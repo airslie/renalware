@@ -1,0 +1,12 @@
+.study-memberships-table
+  table
+    thead
+      tr
+        th Name
+        th.col-width-small
+    tbody
+      - memberships.each do |membership|
+        tr
+          td= membership.user
+
+  = paginate memberships

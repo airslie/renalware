@@ -1,0 +1,12 @@
+= content_for(:tabs) do
+  = render "renalware/research/studies/tabs", study: study
+
+= within_admin_layout(\
+   title: study.code,
+   breadcrumbs: breadcrumb_for("Clinical Studies", research_studies_path)) do
+
+  = link_to new_research_study_membership_path, class: :button do
+    i.fas.fa-plus
+    | Add
+
+  = render "table", study: study, memberships: memberships

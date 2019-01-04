@@ -8,5 +8,7 @@ dl.sub-nav
     = link_to research_study_participations_path(study) do
       i.fas.fa-users
       | Participants
-  / dd(class=("active" if params.fetch(:q, {})[:expired]))
-  /   = link_to "Members", admin_expired_users_path
+  dd
+    = link_to research_study_memberships_path(study) do
+      i.fas.fa-user
+      | Members

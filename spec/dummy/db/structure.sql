@@ -6281,6 +6281,41 @@ UNION ALL
 
 
 --
+-- Name: research_memberships; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE research_memberships (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    study_id bigint NOT NULL,
+    hospital_centre_id bigint NOT NULL,
+    updated_by_id bigint NOT NULL,
+    created_by_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: research_memberships_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE research_memberships_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: research_memberships_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE research_memberships_id_seq OWNED BY research_memberships.id;
+
+
+--
 -- Name: research_participations; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -8331,6 +8366,13 @@ ALTER TABLE ONLY reporting_audits ALTER COLUMN id SET DEFAULT nextval('reporting
 
 
 --
+-- Name: research_memberships id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_memberships ALTER COLUMN id SET DEFAULT nextval('research_memberships_id_seq'::regclass);
+
+
+--
 -- Name: research_participations id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -9619,6 +9661,14 @@ ALTER TABLE ONLY renal_versions
 
 ALTER TABLE ONLY reporting_audits
     ADD CONSTRAINT reporting_audits_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: research_memberships research_memberships_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_memberships
+    ADD CONSTRAINT research_memberships_pkey PRIMARY KEY (id);
 
 
 --
@@ -12609,6 +12659,41 @@ CREATE UNIQUE INDEX index_reporting_hd_blood_pressures_audit_on_hospital_unit_na
 
 
 --
+-- Name: index_research_memberships_on_created_by_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_memberships_on_created_by_id ON research_memberships USING btree (created_by_id);
+
+
+--
+-- Name: index_research_memberships_on_hospital_centre_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_memberships_on_hospital_centre_id ON research_memberships USING btree (hospital_centre_id);
+
+
+--
+-- Name: index_research_memberships_on_study_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_memberships_on_study_id ON research_memberships USING btree (study_id);
+
+
+--
+-- Name: index_research_memberships_on_updated_by_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_memberships_on_updated_by_id ON research_memberships USING btree (updated_by_id);
+
+
+--
+-- Name: index_research_memberships_on_user_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_memberships_on_user_id ON research_memberships USING btree (user_id);
+
+
+--
 -- Name: index_research_participations_on_created_by_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -13506,6 +13591,14 @@ ALTER TABLE ONLY hd_profiles
 
 
 --
+-- Name: research_memberships fk_rails_0acac146f1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_memberships
+    ADD CONSTRAINT fk_rails_0acac146f1 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: transplant_donations fk_rails_0b66891291; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -13639,6 +13732,14 @@ ALTER TABLE ONLY pathology_requests_drugs_drug_categories
 
 ALTER TABLE ONLY medication_prescriptions
     ADD CONSTRAINT fk_rails_25e627b557 FOREIGN KEY (patient_id) REFERENCES patients(id);
+
+
+--
+-- Name: research_memberships fk_rails_26051c519f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_memberships
+    ADD CONSTRAINT fk_rails_26051c519f FOREIGN KEY (hospital_centre_id) REFERENCES hospital_centres(id);
 
 
 --
@@ -14138,6 +14239,14 @@ ALTER TABLE ONLY problem_notes
 
 
 --
+-- Name: research_memberships fk_rails_6f71f151e0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_memberships
+    ADD CONSTRAINT fk_rails_6f71f151e0 FOREIGN KEY (created_by_id) REFERENCES users(id);
+
+
+--
 -- Name: pathology_observations fk_rails_70ef87ad18; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -14391,6 +14500,14 @@ ALTER TABLE ONLY transplant_donor_workups
 
 ALTER TABLE ONLY pd_regime_terminations
     ADD CONSTRAINT fk_rails_93f7877530 FOREIGN KEY (updated_by_id) REFERENCES users(id);
+
+
+--
+-- Name: research_memberships fk_rails_96c39cf109; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_memberships
+    ADD CONSTRAINT fk_rails_96c39cf109 FOREIGN KEY (study_id) REFERENCES research_studies(id);
 
 
 --
@@ -14719,6 +14836,14 @@ ALTER TABLE ONLY access_plans
 
 ALTER TABLE ONLY problem_problems
     ADD CONSTRAINT fk_rails_bbae3e065d FOREIGN KEY (created_by_id) REFERENCES users(id);
+
+
+--
+-- Name: research_memberships fk_rails_bbb5d0c9bb; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_memberships
+    ADD CONSTRAINT fk_rails_bbb5d0c9bb FOREIGN KEY (updated_by_id) REFERENCES users(id);
 
 
 --
@@ -15927,6 +16052,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181126123745'),
 ('20181217124025'),
 ('20190104095254'),
+('20190104170135'),
 ('20190117144832'),
 ('20190120105229');
 

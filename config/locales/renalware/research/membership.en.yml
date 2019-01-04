@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    attributes:
+      renalware/research/membership:
+        user_id: "User"
+    errors:
+      models:
+        renalware/research/membership:
+          user_id:
+            taken: is already a member of this study

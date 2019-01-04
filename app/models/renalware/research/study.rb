@@ -23,6 +23,11 @@ module Renalware
       has_many :patients,
                class_name: "Renalware::User",
                through: :participations
+
+      has_many :memberships, dependent: :destroy
+      has_many :users,
+               class_name: "Renalware::User",
+               through: :memberships
     end
   end
 end
