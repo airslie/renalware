@@ -6292,7 +6292,8 @@ CREATE TABLE research_memberships (
     updated_by_id bigint NOT NULL,
     created_by_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    deleted_at timestamp without time zone
 );
 
 
@@ -12666,6 +12667,13 @@ CREATE INDEX index_research_memberships_on_created_by_id ON research_memberships
 
 
 --
+-- Name: index_research_memberships_on_deleted_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_memberships_on_deleted_at ON research_memberships USING btree (deleted_at);
+
+
+--
 -- Name: index_research_memberships_on_hospital_centre_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -16053,6 +16061,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181217124025'),
 ('20190104095254'),
 ('20190104170135'),
+('20190107163734'),
 ('20190117144832'),
 ('20190120105229');
 

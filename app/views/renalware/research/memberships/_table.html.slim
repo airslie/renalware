@@ -3,10 +3,23 @@
     thead
       tr
         th Name
+        th Site
+        th.col-width-date-time Added
         th.col-width-small
     tbody
       - memberships.each do |membership|
         tr
           td= membership.user
+          td.col-width-medium-with-ellipsis= membership.hospital_centre
+          td= l(membership.created_at)
+          td.right
+            - if policy(membership).edit?
+              = link_to "Edit", edit_research_study_membership_path(study, membership)
+            - if policy(membership).destroy?
+              | &nbsp;|&nbsp;
+              = link_to "Delete",
+                        research_study_membership_path(study, membership),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" }
 
   = paginate memberships

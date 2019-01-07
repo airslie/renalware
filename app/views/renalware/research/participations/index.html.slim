@@ -1,7 +1,8 @@
 = content_for(:filters) do
-  = link_to(new_research_study_participation_path, class: :button) do
-    i.fas.fa-plus
-    | Add
+  - if policy(participants).create?
+    = link_to(new_research_study_participation_path, class: "button right") do
+      i.fas.fa-plus
+      | Add
   = render "filters", study: study, query: query
 
 = content_for(:tabs) do

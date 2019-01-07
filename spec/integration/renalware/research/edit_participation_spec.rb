@@ -8,7 +8,7 @@ describe "Edit a patient's participation in a study", type: :system, js: true do
   it "Updating a participation" do
     participation = create(:research_participation)
 
-    login_as_clinical
+    login_as_admin
     visit research_study_participations_path(participation.study)
 
     within ".study-participations-table" do

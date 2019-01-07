@@ -9,7 +9,7 @@ describe "Add a patient to a study (creating a participation)", type: :system, j
     patient = create(:patient, family_name: "XXX", given_name: "Jon")
     study = create_study
 
-    login_as_clinical
+    login_as_admin
     visit research_study_participations_path(study)
 
     click_on "Add"

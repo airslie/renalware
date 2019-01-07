@@ -3,4 +3,4 @@
    title: "Add user",
    breadcrumbs: breadcrumb_for("Clinical Studies", research_studies_path)) do
 
-  = render "form", membership: membership
+  = render "form", membership: membership, url: research_study_memberships_path(membership.study)

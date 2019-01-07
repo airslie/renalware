@@ -8,9 +8,10 @@ module Renalware
       include Renalware::Concerns::Pageable
 
       def index
-        memberships = study.memberships.page(page).per(per_page)
+        query = MembershipsQuery.new(study: study, options: params[:q])
+        memberships = query.call.page(page).per(per_page)
         authorize memberships
-        render locals: { study: study, memberships: memberships }
+        render locals: { study: study, memberships: memberships, query: query.search }
       end
 
       def new

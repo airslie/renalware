@@ -1,5 +1,6 @@
 = content_for(:actions) do
-  = link_to("Add", new_research_study_path, class: :button)
+  - if policy(studies).create?
+    = link_to("Add", new_research_study_path, class: :button)
 
 = content_for(:filters) do
   = render "filters", query: query

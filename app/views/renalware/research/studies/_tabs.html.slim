@@ -1,9 +1,10 @@
 dl.sub-nav
   dd= link_to "Summary", research_study_path(study)
-  dd
-    = link_to edit_research_study_path(study) do
-      i.fas.fa-cogs
-      | Settings
+  - if policy(study).edit?
+    dd
+      = link_to edit_research_study_path(study) do
+        i.fas.fa-cogs
+        | Settings
   dd
     = link_to research_study_participations_path(study) do
       i.fas.fa-users

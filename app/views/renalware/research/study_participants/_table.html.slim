@@ -1,0 +1,36 @@
+.study-participants-table
+  table
+    thead
+      tr
+        th.col-width-date= sort_link(query, :joined_on, "Joined on")
+        th.col-width-date= sort_link(query, :left_on, "Left on")
+        th Patient
+        th.col-width-nhs-no NHS Number
+        th.col-width-reference-no Hosp no
+        th.col-width-tiny Age
+        th Sex
+        th External ID
+        th.col-width-small
+    tbody
+      - participants.each do |participant|
+        tr
+          td= l(participant.joined_on)
+          td= l(participant.left_on)
+          td= default_patient_link(participant.patient)
+          td= participant.patient.nhs_number
+          td= participant.patient.hospital_identifiers
+          td= participant.patient.age
+          td= participant.patient.sex
+          td= participant.external_id
+          td
+            - if policy(participant).destroy?
+              = link_to "Delete",
+                        research_study_participant_path(study, participant),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" }
+              = " | "
+            - if policy(participant).edit?
+              = link_to("Edit",
+                        edit_research_study_participant_path(study, participant),
+                        data: { "reveal-id" => "study-participant-modal", "reveal-ajax" => "true" })
+  = paginate participants
