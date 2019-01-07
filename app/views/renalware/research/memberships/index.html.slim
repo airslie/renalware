@@ -5,7 +5,7 @@
         | Add
 
 = content_for(:tabs) do
-  = render "renalware/research/studies/tabs", study: study
+  = render "renalware/research/studies/tabs", study: study, active: :memberships
 
 = within_admin_layout(\
    title: study.code,

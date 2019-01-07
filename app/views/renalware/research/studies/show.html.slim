@@ -1,5 +1,5 @@
 = content_for(:tabs) do
-  = render "tabs", study: study
+  = render "tabs", study: study, active: :summary
 
 = within_admin_layout(title: study.code,
                       breadcrumbs: breadcrumb_for("Clinical Studies",

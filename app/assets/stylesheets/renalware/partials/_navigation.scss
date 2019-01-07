@@ -277,3 +277,31 @@ dd.patient-name {
     }
   }
 }
+
+.side-nav.list-group {
+  padding: 0;
+  margin: 0;
+  margin-right: 2rem;
+  border-radius: .3rem;
+  border: solid 1px $table-border-colour;
+
+  li {
+    border-bottom: solid 1px $table-border-colour;
+    margin: 0;
+    font-size: 1rem;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    a, a:hover, a:active, a:visited {
+      color: $nhs-blue;
+    }
+
+    &.active {
+      a, a:hover, a:active, a:visited {
+        color: $black;
+      }
+    }
+  }
+}
