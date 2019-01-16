@@ -2,13 +2,7 @@
                   url: url,
                   html: { autocomplete: "off" },
                   wrapper: :horizontal_form) do |f|
-<<<<<<< HEAD:app/views/renalware/research/study_participations/_form.html.slim
-  - if participation.persisted?
-    h5= participation.patient.to_s(:long)
-  - else
-=======
-  - unless participant.persisted?
->>>>>>> Make tabs in Research studies non-js driven:app/views/renalware/research/study_participants/_form.html.slim
+  - unless participation.persisted?
     #patient-select2
       = f.input :patient_id,
                     collection: [],

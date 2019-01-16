@@ -1,8 +1,0 @@
-
-= within_admin_layout(\
-   title: "Edit membership",
-   breadcrumbs: breadcrumb_for("Clinical Studies", research_studies_path)) do
-
-  = render(\
-    "form", membership: membership,
-    url: research_study_membership_path(membership.study, membership))

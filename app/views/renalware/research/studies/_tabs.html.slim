@@ -8,16 +8,11 @@ dl.sub-nav.no-js-selection
       = link_to edit_research_study_path(study) do
         i.fas.fa-cogs
         | Settings
-<<<<<<< HEAD
-  dd
+  dd(class=("active" if active_tab == :participations))
     = link_to research_study_participations_path(study) do
-=======
-  dd(class=("active" if active_tab == :participants))
-    = link_to research_study_participants_path(study) do
->>>>>>> Make tabs in Research studies non-js driven
       i.fas.fa-users
       | Participants
-  dd(class=("active" if active_tab == :memberships))
-    = link_to research_study_memberships_path(study) do
+  dd(class=("active" if active_tab == :investigatorships))
+    = link_to research_study_investigatorships_path(study) do
       i.fas.fa-user
-      | Members
+      | Investigators

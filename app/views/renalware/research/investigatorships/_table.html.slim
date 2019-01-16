@@ -1,0 +1,25 @@
+.study-investigatorships-table
+  table
+    thead
+      tr
+        th Name
+        th Site
+        th.col-width-date-time Added
+        th.col-width-small
+    tbody
+      - investigatorships.each do |investigatorship|
+        tr
+          td= investigatorship.user
+          td.col-width-medium-with-ellipsis= investigatorship.hospital_centre
+          td= l(investigatorship.created_at)
+          td.right
+            - if policy(investigatorship).edit?
+              = link_to "Edit", edit_research_study_investigatorship_path(study, investigatorship)
+            - if policy(investigatorship).destroy?
+              | &nbsp;|&nbsp;
+              = link_to "Delete",
+                        research_study_investigatorship_path(study, investigatorship),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" }
+
+  = paginate investigatorships

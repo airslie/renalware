@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :research_membership, class: "Renalware::Research::Membership" do
+  factory :research_investigatorship, class: "Renalware::Research::Investigatorship" do
     association :study, factory: :research_study
     association :user
     association :hospital_centre

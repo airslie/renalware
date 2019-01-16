@@ -4,7 +4,7 @@ require_dependency "renalware/research"
 
 module Renalware
   module Research
-    class Membership < ApplicationRecord
+    class Investigatorship < ApplicationRecord
       include Accountable
       acts_as_paranoid
       belongs_to :user

@@ -24,10 +24,10 @@ module Renalware
                class_name: "Renalware::User",
                through: :participations
 
-      has_many :memberships, dependent: :destroy
-      has_many :users,
+      has_many :investigatorships, dependent: :destroy
+      has_many :investigators,
                class_name: "Renalware::User",
-               through: :memberships
+               through: :investigatorships
     end
   end
 end

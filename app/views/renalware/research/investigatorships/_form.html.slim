@@ -1,13 +1,13 @@
-= simple_form_for(membership,
+= simple_form_for(investigatorship,
                   url: url,
-                  as: :research_study_membership,
+                  as: :research_study_investigatorship,
                   html: { autocomplete: "off" },
                   wrapper: :horizontal_form) do |f|
 
-  = render "renalware/shared/errors", model: membership
+  = render "renalware/shared/errors", model: investigatorship
   br
-  - if membership.persisted?
-    h5= membership.user
+  - if investigatorship.persisted?
+    h5= investigatorship.user
   - else
      = f.association :user,
         as: :user_picker,
@@ -21,4 +21,5 @@
         label_method: :to_s,
         wrapper: :horizontal_medium
 
-  = save_or_cancel(form: f, back_path: research_study_memberships_path(membership.study))
+  = save_or_cancel(form: f,
+                   back_path: research_study_investigatorships_path(investigatorship.study))

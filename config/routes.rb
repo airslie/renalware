@@ -97,7 +97,7 @@ Renalware::Engine.routes.draw do
   namespace :research do
     resources :studies do
       resources :participations, controller: :participations
-      resources :memberships, controller: :memberships
+      resources :investigatorships, controller: :investigatorships
     end
   end
 

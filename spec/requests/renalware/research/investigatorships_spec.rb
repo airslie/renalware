@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "Managing clinical study membership" do
+describe "Managing clinical study investigatorships" do
   let(:user) { @current_user }
   let(:hospital) { create(:hospital_centre) }
   let(:study) do
@@ -14,9 +14,9 @@ describe "Managing clinical study membership" do
       by: user
     )
   end
-  let(:membership) do
+  let(:investigatorship) do
     create(
-      :research_membership,
+      :research_investigatorship,
       study: study,
       user: user,
       hospital_centre: hospital,
@@ -25,18 +25,18 @@ describe "Managing clinical study membership" do
   end
 
   describe "GET index" do
-    it "renders a list of study members" do
-      get research_study_memberships_path(study)
+    it "renders a list of study investigators" do
+      get research_study_investigatorships_path(study)
 
       expect(response).to be_successful
       expect(response).to render_template(:index)
-      expect(response.body).to match("Members")
+      expect(response.body).to match("Investigators")
     end
   end
 
   describe "GET new" do
     it "renders" do
-      get new_research_study_membership_path(study)
+      get new_research_study_investigatorship_path(study)
 
       expect(response).to be_successful
       expect(response).to render_template(:new, format: :html)
@@ -44,14 +44,14 @@ describe "Managing clinical study membership" do
   end
 
   describe "DELETE JS destroy" do
-    it "deletes the member" do
-      delete research_study_membership_path(study, membership)
+    it "deletes the investigatorship" do
+      delete research_study_investigatorship_path(study, investigatorship)
 
       expect(response).to be_redirect
       follow_redirect!
       expect(response).to be_successful
       expect(response).to render_template(:index)
-      expect(Renalware::Research::Membership.count).to eq(0)
+      expect(Renalware::Research::Investigatorship.count).to eq(0)
     end
   end
 
@@ -61,8 +61,8 @@ describe "Managing clinical study membership" do
         params = { user_id: user.id, hospital_centre_id: hospital.id }
 
         post(
-          research_study_memberships_path(study),
-          params: { research_study_membership: params }
+          research_study_investigatorships_path(study),
+          params: { research_study_investigatorship: params }
         )
 
         expect(response).to be_redirect
@@ -77,8 +77,8 @@ describe "Managing clinical study membership" do
         params = { user_id: nil, hospital_centre_id: nil }
 
         post(
-          research_study_memberships_path(study),
-          params: { research_study_membership: params }
+          research_study_investigatorships_path(study),
+          params: { research_study_investigatorship: params }
         )
 
         expect(response).to be_successful
@@ -88,7 +88,7 @@ describe "Managing clinical study membership" do
 
     describe "GET html edit" do
       it "renders the form" do
-        get edit_research_study_membership_path(membership.study, membership)
+        get edit_research_study_investigatorship_path(investigatorship.study, investigatorship)
 
         expect(response).to be_successful
         expect(response).to render_template(:edit)
@@ -96,10 +96,10 @@ describe "Managing clinical study membership" do
     end
 
     describe "PATCH html update" do
-      it "updates the membership" do
+      it "updates the investigatorship" do
         params = { hospital_centre_id: hospital.id }
-        url = research_study_membership_path(membership.study, membership)
-        patch url, params: { research_study_membership: params }
+        url = research_study_investigatorship_path(investigatorship.study, investigatorship)
+        patch url, params: { research_study_investigatorship: params }
 
         expect(response).to be_redirect
         follow_redirect!
