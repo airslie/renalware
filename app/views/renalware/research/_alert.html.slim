@@ -1,13 +1,13 @@
 li.patient-alert.research-study-participant
   i.fas.fa-exclamation-triangle
-  span.title= link_to(participation.study.code, research_study_participants_path(participation.study))
+  span.title= link_to(participation.study.code, research_study_participations_path(participation.study))
   span.body participant
 
   / A Study might have a url linking to an external study application. In this case show the link
   / in the alert.
-  - if participation.external_application_participant_url.present?
+  - if participation.external_application_participation_url.present?
     span.external_application_link
-      = link_to(participation.external_application_participant_url, target: "_blank") do
+      = link_to(participation.external_application_participation_url, target: "_blank") do
         i.fas.fa-external-link-alt
         | &nbsp;Launch application
 

@@ -10,17 +10,17 @@ describe "Add a patient to a study (creating a participation)", type: :system, j
     study = create_study
 
     login_as_clinical
-    visit research_study_participants_path(study)
+    visit research_study_participations_path(study)
 
     click_on "Add"
 
-    expect(page).to have_current_path(new_research_study_participant_path(study))
+    expect(page).to have_current_path(new_research_study_participation_path(study))
     select2(patient.to_s(:long), css: "#patient-select2", search: true)
 
     fill_in "Joined on", with: "2019-01-01"
     click_on "Save"
 
-    expect(page).to have_current_path(research_study_participants_path(study))
+    expect(page).to have_current_path(research_study_participations_path(study))
     expect(page).to have_content(patient.to_s)
   end
 

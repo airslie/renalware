@@ -7,10 +7,10 @@
             hint: "If there is an an external application associated with this study " \
                   "you can enter it here and, for participanting patients, the link " \
                   "will appear at the top of patient pages.<br/>" \
-                  "Use the format https://my-research-app/participants/{external_id}<br/> if you " \
+                  "Use the format https://my-research-app/participations/{external_id}<br/> if you " \
                   "The {external_id} placeholder will be replaced with " \
                   "research_study_particpant_external_id".html_safe,
-            placeholder: "e.g. https://my-research-app/participants/{external_id}"
+            placeholder: "e.g. https://my-research-app/participations/{external_id}"
   = f.input :started_on, as: :date_picker, wrapper: :horizontal_datepicker
   = f.input :terminated_on, as: :date_picker, wrapper: :horizontal_datepicker
   = f.input :notes, as: :text, wrapper: :horizontal_large, input_html: { rows: 6 }

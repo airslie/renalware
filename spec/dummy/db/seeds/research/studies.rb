@@ -23,8 +23,8 @@ log "Adding Research Studies" do
         patient_ids.each_with_index do |patient_id, patient_idx|
           joined_on = study.started_on + idx.weeks
           left_on = patient_idx.zero? ? joined_on + idx.months : nil
-          study.participants.create!(
-            participant_id: patient_id,
+          study.participations.create!(
+            patient_id: patient_id,
             joined_on: joined_on,
             left_on: left_on,
             by: user
