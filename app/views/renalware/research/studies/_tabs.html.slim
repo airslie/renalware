@@ -5,7 +5,7 @@ dl.sub-nav
       i.fas.fa-cogs
       | Settings
   dd
-    = link_to research_study_participants_path(study) do
+    = link_to research_study_participations_path(study) do
       i.fas.fa-users
       | Participants
   / dd(class=("active" if params.fetch(:q, {})[:expired]))

@@ -1,5 +1,5 @@
 = content_for(:filters) do
-  = link_to(new_research_study_participant_path, class: :button) do
+  = link_to(new_research_study_participation_path, class: :button) do
     i.fas.fa-plus
     | Add
   = render "filters", study: study, query: query
@@ -11,4 +11,4 @@
   title: study.code,
   breadcrumbs: breadcrumb_for("Clinical Studies", research_studies_path)) do
 
-  = render "table", study: study, participants: participants, query: query
+  = render "table", study: study, participations: participations, query: query

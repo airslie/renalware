@@ -1,12 +1,12 @@
-= simple_form_for(participant,
+= simple_form_for(participation,
                   url: url,
                   html: { autocomplete: "off" },
                   wrapper: :horizontal_form) do |f|
-  - if participant.persisted?
-    h5= participant.patient.to_s(:long)
+  - if participation.persisted?
+    h5= participation.patient.to_s(:long)
   - else
     #patient-select2
-      = f.input :participant_id,
+      = f.input :patient_id,
                     collection: [],
                     input_html: { \
                       class: "patient-id-select2 patient-ajax-search",
@@ -16,4 +16,4 @@
 
   = f.input :joined_on, as: :date_picker
   = f.input :left_on, as: :date_picker
-  = save_or_cancel(form: f, back_path: research_study_participants_path(participant.study))
+  = save_or_cancel(form: f, back_path: research_study_participations_path(participation.study))

@@ -15,10 +15,14 @@ module Renalware
 
       scope :ordered, -> { order(code: :asc) }
 
-      has_many :participants,
-               class_name: "StudyParticipant",
+      has_many :participations,
+               class_name: "StudyParticipation",
                dependent: :destroy,
                inverse_of: :study
+
+      has_many :patients,
+               class_name: "Renalware::User",
+               through: :participations
     end
   end
 end

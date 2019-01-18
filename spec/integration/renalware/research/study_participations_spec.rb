@@ -15,10 +15,10 @@ describe "Managing clinical study participation", type: :request do
   end
 
   describe "GET index" do
-    it "renders a list of study participants" do
+    it "renders a list of study participations" do
       study = create_study
 
-      get research_study_participants_path(study)
+      get research_study_participations_path(study)
 
       expect(response).to be_successful
       expect(response).to render_template(:index)
@@ -30,7 +30,7 @@ describe "Managing clinical study participation", type: :request do
     it "renders" do
       study = create_study
 
-      get new_research_study_participant_path(study)
+      get new_research_study_participation_path(study)
 
       expect(response).to be_successful
       expect(response).to render_template(:new, format: :html)
@@ -38,19 +38,19 @@ describe "Managing clinical study participation", type: :request do
   end
 
   describe "DELETE JS destroy" do
-    it "soft deletes the participant" do
+    it "soft deletes the participation" do
       study = create_study
       patient = create(:patient, by: user, family_name: "ZZ")
-      participant = create(:research_study_participant, study: study, patient: patient)
+      participation = create(:research_study_participation, study: study, patient: patient)
 
       expect do
-        delete research_study_participant_path(study, participant, format: :js)
-      end.to change{ Renalware::Research::StudyParticipant.count }.by(-1)
+        delete research_study_participation_path(study, participation, format: :js)
+      end.to change{ Renalware::Research::StudyParticipation.count }.by(-1)
 
       follow_redirect!
       expect(response).to be_successful
-      expect(Renalware::Research::StudyParticipant.deleted.count).to eq(1)
-      within ".study-participants-table" do
+      expect(Renalware::Research::StudyParticipation.deleted.count).to eq(1)
+      within ".study-participations-table" do
         expect(response.body).not_to include("ZZ")
       end
     end
@@ -61,11 +61,11 @@ describe "Managing clinical study participation", type: :request do
       it "add the participant to the study" do
         study = create_study
         patient = create(:patient, by: user)
-        params = { participant_id: patient.id, joined_on: "01-Oct-2017", left_on: "02-Oct-2017" }
+        params = { patient_id: patient.id, joined_on: "01-Oct-2017", left_on: "02-Oct-2017" }
 
         post(
-          research_study_participants_path(study),
-          params: { research_study_participant: params }
+          research_study_participations_path(study),
+          params: { research_study_participation: params }
         )
 
         expect(response).to be_redirect
@@ -73,8 +73,8 @@ describe "Managing clinical study participation", type: :request do
         expect(response).to be_successful
         expect(response).to render_template(:index)
 
-        expect(Renalware::Research::StudyParticipant.count).to eq(1)
-        participant = Renalware::Research::StudyParticipant.first
+        expect(Renalware::Research::StudyParticipation.count).to eq(1)
+        participant = Renalware::Research::StudyParticipation.first
         expect(participant.patient.id).to eq(patient.id)
         expect(I18n.l(participant.joined_on)).to eq("01-Oct-2017")
         expect(I18n.l(participant.left_on)).to eq("02-Oct-2017")
@@ -84,11 +84,11 @@ describe "Managing clinical study participation", type: :request do
     context "with invalid inputs" do
       it "re-renders the form with validation errors" do
         study = create_study
-        params = { participant_id: nil }
+        params = { patient_id: nil }
 
         post(
-          research_study_participants_path(study),
-          params: { research_study_participant: params }
+          research_study_participations_path(study),
+          params: { research_study_participation: params }
         )
 
         expect(response).to be_successful
@@ -98,9 +98,9 @@ describe "Managing clinical study participation", type: :request do
 
     describe "GET html edit" do
       it "renders the form" do
-        participant = create(:research_study_participant)
+        participant = create(:research_study_participation)
 
-        get edit_research_study_participant_path(participant.study, participant)
+        get edit_research_study_participation_path(participant.study, participant)
 
         expect(response).to be_successful
         expect(response).to render_template(:edit)
@@ -109,11 +109,11 @@ describe "Managing clinical study participation", type: :request do
 
     describe "PATCH html update" do
       it "updates the participant" do
-        participant = create(:research_study_participant)
+        participant = create(:research_study_participation)
 
         params = { joined_on: 1.year.ago.to_date }
-        url = research_study_participant_path(participant.study, participant)
-        patch url, params: { research_study_participant: params }
+        url = research_study_participation_path(participant.study, participant)
+        patch url, params: { research_study_participation: params }
 
         expect(response).to be_redirect
         follow_redirect!

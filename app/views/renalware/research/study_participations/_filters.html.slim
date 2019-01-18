@@ -1,7 +1,7 @@
 .search-form.filters
   = simple_form_for query,
       as: :q,
-      url: research_study_participants_path(study),
+      url: research_study_participations_path(study),
       method: :get do |f|
     .row
       .columns.medium-3
@@ -10,4 +10,4 @@
       .columns.medium-4.actions.end
         = f.submit t("helpers.submit.filter"), class: "button secondary", name: nil
         span= " or "
-        = link_to t("helpers.reset"), research_study_participants_path(study)
+        = link_to t("helpers.reset"), research_study_participations_path(study)
