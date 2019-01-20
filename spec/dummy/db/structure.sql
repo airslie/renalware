@@ -5831,7 +5831,7 @@ CREATE VIEW reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_desc)::text = ANY (ARRAY[('HD'::character varying)::text, ('PD'::character varying)::text, ('Transplant'::character varying)::text, ('Low Clearance'::character varying)::text, ('Nephrology'::character varying)::text]))
+  WHERE ((e1.modality_desc)::text = ANY ((ARRAY['HD'::character varying, 'PD'::character varying, 'Transplant'::character varying, 'Low Clearance'::character varying, 'Nephrology'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -5910,7 +5910,7 @@ CREATE VIEW reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_desc)::text = ANY (ARRAY[('HD'::character varying)::text, ('PD'::character varying)::text, ('Transplant'::character varying)::text, ('Low Clearance'::character varying)::text]))
+  WHERE ((e1.modality_desc)::text = ANY ((ARRAY['HD'::character varying, 'PD'::character varying, 'Transplant'::character varying, 'Low Clearance'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -6281,6 +6281,44 @@ UNION ALL
 
 
 --
+-- Name: research_participations; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE research_participations (
+    id bigint NOT NULL,
+    patient_id bigint NOT NULL,
+    study_id bigint NOT NULL,
+    joined_on date NOT NULL,
+    left_on date,
+    deleted_at timestamp without time zone,
+    updated_by_id bigint,
+    created_by_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    external_id integer
+);
+
+
+--
+-- Name: research_participations_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE research_participations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: research_participations_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE research_participations_id_seq OWNED BY research_participations.id;
+
+
+--
 -- Name: research_studies; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -6318,44 +6356,6 @@ CREATE SEQUENCE research_studies_id_seq
 --
 
 ALTER SEQUENCE research_studies_id_seq OWNED BY research_studies.id;
-
-
---
--- Name: research_study_participations; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE research_study_participations (
-    id bigint NOT NULL,
-    patient_id bigint NOT NULL,
-    study_id bigint NOT NULL,
-    joined_on date NOT NULL,
-    left_on date,
-    deleted_at timestamp without time zone,
-    updated_by_id bigint,
-    created_by_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    external_id integer
-);
-
-
---
--- Name: research_study_participations_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE research_study_participations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: research_study_participations_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE research_study_participations_id_seq OWNED BY research_study_participations.id;
 
 
 --
@@ -8331,17 +8331,17 @@ ALTER TABLE ONLY reporting_audits ALTER COLUMN id SET DEFAULT nextval('reporting
 
 
 --
+-- Name: research_participations id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_participations ALTER COLUMN id SET DEFAULT nextval('research_participations_id_seq'::regclass);
+
+
+--
 -- Name: research_studies id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY research_studies ALTER COLUMN id SET DEFAULT nextval('research_studies_id_seq'::regclass);
-
-
---
--- Name: research_study_participations id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY research_study_participations ALTER COLUMN id SET DEFAULT nextval('research_study_participations_id_seq'::regclass);
 
 
 --
@@ -9622,19 +9622,19 @@ ALTER TABLE ONLY reporting_audits
 
 
 --
+-- Name: research_participations research_participations_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY research_participations
+    ADD CONSTRAINT research_participations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: research_studies research_studies_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY research_studies
     ADD CONSTRAINT research_studies_pkey PRIMARY KEY (id);
-
-
---
--- Name: research_study_participations research_study_participations_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY research_study_participations
-    ADD CONSTRAINT research_study_participations_pkey PRIMARY KEY (id);
 
 
 --
@@ -12609,6 +12609,48 @@ CREATE UNIQUE INDEX index_reporting_hd_blood_pressures_audit_on_hospital_unit_na
 
 
 --
+-- Name: index_research_participations_on_created_by_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_participations_on_created_by_id ON research_participations USING btree (created_by_id);
+
+
+--
+-- Name: index_research_participations_on_deleted_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_participations_on_deleted_at ON research_participations USING btree (deleted_at);
+
+
+--
+-- Name: index_research_participations_on_external_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_research_participations_on_external_id ON research_participations USING btree (external_id);
+
+
+--
+-- Name: index_research_participations_on_patient_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_participations_on_patient_id ON research_participations USING btree (patient_id);
+
+
+--
+-- Name: index_research_participations_on_study_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_participations_on_study_id ON research_participations USING btree (study_id);
+
+
+--
+-- Name: index_research_participations_on_updated_by_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_participations_on_updated_by_id ON research_participations USING btree (updated_by_id);
+
+
+--
 -- Name: index_research_studies_on_code; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -12648,48 +12690,6 @@ CREATE INDEX index_research_studies_on_leader ON research_studies USING btree (l
 --
 
 CREATE INDEX index_research_studies_on_updated_by_id ON research_studies USING btree (updated_by_id);
-
-
---
--- Name: index_research_study_participations_on_created_by_id; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_research_study_participations_on_created_by_id ON research_study_participations USING btree (created_by_id);
-
-
---
--- Name: index_research_study_participations_on_deleted_at; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_research_study_participations_on_deleted_at ON research_study_participations USING btree (deleted_at);
-
-
---
--- Name: index_research_study_participations_on_external_id; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_research_study_participations_on_external_id ON research_study_participations USING btree (external_id);
-
-
---
--- Name: index_research_study_participations_on_patient_id; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_research_study_participations_on_patient_id ON research_study_participations USING btree (patient_id);
-
-
---
--- Name: index_research_study_participations_on_study_id; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_research_study_participations_on_study_id ON research_study_participations USING btree (study_id);
-
-
---
--- Name: index_research_study_participations_on_updated_by_id; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_research_study_participations_on_updated_by_id ON research_study_participations USING btree (updated_by_id);
 
 
 --
@@ -13305,7 +13305,7 @@ CREATE INDEX tx_versions_type_id ON transplant_versions USING btree (item_type, 
 -- Name: unique_study_participants; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE UNIQUE INDEX unique_study_participants ON research_study_participations USING btree (patient_id, study_id) WHERE (deleted_at IS NULL);
+CREATE UNIQUE INDEX unique_study_participants ON research_participations USING btree (patient_id, study_id) WHERE (deleted_at IS NULL);
 
 
 --
@@ -13323,10 +13323,10 @@ CREATE TRIGGER update_current_observation_set_trigger AFTER INSERT OR UPDATE ON 
 
 
 --
--- Name: research_study_participations update_research_study_participants_trigger; Type: TRIGGER; Schema: renalware; Owner: -
+-- Name: research_participations update_research_study_participants_trigger; Type: TRIGGER; Schema: renalware; Owner: -
 --
 
-CREATE TRIGGER update_research_study_participants_trigger BEFORE INSERT ON research_study_participations FOR EACH ROW EXECUTE PROCEDURE update_research_study_participants_from_trigger();
+CREATE TRIGGER update_research_study_participants_trigger BEFORE INSERT ON research_participations FOR EACH ROW EXECUTE PROCEDURE update_research_study_participants_from_trigger();
 
 
 --
@@ -14226,18 +14226,18 @@ ALTER TABLE ONLY letter_archives
 
 
 --
--- Name: research_study_participations fk_rails_8039d07f46; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+-- Name: research_participations fk_rails_8039d07f46; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY research_study_participations
+ALTER TABLE ONLY research_participations
     ADD CONSTRAINT fk_rails_8039d07f46 FOREIGN KEY (study_id) REFERENCES research_studies(id);
 
 
 --
--- Name: research_study_participations fk_rails_87bef0e757; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+-- Name: research_participations fk_rails_87bef0e757; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY research_study_participations
+ALTER TABLE ONLY research_participations
     ADD CONSTRAINT fk_rails_87bef0e757 FOREIGN KEY (created_by_id) REFERENCES users(id);
 
 
@@ -14410,10 +14410,10 @@ ALTER TABLE ONLY patients
 
 
 --
--- Name: research_study_participations fk_rails_980af0ec33; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+-- Name: research_participations fk_rails_980af0ec33; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY research_study_participations
+ALTER TABLE ONLY research_participations
     ADD CONSTRAINT fk_rails_980af0ec33 FOREIGN KEY (patient_id) REFERENCES patients(id);
 
 
@@ -14426,10 +14426,10 @@ ALTER TABLE ONLY admission_admissions
 
 
 --
--- Name: research_study_participations fk_rails_9c3d41afbe; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+-- Name: research_participations fk_rails_9c3d41afbe; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY research_study_participations
+ALTER TABLE ONLY research_participations
     ADD CONSTRAINT fk_rails_9c3d41afbe FOREIGN KEY (updated_by_id) REFERENCES users(id);
 
 
@@ -15927,6 +15927,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181126123745'),
 ('20181217124025'),
 ('20190104095254'),
-('20190117144832');
+('20190117144832'),
+('20190120105229');
 
 

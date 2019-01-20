@@ -154,14 +154,14 @@ describe "Clinical Studies management", type: :request do
   describe "DELETE destroy" do
     it "soft-deletes the study" do
       study = create_study
-      create(:research_study_participation, study: study)
+      create(:research_participation, study: study)
 
       expect {
         delete research_study_path(study)
       }.to change{ Renalware::Research::Study.count }.by(-1)
-       .and change{ Renalware::Research::StudyParticipation.count }.by(-1)
+       .and change{ Renalware::Research::Participation.count }.by(-1)
        .and change{ Renalware::Research::Study.deleted.count }.by(1)
-       .and change{ Renalware::Research::StudyParticipation.deleted.count }.by(1)
+       .and change{ Renalware::Research::Participation.deleted.count }.by(1)
 
       follow_redirect!
       expect(response).to be_successful

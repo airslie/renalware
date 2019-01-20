@@ -1,10 +1,10 @@
 en:
   activerecord:
     attributes:
-      renalware/research/study_participation:
+      renalware/research/participation:
         patient_id: "Patient"
     errors:
       models:
-        renalware/research/study_participation:
+        renalware/research/participation:
           patient_id:
             taken: is already in this study

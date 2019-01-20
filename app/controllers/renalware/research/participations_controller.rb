@@ -4,18 +4,18 @@ require_dependency "renalware/research"
 
 module Renalware
   module Research
-    class StudyParticipationsController < BaseController
+    class ParticipationsController < BaseController
       include Renalware::Concerns::Pageable
 
       def index
-        authorize StudyParticipation, :index?
-        query = StudyParticipationsQuery.new(study: study, options: params[:q])
+        authorize Participation, :index?
+        query = ParticipationQuery.new(study: study, options: params[:q])
         participations = query.call.page(page).per(per_page)
         render locals: { study: study, participations: participations, query: query.search }
       end
 
       def show
-        authorize StudyParticipation, :show?
+        authorize Participation, :show?
         redirect_to research_study_participations_path(study)
       end
 
@@ -83,7 +83,7 @@ module Renalware
       end
 
       def find_and_authorise_participation
-        StudyParticipation.find(params[:id]).tap { |participation| authorize participation }
+        Participation.find(params[:id]).tap { |participation| authorize participation }
       end
 
       def participation_params_for_update
@@ -92,7 +92,7 @@ module Renalware
 
       def participation_params
         params
-          .require(:research_study_participation)
+          .require(:research_participation)
           .permit(:patient_id, :joined_on, :left_on)
       end
     end

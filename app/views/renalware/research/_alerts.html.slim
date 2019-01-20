@@ -1,4 +1,4 @@
-- participations = Renalware::Research::StudyParticipation.where(patient_id: patient.id).where("joined_on <= ?", Time.zone.now).where("left_on is null or left_on > ?", Time.zone.now)
+- participations = Renalware::Research::Participation.where(patient_id: patient.id).where("joined_on <= ?", Time.zone.now).where("left_on is null or left_on > ?", Time.zone.now)
 = render partial: "renalware/research/alert",
           collection: participations,
           as: :participation

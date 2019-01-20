@@ -9,7 +9,7 @@
                   "will appear at the top of patient pages.<br/>" \
                   "Use the format https://my-research-app/participations/{external_id}<br/> if you " \
                   "The {external_id} placeholder will be replaced with " \
-                  "research_study_particpant_external_id".html_safe,
+                  "research_participation_external_id".html_safe,
             placeholder: "e.g. https://my-research-app/participations/{external_id}"
   = f.input :started_on, as: :date_picker, wrapper: :horizontal_datepicker
   = f.input :terminated_on, as: :date_picker, wrapper: :horizontal_datepicker

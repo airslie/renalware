@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Research::StudyParticipation, type: :model do
+  describe Research::Participation, type: :model do
     it_behaves_like "an Accountable model"
     it_behaves_like "a Paranoid model"
     it { is_expected.to validate_presence_of :patient_id }
@@ -12,7 +12,7 @@ module Renalware
 
     describe "uniqueness" do
       subject{
-        Research::StudyParticipation.new(
+        Research::Participation.new(
           patient_id: patient.id,
           study_id: study.id,
           joined_on: "2018-01-01"
@@ -27,7 +27,7 @@ module Renalware
 
     describe ".external_application_participation_url" do
       subject do
-        build_stubbed(:research_study_participation, study: study, external_id: "123")
+        build_stubbed(:research_participation, study: study, external_id: "123")
           .external_application_participation_url
       end
 

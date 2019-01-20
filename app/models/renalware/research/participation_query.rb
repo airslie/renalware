@@ -5,7 +5,7 @@ require "attr_extras"
 
 module Renalware
   module Research
-    class StudyParticipationsQuery
+    class ParticipationQuery
       pattr_initialize [:study!, :options!]
 
       def call
