@@ -4,7 +4,7 @@ require_dependency "renalware/research"
 
 module Renalware
   module Research
-    class StudyParticipation < ApplicationRecord
+    class Participation < ApplicationRecord
       include Accountable
       include PatientsRansackHelper
 

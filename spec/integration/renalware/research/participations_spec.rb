@@ -41,15 +41,15 @@ describe "Managing clinical study participation", type: :request do
     it "soft deletes the participation" do
       study = create_study
       patient = create(:patient, by: user, family_name: "ZZ")
-      participation = create(:research_study_participation, study: study, patient: patient)
+      participation = create(:research_participation, study: study, patient: patient)
 
       expect do
         delete research_study_participation_path(study, participation, format: :js)
-      end.to change{ Renalware::Research::StudyParticipation.count }.by(-1)
+      end.to change{ Renalware::Research::Participation.count }.by(-1)
 
       follow_redirect!
       expect(response).to be_successful
-      expect(Renalware::Research::StudyParticipation.deleted.count).to eq(1)
+      expect(Renalware::Research::Participation.deleted.count).to eq(1)
       within ".study-participations-table" do
         expect(response.body).not_to include("ZZ")
       end
@@ -65,7 +65,7 @@ describe "Managing clinical study participation", type: :request do
 
         post(
           research_study_participations_path(study),
-          params: { research_study_participation: params }
+          params: { research_participation: params }
         )
 
         expect(response).to be_redirect
@@ -73,8 +73,8 @@ describe "Managing clinical study participation", type: :request do
         expect(response).to be_successful
         expect(response).to render_template(:index)
 
-        expect(Renalware::Research::StudyParticipation.count).to eq(1)
-        participant = Renalware::Research::StudyParticipation.first
+        expect(Renalware::Research::Participation.count).to eq(1)
+        participant = Renalware::Research::Participation.first
         expect(participant.patient.id).to eq(patient.id)
         expect(I18n.l(participant.joined_on)).to eq("01-Oct-2017")
         expect(I18n.l(participant.left_on)).to eq("02-Oct-2017")
@@ -88,7 +88,7 @@ describe "Managing clinical study participation", type: :request do
 
         post(
           research_study_participations_path(study),
-          params: { research_study_participation: params }
+          params: { research_participation: params }
         )
 
         expect(response).to be_successful
@@ -98,7 +98,7 @@ describe "Managing clinical study participation", type: :request do
 
     describe "GET html edit" do
       it "renders the form" do
-        participant = create(:research_study_participation)
+        participant = create(:research_participation)
 
         get edit_research_study_participation_path(participant.study, participant)
 
@@ -109,11 +109,11 @@ describe "Managing clinical study participation", type: :request do
 
     describe "PATCH html update" do
       it "updates the participant" do
-        participant = create(:research_study_participation)
+        participant = create(:research_participation)
 
         params = { joined_on: 1.year.ago.to_date }
         url = research_study_participation_path(participant.study, participant)
-        patch url, params: { research_study_participation: params }
+        patch url, params: { research_participation: params }
 
         expect(response).to be_redirect
         follow_redirect!

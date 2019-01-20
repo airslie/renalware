@@ -6,7 +6,7 @@ describe "Edit a patient's participation in a study", type: :system, js: true do
   include AjaxHelpers
 
   it "Updating a participation" do
-    participation = create(:research_study_participation)
+    participation = create(:research_participation)
 
     login_as_clinical
     visit research_study_participations_path(participation.study)

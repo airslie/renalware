@@ -16,7 +16,7 @@ module Renalware
       scope :ordered, -> { order(code: :asc) }
 
       has_many :participations,
-               class_name: "StudyParticipation",
+               class_name: "Participation",
                dependent: :destroy,
                inverse_of: :study
 
