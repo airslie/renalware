@@ -1,0 +1,8 @@
+
+= within_admin_layout(\
+   title: "Edit investigator",
+   breadcrumbs: breadcrumb_for("Clinical Studies", research_studies_path)) do
+
+  = render(\
+    "form", investigatorship: investigatorship,
+    url: research_study_investigatorship_path(investigatorship.study, investigatorship))

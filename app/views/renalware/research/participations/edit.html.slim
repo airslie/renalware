@@ -1,7 +1,20 @@
-= within_admin_layout(title: "Edit",
-                      breadcrumbs: breadcrumb_for("Clinical Studies",
-                                   research_studies_path)) do
+= content_for(:tabs) do
+  = render "renalware/research/studies/tabs", study: participation.study, active: :participations
 
-  = render "form",
-           participation: participation,
-           url: research_study_participation_path(participation.study, participation)
+= within_admin_layout(\
+  title: participation.study.code,
+  breadcrumbs: breadcrumb_for("Clinical Studies", research_studies_path)) do
+
+  br
+
+  .row
+    .columns.small-12
+      h3= participation.patient.to_s(:long)
+      hr
+    .columns.small-3
+      = render "side_nav"
+
+    .columns.small-9
+      = render "form",
+              participation: participation,
+              url: research_study_participation_path(participation.study, participation)

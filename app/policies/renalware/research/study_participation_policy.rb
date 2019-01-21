@@ -4,7 +4,7 @@ require_dependency "renalware/research"
 
 module Renalware
   module Research
-    class ParticipationPolicy < ResearchPolicy
+    class StudyParticipationPolicy < BasePolicy
     end
   end
 end

@@ -2,9 +2,7 @@
                   url: url,
                   html: { autocomplete: "off" },
                   wrapper: :horizontal_form) do |f|
-  - if participation.persisted?
-    h5= participation.patient.to_s(:long)
-  - else
+  - unless participation.persisted?
     #patient-select2
       = f.input :patient_id,
                     collection: [],

@@ -1,12 +1,18 @@
-dl.sub-nav
-  dd= link_to "Summary", research_study_path(study)
-  dd
-    = link_to edit_research_study_path(study) do
-      i.fas.fa-cogs
-      | Settings
-  dd
+- active_tab = local_assigns[:active]
+
+dl.sub-nav.no-js-selection
+  dd(class=("active" if active_tab == :summary))
+    = link_to "Summary", research_study_path(study)
+  - if policy(study).edit?
+    dd(class=("active" if active_tab == :settings))
+      = link_to edit_research_study_path(study) do
+        i.fas.fa-cogs
+        | Settings
+  dd(class=("active" if active_tab == :participations))
     = link_to research_study_participations_path(study) do
       i.fas.fa-users
       | Participants
-  / dd(class=("active" if params.fetch(:q, {})[:expired]))
-  /   = link_to "Members", admin_expired_users_path
+  dd(class=("active" if active_tab == :investigatorships))
+    = link_to research_study_investigatorships_path(study) do
+      i.fas.fa-user
+      | Investigators

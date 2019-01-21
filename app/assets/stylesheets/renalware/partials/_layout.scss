@@ -150,6 +150,7 @@ section.display {
     &.with-tabs {
       border-bottom: 1px solid $tab-border-color;
       margin-bottom: 1.5rem;
+      background-color: $nearly-white;
 
       .page-heading {
         margin-bottom: .8rem;
