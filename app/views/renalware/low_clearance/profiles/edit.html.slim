@@ -1,13 +1,6 @@
 = within_patient_layout(title: "Profile",
   breadcrumbs: breadcrumb_for("Low Clearance Summary", patient_low_clearance_dashboard_path(patient))) do
 
-
-  / in show
-  /        = render "renalware/shared/documents/attributes_group",
-                   group: profile.document.low_clearance,
-                   legend: "Low Clearance",
-                   width: "xlarge"
-
   = simple_form_for profile,
                     url: patient_low_clearance_profile_path(patient),
                     html: { autocomplete: "off" },

@@ -6377,6 +6377,7 @@ CREATE TABLE research_studies (
     updated_at timestamp without time zone NOT NULL,
     application_url character varying,
     namespace character varying,
+    type character varying,
     document jsonb
 );
 

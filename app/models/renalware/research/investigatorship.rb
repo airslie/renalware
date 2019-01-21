@@ -31,7 +31,7 @@ module Renalware
       end
 
       class Document < Document::Embedded
-        attribute :test, String
+        # attribute :test, String
       end
       has_document class_name: "Document"
     end

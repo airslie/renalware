@@ -74,7 +74,7 @@ module Renalware
           .require(:research_study)
           .permit(
             :code, :description, :leader, :notes, :started_on, :terminated_on,
-            :application_url
+            :application_url, document: {}
           )
       end
     end

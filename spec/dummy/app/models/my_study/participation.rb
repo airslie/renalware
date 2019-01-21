@@ -7,10 +7,14 @@
 # DummyStudy::Participant. Likewise for DummyStudy::Investigatorship.
 # If those classes are not defined it falls back to using the built-in Participant
 # and Investigatorship classes. Either way, STI takes care of storing the
-# class name whrn thre recordd is saved.
-class Participation < Renalware::Research::Participation
-  class Document < Renalware::Research::Participation::Document
-    attribute :sub, String
+# class name when thre recordd is saved.
+module MyStudy
+  class Participation < Renalware::Research::Participation
+    # Augment the base Document by adding some fields...
+    class Document < Renalware::Research::Participation::Document
+      attribute :some_attribute, String
+      validates :some_attribute, presence: true
+    end
+    has_document class_name: "Document"
   end
-  has_document class_name: "Document"
 end

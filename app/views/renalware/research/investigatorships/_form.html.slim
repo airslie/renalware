@@ -21,7 +21,11 @@
         label_method: :to_s,
         wrapper: :horizontal_medium
 
-  = investigatorship.document.to_json
+  - namespace = investigatorship.study&.namespace
+  - if namespace.present?
+    = render partial_path_from_namespace(namespace, :investigatorships),
+             f: f,
+             investigatorship: investigatorship
   br
 
   = save_or_cancel(form: f,

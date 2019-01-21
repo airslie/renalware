@@ -1,5 +1,9 @@
 br
-= simple_form_for(study, wrapper: :horizontal_form, html: { autocomplete: "off" }) do |f|
+= simple_form_for(study,
+                  url: url,
+                  as: :research_study,
+                  wrapper: :horizontal_form,
+                  html: { autocomplete: "off" }) do |f|
   = f.input :code, wrapper: :horizontal_small
   = f.input :description, wrapper: :horizontal_large
   = f.input :leader, wrapper: :horizontal_small
@@ -15,4 +19,9 @@ br
   = f.input :started_on, as: :date_picker, wrapper: :horizontal_datepicker
   = f.input :terminated_on, as: :date_picker, wrapper: :horizontal_datepicker
   = f.input :notes, as: :text, wrapper: :horizontal_large, input_html: { rows: 6 }
+
+  - namespace = study&.namespace
+  - if namespace.present?
+    = render partial_path_from_namespace(namespace, :studies), f: f, study: study
+
   = save_or_cancel(form: f, back_path: research_studies_path)

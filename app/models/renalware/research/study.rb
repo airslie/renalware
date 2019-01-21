@@ -32,8 +32,15 @@ module Renalware
                class_name: "Renalware::User",
                through: :investigatorships
 
+      # Define this explicity so that an subclasses will inherit it - otherwise Pundit will try
+      # and resolve eg MyStudy::XxxPolicy which won't exist and not need to the
+      # impementor to create.
+      def self.policy_class
+        StudyPolicy
+      end
+
       class Document < Document::Embedded
-        attribute :test, String
+        # attribute :example, String
       end
     end
   end

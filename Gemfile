@@ -62,8 +62,8 @@ end
 
 group :development do
   gem "awesome_print", require: false
-  gem "better_errors"
-  gem "binding_of_caller"
+  # gem "better_errors"
+  # gem "binding_of_caller"
   gem "bullet"
   gem "foreman", require: false
   # gem "meta_request" # useful for https://github.com/dejan/rails_panel
