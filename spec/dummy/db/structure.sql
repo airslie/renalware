@@ -6371,7 +6371,8 @@ CREATE TABLE research_studies (
     created_by_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    application_url character varying
+    application_url character varying,
+    namespace character varying
 );
 
 
@@ -16063,6 +16064,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190104170135'),
 ('20190107163734'),
 ('20190117144832'),
-('20190120105229');
+('20190120105229'),
+('20190121092403');
 
 
