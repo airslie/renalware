@@ -21,5 +21,8 @@
         label_method: :to_s,
         wrapper: :horizontal_medium
 
+  = investigatorship.document.to_json
+  br
+
   = save_or_cancel(form: f,
                    back_path: research_study_investigatorships_path(investigatorship.study))

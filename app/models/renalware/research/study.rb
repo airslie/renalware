@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require_dependency "renalware/research"
+require "document/base"
 
 module Renalware
   module Research
     class Study < ApplicationRecord
       include Accountable
+      include Document::Base
       acts_as_paranoid
+      has_document class_name: "Renalware::Research::Study::Document"
 
       validates :code, presence: true, uniqueness: { scope: :deleted_at }
       validates :description, presence: true
@@ -28,6 +31,10 @@ module Renalware
       has_many :investigators,
                class_name: "Renalware::User",
                through: :investigatorships
+
+      class Document < Document::Embedded
+        attribute :test, String
+      end
     end
   end
 end

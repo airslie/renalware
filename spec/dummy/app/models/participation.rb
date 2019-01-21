@@ -9,5 +9,8 @@
 # and Investigatorship classes. Either way, STI takes care of storing the
 # class name whrn thre recordd is saved.
 class Participation < Renalware::Research::Participation
-  # define Document here
+  class Document < Renalware::Research::Participation::Document
+    attribute :sub, String
+  end
+  has_document class_name: "Document"
 end

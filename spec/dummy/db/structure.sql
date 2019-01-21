@@ -6294,7 +6294,8 @@ CREATE TABLE research_investigatorships (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone,
-    type character varying
+    type character varying,
+    document jsonb
 );
 
 
@@ -6333,7 +6334,8 @@ CREATE TABLE research_participations (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     external_id integer,
-    type character varying
+    type character varying,
+    document jsonb
 );
 
 
@@ -6374,7 +6376,8 @@ CREATE TABLE research_studies (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     application_url character varying,
-    namespace character varying
+    namespace character varying,
+    document jsonb
 );
 
 
@@ -12677,6 +12680,13 @@ CREATE INDEX index_research_investigatorships_on_deleted_at ON research_investig
 
 
 --
+-- Name: index_research_investigatorships_on_document; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_investigatorships_on_document ON research_investigatorships USING gin (document);
+
+
+--
 -- Name: index_research_investigatorships_on_hospital_centre_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -12716,6 +12726,13 @@ CREATE INDEX index_research_participations_on_created_by_id ON research_particip
 --
 
 CREATE INDEX index_research_participations_on_deleted_at ON research_participations USING btree (deleted_at);
+
+
+--
+-- Name: index_research_participations_on_document; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_participations_on_document ON research_participations USING gin (document);
 
 
 --
@@ -12772,6 +12789,13 @@ CREATE INDEX index_research_studies_on_deleted_at ON research_studies USING btre
 --
 
 CREATE INDEX index_research_studies_on_description ON research_studies USING btree (description);
+
+
+--
+-- Name: index_research_studies_on_document; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_research_studies_on_document ON research_studies USING gin (document);
 
 
 --
@@ -16068,6 +16092,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190117144832'),
 ('20190120105229'),
 ('20190121092403'),
-('20190121125239');
+('20190121125239'),
+('20190121135548');
 
 

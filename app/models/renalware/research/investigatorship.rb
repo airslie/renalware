@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require_dependency "renalware/research"
+require "document/base"
 
 module Renalware
   module Research
     class Investigatorship < ApplicationRecord
       include Accountable
+      include Document::Base
       acts_as_paranoid
       belongs_to :user
       belongs_to :study
@@ -27,6 +29,11 @@ module Renalware
       def self.policy_class
         InvestigatorshipPolicy
       end
+
+      class Document < Document::Embedded
+        attribute :test, String
+      end
+      has_document class_name: "Document"
     end
   end
 end

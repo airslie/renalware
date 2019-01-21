@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require_dependency "renalware/research"
+require "document/base"
 
 module Renalware
   module Research
     class Participation < ApplicationRecord
       include Accountable
       include PatientsRansackHelper
-
+      include Document::Base
       acts_as_paranoid
       validates :patient_id, presence: true, uniqueness: { scope: :study }
       validates :study, presence: true
@@ -38,6 +39,11 @@ module Renalware
       def self.policy_class
         ParticipationPolicy
       end
+
+      class Document < Document::Embedded
+        attribute :test, String
+      end
+      has_document class_name: "Document"
     end
   end
 end
