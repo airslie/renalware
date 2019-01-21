@@ -6293,7 +6293,8 @@ CREATE TABLE research_investigatorships (
     created_by_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    type character varying
 );
 
 

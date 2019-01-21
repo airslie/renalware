@@ -25,7 +25,7 @@ module Renalware
       end
 
       def create
-        investigatorship = study.investigatorships.new(investigatorship_params)
+        investigatorship = build_investigatorship
         authorize investigatorship
         if investigatorship.save_by(current_user)
           redirect_to research_study_investigatorships_path(study)
@@ -63,6 +63,16 @@ module Renalware
         study.investigatorships.find(params[:id]).tap do |investigatorship|
           authorize(investigatorship)
         end
+      end
+
+      def build_investigatorship
+        class_factory.investigatorship.new(investigatorship_params).tap do |investigatorship|
+          investigatorship.study = study
+        end
+      end
+
+      def class_factory
+        ClassFactory.new(namespace: study.namespace)
       end
 
       def investigatorship_params
