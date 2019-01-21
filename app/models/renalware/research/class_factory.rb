@@ -27,13 +27,22 @@ module Renalware
 
       def find_namespaced_class_if_exists_else_use_default(class_name)
         if namespace.present?
-          klass = "#{namespace}::#{class_name}"
-          return klass.constantize if Object.const_defined?(klass)
-
-          raise UnresolvedResearchNamespaceOrClassError, "Not defined: #{klass}"
+          qualified_class_name = "#{namespace}::#{class_name}".gsub("::::", "::")
+          if class_exists?(qualified_class_name)
+            return qualified_class_name.constantize
+          else
+            raise UnresolvedResearchNamespaceOrClassError, "Not defined: #{qualified_class_name}"
+          end
         end
 
         "Renalware::Research::#{class_name}".constantize
+      end
+
+      def class_exists?(qualified_class_name)
+        klass = Module.const_get(qualified_class_name) # may raise NameError
+        klass.is_a?(Class)
+      rescue NameError
+        false
       end
     end
   end

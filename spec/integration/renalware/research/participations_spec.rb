@@ -65,7 +65,7 @@ describe "Managing clinical study participation", type: :request do
 
         post(
           research_study_participations_path(study),
-          params: { research_participation: params }
+          params: { participation: params }
         )
 
         expect(response).to be_redirect
@@ -88,7 +88,7 @@ describe "Managing clinical study participation", type: :request do
 
         post(
           research_study_participations_path(study),
-          params: { research_participation: params }
+          params: { participation: params }
         )
 
         expect(response).to be_successful
@@ -113,7 +113,7 @@ describe "Managing clinical study participation", type: :request do
 
         params = { joined_on: 1.year.ago.to_date }
         url = research_study_participation_path(participant.study, participant)
-        patch url, params: { research_participation: params }
+        patch url, params: { participation: params }
 
         expect(response).to be_redirect
         follow_redirect!

@@ -20,6 +20,13 @@ module Renalware
       delegate :to_s, to: :user
 
       scope :ordered, -> { order(created_at: :desc) }
+
+      # Define this explicity so that an subclasses will inherit it - otherwise Pundit will try
+      # and resolve eg DummyStudy::InvestigatorshipPolicy which won't exist and not need to the
+      # impementor to create.
+      def self.policy_class
+        InvestigatorshipPolicy
+      end
     end
   end
 end

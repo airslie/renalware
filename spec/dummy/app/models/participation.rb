@@ -8,10 +8,6 @@
 # If those classes are not defined it falls back to using the built-in Participant
 # and Investigatorship classes. Either way, STI takes care of storing the
 # class name whrn thre recordd is saved.
-module Research
-  module DummyStudy
-    class Participant < Renalware::Research::Participant
-      # define Document here
-    end
-  end
+class Participation < Renalware::Research::Participation
+  # define Document here
 end

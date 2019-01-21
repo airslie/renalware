@@ -31,6 +31,13 @@ module Renalware
 
         study.application_url.gsub("{external_id}", external_id.to_s)
       end
+
+      # Define this explicity so that an subclasses will inherit it - otherwise Pundit will try
+      # and resolve eg DummyStudy::ParticipationPolicy which won't exist and not need to the
+      # impementor to create.
+      def self.policy_class
+        ParticipationPolicy
+      end
     end
   end
 end

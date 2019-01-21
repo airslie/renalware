@@ -1,5 +1,6 @@
 = simple_form_for(participation,
                   url: url,
+                  as: :participation,
                   html: { autocomplete: "off" },
                   wrapper: :horizontal_form) do |f|
   - unless participation.persisted?

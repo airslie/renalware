@@ -20,8 +20,7 @@ module Renalware
       end
 
       def create
-        participation = study.participations.build(participation_params)
-        participation.joined_on ||= Time.zone.today
+        participation = build_participation
         authorize participation
 
         if participation.save
@@ -70,6 +69,13 @@ module Renalware
         @participations ||= study.participations.includes(:patient).page(page).per(per_page)
       end
 
+      def build_participation
+        class_factory.participation.new(participation_params).tap do |participation|
+          participation.study = study
+          participation.joined_on ||= Time.zone.today
+        end
+      end
+
       def render_edit(participation)
         render :edit, locals: { participation: participation }
       end
@@ -82,6 +88,10 @@ module Renalware
         @study ||= Study.find(params[:study_id])
       end
 
+      def class_factory
+        ClassFactory.new(namespace: study.namespace)
+      end
+
       def find_and_authorise_participation
         Participation.find(params[:id]).tap { |participation| authorize participation }
       end
@@ -92,7 +102,7 @@ module Renalware
 
       def participation_params
         params
-          .require(:research_participation)
+          .require(:participation)
           .permit(:patient_id, :joined_on, :left_on)
       end
     end
