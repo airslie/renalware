@@ -13,11 +13,9 @@
                               placeholder: "Search by patient name or hospital/NHS no." } \
                     }
 
-  - namespace = participation.study&.namespace
-  - if namespace.present?
-    = render partial_path_from_namespace(namespace, :participations),
-             f: f,
-             participation: participation
+  - study_namespace = participation.study&.namespace
+  - if study_namespace.present?
+    = render path_to_research_document_form_partial(study_namespace, :participations), f: f
 
   = f.input :joined_on, as: :date_picker
   = f.input :left_on, as: :date_picker

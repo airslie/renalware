@@ -23,9 +23,8 @@
 
   - namespace = investigatorship.study&.namespace
   - if namespace.present?
-    = render partial_path_from_namespace(namespace, :investigatorships),
-             f: f,
-             investigatorship: investigatorship
+    = render path_to_research_document_form_partial(namespace, :investigatorships), f: f
+
   br
 
   = save_or_cancel(form: f,

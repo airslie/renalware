@@ -2,7 +2,7 @@
 
 module Renalware
   module ResearchHelper
-    def partial_path_from_namespace(namespace, type = nil)
+    def path_to_research_document_form_partial(namespace, type = nil)
       return if namespace.blank?
 
       partial_path = "studies/#{namespace&.underscore}/#{type}/form"
