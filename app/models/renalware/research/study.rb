@@ -9,7 +9,6 @@ module Renalware
       include Accountable
       include Document::Base
       acts_as_paranoid
-      has_document class_name: "Renalware::Research::Study::Document"
 
       validates :code, presence: true, uniqueness: { scope: :deleted_at }
       validates :description, presence: true
@@ -42,6 +41,7 @@ module Renalware
       class Document < Document::Embedded
         # attribute :example, String
       end
+      has_document
     end
   end
 end

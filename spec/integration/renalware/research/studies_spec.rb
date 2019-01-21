@@ -140,7 +140,8 @@ describe "Clinical Studies management", type: :request do
       it "re-renders the form with validation errors" do
         params = {
           research_study: {
-            code: nil
+            code: nil,
+            document: {}
           }
         }
         post research_studies_path, params: params

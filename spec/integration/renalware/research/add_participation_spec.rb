@@ -6,10 +6,9 @@ describe "Add a patient to a study (creating a participation)", type: :system, j
   include AjaxHelpers
 
   it "Adding a patient to a research study" do
-    patient = create(:patient, family_name: "XXX", given_name: "Jon")
-    study = create_study
-
-    login_as_admin
+    user = login_as_admin
+    patient = create(:patient, family_name: "XXX", given_name: "Jon", by: user)
+    study = create_study(by: user)
     visit research_study_participations_path(study)
 
     click_on "Add"
@@ -24,12 +23,13 @@ describe "Add a patient to a study (creating a participation)", type: :system, j
     expect(page).to have_content(patient.to_s)
   end
 
-  def create_study
+  def create_study(by:)
     create(
       :research_study,
       code: "Study1",
       description: "Study 1",
-      leader: "Jack Jones"
+      leader: "Jack Jones",
+      by: by
     )
   end
 end

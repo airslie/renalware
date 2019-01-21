@@ -5,8 +5,14 @@
                   wrapper: :horizontal_form) do |f|
   - unless participation.persisted?
     #patient-select2
+      / Note the shenanigans to get the select2 to redisplay the patient after a validation error
+      / or on an edit. Selected: 1 means just select the option at index 1 - option at index 0 is
+      / always the blank option. Selecting index 1 fails silently if there is nothing there (no
+      / patient selected yet) otherwise it will display the selected patient who will always be
+      / at option index 1.
       = f.input :patient_id,
-                    collection: [],
+                    collection: [[participation.patient&.to_s(:long), participation.patient&.id]],
+                    selected: 1,
                     input_html: { \
                       class: "patient-id-select2 patient-ajax-search",
                       data: { "ajax--url" => search_patients_path(format: :json),

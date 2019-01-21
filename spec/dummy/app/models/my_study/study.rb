@@ -7,6 +7,6 @@ module MyStudy
       attribute :some_attribute
       validates :some_attribute, presence: true
     end
-    has_document class_name: "Document"
+    has_document
   end
 end

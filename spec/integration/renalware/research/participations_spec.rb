@@ -10,7 +10,8 @@ describe "Managing clinical study participation", type: :request do
       :research_study,
       code: "Study1",
       description: "Study 1",
-      leader: "Jack Jones"
+      leader: "Jack Jones",
+      by: user
     )
   end
 
@@ -41,7 +42,7 @@ describe "Managing clinical study participation", type: :request do
     it "soft deletes the participation" do
       study = create_study
       patient = create(:patient, by: user, family_name: "ZZ")
-      participation = create(:research_participation, study: study, patient: patient)
+      participation = create(:research_participation, study: study, patient: patient, by: user)
 
       expect do
         delete research_study_participation_path(study, participation, format: :js)
@@ -98,7 +99,7 @@ describe "Managing clinical study participation", type: :request do
 
     describe "GET html edit" do
       it "renders the form" do
-        participant = create(:research_participation)
+        participant = create(:research_participation, by: user)
 
         get edit_research_study_participation_path(participant.study, participant)
 
@@ -109,7 +110,7 @@ describe "Managing clinical study participation", type: :request do
 
     describe "PATCH html update" do
       it "updates the participant" do
-        participant = create(:research_participation)
+        participant = create(:research_participation, by: user)
 
         params = { joined_on: 1.year.ago.to_date }
         url = research_study_participation_path(participant.study, participant)

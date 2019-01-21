@@ -42,7 +42,7 @@ module Renalware
 
       class Document < Document::Embedded
       end
-      has_document class_name: "Document"
+      has_document
     end
   end
 end

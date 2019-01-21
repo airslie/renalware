@@ -97,7 +97,7 @@ module Renalware
       end
 
       def participation_params_for_update
-        participation_params.slice(:joined_on, :document)
+        participation_params.slice(:joined_on, :left_on, :document)
       end
 
       def participation_params

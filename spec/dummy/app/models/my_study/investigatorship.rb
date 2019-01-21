@@ -9,6 +9,6 @@ module MyStudy
       attribute :some_attribute, Integer
       validates :some_attribute, presence: true, numericality: true
     end
-    has_document class_name: "Document"
+    has_document
   end
 end
