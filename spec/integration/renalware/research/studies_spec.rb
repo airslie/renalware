@@ -93,7 +93,7 @@ describe "Clinical Studies management", type: :request do
     context "with invalid inputs" do
       it "re-renders the form with validation errors" do
         params = {
-          research_study: {
+          study: {
             code: nil
           }
         }

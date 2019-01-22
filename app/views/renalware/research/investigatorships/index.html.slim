@@ -1,6 +1,7 @@
 = content_for(:filters) do
   - if policy(investigatorships).create?
-    = link_to new_research_study_investigatorship_path, class: "button right" do
+    .filter-actions
+      = link_to new_research_study_investigatorship_path, class: "button right" do
         i.fas.fa-plus
         | Add
 

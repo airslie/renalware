@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "Managing clinical study investigatorships" do
+describe "Managing clinical study investigatorships", type: :request do
   let(:user) { @current_user }
   let(:hospital) { create(:hospital_centre) }
   let(:study) do

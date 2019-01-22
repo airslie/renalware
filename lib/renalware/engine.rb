@@ -57,6 +57,7 @@ require "rails-assets-select2"
 require "rails-assets-moment"
 require "rails-assets-mousetrap"
 require "document/base"
+require "document/enum"
 require "byebug" if ENV["RAILS_ENV"] == "development"
 
 module Renalware

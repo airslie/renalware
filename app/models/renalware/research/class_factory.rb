@@ -31,6 +31,7 @@ module Renalware
           if class_exists?(qualified_class_name)
             return qualified_class_name.constantize
           else
+            qualified_class_name.constantize
             raise UnresolvedResearchNamespaceOrClassError, "Not defined: #{qualified_class_name}"
           end
         end

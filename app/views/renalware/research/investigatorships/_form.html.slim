@@ -9,12 +9,13 @@
   - if investigatorship.persisted?
     h5= investigatorship.user
   - else
-     = f.association :user,
-        as: :user_picker,
-        wrapper: :horizontal_medium,
-        collection: Renalware::System::UsersPresenter.new.list_for_dropdown( \
-          user_to_promote_to_top: current_user \
-        )
+    #select2-user
+      = f.association :user,
+          as: :user_picker,
+          wrapper: :horizontal_medium,
+          collection: Renalware::System::UsersPresenter.new.list_for_dropdown( \
+            user_to_promote_to_top: current_user \
+          )
 
   = f.association :hospital_centre,
         collection: Renalware::Hospitals::Centre.ordered,

@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
     "MIT-LICENSE"
   ]
   s.add_dependency "active_type", "~> 0.7.1"
-  s.add_dependency "activerecord-import", "~> 0.28.0"
+  s.add_dependency "activerecord-import", "0.28.0"
   s.add_dependency "ahoy_matey", "~> 2.1.0"
   s.add_dependency "attr_extras", "~> 5.2.0"
   s.add_dependency "autoprefixer-rails", "~> 9.4.2"
