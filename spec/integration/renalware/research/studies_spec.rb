@@ -73,7 +73,7 @@ describe "Clinical Studies management", type: :request do
           application_url: "http://example.com"
         }
 
-        post research_studies_path, params: { research_study: study_params }
+        post research_studies_path, params: { study: study_params }
 
         follow_redirect!
         expect(response).to be_successful
@@ -122,7 +122,7 @@ describe "Clinical Studies management", type: :request do
       it "updates an existing study and redirects to index" do
         study = create_study
 
-        params = { research_study: { code: "Study1a" } }
+        params = { study: { code: "Study1a" } }
 
         patch research_study_path(study), params: params
 
@@ -139,7 +139,7 @@ describe "Clinical Studies management", type: :request do
     context "with invalid inputs" do
       it "re-renders the form with validation errors" do
         params = {
-          research_study: {
+          study: {
             code: nil,
             document: {}
           }

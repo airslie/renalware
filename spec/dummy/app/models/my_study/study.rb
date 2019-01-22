@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
+require "renalware/research"
+
 module MyStudy
+  #
+  # See comments in engine app/models/renalware/research/study.rb
+  #
   class Study < Renalware::Research::Study
-    # Augment the base Document by adding some fields...
-    class Document < Renalware::Research::Study::Document
+    class Document < ::Document::Embedded
       attribute :some_attribute
       validates :some_attribute, presence: true
     end

@@ -3,9 +3,11 @@
 require "renalware/research"
 
 module MyStudy
+  #
+  #  See comments in engine app/models/renalware/research/study.rb
+  #
   class Investigatorship < Renalware::Research::Investigatorship
-    # Augment the base Document by adding some fields...
-    class Document < Renalware::Research::Investigatorship::Document
+    class Document < ::Document::Embedded
       attribute :some_attribute, Integer
       validates :some_attribute, presence: true, numericality: true
     end

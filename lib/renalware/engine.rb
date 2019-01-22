@@ -56,6 +56,7 @@ require "rails-assets-foundation-datepicker"
 require "rails-assets-select2"
 require "rails-assets-moment"
 require "rails-assets-mousetrap"
+require "document/base"
 require "byebug" if ENV["RAILS_ENV"] == "development"
 
 module Renalware

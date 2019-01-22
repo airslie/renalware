@@ -62,7 +62,7 @@ describe "Managing clinical study investigatorships" do
 
         post(
           research_study_investigatorships_path(study),
-          params: { research_study_investigatorship: params }
+          params: { investigatorship: params }
         )
 
         expect(response).to be_redirect
@@ -78,7 +78,7 @@ describe "Managing clinical study investigatorships" do
 
         post(
           research_study_investigatorships_path(study),
-          params: { research_study_investigatorship: params }
+          params: { investigatorship: params }
         )
 
         expect(response).to be_successful
@@ -99,7 +99,7 @@ describe "Managing clinical study investigatorships" do
       it "updates the investigatorship" do
         params = { hospital_centre_id: hospital.id }
         url = research_study_investigatorship_path(investigatorship.study, investigatorship)
-        patch url, params: { research_study_investigatorship: params }
+        patch url, params: { investigatorship: params }
 
         expect(response).to be_redirect
         follow_redirect!
