@@ -41,7 +41,7 @@ module Renalware
             {
               "blood_pressure.systolic" => observations.blood_pressure&.systolic,
               "blood_pressure.diastolic" => observations.blood_pressure&.diastolic,
-              "weight" => observations.weight
+              "weight" => coerce_to_float(observations.weight)
             }
           end
         end

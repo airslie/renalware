@@ -9,6 +9,38 @@ module Renalware
       describe Rendering::DialysisSession do
         include XmlSpecHelper
 
+        context "when the blood_flow is not a number" do
+          it "leaves unset it '' or null" do
+            session = Renalware::HD::Session::Closed.new(performed_on: "2018-11-01")
+            session.document.dialysis.blood_flow = ""
+            presenter = Renalware::HD::SessionPresenter.new(session)
+
+            actual_xml = format_xml(described_class.new(session: presenter).xml)
+
+            expect(actual_xml).to match("<QHD30/>")
+          end
+
+          it "coerces it into an integer if possible" do
+            session = Renalware::HD::Session::Closed.new(performed_on: "2018-11-01")
+            session.document.dialysis.blood_flow = "101 approx"
+            presenter = Renalware::HD::SessionPresenter.new(session)
+
+            actual_xml = format_xml(described_class.new(session: presenter).xml)
+
+            expect(actual_xml).to match("<QHD30>101</QHD30>")
+          end
+
+          it "otherwise leaves it as empty" do
+            session = Renalware::HD::Session::Closed.new(performed_on: "2018-11-01")
+            session.document.dialysis.blood_flow = "n/a"
+            presenter = Renalware::HD::SessionPresenter.new(session)
+
+            actual_xml = format_xml(described_class.new(session: presenter).xml)
+
+            expect(actual_xml).to match("<QHD30/>")
+          end
+        end
+
         # rubocop:disable RSpec/ExampleLength
         it "renders a DialysisSession element" do
           dialysate = build_stubbed(:hd_dialysate, sodium_content: 100)

@@ -15,8 +15,8 @@ module Renalware
               start_time: "12:01",
               end_time: "16:01"
             )
-            session.document.observations_before.weight = "60"
-            session.document.observations_after.weight = "61.1"
+            session.document.observations_before.weight = "60 approx"
+            session.document.observations_after.weight = "61.1 kg"
 
             expected_xml = <<~XML.squish.gsub("> <", "><")
               <X>

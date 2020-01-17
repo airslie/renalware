@@ -67,8 +67,8 @@ module Renalware
               elem << create_node("QHD20", session.access_rr02_code)
               elem << create_node("QHD21", session.access_rr41_code)
               elem << create_node("QHD22", "N") # Access in two sites simultaneously
-              elem << create_node("QHD30", session.blood_flow)
-              elem << create_node("QHD31", session.duration_in_minutes) # Time Dialysed in Minutes
+              elem << create_node("QHD30", coerce_to_integer(session.blood_flow))
+              elem << create_node("QHD31", coerce_to_integer(session.duration_in_minutes))
               elem << create_node("QHD32", session.sodium_content) # Sodium in Dialysate
               elem << create_node("QHD33") # TODO: Needling Method
             end
