@@ -1,6 +1,18 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  # ==> LDAP Configuration
+  # config.ldap_logger = true
+  # config.ldap_create_user = false
+  # config.ldap_update_password = true
+  # config.ldap_config = "#{Rails.root}/config/ldap.yml"
+  # config.ldap_check_group_membership = false
+  # config.ldap_check_group_membership_without_admin = false
+  # config.ldap_check_attributes = false
+  # config.ldap_check_attributes_presence = false
+  # config.ldap_use_admin_to_bind = false
+  # config.ldap_ad_group_check = false
+
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
@@ -101,7 +113,8 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  # config.pepper = '3bf26fb9b8949aa091ec7a02d8316b50a3f7d1481ab7f703aad281c1d1924d7653a802661dd474ae6eb467560add9f997b35021280a7784f6d1cdc5f3e823197'
+  # config.pepper = "3bf26fb9b8949aa091ec7a02d8316b50a3f7d1481ab7f703aad281c1d1924d7653a802661dd" \
+  #                 "474ae6eb467560add9f997b35021280a7784f6d1cdc5f3e823197'
 
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without

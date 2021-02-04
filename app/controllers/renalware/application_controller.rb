@@ -7,5 +7,11 @@ module Renalware
     # Prevent CSRF attacks by raising an exception.
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :reset_session
+
+    if Renalware.config.ldap_authentication
+      rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
+        render text: exception, status: :internal_server_error
+      end
+    end
   end
 end

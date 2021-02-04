@@ -3,14 +3,29 @@ require "active_support/concern"
 # Concern for Devise enhancements
 # eg. User approval and password expiry
 #
+# rubocop:disable Style/ConditionalAssignment
 module Renalware
   module Deviseable
     extend ActiveSupport::Concern
 
     included do
       class_eval do
-        devise(:expirable, :database_authenticatable, :registerable, :lockable,
-               :rememberable, :trackable, :validatable, :timeoutable, :recoverable)
+        modules = %i(
+          expirable
+          registerable
+          lockable
+          rememberable
+          trackable
+          validatable
+          timeoutable
+          recoverable
+        )
+        if Renalware.config.ldap_authentication
+          modules << :ldap_authenticatable
+        else
+          modules << :database_authenticatable
+        end
+        devise(*modules)
       end
 
       # Makes the User 'approvable'
@@ -31,3 +46,4 @@ module Renalware
     end
   end
 end
+# rubocop:enable Style/ConditionalAssignment

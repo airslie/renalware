@@ -1,6 +1,10 @@
 $stdout.sync = true
 
 Rails.application.configure do
+  # In development don't ajax poll so often for a timeout as it can upset our byebug sessions.
+  # config.session_timeout_polling_frequency = 1.hour
+  # config.ldap_authentication = true
+
   config.after_initialize do
     if defined?(Bullet)
       Bullet.enable = true
