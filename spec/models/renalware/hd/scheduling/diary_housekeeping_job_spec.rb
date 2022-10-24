@@ -51,13 +51,13 @@ module Renalware::HD::Scheduling
 
     describe "#perform" do
       it "defaults the :up_until parameter to the end of yesterday" do
-        job.perform
+        job.perform_now
         # expect(job.up_until).to eq((Time.zone.today - 1.day))
       end
 
       context "when there are no old slots" do
         it "does nothing" do
-          job.perform
+          job.perform_now
         end
       end
 
@@ -97,7 +97,7 @@ module Renalware::HD::Scheduling
             expect(DiarySlot.unarchived.count).to eq(2)
 
             # Running the job with no arguments will try and archive yesterday slot
-            job.perform
+            job.perform_now
 
             expect(DiarySlot.count).to eq(2)
             expect(DiarySlot.archived.count).to eq(1)
@@ -140,7 +140,7 @@ module Renalware::HD::Scheduling
           # expect(Diary.count).to eq(2) # we have a weekly and master diary already
           # expect(DiarySlot.count).to eq(2) # each has a slot
 
-          # job.perform
+          # job.perform_now
 
           # # TODO: investigate periodic failure on line 149 eg on Jan 6 2021
           # pending
