@@ -17,6 +17,9 @@ module Dummy
     config.good_job.execution_mode = :external # :async = executes jobs in separate threads within the Rails web server process
     config.good_job.poll_interval = 30 # number of seconds between polls for jobs when execution_mode is set to :async
 
+    config.good_job.cron = Renalware::Engine.scheduled_jobs_config
+    config.good_job.enable_cron = false # Switch to true to enable cron jobs
+
     # Important!!
     # Unless set to :all, pg extensions are not put into structure.sql so certain
     # functions will not exist.

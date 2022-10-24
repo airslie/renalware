@@ -78,6 +78,51 @@ module Renalware
       end
     end
 
+    # Scheduled jobs; Compatible with GoodJob
+    class << self
+      def scheduled_jobs_config
+        {
+          ods_sync: {
+            cron: "every day at 6am",
+            class: "Renalware::Patients::SyncODSJob",
+            kwargs: { dry_run: false },
+            set: { priority: -10 },
+            description: "Use the NHS Organisation Data Service (ODS) API to fetch updates to " \
+                         "practices and GPs"
+          },
+
+          audit_patient_hd_statistics: {
+            cron: "0 3 1 * *", # On the first of each month at 3am
+            class: "Renalware::HD::GenerateMonthlyStatisticsAndRefreshMaterializedViewJob",
+            description: "Queues delayed jobs to generate monthly HD audits for each patient
+                          with a signed-off HD Session in the specified month and year. If
+                          no year or month supplied, it will generate stats for last month
+                          for each patient.".squish
+          },
+
+          hd_scheduling_diary_housekeeping: {
+            cron: "every day at 1:00am",
+            class: "Renalware::HD::Scheduling::DiaryHousekeepingJob"
+          },
+
+          reporting_send_daily_summary_email: {
+            cron: "every day at 11:45pm",
+            class: "Renalware::InvokeRakeTaskJob",
+            args: ["reporting:send_daily_summary_email"],
+            description: "Send an email report on the day's
+                          activity (exluding sensitive data) to configured recipients".squish
+          },
+
+          ukrdc_export: {
+            cron: "Mon-Fri 1am",
+            class: "Renalware::InvokeRakeTaskJob",
+            args: ["ukrdc:export"],
+            description: "Export UKRDC xml - initially to /apps/current/"
+          }
+        }
+      end
+    end
+
     # config.view_component.test_controller = "Renalware::BaseController"
 
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
