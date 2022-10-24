@@ -212,12 +212,12 @@ module Renalware
     config_accessor(:pathology_kfre_5y_obx_code) { "KFRE5" }
     config_accessor(:pathology_kfre_obr_code) { "KFRE" }
 
-    patient_visilbility_restriction_options = %i(none by_site by_site_and_research_study)
+    # patient_visilbility_restriction_options = %i(none by_site by_site_and_research_study)
 
     config_accessor(:patient_visibility_restrictions) { :none }
 
     def restrict_patient_visibility_by_user_site?
-      patient_visibility_restrictions == :by_site
+      [:by_site, :by_site_and_research_study].include?(patient_visibility_restrictions)
     end
 
     def restrict_patient_visibility_by_research_study?
