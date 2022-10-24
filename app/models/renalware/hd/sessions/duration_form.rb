@@ -53,10 +53,10 @@ module Renalware
         def started_at
           return unless valid?
 
-          start = start_date.to_time
+          start = start_date_in_time_zone
 
           if start_time.present?
-            start += start_time.in_time_zone.seconds_since_midnight
+            start += start_time.seconds_since_midnight
           end
           start
         end
@@ -66,8 +66,8 @@ module Renalware
           return unless valid?
           return unless start_date.present? && end_time.present?
 
-          date = overnight_dialysis ? start_date + 1.day : start_date
-          date.to_time + end_time.in_time_zone.seconds_since_midnight
+          date = overnight_dialysis ? start_date_in_time_zone + 1.day : start_date_in_time_zone
+          date.to_time + end_time.seconds_since_midnight
         end
 
         # Factory method that builds a duration form object so we can use it behind
@@ -90,6 +90,12 @@ module Renalware
               session.stopped_at.seconds_since_midnight < session.started_at.seconds_since_midnight
           end
           form
+        end
+
+        private
+
+        def start_date_in_time_zone
+          @start_date_in_time_zone ||= start_date.in_time_zone
         end
       end
     end
