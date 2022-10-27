@@ -18928,7 +18928,7 @@ CREATE UNIQUE INDEX index_patients_on_legacy_patient_id ON renalware.patients US
 -- Name: index_patients_on_local_patient_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE UNIQUE INDEX index_patients_on_local_patient_id ON renalware.patients USING btree (local_patient_id);
+CREATE INDEX index_patients_on_local_patient_id ON renalware.patients USING btree (local_patient_id);
 
 
 --
