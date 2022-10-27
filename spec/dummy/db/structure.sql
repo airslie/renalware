@@ -2210,11 +2210,11 @@ CREATE TABLE renalware.clinic_visits (
     temperature numeric(3,1),
     standing_systolic_bp integer,
     standing_diastolic_bp integer,
+    document jsonb DEFAULT '{}'::jsonb NOT NULL,
+    type character varying,
     body_surface_area numeric(8,2),
     total_body_water numeric(8,2),
-    bmi numeric(10,1),
-    document jsonb DEFAULT '{}'::jsonb NOT NULL,
-    type character varying
+    bmi numeric(10,1)
 );
 
 
@@ -2242,7 +2242,8 @@ CREATE TABLE renalware.hospital_centres (
     trust_name character varying,
     trust_caption character varying,
     host_site boolean DEFAULT false NOT NULL,
-    abbrev character varying
+    abbrev character varying,
+    default_site boolean DEFAULT false
 );
 
 
@@ -2668,14 +2669,14 @@ CREATE TABLE renalware.clinic_clinics (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     user_id integer,
+    visit_class_name character varying,
     code character varying,
     deleted_at timestamp without time zone,
     updated_by_id bigint,
     created_by_id bigint,
     appointments_count integer DEFAULT 0,
     clinic_visits_count integer DEFAULT 0,
-    default_modality_description_id bigint,
-    visit_class_name character varying
+    default_modality_description_id bigint
 );
 
 
@@ -5588,16 +5589,6 @@ CREATE SEQUENCE renalware.letter_mailshot_mailshots_id_seq
 --
 
 ALTER SEQUENCE renalware.letter_mailshot_mailshots_id_seq OWNED BY renalware.letter_mailshot_mailshots.id;
-
-
---
--- Name: letter_mailshot_patients_where_surname_starts_with_r; Type: VIEW; Schema: renalware; Owner: -
---
-
-CREATE VIEW renalware.letter_mailshot_patients_where_surname_starts_with_r AS
- SELECT patients.id AS patient_id
-   FROM renalware.patients
-  WHERE ((patients.family_name)::text ~~ 'R%'::text);
 
 
 --
@@ -9288,7 +9279,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -9368,7 +9359,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -24747,6 +24738,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220915145956'),
 ('20220915150710'),
 ('20220915151614'),
-('20220928115421');
+('20220928115421'),
+('20221027100532');
 
 

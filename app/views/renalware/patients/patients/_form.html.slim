@@ -19,12 +19,11 @@
                 wrapper: :horizontal_small,
                 input_html: index.zero? ? controlled_by_demographics_feed : {}
 
-    / Hospital centre is updated from the clinical profile
-    / = f.association :hospital_centre,
-    /                 collection: Renalware::Hospitals::Centre.where(host_site: true).ordered,
-    /                 wrapper: :horizontal_medium,
-    /                 input_html: { class: "mb-3", data: { controller: "slimselect" }}
-    
+    = f.association :hospital_centre,
+                    collection: Renalware::Hospitals::Centre.host_site.ordered,
+                    wrapper: :horizontal_medium,
+                    input_html: { class: "mb-3" }
+
     = f.input :external_patient_id, wrapper: :horizontal_small
     = f.input :title, wrapper: :horizontal_tiny
     = f.input :family_name, wrapper: :horizontal_small, input_html: controlled_by_demographics_feed

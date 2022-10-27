@@ -27,6 +27,9 @@ module Renalware
 
       def new
         patient = patient_scope.new.tap(&:build_current_address)
+
+        patient.hospital_centre = Renalware::Hospitals::Centre.host_site.default.ordered.first
+
         authorize patient
         render locals: { patient: patient }
       end

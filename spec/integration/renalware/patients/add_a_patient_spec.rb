@@ -6,6 +6,45 @@ require "rails_helper"
 # a user searching for a patient in the master index, At some point that functionality will be moved
 # to patients/new and this test will need updating.
 describe "A user adds a patient", type: :system do
+  describe "add patient flow" do
+    let(:user) { create(:user, :clinical) }
+
+    it "adds a patient successfully" do
+      login_as user
+      visit patients_path
+      click_link "Add"
+
+      expect(page).to have_field "Hospital centre", with: ""
+
+      # Test for validation errors
+      click_button "Save", match: :first
+
+      expect(page).to have_content("Family name can't be blank")
+      expect(page).to have_content("Given name can't be blank")
+      expect(page).to have_content("Date of Birth can't be blank")
+      expect(page).to have_content("Date of Birth is not a valid date")
+      expect(page).to have_content("Sex is required")
+      expect(page).to have_content("The patient must have at least one of these numbers: KCH, QEH, DVH, PRUH, GUYS, Other Hospital Number")
+
+      fill_in "KCH No", with: "12345"
+      fill_in "Family name", with: "FamilyName"
+      fill_in "Given name", with: "GivenName"
+      fill_in "DoB", with: "2022-12-09"
+      select "Not Specified", from: "Sex"
+      select "King's", from: "Hospital centre"
+
+      # The save successfully, and go to the patient demographics page
+      click_button "Save", match: :first
+
+      expect(page).to have_content("Last Name:FamilyName")
+      expect(page).to have_content("First Name:GivenName")
+      expect(page).to have_content("Sex:NS")
+      expect(page).to have_content("Date of Birth:09-Dec-2022")
+      expect(page).to have_content("KCH No:12345")
+      expect(page).to have_content("Hospital centre:King's College Hospital")
+    end
+  end
+
   describe "displaying search results that match user-entered criteria" do
     context "when an abridged patient exists in the master index" do
       it "displays the abridged patient" do
