@@ -20,14 +20,9 @@ begin
       logger           = Logger.new(STDOUT)
       logger.level     = Logger::INFO
       Rails.logger     = logger
-
-      Renalware::HD::GenerateMonthlyStatistics.new(
-        month: ENV["month"],
-        year: ENV["year"]
-      ).call
-
-      # Refresh the materialized view which will aggregate the monthly hd_patient_statistics data
-      RefreshMaterializedViewJob.perform_later(view_name: "renalware.reporting_hd_overall_audit")
+      Renalware::HD::GenerateMonthlyStatisticsAndRefreshMaterializedViewJob.perform_now(
+        month: ENV.fetch("month", nil),
+        year: ENV.fetch("year", nil))
     end
   end
 end
