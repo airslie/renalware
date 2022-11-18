@@ -26,10 +26,10 @@ module Renalware
 
       def create_regime(start_date:, end_date: nil, type: :apd_regime)
         regime = build(type,
-                       add_hd: false,
-                       patient: patient,
-                       start_date: start_date,
-                       end_date: end_date)
+          add_hd: false,
+          patient: patient,
+          start_date: start_date,
+          end_date: end_date)
         regime.bags << build(:pd_regime_bag, :everyday)
         regime.save!
         regime
@@ -103,6 +103,31 @@ module Renalware
 
             expect(UKRDC::Treatment.first).to have_attributes(
               modality_code: apd_ukrdc_modality_code
+            )
+          end
+        end
+
+        context "with 2 regimes of the same type" do
+          before { apd_ukrdc_modality_code }
+
+          it "creates a treatment for each" do
+            create_regime(start_date: Date.today, end_date: Date.parse("2049-01-04"), type: :apd_regime)
+            create_regime(start_date: Date.parse("2049-01-04"), end_date: nil, type: :apd_regime)
+
+            expect {
+              generator.call
+            }.to change(UKRDC::Treatment, :count).by(2)
+
+            treatments = UKRDC::Treatment.order(started_on: :asc)
+            expect(treatments[0]).to have_attributes(
+              modality_code: apd_ukrdc_modality_code,
+              started_on: Date.today,
+              ended_on: Date.parse("2049-01-04")
+            )
+            expect(treatments[1]).to have_attributes(
+              modality_code: apd_ukrdc_modality_code,
+              started_on: Date.parse("2049-01-04"),
+              ended_on: nil
             )
           end
         end
