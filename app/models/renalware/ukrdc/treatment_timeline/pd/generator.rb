@@ -44,17 +44,10 @@ module Renalware
             end
           end
 
-          # Things that trigger a new Treatment for an PD patient
-          # - change of regime type eg from APD to CAPD
-          # - ?
-          # Loop through the patient's regimes and trigger a new treatment when these change
+          # Create a Treatment for each regime change regardless of its type
           def create_treatments_within_modality
-            last_regime = pd_regime_at_start_of_modality
-
-            pd_regimes.each do |regime_|
-              regime = PD::RegimeDecorator.new(regime_, last_regime: last_regime)
-              create_treatment_from(regime) if last_regime.nil? || regime.changed?
-              last_regime = regime
+            pd_regimes.each do |regime|
+              create_treatment_from(regime)
             end
           end
 
