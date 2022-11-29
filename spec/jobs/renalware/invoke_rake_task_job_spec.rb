@@ -5,8 +5,21 @@ require "rails_helper"
 module Renalware
   describe InvokeRakeTaskJob, type: :job do
     describe "#perform" do
+      require "rake"
+      include Rake::DSL
+
+      after do
+        Rake::Task.clear
+      end
+
       it "calls a rake task" do
-        expect { described_class.perform_now("db:version") }.to output(/Current version/).to_stdout
+        task :test do
+          puts "test"
+        end
+
+        expect {
+          described_class.perform_now("test")
+        }.to output(/test/).to_stdout
       end
     end
   end
