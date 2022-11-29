@@ -107,16 +107,16 @@ module Renalware
 
           reporting_send_daily_summary_email: {
             cron: "every day at 11:45pm",
-            class: "Renalware::InvokeRakeTaskJob",
-            args: ["reporting:send_daily_summary_email"],
+            class: "Renalware::InvokeCommandJob",
+            args: ["bundle exec rake reporting:send_daily_summary_email"],
             description: "Send an email report on the day's
                           activity (exluding sensitive data) to configured recipients".squish
           },
 
           ukrdc_export: {
             cron: "Mon-Fri 1am",
-            class: "Renalware::InvokeRakeTaskJob",
-            args: ["ukrdc:export"],
+            class: "Renalware::InvokeCommandJob",
+            args: ["bundle exec rake ukrdc:export"],
             description: "Export UKRDC xml - initially to /apps/current/"
           }
         }

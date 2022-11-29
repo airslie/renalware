@@ -5,16 +5,13 @@ module Renalware
     class InvokeCommandJobError < StandardError; end
 
     def perform(command)
-      stdin, stdout, stderr, wait_thr = Open3.popen3(command)
-      err = stderr.read
-      msg = stdout.read
+      stdout, stderr, status = Open3.capture3(command)
 
-      if err.present?
-        raise InvokeCommandJobError, "#{err}; Command: #{command}"
-      end
+      puts stdout
 
-      if msg.present?
-        puts msg
+      unless status.success?
+        raise InvokeCommandJobError,
+              "Error executing '#{command}' stderror: '#{stderr} stdout: #{stdout}"
       end
     end
   end

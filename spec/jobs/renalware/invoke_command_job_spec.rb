@@ -16,9 +16,15 @@ module Renalware
       context "when command fails" do
         it "raises a ruby error" do
           expect {
-            described_class.perform_now('>&2 echo "error"')
+            described_class.perform_now("nonexistingcommand")
+          }.to raise_error(Errno::ENOENT, "No such file or directory - nonexistingcommand")
+
+          expect {
+            expect {
+              described_class.perform_now("(exit 1)")
+            }.to output.to_stdout_from_any_process
           }.to raise_error(described_class::InvokeCommandJobError,
-                           %Q(error\n; Command: >&2 echo "error"))
+                           /Error executing '\(exit 1\)'/)
         end
       end
     end
