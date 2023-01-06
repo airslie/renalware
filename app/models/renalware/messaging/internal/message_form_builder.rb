@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/messaging"
-
 # Builds a new MessageForm form object. MessageForm is used behind the html form when displaying a
 # `Send Message` Dialog the first time. Note that we don't use this builder again on e.g.
 # form submission - at that point all the required params are in the form payload - this is

@@ -3,13 +3,13 @@ en:
   renalware:
     medications:
       tabbed_prescriptions_list_component:
-        title: Prescriptions
+        administer_on_hd: Give on HD
+        dose: Dose
         drug_name: Drug
         drug_type: Type
-        dose: Dose
         frequency: Freq
-        route: Route
         provider: Provider
-        administer_on_hd: Give on HD
-        terminated_on: Term on
+        route: Route
         started_on: Started on
+        terminated_on: Term on
+        title: Prescriptions

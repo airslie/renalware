@@ -27,6 +27,10 @@ module Renalware
         current_plan.created_at
       end
 
+      def type
+        super
+      end
+
       private
 
       def current_plan

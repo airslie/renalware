@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-
 module Renalware
   module PD
-    class DashboardsController < PD::BaseController
+    class DashboardsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def show
-        authorize patient
+        authorize pd_patient
         render :show, locals: {
-          patient: patient,
-          dashboard: DashboardPresenter.new(patient)
+          patient: pd_patient,
+          dashboard: DashboardPresenter.new(pd_patient)
         }
       end
     end

@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 module Renalware
   module Letters
     class ContactsController < Letters::BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientVisibility
 
       def index
+        authorize Contact, :index?
         render :index, locals: {
-          patient: @patient,
+          patient: patient,
           contact: build_contact,
           contact_descriptions: find_contact_descriptions,
           contacts: find_contacts
@@ -17,7 +16,8 @@ module Renalware
       end
 
       def create
-        contact = @patient.assign_contact(contact_params)
+        contact = patient.assign_contact(contact_params)
+        authorize contact
         if contact.save
           create_contact_successful(contact)
         else
@@ -26,12 +26,11 @@ module Renalware
       end
 
       def edit
-        contact = patient.contacts.find(params[:id])
-        render_edit(contact)
+        render_edit(find_and_authorize_contact)
       end
 
       def update
-        contact = patient.contacts.find(params[:id])
+        contact = find_and_authorize_contact
         if contact.update(update_contact_params)
           flash.now[:notice] = success_msg_for("contact")
           render locals: { patient: patient, contact: ContactPresenter.new(contact) }
@@ -41,6 +40,10 @@ module Renalware
       end
 
       private
+
+      def find_and_authorize_contact
+        patient.contacts.find(params[:id]).tap { |contact| authorize contact }
+      end
 
       def render_edit(contact)
         render :edit, locals: {
@@ -64,7 +67,7 @@ module Renalware
 
       def find_contacts
         CollectionPresenter.new(
-          @patient.contacts.includes(:description).ordered,
+          patient.contacts.includes(:description, person: { address: :country }).ordered,
           ContactPresenter
         )
       end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 module Renalware
   module Clinics
     # TODO: Unused?
@@ -15,9 +13,9 @@ module Renalware
       def weight
         @weight ||= begin
           result = ClinicVisit
-                    .most_recent_for_patient(patient)
-                    .where.not(weight: nil)
-                    .pluck(:date, :weight).first || []
+            .most_recent_for_patient(patient)
+            .where.not(weight: nil)
+            .pick(:date, :weight) || []
 
           Observation.new(result.first, result.last)
         end
@@ -27,9 +25,9 @@ module Renalware
       def height
         @height ||= begin
           result = ClinicVisit
-                    .most_recent_for_patient(patient)
-                    .where.not(height: nil)
-                    .pluck(:date, :height).first || []
+            .most_recent_for_patient(patient)
+            .where.not(height: nil)
+            .pick(:date, :height) || []
 
           Observation.new(result.first, result.last)
         end
@@ -39,9 +37,9 @@ module Renalware
       def blood_pressure
         @blood_pressure ||= begin
           result = ClinicVisit
-                    .most_recent_for_patient(patient)
-                    .where("systolic_bp is not null and diastolic_bp is not null")
-                    .pluck(:date, :systolic_bp, :diastolic_bp).first || [nil, nil, nil]
+            .most_recent_for_patient(patient)
+            .where("systolic_bp is not null and diastolic_bp is not null")
+            .pick(:date, :systolic_bp, :diastolic_bp) || [nil, nil, nil]
 
           Observation.new(result[0], [result[1], result[2]])
         end

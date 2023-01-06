@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     # Backed by a view, returns pathology results grouped by the day the observation

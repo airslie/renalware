@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Events
-  describe EventTypeAlertTrigger, type: :model do
+  describe EventTypeAlertTrigger do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:event_type)
     end

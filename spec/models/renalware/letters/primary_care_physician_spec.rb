@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe PrimaryCarePhysician, type: :model do
+    describe PrimaryCarePhysician do
       include LettersSpecHelper
 
       subject(:primary_care_physician) { build(:letter_primary_care_physician) }

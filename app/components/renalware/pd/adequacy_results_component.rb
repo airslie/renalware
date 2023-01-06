@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/surveys"
-
 module Renalware
   module PD
     class AdequacyResultsComponent < ApplicationComponent
@@ -29,10 +27,14 @@ module Renalware
         end
       end
 
+      def render?
+        results.any?
+      end
+
       private
 
       def scope
-        AdequacyResult.for_patient(patient).ordered
+        AdequacyResult.includes([:patient]).for_patient(patient).ordered
       end
     end
   end

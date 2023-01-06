@@ -208,6 +208,10 @@ scss:
       clear: both;
     }
 
+    .clear-both {
+      clear: both;
+    }
+
     .investigations {
       clear: both;
 
@@ -322,7 +326,8 @@ scss:
     .patient-status
       p= render "patient_summary", patient: letter.patient
 
-    = render letter.parts, patient: letter.patient, letter: letter
+    = render letter.sections, letter: letter
+
     / empty small here is for RTF spacing
     small &nbsp;
     .message= letter.body&.html_safe

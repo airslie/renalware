@@ -1,53 +1,52 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd/base_controller"
-
 module Renalware
   module PD
     class PETAdequacyResultsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
       include PresenterHelper
-      before_action :load_patient
 
       def new
-        result = patient.pet_adequacy_results.new
+        result = pd_patient.pet_adequacy_results.new
         authorize result
-        render locals: { pet_adequacy_result: result, patient: patient }
+        render locals: { pet_adequacy_result: result, patient: pd_patient }
       end
 
       def create
-        result = patient.pet_adequacy_results.new(pet_adequacy_result_params)
+        result = pd_patient.pet_adequacy_results.new(pet_adequacy_result_params)
         authorize result
         if result.save
-          redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("PET Adequacy")
+          redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("PET Adequacy")
         else
           flash.now[:error] = failed_msg_for("PET Adequacy")
-          render :new, locals: { pet_adequacy_result: result, patient: patient }
+          render :new, locals: { pet_adequacy_result: result, patient: pd_patient }
         end
       end
 
       def edit
-        render locals: { pet_adequacy_result: pet_adequacy_result, patient: patient }
+        render locals: { pet_adequacy_result: pet_adequacy_result, patient: pd_patient }
       end
 
       def update
         pet_adequacy_result.assign_attributes(pet_adequacy_result_params)
         if pet_adequacy_result.save
-          redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("PET Adequacy")
+          redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("PET Adequacy")
         else
           flash.now[:error] = failed_msg_for("PET Adequacy")
-          render :edit, locals: { pet_adequacy_result: pet_adequacy_result, patient: patient }
+          render :edit, locals: { pet_adequacy_result: pet_adequacy_result, patient: pd_patient }
         end
       end
 
       def show
-        render locals: { pet_adequacy_result: pet_adequacy_result, patient: patient }
+        render locals: { pet_adequacy_result: pet_adequacy_result, patient: pd_patient }
       end
 
       private
 
       def pet_adequacy_result
         @pet_adequacy_result ||= begin
-          pet_adequacy_result = patient.pet_adequacy_results.find(params[:id])
+          pet_adequacy_result = pd_patient.pet_adequacy_results.find(params[:id])
           authorize pet_adequacy_result
           pet_adequacy_result
         end

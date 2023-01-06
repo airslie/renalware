@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Problems
-  describe Comorbidity, type: :model do
+  describe Comorbidity do
     let(:user) { create(:user) }
 
     it_behaves_like "an Accountable model"

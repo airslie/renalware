@@ -20,7 +20,7 @@ module Renalware
       let(:ure)   { create(:pathology_observation_description, :ure) }
       let(:urr)   { create(:pathology_observation_description, :urr) }
 
-      it "creates a PatientStatistics for the patient with hd sessions in the specified month "\
+      it "creates a PatientStatistics for the patient with hd sessions in the specified month " \
          "including a pathology snapshot with a subset of codes" do
         travel_to Date.new(2016, 12, 3) do
           create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)

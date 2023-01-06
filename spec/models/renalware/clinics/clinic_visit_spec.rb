@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Clinics::ClinicVisit, type: :model do
+describe Renalware::Clinics::ClinicVisit do
   it_behaves_like "an Accountable model"
   it :aggregate_failures do
     is_expected.to be_versioned

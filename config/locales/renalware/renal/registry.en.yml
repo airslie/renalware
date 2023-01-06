@@ -4,9 +4,9 @@ en:
     renal:
       registry_preflight_checks:
         table:
-          ethnicity: Ethnicity
-          prd: PRD
-          comorbidities_at_esrf: Comorbidities
-          first_seen_on: Date first seen
           cause_of_death: Cause of death
+          comorbidities_at_esrf: Comorbidities
           esrf: ESRF
+          ethnicity: Ethnicity
+          first_seen_on: Date first seen
+          prd: PRD

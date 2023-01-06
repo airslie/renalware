@@ -1,0 +1,9 @@
+= simple_form_for(topic, as: :topic, url: url) do |f|
+  = f.input :text
+
+  .mb-4
+    h6 Optional sections
+
+    = f.collection_check_boxes :section_identifiers, Renalware::Letters::Topic.sections_by_identifier.keys.map { |r| [r.to_s.titleize, r.to_s] }, :last, :first
+
+  = f.submit class: :button

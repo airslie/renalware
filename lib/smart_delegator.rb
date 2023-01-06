@@ -37,7 +37,7 @@ class SmartDelegator
 
   def method_missing(method, *args, &block)
     returned_object = object.public_send(method, *args, &block)
-    if returned_object.class == object.class
+    if returned_object.instance_of?(object.class)
       self.class.new(returned_object)
     else
       returned_object

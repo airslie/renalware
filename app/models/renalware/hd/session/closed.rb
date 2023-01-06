@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-require_dependency "renalware/patients/hdf_presence_validator"
 require "document/base"
 
 # This Closed (state) Session adds validation to the standard HD::Session in order

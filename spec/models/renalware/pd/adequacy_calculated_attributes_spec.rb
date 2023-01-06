@@ -40,6 +40,12 @@ module Renalware
 
         let(:adequacy) { AdequacyResult.new(urine_urea: 10, serum_urea: 20, urine_24_vol: 3000) }
 
+        context "when urine_24_vol is 0 (anuric)" do
+          before { adequacy.urine_24_vol = 0 }
+
+          it { is_expected.to eq(0.0) }
+        end
+
         context "when all values are present" do
           it { is_expected.to eq(10.5) }
         end
@@ -51,7 +57,7 @@ module Renalware
         end
 
         context "when urine_urea, serum_urea, urine_24_vol are zero or nil" do
-          attrs = %i(urine_urea serum_urea urine_24_vol)
+          attrs = %i(urine_urea serum_urea)
           invalid_values = [nil, 0]
 
           attrs.each do |attr|
@@ -77,6 +83,12 @@ module Renalware
           it { is_expected.to eq(10500.0) }
         end
 
+        context "when urine_24_vol is 0 (anuric)" do
+          before { adequacy.urine_24_vol = 0 }
+
+          it { is_expected.to eq(0.0) }
+        end
+
         context "when urine_24_missing is true" do
           before { adequacy.urine_24_missing = true }
 
@@ -84,7 +96,7 @@ module Renalware
         end
 
         context "when urine_creatinine, serum_creatinine, urine_24_vol are zero or nil" do
-          attrs = %i(urine_creatinine serum_creatinine urine_24_vol)
+          attrs = %i(urine_creatinine serum_creatinine)
           invalid_values = [nil, 0]
 
           attrs.each do |attr|
@@ -113,6 +125,12 @@ module Renalware
             height: height,
             weight: 100.99 # body_surface_area will eq 47.14
           )
+        end
+
+        context "when urine_24_vol is 0 (anuric)" do
+          before { adequacy.urine_24_vol = 0 }
+
+          it { is_expected.to eq(0.0) }
         end
 
         context "when all values are present" do
@@ -289,8 +307,14 @@ module Renalware
           it { is_expected.to eq(1.42) }
         end
 
+        context "when urine_24_vol is 0 (anuric)" do
+          before { adequacy.urine_24_vol = 0 }
+
+          it { is_expected.to eq(0.0) }
+        end
+
         context "when required adequacy values are nil or 0" do
-          attrs = %i(urine_urea serum_urea urine_24_vol)
+          attrs = %i(urine_urea serum_urea)
           invalid_values = [nil, 0]
 
           attrs.each do |attr|

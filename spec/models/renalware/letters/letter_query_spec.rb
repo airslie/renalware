@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe LetterQuery, type: :model do
+    describe LetterQuery do
       include LettersSpecHelper
       subject(:query) { LetterQuery.new }
 
@@ -21,6 +21,15 @@ module Renalware
         context "when there are no filters" do
           it "returns all letters" do
             expect(query.call.count).to eq(3)
+
+            # Check effective date; Default is desc
+            expect(query.call.map(&:state)).to eq %w(approved pending_review draft)
+
+            query = described_class.new(q: { s: "effective_date asc" })
+            expect(query.call.map(&:state)).to eq %w(draft pending_review approved)
+
+            query = described_class.new(q: { s: "effective_date desc" })
+            expect(query.call.map(&:state)).to eq %w(approved pending_review draft)
           end
         end
       end
@@ -28,7 +37,7 @@ module Renalware
       private
 
       def create_letter_in_state(state)
-        create_letter(state: state, to: :patient, patient: patient)
+        create_letter(state: state, to: :patient, patient: patient, created_at: DateTime.now)
       end
     end
   end

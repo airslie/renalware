@@ -8,6 +8,7 @@ Renalware::Engine.routes.draw do
   draw :api
   draw :clinical
   draw :clinics
+  draw :dietetics
   draw :directory
   draw :drugs
   draw :events
@@ -35,4 +36,6 @@ Renalware::Engine.routes.draw do
 
   # Last
   draw :fallbacks
+
+  resources :protouis
 end

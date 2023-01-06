@@ -6,7 +6,6 @@ module World
       module Domain
         # @section commands
 
-        # rubocop:disable Metrics/CyclomaticComplexity
         def create_global_rule(params)
           param_id =
             case params["type"]
@@ -37,11 +36,10 @@ module World
             param_comparison_value: params["value"]
           )
         end
-        # rubocop:enable Metrics/CyclomaticComplexity
 
         def create_global_rules_from_table(table)
           table.rows.map do |row|
-            params = Hash[table.headers.zip(row)]
+            params = table.headers.zip(row).to_h
             params["rule_set_id"] = @rule_set.id
             params["operator"] = nil if params["operator"].blank?
             params["value"] = nil if params["value"].blank?
@@ -79,7 +77,8 @@ module World
 
         # @section expectations
         #
-        def expect_observations_from_global(required_global_observations, observations_table)
+        def expect_observations_from_global(required_global_observations,
+observations_table)
           observations_table.rows.each do |row|
             request_description = Renalware::Pathology::RequestDescription.find_by!(code: row.first)
             expect(required_global_observations).to include(request_description)

@@ -1,4 +1,0 @@
---color
---backtrace
---format progress
---require turnip/rspec

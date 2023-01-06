@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/feeds"
-
 module Renalware
   module Feeds
     # Responsible for parsing a raw HL7 message as a string and creates a

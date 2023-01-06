@@ -77,7 +77,7 @@ module World
 
         clinical_presentation&.each do |item|
           label = t(item,
-                         scope: "enumerize.renalware/pd/exit_site_infection.clinical_presentation")
+                    scope: "enumerize.renalware/pd/exit_site_infection.clinical_presentation")
           check label
         end
 

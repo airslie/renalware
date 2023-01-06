@@ -5,7 +5,7 @@ en:
       donor_dashboards:
         show:
           add_donation: Donation
-          add_workup: Donor Workup
+          add_investigation: Add Investigation
           add_operation: Donor Transplant Operation
           add_status_update: Update Donor Stage
-          add_investigation: Add Investigation
+          add_workup: Donor Workup

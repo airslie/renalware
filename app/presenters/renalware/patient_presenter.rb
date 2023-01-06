@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-require_dependency "renalware/address_presenter/single_line"
-
 module Renalware
   class PatientPresenter < SimpleDelegator
     def address

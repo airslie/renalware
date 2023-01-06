@@ -4,14 +4,14 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe LetterFactory, type: :model do
-      subject(:factory) { LetterFactory.new(patient) }
+    describe LetterFactory do
+      let(:instance) { LetterFactory.new(patient) }
 
       let(:patient) { create(:letter_patient) }
 
       describe "#build" do
         it "sets the patient as the main recipient if no Primary Care Physician present" do
-          letter = factory.build
+          letter = instance.build
 
           expect(letter.main_recipient.person_role).to eq("patient")
         end
@@ -19,7 +19,7 @@ module Renalware
         it "sets the pathology date to the time of instantiation" do
           date = Time.zone.parse("2017-11-24 01:04:44")
           travel_to date do
-            letter = factory.build
+            letter = instance.build
             expect(letter.pathology_timestamp).to eq(date)
           end
         end
@@ -30,7 +30,7 @@ module Renalware
           it "sets the patient's Primary Care Physician as the main recipient if present" do
             patient.primary_care_physician = create(:letter_primary_care_physician)
 
-            letter = factory.build
+            letter = instance.build
 
             expect(letter.main_recipient.person_role).to eq("primary_care_physician")
           end
@@ -42,7 +42,7 @@ module Renalware
           it "sets the patient as the main recipient if present" do
             patient.primary_care_physician = create(:letter_primary_care_physician)
 
-            letter = factory.build
+            letter = instance.build
 
             expect(letter.main_recipient.person_role).to eq("patient")
           end
@@ -52,7 +52,7 @@ module Renalware
           before { patient.update_columns(practice_id: nil, primary_care_physician_id: nil) }
 
           it "sets the patient as the main recipient" do
-            letter = factory.build
+            letter = instance.build
 
             expect(letter.main_recipient.person_role).to eq("patient")
           end
@@ -87,7 +87,7 @@ module Renalware
 
           context "with contacts as default ccs" do
             it "sets the patient's default CC's" do
-              letter = factory.with_contacts_as_default_ccs.build
+              letter = instance.with_contacts_as_default_ccs.build
 
               addressees = letter.cc_recipients.map(&:addressee)
               expect(addressees).to include(default_cc_contact)

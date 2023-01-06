@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/admin"
-
 module Renalware
   module Letters
     class PdfLetterCacheController < BaseController

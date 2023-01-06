@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/events"
-
 module Renalware
   module Events
     # Used to defines conditions where, for a particular event type, if the there is e.g. a case-

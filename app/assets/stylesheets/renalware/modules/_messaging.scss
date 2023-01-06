@@ -27,7 +27,7 @@
 
   .message-preview {
     padding: 0.4rem 1rem;
-
+    
     .subject {
       font-weight: bold;
       margin: 0 0 0.5rem;
@@ -45,6 +45,21 @@
     span {
       border-radius: 0.3rem;
       padding: 0.2rem 0.4rem;
+    }
+  }
+
+  .message-toggleable-row {
+    border-left: solid 3px #ccc;
+  }
+
+  // When tr toggled open
+  .content-toggled {
+    td {
+      border-bottom: none
+    }
+
+    td:first-child {
+      border-left: solid 3px #ccc;
     }
   }
 }

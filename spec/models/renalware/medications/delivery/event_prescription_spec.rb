@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module Medications
     module Delivery
-      describe EventPrescription, type: :model do
+      describe EventPrescription do
         it { is_expected.to belong_to :event }
         it { is_expected.to belong_to :prescription }
         it { is_expected.to validate_presence_of :event }

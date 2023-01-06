@@ -1,0 +1,42 @@
+= content_for(:actions) do
+  - if policy(topics).new?
+    = link_to t("btn.add"),
+              new_letters_topic_path,
+              class: "button"
+
+= within_new_admin_layout(title: "Letter Topics") do
+  .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
+    i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+    ' Deleting a letter topic sets the 'deleted at' date, preventing it from
+    ' being used prospectively.
+    br
+    ' Drag and drop the icon to change the sort order.
+
+  table
+    thead
+      tr
+        th.col-width-small
+        th.col-width-xlarge Name
+        - if policy(topics).sort?
+          th.col-width-small.text-center Sort order
+        th.col-width-date-time Created at
+        th Deleted at
+    tbody.sortables(data-rel=sort_letters_topics_path)
+      - topics.each do |topic|
+        tr(id=dom_id(topic) class="sortable #{topic.deleted? ? 'deleted' : ''}")
+          td.actions
+            = link_to_if_allowed policy(topic).edit?,
+                                 t("btn.edit"),
+                                 edit_letters_topic_path(topic)
+            = link_to_if_allowed policy(topic).destroy?,
+                                 t("btn.delete"),
+                                 letters_topic_path(topic),
+                                 method: :delete,
+                                 data: { confirm: "Are you sure?" }
+          td= topic.text
+          - if policy(topic).sort?
+            td.handle
+              - unless topic.deleted?
+                i.fas.fa-bars
+          td= l(topic.created_at)
+          td= l(topic.deleted_at)

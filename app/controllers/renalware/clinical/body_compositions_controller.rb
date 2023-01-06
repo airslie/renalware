@@ -1,37 +1,42 @@
 # frozen_string_literal: true
 
 require "collection_presenter"
-require_dependency "renalware/clinical"
 
 module Renalware
   module Clinical
-    class BodyCompositionsController < Clinical::BaseController
+    class BodyCompositionsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::Pageable
-      before_action :load_patient
 
       def index
-        body_compositions = BodyComposition.for_patient(patient).ordered.page(page).per(per_page)
-        render locals: { patient: patient, body_compositions: body_compositions }
+        authorize BodyComposition, :index?
+        body_compositions = BodyComposition.for_patient(clinical_patient)
+                                           .ordered.page(page)
+                                           .per(per_page)
+        render locals: { patient: clinical_patient, body_compositions: body_compositions }
       end
 
       def show
         body_composition = find_body_composition
-        render locals: { patient: patient, body_composition: body_composition }
+        render locals: { patient: clinical_patient, body_composition: body_composition }
       end
 
       def new
         body_composition = BodyComposition.new(
-          patient: patient,
+          patient: clinical_patient,
           assessor: current_user,
           assessed_on: Time.zone.today
         )
+        authorize body_composition
         render_new(body_composition)
       end
 
       def create
         body_composition = build_body_composition
+        authorize body_composition
         if body_composition.save
-          redirect_to patient_clinical_profile_path(patient),
+          redirect_to patient_clinical_profile_path(clinical_patient),
                       notice: success_msg_for("body composition")
         else
           flash.now[:error] = failed_msg_for("body composition")
@@ -41,17 +46,17 @@ module Renalware
 
       def edit
         body_composition = find_body_composition
-        render locals: { patient: patient, body_composition: body_composition }
+        render locals: { patient: clinical_patient, body_composition: body_composition }
       end
 
       def update
         body_composition = find_body_composition
         authorize body_composition
         if body_composition.update(body_composition_params)
-          redirect_to patient_clinical_profile_path(patient),
+          redirect_to patient_clinical_profile_path(clinical_patient),
                       notice: success_msg_for("body_composition")
         else
-          render :edit, locals: { patient: patient, body_composition: body_composition }
+          render :edit, locals: { patient: clinical_patient, body_composition: body_composition }
         end
       end
 
@@ -60,15 +65,15 @@ module Renalware
       def render_new(body_composition)
         render :new, locals: {
           body_composition: body_composition,
-          patient: patient
+          patient: clinical_patient
         }
       end
 
       def build_body_composition
         BodyComposition.new(
           body_composition_params.to_h.merge!(
-            patient: patient,
-            modality_description: patient.modality_description
+            patient: clinical_patient,
+            modality_description: clinical_patient.modality_description
           )
         )
       end
@@ -81,7 +86,9 @@ module Renalware
       end
 
       def find_body_composition
-        Clinical::BodyComposition.for_patient(patient).find(params[:id])
+        Clinical::BodyComposition
+          .for_patient(clinical_patient)
+          .find(params[:id]).tap { |bc| authorize(bc) }
       end
 
       def attributes

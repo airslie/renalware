@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
 require "collection_presenter"
 
 # rubocop:disable Metrics/ClassLength
 module Renalware
   module HD
     class SessionsController < BaseController
-      include PresenterHelper
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::Pageable
-
-      before_action :load_patient
+      include PresenterHelper
 
       def index
         query = sessions_query
@@ -22,19 +21,19 @@ module Renalware
         authorize sessions
         presenter = CollectionPresenter.new(sessions, SessionPresenter, view_context)
         @q = query.search
-        render :index, locals: { patient: patient, sessions: presenter }
+        render :index, locals: { patient: hd_patient, sessions: presenter }
       end
 
       def show
-        session = Session.for_patient(patient).find(params[:id])
+        session = find_session
         authorize session
         presenter = SessionPresenter.new(session, view_context)
-        render :show, locals: { session: presenter, patient: patient }
+        render :show, locals: { session: presenter, patient: hd_patient }
       end
 
       def new
         session = SessionFactory.new(
-          patient: patient,
+          patient: hd_patient,
           user: current_user,
           type: params[:type]
         ).build
@@ -48,13 +47,14 @@ module Renalware
       end
 
       def edit
-        session = Session.for_patient(patient).find(params[:id])
+        session = find_session
+        authorize session
         session.duration_form = Sessions::DurationForm.duration_form_for(session)
         authorize session
         render :edit, locals: locals(session)
       rescue Pundit::NotAuthorizedError
         flash[:warning] = t(".session_is_immutable")
-        redirect_to patient_hd_session_path(session, patient_id: patient)
+        redirect_to patient_hd_session_path(session, patient_id: hd_patient)
       end
 
       def update
@@ -62,16 +62,17 @@ module Renalware
       end
 
       def destroy
-        session = Session.for_patient(patient).find(params[:id])
+        session = find_session
         authorize session
         session.destroy!
         regenerate_rolling_hd_statistics
         message = success_msg_for("HD session")
-        redirect_to patient_hd_dashboard_path(patient), notice: message
+        redirect_to patient_hd_dashboard_path(hd_patient), notice: message
       end
 
       def save_session
-        command = Sessions::SaveSession.new(patient: patient, current_user: current_user)
+        authorize HD::Session::Closed, :"#{action_name}?"
+        command = Sessions::SaveSession.new(patient: hd_patient, current_user: current_user)
         command.subscribe(self)
         command.call(params: session_params,
                      id: params[:id],
@@ -79,7 +80,7 @@ module Renalware
       end
 
       def save_success(_session)
-        url = patient_hd_dashboard_path(patient)
+        url = patient_hd_dashboard_path(hd_patient)
         message = success_msg_for("HD session")
         redirect_to url, notice: message
       end
@@ -92,15 +93,19 @@ module Renalware
 
       protected
 
+      def find_session
+        Session.for_patient(hd_patient).find(params[:id])
+      end
+
       def locals(session)
         {
           session: session,
-          patient: patient
+          patient: hd_patient
         }
       end
 
       def sessions_query
-        Sessions::PatientQuery.new(patient: patient, q: params[:q])
+        Sessions::PatientQuery.new(patient: hd_patient, q: params[:q])
       end
 
       def session_params
@@ -129,7 +134,7 @@ module Renalware
       end
 
       def regenerate_rolling_hd_statistics
-        Delayed::Job.enqueue UpdateRollingPatientStatisticsDjJob.new(patient.id)
+        Delayed::Job.enqueue UpdateRollingPatientStatisticsDjJob.new(hd_patient.id)
       end
     end
   end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     class CreateObservationsGroupedByDateTable2
@@ -33,15 +31,20 @@ module Renalware
         )
       end
 
+      # NB: does not actually group results by date but returns a row for each observed_at datetime.
       def observations
         pagy(
-          ObservationsGroupedByDate.where(group: code_group_name, patient_id: patient.id),
+          ObservationsGroupedByDate.where(group: code_group.name, patient_id: patient.id),
           items: per_page
         )[1]
       end
 
+      # code_group_name might be eg :pd_mdm so we try and find it but the hospital might not
+      # have defined it in which case we use the default group.
       def code_group
-        @code_group ||= CodeGroup.find_by!(name: code_group_name)
+        @code_group ||= begin
+          CodeGroup.find_by(name: code_group_name) || CodeGroup.find_by!(name: "default")
+        end
       end
     end
   end

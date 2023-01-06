@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

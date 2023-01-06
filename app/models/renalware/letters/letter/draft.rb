@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters/letter"
-
 module Renalware
   module Letters
     class Letter::Draft < Letter

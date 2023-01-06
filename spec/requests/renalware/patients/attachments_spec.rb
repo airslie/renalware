@@ -186,7 +186,7 @@ describe "Managing files attached to a patient" do
       follow_redirect!
       expect(response).to be_redirect
       follow_redirect!
-      expect(response.content_type).to eq("image/png")
+      expect(response.media_type).to eq("image/png")
     end
   end
 

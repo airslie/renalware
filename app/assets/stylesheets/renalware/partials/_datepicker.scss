@@ -1,9 +1,6 @@
-.datepicker-wrapper {
-  margin-bottom: 1rem !important;
-}
-
 .datepicker {
   width: 240px;
+  position: relative;
 
   table {
     border-collapse: initial;
@@ -11,12 +8,12 @@
   }
 
   &.dropdown-menu {
-    font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
   }
 }
 
 .datepicker-wrapper,
-.datetimepicker-wrapper, {
+.datetimepicker-wrapper {
   max-width: 250px !important;
 
   i {

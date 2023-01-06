@@ -1,5 +1,5 @@
 = content_for(:tabs) do
-  = render "tabs", study: study
+  = render "tabs", study: study, active: :summary
 
 = within_admin_layout(title: study.code,
                       breadcrumbs: breadcrumb_for("Clinical Studies",
@@ -12,3 +12,6 @@
       = "Started on: #{l(study.started_on)}"
       br
       = "Leader: #{study.leader}"
+
+  - if study.type.present?
+    = render path_to_research_show_partial(study.type, :studies)

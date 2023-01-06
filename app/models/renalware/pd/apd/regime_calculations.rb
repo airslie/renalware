@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
 require_relative "./glucose_calculator"
 
 module Renalware

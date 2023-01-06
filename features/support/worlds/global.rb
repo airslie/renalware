@@ -29,7 +29,8 @@ module World
           email: "#{email_name}@renalware.com",
           password: "supersecret",
           approved: true,
-          prescriber: true
+          prescriber: true,
+          hospital_centre: FactoryBot.create(:hospital_centre)
         )
       end
       user.roles << Renalware::Role.find_or_create_by(name: role) unless user.roles.any?
@@ -45,6 +46,7 @@ module World
         local_patient_id: FactoryBot.generate(:local_patient_id),
         sex: "M",
         born_on: Time.zone.today,
+        hospital_centre: FactoryBot.create(:hospital_centre),
         by: Renalware::SystemUser.find
       )
     end

@@ -3,10 +3,11 @@ en:
   renalware:
     low_clearance:
       dashboards:
+        page_actions:
+          add_profile: Profile
+          mdm: MDM
+          missing_modality_warning: 'Some actions will be unavailable until you add the Advanced Kidney Care modality
+
+            '
         show:
           title: AKCC Summary
-        page_actions:
-          mdm: MDM
-          add_profile: Profile
-          missing_modality_warning: >
-              Some actions will be unavailable until you add the Advanced Kidney Care modality

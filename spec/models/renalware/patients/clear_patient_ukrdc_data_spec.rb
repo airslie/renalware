@@ -7,7 +7,7 @@ module Renalware
     describe ClearPatientUKRDCData do
       describe "#call" do
         it "clears the RPV status if the modality description type is death" do
-          travel_to(Time.zone.now) do
+          freeze_time do
             patient = create(:patient, send_to_rpv: true, rpv_decision_on: 1.year.ago)
             user = create(:user)
 
@@ -21,7 +21,7 @@ module Renalware
         end
 
         context "when the patient has data that would cause a validation error" do
-          it "saves anyway, skipping validations, because a bad email address for example "\
+          it "saves anyway, skipping validations, because a bad email address for example " \
              "should not prevent this action" do
             user = create(:user)
             patient = build(:patient, send_to_rpv: true, email: "invalid-email-address", by: user)

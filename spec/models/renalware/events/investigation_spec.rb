@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Events
-    describe Investigation, type: :model do
+    describe Investigation do
       describe "#document" do
         subject { described_class.new.document }
 

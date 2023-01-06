@@ -1,38 +1,35 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/patient:
-        cc_on_all_letters: CC on all letters
-        cc_decision_on: CC decision date
-        nhs_number: NHS Number
-        external_patient_id: Other Hospital No.
-        sex: Sex
-        born_on: Date of Birth
-        age: Age
-        send_to_renalreg: Send data to Renal Registry
-        send_to_rpv: Send data to Renal Patient View (RPV)
-        renalreg_decision_on: Renal Reg decision date
-        rpv_decision_on: RPV decision date
-        renalreg_recorded_by: Renal Reg decision recorded by
-        rpv_recorded_by: RPV decision recorded by
-        language: Main Language
   activemodel:
     attributes:
       renalware/patient_document:
         diabetes: Diabetes
-      renalware/patient_document/history:
-        alcohol:
-        smoking:
+  activerecord:
+    attributes:
+      renalware/patient:
+        age: Age
+        born_on: Date of Birth
+        cc_decision_on: CC decision date
+        cc_on_all_letters: CC on all letters
+        external_patient_id: Other Hospital No.
+        language: Main Language
+        nhs_number: NHS Number
+        renalreg_decision_on: Renal Reg decision date
+        renalreg_recorded_by: Renal Reg decision recorded by
+        rpv_decision_on: RPV decision date
+        rpv_recorded_by: RPV decision recorded by
+        send_to_renalreg: Send data to Renal Registry
+        send_to_rpv: Send data to Renal Patient View (RPV)
+        sex: Sex
   enumerize:
     renalware/patient:
       allergy_status:
-        unrecorded: Unrecorded
-        known_allergies: ""
+        known_allergies: ''
         no_known_allergies: No Known
         unavailable: Allergies Unavailable
+        unrecorded: Unrecorded
     renalware/patient_document/history:
       smoking:
-        'yes': Current
-        'no': Never
         ex: Former
+        'no': Never
+        'yes': Current

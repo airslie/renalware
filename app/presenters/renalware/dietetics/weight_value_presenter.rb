@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+module Renalware
+  module Dietetics
+    class WeightValuePresenter
+      def initialize(value)
+        @value = value
+      end
+
+      def to_s
+        return nil unless @value
+
+        "#{@value} kg"
+      end
+    end
+  end
+end

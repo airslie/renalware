@@ -1,32 +1,32 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/renal/profile:
-        prd_description: Primary Renal Diagnosis (PRD)
-        esrf_on: ESRF Date
-        first_seen_on: Date First Seen
-        weight_at_esrf: Weight at ESRF
-        modality_at_esrf: Modality at ESRF
-        comorbidities_updated_on: Comorbidities Updated
   activemodel:
     attributes:
       renalware/renal/profile_document/comorbidities:
-        diabetes: Diabetes
-        ischaemic_heart_dis: Ischaemic Heart Disease
-        cabg_or_angioplasty: CABG or Coronary Angioplasty
-        heart_failure: Episode of heart failure (R or L)
+        amputation_for_pvd: Amputation for PVD
         atrial_fibrill: Atrial Fibrillation
-        malignancy: Malignancy
+        cabg_or_angioplasty: CABG or Coronary Angioplasty
         cerebrovascular_dis: Cerebrovascular Disease
         chronic_obstr_pulm_dis: Chronic Obstructive Pulmonary Disease
-        liver_disease: Liver disease
-        periph_vascular_dis: Peripheral Vascular Disease
-        amputation_for_pvd: Amputation for PVD
         claudication: Claudication
-        ischaemic_neuropathic_ulcers: Ischaemic/Neuropathic ulcers
-        non_coronary_intervention: Angioplasty, vascular graft, aneurysm, stent (non-coronary)
         dementia: Dementia
+        diabetes: Diabetes
+        heart_failure: Episode of heart failure (R or L)
+        ischaemic_heart_dis: Ischaemic Heart Disease
+        ischaemic_neuropathic_ulcers: Ischaemic/Neuropathic ulcers
+        liver_disease: Liver disease
+        malignancy: Malignancy
+        non_coronary_intervention: Angioplasty, vascular graft, aneurysm, stent (non-coronary)
+        periph_vascular_dis: Peripheral Vascular Disease
+  activerecord:
+    attributes:
+      renalware/renal/profile:
+        comorbidities_updated_on: Comorbidities Updated
+        esrf_on: ESRF Date
+        first_seen_on: Date First Seen
+        modality_at_esrf: Modality at ESRF
+        prd_description: Primary Renal Diagnosis (PRD)
+        weight_at_esrf: Weight at ESRF
   simple_form:
     hints:
       renal_profile:

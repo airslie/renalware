@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe Delivery::PracticeMailer, type: :mailer do
+    describe Delivery::PracticeMailer do
       subject(:mail) do
         described_class.patient_letter(letter: letter, to: recipient_email)
       end

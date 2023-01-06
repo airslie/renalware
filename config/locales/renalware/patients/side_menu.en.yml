@@ -4,40 +4,40 @@ en:
     patients:
       side_menu:
         actions:
-          heading: Actions
+          create_alert: Create alert
           create_bookmark: Bookmark
           delete_bookmark: Remove bookmark
-          send_message: Send message
-          create_alert: Create alert
+          heading: Actions
           request_admission: Request admission
+          send_message: Send message
         general:
-          heading: General
-          clinic_visits: Clinic Visits (%{count})
-          letters: Letters (%{count})
-          events: Events (%{count})
           access_profiles: Access Summary
-          prescriptions: Prescriptions (%{count})
-          pathology: Pathology (%{count})
-          virology: Virology
-          problems: Problems (%{count})
-          comorbidities: Comorbidities
-          modalities: Modalities (%{count})
-          esrf: Renal Profile
+          attachments: Linked Files (%{count})
+          clinic_visits: Clinic Visits (%{count})
           clinical_profile: Clinical Profile
+          clinical_summary: Clinical Summary
+          comorbidities: Comorbidities
           contacts: Contacts (%{count})
           demographics: Demographics
-          clinical_summary: Clinical Summary
+          esrf: Renal Profile
+          events: Events (%{count})
+          heading: General
           inpatient_admissions: Inpatient Admissions (%{count})
+          letters: Letters (%{count})
           messages: Messages
-          proms: PROMS
-          attachments: Linked Files (%{count})
+          modalities: Modalities (%{count})
+          pathology: Pathology (%{count})
           perspectives: Complex Charts
+          prescriptions: Prescriptions (%{count})
+          problems: Problems (%{count})
+          proms: PROMS
+          virology: Virology
         modalities:
-          heading: Modalities
-          pd: PD
           hd: HD
+          heading: Modalities
           low_clearance: AKCC
+          pd: PD
         transplants:
-          heading: Transplants
           donor_summary: Donor Summary
+          heading: Transplants
           recipient_summary: Recipient Summary

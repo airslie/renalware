@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-
 module Renalware
   module HD
     class Patient < ActiveType::Record[Renalware::Patient]
@@ -9,6 +7,11 @@ module Renalware
       has_one :hd_preference_set, class_name: "PreferenceSet"
       has_many :hd_sessions, class_name: "Session"
       has_many :prescription_administrations
+      has_many :patient_statistics
+      has_one :rolling_patient_statistics, lambda {
+                                             merge(PatientStatistics.rolling)
+                                           }, class_name: "PatientStatistics"
+
       scope :with_profile, lambda {
         includes(hd_profile: :hospital_unit)
         .joins(<<-SQL.squish)

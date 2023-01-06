@@ -17,6 +17,7 @@ tbody.hd-session-row(class=[session.state, stripe_class])
     td.nowrap(rowspan=2)= session.blood_flow
     td.nowrap(rowspan=2)= session.litres_processed
     td.nowrap(rowspan=2)= session.fluid_removed
+    td.col-width-small-with-ellipsis.nowrap.noprint(rowspan=2 title=session.station)= session.station 
     td.nowrap(rowspan=2)= session.machine_no
     td.nowrap(rowspan=2)= session.machine_ktv
     td.nowrap(rowspan=2)= session.machine_urr
@@ -38,7 +39,7 @@ tbody.hd-session-row(class=[session.state, stripe_class])
     td.nowrap= session.after_measurement_for(:blood_pressure)
     td.print-only= session.signed_off_by
   tr.noprint
-    td(colspan=20)
+    td(colspan=21)
       .quick-preview
         = definition_list_for(session, size: :large) do |list|
           = list.definition(:notes){ |value| simple_format(value) }

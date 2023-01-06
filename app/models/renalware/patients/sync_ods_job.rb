@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
 require "nhs_api_client"
 
 module Renalware

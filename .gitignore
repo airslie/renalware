@@ -50,9 +50,7 @@ rerun.txt
 /Find Results
 key.gpg
 /spec/dummy/generated_organisations.csv
-/.vscode
 /spec/dummy/coverage
-/.vscode
 /.rubocop_todo.yml
 /rubocop_todo.yml
 /letter-pdf-1-104-20180830113638-05b485cce1aecfcfceb1f52149d0c673.pdf
@@ -74,3 +72,4 @@ spec/dummy/yarn-error.log
 spec/dummy/config/tailwind.config.js
 spec/dummy/app/assets/builds/tailwind.css
 ukrdc_keyring.*
+config/master.key

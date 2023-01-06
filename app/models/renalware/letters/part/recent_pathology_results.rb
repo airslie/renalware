@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-require "renalware/letters/part"
-
 # When rendered, the template in `to_partial_path` will be used, and our Part object here will be
 # available in the partial as `recent_pathology_results`.
 module Renalware
   module Letters
-    class Part::RecentPathologyResults < Part
+    class Part::RecentPathologyResults < Section
       delegate :each, :any?, :present?, to: :results
 
       def to_partial_path

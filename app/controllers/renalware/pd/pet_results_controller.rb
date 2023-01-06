@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-
 module Renalware
   module PD
-    class PETResultsController < PD::BaseController
+    class PETResultsController < Renalware::BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def new
         pet = PETResult.new(
-          patient: patient,
+          patient: pd_patient,
           performed_on: Date.current
         )
         authorize pet
@@ -19,7 +20,7 @@ module Renalware
         authorize pet
 
         if pet.save_by(current_user)
-          redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("PET result")
+          redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("PET result")
         else
           render_new(pet)
         end
@@ -32,7 +33,7 @@ module Renalware
             render json: pet_graph_data
           end
           format.js do
-            results = patient.pet_results.ordered
+            results = pd_patient.pet_results.ordered
             authorize results
             render locals: { results: results }
           end
@@ -46,7 +47,7 @@ module Renalware
       def update
         pet = find_authorize_pet_result
         if pet.update_by(current_user, pet_result_params)
-          redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("PET result")
+          redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("PET result")
         else
           render_edit(pet)
         end
@@ -54,13 +55,13 @@ module Renalware
 
       def destroy
         find_authorize_pet_result.destroy!
-        redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("Result")
+        redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("Result")
       end
 
       private
 
       def pet_graph_data
-        patient
+        pd_patient
           .pet_results
           .where("d_pcr is not null and net_uf is not null")
           .order(performed_on: :asc)
@@ -68,7 +69,7 @@ module Renalware
       end
 
       def find_authorize_pet_result
-        PD::PETResult.for_patient(patient).find(params[:id]).tap do |pet|
+        PD::PETResult.for_patient(pd_patient).find(params[:id]).tap do |pet|
           authorize pet
         end
       end

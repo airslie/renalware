@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe PD::PeritonitisEpisode, type: :model do
+  describe PD::PeritonitisEpisode do
     include DrugsSpecHelper
 
     it :aggregate_failures do

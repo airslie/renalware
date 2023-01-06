@@ -41,7 +41,7 @@ module Renalware
       )
     }
 
-    describe ".to_s which builds an IDENT string describing the letter attachment in the email, "\
+    describe ".to_s which builds an IDENT string describing the letter attachment in the email, " \
              "and which will be parsed at the practice to file the letter appropriately" do
       context "when config defaults are assumed" do
         it "renders the IDENT using defaults for missing arguments" do
@@ -63,23 +63,23 @@ module Renalware
           visit_or_letter_date = "01/01/2018" # letter.approved_at
 
           expect(metadata.to_s).to eq(
-            "<IDENT>"\
-            "PRAC1|"\
-            "Jones|"\
-            "Tom|"\
-            "Z123|"\
-            "9999999999|"\
-            "01/02/1967|"\
-            "ConfiguredHospitalName|"\
-            "ConfiguredSystem|"\
-            "#{visit_or_letter_date}|"\
-            "LetterDescription|"\
-            "111|"\
-            "Bach, Johann Sebastian|"\
-            "01/01/2018|"\
-            "G123|"\
-            "ConfiguredCareGroup|"\
-            "Johann S. Bach"\
+            "<IDENT>" \
+            "PRAC1|" \
+            "Jones|" \
+            "Tom|" \
+            "Z123|" \
+            "9999999999|" \
+            "01/02/1967|" \
+            "ConfiguredHospitalName|" \
+            "ConfiguredSystem|" \
+            "#{visit_or_letter_date}|" \
+            "LetterDescription|" \
+            "111|" \
+            "Bach, Johann Sebastian|" \
+            "01/01/2018|" \
+            "G123|" \
+            "ConfiguredCareGroup|" \
+            "Johann S. Bach" \
             "</IDENT>"
           )
         end
@@ -101,23 +101,23 @@ module Renalware
           visit_or_letter_date = "01/01/2018" # letter.approved_at
 
           expect(metadata.to_s).to eq(
-            "<IDENT>"\
-            "PRAC1|"\
-            "Jones|"\
-            "Tom|"\
-            "Z123|"\
-            "9999999999|"\
-            "01/02/1967|"\
-            "MyHospital|"\
-            "MySystem|"\
-            "#{visit_or_letter_date}|"\
-            "LetterDescription|"\
-            "111|"\
-            "Bach, Johann Sebastian|"\
-            "01/01/2018|"\
-            "G123|"\
-            "MyCareGroup|"\
-            "Johann S. Bach"\
+            "<IDENT>" \
+            "PRAC1|" \
+            "Jones|" \
+            "Tom|" \
+            "Z123|" \
+            "9999999999|" \
+            "01/02/1967|" \
+            "MyHospital|" \
+            "MySystem|" \
+            "#{visit_or_letter_date}|" \
+            "LetterDescription|" \
+            "111|" \
+            "Bach, Johann Sebastian|" \
+            "01/01/2018|" \
+            "G123|" \
+            "MyCareGroup|" \
+            "Johann S. Bach" \
             "</IDENT>"
           )
         end
@@ -139,23 +139,23 @@ module Renalware
           visit_or_letter_date = "01/01/2018"
 
           expect(metadata.to_s).to eq(
-            "<IDENT>"\
-            "PRAC1|"\
-            "Jones|"\
-            "Tom|"\
-            "Z123|"\
-            "9999999999|"\
-            "01/02/1967|"\
-            "MyHospital|"\
-            "MySystem|"\
-            "#{visit_or_letter_date}|"\
-            "LetterDescription|"\
-            "111|"\
-            "Bach, Johann Sebastian|"\
-            "01/01/2018|"\
-            "|"\
-            "MyCareGroup|"\
-            "Johann S. Bach"\
+            "<IDENT>" \
+            "PRAC1|" \
+            "Jones|" \
+            "Tom|" \
+            "Z123|" \
+            "9999999999|" \
+            "01/02/1967|" \
+            "MyHospital|" \
+            "MySystem|" \
+            "#{visit_or_letter_date}|" \
+            "LetterDescription|" \
+            "111|" \
+            "Bach, Johann Sebastian|" \
+            "01/01/2018|" \
+            "|" \
+            "MyCareGroup|" \
+            "Johann S. Bach" \
             "</IDENT>"
           )
         end
@@ -177,23 +177,23 @@ module Renalware
           visit_or_letter_date = "01/01/2018"
 
           expect(metadata.to_s).to eq(
-            "<IDENT>"\
-            "|"\
-            "Jones|"\
-            "Tom|"\
-            "Z123|"\
-            "9999999999|"\
-            "01/02/1967|"\
-            "MyHospital|"\
-            "MySystem|"\
-            "#{visit_or_letter_date}|"\
-            "LetterDescription|"\
-            "111|"\
-            "Bach, Johann Sebastian|"\
-            "01/01/2018|"\
-            "|"\
-            "MyCareGroup|"\
-            "Johann S. Bach"\
+            "<IDENT>" \
+            "|" \
+            "Jones|" \
+            "Tom|" \
+            "Z123|" \
+            "9999999999|" \
+            "01/02/1967|" \
+            "MyHospital|" \
+            "MySystem|" \
+            "#{visit_or_letter_date}|" \
+            "LetterDescription|" \
+            "111|" \
+            "Bach, Johann Sebastian|" \
+            "01/01/2018|" \
+            "|" \
+            "MyCareGroup|" \
+            "Johann S. Bach" \
             "</IDENT>"
           )
         end
@@ -220,23 +220,23 @@ module Renalware
           end
 
           expect(metadata.to_s).to eq(
-            "<IDENT>"\
-            "PRAC1|"\
-            "Jones|"\
-            "Tom|"\
-            "Z123|"\
-            "9999999999|"\
-            "01/02/1967|"\
-            "ConfiguredHospitalName|"\
-            "ConfiguredSystem|"\
-            "#{visit_date}|"\
-            "LetterDescription|"\
-            "111|"\
-            "Bach, Johann Sebastian|"\
-            "01/01/2018|"\
-            "G123|"\
-            "ConfiguredCareGroup|"\
-            "Johann S. Bach"\
+            "<IDENT>" \
+            "PRAC1|" \
+            "Jones|" \
+            "Tom|" \
+            "Z123|" \
+            "9999999999|" \
+            "01/02/1967|" \
+            "ConfiguredHospitalName|" \
+            "ConfiguredSystem|" \
+            "#{visit_date}|" \
+            "LetterDescription|" \
+            "111|" \
+            "Bach, Johann Sebastian|" \
+            "01/01/2018|" \
+            "G123|" \
+            "ConfiguredCareGroup|" \
+            "Johann S. Bach" \
             "</IDENT>"
           )
         end

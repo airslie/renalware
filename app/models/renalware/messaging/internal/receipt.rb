@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/messaging"
-
 module Renalware
   module Messaging
     module Internal
@@ -10,7 +8,7 @@ module Renalware
         validates :message, presence: true
 
         belongs_to :message
-        belongs_to :recipient
+        belongs_to :recipient, touch: true
 
         scope :unread, -> { where(read_at: nil) }
         scope :read, -> { where.not(read_at: nil) }

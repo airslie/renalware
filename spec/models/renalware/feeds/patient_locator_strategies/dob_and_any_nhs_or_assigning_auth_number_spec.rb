@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Feeds
-  describe PatientLocatorStrategies::DobAndAnyNHSOrAssigningAuthNumber, type: :model do
+  describe PatientLocatorStrategies::DobAndAnyNHSOrAssigningAuthNumber do
     describe "#call" do
       [
         {

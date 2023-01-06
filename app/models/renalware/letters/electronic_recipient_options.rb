@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
+# rubocop:disable Rails/AttributeDefaultBlockValue
 module Renalware
   module Letters
     class ElectronicRecipientOptions
@@ -86,3 +85,4 @@ module Renalware
     end
   end
 end
+# rubocop:enable Rails/AttributeDefaultBlockValue

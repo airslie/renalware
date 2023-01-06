@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "delayed_job_active_record"
 
 module Renalware
   module HD

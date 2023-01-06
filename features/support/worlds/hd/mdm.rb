@@ -25,6 +25,7 @@ module World
         # end
       end
     end
+
     module Web
       def view_patient_mdm_page(patient:, user:)
         login_as user

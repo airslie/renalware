@@ -37,7 +37,17 @@ ruby:
 
 
       = f.fields_for :duration_form, f.object.duration_form do |fdur|
-        = fdur.input :start_date, as: :date_picker, wrapper: :horizontal_datepicker
+        - previous_sessions_component = Renalware::HD::Sessions::PreviousSessionDatesComponent.new(patient: patient)
+
+        = render Renalware::InputValueAlerterComponent.new( \
+          not_recommended_values: previous_sessions_component.not_recommended_values(session), \
+          message: "A session for this date already exists") do |component|
+          - component.with_input do
+            = fdur.input :start_date, as: :flatpickr, wrapper: :horizontal_datepicker, \
+              input_html: { data: component.input_date_attributes }
+
+        = render previous_sessions_component
+
         = fdur.input :start_time, as: :clock_picker, wrapper: :horizontal_clockpicker
 
       = f.association :signed_on_by,

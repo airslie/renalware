@@ -5,10 +5,10 @@ en:
       renalware/hd/prescription_administration:
         administered: Administered
         administered_by: Nurse
-        witnessed_by: Witness
-        witnessed_by_password: Password
         administered_by_password: Password
         reason_id: Reason not administered
+        witnessed_by: Witness
+        witnessed_by_password: Password
     errors:
       models:
         renalware/hd/prescription_administration:
@@ -19,9 +19,9 @@ en:
     hd:
       sessions:
         prescription_administrations:
-          legend: HD Prescriptions
-          drug_name: Drug
-          dose: Dose
-          frequency: Freq
           administered: Given
+          dose: Dose
+          drug_name: Drug
+          frequency: Freq
+          legend: HD Prescriptions
           notes: Notes

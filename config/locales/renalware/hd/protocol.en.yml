@@ -4,29 +4,29 @@ en:
     hd:
       protocols:
         profile:
-          on_worryboard: "On Worryboard"
-          site: "Site:"
-          schedule: "Schedule:"
-          prescribed_time: "Prescribed time:"
-          hd_type: "HD Type:"
-          substitution_percent: "Substitution %:"
-          blood_flow: Blood Flow
-          named_nurse: "Named nurse:"
-          needle_size: "Needle size:"
-          single_needle: "Single needle:"
-          has_sodium_profiling: "Sodium profiling:"
-          sodium_first_half: "NA 1st half:"
-          sodium_second_half: "NA 2nd half:"
-          dialyser: "Dialyser:"
-          dialysate: "Dialysate:"
           anticoagulant:
-            type: "Anticoagulant:"
-            loading_dose: "loading_dose"
-            hourly_dose: "hourly_dose"
-            stop_time: "stop_time"
-          cannulation_type: "Cannulation type:"
-          last_update: "Updated:"
+            hourly_dose: hourly_dose
+            loading_dose: loading_dose
+            stop_time: stop_time
+            type: 'Anticoagulant:'
+          blood_flow: Blood Flow
+          cannulation_type: 'Cannulation type:'
+          dialysate: 'Dialysate:'
+          dialyser: 'Dialyser:'
+          has_sodium_profiling: 'Sodium profiling:'
+          hd_type: 'HD Type:'
+          last_update: 'Updated:'
+          named_nurse: 'Named nurse:'
+          needle_size: 'Needle size:'
+          on_worryboard: On Worryboard
+          prescribed_time: 'Prescribed time:'
+          schedule: 'Schedule:'
+          single_needle: 'Single needle:'
+          site: 'Site:'
+          sodium_first_half: 'NA 1st half:'
+          sodium_second_half: 'NA 2nd half:'
+          substitution_percent: 'Substitution %:'
           transport:
-            has_transport: "Has transport:"
-            type: "Type:"
-            decided_on: "Decided on:"
+            decided_on: 'Decided on:'
+            has_transport: 'Has transport:'
+            type: 'Type:'

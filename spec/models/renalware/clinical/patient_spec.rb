@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Clinical::Patient, type: :model do
+describe Renalware::Clinical::Patient do
   it { is_expected.to have_many :allergies }
 
   describe "#allergy_status default value" do

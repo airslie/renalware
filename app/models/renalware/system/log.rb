@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/system"
-
 module Renalware
   module System
     class Log < ApplicationRecord

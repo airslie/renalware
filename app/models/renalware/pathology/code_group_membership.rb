@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     # An ObservationDescription can be a member of many groups (a set of descriptions used for

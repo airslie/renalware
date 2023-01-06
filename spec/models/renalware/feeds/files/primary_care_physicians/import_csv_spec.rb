@@ -25,7 +25,7 @@ module Renalware
             # Note JONES AA is active so deleted_at will be nil
             # SMITH BB is inactive so deleted_at will be set
             # code,name,f3,f4,street_1,street_2,street_3,town,county,postcode,f11,f12,status,f14,f15,f16,f17,telephone,f19,f20,f21,amended_record_indicator,f23,f24,f25,f26,f27
-            csv_content = <<-CSV.strip_heredoc
+            csv_content = <<~CSV
               "G0102005","JONES AA","Y11","QAL","FIRCROFT, LONDON ROAD","ENGLEFIELD GREEN","EGHAM","SURREY","","TW20 0BS","19740401","","A","P","H81600","19740401","19910401","01232 232323","","","","0","","","","",""
               "G0102926","SMITH BB","Y55","Q79","LENSFIELD MEDICAL PRAC.","48 LENSFIELD ROAD","CAMBRIDGE","","","CB2 1EH","19740401","","C","O","D81001","19740401","19911231","01223 651011","","","","0","","06H","","",""
             CSV
@@ -53,7 +53,7 @@ module Renalware
                 telephone: "01223 651011"
               )
               # code,name,f3,f4,street_1,street_2,street_3,town,county,postcode,f11,f12,status,f14,f15,f16,f17,telephone,f19,f20,f21,amended_record_indicator,f23,f24,f25,f26,f27
-              csv_content = <<-CSV.strip_heredoc
+              csv_content = <<~CSV
                 "G0102926","SMITH BB","Y55","Q79","LENSFIELD MEDICAL PRAC.","48 LENSFIELD ROAD","CAMBRIDGE","","","CB2 1EH","19740401","","C","O","D81001","19740401","19911231","01223 651011","","","","0","","06H","","",""
               CSV
               with_tmpfile(csv_content) do |tmpfile|
@@ -78,7 +78,7 @@ module Renalware
               )
 
               # code,name,f3,f4,street_1,street_2,street_3,town,county,postcode,f11,f12,status,f14,f15,f16,f17,telephone,f19,f20,f21,amended_record_indicator,f23,f24,f25,f26,f27
-              csv_content = <<-CSV.strip_heredoc
+              csv_content = <<~CSV
                 "G0102005","JONES AA","Y11","QAL","FIRCROFT, LONDON ROAD","ENGLEFIELD GREEN","EGHAM","SURREY","","TW20 0BS","19740401","","A","P","H81600","19740401","19910401","01232 232323","","","","0","","","","",""
               CSV
 
@@ -106,7 +106,7 @@ module Renalware
               # code,name,f3,f4,street_1,street_2,street_3,town,county,postcode,f11,f12,status,f14,f15,f16,f17,telephone,f19,f20,f21,amended_record_indicator,f23,f24,f25,f26,f27
               # Name may have changed due to marriage
               # Telephnne could change
-              csv_content = <<-CSV.strip_heredoc
+              csv_content = <<~CSV
                 "G0102005","JONES-SMITHE AA","Y11","QAL","FIRCROFT, LONDON ROAD","ENGLEFIELD GREEN","EGHAM","SURREY","","TW20 0BS","19740401","","A","P","H81600","19740401","19910401","01232 232323","","","","0","","","","",""
               CSV
 

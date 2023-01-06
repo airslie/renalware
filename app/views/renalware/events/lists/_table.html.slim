@@ -6,8 +6,7 @@ table.has-togglable-rows.events-table
   thead
     tr
       th.noprint.togglers= table_toggler
-      - if local_assigns[:edit_proc]
-        th.col-width-tiny
+      th.col-width-tiny
       th.col-width-date= sort_link(q, :created_at, "Added", default_order: :desc)
       th.col-width-large= sort_link(q, :event_type_name, "Type", default_order: :asc)
       th.col-width-large= sort_link(q, :patient_family_name, ["patient_family_name", "patient_given_name asc"], "Patient")

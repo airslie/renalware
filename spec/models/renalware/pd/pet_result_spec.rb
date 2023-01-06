@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module PD
-    describe PETResult, type: :model do
+    describe PETResult do
       it_behaves_like "an Accountable model"
 
       it :aggregate_failures do

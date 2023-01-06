@@ -1,22 +1,15 @@
 ---
 en:
-  simple_form:
-    hints:
-      prescription:
-        route_description: required only if above is "Other"
-    prompts:
-      prescription:
-        medication_route: Please select route of administration
   activerecord:
     attributes:
       renalware/medications/prescription:
+        administer_on_hd: Give on HD
+        frequency: Frequency & Duration
+        last_delivery_date: Last home prescription date
         medication_route: Route
+        next_delivery_date: Next home prescription date
         prescribed_on: Prescribed on
         terminated_on: Terminated on
-        frequency: "Frequency & Duration"
-        administer_on_hd: Give on HD
-        last_delivery_date: Last home prescription date
-        next_delivery_date: Next home prescription date
     errors:
       models:
         renalware/medications/prescription:
@@ -46,3 +39,10 @@ en:
             tablet: tablet
             teaspoon: tsp
             unit: unit
+  simple_form:
+    hints:
+      prescription:
+        route_description: required only if above is "Other"
+    prompts:
+      prescription:
+        medication_route: Please select route of administration

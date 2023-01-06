@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-
 module Renalware
   module PD
-    class AdequacyResultsController < PD::BaseController
+    class AdequacyResultsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def new
-        adequacy = AdequacyResult.new(patient: patient, performed_on: Date.current)
+        adequacy = AdequacyResult.new(patient: pd_patient, performed_on: Date.current)
         authorize adequacy
         render locals: { adequacy: adequacy }
       end
@@ -16,7 +17,7 @@ module Renalware
         authorize adequacy
 
         if adequacy.save_by(current_user)
-          redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("Adequacy result")
+          redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("Adequacy result")
         else
           render :new, locals: { adequacy: adequacy }
         end
@@ -31,7 +32,7 @@ module Renalware
       def update
         result = find_and_authorize_result
         if result.update_by(current_user, result_params)
-          redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("Result")
+          redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("Result")
         else
           render_edit(result)
         end
@@ -40,13 +41,13 @@ module Renalware
       def destroy
         result = find_and_authorize_result
         result.destroy!
-        redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("Result")
+        redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("Result")
       end
 
       def index
         respond_to do |format|
           format.js do
-            results = patient.adequacy_results.ordered
+            results = pd_patient.adequacy_results.ordered
             authorize results
             render locals: { results: results }
           end
@@ -56,7 +57,7 @@ module Renalware
       private
 
       def find_and_authorize_result
-        PD::AdequacyResult.for_patient(patient).find(params[:id]).tap do |adequacy|
+        PD::AdequacyResult.for_patient(pd_patient).find(params[:id]).tap do |adequacy|
           authorize adequacy
         end
       end

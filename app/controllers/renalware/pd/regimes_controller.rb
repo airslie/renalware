@@ -1,84 +1,87 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
-
 module Renalware
   module PD
     class RegimesController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::Pageable
-      before_action :load_patient
 
       def index
-        regimes = regime_type_class.for_patient(patient).with_bags.ordered.page(page).per(per_page)
+        regimes = regime_type_class
+          .for_patient(pd_patient)
+          .with_bags
+          .ordered
+          .page(page).per(per_page)
+
+        authorize regimes
+
         render locals: {
-          patient: patient,
+          patient: pd_patient,
           regimes: regimes,
           pd_type_string: pd_type_string
         }
       end
 
       def capd_regimes
-        @capd_regimes ||= CAPDRegime.for_patient(patient).with_bags.ordered.page(1).per(5)
+        @capd_regimes ||= CAPDRegime.for_patient(pd_patient).with_bags.ordered.page(1).per(5)
       end
 
       def apd_regimes
-        @apd_regimes ||= APDRegime.for_patient(patient).with_bags.ordered.page(1).per(5)
+        @apd_regimes ||= APDRegime.for_patient(pd_patient).with_bags.ordered.page(1).per(5)
       end
 
       def new
-        regime = cloned_last_known_regime_of_type || patient.pd_regimes.new(type: regime_type)
-
-        render :new, locals: {
-          regime: regime,
-          patient: patient
-        }
+        regime = cloned_last_known_regime_of_type || pd_patient.pd_regimes.new(type: regime_type)
+        authorize regime
+        render_new(regime)
       end
 
       def create
-        result = CreateRegime.new(patient: patient)
+        authorize Regime, :create?
+        result = CreateRegime.new(patient: pd_patient)
                              .call(by: current_user, params: pd_regime_params)
 
         if result.success?
-          redirect_to patient_pd_dashboard_path(patient), notice: success_msg_for("PD regime")
+          redirect_to patient_pd_dashboard_path(pd_patient), notice: success_msg_for("PD regime")
         else
           flash.now[:error] = failed_msg_for("PD Regime")
-          render :new, locals: {
-            regime: result.object,
-            patient: patient
-          }
+          render_new(result.object)
         end
       end
 
       def edit
-        render :edit, locals: {
-          regime: pd_regime,
-          patient: patient
-        }
+        render_edit(pd_regime)
       end
 
       def update
         result = ReviseRegime.new(pd_regime).call(by: current_user, params: pd_regime_params)
 
         if result.success?
-          redirect_to patient_pd_dashboard_path(patient),
+          redirect_to patient_pd_dashboard_path(pd_patient),
                       notice: success_msg_for("PD regime")
         else
           flash.now[:error] = failed_msg_for("PD regime")
-          render :edit, locals: {
-            regime: result.object,
-            patient: patient
-          }
+          render_edit(result.object)
         end
       end
 
       def show
         render :show, locals: {
           regime: pd_regime,
-          patient: patient
+          patient: pd_patient
         }
       end
 
       private
+
+      def render_edit(regime)
+        render :edit, locals: { regime: regime, patient: pd_patient }
+      end
+
+      def render_new(regime)
+        render :new, locals: { regime: regime, patient: pd_patient }
+      end
 
       def regime_type
         params[:type] ? "Renalware::#{params[:type]}" : nil
@@ -116,11 +119,7 @@ module Renalware
       end
 
       def pd_regime
-        @pd_regime ||= begin
-          regime = Regime.find(params[:id])
-          authorize regime
-          regime
-        end
+        @pd_regime ||= Regime.find(params[:id]).tap { |reg| authorize reg }
       end
     end
   end

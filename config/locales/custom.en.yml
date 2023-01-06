@@ -1,32 +1,34 @@
 ---
 en:
   create:
-    success: You have successfully added a new %{model_name}.
     failed: You have failed to add a new %{model_name}.
-  update:
-    success: You have successfully updated this %{model_name}.
-    failed: You have failed to update this %{model_name}.
+    success: You have successfully added a new %{model_name}.
   destroy:
+    failed: You have failed to remove this %{model_name}.
     success: You have successfully removed this %{model_name}.
     success_with_name: You have successfully removed '%{name}'.
-    failed: You have failed to remove this %{model_name}.
   renalware:
     beta_message:
-      title: "Important notice: "
-      body: >
-        This is the Renalware 2.0 test system.
-        Not for clinical use. Any data entered will not be retained.
-      feedback_button: Provide feedback or report a bug
+      body: 'This is the Renalware 2.0 test system. Not for clinical use. Any data entered will not be retained.
 
+        '
+      feedback_button: Provide feedback or report a bug
+      title: 'Important notice: '
     esrf:
-      update:
-        success: Successfully updated.
       form:
         prd_prompt: Please select primary renal diagnosis
+      update:
+        success: Successfully updated.
     letters:
+      approved_letters:
+        create:
+          success: You have successfully approved and archived the letter.
+      completed_letters:
+        create:
+          success: You have successfully marked the letter as printed.
       hints:
         cc_hint:
-          cc_on_all_letters: "If not the recipient, the patient <b>will be CCd</b> on the letter."
+          cc_on_all_letters: If not the recipient, the patient <b>will be CCd</b> on the letter.
           not_cc_on_all_letters: |
             If not the recipient, the patient <b>will NOT be CCd</b> on the letter.
             This can be changed in the patients profile.
@@ -36,9 +38,6 @@ en:
       rejected_letters:
         create:
           success: You have successfully rejected the letter.
-      approved_letters:
-        create:
-          success: You have successfully approved and archived the letter.
-      completed_letters:
-        create:
-          success: You have successfully marked the letter as printed.
+  update:
+    failed: You have failed to update this %{model_name}.
+    success: You have successfully updated this %{model_name}.

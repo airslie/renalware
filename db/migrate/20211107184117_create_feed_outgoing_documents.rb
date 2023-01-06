@@ -22,7 +22,7 @@ class CreateFeedOutgoingDocuments < ActiveRecord::Migration[5.2]
           index: false,
           comment: "The letter/event/etc to be processed"
         )
-        t.enum :state, enum_name: :feed_outgoing_document_state, null: false, default: :queued
+        t.enum :state, enum_type: :feed_outgoing_document_state, null: false, default: :queued
         t.json :printing_options, default: {}
         t.uuid :external_uuid, index: { unique: true }, comment: "E.g. the Mirth message id"
         t.text :error

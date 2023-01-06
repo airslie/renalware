@@ -2,18 +2,21 @@
 
 module Renalware
   module Accesses
-    class PlansController < Accesses::BaseController
+    class PlansController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def new
-        plan = Plan.new
+        plan = accesses_patient.plans.new
         authorize plan
         render_new(plan)
       end
 
       def create
-        plan = patient.plans.new(plan_params.merge!(by: current_user))
+        plan = accesses_patient.plans.new(plan_params.merge!(by: current_user))
         authorize plan
         if save_as_current(plan)
-          redirect_to patient_accesses_dashboard_path(patient),
+          redirect_to patient_accesses_dashboard_path(accesses_patient),
                       notice: success_msg_for("access plan")
         else
           render_new(plan)
@@ -28,7 +31,7 @@ module Renalware
 
       def show
         render locals: {
-          patient: patient,
+          patient: accesses_patient,
           plan: find_and_authorize_plan
         }
       end
@@ -36,9 +39,7 @@ module Renalware
       private
 
       def find_and_authorize_plan
-        plan = Plan.find(params[:id])
-        authorize plan
-        plan
+        accesses_patient.plans.find(params[:id]).tap { |plan| authorize plan }
       end
 
       def save_as_current(plan)
@@ -55,11 +56,11 @@ module Renalware
       end
 
       def render_new(plan)
-        render :new, locals: { patient: patient, plan: plan }
+        render :new, locals: { patient: accesses_patient, plan: plan }
       end
 
       def render_edit(plan)
-        render :edit, locals: { patient: patient, plan: plan }
+        render :edit, locals: { patient: accesses_patient, plan: plan }
       end
 
       def plan_params
@@ -67,7 +68,7 @@ module Renalware
       end
 
       def current_plan
-        @current_plan ||= patient.plans.current.first
+        @current_plan ||= accesses_patient.plans.current.first
       end
     end
   end

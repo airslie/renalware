@@ -3,14 +3,14 @@ en:
   activerecord:
     attributes:
       renalware/accesses/procedure:
-        performed_on: Performed On
-        first_used_on: First Use Date
+        catheter_lot_no: Catheter Lot No
+        catheter_make: Catheter Make
         failed_on: Failure Date
-        performed_by: Performed By
-        type: Access Procedure
-        side: Access Side
-        pd_catheter_insertion_technique: PD Catheter Insertion Technique
+        first_used_on: First Use Date
         notes: Notes
         outcome: Outcome
-        catheter_make: Catheter Make
-        catheter_lot_no: Catheter Lot No
+        pd_catheter_insertion_technique: PD Catheter Insertion Technique
+        performed_by: Performed By
+        performed_on: Performed On
+        side: Access Side
+        type: Access Procedure

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-
 module Renalware
   module HD
     class PatientsDialysingByScheduleQuery
@@ -21,7 +19,8 @@ module Renalware
             hd_profiles: {
               schedule_definition_id: schedule_definition_ids,
               hospital_unit_id: hospital_unit_id
-            })
+            }
+          )
           .order(:family_name, :given_name)
       end
     end

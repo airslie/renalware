@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology/requests/frequency"
-
 module Renalware
   module Pathology
     module Requests

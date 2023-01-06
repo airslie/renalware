@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/reporting"
-
 module Renalware
   module UKRDC
     class SummaryMailer < ApplicationMailer

@@ -1,28 +1,16 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/transplants/recipient_operation:
-        cold_ischaemic_time: Cold Ischaemic Time (seconds)
-        cold_ischaemic_time_formatted: Cold Ischaemic Time
-        donor_kidney_removed_from_ice_at: Donor Kidney Removed From Ice At
-        kidney_perfused_with_blood_at: Kidney Perfused With Blood At
-        hospital_centre: Transplant Site
-        hospital_id: Transplant Site
-        notes: Notes
-        operation_type: Operation Type
-        performed_on: Operation Date
-        theatre_case_start_time: Theatre Case Start Time
-        warm_ischaemic_time: Warm Ischaemic Time (seconds)
-        warm_ischaemic_time_formatted: Warm Ischaemic Time
-        recipient_age_at_operation: Age
   activemodel:
     attributes:
-      renalware/transplants/recipient_operation_document/recipient:
-        blood_group: Blood Group
-        cmv_status: CMV Status
-        last_dialysis_on: Last Dialysis Date
-        operation_number: Transplant Operation No
+      renalware/transplants/recipient_operation_document/bk_virus:
+        notes: Notes
+        results: Results
+        tested_on: Test Date
+      renalware/transplants/recipient_operation_document/cadaveric_donor:
+        cadaveric_donor_type: Cadaveric Donor Type
+        death_certified_at: Date and Time of Certification of Death
+        ukt_cause_of_death: UKT Donor's Cause of Death
+        ukt_cause_of_death_other: UKT Donor's Cause of Death (other)
       renalware/transplants/recipient_operation_document/donor:
         age: Age
         asystolic: Asystolic
@@ -39,16 +27,7 @@ en:
         type: Donor Type
         ukt_donor_number: UKT Donor Number
         ukt_notified_at: Date/time notified to UKT
-      renalware/transplants/recipient_operation_document/cadaveric_donor:
-        cadaveric_donor_type: Cadaveric Donor Type
-        death_certified_at: Date and Time of Certification of Death
-        ukt_cause_of_death: UKT Donor's Cause of Death
-        ukt_cause_of_death_other: UKT Donor's Cause of Death (other)
       renalware/transplants/recipient_operation_document/donor_specific_antibodies:
-        notes: Notes
-        results: Results
-        tested_on: Test Date
-      renalware/transplants/recipient_operation_document/bk_virus:
         notes: Notes
         results: Results
         tested_on: Test Date
@@ -58,111 +37,132 @@ en:
         failure_description: Failure Description
         stent_removed_on: Stent Removal Date
         transplant_failed: Transplant failed?
+      renalware/transplants/recipient_operation_document/recipient:
+        blood_group: Blood Group
+        cmv_status: CMV Status
+        last_dialysis_on: Last Dialysis Date
+        operation_number: Transplant Operation No
+  activerecord:
+    attributes:
+      renalware/transplants/recipient_operation:
+        cold_ischaemic_time: Cold Ischaemic Time (seconds)
+        cold_ischaemic_time_formatted: Cold Ischaemic Time
+        donor_kidney_removed_from_ice_at: Donor Kidney Removed From Ice At
+        hospital_centre: Transplant Site
+        hospital_id: Transplant Site
+        kidney_perfused_with_blood_at: Kidney Perfused With Blood At
+        notes: Notes
+        operation_type: Operation Type
+        performed_on: Operation Date
+        recipient_age_at_operation: Age
+        theatre_case_start_time: Theatre Case Start Time
+        warm_ischaemic_time: Warm Ischaemic Time (seconds)
+        warm_ischaemic_time_formatted: Warm Ischaemic Time
   enumerize:
     renalware/transplants/recipient_operation:
       operation_type:
         kidney: Kidney only
         kidney_dual: Kidney only - dual
-        kidney_pancreas: Kidney and pancreas
-        pancreas: Pancreas only
         kidney_liver: Kidney and liver
+        kidney_pancreas: Kidney and pancreas
         liver: Liver only
-    renalware/transplants/recipient_operation_document/donor:
-      type:
-        live_related: Live related
-        cadaver: Cadaver
-        non_heart_beating: NHB
-        live_unrelated: Live unrelated
-      relationship:
-        sibling: Sibling
-        father: Father
-        mother: Mother
-        child: Child
-        other: Other
-      ethnic_category:
-        white: "White"
-        black_caribbean: "Black Caribbean"
-        black_african: "Black African"
-        black_other_non_mixed_origin: "Black / other / non-mixed origin"
-        black_british: "Black British"
-        black_north_african: "Black North African"
-        black_other_african_country: "Black – other African country"
-        black_east_african_asian: "Black East African Asian"
-        black_indian_sub_continent: "Black Indian sub-continent"
-        black_other_asian: "Black – other Asian"
-        black_black_other: "Black Black - other"
-        black_other_mixed: "Black – other / mixed"
-        other_black_black_white_orig: "Other Black - Black/White orig"
-        other_black_black_asian_orig: "Other Black - Black/Asian orig"
-        indian: "Indian"
-        pakistani: "Pakistani"
-        bangladeshi: "Bangladeshi"
-        chinese: "Chinese"
-        other_ethnic_non_mixed: "Other ethnic non-mixed (NMO)"
-        brit_ethnic_minor_spec: "Brit. ethnic minor. spec.(NMO)"
-        caribbean_island: "Caribbean Island (NMO)"
-        north_african_arab: "North African Arab (NMO)"
-        other_african_countries: "Other African countries (NMO)"
-        east_african_asian: "East African Asian (NMO)"
-        indian_sub_continent: "Indian sub-continent (NMO)"
-        other_asian: "Other Asian (NMO)"
-        irish: "Irish (NMO)"
-        greek_cypriot: "Greek Cypriot (NMO)"
-        turkish_cypriot: "Turkish Cypriot (NMO)"
-        other_european: "Other European (NMO)"
-        other_ethnic_nec: "Other ethnic NEC (NMO)"
-        other_ethnic_mixed_origin: "Other ethnic / mixed origin"
-        other_ethnic_black_white_orig: "Other ethnic / Black/White orig"
-        other_ethnic_asian_white_orig: "Other ethnic / Asian/White orig"
-        other_ethnic_mixed_white_orig: "Other ethnic / mixed white orig"
-        other_ethnic_other_mixed_orig: "Other ethnic / other mixed orig"
+        pancreas: Pancreas only
     renalware/transplants/recipient_operation_document/cadaveric_donor:
       cadaveric_donor_type:
+        domino: Domino
         heart_beating: Heart Beating
         non_heart_beating: Non-Heart Beating
-        domino: Domino
       ukt_cause_of_death:
-        acute_blood_loss: "Acute blood loss/hypovolaemia"
-        alcohol_poisoning: "Alcohol poisoning"
-        aneurysm: "Aneurysm"
-        asthma: "Asthma"
-        brain_tumour: "Brain tumour"
-        cancer: "Cancer (other than brain tumour)"
-        carbon_monoxide_poisoning: "Carbon monoxide poisoning"
-        cardiac_arret: "Cardiac arrest"
-        cardiovascular_unclassified: "Cardiovascular - type unclassified"
-        chronic_pulmonary_disease: "Chronic pulmonary disease"
-        congestive_heart_failure: "Congestive heart failure"
-        hypoxic_brain_damage: "Hypoxic brain damage - all causes"
-        infections_unclassified: "Infections - type unclassified"
-        intracranial_haemorrhage: "Intracranial haemorrhage"
-        intracranial_thrombosis: "Intracranial thrombosis"
-        intracranial_unclassidied: "Intracranial - type unclassified (CVA)"
-        ischaemic_heart_disease: "Ischaemic heart disease"
-        liver_failure: "Liver failure (not self-poisoning)"
-        meningitis: "Meningitis"
-        multi_organ_failure: "Multi-organ failure"
-        myocardial_infarction: "Myocardial infarction"
-        other: "Other, please specify"
-        other_drug_overdose: "Other drug overdose, please specify"
-        other_trauma_accident: "Other trauma - accident"
-        other_trauma_suicide: "Other trauma - known or suspected suicide"
-        other_trauma_unknown: "Other trauma - unknown cause"
-        paracetamol_overdose: "Paracetamol overdose"
-        pneumonia: "Pneumonia"
-        pulmonary_embolism: "Pulmonary embolism"
-        renal_failure: "Renal failure"
-        respiratory_failure: "Respiratory failure"
-        respiratory_unclassified: "Respiratory - type unclassified (inc smoke inhalation)"
-        self_poisoning_unclassified: "Self-poisoning - type unclassified"
-        septicaemia: "Septicaemia"
-        sudden_infant_death_syndrome: "Sudden Infant Death Syndrome (SIDS)"
-        trauma_rta_car: "Trauma RTA - car"
-        trauma_rta_motorbike: "Trauma RTA - motorbike"
-        trauma_rta_pedestrian: "Trauma RTA - pedestrian"
-        trauma_rta_pushbike: "Trauma RTA - pushbike"
-        trauma_rta_unknown: "Trauma RTA - unknown type"
-        unknown: "Unknown"
+        acute_blood_loss: Acute blood loss/hypovolaemia
+        alcohol_poisoning: Alcohol poisoning
+        aneurysm: Aneurysm
+        asthma: Asthma
+        brain_tumour: Brain tumour
+        cancer: Cancer (other than brain tumour)
+        carbon_monoxide_poisoning: Carbon monoxide poisoning
+        cardiac_arret: Cardiac arrest
+        cardiovascular_unclassified: Cardiovascular - type unclassified
+        chronic_pulmonary_disease: Chronic pulmonary disease
+        congestive_heart_failure: Congestive heart failure
+        hypoxic_brain_damage: Hypoxic brain damage - all causes
+        infections_unclassified: Infections - type unclassified
+        intracranial_haemorrhage: Intracranial haemorrhage
+        intracranial_thrombosis: Intracranial thrombosis
+        intracranial_unclassidied: Intracranial - type unclassified (CVA)
+        ischaemic_heart_disease: Ischaemic heart disease
+        liver_failure: Liver failure (not self-poisoning)
+        meningitis: Meningitis
+        multi_organ_failure: Multi-organ failure
+        myocardial_infarction: Myocardial infarction
+        other: Other, please specify
+        other_drug_overdose: Other drug overdose, please specify
+        other_trauma_accident: Other trauma - accident
+        other_trauma_suicide: Other trauma - known or suspected suicide
+        other_trauma_unknown: Other trauma - unknown cause
+        paracetamol_overdose: Paracetamol overdose
+        pneumonia: Pneumonia
+        pulmonary_embolism: Pulmonary embolism
+        renal_failure: Renal failure
+        respiratory_failure: Respiratory failure
+        respiratory_unclassified: Respiratory - type unclassified (inc smoke inhalation)
+        self_poisoning_unclassified: Self-poisoning - type unclassified
+        septicaemia: Septicaemia
+        sudden_infant_death_syndrome: Sudden Infant Death Syndrome (SIDS)
+        trauma_rta_car: Trauma RTA - car
+        trauma_rta_motorbike: Trauma RTA - motorbike
+        trauma_rta_pedestrian: Trauma RTA - pedestrian
+        trauma_rta_pushbike: Trauma RTA - pushbike
+        trauma_rta_unknown: Trauma RTA - unknown type
+        unknown: Unknown
+    renalware/transplants/recipient_operation_document/donor:
+      ethnic_category:
+        bangladeshi: Bangladeshi
+        black_african: Black African
+        black_black_other: Black Black - other
+        black_british: Black British
+        black_caribbean: Black Caribbean
+        black_east_african_asian: Black East African Asian
+        black_indian_sub_continent: Black Indian sub-continent
+        black_north_african: Black North African
+        black_other_african_country: Black – other African country
+        black_other_asian: Black – other Asian
+        black_other_mixed: Black – other / mixed
+        black_other_non_mixed_origin: Black / other / non-mixed origin
+        brit_ethnic_minor_spec: Brit. ethnic minor. spec.(NMO)
+        caribbean_island: Caribbean Island (NMO)
+        chinese: Chinese
+        east_african_asian: East African Asian (NMO)
+        greek_cypriot: Greek Cypriot (NMO)
+        indian: Indian
+        indian_sub_continent: Indian sub-continent (NMO)
+        irish: Irish (NMO)
+        north_african_arab: North African Arab (NMO)
+        other_african_countries: Other African countries (NMO)
+        other_asian: Other Asian (NMO)
+        other_black_black_asian_orig: Other Black - Black/Asian orig
+        other_black_black_white_orig: Other Black - Black/White orig
+        other_ethnic_asian_white_orig: Other ethnic / Asian/White orig
+        other_ethnic_black_white_orig: Other ethnic / Black/White orig
+        other_ethnic_mixed_origin: Other ethnic / mixed origin
+        other_ethnic_mixed_white_orig: Other ethnic / mixed white orig
+        other_ethnic_nec: Other ethnic NEC (NMO)
+        other_ethnic_non_mixed: Other ethnic non-mixed (NMO)
+        other_ethnic_other_mixed_orig: Other ethnic / other mixed orig
+        other_european: Other European (NMO)
+        pakistani: Pakistani
+        turkish_cypriot: Turkish Cypriot (NMO)
+        white: White
+      relationship:
+        child: Child
+        father: Father
+        mother: Mother
+        other: Other
+        sibling: Sibling
+      type:
+        cadaver: Cadaver
+        live_related: Live related
+        live_unrelated: Live unrelated
+        non_heart_beating: NHB
   simple_form:
     hints:
       transplants_recipient_operation:

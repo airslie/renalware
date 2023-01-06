@@ -3,25 +3,28 @@ en:
   activerecord:
     attributes:
       renalware/clinical/dry_weight:
-        weight: Dry Weight
         assessed_on: Assessment Date
+        weight: Dry Weight
     errors:
       models:
         renalware/clinical/dry_weight:
           attributes:
             weight:
-              out_of_range: Must be between 5.0 and 300.0 kg
               invalid_number: Please enter a number with up to 2 decimal places, for example 100 or 100.11
+              out_of_range: Must be between 5.0 and 300.0 kg
   renalware:
     clinical:
       dry_weights:
         list:
-          title: Dry Weights
+          add: Add
           add_dry_weight: Add a Dry Weight
           recent:
             title: Recent Dry Weights
-          add: Add
+          title: Dry Weights
         table:
           thead:
-            weight: Weight (kg)
             assessor: Assessor
+            maximum_weight: Max
+            minimum_weight: Min
+            range: Range
+            weight: Weight (kg)

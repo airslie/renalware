@@ -4,29 +4,32 @@ require "collection_presenter"
 
 module Renalware
   module Accesses
-    class NeedlingAssessmentsController < Accesses::BaseController
+    class NeedlingAssessmentsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def new
-        difficulty = patient.needling_assessments.new
+        difficulty = accesses_patient.needling_assessments.new
         authorize difficulty
         render locals: { difficulty: difficulty }
       end
 
       def create
-        difficulty = patient.needling_assessments.new(needling_assessment_params)
+        difficulty = accesses_patient.needling_assessments.new(needling_assessment_params)
         authorize difficulty
         if difficulty.save_by(current_user)
-          redirect_to patient_accesses_dashboard_path(patient)
+          redirect_to patient_accesses_dashboard_path(accesses_patient)
         else
           render :new, locals: { difficulty: difficulty }
         end
       end
 
       def destroy
-        assessment = patient.needling_assessments.find(params[:id])
+        assessment = accesses_patient.needling_assessments.find(params[:id])
         authorize assessment
         assessment.destroy!
         redirect_back(
-          fallback_location: patient_accesses_dashboard_path(patient),
+          fallback_location: patient_accesses_dashboard_path(accesses_patient),
           notice: success_msg_for("needling assessment")
         )
       end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Events::Subtype, type: :model do
+  describe Events::Subtype do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to be_versioned

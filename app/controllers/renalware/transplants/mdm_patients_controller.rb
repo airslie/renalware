@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
-
 module Renalware
   module Transplants
     class MDMPatientsController < Renalware::MDMPatientsController
+      include Concerns::PatientVisibility
+
       def index
         render_index(
           filter_form: filter_form,
@@ -20,6 +20,7 @@ module Renalware
       def query
         @query ||= begin
           MDMPatientsQuery.new(
+            relation: policy_scope(Transplants::Patient),
             params: filter_form.ransacked_parameters.merge(query_params).with_indifferent_access,
             named_filter: named_filter
           )

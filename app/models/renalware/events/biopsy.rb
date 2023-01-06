@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/events"
 require "document/base"
 require "document/embedded"
 require "document/enum"

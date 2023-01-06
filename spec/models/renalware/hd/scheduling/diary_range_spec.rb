@@ -11,7 +11,7 @@ module Renalware
         let(:unit) { create(:hd_hospital_unit) }
 
         context "when there are no diaries at all in the past year" do
-          it "creates a diary for each week in the last year and one for this week, "\
+          it "creates a diary for each week in the last year and one for this week, " \
              "plus a master diary for the unit" do
             travel_to Time.zone.parse("2019-01-01 12:00:00") do
               range = described_class.new(

@@ -1,0 +1,40 @@
+- document = f.object.document
+
+.rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
+    i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+    ' This clinic defines custom fields.
+    ' Inputs beyond this point (up to and not including Notes) are defined in 
+    ' spec/dummy/app/models/clinics/my_visit.rb 
+    ' in the custom visit class 
+    ' Clinics::MyVisit < Renalware::Clinics::ClinicVisit
+    ' and demonstrate how a visit can be extended with custom fields which are stored in the 
+    ' stored clinic_visits.document
+
+
+= f.fields_for(:document, document) do |fdoc|
+  = fdoc.input :visit_number, wrapper: :horizontal_small
+
+article
+  header
+    h2 Activity
+
+  = f.fields_for(:document, document) do |fdoc|
+    = fdoc.input :physical_activity,
+                wrapper: :horizontal_small,
+                hint: "How often do you engage in physical activity (of at least moderate intensity for at least 30 minutes)?"
+
+    article
+      header
+        h2 Smoking
+
+      = fdoc.fields_for(:smoking, document.smoking) do |fsmoking|
+        = fsmoking.input :history,
+                          wrapper: :horizontal_small,
+                          hint: "Which best describes your smoking habits?"
+        = fsmoking.input :number,
+                          wrapper: :horizontal_small,
+                          hint: "If you smoke regularly how many cigarretetes do you smoke each day on average?"
+        = fsmoking.input :ecigarettes,
+                          wrapper: :horizontal_small,
+                          hint: "Do you smoke e-cigarrettes?"
+      

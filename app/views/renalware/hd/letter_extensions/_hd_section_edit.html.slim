@@ -1,0 +1,17 @@
+css:
+  .diff ul{ margin-left: 0; display: flex; gap: 1rem; width: 100%;  }
+  .diff del, .diff ins{display:block;text-decoration:none; }
+  .diff li{ padding:0; margin: 0; }
+  .diff del strong{ background:#fcc; }
+  .diff ins strong{ background:#9f9; }
+
+article.letter-form-problems-and-prescriptions
+  header.flex.items-center.mb-4.mt-2.justify-between
+    h2.mb-0.float-none.mb-4.mr-8 HD Section
+
+    - if section.show_use_updates_toggle?(params[:preview_topic_id])
+      = form.simple_fields_for :update_sections do |fields|
+        = fields.input_field :hd_section, as: :toggle, label: "Use updates below"
+
+  .w-full.mt-4
+    = section.content_with_diffs

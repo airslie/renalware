@@ -41,7 +41,7 @@ ul.side-nav.side-nav--admin(data-controller="collapsible-DISABLED" data-collapsi
 
   = super_admin_menu_item "Virology Vaccination Types", renalware.virology_vaccination_types_path, %r{virology/vaccination_types}
   = admin_menu_item "Mailshots", renalware.letters_mailshots_path, %r{letters/mailshots}
-  = admin_menu_item "Letter Descriptions", renalware.letters_descriptions_path, %r{letters/descriptions}
+  = admin_menu_item "Letter Topics", renalware.letters_topics_path, %r{letters/topics}
 
   li= link_to "UKRDC", "#", data: { action: "collapsible#open", collapsible_target: "link" }
   ul.collapsible(data-collapsible-target="section")

@@ -1,7 +1,9 @@
-- if results.any?
-  = render(Renalware::ArticleComponent.new(title: title)) do |article|
-    - article.with(:actions) do
-      = link_to t("btn.add"), renalware.new_patient_pd_adequacy_result_path(patient), class: :button
-      = link_to t("btn.show_all"), renalware.patient_pd_adequacy_results_path(patient), remote: true, class: "button secondary"
-    #adequacy-results-table
-      = render "renalware/pd/adequacy_results/table", results: results, current_user: current_user
+= render(Renalware::ArticleComponent.new) do |article|
+  - article.with_title { title }
+  - article.with_action do 
+    = link_to t("btn.add"), renalware.new_patient_pd_adequacy_result_path(patient), class: :button
+  - article.with_action do 
+    = link_to t("btn.show_all"), renalware.patient_pd_adequacy_results_path(patient), remote: true, class: "button secondary"
+
+  #adequacy-results-table
+    = render "renalware/pd/adequacy_results/table", results: results, current_user: current_user

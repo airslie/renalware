@@ -12,8 +12,4 @@ module Renalware
       [result, datestamp].compact.join(" ")
     end
   end
-
-  # This class exists to let us use a different (non-table) *_input partial when rendering
-  class DatedResult2 < DatedResult
-  end
 end

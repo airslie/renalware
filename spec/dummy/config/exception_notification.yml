@@ -2,10 +2,6 @@ development:
   notifier: 'silent'
 test:
   notifier: 'silent'
-training:
-  notifier: 'party_foul_adapter'
-staging:
-  notifier: 'party_foul_adapter'
 uat:
   notifier: 'party_foul_adapter'
 production:

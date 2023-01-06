@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "collection_presenter"
-
 module Renalware
   module HD
     class ProtocolPresenter < DumbDelegator

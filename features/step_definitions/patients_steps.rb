@@ -9,6 +9,7 @@ Given(/^Patty is a patient$/) do
     sex: "F",
     born_on: Date.new(1961, 12, 25),
     primary_care_physician: primary_care_physician,
+    hospital_centre: FactoryBot.create(:hospital_centre),
     current_address_attributes: {
       name: "Patty ThePatient",
       street_1: "1 Main St",
@@ -32,6 +33,7 @@ Given(/^Don is a patient$/) do
     sex: "M",
     born_on: Date.new(1989, 1, 1),
     primary_care_physician: primary_care_physician,
+    hospital_centre: FactoryBot.create(:hospital_centre),
     by: Renalware::SystemUser.find
   )
   @don.create_current_address(
@@ -78,6 +80,7 @@ Given(/^the following patients:$/) do |table|
       local_patient_id: SecureRandom.uuid,
       sex: "M",
       born_on: Date.new(1989, 1, 1),
+      hospital_centre: FactoryBot.create(:hospital_centre),
       by: Renalware::SystemUser.find
     )
   end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe "renalware/letters/formatted_letters/_enclosures", type: :view do
+  describe "renalware/letters/formatted_letters/_enclosures" do
     let(:partial) { "renalware/letters/formatted_letters/enclosures" }
 
     context "when the letter has enclsoures" do

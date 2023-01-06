@@ -7,16 +7,11 @@ article.clinic_visits-form-problems-and-prescriptions
                 class: "button secondary",
                 data: { behaviour: "css-toggler" }
   #problems_prescriptions.expandable
-    .row
-      .columns.small-12.large-6
-        / Note we wrap the Part instance in an array here. This is because the Part
-        / delegates to its underling problems array, so it is itself 'array-like'.
-        / The render(object) call below ignores any #to_partial_path method on object if
-        / object is an array and instead only calls to_partial_path (if found) on array elements.
-        / So, in order for the to_partial_path to get called on the array-like Parts::Problems,
-        / we need to wrap it an array. We also use the 'render Part' approach when rendering
-        / a formatted letters, but the LetterPresenter has an array of parts anyway (with parts
-        / for problems, prescriptions, contacts) etc - so this problem is already handled there.
-        = render [Renalware::Letters::Part::Problems.new(patient, nil)]
-      .columns.small-12.large-6
-        = render [Renalware::Letters::Part::Prescriptions.new(patient, nil)]
+    .grid.gap-4.md:grid-cols-2
+      div
+        .list.problems
+          b.subtitle Problems
+          = render Renalware::Problems::SimpleSummaryComponent.new(problems: patient.problems.includes(:notes))
+
+      div
+        = render Renalware::Prescriptions::SummaryComponent.new(patient: patient)

@@ -7,7 +7,7 @@ table.prescriptions
       th.col-width-date Last Given
   tbody
     - prescriptions.each do |prescription|
-      - last_administration = Renalware::HD::PrescriptionLastAdministrationQuery.new(prescription: prescription).call
+      - last_administration = Renalware::HD::PrescriptionAdministrationsQuery.new(prescription: prescription).call.first
       tr
         td= prescription.drug.name
         td= prescription.dose

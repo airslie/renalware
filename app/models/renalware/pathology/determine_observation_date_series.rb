@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     # Responsible for finding the series of unique `observed_at` dates for an
@@ -22,7 +20,7 @@ module Renalware
       def call
         @relation
           .order("DATE(observed_at) DESC")
-          .pluck("DISTINCT ON (DATE(observed_at)) DATE(observed_at)")
+          .reselect("DISTINCT ON (DATE(observed_at)) DATE(observed_at) as date_observed_at").map(&:date_observed_at)
       end
     end
   end

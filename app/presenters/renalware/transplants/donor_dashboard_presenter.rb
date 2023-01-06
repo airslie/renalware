@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
-
 module Renalware
   module Transplants
     class DonorDashboardPresenter
@@ -25,10 +23,11 @@ module Renalware
 
       def investigations
         @investigations ||= begin
-          Events::Investigation
+          events = Events::Investigation
             .for_patient(patient)
             .transplant_donors
             .ordered
+          CollectionPresenter.new(events, Events::EventPresenter)
         end
       end
     end

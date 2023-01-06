@@ -33,7 +33,8 @@ module World
           local_patient_id: SecureRandom.uuid,
           sex: "M",
           born_on: Date.new(1989, 1, 1),
-          created_by: Renalware::User.first
+          created_by: Renalware::User.first,
+          hospital_centre: FactoryBot.create(:hospital_centre)
         ).find_or_create_by!(
           family_name: family_name,
           given_name: given_name

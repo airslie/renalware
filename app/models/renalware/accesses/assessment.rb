@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/accesses"
 require "document/base"
 
 module Renalware
@@ -29,6 +28,10 @@ module Renalware
       validates :procedure_on, timeliness: { type: :date, allow_blank: true }
 
       enumerize :side, in: %i(left right)
+
+      def self.policy_class
+        BasePolicy
+      end
     end
   end
 end

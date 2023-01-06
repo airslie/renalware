@@ -28,14 +28,14 @@ When("Clyde chooses the telephone number {int}") do |telephone|
 end
 
 When("Clyde generates the request forms for the appointments with the following parameters:") do |table|
-  params = Hash[table.rows].with_indifferent_access
+  params = table.rows.to_h.with_indifferent_access
 
   @appointments = view_appointments(@clyde)
   @request_forms = generate_request_forms_for_appointments(@clyde, @appointments, params)
 end
 
 When("Clyde generates the request forms for the appointments sorted by user with the following parameters:") do |table|
-  params = Hash[table.rows].with_indifferent_access
+  params = table.rows.to_h.with_indifferent_access
 
   @appointments = view_appointments(@clyde, q: { s: "user_family_name asc" })
   @request_forms = generate_request_forms_for_appointments(@clyde, @appointments, params)
@@ -43,7 +43,7 @@ end
 
 When("Clyde generates the request form for {word} with the following parameters:") do |patient_name, table|
   params =
-    Hash[table.rows]
+    table.rows.to_h
       .merge(patients: [patient_name])
       .with_indifferent_access
 

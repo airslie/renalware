@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe PDRegimesHelper, type: :helper do
+  describe PDRegimesHelper do
     describe "default_daily_glucose_average" do
       let(:patient) { build_stubbed(:patient) }
       let(:capd_regime) do

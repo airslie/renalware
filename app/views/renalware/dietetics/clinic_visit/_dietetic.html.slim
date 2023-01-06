@@ -1,0 +1,28 @@
+/ We are being rendered on letters/new as a letter 'event' and need to output our properties
+/ into the field as readnly text for reference so the author can inspect as they write
+- clinic_visit = event
+
+= content_for(:clinic_visit_subclass_attributes) do
+  / Render attributes specific to our visit subclass
+  article
+    header
+      h2 Dietetic Visit
+
+    = definition_list_for(clinic_visit.document, size: :xlarge) do |list|
+      = list.definition(:assessment_type) { |value| value&.text }
+      = list.definition(:visit_type) { |value| value&.text }
+
+      h3 Weight
+
+      = list.definition(:previous_weight)
+      = list.definition(:waist_circumference)
+
+      h3 Energy
+      = list.definition(:energy_requirement) { |value| Renalware::Dietetics::EnergyValuePresenter.new(value).to_s }
+
+      h3 SGA Assessment
+      = list.definition(:sga_assessment) { |value| value&.text }
+      = list.definition(:next_review_in) { |value| value&.text }
+
+/ Render the common superclass clinic visit fields
+= render(partial: event.superclass_to_partial_path, locals:{ event: clinic_visit })

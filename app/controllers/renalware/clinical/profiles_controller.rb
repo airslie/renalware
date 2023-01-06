@@ -1,41 +1,42 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinical"
-
 module Renalware
   module Clinical
     # Note that there is no concrete Clinical::Profile, most data here is persisted in the patient
-    class ProfilesController < Clinical::BaseController
+    class ProfilesController < BaseController
+      include Renalware::Concerns::PatientVisibility
+      include Renalware::Concerns::PatientCasting
+
       def show
-        authorize patient
+        authorize clinical_patient
         render locals: {
-          patient: patient,
-          profile: Clinical::ProfilePresenter.new(patient: patient, params: params)
+          patient: clinical_patient,
+          profile: Clinical::ProfilePresenter.new(patient: clinical_patient, params: params)
         }
       end
 
       def edit
-        authorize patient
-        render locals: { patient: patient }
+        authorize clinical_patient
+        render locals: { patient: clinical_patient }
       end
 
       def update
-        authorize patient
+        authorize clinical_patient
         if update_patient
-          redirect_to patient_clinical_profile_path(patient),
+          redirect_to patient_clinical_profile_path(clinical_patient),
                       notice: success_msg_for("clinical history")
         else
-          render :edit, locals: { patient: patient }
+          render :edit, locals: { patient: clinical_patient }
         end
       end
 
       private
 
       def update_patient
-        patient.named_consultant_id = profile_params[:named_consultant_id]
-        patient.named_nurse_id = profile_params[:named_nurse_id]
-        patient.hospital_centre_id = profile_params[:hospital_centre_id]
-        document = patient.document
+        clinical_patient.named_consultant_id = profile_params[:named_consultant_id]
+        clinical_patient.named_nurse_id = profile_params[:named_nurse_id]
+        clinical_patient.hospital_centre_id = profile_params[:hospital_centre_id]
+        document = clinical_patient.document
 
         %i(diabetes history).each do |document_attribute|
           document.send(
@@ -43,7 +44,7 @@ module Renalware
             profile_params[:document][document_attribute].symbolize_keys
           )
         end
-        patient.save_by! current_user
+        clinical_patient.save_by! current_user
       end
 
       def profile_params

@@ -42,9 +42,9 @@ html lang="en"
       - else
         = render "renalware/navigation/main"
       = yield(:header)
-
-    - if defined?(flash_messages)
-      = render "renalware/shared/flash_messages"
+      .flash-message
+        = yield(:flash_messages)
+        = render(Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: true)) unless content_for?(:flash_messages)
 
     main
       = yield

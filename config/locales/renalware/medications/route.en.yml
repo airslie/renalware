@@ -4,4 +4,4 @@ en:
     routes:
       form:
         prompt:
-          other: "Other (Please specify in Route Description below)"
+          other: Other (Please specify in Route Description below)

@@ -25,8 +25,8 @@ module Renalware
     rescue Encoding::UndefinedConversionError
       record.errors.add(
         attribute,
-        "contains unusual characters (e.g. checkboxes, special quotes) which may "\
-        "stop us from using this content in a PDF. These characters can appear if copying and "\
+        "contains unusual characters (e.g. checkboxes, special quotes) which may " \
+        "stop us from using this content in a PDF. These characters can appear if copying and " \
         "pasting from Word for example."
       )
     end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/messaging"
-
 # A form object used behind the html messages#new form, and serving to helps us capture
 # attributes for a Message and its Recipients. The MessageForm is passed to the SendMessage
 # object where it is persisted as a Message with many Recipients through Receipts.
+
+# rubocop:disable Rails/AttributeDefaultBlockValue
 module Renalware
   module Messaging
     module Internal
@@ -37,3 +37,4 @@ module Renalware
     end
   end
 end
+# rubocop:enable Rails/AttributeDefaultBlockValue

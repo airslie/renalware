@@ -1,27 +1,28 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
 require "collection_presenter"
 
 module Renalware
   module HD
     class HistoricalProfilesController < BaseController
+      include Renalware::Concerns::PatientVisibility
+      include Renalware::Concerns::PatientCasting
       include PresenterHelper
 
       def show
-        profile = Profile.deleted.for_patient(patient).find(params[:id])
+        profile = Profile.deleted.for_patient(hd_patient).find(params[:id])
         authorize profile
         render locals: {
-          patient: patient,
+          patient: hd_patient,
           profile: ProfilePresenter.new(profile)
         }
       end
 
       def index
-        profiles = Profile.deleted.ordered.for_patient(patient)
+        profiles = Profile.deleted.ordered.for_patient(hd_patient)
         authorize profiles
         render locals: {
-          patient: patient,
+          patient: hd_patient,
           profiles: present(profiles, ProfilePresenter)
         }
       end

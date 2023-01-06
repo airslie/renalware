@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::HD::Scheduling
-  describe DiarySlot, type: :model do
+  describe DiarySlot do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to belong_to(:diary).touch(true)

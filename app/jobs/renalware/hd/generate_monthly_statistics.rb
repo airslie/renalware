@@ -33,7 +33,7 @@ module Renalware
         end
 
         Rails.logger.info(
-          "Enqueued GenerateMonthlyStatisticsForPatientJob jobs for "\
+          "Enqueued GenerateMonthlyStatisticsForPatientJob jobs for " \
           "#{patients_with_a_closed_hd_session_in_period.length} patients"
         )
       end

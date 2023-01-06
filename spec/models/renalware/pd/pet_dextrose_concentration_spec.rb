@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module PD
-    describe PETDextroseConcentration, type: :model do
+    describe PETDextroseConcentration do
       it { is_expected.to validate_presence_of(:name) }
 
       describe "uniqueness" do

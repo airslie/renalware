@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Hospitals
-  describe Unit, type: :model do
+  describe Unit do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:hospital_centre)
       is_expected.to validate_presence_of(:name)

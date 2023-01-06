@@ -1,13 +1,4 @@
 .list.problems
   b.subtitle Problems
 
-  - if problems.any?
-    ul.indented
-      - problems.ordered.each do |problem|
-        li.problem= problem.description
-        - if problem.notes.present?
-          ol
-            - problem.notes.each do |note|
-              li= note.description
-  - else
-    p No problems listed
+  = render Renalware::Problems::SimpleSummaryComponent.new(problems: problems)

@@ -9,17 +9,30 @@ ruby:
     = link_to t("btn.cancel"), back_path
 
 .form-content data-controller="letters-form"
-  = render event if event.present?
+  / Using this syntax rather than 'render event' becuase that syntax seems to want to
+  / prepend renalware/letters to event.to_partial_path (even if the latter is an absolute path)
+  = render(partial: event.to_partial_path, locals: { event: event }) if event.present?
 
   article
     header
       h2 Header
 
     = f.association :letterhead, autofocus: true
-    = f.input :description,
-              collection: Renalware::Letters::Description.ordered.pluck(:text).uniq,
-              input_html: { class: "searchable_select" }
-    = hidden_field_tag "description_id"
+
+    - frame_url = renalware.url_for(request.params.merge(preview_topic_id: "REPLACE_ID"))
+
+    .mb-3
+      = f.association :topic,
+                required: true,
+                collection: Renalware::Letters::TopicsPresenter.list_for_dropdown(frame_url),
+                input_html: { \
+                  data: { \
+                    controller: "slimselect select-update-frame",
+                    "select-update-frame-frame-id-value": "letter_sections",
+                    "action": "change->select-update-frame#change" \
+                  },
+                }
+
     = f.input :clinical, as: :hidden
     = f.association :author,
         as: :user_picker,
@@ -28,6 +41,13 @@ ruby:
         )
 
   = render "pathology", letter: letter, f: f
+
+  = turbo_frame_tag "letter_sections" do
+    - topic = params[:preview_topic_id].present? ? Renalware::Letters::Topic.find(params[:preview_topic_id]) : letter.topic
+    - if topic
+      - Renalware::Letters::SectionManager.new(letter.__getobj__).edit_sections_for_topic(topic: topic).each do |section|
+        = render section.to_edit_partial_path, section: section, form: f
+
   = render "problems_prescriptions", letter: letter
   = render "main_recipient", f: f, contacts: contacts, patient: patient, letter: letter
   = render "additional_ccs", f: f, contacts: contacts, patient: patient, letter: letter
@@ -55,7 +75,7 @@ ruby:
     = f.input :body,
               as: :trix_editor,
               wrapper: :zilch,
-              data: { target: "letters-form.trix" }
+              data: { "letters-form-target": "trix" }
 
   article
     header

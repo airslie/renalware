@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::HD::Scheduling
-  describe Diary, type: :model do
+  describe Diary do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to validate_presence_of(:hospital_unit_id)

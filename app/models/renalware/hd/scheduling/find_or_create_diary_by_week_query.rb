@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
 require "week_period"
 ##
 # Returns a hospital unit's diary for the requested week (passed to #new as a WeekPeriod

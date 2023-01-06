@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
-require_dependency "renalware/api"
-
 module Renalware
   module API
     module V1

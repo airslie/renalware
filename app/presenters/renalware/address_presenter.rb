@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-
 module Renalware
   class AddressPresenter < DumbDelegator
     def to_s

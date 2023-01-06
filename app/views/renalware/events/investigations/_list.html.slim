@@ -9,4 +9,5 @@ article.investigations
   = render "renalware/events/events/table",
            events: investigations,
            edit_proc: ->(investigation) { edit_patient_investigation_path(patient, investigation) },
+           destroy_proc: ->(investigation) { patient_investigation_path(patient, investigation) },
            exclude_type_column: true

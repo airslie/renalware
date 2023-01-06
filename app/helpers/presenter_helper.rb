@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "collection_presenter"
-
 module PresenterHelper
   def present(object, presenter_class = nil, &block)
     if object.respond_to?(:each)

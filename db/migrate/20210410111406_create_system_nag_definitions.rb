@@ -9,7 +9,7 @@ class CreateSystemNagDefinitions < ActiveRecord::Migration[5.2]
         comment: "Registers a 'missing data nag' sql function and the text to "\
                  "display if the function evaluates to true"
       ) do |t|
-        t.enum :scope, enum_name: :system_nag_definition_scope, null: false
+        t.enum :scope, enum_type: :system_nag_definition_scope, null: false
         t.integer :importance, null: false, default: 1
         t.text :description, null: false, index: { unique: true }
         t.text :hint, comment: "May be displayed when hovering over the nag"

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Accesses
-  describe Site, type: :model do
+  describe Site do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:code)
       is_expected.to validate_presence_of(:name)

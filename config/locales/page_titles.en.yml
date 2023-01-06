@@ -1,12 +1,16 @@
 ---
 en:
   renalware:
+    accesses:
+      dashboards:
+        show:
+          page_title: Access Summary
     patients:
-      show:
-        page_title: Demographics
       clinical_summaries:
         show:
           page_title: Clinical Summary
+      show:
+        page_title: Demographics
     pd:
       dashboards:
         show:
@@ -14,7 +18,3 @@ en:
       regimes:
         show:
           page_title: PD Regime
-    accesses:
-      dashboards:
-        show:
-          page_title: "Access Summary"

@@ -32,12 +32,12 @@ table.sortables(style="list-style-type: none;")
           td.border-0
             input.m-0(type="text" name="view_metadata[columns][][name]" value=col.name style="margin:0")
           td.border-0
-            select.m-0(name="view_metadata[columns][][width]")
+            select.m-0(name="view_metadata[columns][][width]" style="margin: 0")
               option(value="")
               - Renalware::System::ColumnDefinition.new.width_values.each do |val, x|
                 option(value=val selected=(col.width == val.to_s))=val.to_s.humanize
           td.text-center.border-0
-            input.m-0(type="checkbox" name="view_metadata[columns][][truncate]" checked=col.truncate)
+            input.m-0(type="checkbox" name="view_metadata[columns][][truncate]" style="margin:0" checked=col.truncate)
 
             / fc.input(type="checkbox" value=col checked=view.columns.include?(col) name="view_metadata[columns][visible]")
             / input(bestchecked=view.columns.include?(col) name="view_metadata[columns][title]")

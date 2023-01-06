@@ -10,7 +10,7 @@ Rails.application.configure do
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+  config.cache_classes = false
   config.assets.css_compressor = nil
 
   config.log_level = :debug
@@ -60,4 +60,6 @@ Rails.application.configure do
   config.action_view.raise_on_missing_translations = true
 
   Renalware::Engine.routes.default_url_options[:host] = "localhost"
+
+  config.active_job.queue_adapter = :good_job
 end

@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/dashboard"
-require_dependency "collection_presenter"
-
 module Renalware
   module Dashboard
     class DashboardPresenter

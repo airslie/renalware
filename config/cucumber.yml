@@ -3,7 +3,7 @@
 # and add them back into the rake_web profile.
 # See https://github.com/cucumber/cucumber/wiki/Tags
 env_format = "#{ENV['CUCUMBER_FORMAT']}"
-base_opts = (env_format == "" ? "" : "--format #{env_format}") + " -r features"
+base_opts = (env_format == "" ? "" : "--format #{env_format}") + " -r features --publish-quiet"
 std_opts = "#{base_opts} --tags 'not @wip' --tags 'not @legacy' --tags 'not @pending' --strict"
 wip_opts = "#{base_opts} --tags @wip:100 --wip"
 web_opts = "#{base_opts} --tags '@web or @legacy' --tags 'not @wip' --tags 'not @pending' --strict"

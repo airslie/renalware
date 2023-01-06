@@ -4,6 +4,7 @@ kings_college_hospital:
   location: London
   active: true
   is_transplant_site: false
+  host_site: true
 royal_free_hospital:
   code: RAL01
   name: Royal Free Hospital

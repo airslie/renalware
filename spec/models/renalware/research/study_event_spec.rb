@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Research::StudyEvent, type: :model do
+  describe Research::StudyEvent do
     describe "#document" do
       subject { described_class::Document.new }
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
 require "document/base"
 require "renalware/automatic_age_calculator"
 

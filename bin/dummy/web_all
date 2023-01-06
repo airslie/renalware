@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Runs rails server and any other background processes for example delayed_job
+# Runs rails server and any other background processes for example an active job adapter
 # defined in the Procfile
 
 environ = ENV.fetch("RAILS_ENV", "development")

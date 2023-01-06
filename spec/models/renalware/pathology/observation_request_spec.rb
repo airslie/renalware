@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Pathology::ObservationRequest, type: :model do
+  describe Pathology::ObservationRequest do
     include PathologySpecHelper
 
     it :aggregate_failures do

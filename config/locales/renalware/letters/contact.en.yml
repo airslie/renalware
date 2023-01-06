@@ -9,32 +9,32 @@ en:
         renalware/letters/contact:
           attributes:
             person:
-              blank: "has to be selected from the list"
-              taken: "is already a contact for the patient"
+              blank: has to be selected from the list
+              taken: is already a contact for the patient
   renalware:
     letters:
       contacts:
-        index:
-          title: Contacts
-          add_contact: Add
-        new:
-          title: Add new contact
         form:
           description:
             other: Other - please specify in the field below
-        person_from_directory:
-          save: Save
-          cancel: Cancel
+        index:
+          add_contact: Add
+          title: Contacts
+        new:
+          title: Add new contact
         new_person:
-          save: Save
           cancel: Cancel
-      navigation:
-        list: List
+          save: Save
+        person_from_directory:
+          cancel: Cancel
+          save: Save
       letters:
-        main_recipient:
-          add_contact: Add a different recipient via the contacts Directory
         additional_ccs:
           add_contact_as_cc: Add new person to the list
         electronic_ccs:
-          title: Electronic CCs
           add: Add
+          title: Electronic CCs
+        main_recipient:
+          add_contact: Add a different recipient via the contacts Directory
+      navigation:
+        list: List

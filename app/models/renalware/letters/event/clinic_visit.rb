@@ -1,22 +1,28 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 module Renalware
   module Letters
     class Event::ClinicVisit < Event
       include ::ActionView::Helpers
+      include ::ActionView::Context
 
       def initialize(event, clinical:)
         super(event, clinical: true)
       end
 
       def description
-        "(Clinic Date #{::I18n.l(date.to_date, format: :long)})"
+        tag.span do
+          concat(tag.span { "Clinic: #{clinic&.description}" })
+          concat(
+            tag.span(style: "white-space: nowrap;") do
+              " on #{::I18n.l(date.to_date, format: :long)}"
+            end
+          )
+        end
       end
 
       def part_classes
-        super.merge!(clinical_observations: Part::ClinicalObservations)
+        super.push(Part::ClinicalObservations)
       end
 
       def to_s

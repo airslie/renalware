@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/virology"
-
 module Renalware
   module Virology
     class DashboardPresenter
@@ -26,7 +24,10 @@ module Renalware
       end
 
       def vaccinations
-        Vaccination.for_patient(patient).order(date_time: :desc)
+        CollectionPresenter.new(
+          Vaccination.for_patient(patient).order(date_time: :desc),
+          Events::EventPresenter
+        )
       end
     end
   end

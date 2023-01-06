@@ -8,12 +8,13 @@ module Renalware
       include ModalityScopes
       include PatientPathologyScopes
       DEFAULT_SEARCH_PREDICATE = "hgb_date desc"
-      attr_reader :params, :named_filter
+      attr_reader :params, :named_filter, :relation
 
-      def initialize(params:, named_filter:)
+      def initialize(params:, named_filter:, relation: HD::Patient.all)
         @params = params || {}
         @params[:s] = DEFAULT_SEARCH_PREDICATE if @params[:s].blank?
         @named_filter = named_filter || :none
+        @relation = relation
       end
 
       def call
@@ -23,7 +24,7 @@ module Renalware
       # rubocop:disable Metrics/MethodLength
       def search
         @search ||= begin
-          HD::Patient
+          relation
             .include(QueryablePatient)
             .extending(PatientTransplantScopes)
             .merge(Accesses::Patient.with_current_plan)

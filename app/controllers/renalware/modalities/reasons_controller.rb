@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/modalities"
-
 module Renalware
   module Modalities
     class ReasonsController < BaseController

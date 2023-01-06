@@ -46,21 +46,22 @@ module Renalware
     # These settings are used in the construction of the IDENT metadata in letters
     config_accessor(:letter_system_name) { "Renalware" }
     config_accessor(:letter_default_care_group_name) { "RenalCareGroup" }
+    config_accessor(:clinic_name_code_separator) { ENV.fetch("CLINIC_NAME_CODE_SEPARATOR", " ") }
     config_accessor(:default_from_email) { "dev@airslie.com" }
     config_accessor(:display_feedback_banner) { ENV.key?("DISPLAY_FEEDBACK_BANNER") }
     config_accessor(:display_feedback_button_in_navbar) do
       ENV.key?("DISPLAY_FEEDBACK_BUTTON_IN_NAVBAR")
     end
-    config_accessor(:default_from_email_address) { ENV["DEFAULT_FROM_EMAIL_ADDRESS"] }
-    config_accessor(:phone_number_on_letters) { ENV["PHONE_NUMBER_ON_LETTERS"] }
-    config_accessor(:renal_unit_on_letters) { ENV["RENAL_UNIT_ON_LETTERS"] }
+    config_accessor(:default_from_email_address) { ENV.fetch("DEFAULT_FROM_EMAIL_ADDRESS", nil) }
+    config_accessor(:phone_number_on_letters) { ENV.fetch("PHONE_NUMBER_ON_LETTERS", nil) }
+    config_accessor(:renal_unit_on_letters) { ENV.fetch("RENAL_UNIT_ON_LETTERS", nil) }
     # Unless an ALLOW_EXTERNAL_MAIL key is present in .env or .env.production, mail (other than
     # password reset emails etc) will be redirected to e.g. the user who approved the letter.
     config_accessor(:allow_external_mail) { ENV.key?("ALLOW_EXTERNAL_MAIL") }
     config_accessor(:fallback_email_address_for_test_messages) do
-      ENV["FALLBACK_EMAIL_ADDRESS_FOR_TEST_MESSAGES"]
+      ENV.fetch("FALLBACK_EMAIL_ADDRESS_FOR_TEST_MESSAGES", nil)
     end
-    config_accessor(:ukrdc_sending_facility_name) { ENV["UKRDC_SENDING_FACILITY_NAME"] }
+    config_accessor(:ukrdc_sending_facility_name) { ENV.fetch("UKRDC_SENDING_FACILITY_NAME", nil) }
     config_accessor(:ukrdc_default_changes_since_date) {
       Date.parse(ENV.fetch("UKRDC_DEFAULT_CHANGES_SINCE_DATE", "2018-01-01"))
     }
@@ -87,7 +88,7 @@ module Renalware
     # from this date on. It only affects pathology and not medications, letters etc.
     # It is not indented to keep this date set, but its useful if UKRDC ask for
     # a dump of historical pathology.
-    config_accessor(:ukrdc_pathology_start_date) { ENV["UKRDC_PATHOLOGY_START_DATE"] }
+    config_accessor(:ukrdc_pathology_start_date) { ENV.fetch("UKRDC_PATHOLOGY_START_DATE", nil) }
 
     config_accessor(:ukrdc_send_rpv_patients) {
       ENV.fetch("UKRDC_SEND_RPV_PATIENTS", "true") == "true"
@@ -211,6 +212,18 @@ module Renalware
     config_accessor(:pathology_kfre_2y_obx_code) { "KFRE2" }
     config_accessor(:pathology_kfre_5y_obx_code) { "KFRE5" }
     config_accessor(:pathology_kfre_obr_code) { "KFRE" }
+
+    # patient_visilbility_restriction_options = %i(none by_site by_site_and_research_study)
+
+    config_accessor(:patient_visibility_restrictions) { :none }
+
+    def restrict_patient_visibility_by_user_site?
+      [:by_site, :by_site_and_research_study].include?(patient_visibility_restrictions)
+    end
+
+    def restrict_patient_visibility_by_research_study?
+      patient_visibility_restrictions == :by_site_and_research_study
+    end
   end
 
   def self.config

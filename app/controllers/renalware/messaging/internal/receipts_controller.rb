@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/messaging"
-
 # A Receipt is cross reference between Message and Recipient.
 # We can for instance mark on a receipt if/when it was read or viewed.
 module Renalware

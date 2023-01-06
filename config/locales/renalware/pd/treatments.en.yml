@@ -3,23 +3,23 @@ en:
   renalware:
     pd:
       treatments:
-        capd:
-          - "CAPD 1 exchange per day"
-          - "CAPD 2 exchanges per day"
-          - "CAPD 3 exchanges per day"
-          - "CAPD 4 exchanges per day"
-          - "CAPD 5 exchanges per day"
-          - "CAPD assisted 1 exchange per day"
-          - "CAPD assisted 2 exchanges per day"
-          - "CAPD assisted 3 exchanges per day"
-          - "CAPD assisted 4 exchanges per day"
-          - "CAPD assisted 5 exchanges per day"
         apd:
-          - "APD Dry Day"
-          - "APD Dry Day Assisted"
-          - "APD Wet Day"
-          - "APD Wet Day Assisted"
-          - "APD Wet Day w additional manual exchange"
-          - "APD Wet Day w additional machine exchange"
-          - "APD Wet Day Assisted w additional manual exchange"
-          - "APD Wet Day Assisted w additional machine exchange"
+        - APD Dry Day
+        - APD Dry Day Assisted
+        - APD Wet Day
+        - APD Wet Day Assisted
+        - APD Wet Day w additional manual exchange
+        - APD Wet Day w additional machine exchange
+        - APD Wet Day Assisted w additional manual exchange
+        - APD Wet Day Assisted w additional machine exchange
+        capd:
+        - CAPD 1 exchange per day
+        - CAPD 2 exchanges per day
+        - CAPD 3 exchanges per day
+        - CAPD 4 exchanges per day
+        - CAPD 5 exchanges per day
+        - CAPD assisted 1 exchange per day
+        - CAPD assisted 2 exchanges per day
+        - CAPD assisted 3 exchanges per day
+        - CAPD assisted 4 exchanges per day
+        - CAPD assisted 5 exchanges per day

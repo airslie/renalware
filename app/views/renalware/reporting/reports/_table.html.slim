@@ -50,7 +50,7 @@ table
           - klass = "col-width-#{col.width}-with-ellipsis" if col.truncate
           - code = col.code
           - value = row.attributes[code]
-          - if code == "patient_name"
+          - if %w(patient_name nhs_number local_patient_id).include?(code)
             td= default_patient_link(row)
           - else
             - if value.respond_to?(:strftime)

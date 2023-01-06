@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe PatientStatistics, type: :model do
+    describe PatientStatistics do
       it :aggregate_failures do
         is_expected.to validate_presence_of(:hospital_unit)
         is_expected.to validate_presence_of(:patient)

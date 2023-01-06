@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/directory"
 require "collection_presenter"
 
 module Renalware

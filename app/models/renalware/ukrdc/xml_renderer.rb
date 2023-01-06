@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/ukrdc"
 require "benchmark"
 
 module Renalware

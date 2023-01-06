@@ -1,17 +1,17 @@
 ---
 en:
-  renalware/events/clinical_frailty_score:
-    title: "Clinical Frailty Scores"
-    description_column_title: Score
   enumerize:
     renalware/events/clinical_frailty_score/document:
       score:
-        1: 1
-        2: 2
-        3: 3
-        4: 4
-        5: 5
-        6: 6
-        7: 7
-        8: 8
-        9: 9
+        '1': 1
+        '2': 2
+        '3': 3
+        '4': 4
+        '5': 5
+        '6': 6
+        '7': 7
+        '8': 8
+        '9': 9
+  renalware/events/clinical_frailty_score:
+    description_column_title: Score
+    title: Clinical Frailty Scores

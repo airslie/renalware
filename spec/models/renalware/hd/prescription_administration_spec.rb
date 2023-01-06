@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe PrescriptionAdministration, type: :model do
+    describe PrescriptionAdministration do
       let(:witnessed_by) { User.new }
       let(:administered_by) { User.new }
 

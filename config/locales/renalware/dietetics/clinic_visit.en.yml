@@ -1,0 +1,78 @@
+---
+en:
+  activemodel:
+    attributes:
+      renalware/dietetics/clinic_visit/document:
+        adjusted_bmi: Adjusted BMI for amputations/significant oedema
+        dietary_protein_intake: Estimated protein intake
+        dietary_protein_requirement: Estimated protein requirement
+        energy_intake: Estimated energy intake
+        energy_requirement: Estimated energy requirement
+        handgrip_left: Left
+        handgrip_right: Right
+        next_review_in: Next review date
+  enumerize:
+    renalware/dietetics/clinic_visit/document:
+      assessment_type:
+        dietetic_phone_assessment: Dietetic phone assessment
+        dietetic_phone_r_v: Dietetic phone r/v
+        dietetic_r_v: Dietetic r/v
+        sga: SGA
+      attendance:
+        attended: Attended
+        dna: DNA
+        pt_declined: PT declined
+      dominant_hand:
+        left: Left
+        right: Right
+      intervention_a:
+        diabetes: Diabetes
+        fibre: Fibre
+        idpn: IDPN
+        increase_protein: Increase protein
+        new_modality_diet_information: New modality diet information
+        no_change: No change
+        nutrition_support: Nutrition support - food and/or supplements
+        obesity_management: Obesity management
+        other: Other with option to detail
+        patient_declined_intervention: Patient declined assessment/intervention
+        phosphate_bone: Phosphate/Bone
+        potassium: Potassium
+        reduce_protein: Reduce protein
+        salt_fluid: Salt/Fluid
+      intervention_b: :enumerize.renalware/dietetics/clinic_visit/document.intervention_a
+      intervention_c: :enumerize.renalware/dietetics/clinic_visit/document.intervention_a
+      next_review_in:
+        six_months: 6 months
+        three_months: 3 months
+        twelve_months: 12 months
+      plan:
+        plan_A: plan_A
+        plan_B: plan_B
+        plan_C: plan_C
+      sga_assessment:
+        moderate_malnutrition: B - Moderate malnutrition
+        severe_malnutrition: C - Severe malnutrition
+        well_nourished: A - Well nourished
+      visit_type:
+        all_separate_hd_unites: all separate HD units
+        general_clinic: General (ad hoc) clinic
+        lcc: LCC
+        pd: PD
+        tx: Tx
+        weight_management_clinic: Weight management clinic
+  simple_form:
+    hints:
+      clinic_visit:
+        document:
+          dietary_protein_intake: g/day
+          dietary_protein_requirement: g/day
+          energy_intake: kcal/day
+          energy_requirement: kcal/day
+          handgrip_left: kg
+          handgrip_right: kg
+          ideal_body_weight: kg
+          previous_weight: kg
+          time_for_consultation: mins
+          time_for_documentation: mins
+          waist_circumference: cm

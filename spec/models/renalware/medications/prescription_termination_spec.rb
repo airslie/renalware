@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Medications::PrescriptionTermination, type: :model do
+  describe Medications::PrescriptionTermination do
     it_behaves_like "an Accountable model"
     it { is_expected.to belong_to(:prescription).touch(true) }
 

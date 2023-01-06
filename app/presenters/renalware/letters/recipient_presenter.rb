@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-require_dependency "renalware/address_presenter"
-
 module Renalware
   module Letters
     class RecipientPresenter < DumbDelegator

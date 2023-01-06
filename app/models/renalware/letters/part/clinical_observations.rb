@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require "renalware/letters/part"
-
 module Renalware
   module Letters
-    class Part::ClinicalObservations < Part
+    class Part::ClinicalObservations < Section
       include Renalware::AttributeNameHelper
       OBSERVATION_ATTRS = %i(bp weight height bmi urine_blood urine_protein).freeze
       OBSERVATION_UNITS = { weight: :kg, height: :m }.freeze

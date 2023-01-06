@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinics"
 require "success"
 require "failure"
 
@@ -19,7 +18,7 @@ module Renalware
 
       def call
         ClinicVisit.transaction do
-          visit = patient.clinic_visits.new(params)
+          visit = build_clinic_visit
           objects = OpenStruct.new(clinic_visit: visit, appointment: appointment)
           if visit.save && update_appointment_with(visit.id)
             return ::Success.new(objects)
@@ -49,6 +48,24 @@ module Renalware
             patient.appointments.find(built_from_appointment_id)
           end
         end
+      end
+
+      def build_clinic_visit
+        class_for_new_visit.new(params.merge(patient: patient))
+      end
+
+      # A Clinics::Clinic may hint the visit_class_name column which specific class name should be
+      # instanciated when creating a new Visit. If blank then it is just a vailla Visit.
+      def class_for_new_visit
+        @class_for_new_visit ||= begin
+          return Clinics::ClinicVisit if clinic&.visit_class_name.blank?
+
+          Class.const_get(clinic.visit_class_name.classify)
+        end
+      end
+
+      def clinic
+        @clinic ||= Clinic.find_by(id: params[:clinic_id])
       end
 
       attr_reader :params, :patient, :built_from_appointment_id

@@ -2,19 +2,16 @@
 
 module Renalware
   module DefinitionListHelper
-    class DefinitionList < SimpleDelegator
+    class DefinitionList
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::TextHelper
       include ActionView::Context
-
-      def initialize(model)
-        @model_klass = model.class
-        super(model)
-      end
+      pattr_initialize :model
+      delegate_missing_to :model
 
       def definition(attribute, label = nil)
-        text = label || @model_klass.human_attribute_name(attribute)
-        value = __getobj__.public_send(attribute)
+        text = label || model.class.human_attribute_name(attribute)
+        value = model.public_send(attribute)
         value = yield(value) if value.present? && block_given?
         capture do
           concat tag.dt(text)

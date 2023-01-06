@@ -1,96 +1,96 @@
 ---
 en:
   activerecord:
-    errors:
-      models:
-        renalware/pd/regime:
-          attributes:
-              additional_manual_exchange_volume:
-                blank: "required if you have added an 'Additional manual exchange' bag"
-              last_fill_volume:
-                blank: "required if you have added a 'Last fill' bag"
     attributes:
       renalware/pd/regime:
-        glucose_volume_low_strength: Low strength
-        glucose_volume_medium_strength: Med. strength
-        glucose_volume_high_strength: High strength
-        assistance_type: "Assistance"
-        fill_volume: "Fill volume (ml)"
-        last_fill_volume: "Last fill volume (ml)"
-        additional_manual_exchange_volume: "Add'l man exchange vol (ml)"
-        no_cycles_per_apd: "Cycles per session"
-        overnight_volume: "Overnight APD volume (ml)"
-        daily_volume: "Total daily APD volume (ml)"
-        apd_machine_pac: "Machine PAC"
-        tidal_indicator: "Has tidal?"
-        tidal_full_drain_every_three_cycles: "Full drain every 3 cycles?"
-        add_hd: "On additional HD"
-        tidal_percentage: "Tidal (%)"
-        treatment: Treatment
+        add_hd: On additional HD
+        additional_manual_exchange_volume: Add'l man exchange vol (ml)
+        apd_machine_pac: Machine PAC
+        assistance_type: Assistance
+        daily_volume: Total daily APD volume (ml)
         delivery_interval: Delivery interval
-        start_date: Start date
         end_date: End date
         exchanges_done_by: Exchanges done by
         exchanges_done_by_if_other: Exchanges done by (if other)
         exchanges_done_by_notes: Exchanges done by (if specify)
+        fill_volume: Fill volume (ml)
+        glucose_volume_high_strength: High strength
+        glucose_volume_low_strength: Low strength
+        glucose_volume_medium_strength: Med. strength
+        last_fill_volume: Last fill volume (ml)
+        no_cycles_per_apd: Cycles per session
+        overnight_volume: Overnight APD volume (ml)
+        start_date: Start date
+        tidal_full_drain_every_three_cycles: Full drain every 3 cycles?
+        tidal_indicator: Has tidal?
+        tidal_percentage: Tidal (%)
+        treatment: Treatment
       renalware/pd/regime_bag:
-        sunday: Sun
-        monday: Mon
-        tuesday: Tue
-        wednesday: Wed
-        thursday: Thur
-        friday: Fri
-        saturday: Sat
+        additional_manual_exchange: Additional manual exchange
         bag_type: Bag type
-        volume: Volume (ml)
         capd_overnight_bag: Overnight bag
-        additional_manual_exchange: Additional manual exchange
+        friday: Fri
+        monday: Mon
         role: Role
-  renalware:
-    pd:
-      regimes:
-        glucose_volume_low_strength: Glucose low strength vol
-        glucose_volume_medium_strength: Glucose med. strength vol
-        glucose_volume_high_strength: Glucose high strength vol
-        apd_fields:
-          fieldset_titles:
-            tidal: Tidal
-            additional_info: Additional APD Info
-            additional_exchanges: Additional Exchanges
-        bags:
-          form:
-            blank_option: "Select bag type"
-        current_regime:
-          bags_heading: Bags
-        current_apd_regime:
-          overnight_volume: Overnight APD volume
-          daily_volume: Total daily volume
-        apd_regime_show:
-          overnight_volume: Overnight APD volume
-          daily_volume: Total daily volume
-      regime_bags:
-        regime_bags:
-          bag_type: Description
-          volume: Vol
-          capd_overnight: Overnight
-          role: Type
-          days_quantity: No. per week
-          days: Days
+        saturday: Sat
+        sunday: Sun
+        thursday: Thur
+        tuesday: Tue
+        volume: Volume (ml)
+        wednesday: Wed
+    errors:
+      models:
+        renalware/pd/regime:
+          attributes:
+            additional_manual_exchange_volume:
+              blank: required if you have added an 'Additional manual exchange' bag
+            last_fill_volume:
+              blank: required if you have added a 'Last fill' bag
   enumerize:
-    renalware/pd/regime_bag:
-      role:
-        ordinary: Ordinary bag
-        last_fill: Last fill
-        additional_manual_exchange: Additional manual exchange
     renalware/pd/regime:
       exchanges_done_by:
         by_patient: By patient
-        predominantly_by_patient: Predominantly by patient
         equally_between_patient_and_others: Equally between patient and others
-        predominantly_by_others: Predominantly by others
         only_by_others: Only by others
+        predominantly_by_others: Predominantly by others
+        predominantly_by_patient: Predominantly by patient
       exchanges_done_by_if_other:
-        spouse: Spouse
         daughter_son_in_law: Daughter/son/in-law
-        others_specify: Others - specify
         mix_specify: Mix - specify
+        others_specify: Others - specify
+        spouse: Spouse
+    renalware/pd/regime_bag:
+      role:
+        additional_manual_exchange: Additional manual exchange
+        last_fill: Last fill
+        ordinary: Ordinary bag
+  renalware:
+    pd:
+      regime_bags:
+        regime_bags:
+          bag_type: Description
+          capd_overnight: Overnight
+          days: Days
+          days_quantity: No. per week
+          role: Type
+          volume: Vol
+      regimes:
+        apd_fields:
+          fieldset_titles:
+            additional_exchanges: Additional Exchanges
+            additional_info: Additional APD Info
+            tidal: Tidal
+        apd_regime_show:
+          daily_volume: Total daily volume
+          overnight_volume: Overnight APD volume
+        bags:
+          form:
+            blank_option: Select bag type
+        current_apd_regime:
+          daily_volume: Total daily volume
+          overnight_volume: Overnight APD volume
+        current_regime:
+          bags_heading: Bags
+        glucose_volume_high_strength: Glucose high strength vol
+        glucose_volume_low_strength: Glucose low strength vol
+        glucose_volume_medium_strength: Glucose med. strength vol

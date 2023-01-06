@@ -2,8 +2,8 @@
 
 module Renalware
   log "Adding User Groups" do
-    all_user_ids = User.pluck(:id)
-    user_ids = [all_user_ids.sample, all_user_ids.sample, all_user_ids.sample]
+    user_ids = User.pluck(:id).sample(6).uniq
+    p user_ids
     Users::Group.create!(
       name: "Transplant Coordinators",
       user_ids: user_ids,

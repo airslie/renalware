@@ -27,7 +27,7 @@ module Renalware
         {
           total_creatinine_clearance: total_creatinine_clearance,
           pertitoneal_creatinine_clearance: pertitoneal_creatinine_clearance,
-          renal_creatinine_clearance: renal_creatinine_clearance,
+          renal_creatinine_clearance: residual_renal_function,
           total_ktv: total_ktv,
           pertitoneal_ktv: pertitoneal_ktv,
           renal_ktv: renal_ktv,
@@ -37,6 +37,7 @@ module Renalware
 
       def renal_urine_clearance
         return if urine_24_missing
+        return 0.0 if urine_24_vol&.zero?
         return if any_are_nil_or_zero?(urine_urea, serum_urea, urine_24_vol)
 
         (urine_urea * urine_24_vol / 1000.0) / serum_urea * 7.0
@@ -44,6 +45,7 @@ module Renalware
 
       def renal_creatinine_clearance
         return if urine_24_missing
+        return 0.0 if urine_24_vol&.zero?
         return if any_are_nil_or_zero?(urine_creatinine, serum_creatinine, urine_24_vol)
 
         (
@@ -52,11 +54,9 @@ module Renalware
       end
 
       def residual_renal_function
-        return if any_are_nil_or_zero?(
-          body_surface_area,
-          renal_creatinine_clearance,
-          renal_urine_clearance
-        )
+        return 0.0 if renal_creatinine_clearance&.zero?
+        return 0.0 if renal_urine_clearance&.zero?
+        return if any_are_nil_or_zero?(body_surface_area, renal_urine_clearance)
 
         (
           (renal_creatinine_clearance + renal_urine_clearance) / (2.0 * body_surface_area) * 1.72
@@ -79,9 +79,9 @@ module Renalware
       end
 
       def total_creatinine_clearance
-        return if any_are_nil_or_zero?(residual_renal_function, pertitoneal_creatinine_clearance)
+        return if residual_renal_function.nil? || pertitoneal_creatinine_clearance.nil?
 
-        residual_renal_function + pertitoneal_creatinine_clearance
+        residual_renal_function.to_f + pertitoneal_creatinine_clearance.to_f
       end
 
       # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
@@ -108,6 +108,7 @@ module Renalware
 
       def renal_ktv
         return if urine_24_missing
+        return 0.0 if urine_24_vol&.zero?
         return if any_are_nil_or_zero?(
           urine_urea,
           serum_urea,
@@ -135,9 +136,9 @@ module Renalware
       end
 
       def total_ktv
-        return if any_are_nil_or_zero?(renal_ktv, pertitoneal_ktv)
+        return if renal_ktv.nil? || pertitoneal_ktv.nil?
 
-        (renal_ktv + pertitoneal_ktv).round(2)
+        (renal_ktv.to_f + pertitoneal_ktv.to_f).round(2)
       end
 
       def body_surface_area

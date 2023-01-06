@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
 require "collection_presenter"
 
 module Renalware

@@ -1,18 +1,21 @@
-.form-content
-    = render layout: "renalware/shared/fieldset",
-        locals: { legend: "Dry Weight", name: "dryweight" } do
-      = f.input :weight,
-                autofocus: true,
-                wrapper: :horizontal_small
-      = f.input :assessed_on,
-                as: :date_picker,
-                wrapper: :horizontal_datepicker
-      = f.association :assessor,
-                      as: :user_picker,
-                      collection: Renalware::User.ordered,
-                      wrapper: :horizontal_medium
-.row
-  .large-12.columns
-    = f.button :submit
-    '  or
-    = link_to t("btn.cancel"), return_url
+.flex.mb-2
+  div
+    span &nbsp;
+    = f.input :weight, autofocus: true, wrapper: :tw_default
+  
+  div.bg-gray-100.rounded.px-2.md:w-1/2.lg:w-1/3.ml-2
+    div.font-bold.text-center.text-gray-600 Optional Range
+    .flex
+      = f.input :minimum_weight, label: "Min (kg)", wrapper: :tw_default, wrapper_html: { class: "mr-2 mb-2" }
+      = f.input :maximum_weight, label: "Max (kg)", wrapper: :tw_default, wrapper_html: { }
+  
+= f.input :assessed_on, as: :date_picker2, wrapper_html: { class: "mb-4" }
+ 
+= f.association :assessor,
+                as: :user_picker,
+                collection: Renalware::User.ordered,
+                wrapper_html: { class: "w-1/2 mb-4" }
+
+= f.button :submit
+'  or
+= link_to t("btn.cancel"), return_url

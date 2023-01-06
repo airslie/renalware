@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Clinics
-    describe RememberedClinicVisitPreferences, type: :model do
+    describe RememberedClinicVisitPreferences do
       describe "#persist" do
         it "saves certain model attributes to the session" do
           visit = instance_double(ClinicVisit, date: Time.zone.now, clinic_id: 1)

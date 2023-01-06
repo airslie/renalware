@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Events
-  describe EventPdf, type: :model do
+  describe EventPdf do
     describe "#render" do
       it "generates a PDF" do
         event = Renalware::Events::EventPdfPresenter.new(create(:simple_event))

@@ -4,6 +4,7 @@
 module Renalware
   module Clinics
     class VisitsController < BaseController
+      # TODO: PatientVsibility?
       include Renalware::Concerns::Pageable
 
       def index

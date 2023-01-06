@@ -3,14 +3,16 @@
 require "rails_helper"
 
 module Renalware
-  describe "renalware/letters/parts/_clinical_observations", type: :view do
+  describe "renalware/letters/parts/_clinical_observations" do
     helper(Renalware::LettersHelper)
     helper(Renalware::AttributeNameHelper)
 
     subject { render partial: partial, locals: { clinical_observations: part } }
 
     let(:partial) { "renalware/letters/parts/clinical_observations" }
-    let(:part) { Letters::Part::ClinicalObservations.new(nil, nil, clinic_visit) }
+    let(:part) {
+      Letters::Part::ClinicalObservations.new(letter: Letters::Letter.new, event: clinic_visit)
+    }
     let(:clinic_visit) {
       Clinics::ClinicVisit.new(
         height: 1.8,

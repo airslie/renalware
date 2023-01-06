@@ -13,7 +13,7 @@ module World
 
       # @section seeding
       #
-      def seed_recipient_workup_for(user: nil, patient:)
+      def seed_recipient_workup_for(patient:, user: nil)
         patient = transplant_patient(patient)
 
         Renalware::Transplants::RecipientWorkup.create!(
@@ -24,7 +24,7 @@ module World
 
       # @section commands
       #
-      def create_recipient_workup(user: nil, patient:)
+      def create_recipient_workup(patient:, user: nil)
         seed_recipient_workup_for(user: user, patient: patient)
       end
 

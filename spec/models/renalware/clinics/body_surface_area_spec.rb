@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Clinics::BodySurfaceArea, type: :model do
+describe Renalware::Clinics::BodySurfaceArea do
   describe "#calculate" do
     context "when no weight supplied" do
       it "returns nil" do

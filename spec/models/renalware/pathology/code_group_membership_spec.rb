@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Pathology::CodeGroupMembership, type: :model do
+  describe Pathology::CodeGroupMembership do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to be_versioned

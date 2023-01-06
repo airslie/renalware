@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
-
 module Renalware
   module Patients
     # Responsible for transforming an HL7 message payload into a params hash

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/ukrdc"
-
 module Renalware
   module UKRDC
     # If the optional :changed_since argument is passed we select all RPV

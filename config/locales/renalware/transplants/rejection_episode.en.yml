@@ -3,6 +3,6 @@ en:
   activerecord:
     attributes:
       renalware/transplants/rejection_episode:
-        treatment: Treatment given
-        recorded_on: Recorded on
         notes: Notes
+        recorded_on: Recorded on
+        treatment: Treatment given

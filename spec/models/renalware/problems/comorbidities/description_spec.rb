@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Problems
-  describe Comorbidities::Description, type: :model do
+  describe Comorbidities::Description do
     it_behaves_like "a Paranoid model"
 
     it :aggregate_failures do

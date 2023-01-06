@@ -25,7 +25,7 @@ class CreateComorbidities < ActiveRecord::Migration[5.2]
           null: false,
           foreign_key: { to_table: :problem_comorbidity_descriptions }
         )
-        t.enum :recognised, enum_name: :tristate_type, null: false, default: :unknown
+        t.enum :recognised, enum_type: :tristate_type, null: false, default: :unknown
         # t.boolean :recognised, null: true, comment: "true = yes, false = no, null = unknown"
         t.date :recognised_at, null: true, comment: "Note often only year is known"
         t.references :created_by, foreign_key: { to_table: :users }, index: true, null: false

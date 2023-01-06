@@ -1,6 +1,9 @@
 import { application } from "./application"
 
 import ToggleController from "./toggle_controller"
+import ClinicsBmiCalculatorController from "./clinics/bmi_calculator_controller"
+import WeightChangeCalculatorController from "./clinics/weight_change_calculator_controller"
+import DietaryProteinCalculatorController from "./clinics/dietary_protein_calculator_controller"
 import HDPrescriptionController from "./hd/prescription_administration_controller"
 import MedicationsHomeDeliveryModalController from "./medications/home_delivery_modal_controller"
 import SnippetsController from "./snippets_controller"
@@ -22,10 +25,17 @@ import ConditionalDisplayController from "./conditional_display_controller"
 import SlimselectController from "./slimselect_controller"
 import TurboModalController from "./turbo_modal_controller"
 import FormController from "./form_controller"
+import FlashController from "./flash_controller"
+import FlatpickrController from "./flatpickr_controller"
+import InputValueAlerterController from "./input_value_alerter_controller"
+import SelectUpdateFrameController from "./select_update_frame_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
-application.register("home-delivery-modal", MedicationsHomeDeliveryModalController)
+application.register(
+  "home-delivery-modal",
+  MedicationsHomeDeliveryModalController
+)
 application.register("snippets", SnippetsController)
 application.register("letters-form", LettersFormController)
 application.register("prescriptions", PrescriptionsController)
@@ -45,3 +55,16 @@ application.register("conditional-display", ConditionalDisplayController)
 application.register("slimselect", SlimselectController)
 application.register("turbo-modal", TurboModalController)
 application.register("form", FormController)
+application.register("flash", FlashController)
+application.register("flatpickr", FlatpickrController)
+application.register("input-value-alerter", InputValueAlerterController)
+application.register("select-update-frame", SelectUpdateFrameController)
+application.register("clinics--bmi-calculator", ClinicsBmiCalculatorController)
+application.register(
+  "clinics--weight-change-calculator",
+  WeightChangeCalculatorController
+)
+application.register(
+  "clinics--dietary-protein-calculator",
+  DietaryProteinCalculatorController
+)

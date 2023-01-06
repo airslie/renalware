@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Reporting::ReportMailer, type: :mailer do
+  describe Reporting::ReportMailer do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 end

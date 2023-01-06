@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Problems
-  describe Note, type: :model do
+  describe Note do
     it_behaves_like "a Paranoid model"
     it_behaves_like "an Accountable model"
     it :aggregate_failures do

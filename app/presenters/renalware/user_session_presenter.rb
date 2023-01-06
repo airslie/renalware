@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-
 module Renalware
   class UserSessionPresenter
     # Returns a hash to be splatted into the body attributes in a layout e.g. application.html.slim

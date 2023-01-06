@@ -27,8 +27,8 @@ class NHSClient
   # the prodecure concept (71388002) and descendants of the clinical findings concept (404684003)
   ECL = ENV.fetch("NHS_TERMINOLOGY_SERVER_ECL", "<404684003 OR <71388002")
 
-  CLIENT_ID = ENV["NHS_CLIENT_ID"]
-  CLIENT_SECRET = ENV["NHS_CLIENT_SECRET"]
+  CLIENT_ID = ENV.fetch("NHS_CLIENT_ID", nil)
+  CLIENT_SECRET = ENV.fetch("NHS_CLIENT_SECRET", nil)
 
   attr_reader :problems, :problems_total
 

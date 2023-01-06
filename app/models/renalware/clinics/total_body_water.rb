@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinics"
-
 # Total Body Water (TBW) calcuated using WATSON
 # References:
 # - https://qxmd.com/calculate/calculator_344/total-body-water-watson-formula

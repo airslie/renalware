@@ -32,15 +32,6 @@ devise_for :users,
 get "/check_session_expired" => "session_timeout#check_session_expired", as: "check_session_expired"
 get "/keep_session_alive" => "session_timeout#keep_session_alive", as: "keep_session_alive"
 
-super_admin_constraint = lambda do |request|
-  current_user = request.env["warden"].user || Renalware::NullUser.new
-  current_user.has_role?(:super_admin)
-end
-
-constraints super_admin_constraint do
-  match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
-end
-
 # enable mail previews in all environments
 get "/rails/mailers" => "rails/mailers#index"
 get "/rails/mailers/*path" => "rails/mailers#preview"

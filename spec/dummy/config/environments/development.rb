@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+$stdout.sync = true
+
 # In development don't ajax poll so often for a timeout as it can upset our byebug sessions.
 Renalware.configure do |config|
   config.session_timeout_polling_frequency = 1.hour
@@ -27,8 +29,6 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local = true
-  config.action_dispatch.show_exceptions = false
-  config.action_dispatch.show_detailed_exceptions = true
   config.action_view.raise_on_missing_translations = true
 
   # Enable/disable caching. By default caching is disabled.
@@ -94,4 +94,6 @@ Rails.application.configure do
   #   Send mail through smtp://localhost:1025
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { address: "localhost", port: 1025 }
+
+  config.active_job.queue_adapter = :good_job
 end

@@ -1,0 +1,14 @@
+{
+  "[ruby]": {
+    "editor.defaultFormatter": "castwide.solargraph"
+  },
+  // Use Solargraph formatting instead
+  "ruby.format": false,
+  "ruby.lint": {
+    "rubocop": false,
+    "standard": false
+  },
+  "solargraph.autoformat": true,
+  "solargraph.diagnostics": true,
+  "solargraph.formatting": true
+}

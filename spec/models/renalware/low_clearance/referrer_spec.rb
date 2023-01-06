@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module LowClearance
-    describe Referrer, type: :model do
+    describe Referrer do
       it { is_expected.to validate_presence_of(:name) }
 
       describe "uniqueness" do

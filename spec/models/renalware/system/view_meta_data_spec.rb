@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe System::ViewMetadata, type: :model do
+  describe System::ViewMetadata do
     it "exists" do
       # noop
     end

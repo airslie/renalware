@@ -1,31 +1,31 @@
 ---
 en:
-  renalware:
-    virology:
-      vaccinations:
-        list:
-          title: Vaccinations
-      dashboards:
-        actions:
-          add_vaccination: Vaccination
   activemodel:
     attributes:
       renalware/virology/profile_document:
-        hiv: HIV
         hepatitis_b: Hepatitis B
         hepatitis_b_core_antibody: Hepatitis B Core Antibody
         hepatitis_c: Hepatitis C
+        hiv: HIV
         htlv: HTLV
   enumerize:
     renalware/virology/vaccination/document:
       type:
+        covid19_1: COVID-19 1
+        covid19_2: COVID-19 2
         hbv1: HBV Vaccination 1
         hbv2: HBV Vaccination 2
         hbv3: HBV Vaccination 3
         hbv4: HBV Vaccination 4
         hbv_booster: HBV Booster
         influenza: Influenza
-        pneumococcus: Pneumococcus
-        covid19_1: COVID-19 1
-        covid19_2: COVID-19 2
         patient_refused: Patient Refused
+        pneumococcus: Pneumococcus
+  renalware:
+    virology:
+      dashboards:
+        actions:
+          add_vaccination: Vaccination
+      vaccinations:
+        list:
+          title: Vaccinations

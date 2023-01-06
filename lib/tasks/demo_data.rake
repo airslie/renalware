@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-# require_dependency "renalware/letters"
+#  
 
-require_relative '../../app/models/concerns/renalware/broadcasting.rb'
+require_relative "../../app/models/concerns/renalware/broadcasting"
 
 namespace :demo_data do
   task generate_test_letters: :environment do
     return if Rails.env.production?
 
-    Renalware::GenerateTestLetters.new(ENV["pages"]).call
+    Renalware::GenerateTestLetters.new(ENV.fetch("pages", nil)).call
   end
 end
 
@@ -45,7 +45,7 @@ module Renalware
           pathology_timestamp: 1.day.ago,
           event: clinics_patient.clinic_visits.first,
           clinical: true,
-          description: Renalware::Letters::Description.last.text,
+          topic: Renalware::Letters::Topic.last,
           main_recipient_attributes: {
             person_role: "patient"
           },

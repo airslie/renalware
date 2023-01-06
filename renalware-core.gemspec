@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.email       = ["dev@airslie.com"]
   s.homepage    = "https://github.com/airslie/renalware-core"
   s.summary     = "Renalware core functionality as a mountable engine."
-  s.description = "Renalware uses demographic, clinical, pathology, and nephrology datasets to "\
-                  "improve patient care, undertake clinical and administrative audits and share "\
+  s.description = "Renalware uses demographic, clinical, pathology, and nephrology datasets to " \
+                  "improve patient care, undertake clinical and administrative audits and share " \
                   "data with external systems."
   s.license     = "MIT"
 
@@ -32,10 +32,10 @@ Gem::Specification.new do |s|
   ]
 
   s.add_dependency "activerecord-import", "~> 1.0"
-  s.add_dependency "activerecord-postgres_enum", "~> 1.6.0"
+  s.add_dependency "activerecord-postgres_enum", "~> 2.0"
   s.add_dependency "active_type", "~> 0.7.1"
   s.add_dependency "ahoy_matey", "~> 2.1"
-  s.add_dependency "attr_extras", "~> 6.2"
+  s.add_dependency "attr_extras", ">= 6.2"
   s.add_dependency "client_side_validations", "~> 17.0"
   s.add_dependency "client_side_validations-simple_form", "~> 11.0"
   s.add_dependency "clipboard-rails", "~> 1.7.1"
@@ -44,7 +44,6 @@ Gem::Specification.new do |s|
   s.add_dependency "cronex", "~> 0.6.1"
   s.add_dependency "delayed_job", "~> 4.1.4"
   s.add_dependency "delayed_job_active_record", "~> 4.1.2"
-  s.add_dependency "delayed_job_web", "~> 1.4.3"
   s.add_dependency "devise", "~> 4.8"
   s.add_dependency "devise-security", "~> 0.14.3"
   s.add_dependency "dotenv-rails", "~> 2.5"
@@ -68,26 +67,26 @@ Gem::Specification.new do |s|
   s.add_dependency "nested_form", "~> 0.3.2"
   s.add_dependency "nokogiri", "~> 1.9"
   s.add_dependency "ox", "~> 2.13"
-  s.add_dependency "pagy", "~> 4.8"
+  s.add_dependency "pagy", "~> 5.10"
   s.add_dependency "pandoc-ruby", "~> 2.1.4"
   s.add_dependency "paper_trail"
-  s.add_dependency "paranoia", "~> 2.4.0"
+  s.add_dependency "paranoia", "~> 2.6.0"
   s.add_dependency "pdf-reader", "~> 2.9"
   s.add_dependency "pg", "~> 1.1"
   s.add_dependency "prawn", "~> 2.2"
+  s.add_dependency "psych", "< 4" # required for ruby 3.1.3 to avoid invalid database.yml error
   s.add_dependency "puma", ">= 4.3"
   s.add_dependency "pundit", "~> 2.2.0"
   s.add_dependency "rack", "~> 2.0"
   s.add_dependency "rack-attack", "~> 6.5"
   s.add_dependency "rails", "> 5.2", "< 6.2"
-  s.add_dependency "ransack", "~> 2.4.0"
+  s.add_dependency "ransack", "~> 3.1.0"
   s.add_dependency "record_tag_helper", "~> 1.0.0"
-  s.add_dependency "renalware-forms", ">= 0.1.5"
   s.add_dependency "ruby-hl7", "~> 1.2.0"
   s.add_dependency "sassc-rails", "~> 2.1.0"
   s.add_dependency "scenic", "~> 1.5"
   s.add_dependency "simple_form", "~> 5.1"
-  s.add_dependency "sinatra", "~> 2.0"
+  s.add_dependency "sinatra", ">= 2", "< 4"
   s.add_dependency "slim-rails", "~> 3.5"
   s.add_dependency "sprockets-rails", ">= 3.2.2"
   s.add_dependency "store_model", "0.8.0"

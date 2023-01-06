@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module Renal
     module Registry
-      describe PreflightChecks::PatientsQuery, type: :model do
+      describe PreflightChecks::PatientsQuery do
         let(:user) { create(:user) }
 
         def change_patient_modality(patient, modality_description, user)

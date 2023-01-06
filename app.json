@@ -3,26 +3,26 @@
   "description": "Renalware uses demographic, clinical, pathology, and nephrology datasets to improve patient care, undertake clinical and administrative audits and share data with external systems.",
   "website": "http://www.airslie.com/renalware.html",
   "success_url": "/",
-  "stack": "heroku-18",
+  "stack": "heroku-20",
   "addons": [
     {
-      "plan": "heroku-postgresql:hobby-dev",
+      "plan": "heroku-postgresql:basic",
       "options": {
-        "version": "11"
+        "version": "14"
       }
     },
     {
       "plan": "mailgun:starter"
     },
     {
-      "plan": "heroku-redis:hobby-dev"
+      "plan": "heroku-redis:mini"
     }
   ],
   "env": {
     "DEMO": "1",
     "UKRDC_WORKING_PATH": "tmp/ukrdc",
-    "RACK_ENV": "staging",
-    "RAILS_ENV": "staging",
+    "RACK_ENV": "uat",
+    "RAILS_ENV": "uat",
     "DEFAULT_FROM_EMAIL_ADDRESS": "test1@example.com",
     "PHONE_NUMBER_ON_LETTERS": "020 000 0000",
     "RENAL_UNIT_ON_LETTERS": "Test Renal Unit",
@@ -32,16 +32,13 @@
       "generator": "secret"
     },
     "SETUP_BY": {
-            "description": "Who initiated this setup",
-            "value": "Airslie"
+      "description": "Who initiated this setup",
+      "value": "Airslie"
     }
   },
   "buildpacks": [
     {
       "url": "heroku/nodejs"
-    },
-    {
-      "url": "https://github.com/airslie/heroku-buildpack-custom-binaries#v1.0.0"
     },
     {
       "url": "https://github.com/airslie/heroku-buildpack-version"

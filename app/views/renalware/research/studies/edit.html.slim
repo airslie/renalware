@@ -1,11 +1,11 @@
 = content_for(:tabs) do
-  = render "tabs", study: study
+  = render "tabs", study: study, active: :settings
 
 = within_admin_layout(title: study.code,
                       breadcrumbs: breadcrumb_for("Clinical Studies",
                                    research_studies_path)) do
 
-  = render "form", study: study
+  = render "form", study: study, url: research_study_path(study)
 
   br
   hr

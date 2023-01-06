@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-require_dependency "renalware/letters/author"
-
 module Renalware
   module Letters
-    def self.table_name_prefix
-      "letter_"
-    end
+    def self.table_name_prefix = "letter_"
 
     def self.cast_author(user)
       ActiveType.cast(user, Author)
@@ -29,9 +24,7 @@ module Renalware
     end
 
     module Mailshots
-      def self.table_name_prefix
-        "letter_mailshot_"
-      end
+      def self.table_name_prefix = "letter_mailshot_"
     end
   end
 end

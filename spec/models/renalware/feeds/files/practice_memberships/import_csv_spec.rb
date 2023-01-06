@@ -27,7 +27,7 @@ module Renalware
               gp1 = create(:primary_care_physician, code: "GP111111")
               gp2 = create(:primary_care_physician, code: "GP222222")
 
-              csv_content = <<-CSV.strip_heredoc
+              csv_content = <<~CSV
                 "GP111111","PRAC_1","P","19740401","19910401","0"
                 "GP222222","PRAC_2","P","19940401","","0"
               CSV
@@ -72,7 +72,7 @@ module Renalware
               )
 
               # Because GP2 is omitted from the CSV they should be marked as deleted
-              csv_content = <<-CSV.strip_heredoc
+              csv_content = <<~CSV
                 "GP1","PRAC1","P","19740401","19910401","0"
               CSV
 

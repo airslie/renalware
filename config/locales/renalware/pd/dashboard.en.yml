@@ -5,16 +5,17 @@ en:
       dashboards:
         show:
           page_actions:
-            mdm: MDM
-            add_capd_regime: CAPD Regime
-            add_apd_regime: APD Regime
-            add_pet_adequacy: PET Adequacy
-            add_unified_pet_adequacy: PET & Adequacy
-            add_pet: PET
             add_adequacy: Adequacy
+            add_apd_regime: APD Regime
+            add_capd_regime: CAPD Regime
             add_exit_site_infection: Exit Site Infection
-            add_peritonitis_episode: Peritonitis Episode
             add_pd_assessment: PD Assessment
             add_pd_training_session: PD Training Session
-            missing_modality_warning: >
-              Some actions will be unavailable until you add the PD modality
+            add_peritonitis_episode: Peritonitis Episode
+            add_pet: PET
+            add_pet_adequacy: PET Adequacy
+            add_unified_pet_adequacy: PET & Adequacy
+            mdm: MDM
+            missing_modality_warning: 'Some actions will be unavailable until you add the PD modality
+
+              '

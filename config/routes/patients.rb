@@ -18,7 +18,7 @@ resources :bookmarks, controller: "patients/bookmarks", only: [:destroy, :index]
 resource :dashboard, only: :show, controller: "dashboard/dashboards"
 resource :worryboard, only: :show, controller: "patients/worryboard"
 resources :worry_categories, controller: "patients/worry_categories"
-resources :deaths, only: :index, as: :patient_deaths
+resources :deaths, only: :index, as: :patient_deaths, controller: "patients/deaths"
 
 resources :patients, except: [:destroy], controller: "patients/patients" do
   collection do
@@ -35,7 +35,7 @@ resources :patients, except: [:destroy], controller: "patients/patients" do
       as: :anaemia_perspective
 
   resource :clinical_summary, only: :show, controller: "patients/clinical_summaries"
-  resource :death, only: [:edit, :update]
+  resource :death, only: [:edit, :update], controller: "patients/deaths"
   resource :primary_care_physician,
            controller: "patients/primary_care_physician",
            only: [:edit, :update, :destroy]

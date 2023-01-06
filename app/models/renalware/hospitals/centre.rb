@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hospitals"
-
 module Renalware
   module Hospitals
     class Centre < ApplicationRecord
@@ -14,6 +12,9 @@ module Renalware
 
       scope :ordered, -> { order(:name) }
       scope :active, -> { where(active: true) }
+      scope :host_site, -> { where(host_site: true) }
+      scope :default, -> { where(default_site: true) }
+
       scope :performing_transplant, -> { active.where(is_transplant_site: true) }
       scope :with_hd_sites, -> { where(id: Unit.hd_sites.pluck(:hospital_centre_id)) }
 

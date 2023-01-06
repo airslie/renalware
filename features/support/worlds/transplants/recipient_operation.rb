@@ -62,7 +62,7 @@ module World
         )
       end
 
-      def update_recipient_operation(patient:, user: nil, age:)
+      def update_recipient_operation(patient:, age:, user: nil)
         travel_to 1.hour.from_now
 
         operation = recipient_operation_for(patient)

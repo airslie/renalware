@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
-    class ObservationsController < Pathology::BaseController
+    class ObservationsController < BaseController
+      include Renalware::Concerns::PatientVisibility
+      include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::Pageable
-      before_action :load_patient
 
       # Observation history for a particular OBX.
       # - HTML version is rendered from patient pathology under Investigations when you
@@ -14,13 +13,14 @@ module Renalware
       # - JSON version used in graphs
       # rubocop:disable Metrics/MethodLength
       def index
+        authorize pathology_patient
         description = find_description
         observations = find_observations_for_description(description)
 
         respond_to do |format|
           format.html do
             render locals: {
-              patient: @patient,
+              patient: pathology_patient,
               observations: observations,
               description: description
             }
@@ -45,7 +45,7 @@ module Renalware
       end
 
       def find_observations_for_description(description)
-        @patient
+        pathology_patient
           .observations
           .page(page)
           .includes(:request)

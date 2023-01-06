@@ -2,50 +2,57 @@
 
 module Renalware
   module Accesses
-    class ProfilesController < Accesses::BaseController
-      before_action :load_patient
+    class ProfilesController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
 
       def show
-        profile = patient.profiles.find(params[:id])
+        profile = find_profile
         presenter = ProfilePresenter.new(profile)
-        render locals: { patient: patient, profile: presenter }
+        render locals: { patient: accesses_patient, profile: presenter }
       end
 
       def new
-        profile = patient.profiles.new(by: current_user)
-        render locals: { patient: patient, profile: profile }
+        profile = accesses_patient.profiles.new(by: current_user)
+        authorize profile
+        render locals: { patient: accesses_patient, profile: profile }
       end
 
       def create
-        profile = patient.profiles.new(profile_params)
+        profile = accesses_patient.profiles.new(profile_params)
+        authorize profile
 
         if profile.save
-          redirect_to patient_accesses_dashboard_path(patient),
+          redirect_to patient_accesses_dashboard_path(accesses_patient),
                       notice: success_msg_for("Access profile")
         else
           flash.now[:error] = failed_msg_for("Access profile")
-          render :new, locals: { patient: patient, profile: profile }
+          render :new, locals: { patient: accesses_patient, profile: profile }
         end
       end
 
       def edit
-        profile = patient.profiles.find(params[:id])
-        render locals: { patient: patient, profile: profile }
+        profile = find_profile
+        render locals: { patient: accesses_patient, profile: profile }
       end
 
       def update
-        profile = patient.profiles.find(params[:id])
+        profile = find_profile
 
         if profile.update(profile_params)
-          redirect_to patient_accesses_dashboard_path(patient),
+          redirect_to patient_accesses_dashboard_path(accesses_patient),
                       notice: success_msg_for("Access profile")
         else
           flash.now[:error] = failed_msg_for("Access profile")
-          render :edit, locals: { patient: patient, profile: profile }
+          render :edit, locals: { patient: accesses_patient, profile: profile }
         end
       end
 
       protected
+
+      def find_profile
+        accesses_patient.profiles.find(params[:id]).tap { |prof| authorize(prof) }
+      end
 
       def profile_params
         params

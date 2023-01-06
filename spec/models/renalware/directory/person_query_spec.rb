@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Directory
-    describe PersonQuery, type: :model do
+    describe PersonQuery do
       describe "#call" do
         before do
           nurse = create(:user)

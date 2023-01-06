@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::LowClearance::DialysisPlan, type: :model do
+describe Renalware::LowClearance::DialysisPlan do
   it_behaves_like "a Paranoid model"
 
   it :aggregate_failures do

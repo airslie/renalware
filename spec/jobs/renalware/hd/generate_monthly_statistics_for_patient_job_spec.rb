@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe GenerateMonthlyStatisticsForPatientJob, type: :job do
+    describe GenerateMonthlyStatisticsForPatientJob do
       subject(:job) { described_class.new }
 
       let(:patient) { build_stubbed(:hd_patient) }

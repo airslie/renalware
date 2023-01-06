@@ -5,6 +5,7 @@ module Document
     extend ActiveSupport::Concern
 
     class_methods do
+      # rubocop:disable Naming/PredicateName
       def has_document(class_name: "Document")
         document_class = const_get(class_name)
 
@@ -12,6 +13,7 @@ module Document
           document_class
         end
       end
+      # rubocop:enable Naming/PredicateName
     end
 
     included do
@@ -47,6 +49,7 @@ module Document
         write_attribute(:document, document)
       end
 
+      # rubocop:disable Metrics/MethodLength
       def filter_date_params(params)
         params = (params ? params.dup : {}) # DISCUSS: not sure if that slows down form processing?
         date_attributes = {}
@@ -67,6 +70,7 @@ module Document
         end
         params.merge!(date_attributes)
       end
+      # rubocop:enable Metrics/MethodLength
 
       def params_to_date(year, month, day, hour, minute)
         date_fields = [year, month, day].map!(&:to_i)

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Users::Group, type: :model do
+  describe Users::Group do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to validate_presence_of(:name)

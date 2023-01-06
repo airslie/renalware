@@ -101,12 +101,19 @@ module World
         patient = letters_patient(patient)
 
         existing_letter = simple_letter_for(patient)
+        topic = FactoryBot.create(:letter_topic, text: "test")
+
         letter_attributes = {
           body: "updated body",
+          topic_id: topic.id,
           by: user
         }
 
         Renalware::Letters::ReviseLetter.build.call(patient, existing_letter.id, letter_attributes)
+
+        existing_letter.reload
+        expect(existing_letter.description).to eq "test"
+        expect(existing_letter.topic).to eq topic
       end
 
       def delete_simple_letter(patient:, user:)
@@ -314,7 +321,7 @@ module World
 
       def draft_simple_letter(patient:, user:, created_at:, recipient:, ccs: nil)
         login_as user
-        FactoryBot.create(:letter_description, text: "Foo bar")
+        FactoryBot.create(:letter_topic, text: "Foo bar")
         visit patient_letters_letters_path(patient)
         click_on t("btn.create_")
         click_on "Simple Letter"
@@ -322,7 +329,7 @@ module World
         attributes = valid_simple_letter_attributes(patient)
         select attributes[:letterhead].name, from: "Letterhead"
         select user.to_s, from: "Author"
-        select2 attributes[:description], css: ".letter_description"
+        slim_select attributes[:description], from: "Topic"
         fill_recipient(recipient)
         fill_ccs(ccs)
 
@@ -354,15 +361,22 @@ module World
       end
 
       def revise_simple_letter(patient:, user:)
+        FactoryBot.create(:letter_topic, text: "Another topic")
+
         login_as user
         visit patient_letters_letters_path(patient)
         click_on t("btn.edit")
+
+        select "Another topic", from: "Topic"
 
         select user.to_s, from: "Author"
 
         within ".bottom" do
           click_on t("btn.save")
         end
+
+        visit current_path + "/formatted"
+        expect(page).to have_content "(MRH) Another topic"
       end
 
       def delete_simple_letter(patient:, user:)
@@ -413,7 +427,7 @@ module World
         click_on "Mark as printed"
       end
 
-      def view_letters(q: nil, user:)
+      def view_letters(user:, q: nil)
         login_as user
         visit letters_list_path(q: q)
       end

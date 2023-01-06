@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-
 module Renalware
   module HD
     # Presenter formatting a single patient for use behind any MDM Patients listing.

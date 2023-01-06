@@ -3,9 +3,9 @@ en:
   renalware:
     patients:
       header:
+        born_on: Born
+        external_patient_id: Ext Hosp No
         hospital_code: KCH
+        modality: Mod
         nhs_number: NHS No
         sex: Sex
-        born_on: Born
-        modality: Mod
-        external_patient_id: Ext Hosp No

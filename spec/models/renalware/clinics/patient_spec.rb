@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Clinics::Patient, type: :model do
+describe Renalware::Clinics::Patient do
   describe ".most_recent_clinic_visit scope" do
     it "returns nil when the patient has no clinic visits" do
       patient = Renalware::Clinics.cast_patient(create(:patient))

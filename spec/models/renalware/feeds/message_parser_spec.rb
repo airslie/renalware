@@ -18,7 +18,7 @@ module Renalware::Feeds
           #   string \S\12 is not interpreted by Ruby as a \n (!). Hence we expect \\S\\ to be
           #   mapped to ^ somewhere here in the code so that for example WBC units is converted
           #   to "10^12/L".
-          <<-RAW.strip_heredoc
+          <<~RAW
             MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
             PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
             PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
@@ -98,7 +98,7 @@ module Renalware::Feeds
 
       context "with a message with a single observation segment" do
         let(:raw_message) do
-          <<-RAW.strip_heredoc
+          <<~RAW
             MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
             PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
             PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
@@ -117,7 +117,7 @@ module Renalware::Feeds
 
       context "with a message with a 'Cancelled' message in an OBX segment" do
         let(:raw_message) do
-          <<-RAW.strip_heredoc
+          <<~RAW
             MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
             PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
             PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||

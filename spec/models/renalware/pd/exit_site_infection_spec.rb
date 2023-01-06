@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe PD::ExitSiteInfection, type: :model do
+  describe PD::ExitSiteInfection do
     include DrugsSpecHelper
 
     it :aggregate_failures do

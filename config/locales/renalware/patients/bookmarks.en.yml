@@ -3,21 +3,21 @@ en:
   renalware:
     patients:
       bookmarks:
-        new:
-          title: Create a bookmark for this patient
-          save: Save
-          cancel: Cancel
         delete:
           confirm: Are you sure you want to remove this bookmark?
+        new:
+          cancel: Cancel
+          save: Save
+          title: Create a bookmark for this patient
         none: There are no patients bookmarked.
         table:
-          patient_name: Name
-          nhs_number: NHS Number
-          hospital_number: Hosp No
-          born_on: DOB
           age: Age
-          sex: Sex
-          notes: Notes
-          tags: Tags
-          modality: Modality
           bookmarked_on: Bookmarked
+          born_on: DOB
+          hospital_number: Hosp No
+          modality: Modality
+          nhs_number: NHS Number
+          notes: Notes
+          patient_name: Name
+          sex: Sex
+          tags: Tags

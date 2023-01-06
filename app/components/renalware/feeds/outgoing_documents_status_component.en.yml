@@ -3,9 +3,9 @@ en:
   renalware:
     feeds:
       outgoing_documents_status_component:
-        full_title: "Outgoing documents in last %{period_in_days} days"
-        subtitle: "Last %{period_in_days} days"
-        queued: Waiting
-        processed: Sent
         errored: Error
-        latest: "Last %{latest}"
+        full_title: Outgoing documents in last %{period_in_days} days
+        latest: Last %{latest}
+        processed: Sent
+        queued: Waiting
+        subtitle: Last %{period_in_days} days

@@ -1,294 +1,287 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/hd/session:
-        performed_on: Start date
-        hospital_unit: Hospital Unit
-        hospital_centre: Hospital Centre
-        signed_on_by: Put On By
-        signed_off_by: Taken Off By
-        start_time: Session Start Time
-        vstart_time: Session Start Time
-        end_time: Session End Time
-        hd_type: HD Type
-        modality_description: Modality
-        dialysate: Dialysis Solution Used
   activemodel:
     attributes:
       renalware/hd/session/dna/document:
         patient_on_holiday: Is the patient on holiday?
-      renalware/hd/session_document/info:
-        access_confirmed: Confirm this access was used
-        access_type: Access Type Used
-        access_side: Access Side Used
-        is_access_first_use: Is access first use?
-        fistula_plus_line: "1 + 1?"
-        single_needle: "Single Needle?"
-        lines_reversed: "Lines Reversed?"
-        machine_no: Machine No
-      renalware/hd/session_document/observations:
-        weight: Weight (kg)
-        weight_measured: Weight taken
-        pulse: Pulse
-        blood_pressure: Blood Pressure
-        temperature_measured: Temperature taken
-        temperature: Temperature
-        respiratory_rate_measured: Respiratory rate taken
-        respiratory_rate: Respiratory rate
-        bm_stix: BM Stix
+      renalware/hd/session_document/avf_avg_assessment:
+        score: AVF score
+      renalware/hd/session_document/complications:
+        access_site_status: Access Site Status
+        blown_fistula_arterial: Blown Fistula / Graft - arterial
+        blown_fistula_venous: Blown Fistula / Graft - venous
+        circuit_loss: Circuit loss?
+        had_alteplase_urokinase: Had alteplase urokinase?
+        had_blood_transfusion: Had blood transfusion?
+        had_chest_pain: Had chest pain?
+        had_cramps: Had cramps?
+        had_headache: Had headache?
+        had_intradialytic_hypotension: Had intradialytic hypotension?
+        had_mrsa_swab: Had MRSA swab?
+        had_mssa_swab: Had MSSA swab?
+        had_saline_administration: Had saline administration?
+        line_exit_site_status: MR VICTOR (line exit site assessment)
+        multiple_cannulation_attempts: Multiple Cannulation Attempts
+        prolonged_bleeding: Prolonged bleeding > 30 mins
+        was_dressing_changed: Was dressing changed?
       renalware/hd/session_document/dialysis:
         arterial_pressure: Arterial Pressure
-        venous_pressure: Venous pressure
-        fluid_removed: Fluid Removed
         blood_flow: Blood Flow Rate
         flow_rate: Dialysate Flow Rate
-        machine_urr: Machine URR
-        machine_ktv: Machine KTV
+        fluid_removed: Fluid Removed
         litres_processed: Litres Processed
+        machine_ktv: Machine KTV
+        machine_urr: Machine URR
+        venous_pressure: Venous pressure
         washback_quality: Washback quality
       renalware/hd/session_document/hdf:
         subs_fluid_pct: Subs Fluid Percentage
         subs_goal: Subs Goal
         subs_rate: Subs Rate
         subs_volume: Subs Volume
-      renalware/hd/session_document/complications:
-        access_site_status: Access Site Status
-        line_exit_site_status: MR VICTOR (line exit site assessment)
-        was_dressing_changed: Was dressing changed?
-        had_intradialytic_hypotension: Had intradialytic hypotension?
-        had_saline_administration: Had saline administration?
-        had_cramps: Had cramps?
-        had_headache: Had headache?
-        had_chest_pain: Had chest pain?
-        had_alteplase_urokinase: Had alteplase urokinase?
-        had_mrsa_swab: Had MRSA swab?
-        had_mssa_swab: Had MSSA swab?
-        had_blood_transfusion: "Had blood transfusion?"
-        circuit_loss: Circuit loss?
-        blown_fistula_venous: Blown Fistula / Graft - venous
-        blown_fistula_arterial: Blown Fistula / Graft - arterial
-        multiple_cannulation_attempts: Multiple Cannulation Attempts
-        prolonged_bleeding: "Prolonged bleeding > 30 mins"
-      renalware/hd/session_document/avf_avg_assessment:
-        score: "AVF score"
-
+      renalware/hd/session_document/info:
+        access_confirmed: Confirm this access was used
+        access_side: Access Side Used
+        access_type: Access Type Used
+        fistula_plus_line: 1 + 1?
+        is_access_first_use: Is access first use?
+        lines_reversed: Lines Reversed?
+        machine_no: Machine No
+        single_needle: Single Needle?
+      renalware/hd/session_document/observations:
+        blood_pressure: Blood Pressure
+        bm_stix: BM Stix
+        pulse: Pulse
+        respiratory_rate: Respiratory rate
+        respiratory_rate_measured: Respiratory rate taken
+        temperature: Temperature
+        temperature_measured: Temperature taken
+        weight: Weight (kg)
+        weight_measured: Weight taken
     errors:
       models:
         renalware/hd/session/dna/document:
           patient_on_holiday:
             blank: Please choose an option
-        renalware/hd/session_document/info:
-          access_confirmed:
-            blank: Please confirm this was the access used in this session
         renalware/hd/session_document/dialysis:
           attributes:
             machine_ktv:
               inclusion: must be between 0.2 and 3.5
             machine_urr:
               inclusion: must be between 0 and 100
+        renalware/hd/session_document/info:
+          access_confirmed:
+            blank: Please confirm this was the access used in this session
         renalware/hd/session_document/observations:
           attributes:
+            bm_stix:
+              invalid_number: Please enter a number with up to 1 decimal place, for example 20 or 20.1
+              out_of_range: Please enter a value between 0.5 and 50.0
             pulse:
               out_of_range: Please enter a pulse between 20 and 200
-            weight:
-              out_of_range: Please enter a weight between 5.0 and 300.0 kg
-              invalid_number: Please enter a number with up to 2 decimal place, for example 100 or 100.11
-              more_than_7kg_between_pre_post_weights: "More than 7kg difference in pre/post weights"
-            temperature:
-              out_of_range: Please enter a temperature between 28.0 and 45.0°C
-              invalid_number: Please enter a number with up to 1 decimal place, for example 37 or 37.1
-            bm_stix:
-              out_of_range: Please enter a value between 0.5 and 50.0
-              invalid_number: Please enter a number with up to 1 decimal place, for example 20 or 20.1
             respiratory_rate:
               out_of_range: Please enter a value between 4 and 40
-
+            temperature:
+              invalid_number: Please enter a number with up to 1 decimal place, for example 37 or 37.1
+              out_of_range: Please enter a temperature between 28.0 and 45.0°C
+            weight:
+              invalid_number: Please enter a number with up to 2 decimal place, for example 100 or 100.11
+              more_than_7kg_between_pre_post_weights: More than 7kg difference in pre/post weights
+              out_of_range: Please enter a weight between 5.0 and 300.0 kg
+  activerecord:
+    attributes:
+      renalware/hd/session:
+        dialysate: Dialysis Solution Used
+        end_time: Session End Time
+        hd_type: HD Type
+        hospital_centre: Hospital Centre
+        hospital_unit: Hospital Unit
+        modality_description: Modality
+        performed_on: Start date
+        signed_off_by: Taken Off By
+        signed_on_by: Put On By
+        start_time: Session Start Time
+        vstart_time: Session Start Time
   enumerize:
-    renalware/hd/session_document/observations:
-      weight_measured:
-        "yes": "Yes"
-        "no": "No (unmeasurable)"
-      temperature_measured:
-        "yes": "Yes"
-        "no": "No (unmeasurable)"
+    renalware/hd/session_document/avf_avg_assessment:
+      aneurysm:
+        N: 'No'
+        Y: 'Yes'
+      bruit:
+        A: Abnormal
+        N: Normal
+        NIL: Absent
+      feel:
+        H: Hard
+        S: Soft
+      safe_to_use:
+        N: 'No'
+        Y: 'Yes'
+      score:
+        '0': 0
+        '1': 1
+        '2': 2
+        '3': 3
+        '99': Not applicable
+      thrill:
+        A: Abnormal
+        N: Normal
+        NIL: Absent
     renalware/hd/session_document/complications:
       access_site_status:
         clean_and_dry: Clean and Dry
-        slight_erythema: Slight Erythema
         erythema: Erythema
         purulent: Purulent
+        slight_erythema: Slight Erythema
       line_exit_site_status:
-        99: Not Applicable
-        0: 0
-        1: 1
-        2: 2
-        3: 3
-        4: 4
-    renalware/hd/session_document/avf_avg_assessment:
-      score:
-        99: Not applicable
-        0: 0
-        1: 1
-        2: 2
-        3: 3
-      aneurysm:
-        Y: "Yes"
-        N: "No"
-      bruit:
-        N: Normal
-        A: Abnormal
-        NIL: Absent
-      thrill:
-        N: Normal
-        A: Abnormal
-        NIL: Absent
-      feel:
-        S: Soft
-        H: Hard
-      safe_to_use:
-        Y: "Yes"
-        N: "No"
+        '0': 0
+        '1': 1
+        '2': 2
+        '3': 3
+        '4': 4
+        '99': Not Applicable
     renalware/hd/session_document/dialysis:
       washback_quality:
-        1: Very good
-        2: Good
-        3: Fair
-        4: Poor
+        '1': Very good
+        '2': Good
+        '3': Fair
+        '4': Poor
       washback_quality_description:
-        1: No clotting. Clean filter
-        2: Fibrinous ring in the bubble traps. Few blood stripes in the dialyser (<5% of fibres).
-        3: Clot formation in the bubble traps. Many blood stripes (>5% of fibres).
-        4: Clotted circuit. Clotted filter.
-
-  simple_form:
-    hints:
-      hd_session:
-        prescribed_time: in minutes
-        document:
-          info:
-            flow_rate: ml/hr
-            machine_urr: "%"
+        '1': No clotting. Clean filter
+        '2': Fibrinous ring in the bubble traps. Few blood stripes in the dialyser (<5% of fibres).
+        '3': Clot formation in the bubble traps. Many blood stripes (>5% of fibres).
+        '4': Clotted circuit. Clotted filter.
+    renalware/hd/session_document/observations:
+      temperature_measured:
+        'no': No (unmeasurable)
+        'yes': 'Yes'
+      weight_measured:
+        'no': No (unmeasurable)
+        'yes': 'Yes'
   renalware:
     hd:
       dashboards:
         page_actions:
-          add_session: HD Session
-          add_dna_session: DNA Session
-          add_preferences: HD Preferences
           add_access_profile: Access Profile
-          add_hd_profile: HD Profile
+          add_dna_session: DNA Session
           add_dry_weight: Dry Weight
-          missing_modality_warning: >
-              Some actions will be unavailable until you add the HD modality
-      sessions_types:
-        show:
-          dna: DNA Session
-          open: Session
-          closed: Session
-        edit:
-          dna: Edit
-          open: Sign Off
-          closed: Edit
+          add_hd_profile: HD Profile
+          add_preferences: HD Preferences
+          add_session: HD Session
+          missing_modality_warning: 'Some actions will be unavailable until you add the HD modality
+
+            '
       sessions:
-        open:
-          edit: Sign Off
-          view: View
+        administered_drugs_thead:
+          date: Date
+          site: Site
         closed:
           edit: Edit
           view: View
         dna:
           edit: Edit
-          view: View
           form:
-            save: Save
             delete_confirmation: Are you sure you want to delete this session?
             notes: Notes
-        show:
-          dna:
-            title: DNA Session
+            save: Save
+          view: View
         edit:
-          dna:
-            title: DNA Session
-        list:
-          title: Latest HD Sessions
-          add_session: Add a Session
-          add_dna_session: Add DNA Session
-          add_dna: Add DNA Session
-          view_all: View All Sessions
-          view_all_drugs_given: View All Drugs Given
-          missing_profile_message: |
-            Please enter the HD Profile before creating sessions
-          btn:
-            add: Add Session
-        row:
-          sign_on: Sign On
-          sign_off: Sign Off
-          edit: Edit
-        thead:
-          date: Date
-          from: 'Off'
-          to: 'On'
-          duration: Dur
-          site: Site
-          access: Access used
-          time: Time
-          weight: Weight
-          pulse: Pulse
-          temperature: Temp
-          respiratory_rate: RR
-          bm_stix: BM
-          blood_pressure: BP
-          arterial_pressure: AP
-          venous_pressure: VP
-          blood_flow: Blood flow
-          litres_processed: Litres proc
-          fluid_removed: Fluid rem
-          machine: Machine
-          machine_no: "No"
-          machine_ktv: KTv
-          machine_urr: URR
-          hd_drugs_administered: Drugs given?
-          notes: "Notes"
-          started_at: Started
-          stopped_at: Stopped
-          start_time: "On"
-          end_time: "Off"
-          pre: Pre
-          post: Post
-          post_with_changed: Post (chg)
-          user: User
-          put_on_by: Putting on
-          taken_off_by: Taking off
-        form_actions:
-          signoff: Save and Sign-Off
-          signoff_disable_with: Saving and Signing-Off...
-          save: Save
-          save_disable_with: Saving...
-          delete_confirmation: Are you sure you want to delete this session?
-        new:
-          open:
-            title: New Session
-          closed:
-            title: New Session
-          dna:
-            title: New DNA Session
-        edit:
-          session_is_immutable: Sorry, this session is no longer editable
-          open:
-            title: Sign-off
           closed:
             title: Edit
           dna:
             title: Edit DNA Session
-        row:
-          view: View
           open:
-            edit: Sign Off
+            title: Sign-off
+          session_is_immutable: Sorry, this session is no longer editable
+        form_actions:
+          delete_confirmation: Are you sure you want to delete this session?
+          save: Save
+          save_disable_with: Saving...
+          signoff: Save and Sign-Off
+          signoff_disable_with: Saving and Signing-Off...
+        list:
+          add_dna: Add DNA Session
+          add_dna_session: Add DNA Session
+          add_session: Add a Session
+          btn:
+            add: Add Session
+          missing_profile_message: 'Please enter the HD Profile before creating sessions
+
+            '
+          title: Latest HD Sessions
+          view_all: View All Sessions
+          view_all_drugs_given: View All Drugs Given
+        new:
+          closed:
+            title: New Session
+          dna:
+            title: New DNA Session
+          open:
+            title: New Session
+        open:
+          edit: Sign Off
+          view: View
+        row:
           closed:
             edit: Edit
           dna:
             edit: Edit
-        administered_drugs_thead:
+          open:
+            edit: Sign Off
+          view: View
+        show:
+          dna:
+            title: DNA Session
+        thead:
+          access: Access used
+          arterial_pressure: AP
+          blood_flow: Blood flow
+          blood_pressure: BP
+          bm_stix: BM
           date: Date
+          duration: Dur
+          end_time: 'Off'
+          fluid_removed: Fluid rem
+          from: 'Off'
+          hd_drugs_administered: Drugs given?
+          litres_processed: Litres proc
+          machine: Machine
+          machine_ktv: KTv
+          machine_no: 'No'
+          machine_urr: URR
+          notes: Notes
+          post: Post
+          post_with_changed: Post (chg)
+          pre: Pre
+          pulse: Pulse
+          put_on_by: Putting on
+          respiratory_rate: RR
           site: Site
+          start_time: 'On'
+          started_at: Started
+          station: Station
+          stopped_at: Stopped
+          taken_off_by: Taking off
+          temperature: Temp
+          time: Time
+          to: 'On'
+          user: User
+          venous_pressure: VP
+          weight: Weight
+      sessions_types:
+        edit:
+          closed: Edit
+          dna: Edit
+          open: Sign Off
+        show:
+          closed: Session
+          dna: DNA Session
+          open: Session
+  simple_form:
+    hints:
+      hd_session:
+        document:
+          info:
+            flow_rate: ml/hr
+            machine_urr: "%"
+        prescribed_time: in minutes

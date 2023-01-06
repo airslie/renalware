@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/feeds"
-
 module Renalware
   module Feeds
     # Note in the PID segment internal_id == NHS number

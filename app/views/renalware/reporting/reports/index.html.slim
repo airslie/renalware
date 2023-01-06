@@ -1,11 +1,28 @@
+= content_for(:filters) do
+  = simple_form_for search,
+                  url: reporting_reports_path,
+                  remote: false,
+                  html: { class: "" },
+                  data: { controller: "form", action: "input->form#submit" },
+                  method: :get do |f|
+
+    .flex.flex-col.sm:flex-row.items-start.md:w-1/2.mb-6
+      = f.label :sub_category_eq, "Category", class: "mr-4 mt-1"
+      = f.select :sub_category_eq,
+                  Renalware::System::ViewMetadata.where(category: "report").order(:sub_category).pluck(:sub_category).uniq,
+                  { include_blank: "All" },
+                  data: { controller: "slimselect", action: "change->form#submit" }
+
 = within_admin_layout(title: "Reports") do
   table
     thead
       tr
         th.col-width-tiny
         th Title
-        th View name
-        th Type
+        th Category
+        - if current_user_is_super_admin?
+          th View name
+          th Type
         th.col-width-date-time Updated
 
     tbody
@@ -13,8 +30,10 @@
         tr
           td= link_to "View", reporting_report_path(report)
           td= report.title
-          td.code= [report.schema_name, report.view_name].compact.join(".")
-          td= report.display_type&.humanize
+          td=report.sub_category
+          - if current_user_is_super_admin?
+            td.code= [report.schema_name, report.view_name].compact.join(".")
+            td= report.display_type&.humanize
           td= l(report.updated_at)
 
   - if current_user_is_super_admin?

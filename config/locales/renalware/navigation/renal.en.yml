@@ -2,27 +2,27 @@
 en:
   renalware:
     navigation:
-      renal:
-        menu_title: Renal
-        appointments: Appointments
-        clinic_visits: Clinic Visits
-        events: Events
-        tx_wait_list: Tx Wait List
-        live_donors: Live Donors
-        ongoing_hd_sessions: Ongoing HD Sessions
-        hd_patients_with_unmet_preferences: HD Patients with un-met preferences
-        letters: Letters
-        esa_prescriptions: ESA Patients
-        home_delivery_prescriptions: Home Delivery Prescriptions
-        audits: Audits
-        aki_alerts: AKI Alerts
-        studies: Clinical Studies
-        renal_registry_checks: Renal Registry Checks
-        hospital_units: Dialysis Units
-        users: Users
       mdms:
-        menu_title: MDMs
         hd: HD
+        low_clearance: AKCC
+        menu_title: MDMs
         pd: PD
         transplants: Transplant
-        low_clearance: AKCC
+      renal:
+        aki_alerts: AKI Alerts
+        appointments: Appointments
+        audits: Audits
+        clinic_visits: Clinic Visits
+        esa_prescriptions: ESA Patients
+        events: Events
+        hd_patients_with_unmet_preferences: HD Patients with un-met preferences
+        home_delivery_prescriptions: Home Delivery Prescriptions
+        hospital_units: Dialysis Units
+        letters: Letters
+        live_donors: Live Donors
+        menu_title: Renal
+        ongoing_hd_sessions: Ongoing HD Sessions
+        renal_registry_checks: Renal Registry Checks
+        studies: Clinical Studies
+        tx_wait_list: Tx Wait List
+        users: Users

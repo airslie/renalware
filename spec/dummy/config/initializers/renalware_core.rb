@@ -2,8 +2,6 @@
 
 # Here is where we configure the settings for the Renalware::Core engine.
 
-require_dependency "renalware"
-
 Renalware.configure do |config|
   config.patient_hospital_identifiers = {
     KCH: :local_patient_id,
@@ -28,6 +26,7 @@ Renalware.configure do |config|
   config.allow_uploading_patient_attachments = true
   config.hl7_patient_locator_strategy = :dob_and_any_nhs_or_assigning_auth_number
   config.max_batch_print_size = 50
+  config.patient_visibility_restrictions = :by_site # or :by_site_and_research_study or :none
 end
 
 # Renalware::Patients.configure

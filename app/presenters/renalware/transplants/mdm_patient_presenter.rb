@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
-
 module Renalware
   module Transplants
     # Presenter formatting a single patient for use behind any MDM Patients listing.
@@ -11,8 +9,7 @@ module Renalware
           .for_patient(__getobj__)
           .order(performed_on: :desc)
           .limit(1)
-          .pluck(:performed_on)
-          .first
+          .pick(:performed_on)
       end
     end
   end

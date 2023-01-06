@@ -1,13 +1,12 @@
 ---
 en:
   activerecord:
+    attributes:
+      renalware/admissions/request:
+        hospital_unit_id: Current location
+        reason_id: Reason
     errors:
       models:
         renalware/admissions/request:
           patient_id:
             taken: already has an admission request
-
-    attributes:
-      renalware/admissions/request:
-        reason_id: Reason
-        hospital_unit_id: Current location

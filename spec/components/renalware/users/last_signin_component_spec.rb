@@ -9,7 +9,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       component = described_class.new(current_user: user)
 
       render_inline(component).to_html
-      expect(rendered_component).to be_blank
+
+      expect(page.text).to be_blank
     end
   end
 
@@ -23,7 +24,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       component = described_class.new(current_user: user)
 
       render_inline(component).to_html
-      expect(rendered_component).to be_blank
+
+      expect(page.text).to be_blank
     end
   end
 

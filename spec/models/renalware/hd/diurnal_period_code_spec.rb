@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::HD
-  describe DiurnalPeriodCode, type: :model do
+  describe DiurnalPeriodCode do
     it { is_expected.to validate_presence_of(:code) }
 
     describe "#code uniqueness" do

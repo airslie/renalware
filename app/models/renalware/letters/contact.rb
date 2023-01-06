@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 module Renalware
   module Letters
     class Contact < ApplicationRecord
@@ -37,6 +35,10 @@ module Renalware
 
       def unspecified_description?
         description.try(:unspecified?)
+      end
+
+      def self.policy_class
+        BasePolicy
       end
     end
   end

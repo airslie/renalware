@@ -13,7 +13,7 @@ module Renalware
           allow(User).to receive(:find).and_return(user)
           allow(Batch).to receive(:find).and_return(batch)
 
-          described_class.new(batch.id, user.id).perform
+          described_class.perform_now(batch.id, user.id)
 
           expect(BatchCompilePdfs).to have_received(:call).with(batch, user)
         end

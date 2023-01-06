@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Medications
-    describe Prescription, type: :model do
+    describe Prescription do
       subject(:prescription) { described_class.new }
 
       it_behaves_like "an Accountable model"
@@ -87,7 +87,7 @@ module Renalware
 
         describe ".to_be_administered_on_hd" do
           it "returns only current prescriptions flagged as administer_on_hd" do
-            travel_to Time.current do
+            freeze_time do
               tomorrow = Date.current + 1.day
               yesterday = Date.current - 1.day
               create_prescription(administer_on_hd: false,

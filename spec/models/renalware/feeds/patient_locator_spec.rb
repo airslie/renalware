@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Feeds::PatientLocator, type: :model do
+  describe Feeds::PatientLocator do
     describe ".strategy" do
       context "when strategy is configured as :dob_and_any_nhs_or_assigning_auth_number" do
         before do

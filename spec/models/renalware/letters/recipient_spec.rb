@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe Recipient, type: :model do
+    describe Recipient do
       it :aggregate_failures do
         is_expected.to respond_to(:emailed_at)
         is_expected.to respond_to(:printed_at)

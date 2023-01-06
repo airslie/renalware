@@ -1,3 +1,4 @@
+
 table.auto-layout.align-top.messages.has-togglable-rows
   thead
     tr
@@ -9,7 +10,8 @@ table.auto-layout.align-top.messages.has-togglable-rows
       th.col-width-nhs-no= t("thead.nhs_number")
       th.col-width-reference-no= t("thead.hospital_number")
       th= t("thead.subject")
-      td.col-width-tiny
+      th.hidden.xl:table-cell Also sent to
+      th.col-width-tiny
 
   tbody
     = render partial: "renalware/messaging/internal/receipts/receipt", collection: receipts

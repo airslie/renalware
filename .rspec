@@ -1,5 +1,3 @@
---require spec_helper
 --color
---backtrace
---format doc
+--format Fuubar
 -r turnip/rspec

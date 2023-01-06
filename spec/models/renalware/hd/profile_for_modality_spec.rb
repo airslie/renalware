@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe ProfileForModality, type: :model do
+    describe ProfileForModality do
       describe "#hd_profile_id" do
         subject(:resolved_profile_id) do
           described_class.find_by!(modality_id: modality.id).hd_profile_id

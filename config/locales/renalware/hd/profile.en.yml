@@ -1,126 +1,116 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/hd/profile:
-        schedule: Schedule
-        other_schedule: Other Schedule
-        transport_decider: Transport Decider
-        named_nurse: Named Nurse
-        prescribed_time: Prescribed Time on HD
-        formatted_prescribed_time: Prescribed Time on HD
-        prescribed_on: Prescription Date
-        hospital_unit: Hospital Unit
-        hospital_centre: Hospital Centre
-        created_at: Started
-        deactivated_at: Stopped
-        dialysate: Dialysis Solution
   activemodel:
     attributes:
-      renalware/hd/profile_document/dialysis:
-        hd_type: HD Type
-        substitution_percent: Substitution %
-        cannulation_type: Cannulation Type
-        needle_size: Needle Size
-        single_needle: Single Needle?
-        flow_rate: Solution Flow Rate
-        blood_flow: Blood Flow
-        has_sodium_profiling: Has Sodium Profiling?
-        sodium_first_half: Sodium (first half)
-        sodium_second_half: Sodium (2nd half)
       renalware/hd/profile_document/anticoagulant:
         Type: Anticoagulant Type
-        loading_dose: Loading Dose
         hourly_dose: Hourly Dose
+        loading_dose: Loading Dose
         stop_time: Stop Time
-      renalware/hd/profile_document/transport:
-        has_transport: Has Transport?
-        type: Transport Type
-        decided_on: Decision Date
+      renalware/hd/profile_document/care_level:
+        assessed_on: Assessment Date
+        level: Level
+      renalware/hd/profile_document/dialysis:
+        blood_flow: Blood Flow
+        cannulation_type: Cannulation Type
+        flow_rate: Solution Flow Rate
+        has_sodium_profiling: Has Sodium Profiling?
+        hd_type: HD Type
+        needle_size: Needle Size
+        single_needle: Single Needle?
+        sodium_first_half: Sodium (first half)
+        sodium_second_half: Sodium (2nd half)
+        substitution_percent: Substitution %
       renalware/hd/profile_document/drugs:
         on_esa: On ESA?
         on_iron: On Iron?
         on_warfarin: On Warfarin?
-      renalware/hd/profile_document/care_level:
-        assessed_on: Assessment Date
-        level: Level
+      renalware/hd/profile_document/transport:
+        decided_on: Decision Date
+        has_transport: Has Transport?
+        type: Transport Type
+  activerecord:
+    attributes:
+      renalware/hd/profile:
+        created_at: Started
+        deactivated_at: Stopped
+        dialysate: Dialysis Solution
+        formatted_prescribed_time: Prescribed Time on HD
+        hospital_centre: Hospital Centre
+        hospital_unit: Hospital Unit
+        named_nurse: Named Nurse
+        other_schedule: Other Schedule
+        prescribed_on: Prescription Date
+        prescribed_time: Prescribed Time on HD
+        schedule: Schedule
+        transport_decider: Transport Decider
   enumerize:
-    renalware/hd/profile:
-
-    renalware/hd/profile_document/dialysis:
-      hd_type:
-        hd: HD
-        hdf_pre: HDF-PRE
-        hdf_post: HDF-POST
-
     renalware/hd/profile_document/anticoagulant:
-      # The host app should implement this I18n key to specify available coagulants.
-      # See e.g. dummy/config/locales for anticoagulant types
-      # We always specify a Non option because enumerize complains if the key is not
-      # a non-empty array.
       type:
         none: None
-
-    renalware/hd/profile_document/transport:
-      type:
-        ambulance_wheelchair: Ambulance (wheelchair)
-        ambulance_2_man_crew: Ambulance (2 man crew)
-        car: Car
-        taxi: Taxi
     renalware/hd/profile_document/care_level:
       level:
         level0: 0 - Fully self-caring
         level1: 1 - Wheelchair, can transfer to chair for dialysis
         level2: 2 - Wheelchair-bound, transfers with help to bed
         level3: 3 - Bed bound, needs hoist
-
+    renalware/hd/profile_document/dialysis:
+      hd_type:
+        hd: HD
+        hdf_post: HDF-POST
+        hdf_pre: HDF-PRE
+    renalware/hd/profile_document/transport:
+      type:
+        ambulance_2_man_crew: Ambulance (2 man crew)
+        ambulance_wheelchair: Ambulance (wheelchair)
+        car: Car
+        taxi: Taxi
+  renalware:
+    hd:
+      current_profile:
+        summary:
+          anticoagulant:
+            hourly_dose: "  Hourly dose:"
+            loading_dose: 'Loading dose:'
+            stop_time: "  Stop time:"
+            type: 'Anticoagulant:'
+          bicarbonate: 'Bicarbonate:'
+          blood_flow: 'Blood flow:'
+          cannulation_type: 'Cannulation Type:'
+          care_level:
+            assessed_on: 'Assessed on:'
+            level: 'Care level:'
+            summary: 'Care level:'
+          dialysate: 'Dialysate:'
+          dialyser: 'Dialyser:'
+          drugs:
+            on_esa: 'On ESA:'
+            on_iron: 'On iron:'
+            on_warfarin: 'On Warfarin:'
+          has_sodium_profiling: 'Sodium profiling:'
+          hd_type: 'HD Type:'
+          hospital_unit: 'Hospital unit:'
+          last_update: 'Last Update:'
+          named_nurse: 'Named Nurse:'
+          needle_size: 'Needle size:'
+          prescribed_time: 'Prescribed Time:'
+          schedule: 'Schedule:'
+          scheduled_time: Scheduled time
+          single_needle: 'Single needle:'
+          sodium_first_half: 'Sodium 1st half:'
+          sodium_second_half: 'Sodium 2nd half:'
+          substitution_percent: 'Substitution %:'
+          temperature: 'Temperature:'
+          title: HD Profile
+          transport:
+            decided_by: 'Decider:'
+            decided_on: 'Decision date:'
+            has_transport: 'Has transport:'
+            type: 'Type:'
   simple_form:
     hints:
       hd_profile:
         document:
           dialysis:
-            flow_rate: ml/min
             blood_flow: ml/min
-
-  renalware:
-    hd:
-      current_profile:
-        summary:
-          title: "HD Profile"
-          schedule: "Schedule:"
-          scheduled_time: "Scheduled time"
-          hospital_unit: "Hospital unit:"
-          prescribed_time: "Prescribed Time:"
-          hd_type: "HD Type:"
-          substitution_percent: "Substitution %:"
-          named_nurse: "Named Nurse:"
-          dialyser: "Dialyser:"
-          dialysate: "Dialysate:"
-          anticoagulant:
-            type: "Anticoagulant:"
-            loading_dose: "Loading dose:"
-            hourly_dose: "  Hourly dose:"
-            stop_time: "  Stop time:"
-          cannulation_type: "Cannulation Type:"
-          last_update: "Last Update:"
-          needle_size: "Needle size:"
-          single_needle: "Single needle:"
-          blood_flow: "Blood flow:"
-          temperature: "Temperature:"
-          bicarbonate: "Bicarbonate:"
-          has_sodium_profiling: "Sodium profiling:"
-          sodium_first_half: "Sodium 1st half:"
-          sodium_second_half: "Sodium 2nd half:"
-          drugs:
-            on_esa: "On ESA:"
-            on_iron: "On iron:"
-            on_warfarin: "On Warfarin:"
-          transport:
-            has_transport: "Has transport:"
-            type: "Type:"
-            decided_on: "Decision date:"
-            decided_by: "Decider:"
-          care_level:
-            summary: "Care level:"
-            level: "Care level:"
-            assessed_on: "Assessed on:"
+            flow_rate: ml/min

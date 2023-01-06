@@ -87,7 +87,7 @@ module World
 
           within ".document" do
             fill_in "Date", with: "20-07-2015 10:45"
-            select "Access", from: "Clinic"
+            slim_select "Access", from: "Clinic"
             fill_in "Height", with: "1.78"
             fill_in "Weight", with: "82.5"
             fill_in "Pulse", with: "100"
@@ -108,7 +108,7 @@ module World
             patient_id: patient,
             id: clinic_visit.id
           )
-          select "AKI", from: "Clinic"
+          slim_select "AKI", from: "Clinic"
           fill_in "Height", with: "1.71"
           fill_in "Weight", with: "75"
           fill_in "Pulse", with: "101"

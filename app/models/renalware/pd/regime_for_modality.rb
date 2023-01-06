@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-
 module Renalware
   module PD
     # Backed by a (scenic) view this model is used to resolve the PD Regime in use or created

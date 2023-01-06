@@ -1,0 +1,18 @@
+article
+  header
+    h2 Dietetic Visits
+    .supplemental
+      span= "#{dietetic_clinic_visits.length} of #{dietetic_clinic_visits_count}"
+      span.noprint
+        = link_to t("btn.view_all"),
+                    renalware.patient_clinic_visits_path(patient),
+                    class: "button secondary"
+        = link_to renalware.new_patient_clinic_visit_path(patient),
+                  class: "button",
+                  target: "_blank" do
+            i.fa.fa-external-link-square-alt
+            = t("btn.add")
+
+  = render "renalware/clinics/clinic_visits/table",
+          clinic_visits: dietetic_clinic_visits,
+          patient: patient

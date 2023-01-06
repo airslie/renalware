@@ -1,44 +1,42 @@
 ---
 en:
+  activemodel:
+    attributes:
+      renalware/accesses/assessment_document/admin:
+        decision: Decision
+        next_surveillance: Next Surveillance
+      renalware/accesses/assessment_document/results:
+        art_stenosis_notes: Artery Stenosis Notes
+        flow_feed_artery: Flow Feed Artery
+        has_art_stenosis: Artery Stenosis?
+        has_residual_stenosis: Residual Stenosis?
+        has_ven_stenosis: Venous Stenosis?
+        method: Method
+        ven_stenosis_notes: Venous Stenosis Notes
   activerecord:
     attributes:
       renalware/accesses/assessment:
+        comments: Comments
+        failed_on: Failure Date
         performed_on: Performed
         procedure_on: Procedure Date
-        failed_on: Failure Date
-        type: Access Type
         side: Access Side
-        comments: Comments
-
-  activemodel:
-    attributes:
-      renalware/accesses/assessment_document/results:
-        method: Method
-        flow_feed_artery: Flow Feed Artery
-        has_art_stenosis: "Artery Stenosis?"
-        art_stenosis_notes: Artery Stenosis Notes
-        has_ven_stenosis: "Venous Stenosis?"
-        ven_stenosis_notes: Venous Stenosis Notes
-        has_residual_stenosis: "Residual Stenosis?"
-      renalware/accesses/assessment_document/admin:
-        next_surveillance: Next Surveillance
-        decision: Decision
-
+        type: Access Type
   enumerize:
+    renalware/accesses/assessment_document/admin:
+      next_surveillance:
+        routine_3_monthly: Routine 3 Monthly
+        routine_6_monthly: Routine 6 Monthly
+        routine_monthly: Routine Monthly
+        vascular_lab_3_monthly: Vascular Lab 3 Monthly
+        vascular_lab_6_monthly: Vascular Lab 6 Monthly
+        vascular_lab_monthly: Vascular Lab Monthly
     renalware/accesses/assessment_document/results:
       method:
         hand_doppler: Hand Doppler - Access Nurse
-        vascular_technician_doppler: Vascular Technician Doppler
         vascular_laboratory: Vascular Laboratory
+        vascular_technician_doppler: Vascular Technician Doppler
       outcome:
-        green: Green (Fine)
         amber: Amber (Some anxiety)
+        green: Green (Fine)
         red: Red (Severe)
-    renalware/accesses/assessment_document/admin:
-      next_surveillance:
-        routine_6_monthly: Routine 6 Monthly
-        routine_3_monthly: Routine 3 Monthly
-        routine_monthly: Routine Monthly
-        vascular_lab_6_monthly: Vascular Lab 6 Monthly
-        vascular_lab_3_monthly: Vascular Lab 3 Monthly
-        vascular_lab_monthly: Vascular Lab Monthly

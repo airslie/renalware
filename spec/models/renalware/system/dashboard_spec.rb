@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe System::Dashboard, type: :model do
+  describe System::Dashboard do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to have_many(:components).through(:dashboard_components) }
 

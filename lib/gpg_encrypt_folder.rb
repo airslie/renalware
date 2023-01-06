@@ -71,7 +71,7 @@ class GpgCommand
       "--no-random-seed-file",
       "--keyring \"#{keyring_path}\"",
       "--recipient \"#{recipient}\"",
-      "-o \"#{encrypted_filename}\" "\
+      "-o \"#{encrypted_filename}\" " \
       "--encrypt \"#{file}\""
     ].join(" ")
   end

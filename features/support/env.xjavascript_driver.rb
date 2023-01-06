@@ -4,7 +4,7 @@ Capybara.register_driver(:rw_headless_chrome) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     # This makes logs available, but doesn't cause them to appear
     # in real time on the console
-    loggingPrefs: {
+    "goog:loggingPrefs": {
       browser: "ALL",
       client: "ALL",
       driver: "ALL",
@@ -25,7 +25,7 @@ Capybara.register_driver(:rw_headless_chrome) do |app|
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    desired_capabilities: capabilities,
+    capabilities: capabilities,
     options: options
   )
 end

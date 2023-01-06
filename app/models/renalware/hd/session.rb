@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
 require "duration_calculator"
 
 module Renalware

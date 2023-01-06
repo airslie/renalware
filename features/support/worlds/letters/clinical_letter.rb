@@ -42,28 +42,28 @@ module World
         letter = clinical_letter_for(patient)
 
         letter = Renalware::Letters::LetterPresenterFactory.new(letter)
-        expect(letter.part_for(:prescriptions)).to be_present
+        expect(letter.letter_event.part_classes).to include Renalware::Letters::Part::Prescriptions
       end
 
       def expect_clinical_letter_to_list_problems(patient:)
         letter = clinical_letter_for(patient)
 
         letter = Renalware::Letters::LetterPresenterFactory.new(letter)
-        expect(letter.part_for(:problems)).to be_present
+        expect(letter.letter_event.part_classes).to include Renalware::Letters::Part::Problems
       end
 
       def expect_clinical_letter_to_list_recent_pathology_results(patient:)
         letter = clinical_letter_for(patient)
 
         letter = Renalware::Letters::LetterPresenterFactory.new(letter)
-        expect(letter.part_for(:recent_pathology_results)).to be_present
+        expect(letter.letter_event.part_classes).to include Renalware::Letters::Part::RecentPathologyResults
       end
 
       def expect_clinical_letter_to_list_allergies(patient:)
         letter = clinical_letter_for(patient)
 
         letter = Renalware::Letters::LetterPresenterFactory.new(letter)
-        expect(letter.part_for(:allergies)).to be_present
+        expect(letter.letter_event.part_classes).to include Renalware::Letters::Part::Allergies
       end
     end
 
@@ -72,7 +72,7 @@ module World
 
       def draft_clinical_letter(patient:, user:, created_at:)
         login_as user
-        FactoryBot.create(:letter_description, text: "Foo bar")
+        FactoryBot.create(:letter_topic, text: "Foo bar")
         visit patient_letters_letters_path(patient)
         click_on t("btn.create_")
         click_on "Clinical Letter"
@@ -80,7 +80,7 @@ module World
         attributes = valid_simple_letter_attributes(patient)
         select attributes[:letterhead].name, from: "Letterhead"
         select user.to_s, from: "Author"
-        select2 attributes[:description], css: ".letter_description"
+        slim_select attributes[:description], from: "Topic"
 
         within ".bottom" do
           click_on t("btn.create")

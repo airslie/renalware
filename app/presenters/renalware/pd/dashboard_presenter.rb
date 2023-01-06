@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-require_dependency "renalware/events"
-
 module Renalware
   module PD
     class DashboardPresenter

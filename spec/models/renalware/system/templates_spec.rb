@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe System::Template, type: :model do
+  describe System::Template do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:name)
       is_expected.to validate_presence_of(:description)

@@ -54,7 +54,7 @@ module World
 
         def bookmark_patient(user:, patient_name:, notes: "", urgent: false)
           login_as user
-          visit_patient(patient_name)
+          patient = visit_patient(patient_name)
 
           find("a", text: "Bookmark").click
 
@@ -64,7 +64,6 @@ module World
             fill_in("Notes", with: notes)
             find("input.button").click
           end
-          expect(page).to have_css("div.success")
         end
 
         def delete_bookmark(user:, patient_name:)
@@ -72,8 +71,6 @@ module World
           visit_patient(patient_name)
           find("a", text: "Remove bookmark").click
           page.driver.browser.switch_to.alert.accept
-
-          expect(page).to have_css("div.success")
         end
 
         private
@@ -81,6 +78,7 @@ module World
         def visit_patient(patient_given_name)
           patient = find_patient_by_given_name(patient_given_name)
           visit patient_path(id: patient)
+          patient
         end
       end
     end

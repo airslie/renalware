@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe Session, type: :model do
+    describe Session do
       it_behaves_like "an Accountable model"
       it_behaves_like "a Paranoid model"
       it :aggregate_failures do

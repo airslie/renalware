@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module HD
     module Sessions
-      describe LatestPatientSessionsQuery, type: :model do
+      describe LatestPatientSessionsQuery do
         subject(:query) { described_class }
 
         let(:patient) { create(:hd_patient, by: user) }

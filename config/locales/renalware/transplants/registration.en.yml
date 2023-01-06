@@ -1,13 +1,5 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/transplants/registration:
-        assessed_on: Assessment Date
-        contact: Wait List Contact
-        entered_on: Wait List Entry Date
-        notes: Notes
-        referred_on: Referral Date
   activemodel:
     attributes:
       renalware/transplants/registration_document/codes:
@@ -24,25 +16,33 @@ en:
         dr: DR Antigen
         drq: DRQ
         drw: DRW
+      renalware/transplants/registration_document/organs:
+        also_listed_for_kidney_only: If kidney/pancreas required, is the patient also to be listed for kidney only?
+        pancreas_only_type: If pancreas only, which type?
+        received_previous_kidney_or_pancreas_grafts: Has this recipient received a previous kidney or pancreas graft(s)?
+        rejection_risk: Rejection Risk
+        to_be_listed_for_other_organs: In addition to this registration, is the patient to be listed for other organ(s)?
+        transplant_type: Transplant Type
       renalware/transplants/registration_document/transplant:
         blood_group: Blood Group
         nb_of_previous_grafts: Number of previous graft(s)
         sens_status: Sens Status
-      renalware/transplants/registration_document/organs:
-        also_listed_for_kidney_only: "If kidney/pancreas required, is the patient also to be listed for kidney only?"
-        pancreas_only_type: "If pancreas only, which type?"
-        received_previous_kidney_or_pancreas_grafts: "Has this recipient received a previous kidney or pancreas graft(s)?"
-        rejection_risk: Rejection Risk
-        to_be_listed_for_other_organs: "In addition to this registration, is the patient to be listed for other organ(s)?"
-        transplant_type: Transplant Type
+  activerecord:
+    attributes:
+      renalware/transplants/registration:
+        assessed_on: Assessment Date
+        contact: Wait List Contact
+        entered_on: Wait List Entry Date
+        notes: Notes
+        referred_on: Referral Date
   enumerize:
     renalware/transplants/registration_document/organs:
       transplant_type:
         kidney: Kidney only
-        kidney_pancreas: Kidney and pancreas
-        pancreas: Pancreas only
         kidney_liver: Kidney and liver
+        kidney_pancreas: Kidney and pancreas
         liver: Liver only
+        pancreas: Pancreas only
   simple_form:
     hints:
       transplants_registration:

@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/drugs"
-
 module Renalware
   module Drugs
     class Type < ApplicationRecord
-      self.table_name = "drug_types"
-
       has_many :classifications, foreign_key: :drug_type_id, dependent: :destroy
       has_many :drugs, through: :classifications
 

@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Medications
-    describe MedicationRoute, type: :model do
+    describe MedicationRoute do
       subject(:route) { described_class.new }
 
       it :aggregate_failures do

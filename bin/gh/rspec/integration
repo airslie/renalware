@@ -1,2 +1,2 @@
 #!/bin/sh
-bin/rspec --pattern "spec/{integration,acceptance,system}/**/*_spec.rb"  --format progress
+bin/rspec --pattern "spec/{integration,requests,acceptance,system}/**/*_spec.rb"  --format progress

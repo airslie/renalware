@@ -5,16 +5,16 @@ en:
       renalware/pd/adequacy_result:
         dial_24_vol_in: Dial 24 vol in (ml)
         dial_24_vol_out: Dial 24 vol out (ml)
-        urine_24_vol: Urine 24 vol (ml)
         height: Height (m)
+        urine_24_vol: Urine 24 vol (ml)
         weight: Weight (kg)
     errors:
       models:
         renalware/pd/adequacy_result:
           attributes:
             height:
-              out_of_range: Must be between 0.05 and 2.5
               invalid_number: Please enter a number with up to 2 decimal place
+              out_of_range: Must be between 0.05 and 2.5
             weight:
-              out_of_range: Must be between 5.0 and 300.0
               invalid_number: Please enter a number with up to 2 decimal places, for example 100 or 100.11
+              out_of_range: Must be between 5.0 and 300.0

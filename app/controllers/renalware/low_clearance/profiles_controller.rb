@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/low_clearance"
-
 module Renalware
   module LowClearance
     class ProfilesController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def edit
         render_edit(find_and_authorize_profile)
       end
@@ -23,13 +24,13 @@ module Renalware
       private
 
       def find_and_authorize_profile
-        (patient.profile || patient.build_profile).tap do |profile|
+        (low_clearance_patient.profile || low_clearance_patient.build_profile).tap do |profile|
           authorize profile
         end
       end
 
       def render_edit(profile)
-        render :edit, locals: { patient: patient, profile: profile }
+        render :edit, locals: { patient: low_clearance_patient, profile: profile }
       end
 
       def profile_params

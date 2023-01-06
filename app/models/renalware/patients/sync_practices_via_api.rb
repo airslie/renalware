@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
-
 module Renalware
   module Patients
     # Fetches pratice changes and additions from the NHS ODS API.
@@ -132,10 +130,13 @@ module Renalware
           street_3: details.addr_ln3,
           town: details.town,
           county: details.county,
-          postcode: details.post_code || "-",
+          postcode: details.post_code,
           country_id: uk_country_id,
           region: details.country
         )
+        # Skip address validation because there are instances where for example postcode is blank
+        # on Guernsey
+        address.skip_validation = true
         address
       end
 

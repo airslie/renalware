@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/directory"
-
 module Renalware
   module Directory
     class PersonAutoCompletePresenter < DumbDelegator

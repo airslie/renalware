@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::HD::Scheduling
-  describe WeeklyDiary, type: :model do
+  describe WeeklyDiary do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:week_number)
       is_expected.to validate_presence_of(:year)

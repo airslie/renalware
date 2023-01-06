@@ -1,0 +1,29 @@
+article
+  header
+    h2 = t(".title")
+
+  - if last_dietetic_clinic_visit
+    dl.dl-horizontal.xxlarge
+      dt = last_dietetic_clinic_visit.class.human_attribute_name(:date)
+      dd = l(last_dietetic_clinic_visit.date)
+
+      dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:ideal_body_weight)
+      dd = Renalware::Dietetics::WeightValuePresenter.new(last_dietetic_clinic_visit.document.ideal_body_weight).to_s
+
+      dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:sga)
+      dd = I18n.t(last_dietetic_clinic_visit.document.sga_assessment, scope: "enumerize.renalware/dietetics/clinic_visit/document.sga_assessment") if last_dietetic_clinic_visit.document.sga_assessment
+
+      dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:energy_intake)
+      dd = Renalware::Dietetics::EnergyValuePresenter.new(last_dietetic_clinic_visit.document.energy_intake).to_s
+
+      dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:energy_requirement)
+      dd = Renalware::Dietetics::EnergyValuePresenter.new(last_dietetic_clinic_visit.document.energy_requirement).to_s
+
+      dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:dietary_protein_intake)
+      dd = Renalware::Dietetics::ProteinValuePresenter.new(last_dietetic_clinic_visit.document.dietary_protein_intake).to_s
+
+      dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:dietary_protein_requirement)
+      dd = Renalware::Dietetics::ProteinValuePresenter.new(last_dietetic_clinic_visit.document.dietary_protein_requirement).to_s
+
+  - else
+    p = t(".no_data")

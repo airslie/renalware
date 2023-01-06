@@ -25,7 +25,7 @@ module Renalware::Feeds
         expect { service.call(hl7_message) }.to change(Message, :count).by(1)
       end
 
-      it "generates an MD5 hash of the payload which should be unique and therefore "\
+      it "generates an MD5 hash of the payload which should be unique and therefore " \
          "prevent duplicate" do
         service.call(hl7_message)
 

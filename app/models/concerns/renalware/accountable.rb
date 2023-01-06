@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-
 module Renalware
   # Responsible for assigning a system user to the record when it is created
   # and updated.

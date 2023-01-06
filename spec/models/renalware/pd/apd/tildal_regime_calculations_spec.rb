@@ -54,7 +54,7 @@ module Renalware
             end
 
             context "when not doing a full drain every 3 cycles" do
-              it "uses the full fill volume on cycle 1 and the tidal_percentage "\
+              it "uses the full fill volume on cycle 1 and the tidal_percentage " \
                  "volume of the remaining cycles" do
                 regime.tidal_full_drain_every_three_cycles = false
 

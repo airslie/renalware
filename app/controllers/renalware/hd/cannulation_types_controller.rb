@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
-
 module Renalware
   module HD
     class CannulationTypesController < BaseController

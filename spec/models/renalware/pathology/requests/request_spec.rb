@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Pathology::Requests::Request, type: :model do
+  describe Pathology::Requests::Request do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to belong_to(:patient).touch(true)

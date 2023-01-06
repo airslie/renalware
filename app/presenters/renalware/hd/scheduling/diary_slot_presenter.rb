@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-require_dependency "collection_presenter"
-
 # TODO: mixing query and presenter here..
 module Renalware
   module HD
@@ -62,8 +59,8 @@ module Renalware
         def simplify(patients)
           patients.map do |patient|
             hd_profile = patient.hd_profile
-            text = "#{patient.to_s(:long)} - "\
-                  "#{hd_profile&.schedule_definition} "\
+            text = "#{patient.to_s(:long)} - " \
+                  "#{hd_profile&.schedule_definition} " \
                   "#{hd_profile&.hospital_unit&.unit_code}".strip.truncate(65)
             OpenStruct.new(id: patient.id, text: text)
           end

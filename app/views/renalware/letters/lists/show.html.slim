@@ -11,6 +11,11 @@
                       html: { autocomplete: "off" },
                       method: :get do |f|
       .row
+        .small-12.columns
+          = f.submit t("btn.filter"), class: "button secondary"
+          '  or
+          = link_to t("btn.reset"), renalware.letters_filtered_letters_list_path(named_filter: named_filter)
+      .row
         .small-6.medium-1.large-1.columns
             = f.input :enclosures_present,
                       as: :select,
@@ -42,16 +47,16 @@
           = f.input :letterhead_id_eq,
                     collection: form.letterhead_options,
                     label: "Letterhead"
-        .small-6.medium-1.large-1.columns
+        .small-6.medium-3.large-2.columns
+          = f.input :clinic_visit_clinic_id_eq,
+                    collection: form.clinic_visit_clinic_options,
+                    label: "Clinic Visit Clinic"
+        .small-6.medium-1.large-1.columns.end
           = f.input :page_count_in_array,
                     collection: form.page_count_options,
                     label: "Pages",
                     include_blank: form.allow_blank_inputs.include?(:page_count_in_array)
-        .small-12.medium-2.large-2.columns.actions.end
-          = f.submit t("btn.filter"), class: "button secondary"
-          '  or
-          = link_to t("btn.reset"), renalware.letters_filtered_letters_list_path(named_filter: named_filter)
-
+        
   - if named_filter == :batch_printable
 
     ruby:

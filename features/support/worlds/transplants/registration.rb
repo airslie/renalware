@@ -46,6 +46,7 @@ module World
             local_patient_id: FactoryBot.generate(:local_patient_id),
             sex: "M",
             born_on: Time.zone.today,
+            hospital_centre: FactoryBot.create(:hospital_centre),
             by: Renalware::SystemUser.find
           )
           seed_patient_on_wait_list(patient, status, ukt_status)

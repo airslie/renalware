@@ -15,12 +15,12 @@ describe Renalware::HD::PrescriptionLastAdministrationComponent, type: :componen
       recorded_on: Date.parse("01-01-2020"),
       notes: "abc"
     )
-    allow(Renalware::HD::PrescriptionLastAdministrationQuery)
-      .to receive(:call).and_return(administration)
+    allow(Renalware::HD::PrescriptionAdministrationsQuery)
+      .to receive(:call).and_return([administration])
 
     render_inline(described_class.new(prescription: prescription))
 
-    expect(page).to have_content("Last given on Wed 01 Jan 2020 by #{user}")
+    expect(page).to have_content("Last given on Wed 01-Jan-2020 by #{user}")
     expect(page).to have_content("Notes: abc")
   end
 
@@ -31,7 +31,8 @@ describe Renalware::HD::PrescriptionLastAdministrationComponent, type: :componen
       render_inline(component)
 
       expect(component.render?).to be(false)
-      expect(rendered_component).to eq("")
+
+      expect(page.text).to be_blank
     end
   end
 end

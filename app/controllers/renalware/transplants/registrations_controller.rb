@@ -1,31 +1,30 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants/base_controller"
-
 module Renalware
   module Transplants
     class RegistrationsController < BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
 
       def show
         if registration.new_record?
-          redirect_to edit_patient_transplants_registration_path(patient)
+          redirect_to edit_patient_transplants_registration_path(transplants_patient)
         else
-          render locals: { patient: patient, registration: registration }
+          render locals: { patient: transplants_patient, registration: registration }
         end
       end
 
       def edit
-        render locals: { patient: patient, registration: registration }
+        render locals: { patient: transplants_patient, registration: registration }
       end
 
       def update
         if update_registration
-          redirect_to patient_transplants_recipient_dashboard_path(patient),
+          redirect_to patient_transplants_recipient_dashboard_path(transplants_patient),
                       notice: success_msg_for("registration")
         else
           flash.now[:error] = failed_msg_for("registration")
-          render :edit, locals: { patient: patient, registration: registration }
+          render :edit, locals: { patient: transplants_patient, registration: registration }
         end
       end
 
@@ -38,7 +37,12 @@ module Renalware
       end
 
       def registration
-        @registration ||= Registration.for_patient(@patient).first_or_initialize
+        @registration ||= begin
+          Registration
+            .for_patient(transplants_patient)
+            .first_or_initialize
+            .tap { |reg| authorize reg }
+        end
       end
 
       def registration_params

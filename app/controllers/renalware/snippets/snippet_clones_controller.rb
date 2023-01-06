@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/snippets"
-
 #
 # This controller handles copying snippets (when I am the owner) and cloning them (when I am not).
 # The ownership drives what suffix is appended to the snippet title to keep it unique.

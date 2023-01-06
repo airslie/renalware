@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/system"
-
 module Renalware
   module System
     # Information on SQL views used to build parts of the UI

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Messaging::Internal
-  describe Recipient, type: :model do
+  describe Recipient do
     it :aggregate_failures do
       is_expected.to have_many(:messages).through(:receipts)
       is_expected.to have_many(:receipts).class_name("Renalware::Messaging::Internal::Receipt")

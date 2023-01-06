@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/feeds"
-
 module Renalware
   module Feeds
     #
@@ -79,7 +77,7 @@ module Renalware
       # To help enforce this there is a unique MD5 hash on feed_messages which will baulk if the
       # same message payload is saved twice - in this case we exit #call early, the broadcast
       # is not issued and therefore the message is not processed. The message will go back into
-      # the delayed_job queue and retry, failing until it finally gives up!
+      # the activejob queue and retry, failing until it finally gives up!
       def create_feed_message_using_raw_message_and_basic_extracted_patient_data
         @feed_message = PersistMessage.new.call(hl7_message)
       end

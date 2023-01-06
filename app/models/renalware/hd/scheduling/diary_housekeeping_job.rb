@@ -13,22 +13,8 @@ require "renalware/hd"
 module Renalware
   module HD
     module Scheduling
-      DiaryHousekeepingJob = Struct.new(:up_until) do
-        def max_attempts
-          1
-        end
-
-        def queue_name
-          "hd_diary_houskeeping"
-        end
-
-        def priority
-          5 # medium
-        end
-
-        def destroy_failed_jobs?
-          true
-        end
+      class DiaryHousekeepingJob < ApplicationJob
+        queue_as :hd_diary_houskeeping
 
         # :reek:UtilityFunction
         def perform

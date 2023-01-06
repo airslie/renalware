@@ -3,5 +3,5 @@ en:
   activerecord:
     errors:
       messages:
-        nhs_number_invalid_checkdigit: "is invalid - please check"
-        nhs_number_not_numeric: "is invalid -  must be 10 digits"
+        nhs_number_invalid_checkdigit: is invalid - please check
+        nhs_number_not_numeric: is invalid -  must be 10 digits

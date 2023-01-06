@@ -38,10 +38,4 @@
         noscript
           = f.submit("Filter", class: "button") do
             | Filter
-        = link_to "Reset", options.report_path_without_params, class: "mx-3 mb-5"
-        = link_to(options.report_csv_download_path_with_params,
-                  class: "button secondary",
-                  style: "margin-left: 2rem",
-                  data: { confirm: "IMPORTANT! (Warning here about data protection)"}) do
-          i.fa.fa-download
-          | CSV
+        = link_to "Reset", options.report_path_without_params, class: "mx-3 mt-2"

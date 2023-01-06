@@ -10,6 +10,12 @@ tr(class="#{ "urgent" if message.urgent?}" id=message.html_identifier)
   td= patient.nhs_number
   td= patient.hospital_identifier
   td.col-width-medium-with-ellipsis= message.subject
+  / We want to keep the same number of cols becuase of the colspan in the next tr
+  / so we show hide here so there is always the same col count
+  td.w-0.xl:hidden
+  td.hidden.xl:table-cell.col-width-large-with-ellipsis
+    - message.recipients.to_a.flatten.each do |recip|
+      div.whitespace-nowrap= recip&.to_s
   td
     = link_to t("btn.toggle"),
               "##{message.html_preview_identifier}",
@@ -18,11 +24,18 @@ tr(class="#{ "urgent" if message.urgent?}" id=message.html_identifier)
 = content_tag(:tr,
               id: "#{message.html_preview_identifier}",
               style: "display: none",
-              class: "#{ 'urgent' if message.urgent?}")
-  td(colspan=7)
+              class: "message-toggleable-row #{ 'urgent' if message.urgent?}")
+  td.p-0(colspan=9)
     .message-preview
       .subject= message.subject
-      .body= message.body
+      .body(style="min-height: 3rem")= message.body
+      .sent_to.mt-4.mb-1
+        .flex
+          span.pr-2.mr-1.pt-px Also sent to:
+          - message.recipients.to_a.flatten.each do |recip|
+            .rounded.bg-green-50.border.border-green-200.py-px.px-1.mr-2
+              = recip&.to_s
+
   td.nowrap(colspan=2)
     ul.actions
       li= link_to "Keep as unread",

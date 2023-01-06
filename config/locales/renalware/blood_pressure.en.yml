@@ -5,8 +5,8 @@ en:
       models:
         renalware/blood_pressure:
           attributes:
+            diastolic:
+              must_be_less_than_systolic: Diastolic must be less than systolic
+              out_of_range: Diastolic pressure must be a number between 20 and 300
             systolic:
               out_of_range: Systolic pressure must be a number between 20 and 300
-            diastolic:
-              out_of_range: Diastolic pressure must be a number between 20 and 300
-              must_be_less_than_systolic: Diastolic must be less than systolic

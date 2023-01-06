@@ -3,48 +3,48 @@ en:
   activerecord:
     attributes:
       renalware/clinical/body_composition:
+        adipose_tissue_mass: Adipose Tissue Mass (ATM)
         assessed_on: Assessment Date
-        overhydration: Overhydration (OH)
-        volume_of_distribution: Volume of Distribution (V)
-        total_body_water: Total Body Water (TBW)
+        body_cell_mass: Body Cell Mass (BCM)
         extracellular_water: Extracellular Water (ECW)
+        fat_tissue_index: Fat Tissue Index (FTI)
+        fat_tissue_mass: Fat Tissue Mass (FTM)
         intracellular_water: Intracellular Water (ICW)
         lean_tissue_index: Lean Tissue Index (LTI)
-        fat_tissue_index: Fat Tissue Index (FTI)
         lean_tissue_mass: Lean Tissue Mass (LTM)
-        fat_tissue_mass: Fat Tissue Mass (FTM)
-        adipose_tissue_mass: Adipose Tissue Mass (ATM)
-        body_cell_mass: Body Cell Mass (BCM)
-        quality_of_reading: Quality of Reading (Q)
         notes: Notes
-        weight: Weight
+        overhydration: Overhydration (OH)
         pre_post_hd: Pre or Post HD
+        quality_of_reading: Quality of Reading (Q)
+        total_body_water: Total Body Water (TBW)
+        volume_of_distribution: Volume of Distribution (V)
+        weight: Weight
   renalware:
     clinical:
       body_compositions:
         index:
           title: Body Composition Measurements
-        show:
-          title: Body Composition Measurements
         list:
-          title: Body Composition Measurements
           add_dry_weight: Add a Body Composition Measurements
           recent:
             title: Recent Body Composition Measurements
+          title: Body Composition Measurements
+        show:
+          title: Body Composition Measurements
         table:
+          adipose_tissue_mass: ATM
           assessed_on: Date
-          overhydration: OH
-          volume_of_distribution: V
-          total_body_water: TBW
+          assessor: Assessor
+          body_cell_mass: BCM
           extracellular_water: ECW
+          fat_tissue_index: FTI
+          fat_tissue_mass: FTM
           intracellular_water: ICW
           lean_tissue_index: LTI
-          fat_tissue_index: FTI
           lean_tissue_mass: LTM
-          fat_tissue_mass: FTM
-          adipose_tissue_mass: ATM
-          body_cell_mass: BCM
-          quality_of_reading: Q
-          assessor: Assessor
-          weight: Weight
+          overhydration: OH
           pre_post_hd: PrePost
+          quality_of_reading: Q
+          total_body_water: TBW
+          volume_of_distribution: V
+          weight: Weight

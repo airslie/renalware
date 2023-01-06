@@ -4,8 +4,8 @@ en:
     attributes:
       renalware/hospitals/unit:
         hospital_centre: Hospital Centre
-        name: Name
-        unit_code: Unit Code
-        renal_registry_code: NRD Code
-        unit_type: Unit Type
         is_hd_site: Can provide HD treatments?
+        name: Name
+        renal_registry_code: NRD Code
+        unit_code: Unit Code
+        unit_type: Unit Type

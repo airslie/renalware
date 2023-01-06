@@ -1,4 +1,15 @@
- .main-content
+/ On the devise login page we want flash messages to appear as fixed text next to the username 
+/ and password fields so its immediately obvious to the user what the problem is - rather than 
+/ as text at the page top (as we used to do) or as a toast (as we are moving towards elsewhere
+/ in the app. To this end we define an empty :flash_messages content block to prevent the default
+/ (toast) implementation from appearing when there are flash messages (see application.html.slim)
+/ and later on in this file render our own instance of FlashMessagesComponent, asking it not to
+/ use toast.
+= content_for(:flash_messages) do
+  / some content so that content_for?(:flash_messages) returns true in application html
+  span.hidden
+
+.main-content
   .row.small-8.large-12
     br
     = render "renalware/system/messages/list"
@@ -6,6 +17,7 @@
 
   .row.small-6.large-3
     h3= t(".sign_in")
+    .mb-3= render Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: false)
     = simple_form_for(resource,
                       as: resource_name,
                       url: session_path(resource_name),

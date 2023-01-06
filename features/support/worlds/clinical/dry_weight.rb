@@ -34,7 +34,7 @@ module World
 
       # @section commands
       #
-      def create_dry_weight(user: nil, patient:, assessed_on:)
+      def create_dry_weight(patient:, assessed_on:, user: nil)
         patient = clinical_patient(patient)
 
         Renalware::Clinical::DryWeight.create(

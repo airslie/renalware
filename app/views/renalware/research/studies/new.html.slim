@@ -2,4 +2,4 @@
                       breadcrumbs: breadcrumb_for("Clinical Studies",
                                    research_studies_path)) do
 
-  = render "form", study: study
+  = render "form", study: study, url: research_studies_path(study)

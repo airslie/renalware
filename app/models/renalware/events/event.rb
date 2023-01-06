@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pdf_friendly_validator"
-require_dependency "renalware/events"
-
 module Renalware
   module Events
     class Event < ApplicationRecord
       include Accountable
       include PatientScope
+      acts_as_paranoid
+
+      has_paper_trail(
+        versions: { class_name: "Renalware::Events::Version" },
+        on: [:update, :destroy]
+      )
 
       # Virtual attribute helps us persist in the UI (across posts) whether or not the
       # event_type can be changed. If we target e.g.

@@ -62,7 +62,7 @@ RSpec.configure do |config|
     capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
       # This makes logs available, but doesn't cause them to appear
       # in real time on the console
-      loggingPrefs: {
+      "goog:loggingPrefs": {
         browser: "ALL",
         client: "ALL",
         driver: "ALL",
@@ -82,7 +82,7 @@ RSpec.configure do |config|
     Capybara::Selenium::Driver.new(
       app,
       browser: :chrome,
-      desired_capabilities: capabilities,
+      capabilities: capabilities,
       options: options
     )
   end
@@ -104,12 +104,9 @@ RSpec.configure do |config|
     Capybara.reset! if ex.metadata[:js]
   end
 
-  # run retry only on features
-  config.around :each, :js do |ex|
-    if ENV.key?("SEMAPHORECI")
+  if ENV["CI"]
+    config.around :each, :js do |ex|
       ex.run_with_retry retry: 2
-    else
-      ex.run
     end
   end
 
@@ -148,8 +145,8 @@ RSpec.configure do |config|
 
   config.include Renalware::Engine.routes.url_helpers
   config.include Wisper::RSpec::BroadcastMatcher
-  config.include CapybaraHelper, type: %i(system feature)
-  config.include SelectDateSpecHelper, type: %i(system feature)
+  config.include CapybaraHelper, type: %i[system feature]
+  config.include SelectDateSpecHelper, type: %i[system feature]
   config.include TextEditorHelpers, type: :system
   config.include CapybaraSelect2, type: :system
   config.include ActiveSupport::Testing::TimeHelpers
@@ -157,6 +154,8 @@ RSpec.configure do |config|
   config.include Shoulda::Matchers::ActiveRecord, type: :model
   config.include ViewComponent::TestHelpers, type: :component
   config.include ActionView::RecordIdentifier, type: :system
+  config.include SlimSelectHelper, type: :system
+  config.include CapybaraAccessibleSelectors::Session, type: :system
 
   config.fuubar_progress_bar_options = { progress_mark: "≈" }
 
@@ -169,7 +168,7 @@ RSpec.configure do |config|
   # See https://github.com/airblade/paper_trail#7b-rspec for more information.
 
   config.after(:each, type: :system, js: true) do
-    errors = page.driver.browser.manage.logs.get(:browser)
+    errors = page.driver.browser.logs.get(:browser)
     if errors.present?
       aggregate_failures "javascript errrors" do
         errors.each do |error|

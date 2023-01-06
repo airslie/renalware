@@ -16,15 +16,17 @@
         ul.error-messages
           - user.errors.full_messages.each do |msg|
             li= msg
-
-      - if user.expired?
-        .row
-          = check_box_tag "user[unexpire]", true, false, class: "inline"
-          = label_tag :user_unexpire, "Reactivate account"
-
+      
       span
         | Requested write access: &nbsp;
         = yes_no(user.asked_for_write_access)
+        .mb-2
+
+      - if user.expired?
+        .rounded.bg-green-100.px-3.py-2.my-4.-ml-3.w-1/2
+          = check_box_tag "user[unexpire]", true, false, class: "align-middle mr-2"
+          = label_tag :user_unexpire, "Reactivate account", class: "align-middle"
+        
 
       .my-2
         - Renalware::Role.all.order(id: :asc).each_with_index do |role, index|

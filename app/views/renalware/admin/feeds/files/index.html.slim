@@ -47,12 +47,3 @@
               = file.result&.gsub("\n", "<br/>")&.html_safe
               /#&.gsub("\n", "<br/>")&.html_safe
           td= file.created_by.to_s
-
-  br
-  .panel
-    | Note that when you upload a file, a background job kicks off to process it asynchronously.
-    br
-    | You will need to check back to see the results.
-    - if defined?(delayed_job_path)
-      br
-      = "You can also see those jobs #{link_to("here", delayed_job_path)} if you have access.".html_safe

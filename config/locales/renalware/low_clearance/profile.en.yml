@@ -1,77 +1,77 @@
 ---
 en:
-  renalware:
-    low_clearance:
-      profiles:
-        summary:
-          title: Profile
-          first_seen_on: Date first seen
-          dialysis_plan: Dialysis plan
-          dialysis_planned_on: Dialysis plan date
-          predicted_esrf_date: Predicted ESRF date
-          referral_creatinine: Referral CRE
-          referrer: Referred by
-          referrer_id: Referred by
-          referred_by: Referred by notes
-          education_status: Education status
-          referral_egfr: Referral eGFR
-          education_type: Education type
-          attended_on: Date attended educ.
-          dvd1_provided: "'Your Kidneys' DVD"
-          dvd2_provided: "'Dialysis Choices' DVD"
-          transplant_referral: Tx team referral
-          transplant_referred_on: Referral date
-          home_hd_possible: Home HD
-          self_care_possible: Self Care
-          access_notes: AKCC access notes
   activemodel:
     attributes:
       renalware/low_clearance/profile_document:
-        first_seen_on: Date first seen
+        access_notes: AKCC access notes
+        attended_on: Date attended educ.
         dialysis_plan: Dialysis plan
         dialysis_planned_on: Dialysis plan date
+        dvd1_provided: "'Your Kidneys' DVD"
+        dvd2_provided: "'Dialysis Choices' DVD"
+        education_status: Education status
+        education_type: Education type
+        first_seen_on: Date first seen
+        home_hd_possible: Home HD
         predicted_esrf_date: Predicted ESRF date
         referral_creatinine: Referral CRE
         referral_egfr: Referral eGFR
         referred_by: Referred by notes
-        education_status: Education status
-        education_type: Education type
-        attended_on: Date attended educ.
-        dvd1_provided: "'Your Kidneys' DVD"
-        dvd2_provided: "'Dialysis Choices' DVD"
+        self_care_possible: Self Care
         transplant_referral: Tx team referral
         transplant_referred_on: Referral date
-        home_hd_possible: Home HD
-        self_care_possible: Self Care
-        access_notes: AKCC access notes
   enumerize:
     renalware/low_clearance/profile_document:
       dialysis_plan:
-        pd: PD
-        capd_la: CAPD LA
         capd_ga: CAPD GA
         capd_ga_avf: CAPD GA + AVF
         capd_ga_hernia: CAPD GA + Hernia Repair
+        capd_la: CAPD LA
         capd_la_avf: CAPD LA + AVF
         capd_la_sedation: CAPD LA with sedation
         capd_not_yet_assessed: CAPD not yet assessed by CAPD Team
         hd: HD
         hd_via_avf: HD via AVF
-        hd_via_ptfe_graft: HD via PTFE Graft
         hd_via_line: HD via line
+        hd_via_ptfe_graft: HD via PTFE Graft
+        home_hd: Home HD
+        no_current_plan: No Current Plan
+        not_for_dial_consensus: Supportive Care - consensus
+        not_for_dial_patient_choice: Supportive care - patient choice
+        pd: PD
         pre_emptive_lrd: Pre-emptive LRD
         pre_emptive_lrd_backup_hd: Pre-emptive LRD - backup HD
         pre_emptive_lrd_backup_pd: Pre-emptive LRD - backup PD
-        not_for_dial_patient_choice: Supportive care - patient choice
-        not_for_dial_consensus: Supportive Care - consensus
         refuse_to_plan_for_dial: Refusing to plan for RTT--In Denial
-        home_hd: Home HD
         self_care_hd: Self Care HD
-        no_current_plan: No Current Plan
       education_status:
-        invited: Invited
         attended: Attended
         declined: Declined
+        invited: Invited
       education_type:
         day: Day
         evening: Evening
+  renalware:
+    low_clearance:
+      profiles:
+        summary:
+          access_notes: AKCC access notes
+          attended_on: Date attended educ.
+          dialysis_plan: Dialysis plan
+          dialysis_planned_on: Dialysis plan date
+          dvd1_provided: "'Your Kidneys' DVD"
+          dvd2_provided: "'Dialysis Choices' DVD"
+          education_status: Education status
+          education_type: Education type
+          first_seen_on: Date first seen
+          home_hd_possible: Home HD
+          predicted_esrf_date: Predicted ESRF date
+          referral_creatinine: Referral CRE
+          referral_egfr: Referral eGFR
+          referred_by: Referred by notes
+          referrer: Referred by
+          referrer_id: Referred by
+          self_care_possible: Self Care
+          title: Profile
+          transplant_referral: Tx team referral
+          transplant_referred_on: Referral date

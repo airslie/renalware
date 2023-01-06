@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
-
 module Renalware
   module PD
     class PeritonitisEpisodesController < BaseController
-      include PresenterHelper
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PdfRenderable
+      include PresenterHelper
 
       def show
         respond_to do |format|
@@ -18,7 +18,7 @@ module Renalware
       def new
         render locals: {
           peritonitis_episode: new_episode,
-          patient: patient
+          patient: pd_patient
         }
       end
 
@@ -29,7 +29,7 @@ module Renalware
       def edit
         render locals: {
           peritonitis_episode: current_episode,
-          patient: patient
+          patient: pd_patient
         }
       end
 
@@ -38,7 +38,7 @@ module Renalware
       end
 
       def save_episode(episode)
-        command = SavePeritonitisEpisode.new(patient: patient, episode: episode)
+        command = SavePeritonitisEpisode.new(patient: pd_patient, episode: episode)
         command.subscribe(self)
         command.call(params: peritonitis_episode_params)
       end
@@ -48,7 +48,7 @@ module Renalware
           format.js do
             render locals: {
               peritonitis_episode: present(episode, PeritonitisEpisodePresenter),
-              patient: patient
+              patient: pd_patient
             }
           end
           format.html { redirect_after_successful_save(episode) }
@@ -60,7 +60,7 @@ module Renalware
         action = action_name.to_sym == :create ? :new : :edit
         render action, locals: {
           peritonitis_episode: episode,
-          patient: patient
+          patient: pd_patient
         }
       end
 
@@ -72,9 +72,9 @@ module Renalware
 
       def render_show_as_pdf
         variables = {
-          "patient" => Patients::PatientDrop.new(patient),
-          "renal_patient" => Renal::PatientDrop.new(patient),
-          "pd_patient" => PD::PatientDrop.new(patient)
+          "patient" => Patients::PatientDrop.new(pd_patient),
+          "renal_patient" => Renal::PatientDrop.new(pd_patient),
+          "pd_patient" => PD::PatientDrop.new(pd_patient)
         }
         render_liquid_template_to_pdf(template_name: "peritonitis_episode_printable_form",
                                       filename: pdf_filename,
@@ -82,14 +82,14 @@ module Renalware
       end
 
       def pdf_filename
-        "#{patient.family_name}-#{patient.hospital_identifier.id}" \
+        "#{pd_patient.family_name}-#{pd_patient.hospital_identifier.id}" \
         "-PERI-EPISODE-#{current_episode.id}".upcase
       end
 
       def locals_for_show
         prescriptions = current_episode.prescriptions.ordered
         {
-          patient: patient,
+          patient: pd_patient,
           peritonitis_episode: present(current_episode, PeritonitisEpisodePresenter),
           prescriptions: present(prescriptions, Medications::PrescriptionPresenter),
           treatable: present(current_episode, Medications::TreatablePresenter)
@@ -97,21 +97,21 @@ module Renalware
       end
 
       def redirect_after_successful_save(episode)
-        url = patient_pd_peritonitis_episode_path(patient, episode)
+        url = patient_pd_peritonitis_episode_path(pd_patient, episode)
         message = success_msg_for("peritonitis episode")
         redirect_to url, notice: message
       end
 
       def current_episode
         @current_episode ||= begin
-          episode = PeritonitisEpisode.for_patient(patient).find(params[:id])
+          episode = PeritonitisEpisode.for_patient(pd_patient).find(params[:id])
           authorize(episode) if episode.present?
           episode
         end
       end
 
       def new_episode
-        episode = PeritonitisEpisode.for_patient(patient).new
+        episode = PeritonitisEpisode.for_patient(pd_patient).new
         authorize(episode)
         episode
       end

@@ -14,4 +14,8 @@ FactoryBot.define do
     diastolic_bp { 71 }
     clinic { create(:clinic) }
   end
+
+  factory :dietetic_clinic_visit, class: "Renalware::Dietetics::ClinicVisit",
+                                  parent: :clinic_visit do
+  end
 end

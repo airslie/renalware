@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/medications"
-
 # rubocop:disable Metrics/ClassLength
 module Renalware
   module Medications

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/system"
-
 module Renalware
   module System
     # A component is the description in data of an ActionView::Component

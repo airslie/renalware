@@ -62,8 +62,8 @@ module Renalware::Patients::Ingestion
           { possibles: %w(A B), current: "A", incoming: "B", expected: "B" },
           { possibles: %w(A), current: "A", incoming: "B", expected: "A" }
         ].each do |opts|
-          context "when configured ethnicities are #{opts[:possibles].join(', ')} "\
-                  "and the patient's current ethnicity is #{opts[:current]} "\
+          context "when configured ethnicities are #{opts[:possibles].join(', ')} " \
+                  "and the patient's current ethnicity is #{opts[:current]} " \
                   "and incoming ethnicity is #{opts[:incoming]}" do
             before do
               Renalware.configure { |config| config.hl7_patient_locator_strategy = :simple }
@@ -121,14 +121,14 @@ module Renalware::Patients::Ingestion
           )
 
           msh = "MSH|^~\&|ADT||||20150122154918||ADT^A31|897847653|P|2.3"
-          pid = "PID||"\
-                "9999999999^^^NHS|"\
-                "HA123^^^HOSP_A~"\
-                "HB123^^^HOSP_B~"\
-                "HC123^^^HOSP_C~"\
-                "HD123^^^HOSP_D~"\
-                "HE123^^^HOSP_E"\
-                "||Jones^John^^^MS||20000101|M|||"\
+          pid = "PID||" \
+                "9999999999^^^NHS|" \
+                "HA123^^^HOSP_A~" \
+                "HB123^^^HOSP_B~" \
+                "HC123^^^HOSP_C~" \
+                "HD123^^^HOSP_D~" \
+                "HE123^^^HOSP_E" \
+                "||Jones^John^^^MS||20000101|M|||" \
                 "address1^address2^address3^address4^postcode^other^HOME|||||||||||||||||||"
 
           hl7_message = Renalware::Feeds::HL7Message.new(::HL7::Message.new([msh, pid]))
@@ -173,9 +173,9 @@ module Renalware::Patients::Ingestion
           )
 
           msh = "MSH|^~\&|ADT||||20150122154918||ADT^A31|897847653|P|2.3"
-          pid = "PID||"\
-                "1791963196^^^NHS|PAS123^^^PAS NUMBER~"\
-                "||Jones^John^^^MS||20000101|M|||"\
+          pid = "PID||" \
+                "1791963196^^^NHS|PAS123^^^PAS NUMBER~" \
+                "||Jones^John^^^MS||20000101|M|||" \
                 "address1^address2^address3^address4^postcode^other^HOME|||||||||||||||||||"
 
           hl7_message = Renalware::Feeds::HL7Message.new(::HL7::Message.new([msh, pid]))

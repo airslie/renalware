@@ -1,0 +1,27 @@
+- content_for(:top_navigation) do
+  = render "top_navigation"
+
+- content_for(:body_class) { "collapse-patient-menu always-collapse-patient-menu mdm" }
+
+= within_patient_layout(title: "") do
+  br
+
+  .full-screen-container.mdm-page.no-side-gutters
+    .mgrid
+      = render "top", mdm: mdm
+
+      .row
+        .columns.medium-12.large-6
+          = render "prescriptions", mdm: mdm, with_esa: true
+
+      .row
+        .columns.small-12
+          = render Renalware::Dietetics::VisitsComponent.new(patient: mdm.patient, display_count: 8)
+
+      .row = render "pathology", mdm: mdm
+      .row = render "letters", mdm: mdm
+      .row = render "clinic_visits", mdm: mdm
+      .row = render "events", mdm: mdm
+      .row
+        .columns.small-12
+          = render "renalware/hd/mdm/audits", mdm: mdm

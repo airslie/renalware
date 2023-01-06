@@ -1,24 +1,24 @@
 ---
 en:
   renalware:
-    hd:
-      accesses:
-        summary:
-          title: Access
-          add_access_profile: Add an Access Profile
-          view: View
-          edit: Edit
-          site: "Site:"
-          type: "Type:"
-          side: "Side:"
-          plan: "Plan:"
-          plan_date: "Plan date:"
-          notes: "Notes:"
     accesses:
       dashboards:
         page_actions:
-          needling_assessment: Ease of Needling (MAGIC)
           access_assessment: Access Assessment
-          access_procedure: Access Procedure
           access_plan: Access Plan
+          access_procedure: Access Procedure
           access_profile: Access Profile
+          needling_assessment: Ease of Needling (MAGIC)
+    hd:
+      accesses:
+        summary:
+          add_access_profile: Add an Access Profile
+          edit: Edit
+          notes: 'Notes:'
+          plan: 'Plan:'
+          plan_date: 'Plan date:'
+          side: 'Side:'
+          site: 'Site:'
+          title: Access
+          type: 'Type:'
+          view: View

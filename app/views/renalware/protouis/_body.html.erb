@@ -1,0 +1,25 @@
+<div class="bg-red-400">
+  <div>
+
+    <%= render "nav" %>
+    <%= render "patient_banner" %>
+    <%= render "sidebar_desktop" %>
+    <div class="md:pl-56 flex flex-col flex-1">
+      <main class=" bg-nhs-grey-pale pb-10 px-3 py-3 grid grid-cols-4 gap-3 grid-flow-row-dense">
+        <h1 class="text-lg font-semibold ml-2 col-span-4">Clinical Summary</h1>
+        <div class="col-span-3">
+          <%= render "content", index: 1 %>
+        </div>
+        <div class="col-span-4">
+          <%= render "content", index: 2 %>
+        </div>
+        <%= render "content" , index: 3 %>
+        <%= render "content" , index: 4 %>
+        <%= render "content", index: 5 %>
+        <%= render "content", index: 6 %>
+        <%= render "content", index: 7 %>
+        <%= render "todo" %>
+      </main>
+    </div>
+  </div>
+</div>

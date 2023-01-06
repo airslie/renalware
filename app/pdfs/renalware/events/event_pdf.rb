@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/events"
-
 # rubocop:disable Metrics/MethodLength
 module Renalware
   module Events

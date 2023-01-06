@@ -15,7 +15,7 @@ module Renalware
       end
 
       it "only allows certain processes to use it" do
-        stub_const("Renalware::UKRDC::TreatmentTimeline::"\
+        stub_const("Renalware::UKRDC::TreatmentTimeline::" \
                    "RemapModelTableNamesToTheirPreparedEquivalents::ALLOWED_PROCESSES", [])
         expect {
           described_class.new.call

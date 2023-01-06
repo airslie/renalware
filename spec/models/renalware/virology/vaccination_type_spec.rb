@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Virology::VaccinationType, type: :model do
+  describe Virology::VaccinationType do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:code) }
     it { is_expected.to have_db_index(:name).unique(true) }

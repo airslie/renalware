@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-
 module Renalware
   module PD
     class Regime < ApplicationRecord
@@ -25,12 +23,12 @@ module Renalware
       belongs_to :patient, class_name: "Renalware::Patient", touch: true
       belongs_to :system
 
-      has_many :bags, class_name: "Renalware::PD::RegimeBag"
+      has_many :bags, class_name: "Renalware::PD::RegimeBag", dependent: :restrict_with_exception
       has_many :bag_types, through: :bags
       has_one :termination,
               class_name: "RegimeTermination",
-              dependent: :delete,
-              inverse_of: :regime
+              inverse_of: :regime,
+              dependent: :restrict_with_exception
 
       accepts_nested_attributes_for :bags, allow_destroy: true
 

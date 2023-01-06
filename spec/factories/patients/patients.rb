@@ -42,6 +42,7 @@ FactoryBot.define do
     sex { "M" }
     died_on { nil }
     first_cause_id { nil }
+    hospital_centre
 
     # ensures addressable_type and addressable_id work is assigned, using
     # FactoryBot's simple assoc method does not work

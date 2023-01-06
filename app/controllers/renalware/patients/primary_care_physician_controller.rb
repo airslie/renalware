@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
-
 # Note this singular resource is for updating the patient.primary_care_physician.
 # The plural resource in the same folder is for managing primary_care_physicians.
 module Renalware
@@ -99,7 +97,7 @@ module Renalware
           .where(practice_id: practice_id)
           .where("#{PrimaryCarePhysician.table_name}.deleted_at is NULL")
           .order(
-            "#{PracticeMembership.table_name}.left_on desc,"\
+            "#{PracticeMembership.table_name}.left_on desc," \
             "#{PrimaryCarePhysician.table_name}.name asc"
           )
       end

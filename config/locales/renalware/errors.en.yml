@@ -3,16 +3,15 @@ en:
   renalware:
     system:
       errors:
-        not_found:
-          page_title: Page not found
-          heading: Sorry, we couldn't find what you were looking for
-          subheading: More text here
-          support_info: Support information here...
         internal_server_error:
-          # You can test the content on this page by navigating to
-          # /the generate_test_internal_server_error
-          page_title: Server error
           heading: It looks like something went wrong!
-          subheading: >
-            Try again in a few minutes. If it still doesn't work, please let us know.
+          page_title: Server error
+          subheading: 'Try again in a few minutes. If it still doesn''t work, please let us know.
+
+            '
+          support_info: Support information here...
+        not_found:
+          heading: Sorry, we couldn't find what you were looking for
+          page_title: Page not found
+          subheading: More text here
           support_info: Support information here...

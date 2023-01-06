@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Accesses
-  describe Patient, type: :model do
+  describe Patient do
     it :aggregate_failures do
       is_expected.to have_many(:profiles)
       is_expected.to have_many(:plans)

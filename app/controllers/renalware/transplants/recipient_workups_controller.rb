@@ -1,40 +1,42 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants/base_controller"
-
 module Renalware
   module Transplants
     class RecipientWorkupsController < BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
 
       def show
-        workup = RecipientWorkup.for_patient(patient).first_or_initialize
+        workup = RecipientWorkup.for_patient(transplants_patient).first_or_initialize
+        authorize workup
 
         if workup.new_record?
-          redirect_to edit_patient_transplants_recipient_workup_path(patient)
+          redirect_to edit_patient_transplants_recipient_workup_path(transplants_patient)
         else
-          render locals: { patient: patient, workup: workup }
+          render locals: { patient: transplants_patient, workup: workup }
         end
       end
 
       def edit
-        workup = RecipientWorkup.for_patient(patient).first_or_initialize
+        workup = RecipientWorkup.for_patient(transplants_patient).first_or_initialize
+        authorize workup
         workup = RecipientWorkupBuilder.new(
           workup: workup,
           default_consenter_name: current_user.to_s
         ).build
-        render locals: { patient: patient, workup: workup }
+        render locals: { patient: transplants_patient, workup: workup }
       end
 
       def update
-        workup = RecipientWorkup.for_patient(patient).first_or_initialize
+        workup = RecipientWorkup.for_patient(transplants_patient).first_or_initialize
+        authorize workup
 
         if workup.update workup_params
-          redirect_to patient_transplants_recipient_workup_path(patient),
+          redirect_to patient_transplants_recipient_workup_path(transplants_patient),
                       notice: success_msg_for("recipient work up")
         else
           flash.now[:error] = failed_msg_for("recipient work up")
-          render :edit, locals: { patient: patient, workup: workup }
+          render :edit, locals: { patient: transplants_patient, workup: workup }
         end
       end
 

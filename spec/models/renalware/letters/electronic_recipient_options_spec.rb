@@ -81,7 +81,7 @@ module Renalware
           end
         end
 
-        context "when a user has not been a previous e-cc but for this patient, but has been a "\
+        context "when a user has not been a previous e-cc but for this patient, but has been a " \
                 "CC on a letter to another patient by the same author" do
           before do
             letter = create_letter(to: :patient, patient: another_patient, by: author)

@@ -4,10 +4,13 @@ require "collection_presenter"
 
 module Renalware
   module Accesses
-    class DashboardsController < Accesses::BaseController
+    class DashboardsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def show
-        authorize patient
-        render locals: { dashboard: DashboardPresenter.new(patient) }
+        authorize accesses_patient
+        render locals: { dashboard: DashboardPresenter.new(accesses_patient) }
       end
     end
   end

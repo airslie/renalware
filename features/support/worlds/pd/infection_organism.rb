@@ -39,17 +39,19 @@ module World
         within "#new_pd_infection_organism" do
           select(organism_name, from: "Organism")
           click_on t("btn.save")
-          wait_for_ajax
         end
+
+        # wait for the save to complete, and the link to
+        # "Add Infection Organism" to come back again.
+        expect(page).to have_link "Add Infection Organism"
       end
 
-      # This is a flakey test!
       def revise_organism_for(infectable:, sensitivity:, resistance:)
         within "#infection-organisms" do
-          click_on t("btn.edit")
-          sleep 1
-          wait_for_ajax
-          expect(page).to have_css("#infection-organisms form")
+          click_link "Edit"
+
+          expect(page).to have_field("Sensitivity")
+
           fill_in "Sensitivity", with: sensitivity
           fill_in "Resistance", with: resistance
 

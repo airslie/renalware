@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module HD
     module SessionForms
-      describe BatchItem, type: :model do
+      describe BatchItem do
         it { is_expected.to belong_to :batch }
 
         describe "#status" do

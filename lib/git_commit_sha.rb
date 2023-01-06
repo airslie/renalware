@@ -18,7 +18,7 @@ class GitCommitSha
   end
 
   def heroku_sha
-    ENV["SOURCE_VERSION"]
+    ENV.fetch("SOURCE_VERSION", nil)
   end
 
   def capistrano_sha

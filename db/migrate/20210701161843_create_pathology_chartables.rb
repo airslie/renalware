@@ -49,7 +49,7 @@ class CreatePathologyChartables < ActiveRecord::Migration[5.2]
           null: false,
           index: { name: "idx_path_cst_obx" }
         )
-        t.enum :axis, enum_name: :pathology_chart_axis, null: false, default: "y1"
+        t.enum :axis, enum_type: :pathology_chart_axis, null: false, default: "y1"
         t.string(
           :colour,
           comment: "Usually null, but can override the colour in the chartable row here"

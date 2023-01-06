@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     class ObservationDescription < ApplicationRecord
@@ -20,7 +18,7 @@ module Renalware
 
       scope :in_display_order, lambda {
         where("display_group is not null and display_order is not null")
-        .order([:display_group, :display_order])
+          .order([:display_group, :display_order])
       }
 
       enum rr_type: { rr_type_simple: 0, rr_type_interpretation: 1 }

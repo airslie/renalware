@@ -7,7 +7,7 @@ en:
     errors:
       models:
         renalware/hd/scheduling/diary_slot:
-          patient_id:
-            taken: has already been assigned to a station in this day and period
           diurnal_period_code_id:
             taken: There is already a patient in this slot
+          patient_id:
+            taken: has already been assigned to a station in this day and period

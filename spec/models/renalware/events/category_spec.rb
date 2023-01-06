@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Events
-  describe Category, type: :model do
+  describe Category do
     it_behaves_like "a Paranoid model"
     it { is_expected.to have_many(:types) }
 

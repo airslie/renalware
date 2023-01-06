@@ -4,9 +4,9 @@ en:
     attributes:
       renalware/accesses/profile:
         formed_on: Formed On
+        notes: Notes
+        side: Access Side
+        site: Access Site
         started_on: Start Date
         terminated_on: End Date
         type: Access Type
-        side: Access Side
-        site: Access Site
-        notes: Notes

@@ -4,8 +4,14 @@ FactoryBot.define do
   factory :letter, class: "Renalware::Letters::Letter" do
     accountable
 
+    # We shouldn't have to do this but for some reason in RSpec tests if the second
+    # test in a suite creates a letter it can end up with type of nil - something i
+    # n Rails is not setting it. Hence this unpleasant hack:
+    type { instance.class.sti_name }
+
     created_at { Time.zone.today }
     description { "This is a custom description" }
+
     body { "I am pleased to report a marked improvement in her condition." }
 
     association :letterhead, factory: [:letter_letterhead]

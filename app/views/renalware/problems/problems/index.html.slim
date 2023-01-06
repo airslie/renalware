@@ -24,3 +24,5 @@
     header
       h2 Archived
     = render "renalware/problems/problems/archived_table", problems: archived_problems
+
+  = render_if_exists "bottom", local_assigns

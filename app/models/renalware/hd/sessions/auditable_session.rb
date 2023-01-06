@@ -7,7 +7,6 @@
 #  audtiable_session = AuditableSession.new(session)
 #  audtiable_session.weight_loss => 0.91
 #
-require_dependency "renalware/hd"
 
 module Renalware
   module HD

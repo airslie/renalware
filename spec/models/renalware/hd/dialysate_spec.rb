@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe Dialysate, type: :model do
+    describe Dialysate do
       it :aggregate_failures do
         is_expected.to validate_presence_of(:name)
         is_expected.to validate_presence_of(:sodium_content)

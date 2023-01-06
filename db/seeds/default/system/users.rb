@@ -6,6 +6,7 @@ module Renalware
       user.username = Renalware::SystemUser.username
       user.password = "P!#{SecureRandom.hex(20)}"
       user.email = "systemuser@renalware.net"
+      user.roles = [Renalware::Role.find_by!(name: :super_admin)]
       user.approved = true
       user.signature = "System User"
     end

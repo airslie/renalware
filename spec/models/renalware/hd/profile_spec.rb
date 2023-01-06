@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe Profile, type: :model do
+    describe Profile do
       it_behaves_like "an Accountable model"
       it_behaves_like "a Supersedable model"
       it :aggregate_failures do

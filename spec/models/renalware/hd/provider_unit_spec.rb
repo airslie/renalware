@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe ProviderUnit, type: :model do
+    describe ProviderUnit do
       it :aggregate_failures do
         is_expected.to belong_to(:hospital_unit)
         is_expected.to belong_to(:hd_provider)

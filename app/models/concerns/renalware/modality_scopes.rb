@@ -11,8 +11,9 @@ module Renalware
           modality_modalities: {
             state: "current",
             ended_on: nil
-          })
-      .includes(:modality_description)
+          }
+        )
+        .includes(:modality_description)
     end
 
     def with_current_modality_of_class(klass)
@@ -24,8 +25,9 @@ module Renalware
           modality_modalities: {
             state: "current",
             ended_on: nil
-          })
-      .includes(:modality_description)
+          }
+        )
+        .includes(:modality_description)
     end
   end
 end

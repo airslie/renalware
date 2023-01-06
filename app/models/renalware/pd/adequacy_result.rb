@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-
 module Renalware
   module PD
     # Important to understand is that urine measurements related to renal calculations and
@@ -46,10 +44,11 @@ module Renalware
       # urine-missing/dialysate-missing boolean is set. These indicate that the patient's urine
       # or dialysate samples where missing so the renal calculations (relating to urine) or the
       # peritioneal calculations (relating to dialysate) could not happen.
+      # Note we allow urine_24_vol to be 0 as this indicates anuric.
       def update_completed
         self.complete =
           all_calculations_present? ||
-          urine_missing_but_peritoneal_calculation_present? ||
+          urine_missing_or_zero_but_peritoneal_calculation_present? ||
           dialysate_missing_but_renal_calculation_present?
       end
 
@@ -64,8 +63,9 @@ module Renalware
         ].all?(&:present?)
       end
 
-      def urine_missing_but_peritoneal_calculation_present?
-        urine_24_missing? && [pertitoneal_creatinine_clearance, pertitoneal_ktv].all?(&:present?)
+      def urine_missing_or_zero_but_peritoneal_calculation_present?
+        (urine_24_missing? || urine_24_vol&.zero?) &&
+          [pertitoneal_creatinine_clearance, pertitoneal_ktv].all?(&:present?)
       end
 
       def dialysate_missing_but_renal_calculation_present?

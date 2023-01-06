@@ -3,17 +3,17 @@ en:
   activerecord:
     attributes:
       renalware/admissions/consult:
-        decided_on: Decision date
-        transferred_on: Transfer date
-        started_on: Consult date
-        referred_on: Referal date
-        hospital_unit: Unit
-        hospital_ward: Ward
-        e_alert: E-Alert
         consult_type: Specialty notes
         contact_number: Bleep/Ext
+        decided_on: Decision date
+        e_alert: E-Alert
+        hospital_unit: Unit
+        hospital_ward: Ward
         other_site_or_ward: Other site or ward
+        referred_on: Referal date
         rrt: RRT?
+        started_on: Consult date
+        transferred_on: Transfer date
     errors:
       models:
         renalware/admissions/consult:
@@ -21,21 +21,21 @@ en:
             other_site_or_ward:
               blank: Please enter a location, or choose a Site or Ward above
       renalware/admissions/consult:
-        other_site_or_ward:
+        other_site_or_ward: Other site or ward
   enumerize:
     renalware/admissions/consult:
-      transfer_priority:
-        unknown: Unknown (default)
-        necessary: Necessary
-        desirable: Desirable
-        potential: Potential
-        unnecessary: Unnecessary
       aki_risk:
-        "yes": "Yes"
-        "no": "No"
+        'no': 'No'
         unknown: Unknown
+        'yes': 'Yes'
+      transfer_priority:
+        desirable: Desirable
+        necessary: Necessary
+        potential: Potential
+        unknown: Unknown (default)
+        unnecessary: Unnecessary
   renalware:
     admissions:
       consults:
         table:
-          delete_consult_warning_msg: "Mark this consult as done and remove it from the list?"
+          delete_consult_warning_msg: Mark this consult as done and remove it from the list?

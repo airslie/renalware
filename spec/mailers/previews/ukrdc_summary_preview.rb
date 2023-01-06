@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/reporting"
-
 module Renalware
   module UKRDC
     # Preview all emails at http://localhost:3000/rails/mailers

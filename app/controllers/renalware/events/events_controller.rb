@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/ClassLength
-require_dependency "renalware/events"
 
 module Renalware
   module Events
     class EventsController < BaseController
+      include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::Pageable
       include Renalware::Concerns::PdfRenderable
 
@@ -67,7 +67,8 @@ module Renalware
 
       def destroy
         load_and_authorize_event_for_edit_or_update.destroy!
-        redirect_to patient_events_path
+        flash[:notice] = "Event deleted"
+        redirect_to return_url
       end
 
       protected

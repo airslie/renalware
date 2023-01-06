@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Admissions::Request, type: :model do
+describe Renalware::Admissions::Request do
   it_behaves_like "a Paranoid model"
   it_behaves_like "an Accountable model"
   it :aggregate_failures do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-
 module Renalware
   module HD
     # Backed by a Postgres view which defines all the possible permutations of

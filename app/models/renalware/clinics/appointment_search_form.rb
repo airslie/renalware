@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinics"
-
+# rubocop:disable Rails/AttributeDefaultBlockValue
 module Renalware
   module Clinics
     class AppointmentSearchForm
@@ -36,3 +35,4 @@ module Renalware
     end
   end
 end
+# rubocop:enable Rails/AttributeDefaultBlockValue

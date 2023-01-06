@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Messaging
-  describe Message, type: :model do
+  describe Message do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:subject)
       is_expected.to validate_presence_of(:body)

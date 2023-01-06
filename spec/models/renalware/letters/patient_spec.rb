@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_dependency "models/renalware/concerns/personable"
 
 module Renalware
   module Letters
-    describe Patient, type: :model do
+    describe Patient do
       include LettersSpecHelper
 
       subject(:patient) { build(:letter_patient) }

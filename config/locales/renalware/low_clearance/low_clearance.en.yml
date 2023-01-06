@@ -2,10 +2,6 @@
 en:
   renalware:
     low_clearance:
-      profiles:
-        edit:
-          akcc_summary:
-            title: AKCC Summary
       mdm:
         low_clearance_profile:
           title: AKCC Profile
@@ -15,9 +11,13 @@ en:
         tabs:
           tab:
             all: All
-            urea: Urea > 30
-            hgb_low: HGB < 100
             hgb_high: HGB > 130
+            hgb_low: HGB < 100
             on_worryboard: On Worryboard
             supportive_care: Supportive Care
             tx_candidates: Tx Candidates
+            urea: Urea > 30
+      profiles:
+        edit:
+          akcc_summary:
+            title: AKCC Summary

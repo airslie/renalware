@@ -1,36 +1,36 @@
 ---
 en:
-  renalware:
-    pd:
-      training_sessions:
-        new:
-          title: New PD Training Session
-        edit:
-          title: Edit
-        show:
-          title: PD Training Session
-        list:
-          title: PD Training Sessions
-          date_time: Date recorded
-          started_on: Starting Date
-          trainer: Trainer
-          training_site: Site
-          training_type: Type
-          training_duration: Duration
-          outcome: Outcome
   activemodel:
     attributes:
       renalware/pd/training_session/document:
+        outcome: Outcome
         started_on: Starting Date
         trainer: Trainer
+        training_comments: Training Comments
+        training_duration: Duration (days)
         training_site: Training Site
         training_type: Training Type
-        training_duration: Duration (days)
-        outcome: Outcome
-        training_comments: Training Comments
   enumerize:
     renalware/pd/training_session/document:
       outcome:
-        successful: Successful
         limited_success: Limited Success
+        successful: Successful
         unsuccessful: Unsuccessful
+  renalware:
+    pd:
+      training_sessions:
+        edit:
+          title: Edit
+        list:
+          date_time: Date recorded
+          outcome: Outcome
+          started_on: Starting Date
+          title: PD Training Sessions
+          trainer: Trainer
+          training_duration: Duration
+          training_site: Site
+          training_type: Type
+        new:
+          title: New PD Training Session
+        show:
+          title: PD Training Session

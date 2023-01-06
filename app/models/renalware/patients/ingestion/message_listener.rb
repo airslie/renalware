@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
-
 #
 # When subscribed to HL7 `message_arrived` messages, gets notified of incoming HL7 messages
 #

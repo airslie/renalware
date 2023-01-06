@@ -1,64 +1,64 @@
 ---
 en:
-  renalware:
-    pd:
-      assessments:
-        new:
-          title: New PD Assessment
-        edit:
-          title: Edit
-        show:
-          title: PD Assessment
-        list:
-          title: PD Assessments
-          notes: Notes
-          date_time: Date recorded
-          assessed_on: Assessment Date
-          assessor: Assessor
-          had_home_visit: Home visit?
-          home_visit_on: Home Visit Date
   activemodel:
     attributes:
       renalware/pd/assessment/document:
+        abdo_assessor: Abdo Assessor
+        access_clinic_on: Access Clinic Date
+        access_clinic_referral: Access Clinic Referral?
+        added_comments: Added Comments
         assessed_on: Assessment Date
         assessor: Assessor
-        had_home_visit: Had Home Visit?
-        home_visit_on: Home Visit Date
-        housing_type: Housing Type
-        occupant_notes: Occupant Notes
-        exchange_area: Exchange Area
-        handwashing: Handwashing
-        fluid_storage: Fluid Storage
         bag_warming: Bag Warming
-        delivery_interval: Delivery Interval
-        needs_rehousing: Needs Rehousing?
-        rehousing_notes: Rehousing Notes
-        social_worker: Social Worker?
-        seen_video: Seen Video?
-        can_open_bag: Can Open Bag?
-        can_lift_bag: Can Lift Bag?
-        eyesight: Eyesight
-        hearing: Hearing
-        dexterity: Dexterity
-        motivation: Motivation
-        language: Language
-        other_notes: Other Notes
-        suitable_for_pd: Suitable for PD?
-        system_choice: System Choice?
-        insertion_discussed: Insertion Discussed?
-        method_chosen: Method Chosen?
-        access_clinic_referral: Access Clinic Referral?
-        access_clinic_on: Access Clinic Date
-        abdo_assessor: Abdo Assessor
         bowel_disease: Bowel Disease?
         bowel_disease_notes: Bowel Disease Notes
-        added_comments: Added Comments
+        can_lift_bag: Can Lift Bag?
+        can_open_bag: Can Open Bag?
+        delivery_interval: Delivery Interval
+        dexterity: Dexterity
+        exchange_area: Exchange Area
+        eyesight: Eyesight
+        fluid_storage: Fluid Storage
+        had_home_visit: Had Home Visit?
+        handwashing: Handwashing
+        hearing: Hearing
+        home_visit_on: Home Visit Date
+        housing_type: Housing Type
+        insertion_discussed: Insertion Discussed?
+        language: Language
+        method_chosen: Method Chosen?
+        motivation: Motivation
+        needs_rehousing: Needs Rehousing?
+        occupant_notes: Occupant Notes
+        other_notes: Other Notes
+        rehousing_notes: Rehousing Notes
+        seen_video: Seen Video?
+        social_worker: Social Worker?
+        suitable_for_pd: Suitable for PD?
+        system_choice: System Choice?
   enumerize:
     renalware/pd/assessment/document:
+      method_chosen:
+        iot_ga: IOT GA
+        perc_la: PERC LA
       system_choice:
         homechoice: Homechoice
         solo: Solo
         staysafe: Staysafe
-      method_chosen:
-        perc_la: PERC LA
-        iot_ga: IOT GA
+  renalware:
+    pd:
+      assessments:
+        edit:
+          title: Edit
+        list:
+          assessed_on: Assessment Date
+          assessor: Assessor
+          date_time: Date recorded
+          had_home_visit: Home visit?
+          home_visit_on: Home Visit Date
+          notes: Notes
+          title: PD Assessments
+        new:
+          title: New PD Assessment
+        show:
+          title: PD Assessment

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/ukrdc"
-
 module Renalware
   module UKRDC
     # Represents a Renal Reg modality QBL or Text code and description

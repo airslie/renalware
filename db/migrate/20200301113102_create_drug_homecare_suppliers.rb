@@ -56,7 +56,7 @@ class CreateDrugHomecareSuppliers < ActiveRecord::Migration[5.2]
         t.enum(
           :prescription_duration_unit,
           null: false,
-          enum_name: :duration,
+          enum_type: :duration,
           comment: "E.g. 'week' or 'month'"
         )
         t.timestamps null: false

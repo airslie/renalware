@@ -1,40 +1,40 @@
 ---
 en:
   renalware:
-    mdm_patients:
-      patient:
-        view: "MDM"
-      table:
-        name: Name
-        nhs_no: NHS No.
-        hosp_no: Hosp No.
-        sex: Sex
-        age: Age
-        dob: Date of Birth
-        modality: Modality
-        esrf: ESRF
-        hgb: HGB
-        hgb_date: HGB Date
-        ure: URE
-        ure_date: URE Date
-        cre: CRE
-        cre_date: CRE Date
-        egfr: EGFR
-        registration_status: Tx Status
     mdm:
+      letters:
+        title: Letters
       pathology:
         title: Recent Pathology
       prescriptions:
-        title: Prescriptions
         table:
+          administer_on_hd: Give on HD
+          dose: Dose
           drug_name: Drug
           drug_type: Type
-          dose: Dose
           frequency: Freq
-          route: Route
           provider: Provider
-          administer_on_hd: Give on HD
-          terminated_on: Term on
+          route: Route
           started_on: Started on
-      letters:
-        title: Letters
+          terminated_on: Term on
+        title: Prescriptions
+    mdm_patients:
+      patient:
+        view: MDM
+      table:
+        age: Age
+        cre: CRE
+        cre_date: CRE Date
+        dob: Date of Birth
+        egfr: EGFR
+        esrf: ESRF
+        hgb: HGB
+        hgb_date: HGB Date
+        hosp_no: Hosp No.
+        modality: Modality
+        name: Name
+        nhs_no: NHS No.
+        registration_status: Tx Status
+        sex: Sex
+        ure: URE
+        ure_date: URE Date

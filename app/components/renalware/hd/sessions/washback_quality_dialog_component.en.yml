@@ -4,8 +4,8 @@ en:
     hd:
       sessions:
         washback_quality_dialog_component:
-          title: HD washback quality - Tubing / Dialyser clotting scale
           table:
+            description: Description
             grade: Grade
             name: Name
-            description: Description
+          title: HD washback quality - Tubing / Dialyser clotting scale

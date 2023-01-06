@@ -12,7 +12,8 @@ module Renalware
       let(:dob) { "2015-04-01" }
       let(:observation_datetime) { "200911111841" }
       let(:patient) do
-        create(:pathology_patient, local_patient_id: local_patient_id) do |pat|
+        create(:pathology_patient, local_patient_id: local_patient_id,
+                                   born_on: Date.today - 34.years) do |pat|
           create(
             :modality,
             started_on: Date.parse(dob),
@@ -139,7 +140,7 @@ module Renalware
                   ]
                 )
 
-                travel_to Time.zone.now do
+                freeze_time do
                   allow(KFRE::CalculateKFRE)
                     .to receive(:call)
                     .and_return(KFRE::Result.new(yr2: 10.1, yr5: 20.2))

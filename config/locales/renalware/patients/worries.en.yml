@@ -4,11 +4,11 @@ en:
     patients:
       worries:
         delete:
-          title: Remove worry
           confirm: Remove this patient from the worryboard?
+          title: Remove worry
         new:
-          title: Add to Worryboard
           confirm: Add this patient to the worryboard?
+          title: Add to Worryboard
       worry:
         create:
           success: "%{patient} added to worryboard"

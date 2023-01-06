@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe PD::System, type: :model do
+  describe PD::System do
     it_behaves_like "a Paranoid model"
 
     it :aggregate_failures do

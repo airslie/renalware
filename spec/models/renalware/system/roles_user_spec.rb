@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe RolesUser, type: :model do
+  describe RolesUser do
     it :aggregate_failures do
       is_expected.to belong_to :user
       is_expected.to belong_to :role

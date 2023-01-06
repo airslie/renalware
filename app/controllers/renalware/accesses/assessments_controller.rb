@@ -2,26 +2,29 @@
 
 module Renalware
   module Accesses
-    class AssessmentsController < Accesses::BaseController
-      before_action :load_patient
+    class AssessmentsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
 
       def show
         render locals: {
-          patient: patient,
-          assessment: AssessmentPresenter.new(find_assessement)
+          patient: accesses_patient,
+          assessment: AssessmentPresenter.new(find__and_authorize_assessement)
         }
       end
 
       def new
-        assessment = AssessmentFactory.new(patient: patient).build
+        assessment = AssessmentFactory.new(patient: accesses_patient).build
+        authorize assessment
         render_new(assessment)
       end
 
       def create
-        assessment = patient.assessments.new(assessment_params)
+        assessment = accesses_patient.assessments.new(assessment_params)
+        authorize assessment
 
         if assessment.save_by(current_user)
-          redirect_to patient_accesses_dashboard_path(patient),
+          redirect_to patient_accesses_dashboard_path(accesses_patient),
                       notice: success_msg_for("Access assessment")
         else
           flash.now[:error] = failed_msg_for("Access assessment")
@@ -30,14 +33,14 @@ module Renalware
       end
 
       def edit
-        render_edit(find_assessement)
+        render_edit(find__and_authorize_assessement)
       end
 
       def update
-        assessment = find_assessement
+        assessment = find__and_authorize_assessement
 
         if assessment.update_by(current_user, assessment_params)
-          redirect_to patient_accesses_dashboard_path(patient),
+          redirect_to patient_accesses_dashboard_path(accesses_patient),
                       notice: success_msg_for("Access assessment")
         else
           flash.now[:error] = failed_msg_for("Access assessment")
@@ -47,16 +50,16 @@ module Renalware
 
       protected
 
-      def find_assessement
-        patient.assessments.find(params[:id])
+      def find__and_authorize_assessement
+        accesses_patient.assessments.find(params[:id]).tap { |ass| authorize ass }
       end
 
       def render_new(assessment)
-        render :new, locals: { patient: patient, assessment: assessment }
+        render :new, locals: { patient: accesses_patient, assessment: assessment }
       end
 
       def render_edit(assessment)
-        render :edit, locals: { patient: patient, assessment: assessment }
+        render :edit, locals: { patient: accesses_patient, assessment: assessment }
       end
 
       def assessment_params

@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
-
 module Renalware
   module HD
     class CurrentProfileController < BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientVisibility
+      include Renalware::Concerns::PatientCasting
       before_action :load_profile
 
       def show
@@ -18,7 +17,7 @@ module Renalware
 
       def update
         if update_profile
-          redirect_to patient_hd_dashboard_path(patient),
+          redirect_to patient_hd_dashboard_path(hd_patient),
                       notice: success_msg_for("HD profile")
         else
           flash.now[:error] = failed_msg_for("HD profile")
@@ -31,7 +30,7 @@ module Renalware
       attr_reader :profile
 
       def locals
-        { profile: profile_presenter, patient: patient }
+        { profile: profile_presenter, patient: hd_patient }
       end
 
       def update_profile
@@ -45,14 +44,14 @@ module Renalware
       end
 
       def update_named_nurse_on_patient
-        patient.update!(
+        hd_patient.update!(
           named_nurse_id: profile_params[:named_nurse_id],
           by: current_user
         )
       end
 
       def preference_set
-        PreferenceSet.for_patient(patient).first_or_initialize
+        PreferenceSet.for_patient(hd_patient).first_or_initialize
       end
 
       def profile_presenter
@@ -62,9 +61,10 @@ module Renalware
       def load_profile
         @profile = begin
           Profile
-            .for_patient(patient)
+            .for_patient(hd_patient)
             .first_or_initialize
-            .tap { |profile| profile.named_nurse_id = patient.named_nurse_id }
+            .tap { |profile| profile.named_nurse_id = hd_patient.named_nurse_id }
+            .tap { |profile| authorize(profile) }
         end
       end
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinical"
 require "document/base"
 
 module Renalware
@@ -24,6 +23,12 @@ module Renalware
       validates :weight, presence: true, "renalware/patients/weight" => true
       validates :assessed_on, presence: true
       validates :assessed_on, timeliness: { type: :date, allow_blank: false }
+      validates :minimum_weight,
+                numericality: { less_than_or_equal_to: :maximum_weight },
+                unless: -> { maximum_weight.blank? }
+      validates :maximum_weight,
+                numericality: { less_than_or_equal_to: :minimum_weigh_plus_max_range },
+                unless: -> { minimum_weigh_plus_max_range.blank? }
 
       def self.policy_class
         BasePolicy
@@ -31,6 +36,12 @@ module Renalware
 
       def self.latest
         ordered.first
+      end
+
+      def minimum_weigh_plus_max_range
+        return unless minimum_weight
+
+        minimum_weight + 90.0
       end
     end
   end

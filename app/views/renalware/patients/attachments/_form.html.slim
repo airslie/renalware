@@ -29,13 +29,13 @@ ruby:
                 disabled: !attachment.new_record?,
                 data: { action: "change->patient-attachments#toggleFileInputs" }}
 
-    span(data-target="patient-attachments.externalLocation")
+    span(data-patient-attachments-target="externalLocation")
       = f.input(:external_location,
                 wrapper: :horizontal_medium,
                 placeholder: "The path to the file e.g. \\\\Server\\Folder\\Filename",
                 input_html: { disabled: !attachment.new_record? })
 
-    span(data-target="patient-attachments.fileBrowser")
+    span(data-patient-attachments-target="fileBrowser")
       - if attachment.new_record?
         = f.input(:file,
                   as: :file,

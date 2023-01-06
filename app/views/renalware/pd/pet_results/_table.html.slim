@@ -12,6 +12,7 @@ table.toggleable(data-controller="toggle" )
       th.col-width-tiny Type
       th.bg-gray-100 D_Pcr
       th.bg-gray-100 netUF
+      th T4
       th Volume in
       th Drain time
       th Infusion time
@@ -50,6 +51,7 @@ table.toggleable(data-controller="toggle" )
           th= result.test_type&.text
           th.bg-gray-100= result.d_pcr
           th.bg-gray-100= result.net_uf
+          td= result.sample_4hr_time
           td= result.volume_in
           td= result.drain_time
           td= result.infusion_time

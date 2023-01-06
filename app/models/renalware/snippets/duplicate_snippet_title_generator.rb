@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/snippets"
-
 module Renalware
   module Snippets
     class DuplicateSnippetTitleGenerator
@@ -55,7 +53,7 @@ module Renalware
 
       def report_error
         raise InvalidSnippetTitleError,
-              "Tried #{MAX_ATTEMPTS} times to construct a new snippet title. Got to "\
+              "Tried #{MAX_ATTEMPTS} times to construct a new snippet title. Got to " \
               "'#{snippet.title}' but the title is still not unique."
       end
     end

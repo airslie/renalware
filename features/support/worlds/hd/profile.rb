@@ -39,7 +39,7 @@ module World
 
       # @section commands
       #
-      def create_hd_profile(user: nil, patient:, prescriber:)
+      def create_hd_profile(patient:, prescriber:, user: nil)
         patient = hd_patient(patient)
 
         Renalware::HD::Profile.create(

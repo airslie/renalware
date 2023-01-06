@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/address_presenter"
-
 module Renalware
   class AddressPresenter::Block < AddressPresenter
     def to_html

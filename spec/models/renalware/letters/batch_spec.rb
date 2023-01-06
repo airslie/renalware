@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe Batch, type: :model do
+    describe Batch do
       include LettersSpecHelper
       it_behaves_like "an Accountable model"
       it :aggregate_failures do

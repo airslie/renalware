@@ -21,7 +21,6 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
     end
   end
 
-  # rubocop:disable RSpec/MultipleExpectations
   context "when the patient has drugs to be given on HD" do
     it "there are dropdown buttons for each drug, linking to the correct location" do
       patient = create(:hd_patient)
@@ -42,17 +41,14 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
       expect(page).to have_content("Drug2")
       expect(page).not_to have_content("Drug3")
 
-      # Using the view_component built-in rendered_component method here
-      # to inspect the html; since we are looking for data attributes,
-      # its easier than digging around with page (capybara) or the return result
-      # fronm render_inline (nokogiri).
-      expect(rendered_component)
-        .to match(new_hd_prescription_administration_path(prescriptions[0]))
-      expect(rendered_component)
-        .to match(new_hd_prescription_administration_path(prescriptions[1]))
-      expect(rendered_component)
-        .not_to match(new_hd_prescription_administration_path(prescriptions[2]))
+      # Note that the links in the html seem to have an .html extension. Not atempting to
+      # fix that yet, so specifiying an html format here for now
+      expect(page).to have_link(href: new_hd_prescription_administration_path(prescriptions[0],
+                                                                              format: :html))
+      expect(page).to have_link(href: new_hd_prescription_administration_path(prescriptions[1],
+                                                                              format: :html))
+      expect(page).not_to have_link(href: new_hd_prescription_administration_path(prescriptions[2],
+                                                                                  format: :html))
     end
   end
-  # rubocop:enable RSpec/MultipleExpectations
 end

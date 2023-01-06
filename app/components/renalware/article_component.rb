@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 module Renalware
-  # Renders article markup with ttle and optional actions etc.
+  # Renders article markup with optional title and action links/buttons.
   # We use <article> extensively so this is a useful component that lets us
-  # build more and more useful components. Other components can use this component
-  # in their markup.
+  # style them consistently and reuse them.
   class ArticleComponent < ApplicationComponent
-    rattr_initialize [:title]
-    with_content_areas :title_link, :actions
+    rattr_initialize [classes!: nil]
+
+    renders_one :title # block returning a string or link_to(..)
+    renders_many :actions # blocks returning a link_to or button_to etc
   end
 end

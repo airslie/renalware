@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/accesses"
-
 module Renalware
   module Accesses
     class Profile < ApplicationRecord

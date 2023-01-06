@@ -29,6 +29,7 @@
     "debounce": "^1.2.1",
     "eslint": "^8.0",
     "eslint-plugin-import": "^2.7.0",
+    "flatpickr": "^4.6.13",
     "foundation-datepicker": "1.5.0",
     "highcharts": "10.1.0",
     "masonry-layout": "^4.2.2",

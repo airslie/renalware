@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/ClassLength
-require_dependency "renalware/clinics"
 
 module Renalware
   class MDMPresenter
@@ -19,34 +18,38 @@ module Renalware
       @view_context = view_context
     end
 
-    def pathology
-      @pathology ||= pathology_for_codes
+    def pathology_code_group_name
+      :default
     end
 
-    def pathology_for_codes(codes = nil, per_page: 25, page: 1)
-      Pathology::CreateObservationsGroupedByDateTable.new(
+    def pathology
+      Pathology::CreateObservationsGroupedByDateTable2.new(
         patient: patient,
-        observation_descriptions: pathology_descriptions_for_codes(codes),
-        page: page,
-        per_page: per_page
+        code_group_name: pathology_code_group_name,
+        page: 1,
+        per_page: 8
       ).call
     end
 
     def clinic_visits(limit: 6)
-      @clinic_visits ||= Clinics::ClinicVisit.for_patient(patient)
-                                             .includes(:clinic)
-                                             .with_created_by
-                                             .ordered
-                                             .limit(limit)
+      @clinic_visits ||= begin
+        visits_ = Clinics::ClinicVisit
+          .for_patient(patient)
+          .includes(:clinic)
+          .with_created_by
+          .ordered
+          .limit(limit)
+        CollectionPresenter.new(visits_, Renalware::Clinics::VisitPresenter)
+      end
     end
 
     def clinic_visits_having_measurements(limit: 3)
       @clinic_visits_having_measurements ||= begin
         Clinics::ClinicVisit
           .for_patient(patient)
-          .where("height is not null "\
-                 "or weight is not null "\
-                 "or systolic_bp is not null "\
+          .where("height is not null " \
+                 "or weight is not null " \
+                 "or systolic_bp is not null " \
                  "or diastolic_bp is not null")
           .ordered
           .limit(limit)
@@ -107,7 +110,12 @@ module Renalware
 
     # rubocop:disable Lint/UnusedMethodArgument
     def events_of_type(type: nil)
-      Events::Event.for_patient(patient).includes([:created_by, :event_type]).limit(6).ordered
+      events_ = Events::Event
+        .for_patient(patient)
+        .includes([:created_by, :patient, event_type: :category])
+        .limit(6)
+        .ordered
+      CollectionPresenter.new(events_, Renalware::Events::EventPresenter)
     end
     # rubocop:enable Lint/UnusedMethodArgument
     alias_method :events, :events_of_type
@@ -139,9 +147,7 @@ module Renalware
     end
 
     def current_transplant_status
-      @current_transplant_status ||= begin
-        Renalware::Transplants::Registration.for_patient(patient).first&.current_status
-      end
+      @current_transplant_status ||= Transplants.current_transplant_status_for_patient(patient)
     end
 
     def access
@@ -156,17 +162,6 @@ module Renalware
     end
 
     private
-
-    def pathology_descriptions_for_codes(codes)
-      if codes.nil?
-        Pathology::RelevantObservationDescription.all
-      else
-        codes = Array(codes)
-        descriptions = Pathology::ObservationDescription.for(Array(codes))
-        warn("No OBX(es) found for codes #{codes}") if descriptions.empty?
-        descriptions
-      end
-    end
 
     def pathology_patient
       Renalware::Pathology.cast_patient(patient)

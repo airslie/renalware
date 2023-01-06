@@ -238,8 +238,7 @@ module World
         drug_selector = options.fetch(:drug_selector, default_medication_drug_selector)
 
         click_link "Add Prescription"
-        sleep 1 # TODO: Remove this hack to get resolve intermittently failing test
-        expect(page).to have_selector("#new_medications_prescription", count: 1)
+        expect(page).to have_selector("#new_medications_prescription")
 
         within "#new_medications_prescription" do
           drug_selector.call(drug_name)

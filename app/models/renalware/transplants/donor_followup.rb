@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
 require "document/base"
 
 module Renalware
@@ -17,6 +16,10 @@ module Renalware
 
       validates :last_seen_on, timeliness: { type: :date, allow_blank: true }
       validates :dead_on, timeliness: { type: :date, allow_blank: true }
+
+      def self.policy_class
+        BasePolicy
+      end
     end
   end
 end

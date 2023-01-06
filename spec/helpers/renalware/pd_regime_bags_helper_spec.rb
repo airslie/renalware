@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe PDRegimeBagsHelper, type: :helper do
+  describe PDRegimeBagsHelper do
     let(:bag_type) { build_stubbed(:bag_type) }
     let(:invalid_pd_regime_bag) do
       build(

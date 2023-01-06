@@ -3,10 +3,11 @@
 require "rails_helper"
 
 module Renalware::Events
-  describe Event, type: :model do
+  describe Event do
     subject(:event) { described_class.new }
 
     it_behaves_like "an Accountable model"
+    it_behaves_like "a Paranoid model"
 
     it :aggregate_failures do
       is_expected.to validate_presence_of(:patient)
@@ -15,6 +16,7 @@ module Renalware::Events
       is_expected.to respond_to(:type)
       is_expected.to belong_to(:patient).touch(true)
       is_expected.to validate_timeliness_of(:date_time)
+      is_expected.to be_versioned
     end
 
     describe "#document jsonb" do

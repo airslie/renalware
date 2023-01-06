@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/surveys"
-
 module Renalware
   module PD
     class PETResultsComponent < ApplicationComponent
@@ -77,7 +75,7 @@ module Renalware
       private
 
       def scope
-        patient.pet_results.ordered
+        patient.pet_results.includes([:overnight_dextrose_concentration]).ordered
       end
     end
   end

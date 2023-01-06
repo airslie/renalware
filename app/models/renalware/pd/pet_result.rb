@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
 #
 # Captures data used for PET (Peritoneal Equilibration Test) and Adequacy.
 #

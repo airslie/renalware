@@ -14,7 +14,7 @@ module Renalware
           end
         end
 
-        context "when the ukrdc_prepare_tables function exists, letting a site prepare various "\
+        context "when the ukrdc_prepare_tables function exists, letting a site prepare various " \
                 "tables and save them as eg ukrdc_prepared_hd_profiles" do
           it "calls the SQL function" do
             # We can assert this by making a test SQL function raise an exception
@@ -33,7 +33,7 @@ module Renalware
 
           it "returns true" do
             connection.execute(
-              "create function renalware.ukrdc_prepare_tables() RETURNS void "\
+              "create function renalware.ukrdc_prepare_tables() RETURNS void " \
               "LANGUAGE plpgsql AS $$ BEGIN END; $$;"
             )
 

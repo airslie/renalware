@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::HD
-  describe Dialyser, type: :model do
+  describe Dialyser do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:group)
       is_expected.to validate_presence_of(:name)

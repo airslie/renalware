@@ -4,17 +4,32 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe Letter, type: :model do
+    describe Letter do
       it :aggregate_failures do
         is_expected.to validate_presence_of(:letterhead)
         is_expected.to validate_presence_of(:patient)
         is_expected.to validate_presence_of(:author)
         is_expected.to validate_presence_of(:main_recipient)
-        is_expected.to validate_presence_of(:description)
         is_expected.to belong_to(:patient).touch(true)
         is_expected.to have_many(:electronic_receipts).dependent(:destroy)
         is_expected.to respond_to(:pathology_timestamp)
         is_expected.to respond_to(:pathology_snapshot)
+      end
+
+      describe "validate_presence_of(topic)" do
+        context "when description hasn't been set" do
+          it do
+            is_expected.to validate_presence_of(:topic)
+          end
+        end
+
+        context "when description has been set" do
+          it "does not validate presence of topic" do
+            letter = described_class.new(description: "test")
+            letter.valid?
+            expect(letter.errors.include?(:topic)).to be false
+          end
+        end
       end
 
       describe "#include_pathology_in_letter_body?" do

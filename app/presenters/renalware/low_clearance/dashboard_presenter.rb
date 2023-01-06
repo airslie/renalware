@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/low_clearance"
-
 module Renalware
   module LowClearance
     class DashboardPresenter

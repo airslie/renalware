@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe BatchItem, type: :model do
+    describe BatchItem do
       it :aggregate_failures do
         is_expected.to belong_to :letter
         is_expected.to belong_to :batch

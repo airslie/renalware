@@ -3,6 +3,6 @@ en:
   activerecord:
     attributes:
       renalware/directory/person:
-        title: Title
-        given_name: Given Name
         family_name: Family Name
+        given_name: Given Name
+        title: Title

@@ -1,16 +1,5 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/transplants/donor_operation:
-        anaesthetist: Anaesthetist
-        donor_splenectomy_peri_or_post_operatively: Donor splenectomy peri or post operatively
-        kidney_side: Kidney Side
-        nephrectomy_type: Type of Nephrectomy on donor
-        nephrectomy_type_other: Nephrectomy Type (other)
-        notes: Notes
-        operating_surgeon: Operating Surgeon
-        performed_on: Operation Date
   activemodel:
     attributes:
       renalware/transplants/donor_operation_document/diagnosis:
@@ -25,24 +14,35 @@ en:
         donor_returned_to_previous_general_activity_level: Donor returned to previous levels of general activity
         nb_months_to_return_to_previous_general_activity_level: Time after donation when previous levels attained
         subsequent_operation_indicator: Requirement for re-operation
+  activerecord:
+    attributes:
+      renalware/transplants/donor_operation:
+        anaesthetist: Anaesthetist
+        donor_splenectomy_peri_or_post_operatively: Donor splenectomy peri or post operatively
+        kidney_side: Kidney Side
+        nephrectomy_type: Type of Nephrectomy on donor
+        nephrectomy_type_other: Nephrectomy Type (other)
+        notes: Notes
+        operating_surgeon: Operating Surgeon
+        performed_on: Operation Date
   enumerize:
     renalware/transplants/donor_operation:
-      operating_surgeon:
-        consultant: Consultant
-        fellow_senior_registrar: Fellow/Senior Registrar
-        other: Other
       anaesthetist:
         consultant: Consultant
         fellow_senior_registrar: Fellow/Senior Registrar
         other: Other
       nephrectomy_type:
-        open_transperitoneal: Open operation - transperitoneal
+        laparoscropic_extra: Laparoscopic operation - extraperitoneal
+        laparoscropic_intra: Laparoscopic operation - intraperitoneal
+        open_extraperitoneal: Open operation - anterior approach extraperitoneal
         open_loin_with_resection: Open operation - loin approach with rib resection
         open_loin_without_resection: Open operation - loin approach without rib resection
-        open_extraperitoneal: Open operation - anterior approach extraperitoneal
-        laparoscropic_intra: Laparoscopic operation - intraperitoneal
-        laparoscropic_extra: Laparoscopic operation - extraperitoneal
+        open_transperitoneal: Open operation - transperitoneal
         other: Other (please specify)
+      operating_surgeon:
+        consultant: Consultant
+        fellow_senior_registrar: Fellow/Senior Registrar
+        other: Other
   simple_form:
     hints:
       transplants_donor_operation:

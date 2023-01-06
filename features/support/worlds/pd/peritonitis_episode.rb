@@ -82,7 +82,7 @@ module World
           select2("Relapsing", css: "#peritonitis_episode_types")
           fill_in "Diagnosed on", with: diagnosed_on
           click_on t("btn.save")
-          wait_for_ajax
+          expect(page).to have_content "Peritonitis Episode Notes"
         end
       end
 

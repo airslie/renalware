@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/deaths"
-
 module Renalware
   module Modalities
     class ModalitiesController < BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientVisibility
 
       def new
         modality = Modality.new(patient: patient)
+        authorize modality
         render locals: { patient: patient, modality: modality }
       end
 
       def index
+        authorize Modality, :index?
         modalities = patient
                        .modalities
                        .includes([:description, :created_by])
@@ -21,6 +21,7 @@ module Renalware
       end
 
       def create
+        authorize Modality, :create?
         result = change_patient_modality
         if result.success?
           handle_valid_modality

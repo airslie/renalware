@@ -3,25 +3,21 @@ en:
   activerecord:
     attributes:
       renalware/letters/letter:
-        issued_on: Date
-        date: Date
-        letterhead: Letterhead
         author: Author
-        description: Description
-        salutation: Salutation
         body: Message
-        state: State
+        date: Date
+        description: Description
+        issued_on: Date
+        letterhead: Letterhead
         notes: Internal Notes
-  simple_form:
-    hints:
-      letters_letter:
-        notes: These notes will not appear on the letter
+        salutation: Salutation
+        state: State
   renalware:
     letters:
       letters:
         create_letter_button_dropdown:
-          draft_clinical_letter: Clinical Letter
           draft_clinic_visit_letter: Clinic Visit Letter
+          draft_clinical_letter: Clinical Letter
           simple_letter: Simple Letter
         new:
           clinical:
@@ -33,11 +29,10 @@ en:
           tab:
             all: All
             batch_printable: Batch Printable
-
-      letters_in_progress_component:
-        title: Letters in Progress
-        none: No letters in progress
-
       summary_part:
         btn:
           draft_letter: Draft Letter
+  simple_form:
+    hints:
+      letters_letter:
+        notes: These notes will not appear on the letter

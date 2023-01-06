@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module LowClearance
-    describe Profile, type: :model do
+    describe Profile do
       it_behaves_like "an Accountable model"
       it :aggregate_failures do
         is_expected.to validate_presence_of(:patient)

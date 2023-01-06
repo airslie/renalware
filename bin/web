@@ -1,3 +1,5 @@
 #!/bin/sh
 bundle exec rake app:yarn:install
-bundle exec ./spec/dummy/bin/rails server $@
+pushd spec/dummy
+bundle exec ./bin/rails server $@
+popd

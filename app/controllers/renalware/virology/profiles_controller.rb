@@ -1,21 +1,19 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/virology"
-
 module Renalware
   module Virology
-    class ProfilesController < Virology::BaseController
+    class ProfilesController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def edit
-        profile = find_profile
-        authorize profile
-        render_edit(profile: profile)
+        render_edit(profile: find_profile_and_authorize_profile)
       end
 
       def update
-        profile = find_profile
-        authorize profile
+        profile = find_profile_and_authorize_profile
         if update_profile(profile)
-          redirect_to patient_virology_dashboard_path(patient)
+          redirect_to patient_virology_dashboard_path(virology_patient)
         else
           render_edit(profile: profile)
         end
@@ -23,12 +21,13 @@ module Renalware
 
       private
 
-      def find_profile
-        patient.profile || patient.build_profile
+      def find_profile_and_authorize_profile
+        (virology_patient.profile || virology_patient.build_profile)
+          .tap { |profile| authorize profile }
       end
 
       def render_edit(profile:)
-        render :edit, locals: { patient: patient, profile: profile }
+        render :edit, locals: { patient: virology_patient, profile: profile }
       end
 
       def update_profile(profile)

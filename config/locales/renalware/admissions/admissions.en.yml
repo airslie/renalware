@@ -1,38 +1,37 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/admissions/admission:
-        admitted_on: Admitted Date
-        admission_type: Admission Type
-        consultant: Consultant
-        modality: Modality
-        reason_for_admission: Reason for Admission
-        notes: Notes
-        transferred_on: Transfer Date
-        transferred_to: Transfer Destination
-        discharged_on: Discharge Date
-        discharge_destination: Discharge Destination
-        destination_notes: Destination Notes
-        discharge_summary: Discharge Summary
-        summarised_on: Discharge Summary Date
-        summarised_by_id: Discharge Summary Author
-        hospital_unit_id: Hospital Site
-        hospital_ward_id: Hospital Ward
   activemodel:
     attributes:
       renalware/admissions/admission_search_form:
-        term: Hosp/NHS no. or name
         hospital_unit_id: Site
         hospital_ward_id: Ward
         status: Status
-
+        term: Hosp/NHS no. or name
+  activerecord:
+    attributes:
+      renalware/admissions/admission:
+        admission_type: Admission Type
+        admitted_on: Admitted Date
+        consultant: Consultant
+        destination_notes: Destination Notes
+        discharge_destination: Discharge Destination
+        discharge_summary: Discharge Summary
+        discharged_on: Discharge Date
+        hospital_unit_id: Hospital Site
+        hospital_ward_id: Hospital Ward
+        modality: Modality
+        notes: Notes
+        reason_for_admission: Reason for Admission
+        summarised_by_id: Discharge Summary Author
+        summarised_on: Discharge Summary Date
+        transferred_on: Transfer Date
+        transferred_to: Transfer Destination
   enumerize:
     renalware/admissions/admission:
       discharge_destination:
-        home: Home
-        other_ward: Other Ward
-        other_hosp: Other Hospital
-        itu: ITU
         death: Deceased
+        home: Home
+        itu: ITU
         other: Other (Specify in Notes)
+        other_hosp: Other Hospital
+        other_ward: Other Ward

@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_dependency "models/renalware/concerns/personable"
 
 module Renalware::Patients
-  describe PrimaryCarePhysician, type: :model do
+  describe PrimaryCarePhysician do
     subject(:primary_care_physician) { create(:primary_care_physician) }
 
     it :aggregate_failures do

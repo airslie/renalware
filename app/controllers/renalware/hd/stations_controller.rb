@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
 require "collection_presenter"
 
 module Renalware

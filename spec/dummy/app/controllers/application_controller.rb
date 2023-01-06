@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Renalware::Concerns::CacheBusting
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :reset_session
   helper Renalware::Engine.helpers
 
   # Disable until we suppler >1 locale

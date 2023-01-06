@@ -3,39 +3,39 @@ en:
   activerecord:
     attributes:
       renalware/transplants/donation:
-        state: State
-        relationship_with_recipient: Relationship With Recipient
-        relationship_with_recipient_other: Other Relationship (if required)
-        recipient: Recipient
         blood_group_compatibility: Blood Group Compatibility
         mismatch_grade: Mismatch Grade
-        paired_pooled_donation: Paired Pooled Donation
         notes: Notes
+        paired_pooled_donation: Paired Pooled Donation
+        recipient: Recipient
+        relationship_with_recipient: Relationship With Recipient
+        relationship_with_recipient_other: Other Relationship (if required)
+        state: State
   enumerize:
     renalware/transplants/donation:
-      relationship_with_recipient:
-        son_or_daughter: "Son or daughter"
-        mother_or_father: "Mother or father"
-        sibling_2_shared: "Sibling (2 shared haplotypes)"
-        sibling_1_shared: "Sibling (1 shared haplotype)"
-        sibling_0_shared: "Sibling (0 shared haplotypes)"
-        sibling:: "Sibling (genetic relationship unknown)"
-        monozygotic_twin: "Monozygotic (identical) twin"
-        dizygotic_twin: "Dizygotic (non-identical) twin"
-        other_living_related: "Other living related - please specify"
-        living_non_related_spouse: "Living non-related donor - spouse"
-        living_non_related_partner: "Living non-related donor - partner"
-        pooled_paired: "Pooled/paired donor"
-        altruistic_non_directed: "Altruistic non-directed donor"
-        other_living_non_related: "Other living non-related donor"
-      state:
-        volunteered: Volunteered
-        seen_in_clinic: Seen in Clinic
-        investigating: Investigations being done
-        handed_over: Handed over
-        unsuitable: Unsuitable
       paired_pooled_donation:
-        n_a: N/A
-        information_given: Information Given
         consented: Consented
+        information_given: Information Given
+        n_a: N/A
         to_enroll_in_next_matching_run: To enrol in next matching run
+      relationship_with_recipient:
+        altruistic_non_directed: Altruistic non-directed donor
+        dizygotic_twin: Dizygotic (non-identical) twin
+        living_non_related_partner: Living non-related donor - partner
+        living_non_related_spouse: Living non-related donor - spouse
+        monozygotic_twin: Monozygotic (identical) twin
+        mother_or_father: Mother or father
+        other_living_non_related: Other living non-related donor
+        other_living_related: Other living related - please specify
+        pooled_paired: Pooled/paired donor
+        'sibling:': Sibling (genetic relationship unknown)
+        sibling_0_shared: Sibling (0 shared haplotypes)
+        sibling_1_shared: Sibling (1 shared haplotype)
+        sibling_2_shared: Sibling (2 shared haplotypes)
+        son_or_daughter: Son or daughter
+      state:
+        handed_over: Handed over
+        investigating: Investigations being done
+        seen_in_clinic: Seen in Clinic
+        unsuitable: Unsuitable
+        volunteered: Volunteered

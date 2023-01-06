@@ -1,0 +1,16 @@
+= definition_list_for(clinic_visit.document, size: :large) do |list|
+  = list.definition(:visit_number)
+  = list.definition(:physical_activity){ |value| value&.text }
+
+
+= definition_list_for(clinic_visit.document.smoking, size: :large) do |list|
+  dt 
+    b Smoking 
+  dd
+  = list.definition(:history){ |value| value&.text }
+  = list.definition(:number)
+  = list.definition(:ecigarettes){ |value| value&.text }
+
+= definition_list_for(clinic_visit, size: :large) do |list|
+  = list.definition(:notes){ |value| simple_format(value) }
+  = list.definition(:admin_notes){ |value| simple_format(value) }

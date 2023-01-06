@@ -1,67 +1,67 @@
 ---
 en:
+  activemodel:
+    attributes:
+      renalware/events/investigation/document:
+        result1: Rejection
+        result2: IFTA
+  enumerize:
+    renalware/events/investigation/document:
+      type:
+        24_hr_urinary_stone_screen: 24 hr Urinary Stone Screen
+        blood_group: Blood Group
+        bowel_screening: Bowel Screening
+        cardiac_24_hour_abpm: Cardiac - 24 hour ABPM
+        cardiac_24_hour_ecg: Cardiac - 24 hr ECG
+        cardiac_coronary_angio: Cardiac - Coronary Angio
+        cardiac_cpet: Cardiac - CPET
+        cardiac_ecg: Cardiac - ECG
+        cardiac_echo: Cardiac - Echo
+        cardiac_exercise_ecg: Cardiac - Exercise ECG
+        cardiac_muga_scan: Cardiac - MUGA Scan
+        cardiac_myoview_scan: Cardiac - Myoview Scan
+        cardiac_periph_angio: Cardiac - Peripheral Angio
+        cardiac_stress_echo: Cardiac - Stress Echo
+        cervical_smear: Cervical Smear
+        colonoscopy: Colonoscopy
+        cystoscopy: Cystoscopy
+        dental_check: Dental Check
+        gastroscopy: Gastroscopy
+        imaging_bone Scan: Imaging - Bone Scan
+        imaging_ct_abdomen: Imaging - CT Abdomen
+        imaging_ct_chest: Imaging - CT Chest
+        imaging_ct_head: Imaging - CT Head
+        imaging_ct_kub: Imaging - CT KUB
+        imaging_ct_pulm_angio: Imaging - CT Pulm Angio
+        imaging_ct_renal_angio: Imaging - CT Renal Angio
+        imaging_ct_unspec: Imaging - CT (Unspec)
+        imaging_cxr: Imaging - CXR
+        imaging_doppler_carotids: Imaging - Doppler Carotids
+        imaging_doppler_carotids_legs: Imaging - Doppler Carotids Legs
+        imaging_doppler_legs: Imaging - Doppler Legs
+        imaging_liver_us: Imaging - Liver US
+        imaging_mag3_scan: Imaging - MAG3 Scan
+        imaging_mammography: Imaging - Mammography
+        imaging_post_mict_bladder_us: Imaging - Post mict bladder US
+        imaging_renal_us: Imaging - Renal US
+        imaging_static_dmsa: Imaging - Static DMSA
+        imaging_us_unspec: Imaging - US (Unspec)
+        isotopic_gfr: Isotopic GFR
+        lung_biopsy: Lung Biopsy
+        lung_function_tests: Lung Function Tests
+        opinion_cardiology: Opinion - Cardiology
+        opinion_haematology: Opinion - Haematology
+        opinion_specialist: Opinion - Specialist
+        other: Other
+        psa: PSA
+        urodynamics: Urodynamics
   renalware:
     events:
       investigations:
         list:
-          title: Investigations
           add: Add
           date_time: Date taken
-          type: Type
-          result: Result
           notes: Notes
-  activemodel:
-    attributes:
-      renalware/events/investigation/document:
-        result1: "Rejection"
-        result2: "IFTA"
-  enumerize:
-    renalware/events/investigation/document:
-      type:
-        blood_group: "Blood Group"
-        cardiac_24_hour_abpm: "Cardiac - 24 hour ABPM"
-        cardiac_24_hour_ecg: "Cardiac - 24 hr ECG"
-        cardiac_coronary_angio: "Cardiac - Coronary Angio"
-        cardiac_periph_angio: "Cardiac - Peripheral Angio"
-        cardiac_cpet: "Cardiac - CPET"
-        cardiac_ecg: "Cardiac - ECG"
-        cardiac_echo: "Cardiac - Echo"
-        cardiac_exercise_ecg: "Cardiac - Exercise ECG"
-        cardiac_myoview_scan: "Cardiac - Myoview Scan"
-        cardiac_muga_scan: "Cardiac - MUGA Scan"
-        cardiac_stress_echo: "Cardiac - Stress Echo"
-        cervical_smear: "Cervical Smear"
-        colonoscopy: "Colonoscopy"
-        gastroscopy: "Gastroscopy"
-        bowel_screening: "Bowel Screening"
-        cystoscopy: "Cystoscopy"
-        urodynamics: "Urodynamics"
-        24_hr_urinary_stone_screen: "24 hr Urinary Stone Screen"
-        dental_check: "Dental Check"
-        psa: "PSA"
-        isotopic_gfr: "Isotopic GFR"
-        lung_biopsy: "Lung Biopsy"
-        lung_function_tests: "Lung Function Tests"
-        imaging_bone Scan: "Imaging - Bone Scan"
-        imaging_ct_abdomen: "Imaging - CT Abdomen"
-        imaging_ct_chest: "Imaging - CT Chest"
-        imaging_ct_head: "Imaging - CT Head"
-        imaging_ct_kub: "Imaging - CT KUB"
-        imaging_ct_pulm_angio: "Imaging - CT Pulm Angio"
-        imaging_ct_renal_angio: "Imaging - CT Renal Angio"
-        imaging_ct_unspec: "Imaging - CT (Unspec)"
-        imaging_cxr: "Imaging - CXR"
-        imaging_doppler_carotids: "Imaging - Doppler Carotids"
-        imaging_doppler_carotids_legs: "Imaging - Doppler Carotids Legs"
-        imaging_doppler_legs: "Imaging - Doppler Legs"
-        imaging_liver_us: "Imaging - Liver US"
-        imaging_mammography: "Imaging - Mammography"
-        imaging_post_mict_bladder_us: "Imaging - Post mict bladder US"
-        imaging_renal_us: "Imaging - Renal US"
-        imaging_us_unspec: "Imaging - US (Unspec)"
-        imaging_static_dmsa: "Imaging - Static DMSA"
-        imaging_mag3_scan: "Imaging - MAG3 Scan"
-        opinion_cardiology: "Opinion - Cardiology"
-        opinion_haematology: "Opinion - Haematology"
-        opinion_specialist: "Opinion - Specialist"
-        other: "Other"
+          result: Result
+          title: Investigations
+          type: Type

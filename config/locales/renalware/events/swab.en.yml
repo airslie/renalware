@@ -1,29 +1,29 @@
 ---
 en:
-  renalware:
-    events:
-      swabs:
-        list:
-          title: Swabs
-          thead:
-            date_time: Date taken
-            result: Result
-            location: "Site"
+  activemodel:
+    attributes:
+      renalware/events/swab/document:
+        location: Site
+        result: Swab result
+        type: Swab type
   activerecord:
     attributes:
       renalware/events/swab:
         date_time: Date taken
-  activemodel:
-    attributes:
-      renalware/events/swab/document:
-        type: Swab type
-        result: Swab result
-        location: Site
   enumerize:
     renalware/events/swab/document:
       result:
-        pos: Positive
         neg: Negative
+        pos: Positive
       type:
         mrsa: MRSA
         mssa: MSSA
+  renalware:
+    events:
+      swabs:
+        list:
+          thead:
+            date_time: Date taken
+            location: Site
+            result: Result
+          title: Swabs

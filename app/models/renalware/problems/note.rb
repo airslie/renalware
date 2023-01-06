@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/problems"
-
 module Renalware
   module Problems
     class Note < ApplicationRecord

@@ -1,23 +1,24 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
-    class PatientRulesController < Pathology::BaseController
-      before_action :load_patient
+    class PatientRulesController < BaseController
+      include Renalware::Concerns::PatientVisibility
+      include Renalware::Concerns::PatientCasting
 
       def new
-        patient_rule = @patient.rules.new
+        patient_rule = pathology_patient.rules.new
+        authorize patient_rule
 
         render_new(patient_rule)
       end
 
       def create
-        patient_rule = @patient.rules.new(patient_rule_params)
+        patient_rule = pathology_patient.rules.new(patient_rule_params)
+        authorize patient_rule
 
         if patient_rule.save
-          redirect_to patient_pathology_required_observations_path(@patient),
+          redirect_to patient_pathology_required_observations_path(pathology_patient),
                       notice: success_msg_for("Patient Rule")
         else
           flash.now[:error] = failed_msg_for("Patient Rule")
@@ -26,16 +27,14 @@ module Renalware
       end
 
       def edit
-        patient_rule = @patient.rules.find(params[:id])
-
-        render_edit(patient_rule)
+        render_edit(find_and_authorize_patient_rule)
       end
 
       def update
-        patient_rule = @patient.rules.find(params[:id])
+        patient_rule = find_and_authorize_patient_rule
 
         if patient_rule.update(patient_rule_params)
-          redirect_to patient_pathology_required_observations_path(@patient),
+          redirect_to patient_pathology_required_observations_path(pathology_patient),
                       notice: success_msg_for("patient rule")
         else
           flash.now[:error] = failed_msg_for("patient rule")
@@ -44,13 +43,18 @@ module Renalware
       end
 
       def destroy
+        authorize Requests::PatientRule, :destroy?
         Requests::PatientRule.destroy(params[:id])
 
-        redirect_to patient_pathology_required_observations_path(@patient),
+        redirect_to patient_pathology_required_observations_path(pathology_patient),
                     notice: success_msg_for("patient rule")
       end
 
       private
+
+      def find_and_authorize_patient_rule
+        pathology_patient.rules.find(params[:id]).tap { |rule| authorize rule }
+      end
 
       def render_edit(patient_rule)
         render :edit, locals: {

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Medications::Delivery
-  describe PrescriptionsDueForDeliveryQuery, type: :model do
+  describe PrescriptionsDueForDeliveryQuery do
     subject(:query) { PrescriptionsDueForDeliveryQuery.new.call }
 
     def create_home_del_prescription(patient, drug, next_delivery_date)

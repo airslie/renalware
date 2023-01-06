@@ -5,15 +5,15 @@ en:
       internal:
         messages:
           form:
-            title: Send a message
             cancel: Cancel
             recipient_ids: Recipients
+            title: Send a message
           table:
-            from: From
-            patient_name: Patient
-            subject: Subject
-            body: Body
-            urgent: Urgent
             age: Age
+            body: Body
+            from: From
             hosp_no: Hosp No.
+            patient_name: Patient
             recipient: Recipient
+            subject: Subject
+            urgent: Urgent

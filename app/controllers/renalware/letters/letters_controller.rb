@@ -2,7 +2,6 @@
 
 # TODO: Remove this disable
 # rubocop:disable Metrics/ClassLength
-require_dependency "renalware/letters"
 
 module Renalware
   module Letters
@@ -199,11 +198,12 @@ module Renalware
       def attributes
         [
           :event_type, :event_id, :clinical,
-          :letterhead_id, :author_id, :description, :enclosures,
+          :letterhead_id, :author_id, :topic_id, :enclosures,
           :salutation, :body, :notes, :pathology_timestamp,
           main_recipient_attributes: main_recipient_attributes,
           cc_recipients_attributes: cc_recipients_attributes,
-          electronic_cc_recipient_ids: []
+          electronic_cc_recipient_ids: [],
+          update_sections: {}
         ]
       end
 

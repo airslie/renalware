@@ -18,10 +18,11 @@ module Renalware
         attr_reader :patient, :period
 
         def patient_sessions_in_period
-          patient.hd_sessions
-                 .extending(SessionScopes)
-                 .finished
-                 .falling_within(period.to_range)
+          patient
+            .hd_sessions
+            .extending(SessionScopes)
+            .finished
+            .falling_within(period.to_range)
         end
       end
     end

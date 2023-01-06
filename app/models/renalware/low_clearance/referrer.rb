@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/low_clearance"
 require "document/base"
 
 module Renalware

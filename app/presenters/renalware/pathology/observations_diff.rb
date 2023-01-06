@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 # Compares two hashes of pathology observations (OBXs).
 # Used for example in a Letter, where a snapshot of pathology is stored on the letter,
 # but when the letter we compare the snapshot to the latest hash in the jsonb column
@@ -79,11 +77,12 @@ module Renalware
       def to_h
         return {} if observation_set_a.blank? && observation_set_a.blank?
 
-        filter_observations
+        filtered_observation_set_a = filter_observations_by_descriptions(observation_set_a)
+        filtered_observation_set_b = filter_observations_by_descriptions(observation_set_b)
 
         description_codes.each_with_object({}) do |code, hash|
-          obs_a = Observation.new(observation_set_a.fetch(code, {}))
-          obs_b = Observation.new(observation_set_b.fetch(code, {}))
+          obs_a = Observation.new(filtered_observation_set_a.fetch(code, {}))
+          obs_b = Observation.new(filtered_observation_set_b.fetch(code, {}))
 
           arr = Array.new(3)
           arr[0] = obs_a if obs_a.any?
@@ -100,13 +99,8 @@ module Renalware
 
       private
 
-      def filter_observations
-        filter_observations_by_descriptions(observation_set_a)
-        filter_observations_by_descriptions(observation_set_b)
-      end
-
       def filter_observations_by_descriptions(observations)
-        observations.select! { |code, _obs| description_codes.include?(code.to_sym) }
+        observations.select { |code, _obs| description_codes.include?(code.to_sym) }
       end
 
       def description_codes

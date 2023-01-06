@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hospitals"
-
 module Renalware
   module Hospitals
     class Ward < ApplicationRecord

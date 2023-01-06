@@ -1,9 +1,16 @@
 = content_for(:actions) do
     /.flex
+    = link_to(options.report_csv_download_path_with_params,
+          class: "button secondary",
+          style: "margin-left: 2rem",
+          data: { confirm: "IMPORTANT! (Warning here about data protection)"}) do
+      i.fa.fa-download
+      | Download CSV
+
     - if current_user_is_super_admin?
       = link_to edit_system_view_metadatum_path(options.current_view, format: :html),
                 data: { "reveal-id" => "system-view-metadata-modal", "reveal-ajax" => "true" },
-                class: "right rounded px-2 py-1 bg-orange-300 text-gray-800 text-sm mt-0.5 mr-2" do
+                class: "button secondary" do
           i.fas.fa-cogs.pr-2
           | Configure columns
       / The modal dialog container

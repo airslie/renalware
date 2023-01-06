@@ -83,7 +83,7 @@ module Renalware
           end
 
           it "sets the end on the replaced regime to be the start date of new one" do
-            travel_to Time.zone.now do
+            freeze_time do
               result = ReviseRegime.new(regime).call(by: user, params: params)
 
               expect(result).to be_success

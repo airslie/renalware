@@ -46,7 +46,15 @@
                       }
 
         .recorded-on
-          = fpa.input :recorded_on, as: :date_picker, wrapper: :hz_xs, input_html: { autocomplete: "off" }
+          - not_recommended_values = Renalware::HD::PrescriptionAdministrationsQuery.new(prescription: prescription).call(limit: 10) \
+            .map {|prescription| l(prescription.recorded_on.to_date) }
+
+          = render Renalware::InputValueAlerterComponent.new( \
+            not_recommended_values: not_recommended_values, \
+            message: "Drug already recorded as administered on this date") do |component|
+            - component.with_input do
+              = fpa.input :recorded_on, as: :flatpickr, wrapper: :horizontal_datepicker, \
+                input_html: { data: component.input_date_attributes, autocomplete: "new-password" }
 
         .notes(style="display: block")
           = fpa.label :notes

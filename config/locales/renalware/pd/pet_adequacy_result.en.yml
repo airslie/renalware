@@ -1,45 +1,45 @@
 ---
 en:
-  renalware:
-    pd:
-      pet_adequacy_results:
-        new:
-          page_title: New PET/Adequacy
-          fieldset_title: PET/Adequacy
-        edit:
-          page_title: Edit PET/Adequacy
-        form:
-          save: "Save"
   activerecord:
-    models:
-      renalware/pd/pet_adequacy_result: PET/Adequacy
     attributes:
       renalware/pd/pet_adequacy_result:
-        pet_type: PET type
+        adequacy_date: Adequacy date
+        crcl_dialysate: CrCl Dialysate
+        crcl_rrf: CrCl RRF
+        crcl_total: CrCl Total
+        creat_value: Creat value
+        daily_uf: Daily UF
+        daily_urine: Daily Urine
+        date_creat_clearance: Date creat clearance
+        date_creat_value: Date creat value
+        date_rff: Date RFF
+        dialysate_creat_plasma_ratio: Dialysate creat plasma ratio
+        dialysate_effluent_volume: Dialysate effluent volume
+        dialysate_glucose_end: Dialysate glucose end
+        dialysate_glucose_start: Dialysate glucose start
+        ktv_dialysate: Kt/V dialysate
+        ktv_rrf: Kt/V RRF
+        ktv_total: Kt/V total
         pet_date: PET date
         pet_duration: PET duration
         pet_net_uf: PET net UF
-        adequacy_date: Adequacy date
-        dialysate_creat_plasma_ratio: Dialysate creat plasma ratio
-        dialysate_glucose_start: Dialysate glucose start
-        dialysate_glucose_end: Dialysate glucose end
-        ktv_total: Kt/V total
-        ktv_dialysate: Kt/V dialysate
-        ktv_rrf: Kt/V RRF
-        crcl_total: CrCl Total
-        crcl_dialysate: CrCl Dialysate
-        crcl_rrf: CrCl RRF
-        daily_uf: Daily UF
-        daily_urine: Daily Urine
-        creat_value: Creat value
-        dialysate_effluent_volume: Dialysate effluent volume
-        urine_urea_conc: Urine urea conc
+        pet_type: PET type
         urine_creat_conc: Urine creat conc
-        date_rff: Date RFF
-        date_creat_clearance: Date creat clearance
-        date_creat_value: Date creat value
+        urine_urea_conc: Urine urea conc
+    models:
+      renalware/pd/pet_adequacy_result: PET/Adequacy
   enumerize:
     renalware/pd/pet_adequacy_result:
       pet_type:
         fast: Fast
         full: Full
+  renalware:
+    pd:
+      pet_adequacy_results:
+        edit:
+          page_title: Edit PET/Adequacy
+        form:
+          save: Save
+        new:
+          fieldset_title: PET/Adequacy
+          page_title: New PET/Adequacy

@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module Renal
     module Registry
-      describe PreflightChecks::MissingESRFQuery, type: :model do
+      describe PreflightChecks::MissingESRFQuery do
         let(:user) { create(:user) }
         let(:hd) { create(:hd_modality_description) }
         let(:pd) { create(:pd_modality_description) }

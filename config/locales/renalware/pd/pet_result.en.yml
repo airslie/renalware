@@ -3,20 +3,19 @@ en:
   activerecord:
     attributes:
       renalware/pd/pet_result:
-        net_uf: PET_netUF
         d_pcr: PET_D_Pcr
         dextrose_concentration: Dextrose
         dextrose_concentration_id: Dextrose
-        volume_in: Volume in (ml)
-        volume_out: Volume out (ml)
-        infusion_time: Infusion time (min)
         drain_time: Drain time (min)
+        infusion_time: Infusion time (min)
+        net_uf: PET_netUF
         overnight_dextrose_concentration: Overnight dextrose
         overnight_dextrose_concentration_id: Overnight dextrose
+        overnight_dwell_time: Overnight dwell time (min)
         overnight_volume_in: Overnight vol in (ml)
         overnight_volume_out: Overnight vol out (ml)
-        overnight_dwell_time: Overnight dwell time (min)
-
+        volume_in: Volume in (ml)
+        volume_out: Volume out (ml)
   enumerize:
     renalware/pd/pet_result:
       pet_type:

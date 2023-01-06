@@ -28,7 +28,7 @@ module Renalware
       def bookmark
         return if current_user.blank?
 
-        patients_user.bookmark_for_patient(patient)
+        @bookmark ||= patients_user.bookmark_for_patient(patient)
       end
 
       def patients_user

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_dependency "models/renalware/concerns/personable"
+require_relative "../concerns/personable"
 
 module Renalware
-  describe Patient, type: :model do
+  describe Patient do
     include PatientsSpecHelper
     subject(:patient) { create(:patient, nhs_number: "9999999999") }
 
@@ -211,7 +211,7 @@ module Renalware
             "HOSP1, HOSP2, HOSP3, HOSP4, HOSP5, Other Hospital Number"
         }
         let(:error_message2) {
-          "The patient must have at least one of these numbers: NHS, HOSP1, HOSP2, HOSP3, "\
+          "The patient must have at least one of these numbers: NHS, HOSP1, HOSP2, HOSP3, " \
             "HOSP4, HOSP5, Other Hospital Number"
         }
 

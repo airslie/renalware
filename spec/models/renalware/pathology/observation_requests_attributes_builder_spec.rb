@@ -88,7 +88,7 @@ module Renalware::Pathology
       end
 
       context "when the patient is not found" do
-        it "logs a warning fails silently. This is an acceptable outcome "\
+        it "logs a warning fails silently. This is an acceptable outcome " \
            "because most pathology messages will be for non-renal patients, and we ignore them" do
           non_existent_patient = "123123123"
           hl7_message = double(
@@ -128,7 +128,7 @@ module Renalware::Pathology
 
       context "when the message has > 1 OBR segment" do
         let(:raw_message) do
-          <<-RAW.strip_heredoc
+          <<~RAW
             MSH|^~\&|HM|LIVE|SCM||20181212170103||ORU^R01|00002286|P|2.3.1|||AL
             PID|||Z999990^^^PAS Number||XXX^XXX^^^Mr||11110715|M|||ss^ss^^^SE00 600
             PV1||Inpatient|COPK|||||RABRO^Rabbit, Roger||||||||||NHS|ED001332881^^^Visit Number
@@ -165,7 +165,7 @@ module Renalware::Pathology
 
       context "when the message has an OBX segment (eg WSUM) with no observation date" do
         let(:raw_message) do
-          <<-RAW.strip_heredoc
+          <<~RAW
             MSH|^~\&|BLB|LIVE|SCM||1111111||ORU^R01|1111111|P|2.3.1|||AL
             PID|||V1111111^^^KCH||SSS^SS^^^Mr||20010101|M|||s^s^^^x
             PV1||Inpatient|DMU|||||xxx^xx, xxxx||||||||||NHS|V1111111^^^Visit Number

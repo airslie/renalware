@@ -41,7 +41,7 @@ module Renalware
       scope = if self.class.respond_to?(:position_sorting_scope)
                 self.class.position_sorting_scope(self)
               else
-                self.class
+                self.class.default_scoped
               end
       self.position = (scope.maximum(:position) || 0) + 1
     end

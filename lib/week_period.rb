@@ -30,7 +30,7 @@ class WeekPeriod
 
   def to_s
     "#{I18n.l(date_on_first_day_of_week, format: :long)} " \
-    "to #{I18n.l(last_day_of_week, format: :long)}"
+      "to #{I18n.l(last_day_of_week, format: :long)}"
   end
 
   # The date of last day of the week (a Sunday)

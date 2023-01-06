@@ -1,52 +1,73 @@
+- clinic_visit = f.object
 = render "renalware/shared/errors", model: f.object
+
+= hidden_field_tag "visit_class_name", f.object.clinic&.visit_class_name
 
 .simple_form
   .row
     .large-12.columns
-      fieldset
-        legend Summary
-        .row
-          .columns.small-12
-            = f.input :date, as: :date_picker, wrapper: :horizontal_datepicker
-            = f.input :time, as: :clock_picker, wrapper: :horizontal_clockpicker
-            = f.association :clinic,
-                            wrapper: :horizontal_small,
-                            label_method: :name,
-                            value_method: :id,
-                            include_blank: t(".clinic_prompt")
-            = f.input :did_not_attend,
-                      as: :boolean,
-                      boolean_style: :inline,
-                      wrapper: :horizontal_small
+      article.general
+        header
+          h2 Summary
+
+        #clinic-visit-clinic-container.pb-3
+          = f.association :clinic,
+                          collection: clinic_options,
+                          wrapper: :horizontal_medium,
+                          include_blank: t(".clinic_prompt"),
+                          input_html: { \
+                            data: { \
+                              controller: "slimselect select-update-frame",
+                              "select-update-frame-frame-id-value": "clinic-visit-specific-inputs",
+                              "action": "change->select-update-frame#change" \
+                            },
+                          }
+        = f.input :date, as: :date_picker, wrapper: :horizontal_datepicker
+        = f.input :time, as: :clock_picker, wrapper: :horizontal_clockpicker
+        = f.input :did_not_attend,
+                  as: :boolean,
+                  boolean_style: :inline,
+                  wrapper: :horizontal_small
 
       = render "problems_prescriptions", patient: f.object.patient
 
-      fieldset
-        legend Observations
-        = f.input :height, wrapper: :horizontal_small
-        = f.input :weight, wrapper: :horizontal_small
+      article.observations
+        header
+          h2 Observations
+        = f.input :height, wrapper: :horizontal_small,
+          input_html: { step: 0.01 }
+
+        = f.input :weight, wrapper: :horizontal_small,
+          input_html: { step: 1, min: 15, max: 300 }
+
         = f.input :bp,
                   label: "Blood Pressure",
                   placeholder: "e.g. 110/70",
                   wrapper: :horizontal_small
+
         = f.input :standing_bp,
                   label: "Standing BP",
                   placeholder: "e.g. 110/70",
                   wrapper: :horizontal_small
         = f.input :pulse, wrapper: :horizontal_small
         = f.input :temperature, wrapper: :horizontal_small
-
         = f.input :urine_blood, wrapper: :horizontal_small
         = f.input :urine_protein, wrapper: :horizontal_small
 
-      fieldset
-        legend Notes
-        .row
-          .columns.large-12
-            - target = ".clinic-visit-notes-editor"
-            = snippets_modal_and_link_to_open_it(target_input_for_seleted_snippet: target)
-            = f.input :notes, as: :trix_editor, class: "clinic-visit-notes-editor", wrapper: :zilch
+      / The contents of this div will get replaced if a user selects an alternative
+      / clinic in the drop-down above. See clinics.js.
+      = turbo_frame_tag "clinic-visit-specific-inputs" do
+        = render partial: clinic_visit.to_form_partial_path,
+                 locals: { clinic_visit: clinic_visit, f: f }
 
-      fieldset
-        legend Admin Notes
+      article
+        header
+          h2 Notes
+        - target = ".clinic-visit-notes-editor"
+        = snippets_modal_and_link_to_open_it(target_input_for_seleted_snippet: target)
+        = f.input :notes, as: :trix_editor, class: "clinic-visit-notes-editor", wrapper: :zilch
+
+      article
+        header
+         h2 Admin Notes
         = f.text_area :admin_notes, { rows: 5 }

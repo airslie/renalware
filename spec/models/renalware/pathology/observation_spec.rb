@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Pathology::Observation, type: :model do
+  describe Pathology::Observation do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:description)
       # is_expected.to validate_presence_of(:result)

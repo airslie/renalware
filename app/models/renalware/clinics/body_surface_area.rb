@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinics"
-
 # The body surface area (BSA) of a patient calculated using DuBois/DuBois
 # BSA = 0.007184 * Height^0.725 * Weight^0.425
 # Resources:

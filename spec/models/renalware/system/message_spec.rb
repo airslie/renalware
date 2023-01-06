@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe System::Message, type: :model do
+  describe System::Message do
     it { is_expected.to validate_presence_of(:body) }
 
     describe ".active scope" do

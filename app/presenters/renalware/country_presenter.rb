@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-
 module Renalware
   class CountryPresenter < SimpleDelegator
     def to_s

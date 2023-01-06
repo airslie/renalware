@@ -1,23 +1,28 @@
+- query ||= nil
+- sortable = query.present? && local_assigns.fetch(:sortable_columns, false)
+
 table.clinics.auto-layout
   thead
     tr
       th.noprint.togglers= table_toggler
-      th.noprint.col-width-medium
-      th.col-width-date Date
+      th.actions.noprint.col-width-medium
+      th.col-width-date= sort_link_if(sortable, query, :date, "Date")
       th.col-width-tiny DNA
-      th Clinic Type
-      th.col-width-tiny Height
-      th.col-width-tiny Weight
+      th.col-width-large= sort_link_if(sortable, query, :clinic_name, "Clinic")
+      th.col-width-tiny= sort_link_if(sortable, query, :height, "Height")
+      th.col-width-tiny= sort_link_if(sortable, query, :weight, "Weight")
       th.col-width-tiny BMI
       th.col-width-tinyish BP
       th.col-width-tinyish Standing BP
-      th.col-width-tiny Pulse
-      th.col-width-tiny Temp
+      th.col-width-tiny= sort_link_if(sortable, query, :pulse, "Pulse")
+      th.col-width-tiny= sort_link_if(sortable, query, :temperature, "Temp")
       th.col-width-tiny Urine blood
       th.col-width-tiny Urine protein
       th.col-width-tiny(title="Body surface area") BSA
       th.col-width-tiny(title="Total Body Water") TBW
-      th.col-width-medium Created by
+      th.col-width-medium.show-for-large-up Created by
+      th.col-width-date.show-for-xlarge-up Last edited
+      th.col-width-medium.show-for-xlarge-up Last edited by
   tbody
     = render partial: "renalware/clinics/clinic_visits/table_row",
              collection: clinic_visits,

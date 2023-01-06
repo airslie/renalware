@@ -375,7 +375,7 @@ module Renalware
         end
 
         describe "#mean_ufr" do
-          it "returns fluid removed (ml) / HD time in hours / dry weight (kg) "\
+          it "returns fluid removed (ml) / HD time in hours / dry weight (kg) " \
              "in units of ml/hr/kg" do
             clinical_patient = Clinical.cast_patient(patient)
             dry_weight1 = build_stubbed(:dry_weight, patient: clinical_patient, weight: 100.0)
@@ -407,8 +407,8 @@ module Renalware
             expect(audit.mean_ufr).to eq(2.67)
           end
 
-          it "returns just one session UFR if another other session has a fluid_removed "\
-             "which is not a number (i.e. 0) i.e. we do not include the 'bad' session when "\
+          it "returns just one session UFR if another other session has a fluid_removed " \
+             "which is not a number (i.e. 0) i.e. we do not include the 'bad' session when " \
              "generating the mean value" do
             clinical_patient = Clinical.cast_patient(patient)
             dry_weight1 = build_stubbed(:dry_weight, patient: clinical_patient, weight: 100.0)

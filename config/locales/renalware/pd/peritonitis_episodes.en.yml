@@ -1,27 +1,27 @@
 ---
 en:
-  renalware:
-    pd:
-      peritonitis_episodes:
-        fields:
-          fluid_description:
-            blank_option: "Please select description that best describes fluid"
-          fieldsets:
-            dates: Dates
-            outcomes: Outcomes
-            causes: Causes/Symptoms
-            white_cell_count: White Cell Count
-            comments: Comments
   activerecord:
     attributes:
       renalware/pd/peritonitis_episode:
         diagnosis_date: Diagnosed on
-        treatment_start_date: Treatment start on
-        treatment_end_date: Treatment end on
         episode_type: Episode type
-        white_cell_total: White Cell Total (x10⁹)
-        white_cell_neutro: Neutro (%)
-        white_cell_lympho: Lympho (%)
-        white_cell_degen: Degen (%)
-        white_cell_other: Other (%)
         notes: Episode notes
+        treatment_end_date: Treatment end on
+        treatment_start_date: Treatment start on
+        white_cell_degen: Degen (%)
+        white_cell_lympho: Lympho (%)
+        white_cell_neutro: Neutro (%)
+        white_cell_other: Other (%)
+        white_cell_total: White Cell Total (x10⁹)
+  renalware:
+    pd:
+      peritonitis_episodes:
+        fields:
+          fieldsets:
+            causes: Causes/Symptoms
+            comments: Comments
+            dates: Dates
+            outcomes: Outcomes
+            white_cell_count: White Cell Count
+          fluid_description:
+            blank_option: Please select description that best describes fluid

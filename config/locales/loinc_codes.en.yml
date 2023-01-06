@@ -2,22 +2,19 @@
 en:
   loinc:
     blood_pressure:
-      systolic:
-        # code: 76538-8
-        code: QBLG3
-        description: Blood pressure device Cuff pressure.systolic
-        units: "mmHg"
       diastolic:
-        # code: 76539-6
         code: QBLG4
         description: Blood pressure device Cuff pressure.diastolic
-        units: "mmHg"
-    weight:
-      # code: 3141-9
-      code: QBLG1
-      description: Body weight Measured
-      units: "Kg"
+        units: mmHg
+      systolic:
+        code: QBLG3
+        description: Blood pressure device Cuff pressure.systolic
+        units: mmHg
     height:
       code: QBLGB
       description: Height Measured
-      units: "cm"
+      units: cm
+    weight:
+      code: QBLG1
+      description: Body weight Measured
+      units: Kg

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/modalities"
 require "success"
 require "failure"
 

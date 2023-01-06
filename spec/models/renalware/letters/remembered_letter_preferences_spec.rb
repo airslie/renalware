@@ -4,12 +4,12 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe RememberedLetterPreferences, type: :model do
+    describe RememberedLetterPreferences do
       describe "#persist" do
         it "saves certain model attributes to the session" do
           letter = instance_double(Letter,
                                    letterhead_id: 1,
-                                   description: "1",
+                                   topic_id: "1",
                                    author_id: 1)
           session = {}
 
@@ -26,7 +26,7 @@ module Renalware
           session = {
             letter_preferences: {
               letterhead_id: 1,
-              description: "1",
+              topic_id: "1",
               author_id: 1
             }
           }

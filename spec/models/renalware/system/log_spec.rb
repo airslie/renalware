@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe System::Log, type: :model do
+  describe System::Log do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:severity)
       is_expected.to validate_presence_of(:group)

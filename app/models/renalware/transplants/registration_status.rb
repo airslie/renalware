@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
-
 module Renalware
   module Transplants
     class RegistrationStatus < ApplicationRecord
@@ -29,6 +27,10 @@ module Renalware
 
       def to_s
         description&.to_s
+      end
+
+      def self.policy_class
+        BasePolicy
       end
     end
   end

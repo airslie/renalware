@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module Transplants
     module Registrations
-      describe WaitListQuery, type: :model do
+      describe WaitListQuery do
         describe "#call" do
           subject(:query) { WaitListQuery.new(named_filter: filter) }
 

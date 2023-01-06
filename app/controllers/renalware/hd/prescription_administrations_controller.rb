@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
 require "collection_presenter"
 
 module Renalware
   module HD
     class PrescriptionAdministrationsController < BaseController
+      include Renalware::Concerns::PatientVisibility
+      include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::Pageable
 
+      before_action :find_and_load_patient_from_prescrption, except: [:index]
+
       def index
-        hd_patient = HD.cast_patient(patient)
         administrations = hd_patient
           .prescription_administrations
           .includes(:administered_by, :witnessed_by, :reason, :prescription)
@@ -61,8 +63,12 @@ module Renalware
         )
       end
 
-      def hd_patient
-        HD.cast_patient(prescription.patient)
+      # Becuase for actions other than index we have no params[:patient_id] (secure_id guid) in
+      # the url, here we set @patient (normally set in BaseController) based on the
+      # prescription.patient_id. We need @patient set before calling hd_patient which is defined
+      # dynamically in the PatientCasting concern (and will memoise on first call).
+      def find_and_load_patient_from_prescrption
+        @patient ||= patient_scope.find(prescription&.patient_id)
       end
 
       def render_new(administration)

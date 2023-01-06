@@ -1,0 +1,225 @@
+- document = f.object.document
+
+div class="divide-y-blue-gray-200 mt-6 space-y-8 divide-y mb-12"
+  section.pt-8
+    header
+      h2.font-medium.mb-6 Dietetic Visit
+
+    = f.fields_for(:document, document) do |fdoc|
+      .mb-4
+        = fdoc.input :assessment_type,
+                    as: :inline_radio_buttons,
+                    wrapper: :horizontal_medium
+      = fdoc.input :visit_type,
+                  wrapper: :horizontal_small
+      = fdoc.input :attendance,
+                  as: :inline_radio_buttons,
+                  wrapper: :horizontal_medium
+
+  section.pt-8(data-controller="clinics--weight-change-calculator"
+    data-clinics--weight-change-calculator-weight-selector-value="#clinic_visit_weight"
+  )
+
+    header
+      h2.font-medium.mb-6 Weight
+
+    = f.fields_for(:document, document) do |fdoc|
+
+      div.clear style="clear: both"
+
+      .grid.grid-cols-12.sm:gap-4
+        .col-span-12.sm:col-span-4.lg:col-span-3 Dry Weight
+
+        .col-span-12.sm:col-span-8.lg:col-span-9
+          div
+            - latest_dry_weight = Renalware::Clinical.cast_patient(clinic_visit.patient).latest_dry_weight
+            - if latest_dry_weight.present?
+              = Renalware::Clinical::DryWeightPresenter.new(latest_dry_weight).to_s + " kg"
+            - else
+              | n/a
+
+          .text-sm.mb-4
+            = link_to "Edit in clinical profile", patient_clinical_profile_path(clinic_visit.patient), target: :_blank
+
+
+      = fdoc.input :weight_notes,
+                  wrapper: :horizontal_medium
+      = fdoc.input :previous_weight,
+                  as: :integer,
+                  input_html: { \
+                      step: 1,
+                      min: 15,
+                      max: 300,
+                      data: { \
+                      "clinics--weight-change-calculator-target": "previousWeight",
+                      action: "input->clinics--weight-change-calculator#calculate" \
+                    } \
+                  },
+                  wrapper: :horizontal_small
+
+      = fdoc.input :previous_weight_date,
+                  input_html: { \
+                    data: { flatpickr_max_date: "today" },
+                  },
+                  as: :flatpickr,
+                  wrapper: :horizontal_small
+
+      .grid.grid-cols-12.sm:gap-4.mb-6
+        label.col-span-12.sm:col-span-4.lg:col-span-3 % Weight change
+
+        .col-span-12.sm:col-span-8.lg:col-span-9
+          div data-clinics--weight-change-calculator-target="output"
+
+      .grid.grid-cols-12.sm:gap-4.mb-6(data-controller="clinics--bmi-calculator"
+        data-clinics--bmi-calculator-weight-selector-value="#clinic_visit_weight"
+        data-clinics--bmi-calculator-height-selector-value="#clinic_visit_height")
+
+        label.col-span-12.sm:col-span-4.lg:col-span-3 BMI
+
+        .col-span-12.sm:col-span-8.lg:col-span-9
+          div data-clinics--bmi-calculator-target="output"
+
+      = fdoc.input :adjusted_bmi,
+                  wrapper: :horizontal_small
+
+      = fdoc.input :ideal_body_weight,
+                  as: :integer,
+                  input_html: { step: 1, min: 15, max: 300 },
+                  wrapper: :horizontal_small
+      = fdoc.input :waist_circumference,
+                  as: :integer,
+                  input_html: { step: 1, min: 30, max: 300 },
+                  wrapper: :horizontal_small
+
+  section.pt-8 data-controller="clinics--dietary-protein-calculator"
+    header
+      h2.font-medium.mb-6 Dietary
+
+    = f.fields_for(:document, document) do |fdoc|
+
+      = fdoc.input :dietary_protein_requirement,
+                  as: :integer,
+                  input_html: { step: 1, min: 5, max: 280 },
+                  wrapper: :horizontal_small
+
+      = fdoc.input :dietary_protein_intake,
+                  as: :integer,
+                  wrapper: :horizontal_small,
+                  input_html: { \
+                      step: 1,
+                      min: 5,
+                      max: 280,
+                      data: { \
+                      "clinics--dietary-protein-calculator-target": "proteinIntake",
+                      action: "input->clinics--dietary-protein-calculator#calculate" \
+                    } \
+                  }
+
+      .grid.grid-cols-12.sm:gap-4.mb-6
+        label.col-span-12.sm:col-span-4.lg:col-span-3 Dietary protein (g/kg IBW)
+
+        .col-span-12.sm:col-span-8.lg:col-span-9
+          div data-clinics--dietary-protein-calculator-target="output"
+
+      = fdoc.input :high_biological_value,
+                  as: :integer,
+                  input_html: { step: 1, min: 0, max: 100 },
+                  wrapper: :horizontal_small
+
+      = fdoc.input :energy_requirement,
+                  as: :integer,
+                  wrapper: :horizontal_small,
+                  input_html: { \
+                    step: 100,
+                    min: 500,
+                    max: 4000,
+                  }
+
+      = fdoc.input :energy_intake,
+                  as: :integer,
+                  wrapper: :horizontal_small,
+                  input_html: { \
+                    step: 100,
+                    min: 500,
+                    max: 4000,
+                  }
+  section.pt-8
+    header
+      h2.font-medium.mb-6 Handgrip
+
+    = f.fields_for(:document, document) do |fdoc|
+
+      .grid.grid-cols-2.gap-16.max-w-xl.mb-4
+        = fdoc.input :handgrip_left,
+                    as: :integer,
+                    wrapper: :vertical_form,
+                    input_html: { \
+                      step: 1,
+                      min: 1,
+                      max: 150,
+                    }
+
+        = fdoc.input :handgrip_right,
+                    as: :integer,
+                    wrapper: :vertical_form,
+                    input_html: { \
+                      step: 1,
+                      min: 1,
+                      max: 150,
+                    }
+
+      = fdoc.input :dominant_hand,
+                  as: :inline_radio_buttons,
+                  wrapper: :horizontal_medium
+
+  section.pt-8
+    header
+      h2.font-medium.mb-6 SGA & Plan
+
+    = f.fields_for(:document, document) do |fdoc|
+
+      .mb-4
+        = fdoc.input :sga_assessment,
+                    as: :inline_radio_buttons,
+                    wrapper: :horizontal_medium
+
+      = fdoc.input :plan,
+                  wrapper: :horizontal_medium
+
+      = fdoc.input :intervention_a,
+                  wrapper: :horizontal_small
+
+      = fdoc.input :intervention_b,
+                  wrapper: :horizontal_small
+
+      = fdoc.input :intervention_c,
+                  wrapper: :horizontal_small
+
+  section.pt-8
+    header
+      h2.font-medium.mb-6 Consultation time and Review date
+
+    = f.fields_for(:document, document) do |fdoc|
+
+      = fdoc.input :time_for_consultation,
+                  as: :integer,
+                  input_html: { \
+                    step: 1,
+                    min: 1,
+                    max: 1000,
+                  },
+                  wrapper: :horizontal_small
+
+      = fdoc.input :time_for_documentation,
+                  as: :integer,
+                  input_html: { \
+                    step: 1,
+                    min: 1,
+                    max: 1000,
+                  },
+                  wrapper: :horizontal_small
+
+
+      = fdoc.input :next_review_in,
+                  as: :inline_radio_buttons,
+                  wrapper: :horizontal_medium

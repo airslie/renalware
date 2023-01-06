@@ -70,8 +70,7 @@ module World
           { status: s.description.name,
             start_date: l(s.started_on),
             by: s.updated_by.given_name,
-            termination_date: (s.terminated_on ? l(s.terminated_on) : "")
-          }.with_indifferent_access
+            termination_date: (s.terminated_on ? l(s.terminated_on) : "") }.with_indifferent_access
         end
         expect(statuses.size).to eq(hashes.size)
         hashes.each do |row|

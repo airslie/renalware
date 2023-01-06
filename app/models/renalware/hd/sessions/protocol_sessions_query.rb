@@ -10,12 +10,13 @@ module Renalware
         end
 
         def call(starting_on: 4.weeks.ago, ending_on: Time.zone.today, max_sessions: 12)
-          Session.includes(:hospital_unit, :signed_off_by)
-                 .extending(Scopes)
-                 .for_patient(patient)
-                 .not_dna
-                 .limit(limit)
-                 .ordered
+          Session
+            .includes(:hospital_unit, :signed_off_by)
+            .extending(Scopes)
+            .for_patient(patient)
+            .not_dna
+            .limit(limit)
+            .ordered
         end
 
         private

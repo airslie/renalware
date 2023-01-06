@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     module Charts
-      class ChartsController < Pathology::BaseController
+      # Unused?
+      class ChartsController < BaseController
         # GET html
         # Render the data-defined charts all together under the Pathology Charts tab
         def index

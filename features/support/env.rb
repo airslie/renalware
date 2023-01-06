@@ -29,7 +29,7 @@ require "factory_bot"
 require "./spec/support/factory_bot"
 FactoryBot.find_definitions
 
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: "chromedriver.storage.googleapis.com")
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you"d prefer to use XPath, just uncomment this line and adjust any

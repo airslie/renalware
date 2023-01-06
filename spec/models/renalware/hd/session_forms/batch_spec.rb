@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module HD
     module SessionForms
-      describe Batch, type: :model do
+      describe Batch do
         it_behaves_like "an Accountable model"
         it { is_expected.to have_many :items }
 

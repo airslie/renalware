@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
-
 module Renalware
   module Transplants
     # Extends a RecipientWorkupDocument::YesNoUnknownConsent document attribute

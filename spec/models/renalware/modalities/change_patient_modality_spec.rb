@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Modalities::ChangePatientModality, type: :model do
+  describe Modalities::ChangePatientModality do
     subject(:command) { described_class.new(patient: patient, user: user) }
 
     let(:patient)                 { build_stubbed(:patient) }

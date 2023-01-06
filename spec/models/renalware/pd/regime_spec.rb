@@ -5,7 +5,7 @@ require "./spec/support/login_macros"
 
 module Renalware
   module PD
-    describe Regime, type: :model do
+    describe Regime do
       describe "validations" do
         it :aggregate_failures do
           is_expected.to validate_presence_of :patient

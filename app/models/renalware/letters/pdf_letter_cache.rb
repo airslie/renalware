@@ -31,7 +31,6 @@
 #     WickedPdf.new.pdf_from_string(...)
 #   end
 #
-require_dependency "renalware/letters"
 
 module Renalware
   module Letters

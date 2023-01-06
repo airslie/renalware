@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants/base_controller"
-
 module Renalware
   module Transplants
     class WaitListsController < BaseController

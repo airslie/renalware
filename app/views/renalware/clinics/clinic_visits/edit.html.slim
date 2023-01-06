@@ -1,14 +1,14 @@
 = within_patient_layout(\
     title: "Edit",
-    breadcrumbs: breadcrumb_for("Clinic Visits", patient_clinic_visits_path(@patient))\
+    breadcrumbs: breadcrumb_for("Clinic Visits", patient_clinic_visits_path(patient))\
   ) do
 
   .document
-    = simple_form_for [@patient, @clinic_visit],
+    = simple_form_for [patient, clinic_visit],
       as: :clinic_visit,
-      url: patient_clinic_visit_path(patient_id: @patient.to_param, id: @clinic_visit.to_param),
+      url: patient_clinic_visit_path(patient, clinic_visit),
       html: { autocomplete: "off" },
       wrapper: :horizontal_form do |f|
 
-      = render "form", f: f
+      = render "form", f: f, clinic_options: clinic_options
       = f.submit t("btn.update"), class: "button"

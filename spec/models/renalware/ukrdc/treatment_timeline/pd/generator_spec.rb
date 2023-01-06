@@ -92,7 +92,7 @@ module Renalware
         end
 
         context "when there is a APD regime created within 100 yrs of the modality start date" do
-          it "finds this initial regime, regardless of how far in the future it is, and "\
+          it "finds this initial regime, regardless of how far in the future it is, and " \
              "uses its type etc when creating the Treatment" do
             apd_ukrdc_modality_code
             create_regime(start_date: Time.zone.now + 99.years, end_date: nil, type: :apd_regime)
@@ -133,7 +133,7 @@ module Renalware
         end
 
         context "when has 2 PD regimes (APD then CAPD) created after the modality start date" do
-          it "uses the first for the initial Treatment and creates "\
+          it "uses the first for the initial Treatment and creates " \
              "a futher Treatment to register the change from APD to APD" do
             apd_ukrdc_modality_code
             capd_ukrdc_modality_code

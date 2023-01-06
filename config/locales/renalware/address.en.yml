@@ -3,14 +3,14 @@ en:
   activerecord:
     attributes:
       renalware/address:
+        country: Country
+        county: County
+        email: Email
         name: Name
         organisation_name: Organisation
+        postcode: Postcode
         street_1: Line 1
         street_2: Line 2
         street_3: Line 3
-        town: Town
-        county: County
-        postcode: Postcode
-        country: Country
         telephone: Telephone
-        email: Email
+        town: Town

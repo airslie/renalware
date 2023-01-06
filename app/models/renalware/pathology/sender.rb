@@ -15,7 +15,7 @@ module Renalware
         sender = select(
           "distinct on (pathology_senders.sending_facility) pathology_senders.*"
         ).where(
-          "? similar to sending_facility and "\
+          "? similar to sending_facility and " \
           "(sending_application = ? or sending_application = '*')",
           sending_facility,
           sending_application

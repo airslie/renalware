@@ -3,14 +3,14 @@ en:
   activerecord:
     attributes:
       renalware/reporting/audit:
-        display_configuration: DataTables configuration
-        refresh_schedule: Refresh schedule (cron format)
-        name: Name
         description: Description
+        display_configuration: DataTables configuration
+        name: Name
+        refresh_schedule: Refresh schedule (cron format)
         view_name: Name of materialized view (the data source)
   renalware:
     navigation:
       reports:
-        title: "Reporting"
-        audits: "Audits"
-        reports: "Reports"
+        audits: Audits
+        reports: Reports
+        title: Reporting

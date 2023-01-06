@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/modalities"
-
 module Renalware
   module Modalities
     class Modality < ApplicationRecord
@@ -34,6 +32,10 @@ module Renalware
 
       def terminated?
         state == "terminated"
+      end
+
+      def self.policy_class
+        BasePolicy
       end
 
       private

@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module UKRDC
     describe PathologyObservationRequestPresenter do
-      describe "#placer_id which is a concatenation of several columns to "\
+      describe "#placer_id which is a concatenation of several columns to " \
                "create a unique reference that identifies an HL7 OBR request" do
         subject { described_class.new(request).placer_id }
 

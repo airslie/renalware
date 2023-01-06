@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Clinics::Appointment, type: :model do
+describe Renalware::Clinics::Appointment do
   it_behaves_like "an Accountable model"
   it :aggregate_failures do
     is_expected.to belong_to(:patient).touch(true)

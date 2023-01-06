@@ -8,7 +8,7 @@ class CreatePETResults < ActiveRecord::Migration[5.2]
 
         # The first set are inputs when seeing the patient
         t.date :performed_on, null: false
-        t.enum :test_type, enum_name: :pd_pet_type, null: false
+        t.enum :test_type, enum_type: :pd_pet_type, null: false
         t.integer :volume_in
         t.integer :volume_out
         t.references(

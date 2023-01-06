@@ -47,7 +47,7 @@ module Renalware
       end
 
       context "when the patient has had an OBR and a then an update to that OBR" do
-        it "uses Pathology::ObservationRequest#distinct_for_patient_id to ensure it always gets "\
+        it "uses Pathology::ObservationRequest#distinct_for_patient_id to ensure it always gets " \
            "the most recently received version of any observation request" do
           allow(Pathology::ObservationRequest)
             .to receive(:distinct_for_patient_id).with(patient.id)

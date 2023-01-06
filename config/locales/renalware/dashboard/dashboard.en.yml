@@ -2,23 +2,23 @@
 en:
   renalware:
     dashboard:
-      dashboards:
-        title: "Dashboard / "
-        show:
-          title: Dashboard
-        content:
-          letters:
-            in_progress:
-              none: You have no letters which are <em>in draft</em> or <em>pending review</em>.
-          bookmarks:
-            none: There are no patients bookmarked.
-          messages:
-            none: You have no messages.
-          electronic_ccs:
-            none: You have no electronic CCs.
       bookmarks:
         none: There are no patients bookmarked.
         table:
           thead:
-            patient_name: Name
             bookmarked_on: Bookmarked
+            patient_name: Name
+      dashboards:
+        content:
+          bookmarks:
+            none: There are no patients bookmarked.
+          electronic_ccs:
+            none: You have no electronic CCs.
+          letters:
+            in_progress:
+              none: You have no letters which are <em>in draft</em> or <em>pending review</em>.
+          messages:
+            none: You have no messages.
+        show:
+          title: Dashboard
+        title: 'Dashboard / '

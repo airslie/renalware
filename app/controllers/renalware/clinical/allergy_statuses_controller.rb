@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinical"
-
 module Renalware
   module Clinical
-    class AllergyStatusesController < Clinical::BaseController
+    class AllergyStatusesController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def update
-        authorize patient
+        authorize clinical_patient
         form = AllergyStatusForm.new(allergy_status_params)
-        if form.save(patient, current_user)
-          redirect_back fallback_location: patient_clinical_profile_path(patient),
+        if form.save(clinical_patient, current_user)
+          redirect_back fallback_location: patient_clinical_profile_path(clinical_patient),
                         notice: "Allergy status updated"
         else
           # we use client-side validation so will not get here

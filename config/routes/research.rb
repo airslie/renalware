@@ -2,6 +2,9 @@
 
 namespace :research do
   resources :studies do
-    resources :participants, controller: :study_participants
+    resources :participations, controller: :participations
+    resources :investigatorships, controller: :investigatorships
+    resources :memberships, controller: :memberships
+    resources :investigatorships, controller: :investigatorships
   end
 end

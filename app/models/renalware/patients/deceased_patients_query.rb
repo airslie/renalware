@@ -4,9 +4,10 @@ module Renalware
   module Patients
     # Finds patients with a death modality or who have a died_on date
     class DeceasedPatientsQuery
-      attr_reader :query_params
+      attr_reader :query_params, :scope
 
-      def initialize(query_params)
+      def initialize(query_params, scope: Patient)
+        @scope = scope
         @query_params = query_params || {}
         @query_params[:s] = "family_name ASC" if @query_params[:s].blank?
       end
@@ -16,7 +17,7 @@ module Renalware
       end
 
       def search
-        Patient
+        scope
           .includes(:first_cause, current_modality: :description)
           .ransack(query_params)
       end

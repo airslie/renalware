@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe ElectronicReceipt, type: :model do
+    describe ElectronicReceipt do
       it :aggregate_failures do
         is_expected.to belong_to(:letter).touch(true)
         is_expected.to have_db_index(:recipient_id)

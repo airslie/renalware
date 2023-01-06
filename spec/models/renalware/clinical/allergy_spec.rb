@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Clinical::Allergy, type: :model do
+describe Renalware::Clinical::Allergy do
   it_behaves_like "a Paranoid model"
   it_behaves_like "an Accountable model"
   it :aggregate_failures do

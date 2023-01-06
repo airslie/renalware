@@ -12,7 +12,7 @@ resources :patients, only: [] do
             defaults: { slug: :swabs }
 
   resources :investigations,
-            only: [:new, :create, :edit, :update],
+            only: [:new, :create, :edit, :update, :destroy],
             controller: "events/investigations",
             defaults: { slug: :investigations }
 

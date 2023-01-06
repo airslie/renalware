@@ -3,9 +3,9 @@ en:
   renalware:
     hd:
       dashboards:
-        show:
-          title: "HD Summary"
         page_actions:
-          protocol: Print HD Session Form
           mdm: MDM
+          protocol: Print HD Session Form
           record_hd_drugs: Record HD Drugs
+        show:
+          title: HD Summary

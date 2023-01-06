@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 # Represents an Electronic CC - a reference to a letter sent to a recipient (another user on the
 # system) as a 'CC'. We use the concept of a 'receipt' which, while mainly being a cross table
 # between letter and recipient user, is also a well-named place to store related information

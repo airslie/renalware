@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
-
 module Renalware
   module Patients
     class PatientsController < Renalware::BaseController
       include PresenterHelper
       include Renalware::Concerns::Pageable
+      include Renalware::Concerns::PatientVisibility
 
       def index
         sort = params.dig(:q, :s)
@@ -21,19 +20,22 @@ module Renalware
 
       def search
         skip_authorization
-        query = Patients::SearchQuery.new(term: params[:term])
+        query = Patients::SearchQuery.new(term: params[:term], scope: patient_scope)
         patients = query.call.page(page).per(per_page)
         render json: simplify(patients).to_json
       end
 
       def new
-        patient = Patient.new.tap(&:build_current_address)
+        patient = patient_scope.new.tap(&:build_current_address)
+
+        patient.hospital_centre = Renalware::Hospitals::Centre.host_site.default.ordered.first
+
         authorize patient
         render locals: { patient: patient }
       end
 
       def create
-        patient = Patient.new(patient_params)
+        patient = patient_scope.new(patient_params)
         authorize patient
 
         if patient.save_by(current_user)
@@ -65,9 +67,11 @@ module Renalware
         render locals: { patient: patient }
       end
 
+      # This differs from the base controller implementation becuase we are looking
+      # up by id not patient_id
       def patient
         @patient ||= begin
-          Renalware::Patient.find_by(secure_id: params[:id]).tap do |patient_|
+          patient_scope.find_by(secure_id: params[:id]).tap do |patient_|
             raise PatientNotFoundError unless patient_
           end
         end
@@ -97,7 +101,7 @@ module Renalware
           :local_patient_id, :local_patient_id_2, :local_patient_id_3,
           :local_patient_id_4, :local_patient_id_5, :external_patient_id,
           :send_to_renalreg, :send_to_rpv, :renalreg_decision_on, :rpv_decision_on,
-          :renalreg_recorded_by, :rpv_recorded_by,
+          :renalreg_recorded_by, :rpv_recorded_by, :hospital_centre_id,
           current_address_attributes: address_params,
           document: {}
         ]

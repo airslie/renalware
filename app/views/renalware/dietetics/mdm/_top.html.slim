@@ -1,0 +1,14 @@
+.row
+  .columns.small-12.medium-6
+    = render Renalware::Dietetics::SummaryComponent.new(patient: mdm.patient)
+    = render Renalware::Dietetics::RecentWeightsComponent.new(patient: mdm.patient, display_count: 3)
+
+  .columns.medium-6
+    = render "renalware/clinical/dry_weights/list",
+              patient: mdm.patient,
+              limit: 5
+
+  .columns.medium-6
+    = render Renalware::Dietetics::RecentHandgripsComponent.new(patient: mdm.patient, display_count: 3)
+
+  = render "worryboard", mdm: mdm

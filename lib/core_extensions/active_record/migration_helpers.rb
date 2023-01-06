@@ -36,9 +36,9 @@ module CoreExtensions
       # end
       def within_renalware_schema(suffix: nil)
         schemas = if suffix.present?
-                    "renalware_#{suffix},renalware,public"
+                    "renalware_#{suffix},renalware,public,heroku_ext"
                   else
-                    "renalware,public"
+                    "renalware,public,heroku_ext"
                   end
         original_schema_search_path = connection.schema_search_path
         connection.schema_search_path = schemas
@@ -48,7 +48,7 @@ module CoreExtensions
 
       def within_public_schema
         original_schema_search_path = connection.schema_search_path
-        connection.schema_search_path = "public"
+        connection.schema_search_path = "public,heroku_ext"
         yield if block_given?
         connection.schema_search_path = original_schema_search_path
       end

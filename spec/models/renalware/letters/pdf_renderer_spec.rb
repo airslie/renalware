@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe PdfRenderer, type: :model do
+    describe PdfRenderer do
       it "renders a PDF" do
         primary_care_physician = build_stubbed(:letter_primary_care_physician)
         patient = build_stubbed(:letter_patient, primary_care_physician: primary_care_physician)

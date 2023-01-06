@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Modalities::Modality, type: :model do
+  describe Modalities::Modality do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to validate_presence_of :patient

@@ -46,15 +46,15 @@ module Renalware::Patients::Ingestion
           )
 
           msh = "MSH|^~\&|ADT||||20150122154918||ADT^A31|897847653|P|2.3"
-          pid = "PID||"\
-                "9999999999^^^NHS|"\
-                "#{pattrs.local_patient_id}^^^HOSP_A~"\
-                "#{pattrs.local_patient_id_2}^^^HOSP_B~"\
-                "#{pattrs.local_patient_id_3}^^^HOSP_C~"\
-                "#{pattrs.local_patient_id_4}^^^HOSP_D~"\
-                "#{pattrs.local_patient_id_5}^^^HOSP_E"\
-                "||#{pattrs.family_name}^#{pattrs.given_name}^^^MS||20000101|#{pattrs.sex}|||"\
-                "#{aattrs.street_1}^#{aattrs.street_2}^#{aattrs.town}^#{aattrs.county}^"\
+          pid = "PID||" \
+                "9999999999^^^NHS|" \
+                "#{pattrs.local_patient_id}^^^HOSP_A~" \
+                "#{pattrs.local_patient_id_2}^^^HOSP_B~" \
+                "#{pattrs.local_patient_id_3}^^^HOSP_C~" \
+                "#{pattrs.local_patient_id_4}^^^HOSP_D~" \
+                "#{pattrs.local_patient_id_5}^^^HOSP_E" \
+                "||#{pattrs.family_name}^#{pattrs.given_name}^^^MS||20000101|#{pattrs.sex}|||" \
+                "#{aattrs.street_1}^#{aattrs.street_2}^#{aattrs.town}^#{aattrs.county}^" \
                 "#{aattrs.postcode}^other^HOME|||||||||||||||||||"
 
           hl7_message = Renalware::Feeds::HL7Message.new(::HL7::Message.new([msh, pid]))

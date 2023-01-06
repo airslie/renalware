@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Users::Groups::Membership, type: :model do
+  describe Users::Groups::Membership do
     it :aggregate_failures do
       is_expected.to belong_to(:group).with_foreign_key(:user_group_id)
       is_expected.to belong_to(:user)

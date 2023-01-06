@@ -145,7 +145,7 @@ When(/^Clyde submits an erroneous donor operation$/) do
   )
 end
 
-When(/^Clyde submits a pre\-dated registration$/) do
+When(/^Clyde submits a pre-dated registration$/) do
   create_transplant_registration(
     patient: @patty,
     status: "Died", started_on: Time.zone.today + 1.day,
@@ -175,7 +175,7 @@ When(/^Clyde submits an erroneous registration status$/) do
   )
 end
 
-When(/^Clyde submits an pre\-dated registration status$/) do
+When(/^Clyde submits an pre-dated registration status$/) do
   set_transplant_registration_status(
     patient: @patty,
     status: "Active", started_on: (Time.zone.today + 1.day),

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Admissions::Admission, type: :model do
+describe Renalware::Admissions::Admission do
   include PatientsSpecHelper
   let(:patient) do
     create(:patient).tap do |pat|

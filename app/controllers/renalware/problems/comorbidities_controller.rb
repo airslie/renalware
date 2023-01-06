@@ -3,6 +3,8 @@
 module Renalware
   module Problems
     class ComorbiditiesController < BaseController
+      include Renalware::Concerns::PatientVisibility
+
       def show
         comorbidities = patient.comorbidities
         authorize comorbidities

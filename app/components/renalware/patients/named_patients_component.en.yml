@@ -1,11 +1,12 @@
+---
 en:
   renalware:
     patients:
       named_patients_component:
-        title: Named Patients
-        last_clinic_visit: Last clinic visit
-        cre: CRE
-        hgb: HGB
-        dialysing_at: Dialysing at
-        access_started: Access started
         access: Access
+        access_started: Access started
+        cre: CRE
+        dialysing_at: Dialysing at
+        hgb: HGB
+        last_clinic_visit: Last clinic visit
+        title: Named Patients

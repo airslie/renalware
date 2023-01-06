@@ -5,6 +5,13 @@
         .small-9.large-4.columns
           = f.label "Name or username contains"
           = f.search_field :family_name_or_given_name_or_username_or_email_cont
+        .small-5.large-4.columns
+          = f.label "Site"
+          = f.select(:hospital_centre_id_eq,
+                     options_from_collection_for_select(\
+                     Renalware::Hospitals::Centre.all, "id", "name", user_search.hospital_centre_id_eq),
+                     { include_blank: "Any" },
+                     { class: "searchable_select" })
         .small-3.large-4.columns.actions.end
           = f.submit t("btn.filter"), class: "button"
           '  or

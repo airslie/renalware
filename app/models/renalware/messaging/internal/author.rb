@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/messaging"
-
 module Renalware
   module Messaging
     # TODO: Document the Internal module

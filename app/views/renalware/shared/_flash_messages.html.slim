@@ -1,6 +1,3 @@
-.flash-message
-  - flash_messages.each do |name, msg|
-    .row.no-side-gutters class=name
-      .alert-box class=flash_style(name) data={ alert: nil }
-        = msg
-        a href="#" class="close" &times;
+/ This partial is used by js partials to display any flash messages after a js action 
+/ e.g a create via a modal
+= render(Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: true))

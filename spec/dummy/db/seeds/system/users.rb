@@ -3,6 +3,7 @@
 module Renalware
   log "Adding Demo Site Users\n" do
     sites = %w(Barts KCH Kent Lister)
+    host_hospital_centre_id = Hospitals::Centre.where(host_site: true).order(:name).pluck(:id).first
 
     sites.each do |site|
       site_code = site.downcase
@@ -19,6 +20,7 @@ module Renalware
         u.signature = "#{site} Superuser"
         u.feature_flags = 4
         u.professional_position = Faker::Job.position
+        u.hospital_centre_id = host_hospital_centre_id
       end
 
       log "#{username} created.", type: :sub
@@ -34,6 +36,7 @@ module Renalware
         u.roles = [Renalware::Role.find_by!(name: :admin)]
         u.signature = "Dr #{site} Admin, MRCP"
         u.professional_position = Faker::Job.position
+        u.hospital_centre_id = host_hospital_centre_id
       end
 
       log "#{username} created.", type: :sub
@@ -50,6 +53,7 @@ module Renalware
         u.signature = "Dr #{site}"
         u.telephone = Faker::PhoneNumber.phone_number
         u.professional_position = Faker::Job.position
+        u.hospital_centre_id = host_hospital_centre_id
       end
 
       log "#{username} created.", type: :sub
@@ -65,6 +69,7 @@ module Renalware
         u.roles = [Renalware::Role.find_by!(name: :clinical)]
         u.signature = "#{site} Nurse"
         u.professional_position = Faker::Job.position
+        u.hospital_centre_id = host_hospital_centre_id
       end
 
       log "#{username} created.", type: :sub
@@ -80,6 +85,7 @@ module Renalware
         u.roles = [Renalware::Role.find_by!(name: :read_only)]
         u.signature = "#{site} Guest"
         u.professional_position = [Faker::Job.seniority, Faker::Job.position].compact.join(" ")
+        u.hospital_centre_id = host_hospital_centre_id
       end
 
       log "#{username} created.", type: :sub
@@ -96,6 +102,7 @@ module Renalware
       u.signature = "Renalware Developer"
       u.professional_position = Faker::Job.position
       u.authentication_token = "eZ4sswrWAtbx6hgfiGn8"
+      u.hospital_centre_id = host_hospital_centre_id
     end
   end
 end

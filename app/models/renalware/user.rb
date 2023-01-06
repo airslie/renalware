@@ -33,11 +33,6 @@ module Renalware
     scope :author, -> { where.not(signature: nil) }
     scope :ordered, -> { order(:family_name, :given_name) }
     scope :excluding_system_user, -> { where.not(username: SystemUser.username) }
-    scope :with_no_role, lambda {
-      left_outer_joins(:roles)
-        .distinct("roles_users.user_id")
-        .where("roles_users.user_id is null")
-    }
     scope :consultants, -> { where(consultant: true).excluding_system_user.ordered }
     scope :visible, -> { where(hidden: false) }
     scope :hidden, -> { where(hidden: true) }
@@ -91,7 +86,7 @@ module Renalware
     # The idea is that we can check the token belongs to the user buy regenerating the token at any
     # time and checking it still matches. Unlike Devise.friendly_token, we can always regenerate
     # the same token here for any user as it is salted with the same secret. This secret is not
-    # stored git for staging and production environments.
+    # stored git for uat and production environments.
     def auth_token
       digest = OpenSSL::Digest.new("sha256")
       key = Rails.application.secrets.secret_key_base

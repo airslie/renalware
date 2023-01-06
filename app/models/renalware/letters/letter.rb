@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 module Renalware
   module Letters
     class Letter < ApplicationRecord
@@ -20,6 +18,7 @@ module Renalware
       belongs_to :completed_by, class_name: "User"
       belongs_to :patient, touch: true
       belongs_to :letterhead
+      belongs_to :topic, class_name: "Letters::Topic", optional: true
       has_one :main_recipient,
               -> { where(role: "main") },
               class_name: "Recipient",
@@ -34,6 +33,7 @@ module Renalware
       has_many :electronic_cc_recipients,
                through: :electronic_receipts,
                source: :recipient # recipient here is class User not Letters:Recipient
+      has_many :section_snapshots, dependent: :destroy
       has_one :signature, dependent: :destroy
       has_one :archive, inverse_of: :letter
       serialize :pathology_snapshot, Pathology::ObservationsJsonbSerializer
@@ -44,7 +44,8 @@ module Renalware
       validates :letterhead, presence: true
       validates :author, presence: true
       validates :patient, presence: true
-      validates :description, presence: true
+      validates :topic, presence: true, if: ->(letter) { letter.description.nil? }
+
       validates :main_recipient, presence: true
 
       include ExplicitStateModel
@@ -70,6 +71,12 @@ module Renalware
 
       delegate :primary_care_physician, to: :patient
       delegate :visit_number, :clinic_code, to: :event, allow_nil: true
+      delegate :sections, to: :topic, allow_nil: true
+
+      EVENTS_MAP = {
+        Clinics::ClinicVisit => Event::ClinicVisit,
+        NilClass => Event::Unknown
+      }.freeze
 
       def self.policy_class
         LetterPolicy
@@ -89,11 +96,6 @@ module Renalware
         Arel.sql("coalesce(completed_at, approved_at, submitted_for_approval_at, created_at)")
       end
 
-      EVENTS_MAP = {
-        Clinics::ClinicVisit => Event::ClinicVisit,
-        NilClass => Event::Unknown
-      }.freeze
-
       # A Letter Event is unrelated to Events::Event. Instead it is an un-persisted decorator
       # around the polymorphic event relationship (determined by event_class and event_id);
       # each concrete Event class decorates that relationship with some helpers, for example
@@ -105,7 +107,7 @@ module Renalware
       # 'clinical letter' which is a simple letter with the added clinical parts, but which is
       # unrelated to a clinic_visit for instance.
       def letter_event
-        EVENTS_MAP.fetch(event.class).new(event, clinical: clinical?)
+        EVENTS_MAP.fetch(event.class, Event::ClinicVisit).new(event, clinical: clinical?)
       end
 
       def subject?(other_patient)

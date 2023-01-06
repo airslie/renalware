@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module Letters
     module Mailshots
-      describe Mailshot, type: :model do
+      describe Mailshot do
         it :aggregate_failures do
           is_expected.to validate_presence_of(:description)
           is_expected.to validate_presence_of(:author)

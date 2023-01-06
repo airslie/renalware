@@ -11,7 +11,7 @@ module Renalware::Feeds
     let(:message_type) { "ORU^R01" }
     let(:sex) { "F" }
     let(:raw_message) do
-      msg = <<-RAW.strip_heredoc
+      msg = <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||#{message_type}|1258271|P|2.3.1|||AL||||
         PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
@@ -128,7 +128,7 @@ module Renalware::Feeds
 
     context "when the message type is MFN^M02" do
       let(:raw_message) do
-        <<-RAW.strip_heredoc
+        <<~RAW
           MSH|^~\&|ADT|iSOFT Engine|eGate|Kings|20191030155640||MFN^M02|1861609776|P|2.3|||AL|AL
           MFI|STF|PIMS|UPD|20191030155640|20191030155640|NE
           MFE|MAD|1861609776|20191030155640|193814
@@ -154,7 +154,7 @@ module Renalware::Feeds
 
     describe HL7Message::Observation do
       let(:raw_message) do
-        <<-RAW.strip_heredoc
+        <<~RAW
           MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
           PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
           OBR|2|BRM-21B846500|BRM-0021B846500|FBC^FULL BLOOD COUNT^WinPath||202111111228|202111111221||||||copd excetrbation ? sob||B^Blood|EMD^A\T\E Consultant||||||202111111240||BLS|F

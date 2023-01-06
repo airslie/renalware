@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::HD::Scheduling
-  describe MasterDiary, type: :model do
+  describe MasterDiary do
     it { is_expected.to have_many(:weekly_diaries) }
 
     describe "#master" do

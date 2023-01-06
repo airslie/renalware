@@ -4,7 +4,7 @@ require "rspec-html-matchers"
 require "rails_helper"
 
 module Renalware
-  describe PrimaryCarePhysiciansHelper, type: :helper do
+  describe PrimaryCarePhysiciansHelper do
     include RSpecHtmlMatchers
 
     describe "practices_options_for_select" do

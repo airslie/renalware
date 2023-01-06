@@ -1,27 +1,28 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
-    class ObservationRequestsController < Pathology::BaseController
+    class ObservationRequestsController < BaseController
+      include Renalware::Concerns::PatientVisibility
+      include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::Pageable
-      before_action :load_patient
 
       def index
+        authorize pathology_patient
         observation_requests = find_observation_requests
         render locals: {
           observation_requests: observation_requests.result.page(page).per(per_page),
           search: observation_requests,
           obr_filter_options: obr_filter_options,
-          patient: @patient
+          patient: pathology_patient
         }
       end
 
       def show
+        authorize pathology_patient
         observation_request = find_observation_request
 
-        render locals: { observation_request: observation_request, patient: @patient }
+        render locals: { observation_request: observation_request, patient: pathology_patient }
       end
 
       private
@@ -29,7 +30,8 @@ module Renalware
       # Select just the OBR description ids and codes that have been associated with this patient.
       # We'll uses them to build a filter dropdown list.
       def obr_filter_options
-        @patient.observation_requests
+        pathology_patient
+          .observation_requests
           .joins(:description)
           .order("pathology_request_descriptions.code asc")
           .pluck(
@@ -42,14 +44,16 @@ module Renalware
       end
 
       def find_observation_requests
-        @patient.observation_requests
+        pathology_patient
+          .observation_requests
           .includes(:description)
           .ordered
           .ransack(params[:q])
       end
 
       def find_observation_request
-        @patient.observation_requests
+        pathology_patient
+          .observation_requests
           .includes(observations: :description)
           .find(params[:id])
       end

@@ -9,12 +9,13 @@ module Renalware::Letters
 
       describe "#part_classes" do
         it "contains the default clinical part classes" do
-          expect(event.part_classes).to eq(
-            problems: Part::Problems,
-            prescriptions: Part::Prescriptions,
-            recent_pathology_results: Part::RecentPathologyResults,
-            allergies: Part::Allergies
-          )
+          expect(event.part_classes).to eq \
+            [
+              Part::Problems,
+              Part::Prescriptions,
+              Part::RecentPathologyResults,
+              Part::Allergies
+            ]
         end
       end
 
@@ -31,8 +32,8 @@ module Renalware::Letters
       subject(:event) { described_class.new(nil) }
 
       describe "#part_classes" do
-        it "is an empty hash" do
-          expect(event.part_classes).to eq({})
+        it "is an empty array" do
+          expect(event.part_classes).to eq([])
         end
       end
 

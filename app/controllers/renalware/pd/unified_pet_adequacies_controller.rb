@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd/base_controller"
-
 module Renalware
   module PD
     # PET and Adequacy are two distinct, descrete PD tests.
@@ -16,15 +14,17 @@ module Renalware
     # the processing of the tests is quicte different.
     # See pet.rb and adequacy.rb for more detail.
     class UnifiedPETAdequaciesController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
       include PresenterHelper
 
       # We use an activbe model form to present a unified model api for the view
       # to display and submit in the #new template.
       def new
         form = UnifiedPETAdequacyForm.new(
-          patient: patient,
-          pet: PETResult.new(patient: patient, performed_on: Date.current),
-          adequacy: AdequacyResult.new(patient: patient, performed_on: Date.current)
+          patient: pd_patient,
+          pet: PETResult.new(patient: pd_patient, performed_on: Date.current),
+          adequacy: AdequacyResult.new(patient: pd_patient, performed_on: Date.current)
         )
         authorize Patient, :index?
         render locals: { form: form }
@@ -38,7 +38,7 @@ module Renalware
 
         if form.valid?
           form.save_by!(current_user)
-          redirect_to patient_pd_dashboard_path(patient)
+          redirect_to patient_pd_dashboard_path(pd_patient)
         else
           render :new, locals: { form: form }
         end
@@ -46,7 +46,7 @@ module Renalware
 
       def build_form_object(pet, adequacy)
         UnifiedPETAdequacyForm.new(
-          patient: patient,
+          patient: pd_patient,
           pet: pet,
           adequacy: adequacy,
           **unified_params.to_h.symbolize_keys

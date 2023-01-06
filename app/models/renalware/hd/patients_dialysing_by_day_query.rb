@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-
 # Find for example HD Patients who according to their HD Profile dialyse on Monday
 # at a particular unit
 # Example usage in that instance (1 == Monday):

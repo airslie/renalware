@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Patients
-  describe PracticeMembership, type: :model do
+  describe PracticeMembership do
     it :aggregate_failures do
       is_expected.to belong_to(:practice)
       is_expected.to belong_to(:primary_care_physician)

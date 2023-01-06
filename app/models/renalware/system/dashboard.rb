@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/system"
-
 module Renalware
   module System
     # The desription in data of a dashboard displayed in the UI, for example

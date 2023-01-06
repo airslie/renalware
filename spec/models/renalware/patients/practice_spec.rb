@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Patients
-  describe Practice, type: :model do
+  describe Practice do
     it :aggregate_failures do
       is_expected.to validate_presence_of :name
       is_expected.to validate_presence_of :address

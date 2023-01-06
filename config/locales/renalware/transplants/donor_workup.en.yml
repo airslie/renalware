@@ -2,26 +2,36 @@
 en:
   activemodel:
     attributes:
-      renalware/transplants/donor_workup_document/relationship:
-        donor_recip_relationship: Relationship to Recipient
-        relationship_other: Other Relationship (if required)
       renalware/transplants/donor_workup_document/comorbidities:
-        diabetes: Diabetes?
-        ischaemic_heart_dis: Ischaemic Heart Disease?
-        cabg_or_angioplasty: CABG or Coronary Angioplasty?
-        heart_failure: Episode of heart failure (R or L)?
+        amputation_for_pvd: Amputation for PVD?
         atrial_fibrill: Atrial Fibrillation?
-        malignancy: Malignancy?
+        cabg_or_angioplasty: CABG or Coronary Angioplasty?
         cerebrovascular_dis: Cerebrovascular Disease?
         chronic_obstr_pulm_dis: Chronic Obstructive Pulmonary Disease?
-        liver_disease: Liver disease?
-        periph_vascular_dis: Peripheral Vascular Disease?
-        amputation_for_pvd: Amputation for PVD?
         claudication: Claudication?
-        ischaemic_neuropathic_ulcers: Ischaemic/Neuropathic ulcers?
-        non_coronary_intervention: Angioplasty, vascular graft, aneurysm, stent (non-coronary)?
         dementia: Dementia?
+        diabetes: Diabetes?
+        heart_failure: Episode of heart failure (R or L)?
+        ischaemic_heart_dis: Ischaemic Heart Disease?
+        ischaemic_neuropathic_ulcers: Ischaemic/Neuropathic ulcers?
+        liver_disease: Liver disease?
+        malignancy: Malignancy?
+        non_coronary_intervention: Angioplasty, vascular graft, aneurysm, stent (non-coronary)?
+        periph_vascular_dis: Peripheral Vascular Disease?
         smoking: Smoker?
+      renalware/transplants/donor_workup_document/creatinine_clearance:
+        clearance: Calculated Clearance
+        clearance_type: Calculated Clearance Type
+        measured_clearance: Measured Clearance
+      renalware/transplants/donor_workup_document/glomerular_filtration_rate:
+        is_measured_value_corrected: Is Measured GFR Corrected?
+        isotopic_value: Isotopic GFR
+        measured_value: Measured GFR
+        value_corrected_for_bsa: GFR Corrected for Body Surface Area?
+      renalware/transplants/donor_workup_document/imaging_and_scans:
+        chest_xray: Chest X-ray (CXR)
+        ecg_comment: ECG Comment
+        renal_ultrasound: Renal Ultrasound
       renalware/transplants/donor_workup_document/infections:
         cytology: Urine Cytology
         ebv: EBV Test
@@ -32,22 +42,6 @@ en:
         syphilis: Syphilis Test
         syphilis_preop: Syphilis Test (pre-op)
         toxoplasmosis: Toxoplasmosis Test
-      renalware/transplants/donor_workup_document/imaging_and_scans:
-        chest_xray: Chest X-ray (CXR)
-        ecg_comment: ECG Comment
-        renal_ultrasound: Renal Ultrasound
-      renalware/transplants/donor_workup_document/creatinine_clearance:
-        clearance: Calculated Clearance
-        clearance_type: Calculated Clearance Type
-        measured_clearance: Measured Clearance
-      renalware/transplants/donor_workup_document/glomerular_filtration_rate:
-        is_measured_value_corrected: Is Measured GFR Corrected?
-        isotopic_value: Isotopic GFR
-        measured_value: Measured GFR
-        value_corrected_for_bsa: GFR Corrected for Body Surface Area?
-      renalware/transplants/donor_workup_document/urine_dipsticks:
-        blood: Blood Result
-        protein: Protein Result
       renalware/transplants/donor_workup_document/other_investigations:
         egfr: Donor eGFR
         haemoglobinopathy: Haemoglobinopathy Comment
@@ -55,6 +49,12 @@ en:
         oral_gtt: Oral GTT
         protein_creatinine_ratio: Protein Creatinine Ratio
         sitting_blood_pressure: Sitting Blood Pressure
+      renalware/transplants/donor_workup_document/relationship:
+        donor_recip_relationship: Relationship to Recipient
+        relationship_other: Other Relationship (if required)
+      renalware/transplants/donor_workup_document/urine_dipsticks:
+        blood: Blood Result
+        protein: Protein Result
     errors:
       models:
         renalware/transplants/donor_workup_document/scores:
@@ -67,24 +67,24 @@ en:
     renalware/transplants/donor_workup_document/creatinine_clearance:
       clearance_type:
         cockroft_gault: Cockroft & Gault
-        schwartz: Schwartz
         other: Other
+        schwartz: Schwartz
     renalware/transplants/donor_workup_document/relationship:
       donor_recip_relationship:
-        son_or_daughter: "Son or daughter"
-        mother_or_father: "Mother or father"
-        sibling_2_shared: "Sibling (2 shared haplotypes)"
-        sibling_1_shared: "Sibling (1 shared haplotype)"
-        sibling_0_shared: "Sibling (0 shared haplotypes)"
-        sibling:: "Sibling (genetic relationship unknown)"
-        monozygotic_twin: "Monozygotic (identical) twin"
-        dizygotic_twin: "Dizygotic (non-identical) twin"
-        other_living_related: "Other living related - please specify"
-        living_non_related_spouse: "Living non-related donor - spouse"
-        living_non_related_partner: "Living non-related donor - partner"
-        pooled_paired: "Pooled/paired donor"
-        altruistic_non_directed: "Altruistic non-directed donor"
-        other_living_non_related: "Other living non-related donor - please specify"
+        altruistic_non_directed: Altruistic non-directed donor
+        dizygotic_twin: Dizygotic (non-identical) twin
+        living_non_related_partner: Living non-related donor - partner
+        living_non_related_spouse: Living non-related donor - spouse
+        monozygotic_twin: Monozygotic (identical) twin
+        mother_or_father: Mother or father
+        other_living_non_related: Other living non-related donor - please specify
+        other_living_related: Other living related - please specify
+        pooled_paired: Pooled/paired donor
+        'sibling:': Sibling (genetic relationship unknown)
+        sibling_0_shared: Sibling (0 shared haplotypes)
+        sibling_1_shared: Sibling (1 shared haplotype)
+        sibling_2_shared: Sibling (2 shared haplotypes)
+        son_or_daughter: Son or daughter
   simple_form:
     hints:
       transplants_donor_workup:
@@ -94,11 +94,11 @@ en:
               status: For comorbidities enter year diagnosed at right if YES
             smoking:
               status: Includes former as well as current smokers
+          glomerular_filtration_rate:
+            measured_gfr:
+              result: 'Uncorrected: enter as <b>ml/min</b><br>Corrected: enter as <b>ml/min/1.73m²</b>'
           infections:
             htlv:
               status: Enter date of this and following tests at right
-          glomerular_filtration_rate:
-            measured_gfr:
-              result: "Uncorrected: enter as <b>ml/min</b><br>Corrected: enter as <b>ml/min/1.73m²</b>"
           other_investigations:
             sitting_blood_pressure: Enter as e.g. '120/80'

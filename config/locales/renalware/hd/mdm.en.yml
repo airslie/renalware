@@ -2,52 +2,51 @@
 en:
   renalware:
     hd:
-      mdm_patients:
-        index:
-          page_title: HD MDM Patients
-        filters:
-          hospital_unit: Dialysing at
-          schedule: Schedule
       mdm:
-        en:
-        hd_profile:
-          title: HD Profile
-          schedule: Sched
-          scheduled_time: Scheduled time
-          prescribed_time: Prescribed time
-          hd_type: HD Type
-          named_nurse: Named nurse
-          dialyser: Dialyser
-          dialysate: Dialysate
-          anticoagulant: Anticoag
-          cannulation_type: Cann type
-          last_update: Last updated
         access:
-          title: Access
-          site: Site
-          type: Type
-          side: Side
+          notes: Notes
           plan: Plan
           plan_date: Plan date
-          notes: Notes
+          side: Side
+          site: Site
+          title: Access
+          type: Type
         audits:
-          title: Audit
-          period: Period
-          pre_mean_blood_pressure: Pre mean BP
-          post_mean_blood_pressure: Post mean BP
-          lowest_systolic_blood_pressure: Lowest syst BP
+          dialysis_minutes_shortfall: Missed HD time
           highest_systolic_blood_pressure: Highest syst BP
+          lowest_systolic_blood_pressure: Lowest syst BP
+          mean_blood_flow: Mean blood flow
           mean_fluid_removal: Mean fluid removal
-          mean_weight_loss: Mean weight loss
+          mean_litres_processed: Mean litres proc.
           mean_machine_ktv: Mean mach. KTv
           mean_ufr: Mean UFR (ml/hr/kg)
-          mean_blood_flow: Mean blood flow
-          mean_litres_processed: Mean litres proc.
+          mean_weight_loss: Mean weight loss
           number_of_sessions: Sessions
-          dialysis_minutes_shortfall: Missed HD time
+          period: Period
+          post_mean_blood_pressure: Post mean BP
+          pre_mean_blood_pressure: Pre mean BP
+          title: Audit
+        hd_profile:
+          anticoagulant: Anticoag
+          cannulation_type: Cann type
+          dialysate: Dialysate
+          dialyser: Dialyser
+          hd_type: HD Type
+          last_update: Last updated
+          named_nurse: Named nurse
+          prescribed_time: Prescribed time
+          schedule: Sched
+          scheduled_time: Scheduled time
+          title: HD Profile
         pathology:
           title: Pathology
           view: View
         sessions:
           title: HD Sessions
           view_all: View all
+      mdm_patients:
+        filters:
+          hospital_unit: Dialysing at
+          schedule: Schedule
+        index:
+          page_title: HD MDM Patients

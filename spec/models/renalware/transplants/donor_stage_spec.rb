@@ -27,7 +27,7 @@ module Renalware
 
       describe "scopes" do
         describe "#current" do
-          it "returns the one and only current status ie the only one (for this patient) "\
+          it "returns the one and only current status ie the only one (for this patient) " \
              "without a termination date" do
             user = create(:user)
             patient = Transplants.cast_patient(create(:patient))

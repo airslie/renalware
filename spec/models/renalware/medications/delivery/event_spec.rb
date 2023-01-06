@@ -5,7 +5,7 @@ require "rails_helper"
 module Renalware
   module Medications
     module Delivery
-      describe Event, type: :model do
+      describe Event do
         it_behaves_like "a Paranoid model"
         it_behaves_like "an Accountable model"
         it { is_expected.to belong_to :drug_type }

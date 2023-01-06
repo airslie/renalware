@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/system"
 require "liquid" # See https://github.com/Shopify/liquid
 
 module Renalware

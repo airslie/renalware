@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-
 module Renalware
   module Deaths
-    def self.table_name_prefix
-      "death_"
-    end
+    def self.table_name_prefix = "death_"
   end
 end

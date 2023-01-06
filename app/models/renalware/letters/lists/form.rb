@@ -35,6 +35,7 @@ module Renalware
           attribute :created_by_id_eq, Integer
           attribute :letterhead_id_eq, Integer
           attribute :page_count_in_array, Integer
+          attribute :clinic_visit_clinic_id_eq, Integer
 
           def letter_state_options(states = Letters::Letter.states)
             states.map do |state|
@@ -53,6 +54,12 @@ module Renalware
 
           def letterhead_options
             @letterhead_options ||= Letters::Letterhead.ordered
+          end
+
+          def clinic_visit_clinic_options
+            @clinic_visit_clinic_options ||= Clinics::Clinic.order(:name).map { |cl|
+              [cl.description, cl.id]
+            }
           end
 
           def page_count_options

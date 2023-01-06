@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 #
 # When subscribed to HL7 `oru_message_arrived` messages, gets notified of incoming HL7 messages.
 # Here we are interested only in AKI path results

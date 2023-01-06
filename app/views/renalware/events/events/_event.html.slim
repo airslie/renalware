@@ -1,4 +1,7 @@
 - row_id = "#{toggle_prefix}-quick-preview-#{event.id}"
+- edit_proc = local_assigns[:edit_proc]
+- destroy_proc = local_assigns[:destroy_proc]
+
 tr
   td.noprint= toggler("##{row_id}")
   td.actions
@@ -7,13 +10,10 @@ tr
     / custom edit link (e.g. the Investigations event subclass, has its own slug, controllwe and
     / and form) otherwise render a standard Event edit link.
     - if policy(event).edit?
-      = link_to(t("btn.edit"), local_assigns[:edit_proc] ? edit_proc.call(event) : edit_patient_event_path(event.patient, event))
+      = link_to(t("btn.edit"), edit_proc&.call(event) || edit_patient_event_path(event.patient, event))
 
     - if policy(event).destroy?
-      - if local_assigns[:destroy_proc]
-        = link_to(t("btn.delete"), destroy_proc.call(event))
-      - else
-        = link_to(patient_event_path(event.patient, event),
+        = link_to(destroy_proc&.call(event) || patient_event_path(event.patient, event),
                   method: :delete,
                   data: { confirm: "Are you sure you want delete this event?\n" }) do
           i.far.fa-trash-alt

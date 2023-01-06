@@ -1,0 +1,6 @@
+= within_patient_layout(title: "Investigation / New") do
+  = render "renalware/events/events/form",
+            event: event,
+            patient: patient,
+            event_types: event_types,
+            url: patient_investigations_path(patient)

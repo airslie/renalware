@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware"
-
 module Renalware
   module Broadcasting
     include Wisper::Publisher
@@ -16,7 +14,7 @@ module Renalware
         @async = async
       end
 
-      # Note that when using the wisper-activejob gem (so we can use delayed_job for instance)
+      # Note that when using the wisper-activejob gem
       # we subscribe the class not an instance, and the subscriber must have class
       # methods matching the event names it wants to handle.
       # https://github.com/krisleech/wisper-activejob

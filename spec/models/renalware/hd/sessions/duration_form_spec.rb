@@ -143,7 +143,7 @@ describe Renalware::HD::Sessions::DurationForm do
     context "when start_date present but start_time blank" do
       subject { described_class.new(start_date: "2021-12-12").started_at }
 
-      it { is_expected.to eq(DateTime.parse("2021-12-12 00:00:00")) }
+      it { is_expected.to eq(Time.zone.parse("2021-12-12 00:00:00")) }
     end
 
     context "when start_date is not a valid date" do
@@ -155,7 +155,13 @@ describe Renalware::HD::Sessions::DurationForm do
     context "when start_date and start_time are present" do
       subject { described_class.new(start_date: "2021-12-12", start_time: "11:31").started_at }
 
-      it { is_expected.to eq(DateTime.parse("2021-12-12 11:31:00")) }
+      it { is_expected.to eq(Time.zone.parse("2021-12-12 11:31:00")) }
+    end
+
+    context "when allowing for a different server timestamp", tz: "Pacific Time (US & Canada)" do
+      subject { described_class.new(start_date: "2021-12-12", start_time: "11:31").started_at }
+
+      it { is_expected.to eq(Time.zone.parse("Sun, 12 Dec 2021 11:31:00 -0800")) }
     end
   end
 
@@ -181,7 +187,7 @@ describe Renalware::HD::Sessions::DurationForm do
         ).stopped_at
       end
 
-      it { is_expected.to eq(DateTime.parse("2021-12-12 13:31:00")) }
+      it { is_expected.to eq(Time.zone.parse("2021-12-12 13:31:00")) }
 
       context "when overnight_dialysis is true" do
         subject(:form) do
@@ -195,8 +201,20 @@ describe Renalware::HD::Sessions::DurationForm do
 
         it do
           expect(form).to be_valid
-          expect(form.stopped_at).to eq(DateTime.parse("2021-12-13 01:01:00"))
+          expect(form.stopped_at).to eq(Time.zone.parse("2021-12-13 01:01:00"))
         end
+      end
+
+      context "when allowing for a different server timestamp", tz: "Pacific Time (US & Canada)" do
+        subject do
+          described_class.new(
+            start_date: "2021-12-12",
+            start_time: "11:31",
+            end_time: "13:31"
+          ).stopped_at
+        end
+  
+        it { is_expected.to eq(Time.zone.parse("Sun, 12 Dec 2021 13:31:00 -0800")) }
       end
     end
   end

@@ -3,10 +3,10 @@ en:
   activerecord:
     attributes:
       renalware/transplants/donor_followup:
-        last_seen_on: Last Seen Date
+        dead_on: Date of Death
         followed_up: Followed Up
+        last_seen_on: Last Seen Date
         lost_to_followup: Has been lost to follow up?
+        notes: Notes
         transferred_for_followup: Was transferred for follow up?
         ukt_centre_code: Followup Centre Code
-        dead_on: Date of Death
-        notes: Notes

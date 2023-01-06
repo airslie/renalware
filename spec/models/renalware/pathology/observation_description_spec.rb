@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Pathology::ObservationDescription, type: :model do
+  describe Pathology::ObservationDescription do
     it :aggregate_failures do
       is_expected.to belong_to(:measurement_unit)
       is_expected.to have_db_index(:code).unique(true)

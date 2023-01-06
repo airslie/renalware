@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/system"
-
 module Renalware
   module System
     # Backed by Jsonb, stored in view_metadata.columns, a model to allow

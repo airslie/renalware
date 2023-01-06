@@ -281,7 +281,6 @@ module World
           expected_values
             .except("consultant_code")
             .each do |key, expected_value|
-
             xpath = <<-ELEMENT.squish
               //div[data-patient-id='#{patient.id}']
               [data-role='form_summary']

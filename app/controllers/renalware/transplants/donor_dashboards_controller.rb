@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants/base_controller"
-
 module Renalware
   module Transplants
     class DonorDashboardsController < BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
 
       def show
-        render locals: { dashboard: DonorDashboardPresenter.new(patient) }
+        authorize transplants_patient
+        render locals: { dashboard: DonorDashboardPresenter.new(transplants_patient) }
       end
     end
   end

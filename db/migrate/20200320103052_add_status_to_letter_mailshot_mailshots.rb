@@ -6,7 +6,7 @@ class AddStatusToLetterMailshotMailshots < ActiveRecord::Migration[5.2]
         %w(queued processing success failure)
       )
       change_table :letter_mailshot_mailshots do |t|
-        t.enum :status, enum_name: :background_job_status
+        t.enum :status, enum_type: :background_job_status
         t.text :last_error
       end
     end

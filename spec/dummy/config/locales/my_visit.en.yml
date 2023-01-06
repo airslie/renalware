@@ -1,0 +1,21 @@
+en:
+  enumerize:
+    clinics/my_visit/document:
+      physical_activity:
+        1_gt_3_times_a_wk: ">3 times a week"
+        2_twice_a_week: "Twice a week"
+        3_once_a_week: "Once a week"
+        4_lt_once_a_week: "Less than once a week"
+        5_never: "Never"
+        99_refused: "Refused"
+    clinics/my_visit/document/smoking:
+      history:
+        1_never: "I have never smoked cigarettes regularly"
+        2_previous_smoker: "I used to smoke cigarettes regualrly but no longer do"
+        3_smoke_regularly: "I smoke cigarettes regularly"
+        99_refused: "Refused"
+      ecigarettes:
+        1_never: "I have never smoked e-cigarrettes regularly"
+        2_previous_smoker: "I used to smoke e-cigarettes regualrly but no longer do"
+        3_smoke_regularly: "I smoke e-cigarettes regularly"
+        99_refused: "Refused"

@@ -11,7 +11,8 @@ describe Renalware::PD::PETResultsComponent, type: :component do
       allow(component).to receive(:results).and_return([])
 
       render_inline(component).to_html
-      expect(rendered_component).to be_blank
+
+      expect(page.text).to be_blank
     end
   end
 

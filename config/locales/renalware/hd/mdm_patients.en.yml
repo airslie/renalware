@@ -4,35 +4,35 @@ en:
     hd:
       mdm_patients:
         patient:
-          view: "MDM"
+          view: MDM
         table:
           page_title: HD MDM patients
           thead:
-            name: Name
             access: Access
-            access_started_on: Access date
             access_plan: Access Plan
             access_plan_date: Plan Date
-            registration_status: Tx Status
-            schedule: Schedule
-            transport_type: Transport
+            access_started_on: Access date
+            cre: CRE
+            cre_date: CRE Date
             dialysing_at: Dialysing at
+            egfr: EGFR
             esrf: ESRF
             hgb: HGB
             hgb_date: HGB Date
+            name: Name
+            phos: PO4
+            phos_date: PO4 Date
+            pot: POT
+            pot_date: POT Date
+            pthi: PTHI
+            pthi_date: PTHI Date
+            registration_status: Tx Status
+            schedule: Schedule
+            transport_type: Transport
             ure: URE
             ure_date: URE Date
             urr: URR
             urr_date: URR Date
-            phos: PO4
-            phos_date: PO4 Date
-            pthi: PTHI
-            pthi_date: PTHI Date
-            pot: POT
-            pot_date: POT Date
-            cre: CRE
-            cre_date: CRE Date
-            egfr: EGFR
         tabs:
           tab:
             all: All

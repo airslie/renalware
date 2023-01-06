@@ -26,10 +26,10 @@ module Renalware
         end
 
         def log_weekly_diary_creation(period)
-          Rails.logger.debug(
-            "DEBUG: Creating weekly diary for unit #{unit.id} period "\
-            "#{period.week_number}/#{period.year}"
-          )
+          Rails.logger.debug {
+            "DEBUG: Creating weekly diary for unit #{unit.id} period " \
+              "#{period.week_number}/#{period.year}"
+          }
         end
 
         def from_date
@@ -57,7 +57,7 @@ module Renalware
 
         def master_diary_for(unit, by)
           MasterDiary.find_or_create_by!(hospital_unit_id: unit.id) do |diary|
-            Rails.logger.debug "DEBUG: Creating master diary for unit #{unit.id}"
+            Rails.logger.debug { "DEBUG: Creating master diary for unit #{unit.id}" }
             diary.master = true
             diary.by = by
           end

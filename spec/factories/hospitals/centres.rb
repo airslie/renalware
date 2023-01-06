@@ -8,5 +8,6 @@ FactoryBot.define do
 
     name { "King's College Hospital" }
     code { "RJZ" }
+    host_site { true }
   end
 end

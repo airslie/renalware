@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 # Responsible for finding Observations for the specified descriptions.
 module Renalware
   module Pathology

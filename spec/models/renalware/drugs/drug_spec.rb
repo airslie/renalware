@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Drugs
-  describe Drug, type: :model do
+  describe Drug do
     subject(:drug) { build(:drug) }
 
     it :aggregate_failures do

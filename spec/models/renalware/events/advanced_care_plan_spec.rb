@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Events::AdvancedCarePlan, type: :model do
+describe Renalware::Events::AdvancedCarePlan do
   describe "#document" do
     subject { described_class.new.document }
 

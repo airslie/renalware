@@ -4,41 +4,13 @@ en:
     attributes:
       renalware/transplants/recipient_workup_document:
         hla_data: HLA Data
-      renalware/transplants/recipient_workup_document/historicals:
-        dvt: History of DVT?
-        family_diabetes: Family history of diabetes?
-        neurogenic_bladder: History of neurogenic bladder?
-        recurrent_utis: History of UTIs?
-        reflux: History of reflux?
-        tb: History of TB?
-      renalware/transplants/recipient_workup_document/scores:
-        karnofsky: Karnofsky Score
-        prisma: Frailty (Prisma) score
-      renalware/transplants/recipient_workup_document/obstetrics_and_gynaecology:
-        pregnancies_count: Number of pregnancies
       renalware/transplants/recipient_workup_document/cervical_smear:
         recorded_on: Cervical smear date
         result: Cervical smear result (latest)
-      renalware/transplants/recipient_workup_document/examination:
-        carotid_bruit: Carotid Bruit?
-        dorsalis_pedis_pulse: Dorsalis pedis pulse?
-        femoral_bruit: Femoral Bruit?
-        femoral_pulse: Femoral pulse?
-        heart_failure: Heart Failure?
-        heart_sounds: Heart Sounds
-        posterior_tibial_pulse: Posterior tibial pulse?
       renalware/transplants/recipient_workup_document/consent:
         consented_on: Consent Date
         full_name: Who consented
         value: Transplant Consent
-      renalware/transplants/recipient_workup_document/marginal_consent:
-        consented_on: Marginal Consent Date
-        full_name: Who Marginal consented
-        value: Marginal consent?
-      renalware/transplants/recipient_workup_document/nhb_consent:
-        consented_on: NHB Consent Date
-        full_name: Who NHB consented
-        value: NHB Consent
       renalware/transplants/recipient_workup_document/education:
         cancer: Cancer Risks
         drugs_longterm: Drugs (Long term)
@@ -51,6 +23,34 @@ en:
         success_rate: Success Rate
         transport_benefits: Transport/Benefits
         waiting_list: Waiting List
+      renalware/transplants/recipient_workup_document/examination:
+        carotid_bruit: Carotid Bruit?
+        dorsalis_pedis_pulse: Dorsalis pedis pulse?
+        femoral_bruit: Femoral Bruit?
+        femoral_pulse: Femoral pulse?
+        heart_failure: Heart Failure?
+        heart_sounds: Heart Sounds
+        posterior_tibial_pulse: Posterior tibial pulse?
+      renalware/transplants/recipient_workup_document/historicals:
+        dvt: History of DVT?
+        family_diabetes: Family history of diabetes?
+        neurogenic_bladder: History of neurogenic bladder?
+        recurrent_utis: History of UTIs?
+        reflux: History of reflux?
+        tb: History of TB?
+      renalware/transplants/recipient_workup_document/marginal_consent:
+        consented_on: Marginal Consent Date
+        full_name: Who Marginal consented
+        value: Marginal consent?
+      renalware/transplants/recipient_workup_document/nhb_consent:
+        consented_on: NHB Consent Date
+        full_name: Who NHB consented
+        value: NHB Consent
+      renalware/transplants/recipient_workup_document/obstetrics_and_gynaecology:
+        pregnancies_count: Number of pregnancies
+      renalware/transplants/recipient_workup_document/scores:
+        karnofsky: Karnofsky Score
+        prisma: Frailty (Prisma) score
     errors:
       models:
         renalware/transplants/recipient_workup_document/scores/karnofsky/dated_integer:
@@ -58,24 +58,24 @@ en:
             result:
               inclusion: must be between 0 and 100
         renalware/transplants/recipient_workup_document/scores/prisma/dated_integer:
-            result:
-              inclusion: must be between 0 and 7
+          result:
+            inclusion: must be between 0 and 7
   enumerize:
     renalware/transplants/recipient_workup_document/consent:
       value:
         full: Full
         partial: Partial
         refused: Refused transplant
+  renalware:
+    transplants:
+      recipient_workups:
+        summary:
+          consent: 'Consent:'
+          marginal_consent: 'Marginal Consent:'
+          nhb_consent: 'NHB Consent:'
   simple_form:
     hints:
       transplants_recipient_workup:
         document:
           consent:
             full_name: Your name or the person who consented
-  renalware:
-    transplants:
-      recipient_workups:
-        summary:
-          consent: "Consent:"
-          marginal_consent: "Marginal Consent:"
-          nhb_consent: "NHB Consent:"

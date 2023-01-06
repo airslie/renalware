@@ -38,3 +38,4 @@
 = within_patient_layout(title: "Prescriptions") do
   = render "filter_form", search: current_search, drug_types: drug_types, treatable: treatable
   = render "index", local_assigns
+  = render_if_exists "bottom", local_assigns

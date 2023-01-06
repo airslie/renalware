@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Renal::AKIAlert, type: :model do
+  describe Renal::AKIAlert do
     it_behaves_like "an Accountable model"
     it :aggregate_failures do
       is_expected.to validate_presence_of(:patient)

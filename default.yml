@@ -1,5 +1,5 @@
 inherit_from:
-  - https://raw.githubusercontent.com/airslie/styleguide/master/rubocop.yml
+  - https://raw.githubusercontent.com/airslie/styleguide/main/rubocop.yml
 
 # Don't add anything to this file other than the inherit_from above
 # as this file is overwritten on CodeClimate with the contents of the above

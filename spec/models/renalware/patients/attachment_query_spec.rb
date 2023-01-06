@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Patients
-    describe AttachmentQuery, type: :model do
+    describe AttachmentQuery do
       let(:user) { create(:user) }
       let(:patient1) { create(:patient, by: user) }
       let(:patient2) { create(:patient, by: user) }

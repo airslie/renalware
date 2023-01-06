@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-require_dependency "renalware/pd/apd/glucose_calculator"
-
 module Renalware
   module PD
     module APD

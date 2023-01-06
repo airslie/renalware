@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe System::UserFeedback, type: :model do
+  describe System::UserFeedback do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:author)
       is_expected.to validate_presence_of(:category)

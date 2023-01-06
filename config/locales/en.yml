@@ -1,83 +1,97 @@
 ---
 en:
-  :true: "Yes"
-  :false: "No"
-  disable_with:
-    save: Saving...
-  new_record:
-    page_title: New
-  edit_record:
-    page_title: Edit
-  modal:
-    close: Close
-  collection:
-    blank_option: Please select
-    blank_option_for_multiple: Please select one or more
-
-  enums:
-    letter:
-      state:
-        draft: Draft
-        pending_review: Pending Review
-        approved: Approved
-        completed: Completed
-      for_receptionists:
-        state:
-          draft: Draft
-          pending_review: Pending Review
-          approved: Approved (Ready to Print)
-          completed: Completed (Printed)
-    provider:
-      gp: GP
-      hospital: Hospital
-      home_delivery: Home Delivery
-  helpers:
-    label:
-      patient:
-        paediatric_patient_indicator: "If under 18 years, is the recipient being treated in a paediatric unit?"
-    select:
-      prompt: Please select
-    submit:
-      create: Create
-      submit: Save
-      update: Save
-      filter: Filter
   activerecord:
     attributes:
       renalware/event_type:
         name: Name
-      renalware/peritonitis_episode/infection_organisms:
-        organism_code: Organism
       renalware/exit_site_infection/infection_organisms:
         organism_code: Organism
-      renalware/patient/medications:
-        drug: Medication to be administered
-        dose: Medication's dose
-        medication_route_id: Medication's route
-        frequency: "Medication's frequency & duration"
-        prescribed_on: "Medication's prescribed date"
-        provider: Medication's provider
-      renalware/peritonitis_episode/medications:
-        drug: Medication to be administered
-        dose: Medication's dose
-        medication_route_id: Medication's route
-        frequency: "Medication's frequency & duration"
-        start_date: "Medication's prescribed date"
-        provider: Medication's provider
       renalware/exit_site_infection/medications:
-        drug: Medication to be administered
         dose: Medication's dose
+        drug: Medication to be administered
+        frequency: Medication's frequency & duration
         medication_route_id: Medication's route
-        frequency: "Medication's frequency & duration"
-        start_date: "Medication's prescribed date"
+        provider: Medication's provider
+        start_date: Medication's prescribed date
+      renalware/patient/medications:
+        dose: Medication's dose
+        drug: Medication to be administered
+        frequency: Medication's frequency & duration
+        medication_route_id: Medication's route
+        prescribed_on: Medication's prescribed date
         provider: Medication's provider
       renalware/pd_regime:
-        treatment: PD regime treatment
         pd_regime_bags: PD regime
+        treatment: PD regime treatment
       renalware/pd_regime/pd_regime_bags:
         bag_type_id: PD bag type
-        volume: "PD bag volume (ml)"
         days: PD bag
+        volume: PD bag volume (ml)
+      renalware/peritonitis_episode/infection_organisms:
+        organism_code: Organism
+      renalware/peritonitis_episode/medications:
+        dose: Medication's dose
+        drug: Medication to be administered
+        frequency: Medication's frequency & duration
+        medication_route_id: Medication's route
+        provider: Medication's provider
+        start_date: Medication's prescribed date
+  btn:
+    add: Add
+    add_: Add...
+    all: All
+    archive: Archive
+    cancel: Cancel
+    change: Change
+    clear: Clear
+    create: Create
+    create_: Create...
+    delete: Delete
+    details: Details
+    edit: Edit
+    filter: Filter
+    help: Help
+    insert: Insert
+    list: List
+    or: or
+    preview: Preview
+    print: Print
+    remove: Remove
+    reset: Reset
+    save: Save
+    show: Show
+    show_all: Show all
+    submit: Save
+    terminate: Terminate
+    toggle: Toggle
+    update: Update
+    urgent: Urgent
+    view: View
+    view_all: View All
+  collection:
+    blank_option: Please select
+    blank_option_for_multiple: Please select one or more
+  disable_with:
+    save: Saving...
+  edit_record:
+    page_title: Edit
+  enums:
+    letter:
+      for_receptionists:
+        state:
+          approved: Approved (Ready to Print)
+          completed: Completed (Printed)
+          draft: Draft
+          pending_review: Pending Review
+      state:
+        approved: Approved
+        completed: Completed
+        draft: Draft
+        pending_review: Pending Review
+    provider:
+      gp: GP
+      home_delivery: Home Delivery
+      hospital: Hospital
   errors:
     format: "%{attribute} %{message}"
     messages:
@@ -91,12 +105,12 @@ en:
       greater_than: must be greater than %{count}
       greater_than_or_equal_to: must be greater than or equal to %{count}
       inclusion: is not included in the list
-      numeric_inclusion: "must be between %{from} and %{to}"
       invalid: is invalid
       less_than: must be less than %{count}
       less_than_or_equal_to: must be less than or equal to %{count}
       not_a_number: is not a number
       not_an_integer: must be an integer
+      numeric_inclusion: must be between %{from} and %{to}
       odd: must be odd
       record_invalid: 'Validation failed: %{errors}'
       taken: has already been taken
@@ -114,80 +128,61 @@ en:
       header:
         one: 1 error prohibited this %{model} from being saved
         other: "%{count} errors prohibited this %{model} from being saved"
-
-  # Common translation fallbacks which will be resolved in a cascading lookup from any view
+  'false': 'No'
+  helpers:
+    label:
+      patient:
+        paediatric_patient_indicator: If under 18 years, is the recipient being treated in a paediatric unit?
+    select:
+      prompt: Please select
+    submit:
+      create: Create
+      filter: Filter
+      submit: Save
+      update: Save
+  modal:
+    close: Close
+  new_record:
+    page_title: New
   thead:
-    patient_name: Patient
-    patient: Patient
+    age: Age
+    author: Author
+    body: Body
+    bookmarked_on: Bookmarked
+    born_on: DOB
+    created_at: Created on
+    created_by: Created by
+    date_: Date
+    date_of_birth: DOB
+    date_time: Date/Time
+    description: Description
+    hosp_no: Hosp No
+    hospital_number: Hosp No
+    modality: Modality
     name: Patient
     nhs_number: NHS Number
-    hospital_number: Hosp No
-    hosp_no: Hosp No
-    date_of_birth: DOB
-    born_on: DOB
-    age: Age
-    sex: Sex
-    modality: Modality
     notes: Notes
-    tags: Tags
-    bookmarked_on: Bookmarked
-    date_: Date
-    time_: Time
-    date_time: Date/Time
-    created_by: Created by
-    updated_by: Updated by
-    created_at: Created on
-    updated_at: Updated on
-    type: Type
-    description: Description
+    patient: Patient
+    patient_name: Patient
+    read_at: Read at
+    recipient: Recipient
+    sent_at: Sent at
+    sent_from: From
+    sex: Sex
     state: State
     status: Status
-    author: Author
-    recipient: Recipient
     subject: Subject
-    body: Body
-    sent_at: Sent at
-    read_at: Read at
-    sent_from: From
-
-  btn:
-    cancel: Cancel
-    remove: Remove
-    delete: Delete
-    edit: Edit
-    save: Save
-    submit: Save
-    add: Add
-    add_: Add...
-    create: Create
-    create_: Create...
-    update: Update
-    view: View
-    view_all: View All
-    show_all: Show all
-    show: Show
-    details: Details
-    toggle: Toggle
-    print: Print
-    all: All
-    clear: Clear
-    insert: Insert
-    terminate: Terminate
-    help: Help
-    archive: Archive
-    list: List
-    change: Change
-    reset: Reset
-    filter: Filter
-    preview: Preview
-    urgent: Urgent
-    or: or
-
+    tags: Tags
+    time_: Time
+    type: Type
+    updated_at: Updated on
+    updated_by: Updated by
   titles:
-    problems: Problems
-    current_prescriptions: Current Prescriptions
-    letters: Letters
-    events: Events
     admissions: Admissions
-    consults: Consults
     bookmark: Bookmark
+    consults: Consults
+    current_prescriptions: Current Prescriptions
+    events: Events
+    letters: Letters
+    problems: Problems
+  'true': 'Yes'

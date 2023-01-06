@@ -4,7 +4,7 @@ require "rails_helper"
 require "./spec/support/login_macros"
 
 module Renalware
-  describe PD::RegimeBag, type: :model do
+  describe PD::RegimeBag do
     before do
       @patient = build_stubbed(:patient)
       @pd_regime_bag_1 = PD::RegimeBag.new

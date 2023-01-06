@@ -1,5 +1,4 @@
 inherit_from:
-  - .rubocop_todo.yml
   - default.yml
 
 require:
@@ -9,7 +8,6 @@ require:
 
 # Note that the local default.yml is overwritten on CodeClimate with the contents of
 # the remote rubocop.yml pulled from GitHub in a codeclimate prepare step.
-
 
 #
 # Uncomment this section to check specs
@@ -36,7 +34,7 @@ require:
 AllCops:
   NewCops: enable
   UseCache: true
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.1
   # Just defining the Exclude or Include keys here overwrites the settings in default.yml
   # so we have to redefine the entire set
   Exclude:

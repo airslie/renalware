@@ -8,7 +8,7 @@ module Renalware::Feeds
 
     describe "patient numbers" do
       let(:raw_message) do
-        <<-RAW.strip_heredoc
+        <<~RAW
           PID||123456789^^^NHS^ignoreme|D7006359^^^PAS1~X1234^^^PAS2|
         RAW
       end
@@ -37,8 +37,8 @@ module Renalware::Feeds
       subject { pi.address }
 
       let(:raw_message) do
-        <<-RAW.strip_heredoc
-        PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+        <<~RAW
+          PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         RAW
       end
 
@@ -46,7 +46,7 @@ module Renalware::Feeds
 
       context "when address is nil" do
         let(:raw_message) do
-          <<-RAW.strip_heredoc
+          <<~RAW
             PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F
           RAW
         end
@@ -59,7 +59,7 @@ module Renalware::Feeds
       subject { pi.sex }
 
       let(:raw_message) do
-        <<-RAW.strip_heredoc
+        <<~RAW
           PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         RAW
       end
@@ -91,7 +91,7 @@ module Renalware::Feeds
 
         context "when PID sex is #{original} and has a desription in the message" do
           let(:raw_message) do
-            <<-RAW.strip_heredoc
+            <<~RAW
               PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|#{sex}^SEXDESC|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
             RAW
           end

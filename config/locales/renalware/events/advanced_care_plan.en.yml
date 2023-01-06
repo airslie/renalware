@@ -1,13 +1,13 @@
 ---
 en:
-  renalware/events/advanced_care_plan:
-    title: "Advanced Care Plans"
-    description_column_title: State
   enumerize:
     renalware/events/advanced_care_plan/document:
       state:
-        not_required: "ACP not required"
-        required_but_not_started: "ACP required but not started"
-        acp_in_progress: "ACP in progress"
-        acp_complete: "ACP complete"
-        acp_declined: "ACP declined"
+        acp_complete: ACP complete
+        acp_declined: ACP declined
+        acp_in_progress: ACP in progress
+        not_required: ACP not required
+        required_but_not_started: ACP required but not started
+  renalware/events/advanced_care_plan:
+    description_column_title: State
+    title: Advanced Care Plans

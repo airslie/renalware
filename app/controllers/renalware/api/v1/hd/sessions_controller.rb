@@ -3,8 +3,6 @@
 require "success"
 require "failure"
 
-require_dependency "renalware/api"
-
 module Renalware
   module API
     module V1

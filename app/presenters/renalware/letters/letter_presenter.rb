@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
 require "collection_presenter"
 
 # rubocop:disable Metrics/ClassLength
@@ -57,18 +56,8 @@ module Renalware
         "Preview"
       end
 
-      def parts
-        filtered_part_classes = PartClassFilter.new(
-          part_classes: letter_event.part_classes,
-          include_pathology_in_letter_body: letterhead.include_pathology_in_letter_body?
-        )
-        filtered_part_classes.to_h.values.map do |part_class|
-          part_class.new(patient, self, letter_event)
-        end
-      end
-
-      def part_for(part_name)
-        letter_event.part_classes[part_name].new(patient, self, letter_event)
+      def sections
+        SectionManager.new(__getobj__).sections
       end
 
       # rubocop:disable Rails/OutputSafety

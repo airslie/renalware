@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Feeds::Message, type: :model do
+  describe Feeds::Message do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:header_id)
       is_expected.to validate_presence_of(:event_code)

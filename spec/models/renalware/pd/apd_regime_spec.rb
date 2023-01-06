@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module PD
-    describe APDRegime, type: :model do
+    describe APDRegime do
       subject(:regime) { described_class.new }
 
       describe "validations" do

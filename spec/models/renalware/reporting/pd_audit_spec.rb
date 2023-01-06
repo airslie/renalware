@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe "PD Audit", type: :model do
+  describe "PD Audit" do
     include PatientsSpecHelper
     let(:user) { create(:user) }
 

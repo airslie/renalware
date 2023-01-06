@@ -1,53 +1,69 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants/base_controller"
-
 module Renalware
   module Transplants
     class DonorOperationsController < BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
 
       def show
-        operation = DonorOperation.for_patient(patient).find(params[:id])
-        render locals: { operation: operation, patient: patient }
+        operation = find_and_authorize_operation
+        render locals: { patient: transplants_patient, operation: operation }
       end
 
       def new
-        render locals: { operation: DonorOperation.new, patient: patient }
+        operation = DonorOperation.new
+        authorize operation
+        render_new(operation)
       end
 
       def create
-        operation = DonorOperation.new(patient: patient)
+        operation = DonorOperation.new(patient: transplants_patient)
         operation.attributes = operation_params
+        authorize operation
 
         if operation.save
-          redirect_to patient_transplants_donor_dashboard_path(patient),
+          redirect_to patient_transplants_donor_dashboard_path(transplants_patient),
                       notice: success_msg_for("donor operation")
         else
           flash.now[:error] = failed_msg_for("donor operation")
-          render :new, locals: { operation: operation, patient: patient }
+          render_new(operation)
         end
       end
 
       def edit
-        operation = DonorOperation.for_patient(patient).find(params[:id])
-        render locals: { operation: operation, patient: patient }
+        render_edit(find_and_authorize_operation)
       end
 
       def update
-        operation = DonorOperation.for_patient(patient).find(params[:id])
+        operation = find_and_authorize_operation
         operation.attributes = operation_params
 
         if operation.save
-          redirect_to patient_transplants_donor_dashboard_path(patient),
+          redirect_to patient_transplants_donor_dashboard_path(transplants_patient),
                       notice: success_msg_for("donor operation")
         else
           flash.now[:error] = failed_msg_for("donor operation")
-          render :edit, locals: { operation: operation, patient: patient }
+          render_edit(operation)
         end
       end
 
       protected
+
+      def find_and_authorize_operation
+        DonorOperation
+          .for_patient(transplants_patient)
+          .find(params[:id])
+          .tap { |operation| authorize operation }
+      end
+
+      def render_edit(operation)
+        render :edit, locals: { patient: transplants_patient, operation: operation }
+      end
+
+      def render_new(operation)
+        render :new, locals: { patient: transplants_patient, operation: operation }
+      end
 
       def operation_params
         params

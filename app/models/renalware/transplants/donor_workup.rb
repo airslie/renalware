@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants"
 require "document/base"
 
 module Renalware
@@ -16,6 +15,10 @@ module Renalware
         on: [:create, :update, :destroy]
       )
       has_document class_name: "Renalware::Transplants::DonorWorkupDocument"
+
+      def self.policy_class
+        BasePolicy
+      end
     end
   end
 end

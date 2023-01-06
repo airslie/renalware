@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "renalware/virology/profiles/summary", type: :view do
+describe "renalware/virology/profiles/summary" do
   VIROLOGY_ATTRIBUTES = %i(hiv hepatitis_b hepatitis_b_core_antibody hepatitis_c htlv).freeze
   helper(Renalware::Engine.routes.url_helpers, Renalware::AttributeNameHelper)
 

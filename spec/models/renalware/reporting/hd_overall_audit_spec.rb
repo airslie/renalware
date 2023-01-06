@@ -5,7 +5,7 @@ require "rails_helper"
 # rubocop:disable RSpec/ExampleLength
 module Renalware
   # HD Overall Audit is currently a materialized view
-  describe "HD Overall Audit", type: :model do
+  describe "HD Overall Audit" do
     include PatientsSpecHelper
 
     let(:user) { create(:user) }

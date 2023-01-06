@@ -1,11 +1,5 @@
 ---
 en:
-  renalware:
-    events:
-      events:
-        table:
-          thead:
-            created_at: Added
   activerecord:
     attributes:
       renalware/events/event:
@@ -16,3 +10,9 @@ en:
         renalware/events/event:
           event_type_id:
             blank: please select an option
+  renalware:
+    events:
+      events:
+        table:
+          thead:
+            created_at: Added

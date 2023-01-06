@@ -4,12 +4,12 @@ en:
     transplants:
       live_donors:
         index:
-          page_title: Live Donors
+          age: Age
+          hosp_no: Hosp no
           name: Name
           nhs_no: NHS no
-          hosp_no: Hosp no
+          page_title: Live Donors
           sex: Sex
-          age: Age
           stage:
             position: Position
             status: Status

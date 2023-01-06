@@ -12,7 +12,7 @@ module Renalware
         it "returns only the most recent path results" do
           patient = create_patient
           descriptions = create_descriptions(%w(x y z))
-          travel_to(Time.zone.now) do
+          freeze_time do
             # current
             create_observations(patient,
                                 descriptions,

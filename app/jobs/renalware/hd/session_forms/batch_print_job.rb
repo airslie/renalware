@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 module Renalware
   module HD
     module SessionForms
-      BatchPrintJob = Struct.new(:batch_id, :user_id) do
+      class BatchPrintJob < ApplicationJob
         include UsingTempFolder
 
         # Returns the name of a temp file containing the pdf data
-        def perform
+        def perform(batch_id, user_id)
           in_a_temporary_folder do |dir|
             Dir.chdir(dir) do
               batch = Batch.find(batch_id)
@@ -19,9 +17,7 @@ module Renalware
           end
         end
 
-        def max_attempts
-          1
-        end
+        discard_on StandardError
 
         def queue_name
           "hd_session_forms"

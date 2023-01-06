@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-
 module Renalware
   module HD
     # Backed by a (scenic) view this model is used to resolve the HD Profile in use or created

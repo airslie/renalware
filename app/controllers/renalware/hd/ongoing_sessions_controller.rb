@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
-
 module Renalware
   module HD
     class OngoingSessionsController < BaseController
+      # TODO: PatientVisibility
       include Renalware::Concerns::Pageable
 
       def show

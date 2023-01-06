@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd/base_controller"
-
 module Renalware
   module PD
     class ExitSiteInfectionsController < BaseController
-      include PresenterHelper
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PdfRenderable
+      include PresenterHelper
 
       def show
         authorize exit_site_infection
@@ -24,10 +24,10 @@ module Renalware
       end
 
       def create
-        esi = ExitSiteInfection.new(exit_site_infection_params.merge!(patient_id: patient.id))
+        esi = ExitSiteInfection.new(exit_site_infection_params.merge!(patient_id: pd_patient.id))
         authorize esi
         if esi.save
-          redirect_to patient_pd_exit_site_infection_path(patient, esi),
+          redirect_to patient_pd_exit_site_infection_path(pd_patient, esi),
                       notice: success_msg_for("exit site infection")
         else
           flash.now[:error] = failed_msg_for("exit site infection")
@@ -43,7 +43,7 @@ module Renalware
       def update
         authorize exit_site_infection
         if exit_site_infection.update(exit_site_infection_params)
-          redirect_to patient_pd_exit_site_infection_path(patient, exit_site_infection),
+          redirect_to patient_pd_exit_site_infection_path(pd_patient, exit_site_infection),
                       notice: success_msg_for("exit site infection")
         else
           flash.now[:error] = failed_msg_for("exit site infection")
@@ -59,9 +59,9 @@ module Renalware
 
       def render_esi_as_pdf_printout
         variables = {
-          "patient" => Patients::PatientDrop.new(patient),
-          "renal_patient" => Renal::PatientDrop.new(patient),
-          "pd_patient" => PD::PatientDrop.new(patient)
+          "patient" => Patients::PatientDrop.new(pd_patient),
+          "renal_patient" => Renal::PatientDrop.new(pd_patient),
+          "pd_patient" => PD::PatientDrop.new(pd_patient)
         }
         render_liquid_template_to_pdf(template_name: "esi_printable_form",
                                       filename: pdf_filename,
@@ -69,7 +69,7 @@ module Renalware
       end
 
       def pdf_filename
-        "#{patient.family_name}-#{patient.hospital_identifier.id}" \
+        "#{pd_patient.family_name}-#{pd_patient.hospital_identifier.id}" \
         "-ESI-#{exit_site_infection.id}".upcase
       end
 
@@ -83,7 +83,7 @@ module Renalware
 
       def locals(esi = exit_site_infection)
         {
-          patient: patient,
+          patient: pd_patient,
           exit_site_infection: esi,
           treatable: present(esi, Medications::TreatablePresenter),
           prescriptions: present(

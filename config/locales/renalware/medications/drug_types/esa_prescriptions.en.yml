@@ -4,21 +4,21 @@ en:
     medications:
       drug_types:
         prescriptions:
+          filters:
+            clear-search: Clear search
+            search_prompt: Search by drug name or a patient's name or hospital number
           index:
             heading: ESA Patients
-          filters:
-            search_prompt: Search by drug name or a patient's name or hospital number
-            clear-search: Clear search
           table:
-            patient_local_patient_id: "Hosp. No"
+            dose: Dose
+            drug_name: Drug
+            frequency: Frequency
+            modality: Modality
+            patient_age: Age
+            patient_local_patient_id: Hosp. No
             patient_name: Patient
             patient_sex: Sex
-            patient_age: Age
-            modality: Modality
-            dose: Dose
-            route_code: Route
-            frequency: Frequency
             prescribed_on: Started
+            route_code: Route
             terminated_on: Terminated
-            drug_name: Drug
-            weekly_units: "Units/Wk"
+            weekly_units: Units/Wk

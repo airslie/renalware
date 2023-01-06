@@ -9,7 +9,7 @@ module Renalware
         return if prescription.blank?
 
         @last_administration ||=
-          PrescriptionLastAdministrationQuery.call(prescription: prescription)
+          PrescriptionAdministrationsQuery.call(prescription: prescription).first
       end
 
       def render?

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 # Backed by a view - see
 module Renalware
   module Pathology

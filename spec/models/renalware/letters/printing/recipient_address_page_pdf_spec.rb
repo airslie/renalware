@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::Letters::Printing
-  describe RecipientAddressPagePdf, type: :model do
+  describe RecipientAddressPagePdf do
     include LettersSpecHelper
 
     describe "#render" do

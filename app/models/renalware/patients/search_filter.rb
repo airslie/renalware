@@ -7,7 +7,6 @@
 #   filter = Patients::SearchFilter.new(search_term, request)
 #   my_relation = patient_filter.call(my_relation)
 #   render locals: { search_form: filter.search_form }
-require_dependency "renalware/patients"
 
 module Renalware
   module Patients

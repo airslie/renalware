@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/virology"
-
 module Renalware
   module Virology
     class Patient < ActiveType::Record[Renalware::Patient]

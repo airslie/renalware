@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     module Requests
@@ -36,6 +34,10 @@ module Renalware
           return if last_request.nil?
 
           last_request.created_at
+        end
+
+        def self.policy_class
+          BasePolicy
         end
 
         private

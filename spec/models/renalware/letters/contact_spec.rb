@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe Contact, type: :model do
+    describe Contact do
       it { is_expected.to belong_to(:patient).touch(true) }
 
       describe "validation" do

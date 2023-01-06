@@ -1,43 +1,46 @@
 ---
 en:
-  renalware:
-    clinics:
-      clinic_visits:
-        form:
-          clinic_prompt: Select clinic type
   activerecord:
     attributes:
       renalware/clinics/clinic_visit:
+        bmi: BMI
         bp: BP
         standing_bp: Standing BP
-        bmi: BMI
         urine_blood: Urine Blood
         urine_protein: Urine Protein
     errors:
       models:
         renalware/clinics/clinic_visit:
           attributes:
+            height:
+              invalid_number: Please enter a number with up to 2 decimal place
+              out_of_range: Please enter a number between 0.05 and 2.5m
             pulse:
               out_of_range: must be between 20 and 200
-            height:
-              out_of_range: Please enter a number between 0.05 and 2.5m
-              invalid_number: Please enter a number with up to 2 decimal place
+            temperature:
+              invalid_number: Please enter a number with up to 1 decimal place, for example 37 or 37.1
+              out_of_range: Please enter a temperature between 28.0 and 45.0°C
   enumerize:
     renalware/clinics/clinic_visit:
       urine_blood:
-        neg: "Negative"
-        trace: "Trace"
-        very_low: "+"
+        high: "++++"
         low: "++"
         medium: "+++"
-        high: "++++"
+        neg: Negative
+        trace: Trace
+        very_low: "+"
       urine_protein:
-        neg: "Negative"
-        trace: "Trace"
-        very_low: "+"
+        high: "++++"
         low: "++"
         medium: "+++"
-        high: "++++"
+        neg: Negative
+        trace: Trace
+        very_low: "+"
+  renalware:
+    clinics:
+      clinic_visits:
+        form:
+          clinic_prompt: Select clinic type
   simple_form:
     hints:
       clinic_visit:

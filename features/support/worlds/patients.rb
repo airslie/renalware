@@ -12,12 +12,14 @@ module World
 
         Renalware::Clinics::Patient.find_or_create_by!(
           given_name: given_name,
-          family_name: family_name || "ThePatient"
+          family_name: family_name || "ThePatient",
+          hospital_centre: FactoryBot.create(:hospital_centre)
         ) do |patient|
           patient.local_patient_id = SecureRandom.uuid
           patient.sex = "M"
           patient.born_on = Date.new(1989, 1, 1)
           patient.by = Renalware::SystemUser.find
+          patient.hospital_centre = FactoryBot.create(:hospital_centre)
         end
       end
 

@@ -3,16 +3,15 @@ en:
   enumerize:
     renalware/pd/apd_regime:
       assistance_type:
+        connect: Connect
+        connect_and_disconnect: Connect and Disconnect
+        disconnect: Disconnect
         none: None
         setup: Setup
-        connect: Connect
-        disconnect: Disconnect
-        connect_and_disconnect: Connect and Disconnect
     renalware/pd/capd_regime:
       assistance_type:
-        none: None
         1_visit_per_day: 1 visit/day
         2_visits_per_day: 2 visits/day
         3_visits_per_day: 3 visits/day
         4_visits_per_day: 4 visits/day
-       
+        none: None

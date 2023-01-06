@@ -1,5 +1,7 @@
-article
+article(class=classes)
   header.flex.flex-row
-    h2.flex-grow== title || title_link
-    .flex-row= actions
+    h2.flex-grow== title 
+    .flex-row
+      - actions.each do |action|
+        = action
   = content

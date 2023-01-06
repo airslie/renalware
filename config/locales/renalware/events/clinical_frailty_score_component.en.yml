@@ -3,7 +3,7 @@ en:
   renalware:
     events:
       clinical_frailty_score_component:
-        date_time: Date time
-        score: Score
         created_at: Created
         created_by: By
+        date_time: Date time
+        score: Score

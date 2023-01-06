@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe System::Download, type: :model do
+  describe System::Download do
     it_behaves_like "a Paranoid model"
     it_behaves_like "an Accountable model"
     it { is_expected.to validate_presence_of(:name) }

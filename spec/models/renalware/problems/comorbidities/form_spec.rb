@@ -3,12 +3,12 @@
 require "rails_helper"
 
 module Renalware::Problems
-  describe Comorbidities::Form, type: :model do
+  describe Comorbidities::Form do
     let(:user) { create(:user) }
     let(:patient) { create(:patient, by: user) }
 
     def build_params(description_id:, recognised:, recognised_at:, id: nil)
-      HashWithIndifferentAccess.new(
+      ActiveSupport::HashWithIndifferentAccess.new(
         "comorbidities_attributes" => {
           "0" => {
             "description_id" => description_id,
@@ -21,7 +21,7 @@ module Renalware::Problems
     end
 
     describe "#comorbidities" do
-      it "returns an array of possible comorbs, one for each description in the database, "\
+      it "returns an array of possible comorbs, one for each description in the database, " \
          "using either the stored record if found or a new one if none exists" do
         # Create 2 descriptions
         # Create an existing comorb for desc1

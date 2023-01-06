@@ -24,8 +24,7 @@ module World
 
       def assign_new_person_as_contact(patient:,
                                        person_attrs:,
-                                       description_name: "Sibling",
-                                       user:,
+                                       user:, description_name: "Sibling",
                                        **_)
         patient = letters_patient(patient)
         person_attrs = {
@@ -146,7 +145,7 @@ module World
       end
 
       def t_contact_description_unspecified
-        t(:other, scope: :"renalware.letters.contacts.form.description")
+        t("renalware.letters.contacts.form.description.other")
       end
     end
   end

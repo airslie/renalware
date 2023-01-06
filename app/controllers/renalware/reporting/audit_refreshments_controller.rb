@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/reporting"
-
 # An Audit Refreshment is a nominal sql-only activity. Its a REST #create action for consistency,
 # though nothing is physically created other than an ActiveJob which is queued and which will
 # asynchronously refresh the materialized view associated with the audit.

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Renal::Profile, type: :model do
+  describe Renal::Profile do
     it :aggregate_failures do
       is_expected.to belong_to(:patient).touch(true)
       is_expected.to validate_presence_of :patient

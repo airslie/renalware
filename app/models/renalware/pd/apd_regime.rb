@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pd"
-require_dependency "numeric_inclusion_validator"
-
 module Renalware
   module PD
     class APDRegime < Regime
@@ -114,7 +111,7 @@ module Renalware
       def all_active_days_have_the_same_available_volume
         APD::AvailableOvernightVolume.new(regime: self).value
       rescue APD::NonUniqueOvernightVolumeError
-        errors.add(:base, "The total volume of 'ordinary' bags should be the same on each day "\
+        errors.add(:base, "The total volume of 'ordinary' bags should be the same on each day " \
                           "the patient has PD")
       end
     end

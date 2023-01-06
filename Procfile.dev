@@ -9,7 +9,21 @@ web: bin/web -p 3000
 #
 # Background jobs
 #
-worker: bundle exec rake app:jobs:work
+# Delayed jobs is currently required for HL7 imports and a couple of jobs not yet 100% ActiveJob
+# compatible (ie custom delayed jobs using Structs). DelayedJob is involved where we use
+#  - Delayed::Job.enqueue(customstruct)
+#  - where a postgres fn called by Mirth has inserted a row in the delayed_jobs table
+# In all other instances (ie where #perform_later or #perform_now are called on the job class)
+# we use the good_job adapter which is more efficient and can execute if needed in async mode,
+# in the same web process but on a different thread, reducing the polling lag delayed_job has - and
+# using less memory.
+# It also supports database-stored cron-style scheduled jobs, enabling us to move away from
+# using cron in Docker/cloud scenarios. Note it does this by default in development and test
+# environments, and these cases the separate worker process defined below does not actually get a
+# look-in. However we still run it up as it helps to validate and test the cron-style job scheduling
+#
+worker1: bundle exec rake app:jobs:work
+worker2: cd spec/dummy && bundle exec good_job start && cd -
 
 #
 # Javascript transpile and bundling

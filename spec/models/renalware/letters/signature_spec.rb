@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module Letters
-    describe Signature, type: :model do
+    describe Signature do
       it :aggregate_failures do
         is_expected.to validate_presence_of(:user)
         is_expected.to validate_presence_of(:letter)

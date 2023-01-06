@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware::HD
-  describe StationLocation, type: :model do
+  describe StationLocation do
     it :aggregate_failures do
       is_expected.to validate_presence_of(:name)
       is_expected.to validate_presence_of(:colour)

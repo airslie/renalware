@@ -63,7 +63,7 @@ module Renalware
           end
         end
 
-        define_singleton_method "states" do
+        define_singleton_method :states do
           states
         end
       end

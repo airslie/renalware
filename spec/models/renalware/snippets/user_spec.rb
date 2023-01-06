@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Renalware
-  describe Snippets::User, type: :model do
+  describe Snippets::User do
     describe "validation" do
       it { is_expected.to have_many(:snippets) }
     end

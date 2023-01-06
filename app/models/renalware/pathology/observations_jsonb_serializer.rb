@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     # We mix this module into any database-returned jsonb hash of observations
@@ -56,7 +54,8 @@ module Renalware
       def self.type_check(hash)
         if hash.nil? then {}
         elsif hash.is_a?(Hash) then hash
-        else JSON.parse(hash)
+        else
+          JSON.parse(hash)
         end
       end
     end

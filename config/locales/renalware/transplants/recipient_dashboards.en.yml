@@ -4,10 +4,11 @@ en:
     transplants:
       recipient_dashboards:
         page_actions:
-          mdm: MDM
+          add_investigation: Add Investigation
+          add_recipient_operation: Recipient Operation
           add_recipient_workup: Recipient Workup
           add_waitlist_registration: Wait List Registration
-          add_recipient_operation: Recipient Operation
-          add_investigation: Add Investigation
-          missing_modality_warning: >
-            Some actions will be unavailable until you add the Transplant modality
+          mdm: MDM
+          missing_modality_warning: 'Some actions will be unavailable until you add the Transplant modality
+
+            '

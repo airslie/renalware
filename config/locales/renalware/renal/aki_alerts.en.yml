@@ -3,8 +3,8 @@ en:
   activerecord:
     attributes:
       renalware/renal/aki_alert:
-        hotlist: On Hotlist
-        max_cre: Max CRE
-        cre_date: CRE Date
-        max_aki: Max AKI
         aki_date: AKI Date
+        cre_date: CRE Date
+        hotlist: On Hotlist
+        max_aki: Max AKI
+        max_cre: Max CRE

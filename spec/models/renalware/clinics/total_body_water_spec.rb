@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Clinics::TotalBodyWater, type: :model do
+describe Renalware::Clinics::TotalBodyWater do
   describe "#calculate" do
     context "when no recent weight measurement found" do
       it "returns nil" do

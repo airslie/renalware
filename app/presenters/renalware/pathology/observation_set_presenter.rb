@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-require_dependency "attr_extras"
-
 module Renalware
   module Pathology
     class ObservationSetPresenter < DumbDelegator

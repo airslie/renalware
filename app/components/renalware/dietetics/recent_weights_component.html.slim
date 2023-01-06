@@ -1,0 +1,14 @@
+article.simple.simple-table
+  header
+    h2.title= t(".title")
+
+  table.auto-layout
+    thead
+      th.col-width-date = Renalware::Clinics::Clinic.human_attribute_name(:date)
+      th = Renalware::Clinics::Clinic.human_attribute_name(:weight)
+
+    tbody
+      - weights.each do |presented_weight|
+        tr
+          td = presented_weight.date
+          td = presented_weight.weight

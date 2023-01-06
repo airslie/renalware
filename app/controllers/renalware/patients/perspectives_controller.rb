@@ -3,6 +3,8 @@
 module Renalware
   module Patients
     class PerspectivesController < BaseController
+      include Renalware::Concerns::PatientVisibility
+
       def show
         authorize patient
 

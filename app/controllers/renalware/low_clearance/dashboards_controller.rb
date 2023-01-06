@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/low_clearance"
-
 module Renalware
   module LowClearance
-    class DashboardsController < LowClearance::BaseController
+    class DashboardsController < BaseController
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
+
       def show
-        authorize patient
+        authorize low_clearance_patient
         render :show, locals: {
-          patient: patient,
+          patient: low_clearance_patient,
           dashboard: dashboard_presenter
         }
       end
@@ -16,7 +17,7 @@ module Renalware
       private
 
       def dashboard_presenter
-        DashboardPresenter.new(user: current_user, patient: patient)
+        DashboardPresenter.new(user: current_user, patient: low_clearance_patient)
       end
     end
   end

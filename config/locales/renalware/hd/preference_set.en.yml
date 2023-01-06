@@ -3,14 +3,14 @@ en:
   activerecord:
     attributes:
       renalware/hd/preference_set:
-        schedule: Schedule
         other_schedule: Other Schedule
+        schedule: Schedule
   renalware:
     hd:
       preference_sets:
         summary:
-          title: Preferences
           enter_preferences: Enter preferences
-          hospital_centre: "Hospital Centre:"
-          schedule: "Schedule:"
-          unit: "Unit:"
+          hospital_centre: 'Hospital Centre:'
+          schedule: 'Schedule:'
+          title: Preferences
+          unit: 'Unit:'

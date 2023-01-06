@@ -4,8 +4,8 @@ code,name,location,is_transplant_site,trust_name,trust_caption,info,host_site,ab
 ABROAD,Non-UK,Non-UK,1,,,,,
 QC001,Mount Royal Hospital,Montreal,1,,,,,MRH
 SNC01,Aberdeen Royal Infirmary,Aberdeen,0,,,,,
-SLC01,Monklands Hospital,Airdrie,0,,,,true,
-24027,Antrim Hospital,Antrim,0,,,,true,
+SLC01,Monklands Hospital,Airdrie,0,,,,,
+24027,Antrim Hospital,Antrim,0,,,,,
 RQBAU,Ysbyty Gwynedd,Bangor,0,,,,,
 RDDH0,Basildon Hospital,Basildon,0,,,,true,
 2020,Belfast City Hospital,Belfast,1,,,,,

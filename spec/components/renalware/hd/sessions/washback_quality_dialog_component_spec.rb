@@ -16,15 +16,15 @@ describe Renalware::HD::Sessions::WashbackQualityDialogComponent, type: :compone
       enumerize:
         renalware/hd/session_document/dialysis:
           washback_quality:
-            1: Name1
-            2: Name2
-            3: Name3
-            4: Name4
+            '1': Name1
+            '2': Name2
+            '3': Name3
+            '4': Name4
           washback_quality_description:
-            1: Desc1
-            2: Desc2
-            3: Desc3
-            4: Desc4
+            '1': Desc1
+            '2': Desc2
+            '3': Desc3
+            '4': Desc4
     YAML
     # Be sure to load the 'real' translations before overriding them with our
     # test ones using #store_translations
@@ -36,10 +36,10 @@ describe Renalware::HD::Sessions::WashbackQualityDialogComponent, type: :compone
     it "returns a hash combining washback quality names and descriptions" do
       expect(described_class.new.table_data).to eq(
         {
-          1 => { name: "Name1", description: "Desc1" },
-          2 => { name: "Name2", description: "Desc2" },
-          3 => { name: "Name3", description: "Desc3" },
-          4 => { name: "Name4", description: "Desc4" }
+          "1": { name: "Name1", description: "Desc1" },
+          "2": { name: "Name2", description: "Desc2" },
+          "3": { name: "Name3", description: "Desc3" },
+          "4": { name: "Name4", description: "Desc4" }
         }
       )
     end

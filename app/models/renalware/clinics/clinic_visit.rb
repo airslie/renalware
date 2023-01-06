@@ -1,21 +1,19 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patients"
-require_dependency "renalware/clinics"
-
 module Renalware
   module Clinics
     class ClinicVisit < ApplicationRecord
+      include Accountable
+      include PatientScope
+      extend Enumerize
+      include Document::Base
+
       self.table_name = :clinic_visits
 
       has_paper_trail(
         versions: { class_name: "Renalware::Clinics::Version" },
         on: [:create, :update, :destroy]
       )
-
-      include Accountable
-      include PatientScope
-      extend Enumerize
 
       belongs_to :patient, touch: true
       belongs_to :clinic, -> { with_deleted }, counter_cache: true
@@ -45,6 +43,13 @@ module Renalware
       delegate :code, to: :clinic, prefix: true, allow_nil: true
       delegate :visit_number, to: :originating_appointment, allow_nil: true
 
+      # The basic clinic visit document is empty and stored as {}.
+      # An STI sub class might choose add custom data to this document by extending this
+      # Document class.
+      class Document < ::Document::Embedded
+      end
+      has_document
+
       def bp
         return unless systolic_bp.present? && diastolic_bp.present?
 
@@ -70,6 +75,14 @@ module Renalware
         return date.to_datetime if time.blank?
 
         datetime_from_date_and_time
+      end
+
+      def to_form_partial_path
+        "/renalware/clinics/clinic_visits/visit_specific_form_fields"
+      end
+
+      def to_toggled_row_partial_path
+        "/renalware/clinics/clinic_visits/toggled_row"
       end
 
       private

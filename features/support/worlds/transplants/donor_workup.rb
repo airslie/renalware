@@ -29,7 +29,7 @@ module World
 
       # @section commands
       #
-      def create_donor_workup(user: nil, patient:)
+      def create_donor_workup(patient:, user: nil)
         seed_donor_workup_for(patient)
       end
 

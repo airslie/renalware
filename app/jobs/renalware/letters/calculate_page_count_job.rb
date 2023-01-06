@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
 require "pdf/reader"
 
 module Renalware
   module Letters
     # This class is both a Wisper listener (subscribing to ApproveLetter events) and an ActiveJob.
     # Should be configured in the broadcast_subscription_map to listen to events from ApproveLetter
-    # and be invoked aysnchronously via a background queue ie delayed_job.
+    # and be invoked aysnchronously via a activejob.
     #
     # We generate a PDF version of the letter (or retrieve it from the cache) and inspect it
     # using a PDF tool to get the page count. We then save that away to the letters table.
@@ -21,7 +20,7 @@ module Renalware
       pattr_initialize :letter
 
       # This method is the name of an event raised elsewhere by a Wisper publisher.
-      # It needs to be a class method in order to be invoked asynchronously by delayed_job
+      # It needs to be a class method in order to be invoked asynchronously by activejob
       def self.letter_approved(letter)
         new(letter).call
       end

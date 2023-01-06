@@ -3,15 +3,15 @@ en:
   activerecord:
     attributes:
       renalware/feeds/file:
-        type: Type
         created_by: Created by
-        time_taken: Took
         result: Result
         status: Status
+        time_taken: Took
+        type: Type
   enumerize:
     renalware/feeds/file:
       status:
-        waiting: Waiting
+        failed: Failed
         processing: Processing
         succeeded: Succeeded
-        failed: Failed
+        waiting: Waiting

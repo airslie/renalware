@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module PD
-    describe RegimeForModality, type: :model do
+    describe RegimeForModality do
       describe "#pd_regime_id" do
         subject(:resolved_regime_id) do
           described_class.find_by!(modality_id: modality.id).pd_regime_id

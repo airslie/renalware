@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters/event"
-
 module Renalware
   module Letters
     class Event::Unknown < Event

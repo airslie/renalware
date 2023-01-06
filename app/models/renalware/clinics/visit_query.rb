@@ -1,32 +1,38 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinics"
-
 module Renalware
   module Clinics
     class VisitQuery
-      attr_reader :visits, :query
+      attr_reader :visits, :query, :scope
 
-      def initialize(q = {})
+      def initialize(q = {}, scope: ClinicVisit)
+        @scope = scope
         @q = q
         @q[:s] = "date DESC" if @q[:s].blank?
       end
 
       def call
-        search.result.includes(:created_by, :clinic, patient: [current_modality: [:description]])
+        search.result.includes(
+          :created_by,
+          :updated_by,
+          :clinic,
+          patient: [current_modality: [:description]]
+        )
       end
 
       def search
-        @search ||= QueryableVisit.ransack(@q)
+        @search ||= scope.extending(RansackScopes).ransack(@q)
       end
 
-      class QueryableVisit < ActiveType::Record[ClinicVisit]
-        ransacker :starts_at, type: :date do
-          Arel.sql("DATE(starts_at)")
-        end
+      module RansackScopes
+        def self.extended(base)
+          base.ransacker :starts_at, type: :date do
+            Arel.sql("DATE(starts_at)")
+          end
 
-        ransacker :start_time, type: :datetime do
-          Arel.sql("starts_at")
+          base.ransacker :start_time, type: :datetime do
+            Arel.sql("starts_at")
+          end
         end
       end
     end

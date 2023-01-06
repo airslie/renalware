@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     class ObservationDescriptionsController < BaseController
+      include Renalware::Concerns::PatientCasting
       include Pagy::Backend
 
       def index
@@ -40,12 +39,12 @@ module Renalware
       #        be issued (hitting this action again) to get the the JSON.
       # rubocop:disable Metrics/MethodLength
       def show
-        authorize patient
+        authorize pathology_patient
         obs_desc = ObservationDescription.find(params[:id])
         respond_to do |format|
           format.json do
             chart_json = obs_desc.chart_series_json(
-              patient_id: patient.id,
+              patient_id: pathology_patient.id,
               start_date: Charts::PeriodMap[params[:period]]
             )
             render json: [chart_json]
@@ -53,7 +52,7 @@ module Renalware
           format.html do
             render(
               locals: {
-                patient: patient,
+                patient: pathology_patient,
                 observation_description: obs_desc
               },
               layout: false

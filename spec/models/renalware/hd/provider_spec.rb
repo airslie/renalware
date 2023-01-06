@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe Provider, type: :model do
+    describe Provider do
       it { is_expected.to validate_presence_of(:name) }
     end
   end

@@ -1,9 +1,7 @@
 = within_patient_layout(title: "New Dry Weight",
                         breadcrumbs: clinical_profile_breadcrumb(patient)) do
 
-  .document
-    = simple_form_for dry_weight,
-        url: patient_clinical_dry_weights_path(patient),
-        html: { autocomplete: "off" },
-        wrapper: "horizontal_form" do |f|
-      = render "form", f: f
+  = simple_form_for dry_weight,
+      url: patient_clinical_dry_weights_path(patient),
+      html: { autocomplete: "off", class: "w-3/4" } do |f|
+    = render "form", f: f

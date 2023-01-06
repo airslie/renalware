@@ -7,7 +7,7 @@ require "rails_helper"
 # created in BST then it will be stored in UTC as 23:00 4-Apr and the ransacker :started_on in
 # AppointmentQuery does not apply the timezone so will not find this appointment if
 # AppointmentSearchForm#from_date is 5-Apr.
-describe Renalware::Clinics::AppointmentSearchForm, type: :model do
+describe Renalware::Clinics::AppointmentSearchForm do
   describe "#query" do
     context "when there is no from_date" do
       it "returns all appointments" do

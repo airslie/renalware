@@ -7,6 +7,7 @@ module Pages
   module Letters
     class Form < PageObject
       include CapybaraSelect2
+      include SlimSelectHelper
 
       PERSON_ROLE_TO_RADIO_ID_MAP = {
         patient: :letter_main_recipient_attributes_person_role_patient,
@@ -25,7 +26,7 @@ module Pages
       end
 
       def description=(value)
-        select2 value, css: ".letter_description"
+        slim_select value, from: "Topic"
       end
 
       def main_recipient=(main_recipient_role)

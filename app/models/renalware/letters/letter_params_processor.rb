@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/letters"
-
 # This class is responsible for transforming the attributes
 # of a letter.  The resulting attributes can then
 # be mass assigned to an ActiveRecord letter object.
@@ -14,6 +12,7 @@ module Renalware
 
       def call(params)
         params = process_main_recipient_attributes(params)
+        params = copy_description_from_topic_if_empty(params)
         process_cc_recipients_attributes(params)
       end
 
@@ -25,6 +24,15 @@ module Renalware
         params.merge(
           main_recipient_attributes: main_recipient_attributes(params)
         )
+      end
+
+      # Copy letter topic if description hasn't been explicitly set, but Topic has
+      def copy_description_from_topic_if_empty(params)
+        if params[:topic_id].present?
+          params[:description] ||= Topic.find(params[:topic_id]).text
+        end
+
+        params
       end
 
       def process_cc_recipients_attributes(params)

@@ -3,5 +3,12 @@
             new_patient_clinic_visit_path(patient),
             class: "button"
 
+= content_for(:filters) do
+  = render "filters", query: query, patient: patient, clinic_visits: clinic_visits
+
 = within_patient_layout(title: "Clinic Visits") do
-  = render "table", clinic_visits: clinic_visits, patient: patient
+  = render "table",
+           clinic_visits: clinic_visits,
+           patient: patient,
+           query: query,
+           sortable_columns: true

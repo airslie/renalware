@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe PreferenceSet, type: :model do
+    describe PreferenceSet do
       it_behaves_like "an Accountable model"
       it :aggregate_failures do
         is_expected.to validate_presence_of(:patient)

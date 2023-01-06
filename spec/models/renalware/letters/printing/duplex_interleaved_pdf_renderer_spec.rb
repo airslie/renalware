@@ -6,7 +6,7 @@ require "pdf/reader"
 module Renalware
   module Letters
     module Printing
-      describe DuplexInterleavedPdfRenderer, type: :model do
+      describe DuplexInterleavedPdfRenderer do
         include LettersSpecHelper
 
         def open_pdf_in_preview(pdf_file)
@@ -17,10 +17,10 @@ module Renalware
           end
         end
 
-        context "when patient is main recipient CCs are the GP and a letter contact "\
+        context "when patient is main recipient CCs are the GP and a letter contact " \
                 "and the patient's practice has no email address so we snail mail the GP" do
           context "when the letter is only 1 page long" do
-            it "renders a PDF containing an address cover sheet + letter for each recipient "\
+            it "renders a PDF containing an address cover sheet + letter for each recipient " \
                "including blank pages where necessary" do
               # practice_email: "x@y.com"
               letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
@@ -32,7 +32,6 @@ module Renalware
               ms = Benchmark.ms do
                 File.binwrite(pdf_file, described_class.call(letter))
               end
-              puts "Rendering the letter/s took #{ms}"
 
               open_pdf_in_preview(pdf_file)
 
@@ -78,7 +77,7 @@ module Renalware
 
               # Page 5 is the GP contact cover page
               expect(pages[4]).to have_pdf_page_text(
-                "Dr GOOD PJ Trumpton Medical Centre 123 Legoland Brewster Road "\
+                "Dr GOOD PJ Trumpton Medical Centre 123 Legoland Brewster Road " \
                 "Brownswater Windsor Berkshire NW1 6BB"
               )
 
@@ -106,7 +105,7 @@ module Renalware
           end
 
           context "when the letter spans 2 pages" do
-            it "renders a PDF containing an address cover sheet + letter for each recipient "\
+            it "renders a PDF containing an address cover sheet + letter for each recipient " \
                "including blank pages where necessary" do
               # update body to tip the page across 2 pages
               letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
@@ -118,7 +117,6 @@ module Renalware
               ms = Benchmark.ms do
                 File.binwrite(pdf_file, described_class.call(letter))
               end
-              puts "Rendering the letter/s took #{ms}"
 
               open_pdf_in_preview(pdf_file)
 
@@ -159,7 +157,7 @@ module Renalware
 
               # Page 5 is the GP contact
               expect(pages[4]).to have_pdf_page_text(
-                "Dr GOOD PJ Trumpton Medical Centre 123 Legoland Brewster Road "\
+                "Dr GOOD PJ Trumpton Medical Centre 123 Legoland Brewster Road " \
                 "Brownswater Windsor Berkshire NW1 6BB"
               )
 
@@ -187,10 +185,10 @@ module Renalware
           end
         end
 
-        context "when patient is main recipient CCs are the GP and a letter contact "\
+        context "when patient is main recipient CCs are the GP and a letter contact " \
                 "and the patient's practice has an email address so the GP will not be printed" do
           context "when the letter is only 1 page long" do
-            it "renders a PDF containing an address cover sheet + letter for each recipient "\
+            it "renders a PDF containing an address cover sheet + letter for each recipient " \
                "including blank pages where necessary" do
               # practice_email: "x@y.com"
               letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(

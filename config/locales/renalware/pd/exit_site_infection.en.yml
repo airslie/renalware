@@ -4,8 +4,8 @@ en:
     renalware/pd/exit_site_infection:
       clinical_presentation:
         pain: Pain
-        redness: Redness
-        swelling: Swelling
         pus: Pus
+        redness: Redness
         swabbed: Swabbed
+        swelling: Swelling
         tunnel_infection: Tunnel infection

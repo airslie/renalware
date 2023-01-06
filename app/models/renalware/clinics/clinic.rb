@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/clinics"
-
 module Renalware
   module Clinics
     class Clinic < ApplicationRecord
@@ -40,6 +38,10 @@ module Renalware
 
       def to_s
         name
+      end
+
+      def description
+        [name, code].reject(&:blank?).uniq.join(Renalware.config.clinic_name_code_separator)
       end
     end
   end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/hd"
-
 module Renalware
   module HD
     class PatientStatistics < ApplicationRecord
@@ -36,6 +34,8 @@ module Renalware
       scope :ordered, lambda {
         order(:rolling, year: :desc, month: :desc)
       }
+
+      scope :rolling, -> { where(rolling: true) }
 
       def to_s
         return "Last #{session_count} sessions" if rolling?

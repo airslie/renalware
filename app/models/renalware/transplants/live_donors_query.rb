@@ -6,8 +6,9 @@ module Renalware
       include ModalityScopes
       DEFAULT_ORDER = %w(family_name given_name).freeze
 
-      def initialize(q = {})
-        @q = q
+      def initialize(params: {}, relation: Patient.all)
+        @params = params
+        @relation = relation
       end
 
       def call
@@ -16,7 +17,7 @@ module Renalware
 
       def search
         @search ||= begin
-          relation.ransack(q).tap do |search|
+          patients.ransack(params).tap do |search|
             search.sorts = DEFAULT_ORDER
           end
         end
@@ -24,14 +25,13 @@ module Renalware
 
       private
 
-      def relation
-        Patient
-          .all
+      def patients
+        relation
           .extending(ModalityScopes)
           .with_current_modality_of_class(DonorModalityDescription)
       end
 
-      attr_reader :q
+      attr_reader :params, :relation
     end
   end
 end

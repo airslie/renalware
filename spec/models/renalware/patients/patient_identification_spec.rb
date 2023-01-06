@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_dependency "models/renalware/concerns/personable"
 
 module Renalware
-  describe Patient, type: :model do
+  describe Patient do
     def configure_patient_hospital_identifiers
       Renalware.configure do |config|
         config.patient_hospital_identifiers = {

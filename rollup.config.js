@@ -3,7 +3,6 @@
 import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs" // required for uglify
 import babel from "rollup-plugin-babel"
-import inject from "@rollup/plugin-inject" // allow referencing jquery in stimulus controllers
 import pkg from "./package.json"
 
 // Had to add context window to avoid rollup converting self to undefined in stimulus
@@ -16,18 +15,11 @@ export default {
     //format: "es",
     inlineDynamicImports: true,
     globals: {
-      "jquery": "jQuery"
+      jquery: "jQuery",
     },
     name: "renalware-core",
     sourcemap: false,
   },
-  plugins: [
-    babel(),
-    resolve(),
-    commonjs(),
-    inject({
-      jQuery: "jquery"
-    })
-  ],
-  external: []
+  plugins: [babel(), resolve(), commonjs()],
+  external: [],
 }

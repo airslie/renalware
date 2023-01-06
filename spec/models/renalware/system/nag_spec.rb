@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::System::Nag, type: :model do
+describe Renalware::System::Nag do
   it do
     # noop
   end

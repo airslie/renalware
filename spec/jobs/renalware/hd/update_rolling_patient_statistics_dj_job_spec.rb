@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe UpdateRollingPatientStatisticsDjJob, type: :job do
+    describe UpdateRollingPatientStatisticsDjJob do
       subject(:job) { described_class.new(patient.id) }
 
       let(:patient) { create(:patient) }

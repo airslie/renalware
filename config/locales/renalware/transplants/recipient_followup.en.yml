@@ -1,18 +1,5 @@
 ---
 en:
-  activerecord:
-    attributes:
-      renalware/transplants/recipient_followup:
-        graft_function_onset: Graft Function Onset
-        last_post_transplant_dialysis_on: Date of last Dialysis Post-Transplant
-        stent_removed_on: Stent Removal Date
-        graft_nephrectomy_on: Date of Graft Nephrectomy
-        return_to_regular_dialysis_on: Date of Return to Regular Dialysis
-        transplant_failed: Transplant Failed
-        transplant_failed_on: Date of Transplant Failure
-        transplant_failure_cause_description_id: Cause of Transplant Failure
-        transplant_failure_cause_other: Cause of Transplant Failure (other)
-        transplant_failure_notes: Transplant Failure Notes
   activemodel:
     attributes:
       renalware/transplants/recipient_followup_document:
@@ -27,9 +14,22 @@ en:
         peripheral_vascular_disease: Peripheral vascular disease
         stroke: Stroke
         transient_ischaemic_attack: Transient ischaemic attack
+  activerecord:
+    attributes:
+      renalware/transplants/recipient_followup:
+        graft_function_onset: Graft Function Onset
+        graft_nephrectomy_on: Date of Graft Nephrectomy
+        last_post_transplant_dialysis_on: Date of last Dialysis Post-Transplant
+        return_to_regular_dialysis_on: Date of Return to Regular Dialysis
+        stent_removed_on: Stent Removal Date
+        transplant_failed: Transplant Failed
+        transplant_failed_on: Date of Transplant Failure
+        transplant_failure_cause_description_id: Cause of Transplant Failure
+        transplant_failure_cause_other: Cause of Transplant Failure (other)
+        transplant_failure_notes: Transplant Failure Notes
   enumerize:
     renalware/transplants/recipient_followup:
       graft_function_onset:
-        immediate: Immediate (1)
         delayed: Delayed (2)
+        immediate: Immediate (1)
         primary_non_function: Primary Non-Function (3)

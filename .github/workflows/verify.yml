@@ -2,14 +2,21 @@ name: Verify
 
 # Do not run when a tag pushed, or when merging to main
 # Do not run if updating docs
-on: 
+on:
   push:
-    tags-ignore: 
-      - '*'
+    tags-ignore:
+      - "*"
     branches-ignore:
       - main
     paths-ignore:
-      - 'docs/**'
+      - "docs/**"
+      - "README.md"
+
+# Cancel any running actions triggered on the same branch.
+# NB: github.ref is the branch or tag that triggered the workflow run.
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   BUNDLE_GITHUB__COM: ${{ secrets.CR_PAT }}
@@ -27,7 +34,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -36,14 +42,14 @@ jobs:
       - name: Setup node and yarn with caching
         uses: actions/setup-node@v3
         with:
-          node-version: 16  
-          cache: 'yarn'
+          node-version: 16
+          cache: "yarn"
 
       - name: Install js packages with yarn
         run: yarn install --frozen-lockfile # optional, --immutable
 
       - name: Asset cache
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v3
         with:
           path: |
             spec/dummy/public/assets
@@ -67,12 +73,11 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        command: 
+        command:
           - bin/gh/rspec/unit
           - bin/gh/rspec/integration
           - bin/gh/cucumber/domain
           - bin/gh/cucumber/web
-      
     name: ${{ matrix.command }}
 
     services:
@@ -93,7 +98,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          submodules: 'true'
+          submodules: "true"
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -103,14 +108,14 @@ jobs:
       - name: Setup node and yarn with caching
         uses: actions/setup-node@v3
         with:
-          node-version: 16  
-          cache: 'yarn'
+          node-version: 16
+          cache: "yarn"
 
       - name: Install js packages with yarn
         run: yarn install --frozen-lockfile # optional, --immutable
 
       - name: Restore asset cache
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v3
         with:
           path: |
             spec/dummy/public/assets
@@ -124,15 +129,23 @@ jobs:
           POSTGRES_PASSWORD: postgres
           RAILS_ENV: test
           PGHOST: localhost
-        run: bin/rails db:create db:migrate
+        run: bin/rails db:create app:db:structure:load
 
       - name: Install dependencies
-        run: sudo apt-get install -y ghostscript pandoc
+        run: sudo apt install -y ghostscript pandoc
 
       - name: Run tests
         env:
           PGHOST: localhost
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          RAILS_ENV: test 
+          RAILS_ENV: test
         run: ${{ matrix.command }}
+
+      - name: Store test failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-failure-screenshots
+          path: spec/dummy/tmp/capybara
+          if-no-files-found: ignore

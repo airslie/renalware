@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe TransmissionLog, type: :model do
+    describe TransmissionLog do
       it :aggregate_failures do
         is_expected.to validate_presence_of(:direction)
         is_expected.to validate_presence_of(:format)

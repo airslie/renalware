@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe SessionFactory, type: :model do
+    describe SessionFactory do
       let(:user) { create(:user, :admin) }
       let(:patient) { create(:hd_patient) }
 

@@ -5,17 +5,17 @@ en:
       prescriptions:
         drug_select:
           default_fields:
-            medication_switch:
-              prompt: "Select drug by category/type or use the search option below"
-              label: Medication Type
-            drug_select:
-              label: Drug
             drug_search:
               label: Select Drug
               placeholder: Search drug by name or type
+            drug_select:
+              label: Drug
+            medication_switch:
+              label: Medication Type
+              prompt: Select drug by category/type or use the search option below
           exit_site_infection_fields:
             drug:
-              prompt: "Please select drug (exit site drugs only)"
+              prompt: Please select drug (exit site drugs only)
           peritonitis_episode_fields:
             drug:
-              prompt: "Please select drug (common peritonitis drugs listed at the top)"
+              prompt: Please select drug (common peritonitis drugs listed at the top)

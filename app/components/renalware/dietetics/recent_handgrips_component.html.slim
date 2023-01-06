@@ -1,0 +1,16 @@
+article.dry-weights.simple.simple-table
+  header
+    h2.title= t(".title")
+
+  table.auto-layout
+    thead
+      th.col-width-date = Renalware::Clinics::Clinic.human_attribute_name(:date)
+      th = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:handgrip_left)
+      th = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:handgrip_right)
+
+    tbody
+      - handgrips.each do |presented_handgrip|
+        tr
+          td = presented_handgrip.date
+          td = presented_handgrip.handgrip_left
+          td = presented_handgrip.handgrip_right

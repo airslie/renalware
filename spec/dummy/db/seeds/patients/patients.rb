@@ -9,6 +9,7 @@ module Renalware
       system_user = SystemUser.find
       countries = System::Country.all
       patients = []
+      host_hospital_centre_id = Hospitals::Centre.where(host_site: true).order(:name).pluck(:id).first
 
       Patient.transaction do
         CSV.foreach(file_path, headers: true) do |row|
@@ -27,6 +28,7 @@ module Renalware
             patient.updated_by_id = system_user.id
             patient.ukrdc_external_id = SecureRandom.uuid
             patient.secure_id = SecureRandom.uuid
+            patient.hospital_centre_id = host_hospital_centre_id
           end
 
           address = pat.current_address || pat.build_current_address

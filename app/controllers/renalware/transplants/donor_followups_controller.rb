@@ -1,48 +1,63 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/transplants/base_controller"
-
 module Renalware
   module Transplants
     class DonorFollowupsController < BaseController
-      before_action :load_patient
+      include Renalware::Concerns::PatientCasting
+      include Renalware::Concerns::PatientVisibility
 
       def show
-        render locals: { patient: patient, donor_followup: operation.followup }
+        authorize operation.followup
+        render locals: {
+          patient: transplants_patient,
+          donor_followup: operation.followup
+        }
       end
 
       def new
         donor_followup = operation.build_followup
-        render locals: { patient: patient, donor_followup: donor_followup }
+        authorize donor_followup
+        render_new(donor_followup)
       end
 
       def create
         donor_followup = operation.build_followup
         donor_followup.attributes = followup_attributes
+        authorize donor_followup
 
         if donor_followup.save
-          redirect_to patient_transplants_donor_dashboard_path(patient)
+          redirect_to patient_transplants_donor_dashboard_path(transplants_patient)
         else
-          render :new, locals: { patient: patient, donor_followup: donor_followup }
+          render_new(donor_followup)
         end
       end
 
       def edit
-        render locals: { patient: patient, donor_followup: operation.followup }
+        authorize operation.followup
+        render_edit(operation.followup)
       end
 
       def update
+        authorize operation.followup
         donor_followup = operation.followup
         donor_followup.attributes = followup_attributes
 
         if donor_followup.save
-          redirect_to patient_transplants_donor_dashboard_path(patient)
+          redirect_to patient_transplants_donor_dashboard_path(transplants_patient)
         else
-          render :edit, locals: { patient: patient, donor_followup: donor_followup }
+          render_edit(operation.followup)
         end
       end
 
       protected
+
+      def render_new(donor_followup)
+        render :new, locals: { patient: transplants_patient, donor_followup: donor_followup }
+      end
+
+      def render_edit(donor_followup)
+        render :edit, locals: { patient: transplants_patient, donor_followup: donor_followup }
+      end
 
       def operation
         @operation ||= DonorOperation.find(params[:donor_operation_id])

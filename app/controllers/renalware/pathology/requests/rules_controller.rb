@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
-
 module Renalware
   module Pathology
     module Requests
-      class RulesController < Pathology::BaseController
+      class RulesController < BaseController
         def index
           rule_sets = GlobalRuleSet.all
           clinics = Renalware::Pathology::Clinic.for_algorithm

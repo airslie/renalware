@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/messaging"
-
 #
 # Abstract Message base class.
 # Use Internal::Message etc. subclasses (stored via STI).

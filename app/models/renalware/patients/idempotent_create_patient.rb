@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/patient"
-
 # TODO: unused class
 module Renalware
   module Patients
@@ -17,8 +15,9 @@ module Renalware
         patient_params = params.fetch(:patient).merge(by: @user)
         local_patient_id = patient_params.fetch(:local_patient_id)
 
-        ::Renalware::Patient.create_with(patient_params)
-                            .find_or_create_by!(local_patient_id: local_patient_id)
+        ::Renalware::Patient
+          .create_with(patient_params)
+          .find_or_create_by!(local_patient_id: local_patient_id)
       end
     end
   end

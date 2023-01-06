@@ -1,29 +1,29 @@
 ---
 en:
-  renalware/events/biopsy:
-    title: "Biopsies"
   activemodel:
     attributes:
       renalware/events/biopsy/document:
-        result1: "Rejection"
-        result2: "IFTA"
+        result1: Rejection
+        result2: IFTA
   enumerize:
     renalware/events/biopsy/document:
       result1:
-        acute_amr: "Acute AMR"
-        chronic_amr: "Chronic AMR"
-        borderline_tcmr: "Borderline TCMR"
-        tcmr_ia: "TCMR IA"
-        tcmr_ib: "TCMR IB"
-        tcmr_iia: "TCMR IIA"
-        tcmr_iib: "TCMR IIB"
-        tcmr_iii: "TCMR III"
-        cni_toxicity: "CNI toxicity"
-        bk_nephropathy: "BK nephropathy"
-        diabetic_nephropathy: "Diabetic nephropathy"
-        recurrent_gn: "Recurrent GN"
-        de_novo_gn: "De Novo GN"
+        acute_amr: Acute AMR
+        bk_nephropathy: BK nephropathy
+        borderline_tcmr: Borderline TCMR
+        chronic_amr: Chronic AMR
+        cni_toxicity: CNI toxicity
+        de_novo_gn: De Novo GN
+        diabetic_nephropathy: Diabetic nephropathy
+        recurrent_gn: Recurrent GN
+        tcmr_ia: TCMR IA
+        tcmr_ib: TCMR IB
+        tcmr_iia: TCMR IIA
+        tcmr_iib: TCMR IIB
+        tcmr_iii: TCMR III
       result2:
-        lt_25: "<25%"
-        from_26_to_50: "26-50%"
+        from_26_to_50: 26-50%
         gt_50: ">50%"
+        lt_25: "<25%"
+  renalware/events/biopsy:
+    title: Biopsies

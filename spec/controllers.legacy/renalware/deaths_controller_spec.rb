@@ -4,7 +4,7 @@ require "rails-controller-testing"
 require "rails_helper"
 
 module Renalware
-  describe DeathsController, type: :controller do
+  describe Patients::DeathsController, type: :controller do
     routes { Engine.routes }
     let(:user) { @current_user }
     let(:patient) do

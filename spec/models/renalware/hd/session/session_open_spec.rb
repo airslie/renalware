@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Renalware
   module HD
-    describe Session::Open, type: :model do
+    describe Session::Open do
       subject(:session) do
         build(:hd_open_session, patient: patient, signed_on_by: nurse, by: nurse)
       end

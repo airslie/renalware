@@ -40,7 +40,7 @@ describe "Clinical Frailty Score nag", type: :component, caching: true do
               it "severity is #{severity}" do
                 set_modality(
                   patient: patient,
-                  modality_description: FactoryBot.create(:"#{modality}_modality_description"),
+                  modality_description: create(:"#{modality}_modality_description"),
                   by: patient.created_by
                 )
                 create(
@@ -68,7 +68,7 @@ describe "Clinical Frailty Score nag", type: :component, caching: true do
         it "returns a severity of '#{severity}' if modality is #{modality} and a 'Missing' value" do
           set_modality(
             patient: patient,
-            modality_description: FactoryBot.create(:"#{modality}_modality_description"),
+            modality_description: create(:"#{modality}_modality_description"),
             by: patient.created_by
           )
           expect(Renalware::Events::Event.for_patient(patient).count).to eq(0)

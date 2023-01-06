@@ -14,7 +14,6 @@ require "concurrent-ruby"
 require "devise"
 require "devise-security"
 require "delayed_job_active_record"
-require "delayed_job_web"
 require "dotenv-rails"
 require "dumb_delegator"
 require "email_validator"
@@ -62,7 +61,7 @@ require "byebug" if ENV.fetch("RAILS_ENV", nil) == "development"
 module Renalware
   # Don't have prefix method return anything.
   # This will keep Rails Engine from generating all table prefixes with the engines name
-  def self.table_name_prefix; end
+  def self.table_name_prefix = nil
 
   class Engine < ::Rails::Engine
     isolate_namespace Renalware
@@ -79,6 +78,51 @@ module Renalware
       end
     end
 
+    # Scheduled jobs; Compatible with GoodJob
+    class << self
+      def scheduled_jobs_config
+        {
+          ods_sync: {
+            cron: "every day at 6am",
+            class: "Renalware::Patients::SyncODSJob",
+            kwargs: { dry_run: false },
+            set: { priority: -10 },
+            description: "Use the NHS Organisation Data Service (ODS) API to fetch updates to " \
+                         "practices and GPs"
+          },
+
+          audit_patient_hd_statistics: {
+            cron: "0 3 1 * *", # On the first of each month at 3am
+            class: "Renalware::HD::GenerateMonthlyStatisticsAndRefreshMaterializedViewJob",
+            description: "Queues delayed jobs to generate monthly HD audits for each patient
+                          with a signed-off HD Session in the specified month and year. If
+                          no year or month supplied, it will generate stats for last month
+                          for each patient.".squish
+          },
+
+          hd_scheduling_diary_housekeeping: {
+            cron: "every day at 1:00am",
+            class: "Renalware::HD::Scheduling::DiaryHousekeepingJob"
+          },
+
+          reporting_send_daily_summary_email: {
+            cron: "every day at 11:45pm",
+            class: "Renalware::InvokeCommandJob",
+            args: ["bundle exec rake reporting:send_daily_summary_email"],
+            description: "Send an email report on the day's
+                          activity (exluding sensitive data) to configured recipients".squish
+          },
+
+          ukrdc_export: {
+            cron: "Mon-Fri 1am",
+            class: "Renalware::InvokeCommandJob",
+            args: ["bundle exec rake ukrdc:export"],
+            description: "Export UKRDC xml - initially to /apps/current/"
+          }
+        }
+      end
+    end
+
     # config.view_component.test_controller = "Renalware::BaseController"
 
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
@@ -86,7 +130,7 @@ module Renalware
 
     config.generators do |gens|
       gens.test_framework :rspec
-      gens.fixture_replacement :factory_girl, dir: "../../spec/factories"
+      gens.fixture_replacement :factory_bot, dir: "spec/factories"
     end
 
     initializer :add_locales do |app|
@@ -168,7 +212,6 @@ module Renalware
       app.config.exceptions_app = Engine.routes unless Rails.env.development?
       app.config.action_mailer.preview_path = Engine.root.join("app", "mailers", "renalware")
       app.config.action_mailer.deliver_later_queue_name = "mailers"
-      app.config.active_job.queue_adapter = :delayed_job
     end
   end
 end

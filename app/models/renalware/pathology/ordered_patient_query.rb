@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency "renalware/pathology"
 require "sql_indexed_case_stmt"
 
 module Renalware

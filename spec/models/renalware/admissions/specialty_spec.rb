@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Renalware::Admissions::Specialty, type: :model do
+describe Renalware::Admissions::Specialty do
   it { is_expected.to validate_presence_of :name }
 
   describe "uniqueness" do
