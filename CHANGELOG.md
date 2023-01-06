@@ -8,6 +8,16 @@ This project adheres to Semantic Versioning.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## 2.3.1
+
+### Added
+
+- Create Dietetic Assessment #2617
+- Create Dietetic Clinic Visit #4078
 - Introduce Topic dependent dynamic letter sections #4030
 - Use a toast for flash notices #3980
 - Support event versioning and soft-delete #3994
@@ -22,9 +32,11 @@ This project adheres to Semantic Versioning.
 - Add basic version of Dietetic MDM list and page #4035
 - Add HD housekeeping task to remove stale batch files #4117
 - Add Letters housekeeping task to remove stale batch files #4115
+- Display count of unread messages next to username in top menu #3984
 
 ### Changed
 
+- Allow optional min and max range to dry weights #3952
 - Rename `Letters::Description` to `Letters::Topic` #4007
 - Integrate BLT research study changes for Heroic #3981
 - Activejob agnosticism - Part 1 #3970
@@ -46,6 +58,8 @@ This project adheres to Semantic Versioning.
 - Add Hospital Centre dropdown when creating a new Patient #4071
 - Allow for time zone when deriving HD Session start and stop times #4060
 - Correct the logic around patient visibility #4058
+- Add Letters housekeeping task to remove stale batch files #4115
+- Add HD housekeeping task to remove stale batch files #4117
 
 ### Fixed
 
