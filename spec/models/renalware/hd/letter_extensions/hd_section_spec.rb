@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "renalware/hd/letter_extensions/hd_section"
 
@@ -32,7 +34,8 @@ module Renalware
 
           context "when hd profile is present" do
             it "renders" do
-              expect(component.call).to eq "HD Unit: <b>MyUnit</b>; Schedule: <b>SCHEDULE</b>; Time: <b>3:30</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Unit</dt><dd>MyUnit</dd><dt>Schedule</dt><dd>SCHEDULE</dd><dt>Time</dt><dd>3:30</dd></dl>"
             end
           end
 
@@ -48,7 +51,8 @@ module Renalware
             let(:current_schedule) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "HD Unit: <b>MyUnit</b>; Time: <b>3:30</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Unit</dt><dd>MyUnit</dd><dt>Time</dt><dd>3:30</dd></dl>"
             end
           end
 
@@ -56,7 +60,8 @@ module Renalware
             let(:prescribed_time) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "HD Unit: <b>MyUnit</b>; Schedule: <b>SCHEDULE</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Unit</dt><dd>MyUnit</dd><dt>Schedule</dt><dd>SCHEDULE</dd></dl>"
             end
           end
 
@@ -64,7 +69,8 @@ module Renalware
             let(:unit_code) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Schedule: <b>SCHEDULE</b>; Time: <b>3:30</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Schedule</dt><dd>SCHEDULE</dd><dt>Time</dt><dd>3:30</dd></dl>"
             end
           end
         end
@@ -108,7 +114,8 @@ module Renalware
             }
 
             it "renders" do
-              expect(component.call).to eq "HD Access: <b>Tunnelled subclav</b> <b>left</b>; <b>Continue Plan</b> <b>01-Oct-2022</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Access</dt> <dd>Tunnelled subclav left</dd><dd>Continue Plan 01-Oct-2022</dd></dl>"
             end
           end
 
@@ -122,7 +129,8 @@ module Renalware
             let(:side) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "HD Access: <b>Tunnelled subclav</b>; <b>Continue Plan</b> <b>01-Oct-2022</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Access</dt> <dd>Tunnelled subclav</dd><dd>Continue Plan 01-Oct-2022</dd></dl>"
             end
           end
 
@@ -130,7 +138,8 @@ module Renalware
             let(:type) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "HD Access: <b>left</b>; <b>Continue Plan</b> <b>01-Oct-2022</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Access</dt> <dd>left</dd><dd>Continue Plan 01-Oct-2022</dd></dl>"
             end
           end
 
@@ -138,7 +147,8 @@ module Renalware
             let(:plan_type) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "HD Access: <b>Tunnelled subclav</b> <b>left</b>; <b>01-Oct-2022</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Access</dt> <dd>Tunnelled subclav left</dd><dd>01-Oct-2022</dd></dl>"
             end
           end
 
@@ -146,7 +156,8 @@ module Renalware
             let(:plan_date) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "HD Access: <b>Tunnelled subclav</b> <b>left</b>; <b>Continue Plan</b>"
+              expect(component.call).to eq \
+                "<dl><dt>HD Access</dt> <dd>Tunnelled subclav left</dd><dd>Continue Plan</dd></dl>"
             end
           end
         end
@@ -155,11 +166,11 @@ module Renalware
       describe PatientObservationsComponent do
         let(:patient) { build_stubbed(:patient) }
         let(:statistics) do
-          build_stubbed :hd_patient_statistics,
+          build_stubbed(:hd_patient_statistics,
                         pre_mean_systolic_blood_pressure: pre_mean_systolic_blood_pressure,
                         pre_mean_diastolic_blood_pressure: pre_mean_diastolic_blood_pressure,
                         post_mean_systolic_blood_pressure: post_mean_systolic_blood_pressure,
-                        post_mean_diastolic_blood_pressure: post_mean_diastolic_blood_pressure
+                        post_mean_diastolic_blood_pressure: post_mean_diastolic_blood_pressure)
         end
         let(:dry_weight) {
           build_stubbed(:dry_weight, patient: build_stubbed(:clinical_patient), weight: 72.6)
@@ -198,7 +209,8 @@ module Renalware
 
           context "when all data is present" do
             it "renders" do
-              expect(component.call).to eq "Mean pre HD BP: <b>13</b> / <b>9</b>; Mean post HD BP: <b>80</b> / <b>6</b>; Dry Weight: <b>72.6</b>; BMI: <b>24.5</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Mean pre HD BP</dt><dd>13 / 9</dd><dt>Mean post HD BP</dt><dd>80 / 6</dd><dt>Dry Weight</dt><dd>72.6</dd><dt>BMI</dt><dd>24.5</dd></dl>"
             end
           end
 
@@ -214,7 +226,8 @@ module Renalware
             let(:dry_weight) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Mean pre HD BP: <b>13</b> / <b>9</b>; Mean post HD BP: <b>80</b> / <b>6</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Mean pre HD BP</dt><dd>13 / 9</dd><dt>Mean post HD BP</dt><dd>80 / 6</dd></dl>"
             end
           end
 
@@ -222,7 +235,8 @@ module Renalware
             let(:height) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Mean pre HD BP: <b>13</b> / <b>9</b>; Mean post HD BP: <b>80</b> / <b>6</b>; Dry Weight: <b>72.6</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Mean pre HD BP</dt><dd>13 / 9</dd><dt>Mean post HD BP</dt><dd>80 / 6</dd><dt>Dry Weight</dt><dd>72.6</dd></dl>"
             end
           end
 
@@ -230,7 +244,8 @@ module Renalware
             let(:pre_mean_systolic_blood_pressure) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Mean post HD BP: <b>80</b> / <b>6</b>; Dry Weight: <b>72.6</b>; BMI: <b>24.5</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Mean post HD BP</dt><dd>80 / 6</dd><dt>Dry Weight</dt><dd>72.6</dd><dt>BMI</dt><dd>24.5</dd></dl>"
             end
           end
 
@@ -238,7 +253,8 @@ module Renalware
             let(:pre_mean_diastolic_blood_pressure) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Mean post HD BP: <b>80</b> / <b>6</b>; Dry Weight: <b>72.6</b>; BMI: <b>24.5</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Mean post HD BP</dt><dd>80 / 6</dd><dt>Dry Weight</dt><dd>72.6</dd><dt>BMI</dt><dd>24.5</dd></dl>"
             end
           end
 
@@ -246,7 +262,8 @@ module Renalware
             let(:post_mean_systolic_blood_pressure) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Mean pre HD BP: <b>13</b> / <b>9</b>; Dry Weight: <b>72.6</b>; BMI: <b>24.5</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Mean pre HD BP</dt><dd>13 / 9</dd><dt>Dry Weight</dt><dd>72.6</dd><dt>BMI</dt><dd>24.5</dd></dl>"
             end
           end
 
@@ -254,7 +271,7 @@ module Renalware
             let(:post_mean_diastolic_blood_pressure) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Mean pre HD BP: <b>13</b> / <b>9</b>; Dry Weight: <b>72.6</b>; BMI: <b>24.5</b>"
+              expect(component.call).to eq "<dl><dt>Mean pre HD BP</dt><dd>13 / 9</dd><dt>Dry Weight</dt><dd>72.6</dd><dt>BMI</dt><dd>24.5</dd></dl>"
             end
           end
         end
@@ -265,10 +282,10 @@ module Renalware
         let(:component) { described_class.new(patient: patient) }
 
         let(:transplant_status) do
-          build_stubbed :transplant_registration_status,
+          build_stubbed(:transplant_registration_status,
                         description: build_stubbed(:transplant_registration_status_description,
                                                    name: "Not started"),
-                        started_on: Date.parse("2022-10-10")
+                        started_on: Date.parse("2022-10-10"))
         end
 
         let(:values) do
@@ -292,7 +309,8 @@ module Renalware
 
           context "when all data is present" do
             it "renders" do
-              expect(component.call).to eq "Mean URR: <b>123</b> <b>12-Dec-2017</b>; Transplant status: <b>Not started</b> <b>10-Oct-2022</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Mean URR</dt><dd>123</dd><dd>12-Dec-2017</dd><dt>Transplant status</dt><dd>Not started</dd><dd>10-Oct-2022</dd></dl>"
             end
           end
 
@@ -300,7 +318,7 @@ module Renalware
             let(:transplant_status) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "Mean URR: <b>123</b> <b>12-Dec-2017</b>"
+              expect(component.call).to eq "<dl><dt>Mean URR</dt><dd>123</dd><dd>12-Dec-2017</dd></dl>"
             end
           end
 
@@ -308,7 +326,8 @@ module Renalware
             let(:values) { {} }
 
             it "renders without it" do
-              expect(component.call).to eq "Transplant status: <b>Not started</b> <b>10-Oct-2022</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Transplant status</dt><dd>Not started</dd><dd>10-Oct-2022</dd></dl>"
             end
           end
 
@@ -316,7 +335,8 @@ module Renalware
             let(:current_observation_set) { nil }
 
             it "renders without URR value" do
-              expect(component.call).to eq "Transplant status: <b>Not started</b> <b>10-Oct-2022</b>"
+              expect(component.call).to eq \
+                "<dl><dt>Transplant status</dt><dd>Not started</dd><dd>10-Oct-2022</dd></dl>"
             end
           end
         end

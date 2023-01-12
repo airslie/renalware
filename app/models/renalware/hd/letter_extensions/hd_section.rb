@@ -12,11 +12,19 @@ module Renalware
 
         def call
           output = []
-          output << "HD Unit: <b>#{presented_hd_profile.hospital_unit_unit_code}</b>" if presented_hd_profile.hospital_unit_unit_code.present?
-          output << "Schedule: <b>#{presented_hd_profile.current_schedule}</b>" if presented_hd_profile.current_schedule
-          output << "Time: <b>#{presented_hd_profile.formatted_prescribed_time}</b>" if presented_hd_profile.formatted_prescribed_time.present?
+          if presented_hd_profile.hospital_unit_unit_code.present?
+            output << "<dt>HD Unit</dt><dd>#{presented_hd_profile.hospital_unit_unit_code}</dd>"
+          end
 
-          output.join("; ").html_safe
+          if presented_hd_profile.current_schedule
+            output << "<dt>Schedule</dt><dd>#{presented_hd_profile.current_schedule}</dd>"
+          end
+
+          if presented_hd_profile.formatted_prescribed_time.present?
+            output << "<dt>Time</dt><dd>#{presented_hd_profile.formatted_prescribed_time}</dd>"
+          end
+
+          "<dl>#{output.join}</dl>".html_safe
         end
 
         def render?
@@ -42,15 +50,19 @@ module Renalware
 
         def call
           output1 = []
-          output1 << "HD Access:"
-          output1 << "<b>#{presented_access_profile.type}</b>" if presented_access_profile.type
-          output1 << "<b>#{presented_access_profile.side}</b>" if presented_access_profile.side
+          output1 << "<dt>HD Access</dt>"
+          sub_output1 = []
+          sub_output1 << "#{presented_access_profile.type}" if presented_access_profile.type
+          sub_output1 << "#{presented_access_profile.side}" if presented_access_profile.side
+          output1 << "<dd>#{sub_output1.join(' ')}</dd>" if sub_output1.present?
 
           output2 = []
-          output2 << "<b>#{presented_access_profile.plan_type}</b>" if presented_access_profile.plan_type
-          output2 << "<b>#{::I18n.l(presented_access_profile.plan_date&.to_date)}</b>" if presented_access_profile.plan_date
+          sub_output2 = []
+          sub_output2 << "#{presented_access_profile.plan_type}" if presented_access_profile.plan_type.present?
+          sub_output2 << "#{::I18n.l(presented_access_profile.plan_date&.to_date)}" if presented_access_profile.plan_date.present?
+          output2 << "<dd>#{sub_output2.join(' ')}</dd>" if sub_output2.present?
 
-          [output1.join(" "), output2.join(" ")].compact.join("; ").html_safe
+          "<dl>#{[output1.join(' '), output2.join(' ')].compact.join}</dl>".html_safe
         end
 
         def render?
@@ -75,11 +87,11 @@ module Renalware
 
         def call
           output = []
-          output << "Mean pre HD BP: #{mean_pre_hd_bp}" if mean_pre_hd_bp
-          output << "Mean post HD BP: #{mean_post_hd_bp}" if mean_post_hd_bp
-          output << "Dry Weight: <b>#{latest_dry_weight}</b>" if latest_dry_weight
-          output << "BMI: <b>#{bmi}</b>" if bmi
-          output.join("; ").html_safe
+          output << "<dt>Mean pre HD BP</dt><dd>#{mean_pre_hd_bp}</dd>" if mean_pre_hd_bp
+          output << "<dt>Mean post HD BP</dt><dd>#{mean_post_hd_bp}</dd>" if mean_post_hd_bp
+          output << "<dt>Dry Weight</dt><dd>#{latest_dry_weight}</dd>" if latest_dry_weight
+          output << "<dt>BMI</dt><dd>#{bmi}</dd>" if bmi
+          "<dl>#{output.join}</dl>".html_safe
         end
 
         def render?
@@ -101,7 +113,7 @@ module Renalware
           return nil unless patient_statistics.pre_mean_systolic_blood_pressure
           return nil unless patient_statistics.pre_mean_diastolic_blood_pressure
 
-          "<b>#{patient_statistics.pre_mean_systolic_blood_pressure.round}</b> / <b>#{patient_statistics.pre_mean_diastolic_blood_pressure.round}</b>"
+          "#{patient_statistics.pre_mean_systolic_blood_pressure.round} / #{patient_statistics.pre_mean_diastolic_blood_pressure.round}"
         end
 
         def mean_post_hd_bp
@@ -109,7 +121,7 @@ module Renalware
           return nil unless patient_statistics.post_mean_systolic_blood_pressure
           return nil unless patient_statistics.post_mean_diastolic_blood_pressure
 
-          "<b>#{patient_statistics.post_mean_systolic_blood_pressure.round}</b> / <b>#{patient_statistics.post_mean_diastolic_blood_pressure.round}</b>"
+          "#{patient_statistics.post_mean_systolic_blood_pressure.round} / #{patient_statistics.post_mean_diastolic_blood_pressure.round}"
         end
 
         def patient_statistics
@@ -130,9 +142,9 @@ module Renalware
 
         def call
           output = []
-          output << "Mean URR: <b>#{urr_value}</b> <b>#{urr_date}</b>" if urr_value
-          output << "Transplant status: <b>#{transplant_status&.description}</b> <b>#{::I18n.l(transplant_status&.started_on)}</b>" if transplant_status
-          output.join("; ").html_safe
+          output << "<dt>Mean URR</dt><dd>#{urr_value}</dd><dd>#{urr_date}</dd>" if urr_value
+          output << "<dt>Transplant status</dt><dd>#{transplant_status&.description}</dd><dd>#{::I18n.l(transplant_status&.started_on)}</dd>" if transplant_status
+          "<dl>#{output.join}</dl>".html_safe
         end
 
         def render?

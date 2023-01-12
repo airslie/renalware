@@ -1,5 +1,4 @@
-
-table.contacts tbody td{
+table.contacts tbody td {
   vertical-align: top;
 }
 
@@ -171,5 +170,17 @@ table.letters {
   &.mailshot-status--success:hover {
     background-color: $nhs-green;
     color: $white;
+  }
+}
+
+turbo-frame#letter_sections {
+  .loading-element {
+    visibility: hidden;
+  }
+}
+
+turbo-frame[busy]#letter_sections {
+  .loading-element {
+    visibility: initial;
   }
 }

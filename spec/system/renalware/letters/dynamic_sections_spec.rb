@@ -37,8 +37,8 @@ module Renalware
         select "Letterhead", from: "Letterhead"
         slim_select "Main Topic", from: "Topic"
 
-        within "article", text: "HD Section" do
-          expect(page).to have_content "HD Unit: U_CODE; Time: 5:00"
+        within "article", text: "HD" do
+          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
         end
 
         within ".top" do
@@ -47,15 +47,15 @@ module Renalware
 
         preview_letter_page = current_path.dup
         visit "#{current_path}/formatted"
-        within ".list", text: "HD Section" do
-          expect(page).to have_content "HD Unit: U_CODE; Time: 5:00"
+        within "section", text: "HD" do
+          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
         end
 
         visit preview_letter_page
         click_link "Edit"
 
-        within "article", text: "HD Section" do
-          expect(page).to have_content "HD Unit: U_CODE; Time: 5:00"
+        within "article", text: "HD" do
+          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
         end
 
         # Let's change some of the data to check the diff
@@ -64,9 +64,9 @@ module Renalware
 
         page.refresh
 
-        within "article", text: "HD Section" do
-          expect(page).to have_content "HD Unit: U_CODE; Time: 5:00"
-          expect(page).to have_content "HD Unit: Another Code; Time: 1:39"
+        within "article", text: "HD" do
+          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
+          expect(page).to have_content "HD Unit\nAnother Code\nTime\n1:39"
         end
 
         # Save, and check that the data hasn't changed
@@ -76,13 +76,13 @@ module Renalware
 
         click_link "Edit"
 
-        within "article", text: "HD Section" do
-          expect(page).to have_content "HD Unit: U_CODE; Time: 5:00"
-          expect(page).to have_content "HD Unit: Another Code; Time: 1:39"
+        within "article", text: "HD" do
+          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
+          expect(page).to have_content "HD Unit\nAnother Code\nTime\n1:39"
         end
 
         # Now use the toggle to apply updates
-        within "article", text: "HD Section" do
+        within "article", text: "HD" do
           find("label", text: "Use updates below").click
         end
 
@@ -92,14 +92,14 @@ module Renalware
 
         click_link "Edit"
 
-        within "article", text: "HD Section" do
-          expect(page).not_to have_content "HD Unit: U_CODE; Time: 5:00"
-          expect(page).to have_content "HD Unit: Another Code; Time: 1:39"
+        within "article", text: "HD" do
+          expect(page).not_to have_content "HD Unit\nU_CODE\nTime\n5:00"
+          expect(page).to have_content "HD Unit\nAnother Code\nTime\n1:39"
         end
 
         # Change to a topic which doesn't have a section
         slim_select "Topic without section", from: "Topic"
-        expect(page).not_to have_content "HD Unit: U_CODE; Time: 1:39"
+        expect(page).not_to have_content "HD Unit\nU_CODE\nTime\n1:39"
       end
     end
   end

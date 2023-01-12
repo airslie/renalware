@@ -1,0 +1,8 @@
+= pre_content
+
+.relative.clear-both
+  / The class "[[busy]_*_&]:visible" means apply the visible tw utility class when a parent element
+  / (a turbo_frame) has the 'busy' attribute. Simples 8~\
+  .loading-element.absolute.top-0.bg-opacity-60.bg-white.left-0.w-full.h-full.z-30.flex.justify-center.items-center(class="invisible [[busy]_*_&]:visible")
+    = inline_svg_tag "renalware/icons/arrow-path", class: "animate-spin -ml-1 mr-3 h-10 mt-20 w-10 stroke-slate-500"
+  = main_content

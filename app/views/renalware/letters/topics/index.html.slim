@@ -17,6 +17,7 @@
       tr
         th.col-width-small
         th.col-width-xlarge Name
+        th Additional sections
         - if policy(topics).sort?
           th.col-width-small.text-center Sort order
         th.col-width-date-time Created at
@@ -34,6 +35,7 @@
                                  method: :delete,
                                  data: { confirm: "Are you sure?" }
           td= topic.text
+          td= topic.section_identifiers.join(", ")
           - if policy(topic).sort?
             td.handle
               - unless topic.deleted?

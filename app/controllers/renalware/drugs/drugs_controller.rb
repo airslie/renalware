@@ -13,28 +13,10 @@ module Renalware
       # drug_type.drugs.ordered.pluck(:id, :name)
       def selected_drugs
         selected_drugs = Drug.for(params[:medication_switch])
-                             .ordered
-                             .pluck(:id, :name)
+          .ordered
+          .pluck(:id, :name)
         authorize Renalware::Drugs::Drug, :selected_drugs?
         render json: selected_drugs
-      end
-
-      def new
-        @drug = Drug.new
-        authorize @drug
-      end
-
-      def create
-        @drug = Drug.new(drug_params)
-        authorize @drug
-
-        if @drug.save
-          redirect_to drugs_drugs_path,
-                      notice: success_msg_for("drug")
-        else
-          flash.now[:error] = failed_msg_for("drug")
-          render :new
-        end
       end
 
       def index
@@ -49,9 +31,27 @@ module Renalware
         end
       end
 
+      def new
+        @drug = Drug.new
+        authorize @drug
+      end
+
       def edit
         @drug = Drug.find(params[:id])
         authorize @drug
+      end
+
+      def create
+        @drug = Drug.new(drug_params)
+        authorize @drug
+
+        if @drug.save
+          redirect_to drugs_drugs_path,
+                      notice: success_msg_for("drug")
+        else
+          flash.now[:error] = failed_msg_for("drug")
+          render :new
+        end
       end
 
       def update

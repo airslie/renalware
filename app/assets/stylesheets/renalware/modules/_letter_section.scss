@@ -1,0 +1,40 @@
+.diff ul {
+  margin-left: 0;
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.diff del,
+.diff ins {
+  display: block;
+  text-decoration: none;
+}
+
+.diff li {
+  padding: 0;
+  margin: 0;
+}
+
+.diff del strong {
+  background: #fcc;
+}
+
+.diff ins strong {
+  background: #9f9;
+}
+
+.letter-section {
+  dl {
+    display: flex;
+    margin: 0 0 0.25rem 0;
+  }
+  dt {
+    margin: 0 0.4rem 0 0;
+    color: inherit;
+  }
+  dd {
+    margin: 0 1.75rem 0 0;
+    font-weight: 700;
+  }
+}

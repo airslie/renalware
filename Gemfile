@@ -19,9 +19,10 @@ gem "faker"
 gem "i18n-tasks", "~> 0.9.33"
 gem "jsbundling-rails", "~> 1.0"
 gem "net-smtp", require: false # remove in Rails 7
-gem "nhs_api_client", github: "airslie/nhs_api_client", tag: "v0.1.2", require: false
+gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
 gem "paper_trail"
 gem "party_foul", "~> 1.5.5", github: "airslie/party_foul"
+gem "rails", "~> 6.0.6"
 gem "redis", "~> 4.8"
 gem "renalware-forms", ">=0.1.16", github: "airslie/renalware-forms", branch: "main"
 gem "ruby-prof", require: false
@@ -38,9 +39,8 @@ gem "wkhtmltopdf-binary", "0.12.3.1"
 # gem "sentry-ruby"
 gem "strong_migrations"
 
-gem "diff-lcs"
-gem "diffy"
 gem "good_job"
+gem "matrix"
 
 group :test do
   gem "capybara", "~> 3.32"

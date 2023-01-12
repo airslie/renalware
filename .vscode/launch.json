@@ -29,5 +29,18 @@
       "args": [],
       "askParameters": false
     },
+    {
+      "type": "rdbg",
+      "name": "Run console",
+      "request": "launch",
+      "command": "./spec/dummy/bin/rails",
+      "script": "console",
+      "args": [],
+      "askParameters": false,
+      "useTerminal": true,
+      "env": {
+        "DISABLE_SPRING": true
+      }
+    },
   ]
 }

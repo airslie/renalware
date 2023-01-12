@@ -1,8 +1,4 @@
-p
-  = render Renalware::HD::LetterExtensions::HDScheduleComponent.new(patient: letter.patient)
-p
-  = render Renalware::HD::LetterExtensions::HDAccessComponent.new(patient: letter.patient)
-p
-  = render Renalware::HD::LetterExtensions::PatientObservationsComponent.new(patient: letter.patient)
-p
-  = render Renalware::HD::LetterExtensions::URRAndTransplantStatusComponent.new(patient: letter.patient)
+= render Renalware::HD::LetterExtensions::HDScheduleComponent.new(patient: letter.patient)
+= render Renalware::HD::LetterExtensions::HDAccessComponent.new(patient: letter.patient)
+= render Renalware::HD::LetterExtensions::PatientObservationsComponent.new(patient: letter.patient)
+= render Renalware::HD::LetterExtensions::URRAndTransplantStatusComponent.new(patient: letter.patient)

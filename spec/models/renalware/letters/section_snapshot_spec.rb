@@ -22,7 +22,7 @@ module Renalware
 
           snapshot = letter.section_snapshots.first
           expect(snapshot.section_identifier).to eq "hd_section"
-          expect(snapshot.content).to include "<p></p>"
+          expect(snapshot.content).to include "<dl></dl>"
         end
       end
 
@@ -55,7 +55,7 @@ module Renalware
 
           snapshot = letter.section_snapshots.first
           expect(snapshot.section_identifier).to eq "hd_section"
-          expect(snapshot.content).to include "<p></p>"
+          expect(snapshot.content).to include "<dl></dl>"
         end
       end
 
@@ -74,7 +74,7 @@ module Renalware
 
           snapshot = letter.section_snapshots.first
           expect(snapshot.section_identifier).to eq "hd_section"
-          expect(snapshot.content).to include "<p></p>"
+          expect(snapshot.content).to include "<dl></dl>"
         end
       end
     end

@@ -57,7 +57,7 @@ module Renalware
 
                 snapshot = letter.section_snapshots.first
                 expect(snapshot.section_identifier).to eq "hd_section"
-                expect(snapshot.content).to include "<p></p>"
+                expect(snapshot.content).to include "<dl></dl>"
               end
             end
 
@@ -91,7 +91,7 @@ module Renalware
               context "and a true value has been passed in" do
                 it "updates the snapshot content" do
                   subject.call(patient, letter.id, by: user, update_sections: { hd_section: "1" })
-                  expect(section_snapshot.reload.content).to include "<p></p>"
+                  expect(section_snapshot.reload.content).to include "<dl></dl>"
                 end
 
                 context "and a false value has been passed in" do
@@ -112,7 +112,7 @@ module Renalware
 
                   snapshot = letter.section_snapshots.first
                   expect(snapshot.section_identifier).to eq "hd_section"
-                  expect(snapshot.content).to include "<p></p>"
+                  expect(snapshot.content).to include "<dl></dl>"
                 end
               end
             end

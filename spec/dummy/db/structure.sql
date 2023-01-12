@@ -3106,172 +3106,6 @@ CREATE VIEW renalware.dietetic_mdm_patients AS
 
 
 --
--- Name: directory_of_medicines_forms; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.directory_of_medicines_forms (
-    id bigint NOT NULL,
-    code character varying,
-    name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: directory_of_medicines_forms_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.directory_of_medicines_forms_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: directory_of_medicines_forms_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.directory_of_medicines_forms_id_seq OWNED BY renalware.directory_of_medicines_forms.id;
-
-
---
--- Name: directory_of_medicines_routes; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.directory_of_medicines_routes (
-    id bigint NOT NULL,
-    code character varying,
-    name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: directory_of_medicines_routes_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.directory_of_medicines_routes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: directory_of_medicines_routes_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.directory_of_medicines_routes_id_seq OWNED BY renalware.directory_of_medicines_routes.id;
-
-
---
--- Name: directory_of_medicines_unit_of_measures; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.directory_of_medicines_unit_of_measures (
-    id bigint NOT NULL,
-    code character varying,
-    name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: directory_of_medicines_unit_of_measures_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.directory_of_medicines_unit_of_measures_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: directory_of_medicines_unit_of_measures_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.directory_of_medicines_unit_of_measures_id_seq OWNED BY renalware.directory_of_medicines_unit_of_measures.id;
-
-
---
--- Name: directory_of_medicines_virtual_medical_products; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.directory_of_medicines_virtual_medical_products (
-    id bigint NOT NULL,
-    code character varying,
-    name character varying,
-    form_code character varying,
-    route_code character varying,
-    unit_of_measure_code character varying,
-    strength_numerator_value character varying,
-    basis_of_strength character varying,
-    virtual_therapeutic_moiety_code character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: directory_of_medicines_virtual_medical_products_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.directory_of_medicines_virtual_medical_products_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: directory_of_medicines_virtual_medical_products_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.directory_of_medicines_virtual_medical_products_id_seq OWNED BY renalware.directory_of_medicines_virtual_medical_products.id;
-
-
---
--- Name: directory_of_medicines_virtual_therapeutic_moieties; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.directory_of_medicines_virtual_therapeutic_moieties (
-    id bigint NOT NULL,
-    code character varying,
-    name character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: directory_of_medicines_virtual_therapeutic_moieties_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.directory_of_medicines_virtual_therapeutic_moieties_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: directory_of_medicines_virtual_therapeutic_moieties_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.directory_of_medicines_virtual_therapeutic_moieties_id_seq OWNED BY renalware.directory_of_medicines_virtual_therapeutic_moieties.id;
-
-
---
 -- Name: directory_people; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -5837,16 +5671,6 @@ CREATE SEQUENCE renalware.letter_mailshot_mailshots_id_seq
 --
 
 ALTER SEQUENCE renalware.letter_mailshot_mailshots_id_seq OWNED BY renalware.letter_mailshot_mailshots.id;
-
-
---
--- Name: letter_mailshot_patients_where_surname_starts_with_r; Type: VIEW; Schema: renalware; Owner: -
---
-
-CREATE VIEW renalware.letter_mailshot_patients_where_surname_starts_with_r AS
- SELECT patients.id AS patient_id
-   FROM renalware.patients
-  WHERE ((patients.family_name)::text ~~ 'R%'::text);
 
 
 --
@@ -9570,7 +9394,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -9650,7 +9474,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -12169,64 +11993,6 @@ ALTER SEQUENCE renalware.ukrdc_treatments_id_seq OWNED BY renalware.ukrdc_treatm
 
 
 --
--- Name: untitled_table_477; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.untitled_table_477 (
-    id integer NOT NULL
-);
-
-
---
--- Name: untitled_table_477_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.untitled_table_477_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: untitled_table_477_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.untitled_table_477_id_seq OWNED BY renalware.untitled_table_477.id;
-
-
---
--- Name: untitled_table_478; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.untitled_table_478 (
-    id integer NOT NULL
-);
-
-
---
--- Name: untitled_table_478_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.untitled_table_478_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: untitled_table_478_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.untitled_table_478_id_seq OWNED BY renalware.untitled_table_478.id;
-
-
---
 -- Name: user_group_memberships; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -12686,41 +12452,6 @@ ALTER TABLE ONLY renalware.death_causes ALTER COLUMN id SET DEFAULT nextval('ren
 --
 
 ALTER TABLE ONLY renalware.delayed_jobs ALTER COLUMN id SET DEFAULT nextval('renalware.delayed_jobs_id_seq'::regclass);
-
-
---
--- Name: directory_of_medicines_forms id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_forms ALTER COLUMN id SET DEFAULT nextval('renalware.directory_of_medicines_forms_id_seq'::regclass);
-
-
---
--- Name: directory_of_medicines_routes id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_routes ALTER COLUMN id SET DEFAULT nextval('renalware.directory_of_medicines_routes_id_seq'::regclass);
-
-
---
--- Name: directory_of_medicines_unit_of_measures id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_unit_of_measures ALTER COLUMN id SET DEFAULT nextval('renalware.directory_of_medicines_unit_of_measures_id_seq'::regclass);
-
-
---
--- Name: directory_of_medicines_virtual_medical_products id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_virtual_medical_products ALTER COLUMN id SET DEFAULT nextval('renalware.directory_of_medicines_virtual_medical_products_id_seq'::regclass);
-
-
---
--- Name: directory_of_medicines_virtual_therapeutic_moieties id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_virtual_therapeutic_moieties ALTER COLUMN id SET DEFAULT nextval('renalware.directory_of_medicines_virtual_therapeutic_moieties_id_seq'::regclass);
 
 
 --
@@ -14061,20 +13792,6 @@ ALTER TABLE ONLY renalware.ukrdc_treatments ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- Name: untitled_table_477 id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.untitled_table_477 ALTER COLUMN id SET DEFAULT nextval('renalware.untitled_table_477_id_seq'::regclass);
-
-
---
--- Name: untitled_table_478 id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.untitled_table_478 ALTER COLUMN id SET DEFAULT nextval('renalware.untitled_table_478_id_seq'::regclass);
-
-
---
 -- Name: user_group_memberships id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -14393,46 +14110,6 @@ ALTER TABLE ONLY renalware.death_causes
 
 ALTER TABLE ONLY renalware.delayed_jobs
     ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
-
-
---
--- Name: directory_of_medicines_forms directory_of_medicines_forms_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_forms
-    ADD CONSTRAINT directory_of_medicines_forms_pkey PRIMARY KEY (id);
-
-
---
--- Name: directory_of_medicines_routes directory_of_medicines_routes_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_routes
-    ADD CONSTRAINT directory_of_medicines_routes_pkey PRIMARY KEY (id);
-
-
---
--- Name: directory_of_medicines_unit_of_measures directory_of_medicines_unit_of_measures_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_unit_of_measures
-    ADD CONSTRAINT directory_of_medicines_unit_of_measures_pkey PRIMARY KEY (id);
-
-
---
--- Name: directory_of_medicines_virtual_medical_products directory_of_medicines_virtual_medical_products_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_virtual_medical_products
-    ADD CONSTRAINT directory_of_medicines_virtual_medical_products_pkey PRIMARY KEY (id);
-
-
---
--- Name: directory_of_medicines_virtual_therapeutic_moieties directory_of_medicines_virtual_therapeutic_moieties_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.directory_of_medicines_virtual_therapeutic_moieties
-    ADD CONSTRAINT directory_of_medicines_virtual_therapeutic_moieties_pkey PRIMARY KEY (id);
 
 
 --
@@ -15988,22 +15665,6 @@ ALTER TABLE ONLY renalware.ukrdc_treatments
 
 
 --
--- Name: untitled_table_477 untitled_table_477_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.untitled_table_477
-    ADD CONSTRAINT untitled_table_477_pkey PRIMARY KEY (id);
-
-
---
--- Name: untitled_table_478 untitled_table_478_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.untitled_table_478
-    ADD CONSTRAINT untitled_table_478_pkey PRIMARY KEY (id);
-
-
---
 -- Name: user_group_memberships user_group_memberships_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -16939,41 +16600,6 @@ CREATE INDEX index_clinical_versions_on_item_type_and_item_id ON renalware.clini
 --
 
 CREATE UNIQUE INDEX index_death_causes_on_code ON renalware.death_causes USING btree (code);
-
-
---
--- Name: index_directory_of_medicines_forms_on_code; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_directory_of_medicines_forms_on_code ON renalware.directory_of_medicines_forms USING btree (code);
-
-
---
--- Name: index_directory_of_medicines_routes_on_code; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_directory_of_medicines_routes_on_code ON renalware.directory_of_medicines_routes USING btree (code);
-
-
---
--- Name: index_directory_of_medicines_unit_of_measures_on_code; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_directory_of_medicines_unit_of_measures_on_code ON renalware.directory_of_medicines_unit_of_measures USING btree (code);
-
-
---
--- Name: index_directory_of_medicines_vmp_on_code; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_directory_of_medicines_vmp_on_code ON renalware.directory_of_medicines_virtual_medical_products USING btree (code);
-
-
---
--- Name: index_directory_of_medicines_vtm_on_code; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_directory_of_medicines_vtm_on_code ON renalware.directory_of_medicines_virtual_therapeutic_moieties USING btree (code);
 
 
 --
@@ -25279,11 +24905,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221006200436'),
 ('20221012114542'),
 ('20221013094654'),
-('20221027100532'),
-('20221205223711'),
-('20221206202033'),
-('20221208192916'),
-('20221208201745'),
-('20221208202357');
+('20221027100532');
 
 

@@ -20,11 +20,11 @@ module Renalware
       end
 
       def plan_type
-        current_plan.plan_type.to_s
+        current_plan&.plan_type.to_s
       end
 
       def plan_date
-        current_plan.created_at
+        current_plan&.created_at
       end
 
       def type
@@ -34,7 +34,7 @@ module Renalware
       private
 
       def current_plan
-        @current_plan ||= patient.current_plan || NullObject.instance
+        @current_plan ||= patient.current_plan
       end
     end
   end
