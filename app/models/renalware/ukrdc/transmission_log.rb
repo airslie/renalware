@@ -3,24 +3,24 @@
 module Renalware
   module UKRDC
     class TransmissionLog < ApplicationRecord
-      validates :sent_at, presence: true
       validates :status, presence: true
       belongs_to :patient, class_name: "Renalware::Patient"
       enum status: {
         undefined: 0,
         error: 1,
-        unsent_no_change_since_last_send: 2,
-        sent: 3,
-        imported: 4
+        skippped_no_change_since_last_send: 2,
+        queued: 3,
+        imported: 4,
+        sftped: 99
       }
       enum direction: { out: 0, in: 1 }
-      scope :ordered, -> { order(sent_at: :asc) }
+      scope :ordered, -> { order(created_at: :asc) }
       belongs_to :batch
 
       def self.with_logging(patient: nil, batch: nil, **options)
         log = new(
           patient: patient,
-          sent_at: Time.zone.now,
+          created_at: Time.zone.now,
           batch: batch,
           **options
         )

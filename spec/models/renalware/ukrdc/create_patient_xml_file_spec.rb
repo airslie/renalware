@@ -93,8 +93,8 @@ module Renalware
         UKRDC::TransmissionLog.create!(
           patient: patient,
           batch: UKRDC::Batch.next,
-          status: :sent,
-          sent_at: 1.week.ago,
+          status: :queued,
+          created_at: 1.week.ago,
           payload: "<xml>out of date</xml>",
           payload_hash: Digest::MD5.hexdigest("<xml>out of date</xml>")
         )
@@ -132,8 +132,8 @@ module Renalware
         UKRDC::TransmissionLog.create!(
           batch: UKRDC::Batch.next,
           patient: patient,
-          status: :sent,
-          sent_at: 1.week.ago,
+          status: :queued,
+          created_at: 1.week.ago,
           payload: xml,
           payload_hash: xml_md5_hash
         )

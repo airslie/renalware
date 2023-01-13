@@ -12,11 +12,11 @@ module Renalware
       # The payload is loaded by clicking on a link in the table
       def index
         ransack_params = params.fetch(:q, {})
-        ransack_params[:s] ||= "sent_at desc"
+        ransack_params[:s] ||= "created_at desc"
 
         query = TransmissionLog
           .includes(:patient)
-          .order(sent_at: :desc)
+          .order(created_at: :desc)
           .select(TransmissionLog.attribute_names - [:payload])
           .ransack(ransack_params)
         pagy, logs = pagy(query.result)

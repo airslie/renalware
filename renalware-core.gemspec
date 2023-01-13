@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
   s.add_dependency "active_type", "~> 0.7.1"
   s.add_dependency "ahoy_matey", "~> 2.1"
   s.add_dependency "attr_extras", ">= 6.2"
+  s.add_dependency "bcrypt_pbkdf"
   s.add_dependency "client_side_validations", "~> 17.0"
   s.add_dependency "client_side_validations-simple_form", "~> 11.0"
   s.add_dependency "clipboard-rails", "~> 1.7.1"
@@ -50,6 +51,7 @@ Gem::Specification.new do |s|
   s.add_dependency "diffy"
   s.add_dependency "dotenv-rails", "~> 2.5"
   s.add_dependency "dumb_delegator", "~> 0.8.0"
+  s.add_dependency "ed25519"
   s.add_dependency "email_validator", "> 1.6.0"
   s.add_dependency "enumerize", "~> 2.4.0"
   s.add_dependency "font-awesome-sass", "~> 5.6" # See icons here: https://fortawesome.github.io/Font-Awesome/icons/
@@ -68,6 +70,7 @@ Gem::Specification.new do |s|
   s.add_dependency "lograge", "~> 0.11"
   s.add_dependency "naught", "~> 1.1.0"
   s.add_dependency "nested_form", "~> 0.3.2"
+  s.add_dependency "net-sftp", "~> 4.0"
   s.add_dependency "nokogiri", "~> 1.9"
   s.add_dependency "ox", "~> 2.13"
   s.add_dependency "pagy", "~> 5.10"

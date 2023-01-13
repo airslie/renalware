@@ -27,7 +27,7 @@ module Renalware
           if xml_payload.present?
             if !force_send && xml_payload_same_as_last_sent_payload?(xml_payload)
               logger.info "    skipping as no change in XML file"
-              log.unsent_no_change_since_last_send!
+              log.skippped_no_change_since_last_send!
             else
               create_xml_file(xml_payload, log)
               update_patient_to_indicate_we_have_sent_their_data_to_ukrdc
@@ -66,12 +66,13 @@ module Renalware
       def create_xml_file(payload, log)
         File.write(xml_filepath, payload)
         log.file_path = xml_filepath
-        log.sent!
+        log.queued!
       end
 
       def last_sent_transmission_log
         @last_sent_transmission_log ||= begin
-          TransmissionLog.where(patient: patient, status: :sent).ordered.last || NullObject.instance
+          TransmissionLog.where(patient: patient,
+                                status: :queued).ordered.last || NullObject.instance
         end
       end
 
@@ -133,9 +134,9 @@ module Renalware
         # This allows us to do payload comparisons independent of the time they were sent.
         def time_neutral_payload
           payload
-            .gsub(%r{<Stream>[^<]*<\/Stream>}, "<Stream>removed</Stream>")
+            .gsub(%r{<Stream>[^<]*</Stream>}, "<Stream>removed</Stream>")
             .gsub(/ (time|start|stop)=["'][^'"]*['"]/, "")
-            .gsub(%r{<UpdatedOn>[^<]*<\/UpdatedOn>}, "<UpdatedOn>removed</UpdatedOn>")
+            .gsub(%r{<UpdatedOn>[^<]*</UpdatedOn>}, "<UpdatedOn>removed</UpdatedOn>")
         end
       end
     end

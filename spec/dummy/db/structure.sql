@@ -11823,7 +11823,7 @@ ALTER SEQUENCE renalware.ukrdc_batches_id_seq OWNED BY renalware.ukrdc_batches.i
 CREATE TABLE renalware.ukrdc_transmission_logs (
     id bigint NOT NULL,
     patient_id bigint,
-    sent_at timestamp without time zone NOT NULL,
+    sent_at timestamp without time zone,
     status integer NOT NULL,
     request_uuid uuid,
     payload_hash text,
@@ -24905,6 +24905,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221006200436'),
 ('20221012114542'),
 ('20221013094654'),
-('20221027100532');
+('20221027100532'),
+('20230112115053');
 
 

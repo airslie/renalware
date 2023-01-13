@@ -6,18 +6,22 @@
     table.stripeless.mb-6
       thead
         tr
-          th.col-width-date-time= sort_link(query, :sent_at, "Sent at")
+          th.col-width-date-time= sort_link(query, :created_at, "Created at")
+          th.col-width-date-time= sort_link(query, :sent_at, "SFTP at")
           th.col-width-small Status
           th.col-width-large Patient
           th.col-width-small NHS
+          th Filepath
           th Error
       tbody
         - logs.each do |log|
           tr
+            td= l(log.created_at)
             td= l(log.sent_at)
             td= log.status
             td= default_patient_link(log.patient) if log.patient.present?
             td= log&.patient&.nhs_number
+            td= log.file_path
             td= log.error
 
     == pagy_foundation_nav pagy

@@ -5,7 +5,6 @@ require "rails_helper"
 module Renalware
   describe UKRDC::TransmissionLog do
     it :aggregate_failures do
-      is_expected.to validate_presence_of(:sent_at)
       is_expected.to validate_presence_of(:status)
       is_expected.to belong_to(:patient).touch(false)
       is_expected.to belong_to(:batch).touch(false)
@@ -42,7 +41,7 @@ module Renalware
             described_class.with_logging(patient: patient, request_uuid: uuid) do |log|
               log.payload = "XYZ"
               log.payload_hash = "123"
-              log.sent!
+              log.queued!
             end
 
             log = described_class.where(patient_id: patient.id).last
@@ -50,7 +49,7 @@ module Renalware
             expect(log).to have_attributes(
               payload: "XYZ",
               payload_hash: "123",
-              status: "sent"
+              status: "queued"
             )
           end
         end
@@ -61,7 +60,7 @@ module Renalware
             described_class.with_logging(patient: patient, request_uuid: uuid) do |log|
               log.payload = "XYZ"
               log.payload_hash = "123"
-              log.unsent_no_change_since_last_send!
+              log.skippped_no_change_since_last_send!
             end
 
             log = described_class.where(patient_id: patient.id).last
@@ -69,7 +68,7 @@ module Renalware
             expect(log).to have_attributes(
               payload: "XYZ",
               payload_hash: "123",
-              status: "unsent_no_change_since_last_send"
+              status: "skippped_no_change_since_last_send"
             )
           end
         end

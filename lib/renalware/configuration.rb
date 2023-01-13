@@ -81,6 +81,12 @@ module Renalware
     config_accessor(:ukrdc_remove_stale_outgoing_files) do
       ENV.fetch("UKRDC_REMOVE_STALE_OUTGOING_FILES", "true") == "true"
     end
+    config_accessor(:ukrdc_sftp_host) { ENV.fetch("UKRDC_SFTP_HOST", nil) }
+    config_accessor(:ukrdc_sftp_user) { ENV.fetch("UKRDC_SFTP_USER", nil) }
+    config_accessor(:ukrdc_sftp_password) { ENV.fetch("UKRDC_SFTP_PASSWORD", nil) }
+    config_accessor(:ukrdc_sftp_port) { ENV.fetch("UKRDC_SFTP_PORT", 2222) }
+    config_accessor(:ukrdc_sftp_remote_path) { ENV.fetch("UKRDC_SFTP_REMOTE_PATH", "") }
+
     # To use a date other that the default changes_since date when
     # compiling pathology to send to UKRDC, you can set an ENV var as follows:
     #   UKRDC_PATHOLOGY_START_DATE=01-01-2011
