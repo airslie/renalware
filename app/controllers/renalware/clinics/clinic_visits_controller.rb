@@ -166,8 +166,8 @@ module Renalware
 
       def new_or_edit_url_for_visit(template, clinic)
         case template
-        when :new then new_patient_clinic_visit_url(clinics_patient, clinic_id: clinic.id)
-        when :edit then edit_patient_clinic_visit_url(clinics_patient, clinic_id: clinic.id)
+        when :new then new_patient_clinic_visit_path(clinics_patient, clinic_id: clinic.id)
+        when :edit then edit_patient_clinic_visit_path(clinics_patient, clinic_id: clinic.id)
         else raise ArgumentError("Unrecognised template #{template}")
         end
       end
