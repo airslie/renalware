@@ -52,7 +52,7 @@ module Renalware
     end
 
     # Will be overriden if a controller includes PatientVisiblity
-    def patient_scope(default_scope = Renalware::Patient)
+    def patient_scope(default_scope = Renalware::Patient.all)
       default_scope
     end
 

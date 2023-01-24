@@ -28,6 +28,3 @@ Renalware.configure do |config|
   config.max_batch_print_size = 50
   config.patient_visibility_restrictions = :by_site # or :by_site_and_research_study or :none
 end
-
-# Renalware::Patients.configure
-# Renalware::Pathology.configure

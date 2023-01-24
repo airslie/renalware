@@ -35,7 +35,7 @@ module Renalware
           after_action :verify_policy_scoped, if: -> { Rails.env.development? || Rails.env.test? }
 
           # Override policy_scope from BaseController
-          def patient_scope(default_scope = Patient)
+          def patient_scope(default_scope = Renalware::Patient.all)
             policy_scope(default_scope)
           end
         end

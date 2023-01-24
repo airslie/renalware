@@ -20,7 +20,11 @@ module Renalware
       end
 
       def search
-        @search ||= Worry.merge(patient_scope).ransack(query_params)
+        @search ||= Worry
+          .eager_load(:patient, :worry_category)
+          .joins(:patient)
+          .merge(patient_scope)
+          .ransack(query_params)
       end
     end
   end
