@@ -17,6 +17,8 @@ en:
         dietetic_phone_assessment: Dietetic phone assessment
         dietetic_phone_r_v: Dietetic phone r/v
         dietetic_r_v: Dietetic r/v
+        dietetic_video_assessment: Dietetic video assessment
+        dietetic_video_r_v: Dietetic video r/v
         sga: SGA
       attendance:
         attended: Attended
@@ -43,9 +45,11 @@ en:
       intervention_b: :enumerize.renalware/dietetics/clinic_visit/document.intervention_a
       intervention_c: :enumerize.renalware/dietetics/clinic_visit/document.intervention_a
       next_review_in:
+        one_month: 1 month
         six_months: 6 months
         three_months: 3 months
         twelve_months: 12 months
+        two_months: 2 months
       plan:
         plan_A: plan_A
         plan_B: plan_B
@@ -55,12 +59,12 @@ en:
         severe_malnutrition: C - Severe malnutrition
         well_nourished: A - Well nourished
       visit_type:
+        akcc: AKCC
         all_separate_hd_unites: all separate HD units
         general_clinic: General (ad hoc) clinic
-        lcc: LCC
+        healthy_living_clinic: Healthy living clinic
         pd: PD
         tx: Tx
-        weight_management_clinic: Weight management clinic
   simple_form:
     hints:
       clinic_visit:

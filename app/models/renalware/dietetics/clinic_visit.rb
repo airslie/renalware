@@ -124,7 +124,7 @@ module Renalware
         attribute :time_for_consultation, Integer
         attribute :time_for_documentation, Integer
         attribute :next_review_in, ::Document::Enum,
-                  enums: %i(three_months six_months twelve_months)
+                  enums: %i(one_month two_months three_months six_months twelve_months)
         attribute :next_review_on, Date
       end
 

@@ -46,8 +46,8 @@ module Renalware
         fill_in "Height", with: "1.78"
 
         within "section", text: "Dietetic Visit" do
-          choose "Dietetic phone assessment"
-          select "LCC", from: "Visit type"
+          select "Dietetic phone assessment", from: "Assessment type"
+          select "AKCC", from: "Visit type"
           choose "DNA"
         end
 
@@ -124,8 +124,8 @@ module Renalware
         click_link "Edit"
 
         within "section", text: "Dietetic Visit" do
-          expect(page).to have_checked_field "Dietetic phone assessment"
-          expect(page).to have_field "Visit type", with: "lcc"
+          expect(page).to have_select "Assessment type", selected: "Dietetic phone assessment"
+          expect(page).to have_select "Visit type", selected: "AKCC"
           expect(page).to have_checked_field "DNA"
         end
 

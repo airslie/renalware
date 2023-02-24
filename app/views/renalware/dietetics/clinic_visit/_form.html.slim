@@ -8,8 +8,7 @@ div class="divide-y-blue-gray-200 mt-6 space-y-8 divide-y mb-12"
     = f.fields_for(:document, document) do |fdoc|
       .mb-4
         = fdoc.input :assessment_type,
-                    as: :inline_radio_buttons,
-                    wrapper: :horizontal_medium
+                    wrapper: :horizontal_small
       = fdoc.input :visit_type,
                   wrapper: :horizontal_small
       = fdoc.input :attendance,
