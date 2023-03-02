@@ -10,6 +10,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+--
 -- Name: renalware; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -3050,32 +3057,58 @@ ALTER SEQUENCE renalware.delayed_jobs_id_seq OWNED BY renalware.delayed_jobs.id;
 --
 
 CREATE VIEW renalware.dietetic_mdm_patients AS
+ WITH latest_dietetic_clinic_visits AS (
+         SELECT DISTINCT ON (clinic_visits.patient_id) clinic_visits.date,
+            clinic_visits.patient_id,
+            clinic_visits.created_by_id,
+            clinic_visits.document,
+            clinic_visits.weight,
+            clinic_visits.bmi
+           FROM renalware.clinic_visits
+          WHERE ((clinic_visits.type)::text = 'Renalware::Dietetics::ClinicVisit'::text)
+          ORDER BY clinic_visits.patient_id, clinic_visits.date DESC, clinic_visits.created_at DESC
+        ), latest_dry_weights AS (
+         SELECT DISTINCT ON (cdw.patient_id) cdw.id,
+            cdw.patient_id,
+            cdw.weight,
+            cdw.assessed_on,
+            cdw.created_by_id,
+            cdw.updated_by_id,
+            cdw.created_at,
+            cdw.updated_at,
+            cdw.assessor_id,
+            cdw.minimum_weight,
+            cdw.maximum_weight
+           FROM renalware.clinical_dry_weights cdw
+          ORDER BY cdw.patient_id, cdw.created_at DESC
+        )
  SELECT p.id,
     p.secure_id,
     ((upper((p.family_name)::text) || ', '::text) || (p.given_name)::text) AS patient_name,
-    ((upper((named_consultant_user.family_name)::text) || ', '::text) || (named_consultant_user.given_name)::text) AS consultant_name,
+    (((named_consultant_user.family_name)::text || ', '::text) || (named_consultant_user.given_name)::text) AS consultant_name,
     p.local_patient_id AS hospital_numbers,
     p.sex,
     p.born_on,
     mx.modality_name,
-    most_recent_clinic_visit.bmi,
-    ((upper((clinic_visit_users.family_name)::text) || ', '::text) || (clinic_visit_users.given_name)::text) AS dietician_name,
+    latest_dietetic_clinic_visits.bmi,
+    (((clinic_visit_users.family_name)::text || ', '::text) || (clinic_visit_users.given_name)::text) AS dietician_name,
     renalware.convert_to_float(((pathology."values" -> 'POT'::text) ->> 'result'::text), NULL::double precision) AS pot,
     renalware.convert_to_float(((pathology."values" -> 'PHOS'::text) ->> 'result'::text), NULL::double precision) AS phos,
     renalware.convert_to_float(((pathology."values" -> 'PTH'::text) ->> 'result'::text), NULL::double precision) AS pth,
     renalware.convert_to_float(((pathology."values" -> 'ALB'::text) ->> 'result'::text), NULL::double precision) AS alb,
     renalware.convert_to_float(((pathology."values" -> 'URR'::text) ->> 'result'::text), NULL::double precision) AS urr,
-    most_recent_clinic_visit.date AS clinic_visit_date,
-    ((most_recent_clinic_visit.document ->> 'next_review_on'::text))::date AS next_review_on,
-    translate(initcap((most_recent_clinic_visit.document ->> 'assessment_type'::text)), '_'::text, ' '::text) AS assessment_type,
-    ((most_recent_clinic_visit.document ->> 'weight_change'::text) || '%'::text) AS weight_change,
-    most_recent_clinic_visit.weight AS current_weight,
-    dry_weight.weight AS dry_weight,
+    latest_dietetic_clinic_visits.date AS clinic_visit_date,
+    ((latest_dietetic_clinic_visits.document ->> 'next_review_on'::text))::date AS next_review_on,
+    translate(initcap((latest_dietetic_clinic_visits.document ->> 'assessment_type'::text)), '_'::text, ' '::text) AS assessment_type,
+    translate(initcap((latest_dietetic_clinic_visits.document ->> 'visit_type'::text)), '_'::text, ' '::text) AS visit_type,
+    ((latest_dietetic_clinic_visits.document ->> 'weight_change'::text) || '%'::text) AS weight_change,
+    latest_dietetic_clinic_visits.weight AS current_weight,
+    latest_dry_weights.weight AS dry_weight,
         CASE
-            WHEN (((most_recent_clinic_visit.document ->> 'next_review_on'::text))::date < now()) THEN 'overdue'::text
-            WHEN (((most_recent_clinic_visit.document ->> 'next_review_on'::text))::date < (now() + '1 mon'::interval)) THEN 'in 1 months'::text
-            WHEN (((most_recent_clinic_visit.document ->> 'next_review_on'::text))::date < (now() + '3 mons'::interval)) THEN 'in 3 months'::text
-            WHEN (((most_recent_clinic_visit.document ->> 'next_review_on'::text))::date < (now() + '6 mons'::interval)) THEN 'in 6 months'::text
+            WHEN (((latest_dietetic_clinic_visits.document ->> 'next_review_on'::text))::date < now()) THEN 'overdue'::text
+            WHEN (((latest_dietetic_clinic_visits.document ->> 'next_review_on'::text))::date < (now() + '1 mon'::interval)) THEN 'in 1 months'::text
+            WHEN (((latest_dietetic_clinic_visits.document ->> 'next_review_on'::text))::date < (now() + '3 mons'::interval)) THEN 'in 3 months'::text
+            WHEN (((latest_dietetic_clinic_visits.document ->> 'next_review_on'::text))::date < (now() + '6 mons'::interval)) THEN 'in 6 months'::text
             ELSE NULL::text
         END AS outstanding_dietetic_visit,
     hospital_centre.name AS hospital_centre,
@@ -3083,26 +3116,17 @@ CREATE VIEW renalware.dietetic_mdm_patients AS
             WHEN (pw.id > 0) THEN true
             ELSE false
         END AS on_worryboard
-   FROM ((((((((renalware.patients p
-     JOIN LATERAL ( SELECT clinic_visits.date,
-            clinic_visits.patient_id,
-            clinic_visits.created_by_id,
-            clinic_visits.document,
-            clinic_visits.weight,
-            clinic_visits.bmi
-           FROM renalware.clinic_visits
-          WHERE (clinic_visits.patient_id = p.id)
-          ORDER BY clinic_visits.date DESC, clinic_visits.created_at DESC
-         LIMIT 1) most_recent_clinic_visit ON (true))
-     JOIN renalware.users clinic_visit_users ON ((clinic_visit_users.id = most_recent_clinic_visit.created_by_id)))
+   FROM ((((((((latest_dietetic_clinic_visits
+     JOIN renalware.patients p ON ((p.id = latest_dietetic_clinic_visits.patient_id)))
+     LEFT JOIN latest_dry_weights ON ((latest_dry_weights.patient_id = p.id)))
+     JOIN renalware.users clinic_visit_users ON ((clinic_visit_users.id = latest_dietetic_clinic_visits.created_by_id)))
      LEFT JOIN renalware.users named_consultant_user ON ((named_consultant_user.id = p.named_consultant_id)))
      LEFT JOIN renalware.patient_worries pw ON ((pw.patient_id = p.id)))
      LEFT JOIN renalware.pathology_current_observation_sets pathology ON ((pathology.patient_id = p.id)))
-     JOIN renalware.patient_current_modalities mx ON ((mx.patient_id = p.id)))
-     JOIN renalware.hospital_centres hospital_centre ON ((hospital_centre.id = p.hospital_centre_id)))
-     LEFT JOIN renalware.clinical_dry_weights dry_weight ON ((dry_weight.patient_id = p.id)))
+     LEFT JOIN renalware.patient_current_modalities mx ON ((mx.patient_id = p.id)))
+     LEFT JOIN renalware.hospital_centres hospital_centre ON ((hospital_centre.id = p.hospital_centre_id)))
   WHERE ((mx.modality_name)::text <> 'death'::text)
-  ORDER BY most_recent_clinic_visit.date;
+  ORDER BY latest_dietetic_clinic_visits.date;
 
 
 --
@@ -24906,6 +24930,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221012114542'),
 ('20221013094654'),
 ('20221027100532'),
-('20230112115053');
+('20230112115053'),
+('20230302134826');
 
 
