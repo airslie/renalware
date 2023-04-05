@@ -6,7 +6,7 @@ module Renalware
       include ::Document::Base
 
       def self.policy_class
-        ::Renalware::BasePolicy
+        Renalware::Clinics::ClinicVisitPolicy
       end
 
       def to_form_partial_path
