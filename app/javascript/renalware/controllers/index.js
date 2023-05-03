@@ -29,6 +29,7 @@ import FlashController from "./flash_controller"
 import FlatpickrController from "./flatpickr_controller"
 import InputValueAlerterController from "./input_value_alerter_controller"
 import SelectUpdateFrameController from "./select_update_frame_controller"
+import ReadMoreController from "./read_more_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
@@ -68,3 +69,4 @@ application.register(
   "clinics--dietary-protein-calculator",
   DietaryProteinCalculatorController
 )
+application.register("read-more", ReadMoreController)

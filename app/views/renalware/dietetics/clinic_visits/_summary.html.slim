@@ -37,3 +37,7 @@
   = list.definition(:time_for_consultation) { |value| "#{value} mins" if value.present? }
   = list.definition(:time_for_documentation) { |value| "#{value} mins" if value.present? }
   = list.definition(:next_review_in) { |value| value&.text }
+
+  = definition_list_for(clinic_visit, size: :xlarge) do |list|
+    = list.definition(:notes){ |value| render Renalware::ReadMoreComponent.new(value) }
+    = list.definition(:admin_notes) { |value| render Renalware::ReadMoreComponent.new(value) }
