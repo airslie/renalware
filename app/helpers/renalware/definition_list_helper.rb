@@ -18,6 +18,13 @@ module Renalware
           concat tag.dd(value)
         end
       end
+
+      def sub_heading(text)
+        capture do
+          concat tag.dt(text, class: "!font-bold py-2 !text-gray-600")
+          concat tag.dd("")
+        end
+      end
     end
 
     def definition_list_for(model, size: :large)

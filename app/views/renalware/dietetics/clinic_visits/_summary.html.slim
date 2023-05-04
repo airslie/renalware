@@ -1,0 +1,39 @@
+/ Rendered from partials _toggled_row _clinic_visit (where it is rendered within the new letter
+/ form as a reference for the author
+= definition_list_for(clinic_visit.document, size: :xlarge) do |list|
+  = list.definition(:assessment_type) { |value| value&.text }
+  = list.definition(:visit_type) { |value| value&.text }
+  = list.definition(:attendance){ |value| value&.text }
+
+  = list.sub_heading "Weight"
+  = list.definition(:weight_notes)
+  = list.definition(:previous_weight) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:previous_weight_date) { |value| l(value) }
+  = list.definition(:weight_change) { |value| "#{value} %" if value.present? }
+  = list.definition(:ideal_body_weight) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:adjusted_bmi)
+  = list.definition(:waist_circumference)
+
+  = list.sub_heading "Dietary"
+  = list.definition(:dietary_protein_requirement)  { |value| Renalware::Dietetics::ProteinValuePresenter.new(value).to_s }
+  = list.definition(:dietary_protein_intake) { |value| Renalware::Dietetics::ProteinValuePresenter.new(value).to_s }
+  = list.definition(:high_biological_value)
+  = list.definition(:energy_requirement) { |value| Renalware::Dietetics::EnergyValuePresenter.new(value).to_s }
+  = list.definition(:energy_intake) { |value| Renalware::Dietetics::EnergyValuePresenter.new(value).to_s }
+
+  = list.sub_heading "Handgrip"
+  = list.definition(:handgrip_left) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:handgrip_right) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:dominant_hand)
+
+  = list.sub_heading "Assessment"
+  = list.definition(:sga_assessment) { |value| value&.text }
+  = list.definition(:plan)
+  = list.definition(:intervention_a) { |value| value&.text }
+  = list.definition(:intervention_b) { |value| value&.text }
+  = list.definition(:intervention_c) { |value| value&.text }
+
+  = list.sub_heading "Consultation time and review date"
+  = list.definition(:time_for_consultation) { |value| "#{value} mins" if value.present? }
+  = list.definition(:time_for_documentation) { |value| "#{value} mins" if value.present? }
+  = list.definition(:next_review_in) { |value| value&.text }

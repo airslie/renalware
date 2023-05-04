@@ -48,6 +48,6 @@ tr(class="#{'dna' if clinic_visit.did_not_attend?}")
   td.show-for-xlarge-up= effective_presenter.effective_updated_by
 
 = content_tag(:tr, id: "clinic_visit-quick-preview-#{clinic_visit.id}", style: "display: none")
-  td(colspan=16)
+  td(colspan=19)
     .quick-preview
       = render(partial: clinic_visit.to_toggled_row_partial_path, locals: { clinic_visit: clinic_visit })

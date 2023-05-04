@@ -1,0 +1,13 @@
+---
+en:
+  activerecord:
+    attributes:
+      renalware/system/online_reference_link:
+        url: URL
+    errors:
+      models:
+        renalware/system/online_reference_link:
+          attributes:
+            url:
+              invalid: must start with http:// or https://
+

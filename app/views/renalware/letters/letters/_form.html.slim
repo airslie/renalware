@@ -9,7 +9,7 @@ ruby:
     = link_to t("btn.cancel"), back_path
 
 .form-content data-controller="letters-form"
-  / Using this syntax rather than 'render event' becuase that syntax seems to want to
+  / Using this syntax rather than 'render event' because that syntax seems to want to
   / prepend renalware/letters to event.to_partial_path (even if the latter is an absolute path)
   = render(partial: event.to_partial_path, locals: { event: event }) if event.present?
 

@@ -102,23 +102,39 @@ module Renalware
         click_link "Toggle all rows"
 
         expect(page).to have_content "Assessment type\nDietetic phone assessment"
+
+        expect(page).to have_content "Weight"
         expect(page).to have_content "Weight notes\nWeight test notes"
-        expect(page).to have_content "Previous weight\n70"
-        expect(page).to have_content "Weight change\n17.9%"
-        expect(page).to have_content "Ideal body weight\n71"
+        expect(page).to have_content "Previous weight\n70 kg"
+        expect(page).to have_content "Previous weight date\n20-Jul-2020"
+        expect(page).to have_content "Weight change\n17.9 %"
+        expect(page).to have_content "Ideal body weight\n71 kg"
+        expect(page).to have_content "Adjusted BMI for amputations/significant oedema\nAdd BMI"
         expect(page).to have_content "Waist circumference\n80"
-        expect(page).to have_content "Estimated protein intake\n40"
-        expect(page).to have_content "Estimated energy requirement\n2000"
-        expect(page).to have_content "Estimated energy intake\n1900"
+
+        expect(page).to have_content "Dietary"
+        expect(page).to have_content "Estimated protein requirement\n30 g/day"
+        expect(page).to have_content "Estimated protein intake\n40 g/day"
         expect(page).to have_content "High biological value\n90"
-        expect(page).to have_content "Dominant hand\nright"
+        expect(page).to have_content "Estimated energy requirement\n2000 kcal/day"
+        expect(page).to have_content "Estimated energy intake\n1900 kcal/day"
+
+        expect(page).to have_content "Handgrip"
         expect(page).to have_content "Left\n30"
         expect(page).to have_content "Right\n10"
-        expect(page).to have_content "Plan\nThorough plan"
+        expect(page).to have_content "Dominant hand\nright"
+
+        expect(page).to have_content "Assessment"
         expect(page).to have_content "Sga assessment\nC - Severe malnutrition"
+        expect(page).to have_content "Plan\nThorough plan"
         expect(page).to have_content "Intervention a\nNo change"
         expect(page).to have_content "Intervention b\nFibre"
         expect(page).to have_content "Intervention c\nPotassium"
+
+        expect(page).to have_content "Consultation time and review date"
+        expect(page).to have_content "Time for consultation\n10 mins"
+        expect(page).to have_content "Time for documentation\n40 mins"
+        expect(page).to have_content "Next review date\n12 months"
 
         # Now check the input fields are all filled out as expected
         click_link "Edit"

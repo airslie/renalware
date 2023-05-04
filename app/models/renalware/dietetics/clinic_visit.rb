@@ -10,15 +10,11 @@ module Renalware
       end
 
       def to_form_partial_path
-        "renalware/dietetics/clinic_visit/form"
+        "renalware/dietetics/clinic_visits/form"
       end
 
       def to_toggled_row_partial_path
-        "renalware/dietetics/clinic_visit/toggled_row"
-      end
-
-      def superclass_to_partial_path
-        becomes(Renalware::Clinics::ClinicVisit).to_partial_path
+        "renalware/dietetics/clinic_visits/toggled_row"
       end
 
       def set_weight_change

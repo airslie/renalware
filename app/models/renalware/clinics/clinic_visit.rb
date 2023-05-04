@@ -85,6 +85,10 @@ module Renalware
         "/renalware/clinics/clinic_visits/toggled_row"
       end
 
+      def superclass_to_partial_path
+        becomes(Renalware::Clinics::ClinicVisit).to_partial_path
+      end
+
       private
 
       # The originating appointment from which the VC was generated - created e.g. by HL7 A05

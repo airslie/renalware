@@ -18,10 +18,6 @@ module Clinics
       "/clinics/my_visits/toggled_row"
     end
 
-    def superclass_to_partial_path
-      becomes(Renalware::Clinics::ClinicVisit).to_partial_path
-    end
-
     class Document < MyBaseDocument
       attribute :visit_number, Integer
       attribute :physical_activity, ::Document::Enum

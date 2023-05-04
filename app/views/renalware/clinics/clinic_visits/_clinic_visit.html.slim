@@ -2,7 +2,7 @@
 / into the field as readnly text for reference so the author can inspect as they write
 - clinic_visit = event
 
-.flex
+.flex-none.lg:flex
   article
     header
       h2 Clinic Visit
@@ -30,10 +30,10 @@
       dd= clinic_visit.urine_protein&.text
       dt= attr_name(clinic_visit, :notes)
       dd= clinic_visit.notes
-  
-  / If clinic_visit is a custom clinic visit subclass defined for example in the 
+
+  / If clinic_visit is a custom clinic visit subclass defined for example in the
   / host app or a gem like Heroic (in order to augment to the standard ClinicVisit with additional
   / attributes), then allow that #visit.to_partial_path partial to
-  / render its own custom attributes via a content block. 
+  / render its own custom attributes via a content block.
   / See spec/dummy/app/views/clinics/my_visits/_my_visit.html.slim for an example
   = yield(:clinic_visit_subclass_attributes)
