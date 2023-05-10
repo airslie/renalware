@@ -4,6 +4,12 @@ html {
   }
 }
 
+// This resests visibilty set in a tailwind utility class.
+// The class exists in foundation also.
+.collapse {
+  visibility: initial ;
+}
+
 // New flexbox layout
 html,
 body {
