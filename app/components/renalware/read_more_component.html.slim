@@ -1,3 +1,4 @@
 span(data-controller="read-more" data-read-more-more-text-value="More&hellip;" data-read-more-less-text-value="Less&hellip;")
   span.line-clamp(data-read-more-target="content")= content.html_safe
-  button.inline.text-yellow-600(type="button" data-action="read-more#toggle") More&hellip;
+  = link_to("#", class: "inline text-yellow-600", data: { action: "read-more#toggle" }) do
+    | More&hellip;
