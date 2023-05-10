@@ -69,7 +69,7 @@ describe "Patient Dietetics MDM" do
 
       set_modality(
         patient: patient,
-        modality_description: FactoryBot.create(:modality_description, :hd),
+        modality_description: create(:modality_description, :hd),
         by: patient.created_by
       )
 
@@ -78,7 +78,7 @@ describe "Patient Dietetics MDM" do
       visit patients_mdms_path("dietetics")
 
       expect(page).to have_content("Dietetics MDMS")
-      expect(page).to have_content("CONSULTANT, Family")
+      expect(page).to have_content("Consultant, Family")
       expect(page).to have_content("JONES, Jack")
       expect(page).to have_content("01-Jan-1988")
       expect(page).to have_content("HD")
