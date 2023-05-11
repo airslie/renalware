@@ -310,7 +310,7 @@ module Renalware
           context "when all data is present" do
             it "renders" do
               expect(component.call).to eq \
-                "<dl><dt>Mean URR</dt><dd>123</dd><dd>12-Dec-2017</dd><dt>Transplant status</dt><dd>Not started</dd><dd>10-Oct-2022</dd></dl>"
+                "<dl><dt>URR</dt><dd>123</dd><dd>12-Dec-2017</dd><dt>Transplant status</dt><dd>Not started</dd><dd>10-Oct-2022</dd></dl>"
             end
           end
 
@@ -318,7 +318,7 @@ module Renalware
             let(:transplant_status) { nil }
 
             it "renders without it" do
-              expect(component.call).to eq "<dl><dt>Mean URR</dt><dd>123</dd><dd>12-Dec-2017</dd></dl>"
+              expect(component.call).to eq "<dl><dt>URR</dt><dd>123</dd><dd>12-Dec-2017</dd></dl>"
             end
           end
 
