@@ -22,7 +22,7 @@ gem "net-smtp", require: false # remove in Rails 7
 gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
 gem "paper_trail"
 gem "party_foul", "~> 1.5.5", github: "airslie/party_foul"
-gem "rails", "~> 6.0.6"
+gem "rails", "~> 6.0.6.1"
 gem "redis", "~> 4.8"
 gem "renalware-forms", ">=0.1.16", github: "airslie/renalware-forms", branch: "main"
 gem "ruby-prof", require: false

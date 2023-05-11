@@ -1,4 +1,4 @@
-class UpdateDieteticMDMPatientsView < ActiveRecord::Migration[7.0]
+class UpdateDieteticMDMPatientsView < ActiveRecord::Migration[6.0]
   def change
     within_renalware_schema do
       safety_assured do

@@ -18,7 +18,11 @@ describe "Creating an medication review event", js: true do
     slim_select "Medication Review", from: "Event type"
     sleep 0.1
 
-    click_on t("btn.create")
+    within("form.new_events_event") do
+      click_on "Save"
+    end
+
+    expect(page).to have_current_path patient_events_path(patient)
 
     events = Renalware::Events::Event.for_patient(patient)
     expect(events.length).to eq(1)
