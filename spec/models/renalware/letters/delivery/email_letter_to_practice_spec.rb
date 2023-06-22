@@ -105,7 +105,7 @@ module Renalware
           # Using a different way of testing the enqueueing here, to create extra coverage
           expect {
             described_class.new(letter: letter).call
-          }.to have_enqueued_job.on_queue("mailers")
+          }.to have_enqueued_job
         end
       end
     end

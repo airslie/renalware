@@ -92,8 +92,13 @@ Rails.application.configure do
   #   $ mailcatcher
   #   Go to http://localhost:1080/
   #   Send mail through smtp://localhost:1025
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: "localhost", port: 1025 }
+
+  # Deliver email via Microsoft Graph API using client credentials OAuth flow.
+  config.action_mailer.delivery_method = :microsoft_graph_api
+
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = { address: "localhost", port: 1025 }
+  Rails.application.default_url_options = { host: "localhost", port: 3000 }
 
   config.active_job.queue_adapter = :good_job
 end

@@ -223,6 +223,14 @@ module Renalware
 
     config_accessor(:patient_visibility_restrictions) { :none }
 
+    #
+    # Microsoft OAuth email authentication config
+    #
+    config_accessor(:mail_oauth_client_id) { ENV.fetch("MAIL_OAUTH_CLIENT_ID", nil) }
+    config_accessor(:mail_oauth_client_secret) { ENV.fetch("MAIL_OAUTH_CLIENT_SECRET", nil) }
+    config_accessor(:mail_oauth_tenant_id) { ENV.fetch("MAIL_OAUTH_TENANT_ID", nil) }
+    config_accessor(:mail_oauth_email_address) { ENV.fetch("MAIL_OAUTH_EMAIL_ADDRESS", nil) }
+
     def restrict_patient_visibility_by_user_site?
       [:by_site, :by_site_and_research_study].include?(patient_visibility_restrictions)
     end
