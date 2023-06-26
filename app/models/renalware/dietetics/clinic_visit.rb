@@ -111,7 +111,7 @@ module Renalware
                   }
 
         attribute :sga_assessment, ::Document::Enum,
-                  enums: %i(well_nourished moderate_malnutrition severe_malnutrition)
+                  enums: %i(na well_nourished moderate_malnutrition severe_malnutrition)
         attribute :plan, String
         attribute :intervention_a, ::Document::Enum
         attribute :intervention_b, ::Document::Enum

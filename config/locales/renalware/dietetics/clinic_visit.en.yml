@@ -55,6 +55,7 @@ en:
         plan_B: plan_B
         plan_C: plan_C
       sga_assessment:
+        na: N/A
         moderate_malnutrition: B - Moderate malnutrition
         severe_malnutrition: C - Severe malnutrition
         well_nourished: A - Well nourished
