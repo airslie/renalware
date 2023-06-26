@@ -69,16 +69,16 @@ module MicrosoftGraph
 
     def build_email_payload(to:, subject:, body:)
       {
-        "message": {
-          "subject": subject,
-          "body": {
-            "contentType": "Text",
-            "content": body
+        message: {
+          subject: subject,
+          body: {
+            contentType: "Text",
+            content: body
           },
-          "toRecipients": to.map do |recip|
+          toRecipients: to.map do |recip|
             {
-              "emailAddress": {
-                "address": recip
+              emailAddress: {
+                address: recip
               }
             }
           end
