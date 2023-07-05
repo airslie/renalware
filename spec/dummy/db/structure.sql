@@ -3053,10 +3053,10 @@ ALTER SEQUENCE renalware.delayed_jobs_id_seq OWNED BY renalware.delayed_jobs.id;
 
 
 --
--- Name: dietetic_mdm_patients; Type: VIEW; Schema: renalware; Owner: -
+-- Name: dietetic_mdm_patients; Type: MATERIALIZED VIEW; Schema: renalware; Owner: -
 --
 
-CREATE VIEW renalware.dietetic_mdm_patients AS
+CREATE MATERIALIZED VIEW renalware.dietetic_mdm_patients AS
  WITH latest_dietetic_clinic_visits AS (
          SELECT DISTINCT ON (clinic_visits.patient_id) clinic_visits.date,
             clinic_visits.patient_id,
@@ -3070,15 +3070,7 @@ CREATE VIEW renalware.dietetic_mdm_patients AS
         ), latest_dry_weights AS (
          SELECT DISTINCT ON (cdw.patient_id) cdw.id,
             cdw.patient_id,
-            cdw.weight,
-            cdw.assessed_on,
-            cdw.created_by_id,
-            cdw.updated_by_id,
-            cdw.created_at,
-            cdw.updated_at,
-            cdw.assessor_id,
-            cdw.minimum_weight,
-            cdw.maximum_weight
+            cdw.weight
            FROM renalware.clinical_dry_weights cdw
           ORDER BY cdw.patient_id, cdw.created_at DESC
         )
@@ -3089,7 +3081,7 @@ CREATE VIEW renalware.dietetic_mdm_patients AS
     p.local_patient_id AS hospital_numbers,
     p.sex,
     p.born_on,
-    mx.modality_name,
+    md.name AS modality_name,
     latest_dietetic_clinic_visits.bmi,
     (((clinic_visit_users.family_name)::text || ', '::text) || (clinic_visit_users.given_name)::text) AS dietician_name,
     renalware.convert_to_float(((pathology."values" -> 'POT'::text) ->> 'result'::text), NULL::double precision) AS pot,
@@ -3116,17 +3108,19 @@ CREATE VIEW renalware.dietetic_mdm_patients AS
             WHEN (pw.id > 0) THEN true
             ELSE false
         END AS on_worryboard
-   FROM ((((((((latest_dietetic_clinic_visits
+   FROM (((((((((latest_dietetic_clinic_visits
      JOIN renalware.patients p ON ((p.id = latest_dietetic_clinic_visits.patient_id)))
      LEFT JOIN latest_dry_weights ON ((latest_dry_weights.patient_id = p.id)))
      JOIN renalware.users clinic_visit_users ON ((clinic_visit_users.id = latest_dietetic_clinic_visits.created_by_id)))
      LEFT JOIN renalware.users named_consultant_user ON ((named_consultant_user.id = p.named_consultant_id)))
      LEFT JOIN renalware.patient_worries pw ON ((pw.patient_id = p.id)))
      LEFT JOIN renalware.pathology_current_observation_sets pathology ON ((pathology.patient_id = p.id)))
-     LEFT JOIN renalware.patient_current_modalities mx ON ((mx.patient_id = p.id)))
+     LEFT JOIN renalware.modality_modalities mm ON (((mm.patient_id = p.id) AND (mm.ended_on IS NULL))))
+     LEFT JOIN renalware.modality_descriptions md ON ((md.id = mm.description_id)))
      LEFT JOIN renalware.hospital_centres hospital_centre ON ((hospital_centre.id = p.hospital_centre_id)))
-  WHERE ((mx.modality_name)::text <> 'death'::text)
-  ORDER BY latest_dietetic_clinic_visits.date DESC;
+  WHERE ((md.name)::text <> 'death'::text)
+  ORDER BY latest_dietetic_clinic_visits.date DESC
+  WITH NO DATA;
 
 
 --
@@ -24932,6 +24926,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221027100532'),
 ('20230112115053'),
 ('20230302134826'),
-('20230511151434');
+('20230511151434'),
+('20230705151013');
 
 
