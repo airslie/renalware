@@ -66,6 +66,7 @@ describe "Patient Dietetics MDM" do
                { code: :consultant_name, type: :list },
                { code: :outstanding_dietetic_visit, type: :list }
              ])
+      Scenic.database.refresh_materialized_view("dietetic_mdm_patients", concurrently: false)
 
       set_modality(
         patient: patient,

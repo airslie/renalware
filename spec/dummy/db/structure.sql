@@ -16600,6 +16600,20 @@ CREATE INDEX index_clinical_dry_weights_on_patient_id ON renalware.clinical_dry_
 
 
 --
+-- Name: index_clinical_dry_weights_on_patient_id_created_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_clinical_dry_weights_on_patient_id_created_at ON renalware.clinical_dry_weights USING btree (patient_id, created_at DESC);
+
+
+--
+-- Name: INDEX index_clinical_dry_weights_on_patient_id_created_at; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON INDEX renalware.index_clinical_dry_weights_on_patient_id_created_at IS 'Ordered index to speed up latest dry weight queries';
+
+
+--
 -- Name: index_clinical_dry_weights_on_updated_by_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -24927,6 +24941,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230112115053'),
 ('20230302134826'),
 ('20230511151434'),
-('20230705151013');
+('20230705151013'),
+('20230705153656');
 
 
