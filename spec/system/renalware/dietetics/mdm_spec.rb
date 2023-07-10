@@ -2,6 +2,7 @@
 
 require "rails_helper"
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers, RSpec/OverwritingSetup, RSpec/MultipleExpectations
 describe "Patient Dietetics MDM" do
   include PatientsSpecHelper
   include PathologySpecHelper
@@ -151,3 +152,4 @@ describe "Patient Dietetics MDM" do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers, RSpec/OverwritingSetup, RSpec/MultipleExpectations
