@@ -41,6 +41,7 @@ en:
         phosphate_bone: Phosphate/Bone
         potassium: Potassium
         reduce_protein: Reduce protein
+        relaxation_of_restrictions: Relaxation of restrictions
         salt_fluid: Salt/Fluid
       intervention_b: :enumerize.renalware/dietetics/clinic_visit/document.intervention_a
       intervention_c: :enumerize.renalware/dietetics/clinic_visit/document.intervention_a
