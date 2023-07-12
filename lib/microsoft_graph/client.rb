@@ -29,10 +29,10 @@ module MicrosoftGraph
 
     class RequestFailed < StandardError; end
 
-    def send_mail(from:, to:, subject:, body:)
+    def send_mail(from:, to:, subject:, body:, html: false)
       to = Array(to)
       access_token = fetch_access_token
-      payload = build_email_payload(to: to, subject: subject, body: body)
+      payload = build_email_payload(to: to, subject: subject, body: body, html: html)
       url = "https://graph.microsoft.com/v1.0/users/#{from}/sendMail"
 
       response = Faraday.post(
@@ -67,12 +67,12 @@ module MicrosoftGraph
 
     private
 
-    def build_email_payload(to:, subject:, body:)
+    def build_email_payload(to:, subject:, body:, html: false)
       {
         message: {
           subject: subject,
           body: {
-            contentType: "Text",
+            contentType: html ? "HTML" : "Text",
             content: body
           },
           toRecipients: to.map do |recip|

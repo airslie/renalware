@@ -5,7 +5,7 @@ require "microsoft_graph/client"
 module MicrosoftGraph
   # Uses the MS Graph API to send an email from a specific configured email address.
   # See MicrosoftGraph::Client for API and OAuth2 implementation.
-  # Useful when an NHS Trust has disblaed SMTP on a renalware NHSMail mailbox.
+  # Useful when an NHS Trust has disabled SMTP on a renalware NHSMail mailbox.
   class DeliveryMethod
     attr_accessor :settings
 
@@ -25,7 +25,8 @@ module MicrosoftGraph
         from: Renalware.config.mail_oauth_email_address,
         to: mail.to,
         subject: mail.subject,
-        body: mail.body.encoded
+        body: mail.body.encoded,
+        html: mail.mime_type&.downcase&.include?("html")
       )
     end
 
