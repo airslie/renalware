@@ -3,7 +3,7 @@
 module Renalware
   module HD
     class SlotRequestPolicy < BasePolicy
-      def historical? = user_is_any_admin?
+      def historical? = index?
     end
   end
 end

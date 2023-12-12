@@ -41,7 +41,7 @@ describe "Managing a list of HD Slot Requests" do
       check "Late presenter"
       check "Suitable for twilight slots"
       check "External referral"
-
+      fill_in "Notes", with: "some notes"
       click_on "Create"
 
       expect(page).to have_current_path(renalware.hd_slot_requests_path)
@@ -80,6 +80,7 @@ describe "Managing a list of HD Slot Requests" do
         check "Late presenter"
         check "Suitable for twilight slots"
         check "External referral"
+        fill_in "Notes", with: "some notes"
         click_on "Create"
       end
 

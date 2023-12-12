@@ -34,6 +34,7 @@ module Renalware
                 }
       validates :urgency, presence: true
       validates :deletion_reason, presence: { if: :deleted_at }
+      validates :notes, presence: true
 
       scope :ordered, -> { order(created_at: :desc) }
     end

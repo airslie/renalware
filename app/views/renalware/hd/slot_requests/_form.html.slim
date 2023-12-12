@@ -8,8 +8,9 @@
       .max-w-xl
         .grid.grid-cols-1.gap-1
           #person-id-select2
-            - if slot_request.patient.present? && params[:redirect_to_patient_on_success] == "true"
-              .bold.text-md = slot_request.patient
+            - if slot_request.patient.present? && slot_request.persisted?
+              /&& params[:redirect_to_patient_on_success] == "true"
+              .bold.text-md.mb-2 = slot_request.patient
               = f.input :patient_id, as: :hidden
             - else
               / [[slot_request.patient&.to_s(:long), slot_request.patient&.id]],
@@ -56,10 +57,6 @@
                   = f.check_box :external_referral
                   span.ml-2 External referral
 
-          = f.input :specific_requirements,
-                    as: :text,
-                    input_html: { rows: 2 },
-                    hint: "transport requirements, blood borne viruses etc"
           = f.input :notes, as: :text, input_html: { rows: 2 }
 
   .mt-5

@@ -2,6 +2,5 @@
 dl.sub-nav(data-controller="tabbed-navigation")
   dd
     = link_to "Active", renalware.hd_slot_requests_path
-  - if policy(Renalware::HD::SlotRequest).historical?
-    dd
-      = link_to "Historical", renalware.historical_hd_slot_requests_path
+  dd
+    = link_to "Historical", renalware.historical_hd_slot_requests_path

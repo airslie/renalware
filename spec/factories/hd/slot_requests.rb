@@ -5,5 +5,6 @@ FactoryBot.define do
     accountable
     patient
     urgency { "urgent" }
+    notes { "some notes" }
   end
 end
