@@ -122,7 +122,7 @@ PATH
       sprockets-rails
       store_model (< 3)
       tailwindcss-rails (~> 2.0.25)
-      turbo-rails (= 1.4.0)
+      turbo-rails (= 1.5.0)
       validates_timeliness (~> 7.0.0.beta1)
       view_component (< 4.0)
       virtus (~> 1.0.5)
@@ -866,7 +866,7 @@ GEM
     timeliness (0.4.5)
     timeout (0.4.0)
     ttfunk (1.7.0)
-    turbo-rails (1.4.0)
+    turbo-rails (1.5.0)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)

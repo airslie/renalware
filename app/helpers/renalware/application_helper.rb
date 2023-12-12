@@ -28,7 +28,7 @@ module Renalware
       link_to(
         patient.to_s(:default),
         patient_clinical_summary_path(patient),
-        "data-turbo-frame": "_top"
+        data: { turbo_frame: "_top" }
       )
     end
 

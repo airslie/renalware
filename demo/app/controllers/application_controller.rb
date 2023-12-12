@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  layout "application"
   include Renalware::Concerns::CacheBusting
   protect_from_forgery with: :reset_session
   helper Renalware::Engine.helpers
-  layout -> { turbo_frame_request? ? false : "renalware" }
-
-  # Disable until we suppler >1 locale
-  # before_action :set_locale
+  layout -> { turbo_frame_request? ? "turbo_rails/frame" : "renalware" }
 
   private
 
