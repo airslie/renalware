@@ -158,7 +158,7 @@ module Renalware
               expect(med).to have_attributes(
                 drug: "esa drug",
                 date: Date.parse("2020-01-01"),
-                dose: "100 milligram",
+                dose: "100 mg",
                 route: "Per Oral"
               )
             end

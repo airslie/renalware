@@ -21,7 +21,7 @@ module Renalware
       end
 
       def route_code
-        medication_route.name
+        medication_route&.name
       end
 
       def drug_type_names

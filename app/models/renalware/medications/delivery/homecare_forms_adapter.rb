@@ -19,7 +19,7 @@ module Renalware
           Forms::Homecare::Pdf.valid?(args)
         end
 
-        def build_args # rubocop:disable Metrics/AbcSize
+        def build_args # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
           args = Forms::Homecare::Args.new(
             provider: homecare_form.form_name,
             version: homecare_form.form_version,
@@ -55,12 +55,13 @@ module Renalware
             args.postcode = add.postcode
           end
 
-          prescriptions.each do |prescription|
+          prescriptions.each do |presc|
+            prescription = PrescriptionPresenter.new(presc)
             args.medications << Forms::Homecare::Args::Medication.new(
               date: prescription.prescribed_on,
               drug: prescription.drug_name,
-              dose: "#{prescription.dose_amount} #{prescription.dose_unit}",
-              route: prescription.medication_route&.name,
+              dose: prescription.dose,
+              route: prescription.route_code,
               frequency: prescription.frequency
             )
           end

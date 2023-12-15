@@ -10,7 +10,13 @@ module Renalware
 
       pattr_initialize :prescription, :current_user
 
-      NEW_PRESCRIPTION_ATTRS = %w(dose_amount dose_unit frequency administer_on_hd stat).freeze
+      NEW_PRESCRIPTION_ATTRS = %w(
+        dose_amount
+        unit_of_measure_id
+        frequency
+        administer_on_hd
+        stat
+      ).freeze
 
       def call(params)
         prescription.assign_attributes(params)
