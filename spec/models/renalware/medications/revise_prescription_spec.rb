@@ -8,7 +8,12 @@ module Renalware::Medications
     let(:user) { create(:user) }
     let(:original_dose_amount) { "100" }
     let(:original_prescription) do
-      create(:prescription, patient: patient, dose_amount: original_dose_amount)
+      create(
+        :prescription,
+        patient: patient,
+        dose_amount: original_dose_amount,
+        dose_unit: "milligram"
+      )
     end
 
     describe "#call" do
@@ -37,6 +42,11 @@ module Renalware::Medications
 
         it "retains the original dose_amount on the terminated prescription" do
           expect(patient.prescriptions.terminated.first.dose_amount).to eq(original_dose_amount)
+        end
+
+        it "discards the original (legacy) dose_unit" do
+          expect(original_prescription.dose_unit).to eq("milligram")
+          expect(patient.prescriptions.current.first.dose_unit).to be_nil
         end
       end
 

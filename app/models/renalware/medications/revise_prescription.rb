@@ -91,7 +91,6 @@ module Renalware
           treatable_id
           treatable_type
           dose_amount
-          dose_unit
           medication_route_id
           route_description
           frequency
