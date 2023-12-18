@@ -1,13 +1,13 @@
-article.clinic_visits-form-problems-and-prescriptions
+article.clinic_visits-form-problems-and-prescriptions(data-controller="simple-toggle")
   header
     h2 Problems and Prescriptions
     .supplemental
       = link_to t("btn.toggle"),
-                "#problems_prescriptions",
-                class: "button secondary",
-                data: { behaviour: "css-toggler" }
-  #problems_prescriptions.expandable
-    .grid.gap-4.md:grid-cols-2
+                "#",
+                data: { action: "click->simple-toggle#toggle" },
+                class: "button secondary"
+  .hidden(data-simple-toggle-target="toggleable")
+    .grid.gap-4.lg:grid-cols-2.clear-both
       div
         .list.problems
           b.subtitle Problems
