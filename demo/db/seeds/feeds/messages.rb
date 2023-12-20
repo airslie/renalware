@@ -5,7 +5,7 @@ module Renalware
     sql = <<-SQL.squish
       INSERT INTO "renalware"."feed_messages" ("message_type", "event_type", "header_id", "body", "created_at", "updated_at", "body_hash", "nhs_number")
       VALUES ('ORU', 'R01', '1258271', 'MSH|^~\&|HM|LBE|SCM||20190327094925||ORU^R01|1258271|P|2.3.1|||AL||||
-      PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+      PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
       PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
       ORC|RE|^PCS|09B0099478^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
       OBR|1|^PCS|09B0099478^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||

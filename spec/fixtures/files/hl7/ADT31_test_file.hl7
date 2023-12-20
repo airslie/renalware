@@ -1,5 +1,5 @@
 MSH|^~\&|ADT|iSOFT Engine|eGate|Kings|20150122154918||ADT^A31|{{message_id}}|P|2.3
 EVN|A31|20150122154918
-PID||{nhs_number}^^^NHS|{{local_patient_id}}^^^PAS Number||RARAR1^BUNNY1^^^MS||20010101|M|||address1^address2^address3^address4^postcode|||||||||||||||||||
+PID||{nhs_number}^^^NHS|{{local_patient_id}}^^^HOSP1||RARAR1^BUNNY1^^^MS||20010101|M|||address1^address2^address3^address4^postcode|||||||||||||||||||
 PD1|||DR WHM SUMISU PRACTICE, Nowhere Surgery, 22 Raccoon Road, Erewhon, Erewhonshire^GPPRC^123prac|123gp^Deeley^DP^^^DR
 PV1|1|I|FISK^1^^LD^^^^^Fiske Ward|22||||123^Deeley^DP^^^DR|123^Hoskin^P^^^P^370|370||||19|||C2458519^Hoskin^P^^^P^370|01|877511|||||||||||||||||||||NORMC||||20110412095300

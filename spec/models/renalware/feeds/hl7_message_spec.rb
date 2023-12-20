@@ -13,7 +13,7 @@ module Renalware::Feeds
     let(:raw_message) do
       msg = <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||#{message_type}|1258271|P|2.3.1|||AL||||
-        PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+        PID||123456789^^^NHS|Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
         ORC|RE|^PCS|09B0099478^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
         OBR|1|123456^PCS|09B0099478^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
@@ -210,7 +210,7 @@ module Renalware::Feeds
       let(:raw_message) do
         <<~RAW
           MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
-          PID||123456789^^^NHS|Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+          PID||123456789^^^NHS|Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
           OBR|2|BRM-21B846500|BRM-0021B846500|FBC^FULL BLOOD COUNT^WinPath||202111111228|202111111221||||||copd excetrbation ? sob||B^Blood|EMD^A\T\E Consultant||||||202111111240||BLS|F
           OBX|2|NM|WBC^White Blood Cell Count^WinPath||12.8\\.br\\This result could indicate your patient might have\\.br\\sepsis.|x 10^9/l|4 - 10|H|||F
           OBX|8|NM|ALT^A.L.T^WinPath||54¬ALT <80 IU/L is rarely significant and is often¬related to a raised BMI.|IU/L|0 - 50|H|||F

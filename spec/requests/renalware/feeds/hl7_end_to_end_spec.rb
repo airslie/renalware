@@ -11,7 +11,7 @@ describe "HL7 message handling end to end" do
     let(:raw_message) do
       <<~'RAW'
         MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
-        PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+        PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
         ORC|RE|^PCS|09B0099478^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
         OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
@@ -138,7 +138,7 @@ describe "HL7 message handling end to end" do
     let(:raw_message) do
       <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
-        PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+        PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200901010101||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB||6.09|10\\S\\12/L|||||F|||||BBKA^Donald DUCK|
       RAW
@@ -159,7 +159,7 @@ describe "HL7 message handling end to end" do
     let(:raw_message) do
       <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
-        PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+        PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111841||||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB||6.09|10\\S\\12/L|||||F|||||BBKA^Donald DUCK|
       RAW
@@ -181,7 +181,7 @@ describe "HL7 message handling end to end" do
     let(:raw_message) do
       <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
-        PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+        PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB|||10\\S\\12/L|||||F|||200911112026||BBKA^Donald DUCK|
         OBX|2|TX|RBC^RBC^MB||9.99||||||F|||201911112026||BBKA^Donald DUCK|
@@ -208,7 +208,7 @@ describe "HL7 message handling end to end" do
     let(:raw_message) do
       <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
-        PID|||Z999990^^^PAS Number||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+        PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         OBR|4||BAS-21B20218246|FCS^FULL CLOTTING SCREEN^WinPath||202111300827|202111300605|||||||202111300827|B&Blood|CINS^Insufficient clinician details||||||202111300841||BLS|A
         OBX|1|ST|HEC1^Routine Coagulation^WinPath||||||||F
         OBX|2|ST|PT^  PT^WinPath||||||||P
@@ -234,7 +234,7 @@ describe "HL7 message handling end to end" do
   def simple_raw_message_w_sodium(unit: "mmol/L")
     <<~RAW
       MSH|^~\&|BLB|LIVE|SCM||1111111||ORU^R01|1111111|P|2.3.1|||AL
-      PID|||V1111111^^^PAS Number||SSS^SS^^^Mr||1111111|M|||s^s^^^x
+      PID|||V1111111^^^HOSP1||SSS^SS^^^Mr||1111111|M|||s^s^^^x
       PV1||Inpatient|DMU|||||xxx^xx, xxxx||||||||||NHS|V1111111^^^Visit Number
       ORC|RE|0031111111^PCS|18T1111111^LA||CM||||201801221418|||xxx^xx, xxxx
       OBR|1|0031111111^PCS|181111111^LA|GS^UNKNOWN G\T\S^BLB||201801221418|201801221418||||||haematology + 1 extra sample|201801221418|B^Blood|xxx^xx, xxxx||18T000000001||||201801251706||BLB|F

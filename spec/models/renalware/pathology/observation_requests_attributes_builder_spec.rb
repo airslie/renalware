@@ -130,7 +130,7 @@ module Renalware::Pathology
         let(:raw_message) do
           <<~RAW
             MSH|^~\&|HM|LIVE|SCM||20181212170103||ORU^R01|00002286|P|2.3.1|||AL
-            PID|||Z999990^^^PAS Number||XXX^XXX^^^Mr||11110715|M|||ss^ss^^^SE00 600
+            PID|||Z999990^^^HOSP1||XXX^XXX^^^Mr||11110715|M|||ss^ss^^^SE00 600
             PV1||Inpatient|COPK|||||RABRO^Rabbit, Roger||||||||||NHS|ED001332881^^^Visit Number
             ORC|RE|PLACERORDERNO1^PCS|1010101010^LA||CM||||201801251204|||RABRO^Rabbit, Roger
             OBR|1|PLACERORDERNO1^PCS|1010101010^LA|RLU^RENAL/LIVER/UREA^HM||201801251204|201801250541||||||.|201801250541|B^Blood|RABRO^Rabbit, Roger||1010101010||||201801251249||HM|F

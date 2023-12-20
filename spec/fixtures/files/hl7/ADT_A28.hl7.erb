@@ -1,6 +1,6 @@
 MSH|^~\&|iPM|iIE|TIE|TIE|20110415094635||ADT^A28|558267|P|2.4|||AL|NE
 EVN|A28|20110415094635
-PID||<%= patient.nhs_number %>^^^NHS|<%= patient.hospital_number %>^^^PAS Number||<%= patient.family_name %>^<%= patient.given_name %>^^^MS||<%= patient.born_on&.strftime('%Y%m%d') %>|<%= patient.sex.to_s %>|||address1^address2^address3^address4^postcode||||||||||||||||||<%= patient.died_at&.strftime('%Y%m%d') %>|
+PID||<%= patient.nhs_number %>^^^NHS|<%= patient.hospital_number %>^^^HOSP1||<%= patient.family_name %>^<%= patient.given_name %>^^^MS||<%= patient.born_on&.strftime('%Y%m%d') %>|<%= patient.sex.to_s %>|||address1^address2^address3^address4^postcode||||||||||||||||||<%= patient.died_at&.strftime('%Y%m%d') %>|
 PD1|||DR WHM SUMISU PRACTICE, Nowhere Surgery, 22 Raccoon Road, Erewhon, Erewhonshire^GPPRC^<%= patient.practice_code %>|<%= patient.gp_code %>^Deeley^DP^^^DR
 NK1|1|NOKONE^TESTING^^^MRS|NSP|EREWHON HOSPITAL N H S TR^LEWSEY ROAD^EREWHON^^ER9 0DZ^ZZ993CZ^HOME|01582 111111|01582 333333|NOK^Next of Kin|20110415|||||||F|19600406000000
 PV1|1|R
