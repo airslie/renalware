@@ -14,6 +14,10 @@ module Renalware
       is_expected.to validate_timeliness_of(:started_on)
     end
 
+    it "does not implememt policy_class but relies on usual lookup" do
+      expect(described_class).not_to respond_to(:policy_class)
+    end
+
     describe "change_type-dependent validation" do
       let(:user) { create(:user) }
       let(:hospital) { create(:hospital_centre, name: "HospA", code: "HospA") }

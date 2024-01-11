@@ -33,8 +33,6 @@ module Renalware
         presence: { if: ->(x) { x.change_type&.require_destination_hospital_centre? } }
       )
 
-      def self.policy_class = BasePolicy
-
       def terminate_by(user, on:)
         self.ended_on = on
         self.state = "terminated"

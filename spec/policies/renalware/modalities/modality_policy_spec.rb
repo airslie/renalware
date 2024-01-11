@@ -27,7 +27,7 @@ module Renalware
         permissions permission do
           it do
             is_expected.not_to permit(clinician, modality)
-            is_expected.to permit(admin, modality)
+            is_expected.not_to permit(admin, modality)
             is_expected.to permit(super_admin, modality)
           end
         end
