@@ -5,6 +5,11 @@ module Renalware
     class Description < ApplicationRecord
       acts_as_paranoid
 
+      has_paper_trail(
+        versions: { class_name: "Renalware::Modalities::Version" },
+        on: [:create, :update, :destroy]
+      )
+
       validates :name, presence: true, uniqueness: true
 
       scope :ignorable_for_aki_alerts, -> { where(ignore_for_aki_alerts: true) }

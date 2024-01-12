@@ -1522,16 +1522,22 @@ $_$;
 CREATE FUNCTION renalware.pathology_chart_series(patient_id integer, observation_description_id integer, start_date date) RETURNS TABLE(observed_on bigint, result double precision)
     LANGUAGE sql
     AS $_$
+  /*
+  Note that we use convert_to_float(result, NULL) here rather than nresult
+  (same value, populated by a trigger). Explain-analysing the query shows that using nresult in the
+  where clause is much slower (x10 times). This might be because pg has not optimised around
+  for the use of nresult yet, but its safer for now to use convert_to_float in both places.
+  */
   select
     extract(epoch from observed_at)::bigint * 1000,
-    convert_to_float(result) from pathology_observations po
+    convert_to_float(result, NULL) from pathology_observations po
   inner join pathology_observation_requests por on por.id = po.request_id
   inner join pathology_observation_descriptions pod on pod.id = po.description_id
   where
     pod.id = observation_description_id
     and observed_at >= start_date
     and por.patient_id = $1
-    and nresult is not null
+    and convert_to_float(result, NULL) is not null
   order by
     po.observed_at asc,
     po.created_at desc
@@ -7463,16 +7469,6 @@ ALTER SEQUENCE renalware.letter_mailshot_mailshots_id_seq OWNED BY renalware.let
 
 
 --
--- Name: letter_mailshot_patients_where_surname_starts_with_r; Type: VIEW; Schema: renalware; Owner: -
---
-
-CREATE VIEW renalware.letter_mailshot_patients_where_surname_starts_with_r AS
- SELECT patients.id AS patient_id
-   FROM renalware.patients
-  WHERE ((patients.family_name)::text ~~ 'R%'::text);
-
-
---
 -- Name: letter_qr_encoded_online_reference_links; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -8316,6 +8312,41 @@ CREATE SEQUENCE renalware.modality_reasons_id_seq
 --
 
 ALTER SEQUENCE renalware.modality_reasons_id_seq OWNED BY renalware.modality_reasons.id;
+
+
+--
+-- Name: modality_versions; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.modality_versions (
+    id bigint NOT NULL,
+    item_type character varying NOT NULL,
+    item_id integer NOT NULL,
+    event character varying NOT NULL,
+    whodunnit character varying,
+    object jsonb,
+    object_changes jsonb,
+    created_at timestamp(6) without time zone
+);
+
+
+--
+-- Name: modality_versions_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.modality_versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: modality_versions_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.modality_versions_id_seq OWNED BY renalware.modality_versions.id;
 
 
 --
@@ -15336,6 +15367,13 @@ ALTER TABLE ONLY renalware.modality_reasons ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: modality_versions id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.modality_versions ALTER COLUMN id SET DEFAULT nextval('renalware.modality_versions_id_seq'::regclass);
+
+
+--
 -- Name: old_passwords id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -17338,6 +17376,14 @@ ALTER TABLE ONLY renalware.modality_modalities
 
 ALTER TABLE ONLY renalware.modality_reasons
     ADD CONSTRAINT modality_reasons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: modality_versions modality_versions_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.modality_versions
+    ADD CONSTRAINT modality_versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -21627,6 +21673,13 @@ CREATE INDEX index_modality_modalities_on_updated_by_id ON renalware.modality_mo
 --
 
 CREATE INDEX index_modality_reasons_on_id_and_type ON renalware.modality_reasons USING btree (id, type);
+
+
+--
+-- Name: index_modality_versions_on_item_type_and_item_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_modality_versions_on_item_type_and_item_id ON renalware.modality_versions USING btree (item_type, item_id);
 
 
 --
@@ -28716,6 +28769,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231121094056'),
 ('20231130102622'),
 ('20231130114143'),
-('20231206115315');
+('20231206115315'),
+('20240111043244');
 
 

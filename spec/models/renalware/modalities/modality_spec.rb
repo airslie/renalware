@@ -12,6 +12,7 @@ module Renalware
       is_expected.to belong_to(:patient).touch(true)
       is_expected.to belong_to(:change_type)
       is_expected.to validate_timeliness_of(:started_on)
+      is_expected.to be_versioned
     end
 
     it "does not implememt policy_class but relies on usual lookup" do

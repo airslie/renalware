@@ -6,6 +6,7 @@ module Renalware
   describe Modalities::Description do
     it_behaves_like "a Paranoid model"
     it { is_expected.to validate_presence_of :name }
+    it { is_expected.to be_versioned }
 
     describe "#validation" do
       subject { described_class.new(name: "P") }
