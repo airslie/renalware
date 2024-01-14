@@ -26,13 +26,14 @@
               - if user_can_edit_or_delete_modalities
                 td.actions
                   - if policy(modality).edit?
-                    = link_to t("btn.edit"),
-                              renalware.edit_patient_modality_path(patient, modality)
+                    = link_to "Amend",
+                              renalware.edit_patient_modality_path(patient, modality),
+                              data: { confirm: "Are you sure you want to amend this modality (thus rewriting the modality history) rather than add a new one?" }
                   - if policy(modality).destroy?
                     = link_to t("btn.delete"),
                               renalware.patient_modality_path(patient, modality),
                               method: :delete,
-                              data: { confirm: "Are you sure?" }
+                              data: { confirm: "Are you sure want to delete this modality from the patient's modality history?" }
               td= modality.description.name
               td= modality.change_type_description
               td= modality.notes

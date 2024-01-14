@@ -28,4 +28,5 @@ Renalware.configure do |config|
   config.patient_visibility_restrictions = :by_site # or :by_site_and_research_study or :none
   config.allow_qr_codes_in_letters = true
   config.process_hl7_via_raw_messages_table = true
+  config.allow_modality_history_amendments = true
 end

@@ -19,6 +19,7 @@ describe "Managing a patient's modalities", js: false do
 
   before do
     create(:modality_change_type, :other, default: true)
+    allow(Renalware.config).to receive(:allow_modality_history_amendments).and_return(true)
   end
 
   pending "adding a modality"
@@ -29,12 +30,12 @@ describe "Managing a patient's modalities", js: false do
          "and the modality will be terminated" do
         travel_to Time.zone.parse("2023-10-01 00:00:00") do
           pd_mod_desc # Make PD modality option available
-          user = login_as_admin
+          user = login_as_super_admin
           modality = change_patient_modality(patient, hd_mod_desc, user)
           visit patient_modalities_path(patient)
 
           within("#modalities_modality_#{modality.id}") do
-            click_on "Edit"
+            click_on "Amend"
           end
 
           select "PD", from: "Description"
@@ -61,7 +62,7 @@ describe "Managing a patient's modalities", js: false do
     context "when patient has two modalities" do
       it "we can change the date boundary between them" do
         travel_to Time.zone.parse("2023-10-01 00:00:00") do
-          user = login_as_admin
+          user = login_as_super_admin
           pd_modality = change_patient_modality(
             patient, pd_mod_desc, user, started_on: "2022-01-01"
           )
@@ -82,7 +83,7 @@ describe "Managing a patient's modalities", js: false do
 
           # Change PD
           within("##{dom_id(pd_modality)}") do
-            click_on "Edit"
+            click_on "Amend"
           end
           fill_in "Ended on", with: "2022-12-01"
           click_on "Save"
@@ -90,7 +91,7 @@ describe "Managing a patient's modalities", js: false do
 
           # Change HD
           within("##{dom_id(hd_modality)}") do
-            click_on "Edit"
+            click_on "Amend"
           end
           fill_in "Started on", with: "2022-12-01"
           click_on "Save"
@@ -110,7 +111,7 @@ describe "Managing a patient's modalities", js: false do
 
       it "sets state to current when the most recent modality's termination date is removed" do
         travel_to Time.zone.parse("2023-10-01 00:00:00") do
-          user = login_as_admin
+          user = login_as_super_admin
           change_patient_modality(
             patient, pd_mod_desc, user, started_on: "2022-01-01"
           )
@@ -127,7 +128,7 @@ describe "Managing a patient's modalities", js: false do
 
           # Terminate the current modality manually
           within("##{dom_id(hd_modality)}") do
-            click_on "Edit"
+            click_on "Amend"
           end
           fill_in "Ended on", with: "2023-01-01"
           click_on "Save"
@@ -137,7 +138,7 @@ describe "Managing a patient's modalities", js: false do
 
           # Now edit it again to remove the terminated date so it becomes current again
           within("##{dom_id(hd_modality)}") do
-            click_on "Edit"
+            click_on "Amend"
           end
           fill_in "Ended on", with: ""
           click_on "Save"
@@ -147,7 +148,7 @@ describe "Managing a patient's modalities", js: false do
 
           # # Change HD
           # within("##{dom_id(hd_modality)}") do
-          #   click_on "Edit"
+          #   click_on "Amend"
           # end
           # fill_in "Started on", with: "2022-12-01"
           # click_on "Save"
@@ -170,7 +171,7 @@ describe "Managing a patient's modalities", js: false do
   describe "deleting a modality" do
     context "when there is only one modality" do
       it "user is left with no modality" do
-        user = login_as_admin
+        user = login_as_super_admin
         modality = change_patient_modality(patient, hd_mod_desc, user)
         visit patient_modalities_path(patient)
 
@@ -184,7 +185,7 @@ describe "Managing a patient's modalities", js: false do
 
     context "when deleting the current modality and there is preceding one" do
       it "the preceding one becomes the current modality" do
-        user = login_as_admin
+        user = login_as_super_admin
         _tx_modality = change_patient_modality(patient, tx_mod_desc, user, started_on: "2021-01-01")
         pd_modality = change_patient_modality(patient, pd_mod_desc, user, started_on: "2022-01-01")
         hd_modality = change_patient_modality(patient, hd_mod_desc, user, started_on: "2023-01-01")
