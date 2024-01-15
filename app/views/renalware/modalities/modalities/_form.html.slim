@@ -11,9 +11,8 @@
       .large-9.columns
 
           = m.input :description_id,
-                    collection: Renalware::Modalities::Description.where(hidden: false),
+                    collection: Renalware::Modalities::DescriptionPresenter.list_for_dropdown,
                     input_html: { id: "modality-description-select" },
-                    label_method: :name, value_method: :id,
                     wrapper: :horizontal_medium,
                     autofocus: true
 

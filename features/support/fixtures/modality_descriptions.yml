@@ -1,6 +1,7 @@
 death:
   name: Death
   type: Renalware::Deaths::ModalityDescription
+  code: death
 live_donor:
   name: Live Donor
   type: Renalware::Transplants::DonorModalityDescription
