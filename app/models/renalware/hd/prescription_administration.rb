@@ -59,18 +59,32 @@ module Renalware
         if valid? &&
            witnessed? &&
            prescription.administer_on_hd? &&
-           prescription.stat? &&
-           prescription.termination.nil?
+           prescription.stat?
 
-          prescription.build_termination(
-            terminated_on: Time.zone.now,
-            notes: "Stat prescription automatically terminated once given",
-            by: SystemUser.find
-          ).save!
+          if prescription.termination.nil?
+            terminate_prescription(prescription)
+          elsif prescription.termination.terminated_on > Time.zone.today
+            update_existing_future_termination_to_terminate_immediately(prescription)
+          end
         end
       end
 
       private
+
+      def terminate_prescription(prescription)
+        prescription.build_termination(
+          terminated_on: Time.zone.now,
+          notes: "Stat prescription automatically terminated once given",
+          by: SystemUser.find
+        ).save!
+      end
+
+      def update_existing_future_termination_to_terminate_immediately(prescription)
+        termination = prescription.termination
+        termination.terminated_on = Time.zone.today
+        termination.created_by = termination.updated_by = SystemUser.find
+        termination.save!
+      end
 
       def witness_cannot_be_administrator
         return unless authorised?

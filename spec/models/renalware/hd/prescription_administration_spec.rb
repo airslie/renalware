@@ -145,8 +145,9 @@ module Renalware
           )
         end
 
-        it "does not try to terminate if already terminated" do
-          prescription.build_termination(terminated_on: Time.zone.now, by: user1).save!
+        it "does not try to terminate if already terminated in the past" do
+          terminated_on = 1.day.ago.to_date
+          prescription.build_termination(terminated_on: terminated_on, by: user1).save!
 
           expect {
             described_class.create!(
@@ -159,7 +160,65 @@ module Renalware
               recorded_on: Time.zone.now,
               by: user1
             )
-          }.to change(Medications::PrescriptionTermination, :count).by(0)
+          }.not_to change(Medications::PrescriptionTermination, :count)
+          expect(prescription.reload.termination.terminated_on).to eq(terminated_on)
+        end
+
+        it "does not try to terminate if already terminated today" do
+          terminated_on = Time.zone.today
+          prescription.build_termination(terminated_on: terminated_on, by: user1).save!
+
+          expect {
+            described_class.create!(
+              prescription: prescription,
+              administered: true,
+              administered_by: user1,
+              witnessed_by: user2,
+              administered_by_password: pwd,
+              witnessed_by_password: pwd,
+              recorded_on: Time.zone.today,
+              by: user1
+            )
+          }.not_to change(Medications::PrescriptionTermination, :count)
+
+          expect(prescription.reload.termination).to have_attributes(
+            terminated_on: terminated_on,
+            updated_by: user1 # ie not system user
+          )
+        end
+
+        it "sets the termination.terminated_on to Now if the termination has a future date " \
+           "(likely, as we give a 14 day future termination date to stat drugs automatically)" \
+           "so that that the prescription is stopped and can not be given again" do
+          future_termination_date = 14.days.since
+          recorded_on = Time.zone.today
+
+          # Give the prescription a future term date
+          prescription.build_termination(
+            terminated_on: future_termination_date,
+            by: user1
+          ).save!
+
+          expect {
+            described_class.create!(
+              prescription: prescription,
+              administered: true,
+              administered_by: user1,
+              witnessed_by: user2,
+              administered_by_password: pwd,
+              witnessed_by_password: pwd,
+              recorded_on: recorded_on,
+              by: user1
+            )
+          }.not_to change(Medications::PrescriptionTermination, :count)
+
+          # Administering the stat+hd prescription will cause an existing termination to be adjusted
+          # so it terminates immediately.
+          expect(prescription.reload.termination).to have_attributes(
+            terminated_on: recorded_on,
+            updated_by: SystemUser.find,
+            created_by: SystemUser.find
+          )
         end
       end
     end
