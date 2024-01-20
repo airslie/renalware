@@ -2,6 +2,13 @@
 
 module Renalware
   module Sortable
+    # Note!
+    # !! Do not use this module when sorting things scoped to a patient or other parent !!
+    # In those instances using eg
+    #  acts_as_list scope: :patient_id
+    # seems to be sufficient. For example the 'before_create :set_position' callback is
+    # not needed if using a scope argument.
+    #
     extend ActiveSupport::Concern
 
     # Assumes that the model has the #position attribute and adds 2 features to a model that

@@ -64,6 +64,130 @@ describe "Problems" do
           )
         end
       end
+
+      it "updated positions correctly" do
+        datetime = Time.zone.parse("2023-01-01 00:00:00")
+
+        # Patient has 2 problems with positions 1 2. We will add new problem and it should have
+        # position 3
+        problems = create_list(:problem, 2, patient: patient)
+        expect(problems.map(&:position)).to eq([1, 2])
+
+        # Another patient has a problem with position 99. It should be unaffected.
+        other_patient = create(:patient)
+        other_patient_problem = create(:problem, patient: other_patient)
+        other_patient_problem.update_column(:position, 99)
+        other_patient_problem.update_column(:updated_at, datetime)
+        expect(other_patient_problem.position).to eq(99)
+
+        post patient_problems_path(
+          patient_id: patient,
+          params: {
+            problems_problem: {
+              "date(3i)" => "31",
+              "date(2i)" => "02",
+              "date(1i)" => "2011",
+              description: "A problem",
+              snomed_id: "12345"
+            }
+          }
+        )
+
+        expect(response).to be_successful
+
+        expect(patient.reload.problems.count).to eq(3)
+        expect(patient.problems.map(&:position)).to eq([1, 2, 3])
+        expect(patient.problems.last.snomed_id).to eq("12345")
+
+        # Check there are no side-effects for the other patient
+        other_patient.reload
+        other_patient_problem.reload
+        expect(other_patient_problem.position).to eq(99) # unchanged
+        expect(other_patient.problems.count).to eq(1) # unchanged
+        expect(other_patient_problem.updated_at).to eq(datetime) # unchanged
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "sets deleted_at on the problem and doesn't change problems belonging to other patients" do
+        datetime = Time.zone.parse("2023-01-01 00:00:00")
+
+        # Patient has 3 problems with positions 1 2 3.  We will delete the second problem.
+        # it should change the position of problem 3 to be 2
+        # Note the act of creation sets the position incrementally
+        problems = create_list(:problem, 3, patient: patient)
+        expect(problems.map(&:position)).to eq([1, 2, 3])
+
+        # Another patient has a problem with position 99. It should be unaffected.
+        other_patient = create(:patient)
+        other_patient_problem = create(:problem, patient: other_patient)
+        other_patient_problem.update_column(:position, 99)
+        other_patient_problem.update_column(:updated_at, datetime)
+        expect(other_patient_problem.position).to eq(99)
+
+        # Deleting a problem 2 from the first patient
+        delete patient_problem_path(patient_id: patient, id: problems[1].id)
+
+        expect(response).to be_redirect # success
+
+        # Reload test subjects
+        patient.reload
+        other_patient.reload
+        other_patient_problem.reload
+        problems.each(&:reload)
+
+        # Check the first patient problems
+        expect(patient.problems.count).to eq(2) # was 3
+        expect(problems[0].position).to eq(1) # unchanged
+        expect(problems[2].position).to eq(2) # was 3
+        expect(problems[1].deleted_at).to be_present # soft-deleted
+
+        # Check there are no side-effects for the other patient
+        expect(other_patient_problem.position).to eq(99) # unchanged
+        expect(other_patient.problems.count).to eq(1) # unchanged
+        expect(other_patient_problem.updated_at).to eq(datetime) # unchanged
+      end
+    end
+
+    describe "PUT sort" do
+      it "sorts only problems for the current patient" do
+        datetime = Time.zone.parse("2023-01-01 00:00:00")
+
+        # Patient has 3 problems with positions 1 2 3.
+        # We will sort so that the problem with position 3 goes to the top and the others are
+        # pushed down ie
+        #   [problem1, problem2, problem3] => [problem3, problem1,problem2]
+        # Note the act of creation sets the position incrementally
+        problems = create_list(:problem, 3, patient: patient)
+        expect(problems.map(&:position)).to eq([1, 2, 3])
+        new_problem_id_order = [problems[2].id, problems[0].id, problems[1].id]
+
+        # Another patient has a problem with position 99. It should be unaffected.
+        other_patient = create(:patient)
+        other_patient_problem = create(:problem, patient: other_patient)
+        other_patient_problem.update_column(:position, 99)
+        other_patient_problem.update_column(:updated_at, datetime)
+        expect(other_patient_problem.position).to eq(99)
+
+        post sort_patient_problems_path(
+          patient_id: patient,
+          params: {
+            "problems_problem" => new_problem_id_order
+          }
+        )
+
+        expect(response).to be_successful
+
+        sorted_problems = patient.problems.reload
+        expect(sorted_problems.map(&:id)).to eq(new_problem_id_order)
+        expect(sorted_problems.map(&:position)).to eq([1, 2, 3])
+
+        # Check there are no side-effects for the other patient
+        other_patient_problem.reload
+        expect(other_patient_problem.position).to eq(99) # unchanged
+        expect(other_patient_problem.updated_at).to eq(datetime) # unchanged
+        expect(other_patient.problems.reload.count).to eq(1) # unchanged
+      end
     end
   end
 end
