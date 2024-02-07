@@ -1,0 +1,11 @@
+= turbo_frame_tag "report_content" do
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      - if options.current_view.description.present?
+        p.border.rounded.px-3.py-2.mb-10.shadow.bg-blue-50
+          = options.current_view.description
+
+      - if options&.rows&.size&.zero?
+        p No matching data
+      - else
+        = render "table", options: options

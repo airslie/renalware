@@ -6,6 +6,7 @@ namespace :reporting do
   resources :reports, only: [:index, :show] do
     member do
       get :chart
+      get :content
       get :chart_raw
     end
   end

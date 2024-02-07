@@ -13,6 +13,7 @@ module Renalware
           :view_proc,
           :pagination!,
           :report_path_without_params,
+          :reset_path,
           :report_csv_download_path_with_params
         ]
       end
@@ -32,6 +33,10 @@ module Renalware
         end
       end
 
+      def content
+        show_html(content_only: true)
+      end
+
       def chart
         respond_to do |format|
           format.html { show_html }
@@ -48,18 +53,19 @@ module Renalware
 
       private
 
-      def show_html
+      def show_html(content_only: false)
         sql_view_klass = build_sql_view_klass
         search = sql_view_klass.ransack(params[:q])
-        pagy, rows = pagy(search.result)
+        pagy, rows = content_only ? pagy(search.result) : [nil, nil]
         current_view.calls.create!(user: current_user, called_at: Time.zone.now)
 
         options = ReportOptions.new(
           search: search,
-          rows: rows.load, # search.result.page(page).per(5).load,
+          rows: rows&.load,
           current_view: current_view,
           pagination: pagy,
-          report_path_without_params: reporting_report_path(current_view),
+          report_path_without_params: content_reporting_report_path(current_view),
+          reset_path: reporting_report_path(current_view),
           report_csv_download_path_with_params: report_csv_download_path_with_params
         )
         render locals: { options: options }
