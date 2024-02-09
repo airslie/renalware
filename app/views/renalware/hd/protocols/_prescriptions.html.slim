@@ -4,12 +4,17 @@ table.prescriptions
       th Drug
       th Dose
       th Freq
-      th.col-width-date Last Given
+      th Last Given (L) / Due (D)
   tbody
     - prescriptions.each do |prescription|
-      - last_administration = Renalware::HD::PrescriptionAdministrationsQuery.new(prescription: prescription).call.first
       tr
         td= prescription.drug_name
         td= prescription.dose
         td= prescription.frequency
-        td= l(last_administration&.recorded_on)
+        td= prescription.last_given_or_due_date_with_indicator
+        / - if prescription.administer_on_hd? && prescription.stat
+        /   = "#{l(prescription.prescribed_on)} (D)"
+        / - else
+        /   - last_administration = Renalware::HD::PrescriptionAdministrationsQuery.new(prescription: prescription).call.first
+        /   - if last_administration&.recorded_on&.present?
+        /     = "#{l(last_administration.recorded_on)} (L)"

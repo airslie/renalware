@@ -69,7 +69,20 @@ module Renalware
         end
       end
 
+      def last_given_or_due_date_with_indicator
+        return "#{::I18n.l(prescribed_on)} (D)" if administer_on_hd? && stat
+
+        if last_administration_on_hd&.recorded_on&.present?
+          "#{::I18n.l(last_administration_on_hd.recorded_on)} (L)"
+        end
+      end
+
       private
+
+      def last_administration_on_hd
+        @last_administration_on_hd ||=
+          HD::PrescriptionAdministrationsQuery.new(prescription: self).call.first
+      end
 
       def translated_dose_unit
         return nil if dose_unit.nil?
