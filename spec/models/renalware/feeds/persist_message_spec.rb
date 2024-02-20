@@ -10,6 +10,7 @@ module Renalware::Feeds
       let(:hl7_message) {
         instance_double(
           HL7Message,
+          time: Time.zone.parse("2023-01-01 00:00:01"),
           type: "::message type code::",
           message_type: "ADT",
           event_type: "A31",
@@ -41,7 +42,8 @@ module Renalware::Feeds
           message_type: "ADT",
           event_type: "A31",
           orc_filler_order_number: "123",
-          dob: Date.parse("20010101")
+          dob: Date.parse("20010101"),
+          sent_at: Time.zone.parse("2023-01-01 00:00:01")
         )
       end
 
@@ -69,17 +71,18 @@ module Renalware::Feeds
           )
         end
 
-        # |                    |	HL7   |	config | Persisted
-        # |                    |	Msg   |	map    |
+        # |                    |  HL7   | config | Persisted
+        # |                    |  Msg   | map    |
         # |--------------------|--------|--------|---------
-        # | local_patient_id   |	HOSP1 |	HOSP1  |	Y
-        # | local_patient_id_2 |	HOSPX |	HOSP2  |	N
-        # | local_patient_id_3 |	HOSP3 |	HOSPY  |	N
-        # | local_patient_id_4 |	HOSP4 |	HOSP4  |	Y
-        # | local_patient_id_5 |	nil   | HOSP5  |	N
+        # | local_patient_id   |  HOSP1 | HOSP1  |  Y
+        # | local_patient_id_2 |  HOSPX | HOSP2  |  N
+        # | local_patient_id_3 |  HOSP3 | HOSPY  |  N
+        # | local_patient_id_4 |  HOSP4 | HOSP4  |  Y
+        # | local_patient_id_5 |  nil   | HOSP5  |  N
         it "silently fails to update unmatched data" do
           hl7_message = instance_double(
             HL7Message,
+            time: Time.zone.parse("2023-01-01 00:00:01"),
             type: "::message type code::",
             message_type: "ADT",
             event_type: "A31",
@@ -112,6 +115,7 @@ module Renalware::Feeds
           feed_message = service.call(hl7_message)
 
           expect(feed_message).to have_attributes(
+            sent_at: Time.zone.parse("2023-01-01 00:00:01"),
             nhs_number: "1",
             local_patient_id: "1111",
             local_patient_id_2: nil,
@@ -124,6 +128,7 @@ module Renalware::Feeds
         it "does not fall over if hospital_identifiers is empty" do
           hl7_message = instance_double(
             HL7Message,
+            time: Time.zone.parse("2023-01-01 00:00:01"),
             type: "::message type code::",
             message_type: "ADT",
             event_type: "A31",

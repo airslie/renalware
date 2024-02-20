@@ -169,6 +169,10 @@ module Renalware
         Renalware::Feeds::HL7Segments::PV2.new(self[:PV2])
       end
 
+      def time
+        self[:MSH].time
+      end
+
       def type
         self[:MSH].message_type
       end

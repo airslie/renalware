@@ -5317,7 +5317,8 @@ CREATE TABLE renalware.feed_messages (
     local_patient_id_5 character varying,
     orc_order_status renalware.enum_hl7_orc_order_status,
     dob date,
-    orc_filler_order_number character varying
+    orc_filler_order_number character varying,
+    sent_at timestamp(6) without time zone
 );
 
 
@@ -28888,6 +28889,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231213170649'),
 ('20231221094630'),
 ('20240111043244'),
-('20240118203934');
+('20240118203934'),
+('20240220091704');
 
 
