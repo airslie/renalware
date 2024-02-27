@@ -19946,6 +19946,13 @@ CREATE UNIQUE INDEX index_feed_messages_on_body_hash ON renalware.feed_messages 
 
 
 --
+-- Name: index_feed_messages_on_dob; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_messages_on_dob ON renalware.feed_messages USING btree (dob);
+
+
+--
 -- Name: index_feed_messages_on_local_patient_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -20009,6 +20016,13 @@ CREATE INDEX index_feed_messages_on_patient_identifiers ON renalware.feed_messag
 
 
 --
+-- Name: index_feed_messages_on_sent_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_messages_on_sent_at ON renalware.feed_messages USING btree (sent_at);
+
+
+--
 -- Name: index_feed_outgoing_documents_on_created_by_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -20047,7 +20061,7 @@ CREATE INDEX index_feed_raw_hl7_messages_on_created_at ON renalware.feed_raw_hl7
 -- Name: INDEX index_feed_raw_hl7_messages_on_created_at; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON INDEX renalware.index_feed_raw_hl7_messages_on_created_at IS 'We query for rows ordering by created_at asc to give us a chance to procsess in FIFO order, so having an ordered index means when we use a LIMIT (batching) in the query, rows will be determined by index scan without having to look to the end of the table - or something like that! In fact the index is implcitly ordered already but having created_at: :asc here makes our intention more explicit.';
+COMMENT ON INDEX renalware.index_feed_raw_hl7_messages_on_created_at IS 'We query for rows ordering by created_at asc to give us a chance to process in FIFO order, so having an ordered index means when we use a LIMIT (batching) in the query, rows will be determined by index scan without having to look to the end of the table - or something like that! In fact the index is implicitly ordered already but having created_at: :asc here makes our intention more explicit.';
 
 
 --
@@ -28890,6 +28904,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231221094630'),
 ('20240111043244'),
 ('20240118203934'),
-('20240220091704');
+('20240220091704'),
+('20240227120942');
 
 

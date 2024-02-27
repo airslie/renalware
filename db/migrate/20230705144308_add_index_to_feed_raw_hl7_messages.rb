@@ -3,10 +3,10 @@ class AddIndexToFeedRawHL7Messages < ActiveRecord::Migration[6.0]
     within_renalware_schema do
       safety_assured do
         comment = <<~COMMENT.squish
-          We query for rows ordering by created_at asc to give us a chance to procsess in FIFO order,
+          We query for rows ordering by created_at asc to give us a chance to process in FIFO order,
           so having an ordered index means when we use a LIMIT (batching) in the query, rows will
           be determined by index scan without having to look to the end of the table -
-          or something like that! In fact the index is implcitly ordered already but having
+          or something like that! In fact the index is implicitly ordered already but having
           created_at: :asc here makes our intention more explicit.
         COMMENT
         # E.g.
@@ -18,7 +18,8 @@ class AddIndexToFeedRawHL7Messages < ActiveRecord::Migration[6.0]
           :feed_raw_hl7_messages,
           :created_at,
           order: { created_at: :asc },
-          comment: comment
+          comment: comment,
+          if_not_exists: true
         )
       end
     end

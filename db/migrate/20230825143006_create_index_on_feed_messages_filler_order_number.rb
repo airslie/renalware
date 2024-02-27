@@ -6,7 +6,12 @@ class CreateIndexOnFeedMessagesFillerOrderNumber < ActiveRecord::Migration[7.0]
   # so should be quick to run, but using concurrently just in case.
   def change
     within_renalware_schema do
-      add_index :feed_messages, :orc_filler_order_number, algorithm: :concurrently
+      add_index(
+        :feed_messages,
+        :orc_filler_order_number,
+        algorithm: :concurrently,
+        if_not_exists: true
+      )
     end
   end
 end
