@@ -240,7 +240,9 @@ module Renalware
       app.config.time_zone = "London"
       app.config.active_record.time_zone_aware_types = [:datetime]
       app.config.active_record.dump_schemas = :all
-      app.config.exceptions_app = Engine.routes unless Rails.env.development?
+      config.exceptions_app = lambda do |env|
+        Renalware::System::ErrorsController.action(:show).call(env)
+      end
       app.config.action_mailer.preview_path = Engine.root.join("app", "mailers", "renalware")
       app.config.action_mailer.deliver_later_queue_name = "mailers"
     end

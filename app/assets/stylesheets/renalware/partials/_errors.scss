@@ -3,6 +3,8 @@
 }
 
 .error-page {
+  overflow-y: scroll;
+
   .title-area .name {
     color: $white;
     font-size: 1.3rem;
@@ -35,6 +37,21 @@
 
   .support-info {
     font-size: 1.2rem;
+  }
+
+  .error-details {
+    margin-top: 50px;
+    text-align: left;
+
+    hr {
+      margin-top: 10px;
+    }
+
+    .error-details-name {
+      padding: 10px 0;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
   }
 }
 

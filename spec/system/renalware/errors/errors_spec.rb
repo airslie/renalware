@@ -22,9 +22,7 @@ module Renalware
         visit admin_user_path(id: 99999999999)
 
         expect(page.status_code).to eq(404)
-        expect(page).to have_content(t_404("heading"))
-        expect(page).to have_content(t_404("subheading"))
-        expect(page).to have_content(t_404("support_info"))
+        expect(page).to have_content("Not Found")
       end
     end
 
@@ -35,18 +33,8 @@ module Renalware
         visit generate_test_internal_server_error_path
 
         expect(page.status_code).to eq(500)
-        expect(page).to have_content(t_500("heading"))
-        expect(page).to have_content(t_500("subheading"))
-        expect(page).to have_content(t_500("support_info"))
+        expect(page).to have_content("Internal Server Error")
       end
-    end
-
-    def t_404(key, scope: "renalware.system.errors.not_found")
-      t(key, scope: scope)
-    end
-
-    def t_500(key, scope: "renalware.system.errors.internal_server_error")
-      t(key, scope: scope)
     end
   end
 end

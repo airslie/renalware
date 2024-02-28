@@ -23,10 +23,9 @@ module Dummy
     # functions will not exist.
     config.active_record.dump_schemas = :all
 
-    unless Rails.env.development?
-      config.exceptions_app = Renalware::Engine.routes
+    config.exceptions_app = lambda do |env|
+      Renalware::System::ErrorsController.action(:show).call(env)
     end
-
     config.action_mailer.default_url_options = { host: ENV.fetch("HOST", "localhost") }
     config.time_zone = "London"
     config.active_record.schema_format = :sql

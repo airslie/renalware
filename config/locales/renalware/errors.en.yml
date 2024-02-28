@@ -1,17 +1,21 @@
 ---
 en:
+  exception:
+    show:
+      not_found:
+        title: "Not Found"
+        description: "The page you were looking for does not exist."
+      internal_server_error:
+        title: "Internal Server Error"
+        description: "Sorry, something went wrong while processing your request."
+      bad_request:
+        title: "Bad Request"
+        description: "The server did not understand your request. It may have been malformed."
+
   renalware:
     system:
       errors:
-        internal_server_error:
-          heading: It looks like something went wrong!
+        show:
           page_title: Server error
-          subheading: 'Try again in a few minutes. If it still doesn''t work, please let us know.
-
-            '
-          support_info: Support information here...
-        not_found:
-          heading: Sorry, we couldn't find what you were looking for
-          page_title: Page not found
-          subheading: More text here
-          support_info: Support information here...
+          support_info: ''
+          #   subheading: 'Try again in a few minutes. If it still doesn''t work, please let us know.'
