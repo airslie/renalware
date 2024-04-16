@@ -6,8 +6,5 @@ en:
         page_actions:
           add_profile: Profile
           mdm: MDM
-          missing_modality_warning: 'Some actions will be unavailable until you add the Advanced Kidney Care modality
-
-            '
         show:
           page_title: AKCC Summary

@@ -30,7 +30,7 @@ module Renalware
 
       def ids_of_patients_with_death_modality
         Patient
-          .extending(ModalityScopes)
+          .include(ModalityScopes)
           .with_current_modality_of_class(Renalware::Deaths::ModalityDescription)
           .pluck(:id)
       end

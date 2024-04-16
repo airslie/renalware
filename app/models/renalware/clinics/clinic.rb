@@ -4,6 +4,7 @@ module Renalware
   module Clinics
     class Clinic < ApplicationRecord
       include Accountable
+      include RansackAll
       acts_as_paranoid
 
       # The dependent option is not really compatible with acts_as_paranoid

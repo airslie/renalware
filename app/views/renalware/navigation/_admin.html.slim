@@ -1,10 +1,10 @@
 li.has-dropdown
   = link_to "Admin", "#"
   ul.dropdown
-    li= link_to "Users", admin_users_path
-    li= link_to "Request Form Print History", pathology_requests_requests_path
-    li= link_to "Path Request Config", pathology_requests_rules_path
-    li= link_to "HD Transmission Logs", hd_transmission_logs_path
+    li= link_to "Users", renalware.admin_users_path
+    li= link_to "Request Form Print History", renalware.pathology_requests_requests_path
+    li= link_to "Path Request Config", renalware.pathology_requests_rules_path
+    li= link_to "HD Transmission Logs", renalware.hd_transmission_logs_path
     - unless Rails.env.production?
       li
-        = link_to "Email Templates", system_email_templates_path
+        = link_to "Email Templates", renalware.system_email_templates_path

@@ -38,7 +38,6 @@ module Renalware
           .with_main_recipient
           .with_letterhead
           .with_author
-          .with_patient
           .limit(Renalware.config.clinical_summary_max_letters_to_display)
       end
 

@@ -7,13 +7,13 @@ require "turnip/capybara"
 # define and include a new anonymous module and put into it anything methods defined
 # in the block.
 module WebSteps
-  def web_steps(&)
+  def web_steps(&block)
     return unless ENV.key?("TURNIP_WEB")
 
     tag = :web
     Module.new do
       singleton_class.send(:define_method, :tag) { tag }
-      module_eval(&)
+      module_eval(&block)
       ::RSpec.configure { |c| c.include self, tag => true }
     end
   end

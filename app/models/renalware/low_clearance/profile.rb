@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "document/base"
-
 module Renalware
   module LowClearance
     class Profile < ApplicationRecord

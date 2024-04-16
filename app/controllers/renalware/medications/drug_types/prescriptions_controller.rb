@@ -8,25 +8,19 @@ module Renalware
   module Medications
     module DrugTypes
       class PrescriptionsController < BaseController
-        include Renalware::Concerns::Pageable
+        include Pagy::Backend
 
         def index
           authorize Prescription, :index?
+          pagy, prescriptions = pagy(query.call)
           render :index, locals: {
-            prescriptions: present_prescriptions,
-            search: query.search
+            prescriptions: CollectionPresenter.new(prescriptions, PrescriptionPresenter),
+            search: query.search,
+            pagy: pagy
           }
         end
 
         private
-
-        def present_prescriptions
-          CollectionPresenter.new(paginated_prescriptions, PrescriptionPresenter)
-        end
-
-        def paginated_prescriptions
-          query.call.page(page).per(per_page)
-        end
 
         def query
           @query ||= begin

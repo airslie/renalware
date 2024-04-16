@@ -4,18 +4,19 @@ module Renalware
   module Events
     class EventsController < BaseController
       include Renalware::Concerns::PatientVisibility
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
 
       def index
         events_query = EventQuery.new(patient: patient, query: query_params)
-        events = events_query.call.page(page).per(per_page)
+        pagy, events = pagy(events_query.call)
         authorize events
         events = EventsPresenter.new(patient, events)
 
         render locals: {
           events: events,
-          query: events_query.search
+          query: events_query.search,
+          pagy: pagy
         }
       end
 
@@ -38,6 +39,7 @@ module Renalware
       end
 
       def edit
+        session[:events_edit_back_url] = request.referer
         render_edit(load_and_authorize_event_for_edit_or_update)
       end
 
@@ -56,7 +58,10 @@ module Renalware
         event = load_and_authorize_event_for_edit_or_update
 
         if UpdateEvent.call(event: event, params: event_params, by: current_user)
-          redirect_to return_url, notice: success_msg_for("event")
+          redirect_to(
+            session.delete(:events_edit_back_url) || events_path,
+            notice: success_msg_for("event")
+          )
         else
           flash.now[:error] = failed_msg_for("event type")
           render_edit(event)
@@ -66,7 +71,7 @@ module Renalware
       def destroy
         load_and_authorize_event_for_edit_or_update.destroy!
         flash[:notice] = "Event deleted"
-        redirect_to return_url
+        redirect_to request.referer
       end
 
       protected

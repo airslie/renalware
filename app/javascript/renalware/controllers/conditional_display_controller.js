@@ -14,6 +14,7 @@ export default class extends Controller {
   'test' attribute.
   */
   showhide(event) {
+    console.log("H")
     event.preventDefault()
     if (event.target.tagName.toUpperCase() == "SELECT") {
       let selectedOption = event.target.options[event.target.selectedIndex]

@@ -10,6 +10,8 @@ module Renalware
       include Accountable
       include PatientsRansackHelper
       extend Enumerize
+      include RansackAll
+
       acts_as_paranoid
 
       belongs_to :patient, class_name: "Renalware::PD::Patient", touch: true

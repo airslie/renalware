@@ -3,8 +3,6 @@
 module Renalware
   module Patients
     class MDMPatientsQuery
-      include ModalityScopes
-      include PatientPathologyScopes
       attr_reader :modality_names, :q, :relation
 
       # modality_names: eg "HD" or "PD"
@@ -21,8 +19,8 @@ module Renalware
       def search
         @search ||= begin
           relation
-            .extending(ModalityScopes)
-            .extending(PatientPathologyScopes)
+            .include(ModalityScopes)
+            .include(PatientPathologyScopes)
             .with_current_pathology
             .with_current_modality_matching(modality_names)
             .ransack(q)

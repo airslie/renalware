@@ -6,6 +6,7 @@ module Renalware
   class User < ApplicationRecord
     include Deviseable
     include Personable
+    include RansackAll
 
     has_many :roles_users, dependent: :destroy
     has_many :roles, through: :roles_users
@@ -68,11 +69,9 @@ module Renalware
       devise_mailer.send(notification, self, *).deliver_later
     end
 
-    # rubocop:disable Naming/PredicateName
     def has_role?(name)
       role_names.include?(name.to_s)
     end
-    # rubocop:enable Naming/PredicateName
 
     def role_names
       @role_names ||= roles.pluck(:name)
@@ -104,14 +103,6 @@ module Renalware
       key = Rails.application.secrets.secret_key_base
       OpenSSL::HMAC.hexdigest(digest, key, id.to_s)
     end
-
-    # We implement a simple can? method ion the use because in places we pass a current user
-    # from an ActionView::Component to a partial, and in the specs the partial says it cannot
-    # Example usage user.can?(:edit, letter)
-    # def can?(method, record)
-    #   method = :"#{method}?" unless method.to_s.ends_with("?")
-    #   Pundit.policy(self, record).public_send(method.to_sym)
-    # end
 
     # We can enable experiment features for particular users using the bitmask user#feature_flags
     # property and bitwise operators.

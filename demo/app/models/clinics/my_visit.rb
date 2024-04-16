@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "renalware/clinics"
-
 module Clinics
   class MyVisit < Renalware::Clinics::ClinicVisit
     include ::Document::Base

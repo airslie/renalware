@@ -29,7 +29,8 @@ module Renalware
           def find_or_create_patient
             # This is the standard A28/31 add/update command which will find or add the patient
             # using the contents of the PID segment
-            Patients::Ingestion::Commands::AddPatient.call(message).tap do |patient|
+            reason = "Clinic appt"
+            Patients::Ingestion::Commands::AddPatient.call(message, reason).tap do |patient|
               assign_the_clinic_default_modality_to_new_patients(patient)
             end
           end

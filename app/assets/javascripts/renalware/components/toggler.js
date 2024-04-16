@@ -24,7 +24,7 @@ function initTogglers() {
     })
   }
 
-  // This handles toggers in a thead th that when clicked will open all the
+  // This handles togglers in a thead th that when clicked will open all the
   // toggleable rows in the table.
   var tableTogglers = $("a[data-behaviour='table-toggler']");
   if (tableTogglers.length > 0) {

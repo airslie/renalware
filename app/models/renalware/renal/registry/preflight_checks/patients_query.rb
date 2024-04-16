@@ -5,7 +5,6 @@ module Renalware
     module Registry
       module PreflightChecks
         class PatientsQuery
-          include ModalityScopes
           MODALITY_NAMES = %w(HD PD Transplant).freeze
           attr_reader :relation, :query_params
 
@@ -57,12 +56,12 @@ module Renalware
           def call
             search
               .result
+              .include(ModalityScopes)
               .merge(HD::Patient.with_profile)
               .eager_load(:profile)
-              .extending(ModalityScopes)
+              .where(where_conditions)
               .preload(current_modality: [:description])
               .with_current_modality_matching(MODALITY_NAMES)
-              .where(where_conditions)
           end
 
           def search

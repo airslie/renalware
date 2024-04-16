@@ -24,7 +24,7 @@ module Renalware
         Patients::SearchQuery.new(scope: HD::Patient.all, term: params[:term])
           .call
           .eager_load(hd_profile: [:hospital_unit, :schedule_definition])
-          .extending(ModalityScopes)
+          .include(ModalityScopes)
           .with_current_modality_of_class(HD::ModalityDescription)
       end
 

@@ -13,6 +13,7 @@ require:
   # - standard
   - rubocop-rails
   - rubocop-rspec
+  - rubocop-rspec_rails
   - rubocop-performance
   - rubocop-factory_bot
   - rubocop-capybara
@@ -31,7 +32,7 @@ AllCops:
   NewCops: enable
   UseCache: true
   SuggestExtensions: true
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
   # Defining the Exclude or Include keys here overwrites the settings in styleguide/rubocop.yml
   # so we have to redefine the entire set.
   Exclude:
@@ -53,6 +54,12 @@ RSpec/VerifiedDoubleReference:
   Enabled: true
   Exclude:
     - "spec/models/renalware/pathology/observation_requests_attributes_builder_spec.rb"
+
+Naming/PredicateName:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
 
 RSpec/MultipleMemoizedHelpers:
   Max: 30
@@ -102,6 +109,7 @@ Layout/LineLength:
     - "features/step_definitions/**/*"
     - "config/initializers/**/*"
     - "app/inputs/**.*"
+    - "demo/db/**/*"
 Style/FrozenStringLiteralComment:
   Exclude:
     - "demo/db/migrate/**/*"

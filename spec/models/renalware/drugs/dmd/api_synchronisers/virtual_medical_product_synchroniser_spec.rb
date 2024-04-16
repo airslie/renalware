@@ -49,7 +49,7 @@ module Renalware
               expect(VirtualMedicalProduct.count).to eq 1
 
               item = VirtualMedicalProduct.first
-              expect(item).to have_attributes \
+              expect(item).to have_attributes(
                 code: "code",
                 name: "name",
                 form_code: "form_code",
@@ -58,6 +58,7 @@ module Renalware
                 basis_of_strength: "basis_of_strength",
                 strength_numerator_value: "strength_numerator_value",
                 virtual_therapeutic_moiety_code: "1234"
+              )
             end
           end
 
@@ -74,7 +75,7 @@ module Renalware
               expect(VirtualMedicalProduct.count).to eq 1
 
               item = VirtualMedicalProduct.first
-              expect(item).to have_attributes \
+              expect(item).to have_attributes(
                 code: "code",
                 name: "name",
                 form_code: "form_code",
@@ -83,6 +84,7 @@ module Renalware
                 basis_of_strength: "basis_of_strength",
                 strength_numerator_value: "strength_numerator_value",
                 virtual_therapeutic_moiety_code: "1234"
+              )
             end
           end
         end

@@ -39,5 +39,12 @@ module Renalware
     def inline_check_icon(checked, **)
       checked ? inline_checked_icon(**) : inline_unchecked_icon(**)
     end
+
+    def text_with_icon_prefix(text, icon_name, **icon_options)
+      tag.div(class: "flex items-center") do
+        concat inline_icon(icon_name, **icon_options)
+        concat tag.div(class: "ml-2 whitespace-nowrap") { text }
+      end
+    end
   end
 end

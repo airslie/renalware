@@ -3,7 +3,7 @@
 module Renalware
   module System
     class UserFeedbackController < BaseController
-      include Concerns::Pageable
+      include Pagy::Backend
 
       def index
         search = UserFeedback
@@ -11,9 +11,9 @@ module Renalware
           .order(created_at: :desc)
           .ransack(search_params)
 
-        feedback_msgs = search.result.page(page).per(per_page)
+        pagy, feedback_msgs = pagy(search.result)
         authorize feedback_msgs
-        render locals: { feedback_msgs: feedback_msgs, search: search }
+        render locals: { feedback_msgs: feedback_msgs, search: search, pagy: pagy }
       end
 
       def new

@@ -1,13 +1,22 @@
-.ss-content .ss-list .ss-optgroup .ss-option,
+.ss-content .ss-list .ss-optgroup {
+  .ss-option,
+  .ss-optgroup-label {
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+}
+
 .ss-content .ss-list .ss-option {
   padding-top: 2px;
   padding-bottom: 2px;
+}
 
+.ss-content .ss-list .ss-optgroup .ss-option,
+.ss-content .ss-list .ss-option {
   &.ss-option-selected,
-  &.ss-option.ss-selected,
-  {
+  &.ss-option.ss-selected {
     color: $dark-grey;
-    background-color: $off-white;
+    background-color: lighten($nhs-light-blue, 20);
   }
 }
 
@@ -19,5 +28,9 @@
   .ss-arrow {
     width: 8px;
     height: 8px;
+  }
+
+  .ss-values {
+    height: 18px;
   }
 }

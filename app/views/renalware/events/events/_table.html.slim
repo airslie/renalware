@@ -1,28 +1,33 @@
 - toggle_prefix ||= "event"
 
-table.has-togglable-rows.events-table
-  thead
-    tr
-      th.noprint.togglers= table_toggler
-      th.col-width-tiny
-      th.col-width-date=t("thead.created_at")
-      - unless local_assigns.fetch(:exclude_type_column, false)
-        th.col-width-large= t("thead.type")
-      - if local_assigns.fetch(:include_patient_column, false)
-        th.col-width-large= t(".patient")
-      th= local_assigns.fetch(:description_column_title, t("thead.description"))
-      th.created_at.col-width-date-time= t("thead.date_time")
-      th.created_by.col-width-medium= t("thead.created_by")
-  tbody
-    / Note we can't use cached: true yet when rendering the events collection, as each row is
-    / used in a different context and displays there slightly differently, for example showing
-    / an Edit link or Type column in certain circumstances.
-    = render partial: "renalware/events/events/event",
-             collection: events,
-             locals: { \
-              exclude_type_column: local_assigns[:exclude_type_column],
-              include_patient_column: local_assigns[:include_patient_column],
-              edit_proc: local_assigns[:edit_proc],
-              destroy_proc: local_assigns[:destroy_proc],
-              toggle_prefix: toggle_prefix \
-            }
+= turbo_frame_tag("events-turbo-frame", "data-turbo-action" => "advance") do
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      table.events-table.toggleable(data-controller="toggle")
+        thead
+          tr
+            th.noprint.togglers.noprint= rows_toggler
+            th.col-width-tiny
+            th.col-width-date=t("thead.created_at")
+            - unless local_assigns.fetch(:exclude_type_column, false)
+              th.col-width-large= t("thead.type")
+            - if local_assigns.fetch(:include_patient_column, false)
+              th.col-width-large= t(".patient")
+            th= local_assigns.fetch(:description_column_title, t("thead.description"))
+            th.created_at.col-width-date-time= t("thead.date_time")
+            th.created_by.col-width-medium= t("thead.created_by")
+        tbody
+          / Note we can't use cached: true yet when rendering the events collection, as each row is
+          / used in a different context and displays there slightly differently, for example showing
+          / an Edit link or Type column in certain circumstances.
+          = render partial: "renalware/events/events/event",
+                  collection: events,
+                  locals: { \
+                    exclude_type_column: local_assigns[:exclude_type_column],
+                    include_patient_column: local_assigns[:include_patient_column],
+                    edit_proc: local_assigns[:edit_proc],
+                    destroy_proc: local_assigns[:destroy_proc],
+                    toggle_prefix: toggle_prefix \
+                  }
+
+      == pagy_nav(pagy) if defined?(pagy)

@@ -3,6 +3,7 @@
 module Renalware
   module Drugs
     class Drug < ApplicationRecord
+      include RansackAll
       # The table name of drugs (rather than the correct drug_drugs) is incorrect but changing
       # it will have a wide impact and so needs careful testing and coordination with hospital
       # database users who may run queries against this table.

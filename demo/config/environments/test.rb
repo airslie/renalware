@@ -13,7 +13,7 @@ Rails.application.configure do
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = false
+  config.cache_classes = true
   config.assets.css_compressor = nil
   config.i18n.raise_on_missing_translations = true
   config.log_level = :debug
@@ -58,7 +58,7 @@ Rails.application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :log
-  ActiveSupport::Deprecation.disallowed_warnings = :all
+  # Rails.application.deprecators.disallowed_warnings = :all
 
   # Raises error for missing translations
   config.i18n.raise_on_missing_translations = true

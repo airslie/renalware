@@ -3,6 +3,8 @@
 module Renalware
   module System
     class Log < ApplicationRecord
+      include RansackAll
+
       validates :severity, presence: true
       validates :group, presence: true
       enum severity: {

@@ -6,6 +6,8 @@ module Renalware
       include Accountable
       extend Enumerize
       include PatientsRansackHelper
+      include RansackAll
+
       PRIORITY_VALUES = (1..20)
       validates :patient_id, presence: true
       validates :started_on, presence: true

@@ -13,7 +13,7 @@ describe "Hospital Wards API" do
       get hospitals_unit_wards_path(unit, format: :json)
 
       expect(response).to be_successful
-      wards = response.parsed_body.map(&:symbolize_keys!)
+      wards = response.parsed_body.map(&:symbolize_keys)
       expect(wards).to eq(
         [
           { id: ward_a.id, name: ward_a.name },

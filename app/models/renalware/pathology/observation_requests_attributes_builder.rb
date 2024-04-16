@@ -41,7 +41,6 @@ module Renalware
 
       def renalware_patient?
         patient.present?
-        # Patient.exists?(local_patient_id: internal_id)
       end
 
       private
@@ -56,7 +55,6 @@ module Renalware
       end
 
       def build_patient_params
-        # patient = find_patient(internal_id)
         request_params.each do |request_param|
           request_param[:patient_id] = patient&.id
         end
@@ -88,7 +86,7 @@ module Renalware
               requestor_name: request.ordering_provider_name || DEFAULT_REQUESTOR_NAME,
               requestor_order_number: request.placer_order_number,
               filler_order_number: request.filler_order_number,
-              requested_at: parse_time(request.date_time),
+              requested_at: parse_time(request.observed_at),
               observations_attributes: observations
             }
           }
@@ -106,19 +104,15 @@ module Renalware
             sender: sender
           ).call
 
-          # Note that OBX.14 observation date could be be missing in which case
-          # use OBR.7 results_status_change_date
-          observed_at = observation.date_time.presence || request.observation_date
-
-          if observation_valid(
+          if observation_valid?(
             request,
-            observed_at,
+            request.observed_at,
             observation,
             observation_description
           )
             {
               description_id: observation_description.id,
-              observed_at: parse_time(observed_at),
+              observed_at: parse_time(request.observed_at), # OBR.7
               result: observation.value,
               comment: observation.comment,
               cancelled: observation.cancelled
@@ -139,12 +133,12 @@ module Renalware
         raise MissingRequestDescriptionError, code
       end
 
-      def observation_valid(request, observed_at, observation, observation_description)
+      def observation_valid?(request, observed_at, observation, observation_description)
         return false if observation.value.blank? && observation.comment.blank?
 
         if observed_at.blank?
           System::Log.warning(<<-MSG.squish)
-            Skipping OBX missing observation date: OBX.14 and OBR.7 dates are blank.
+            Skipping OBX missing observation date: OBR.7 date is blank.
             MSH=#{hl7_message.header_id}
             OBR=#{request.placer_order_number || request.filler_order_number}
             OBX=#{observation_description.code}

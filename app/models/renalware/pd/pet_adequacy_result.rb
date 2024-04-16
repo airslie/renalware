@@ -9,6 +9,7 @@ module Renalware
       extend Enumerize
       include PatientScope
       include Accountable
+      include RansackAll
 
       belongs_to :patient, class_name: "Renalware::PD::Patient", touch: true
       scope :ordered, -> { order(created_at: :desc) }

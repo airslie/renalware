@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require_relative "./import_file_types"
+require_relative "import_file_types"

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-require "document/base"
-
 module Renalware
   module Transplants
     class Registration < ApplicationRecord
       include Document::Base
       include PatientScope
+      include RansackAll
 
       belongs_to :patient, touch: true
       has_many :statuses,

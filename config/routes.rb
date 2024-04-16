@@ -2,6 +2,7 @@
 
 Renalware::Engine.routes.draw do
   root to: "dashboard/dashboards#show"
+  mount Renalware::Reporting::Engine => "reporting", as: :reporting
   draw :accesses
   draw :admin
   draw :admissions
@@ -26,7 +27,7 @@ Renalware::Engine.routes.draw do
   draw :problems
   draw :pd
   draw :renal
-  draw :reporting
+  # draw :reporting
   draw :research
   draw :snippets
   draw :system

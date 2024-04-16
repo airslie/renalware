@@ -17,3 +17,6 @@ en:
           urgent: "Urgent"
           highly_urgent: "Highly urgent"
           routine: "Routine"
+        medically_fit_for_discharge: "MFFD"
+        medically_fit_for_discharge_by: "MFFD checked by"
+        medically_fit_for_discharge_at: "MFFD checked at"

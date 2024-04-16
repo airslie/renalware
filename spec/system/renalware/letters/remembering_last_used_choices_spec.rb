@@ -27,7 +27,7 @@ describe "Remembering last used letter choices in the user's session", js: true 
 
     # Check the initial defaults - all to be blank (because its a new session) apart from author
     # which will default to current user
-    expect(page.find("#letter_author_id option[selected='selected']").value)
+    expect(page.find("#letter_author_id option[selected='selected']", visible: :all).value)
       .to eq(users[0].id.to_s)
     expect(page.find_by_id("letter_letterhead_id").value).to eq("")
     expect(page).to have_no_css "#letter_topic option[selected='selected']"
@@ -35,7 +35,7 @@ describe "Remembering last used letter choices in the user's session", js: true 
     # Now fill in some fields. These fields are in RememberedPreferences (saved to a cookie) so
     # should be remembered the next time we create a letter
     select letterheads[1].name, from: "Letterhead"
-    select "Jones, Jane", from: "Author"
+    slim_select "Jones, Jane", from: "Author"
     slim_select descriptions[1].text, from: "Topic"
     choose("Primary Care Physician")
 
@@ -46,7 +46,7 @@ describe "Remembering last used letter choices in the user's session", js: true 
 
     expect(page.find_by_id("letter_letterhead_id").value).to eq(letterheads[1].id.to_s)
     expect(page).to have_field "Topic", with: descriptions[1].id.to_s, visible: :all
-    expect(page.find("#letter_author_id option[selected='selected']").value)
+    expect(page.find("#letter_author_id option[selected='selected']", visible: :all).value)
       .to eq(users[1].id.to_s)
   end
 end

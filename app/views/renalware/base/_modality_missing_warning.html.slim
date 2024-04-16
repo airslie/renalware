@@ -1,3 +1,6 @@
-li.missing-modality-warning
-  i.fas.fa-info
-  span= message
+- msg = t("missing_modality_warning", modality_name: modality_name)
+.bg-yellow-100.text-gray-600.p-1.px-2.rounded-md
+  / TODO: add popover when reduce to an info icon
+  .flex.items-center(title=msg)
+    = inline_icon(:info, size: :lg)
+    .ml-2.whitespace-nowrap.hidden.lg:block= msg

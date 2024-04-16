@@ -4,6 +4,8 @@ module Renalware
   module Patients
     class Worry < ApplicationRecord
       include Accountable
+      include RansackAll
+
       acts_as_paranoid
 
       has_paper_trail(

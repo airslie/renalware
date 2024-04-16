@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require_relative "./visit_locations"
+require_relative "visit_locations"

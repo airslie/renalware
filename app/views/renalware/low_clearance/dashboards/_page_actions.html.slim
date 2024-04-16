@@ -1,19 +1,18 @@
-= link_to(patient_low_clearance_mdm_path(patient), class: "button with-icon secondary") do
-  i.fas.fa-users
-  = t(".mdm")
+.flex.items-center
+  = link_to(patient_low_clearance_mdm_path(patient), class: "button with-icon secondary") do
+    = text_with_icon_prefix(t(".mdm"), :users, size: :md)
 
-a.button.dropdown.with-icon(href="#"
-                            data-dropdown="pd-options"
-                            aria-controls="pd-options"
-                            aria-expanded="false")
-  i.fas.fa-plus
-  = t("btn.add_")
-br
-ul.f-dropdown#pd-options(data-dropdown-content aria-hidden="true")
+  a.button.dropdown.with-icon(href="#"
+                              data-dropdown="pd-options"
+                              aria-controls="pd-options"
+                              aria-expanded="false")
+    = text_with_icon_prefix(t("btn.add_"), :plus, size: :md)
 
-  = dropdown_btn_item enabled: dashboard.profile.new_record? && dashboard.profile_policy_edit?,
-                      title: t(".add_profile"),
-                      url: edit_patient_low_clearance_profile_path(patient)
+  ul.f-dropdown#pd-options(data-dropdown-content aria-hidden="true")
 
-- unless patient.ever_been_on_low_clearance?
-  = render "modality_missing_warning", message: t(".missing_modality_warning")
+    = dropdown_btn_item enabled: dashboard.profile.new_record? && dashboard.profile_policy_edit?,
+                        title: t(".add_profile"),
+                        url: edit_patient_low_clearance_profile_path(patient)
+
+  - unless patient.ever_been_on_low_clearance?
+    = render "modality_missing_warning", modality_name: "AKCC"

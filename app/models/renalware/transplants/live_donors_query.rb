@@ -3,7 +3,6 @@
 module Renalware
   module Transplants
     class LiveDonorsQuery
-      include ModalityScopes
       DEFAULT_ORDER = %w(family_name given_name).freeze
 
       def initialize(params: {}, relation: Patient.all)
@@ -27,7 +26,7 @@ module Renalware
 
       def patients
         relation
-          .extending(ModalityScopes)
+          .include(ModalityScopes)
           .with_current_modality_of_class(DonorModalityDescription)
       end
 

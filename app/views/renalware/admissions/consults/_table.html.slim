@@ -77,12 +77,12 @@
                 | Actions
               ul.f-dropdown(id="#{uid}" data-dropdown-content aria-hidden="true")
 
-                = dropdown_btn_item(icon: "fa-edit",
+                = dropdown_btn_item(icon: "edit",
                                     url: edit_admissions_consult_path(consult),
                                     title: "View/Edit",
                                     enabled: policy(consult).edit?)
 
-                = dropdown_btn_item(icon: "fa-trash",
+                = dropdown_btn_item(icon: "trash",
                                     url: admissions_consult_path(consult),
                                     title: "Mark as Done",
                                     method: :delete,

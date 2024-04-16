@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require_relative "./prd_descriptions"
+require_relative "prd_descriptions"

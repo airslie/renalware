@@ -27,7 +27,7 @@ describe(
       NO_WITNESS = false
       WITNESS = true
       ADMINISTERED = true
-      UNADMINSTRED = false
+      UNADMINISTERED = false
       NOTES = "notes"
       SUCCESS = true
       FAILURE = false
@@ -50,7 +50,7 @@ describe(
           [ERR_MISSING_ADMINISTERED]
         ],
         not_administered: [
-          UNADMINSTRED,
+          UNADMINISTERED,
           NO_ADMIN_PWD,
           NO_WITNESS,
           NO_WITNESS_PWD,

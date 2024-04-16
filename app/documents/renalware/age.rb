@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "document/enum"
 require "age_calculator"
 
 module Renalware

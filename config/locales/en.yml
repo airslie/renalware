@@ -38,7 +38,7 @@ en:
         start_date: Medication's prescribed date
   btn:
     add: Add
-    add_: Add...
+    add_: Add…
     all: All
     archive: Archive
     cancel: Cancel
@@ -186,3 +186,4 @@ en:
     letters: Letters
     problems: Problems
   'true': 'Yes'
+  missing_modality_warning: "Some actions require the %{modality_name} modality"

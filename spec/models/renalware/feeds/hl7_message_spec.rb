@@ -237,5 +237,39 @@ module Renalware::Feeds
         end
       end
     end
+
+    describe HL7Message::ObservationRequest do
+      describe "observed_at" do
+        context "when OBR.7 is present" do
+          let(:raw_message) do
+            <<~RAW
+              MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
+              PID||123456789^^^NHS|Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+              OBR|2|BRM-21B846500|BRM-0021B846500|FBC^FULL BLOOD COUNT^WinPath||202111110000|202222221111||||||||B^Blood|EMD^A\T\E Consultant||||||202111111240||BLS|F
+            RAW
+          end
+
+          it "returns OBR.7" do
+            obr = decorator.observation_requests.first
+            expect(obr.observed_at).to eq("202222221111")
+          end
+        end
+
+        context "when OBR.7 is missing" do
+          let(:raw_message) do
+            <<~RAW
+              MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
+              PID||123456789^^^NHS|Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
+              OBR|2|BRM-21B846500|BRM-0021B846500|FBC^FULL BLOOD COUNT^WinPath||202111110000|||||||||B^Blood|EMD^A\T\E Consultant||||||202111111240||BLS|F
+            RAW
+          end
+
+          it "returns OBR.6" do
+            obr = decorator.observation_requests.first
+            expect(obr.observed_at).to eq("202111110000")
+          end
+        end
+      end
+    end
   end
 end

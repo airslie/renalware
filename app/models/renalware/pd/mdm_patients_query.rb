@@ -3,8 +3,6 @@
 module Renalware
   module PD
     class MDMPatientsQuery
-      include ModalityScopes
-      include PatientPathologyScopes
       DEFAULT_SEARCH_PREDICATE = "hgb_date desc"
       attr_reader :params, :relation, :named_filter
 
@@ -22,9 +20,9 @@ module Renalware
       def search
         @search ||= begin
           relation
-            .extending(PatientTransplantScopes)
-            .extending(ModalityScopes)
-            .extending(PatientPathologyScopes)
+            .include(PatientTransplantScopes)
+            .include(ModalityScopes)
+            .include(PatientPathologyScopes)
             .extending(NamedFilterScopes)
             .with_current_modality_of_class(Renalware::PD::ModalityDescription)
             .with_current_pathology

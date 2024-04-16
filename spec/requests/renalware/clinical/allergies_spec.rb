@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "renalware/clinical"
 
 describe "Allergy management" do
   let(:patient) { create(:clinical_patient, by: user) }

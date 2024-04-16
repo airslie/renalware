@@ -1,0 +1,10 @@
+- if report.chart&.x_axis_column.present? || report.chart_raw&.keys.any?
+  dl.sub-nav(data-controller="tabbed-navigation")
+    dd= link_to "Table", reporting.report_path(report)
+    - if report.chart_raw&.keys.any?
+      dd= link_to "Chart", reporting.chart_raw_report_path(report)
+    - if report.chart&.x_axis_column.present?
+      dd= link_to "Chart", reporting.chart_report_path(report)
+
+- else
+ .mb-2

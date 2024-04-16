@@ -1,6 +1,6 @@
 li
   = link_to t(".log_out"),
-            destroy_user_session_path,
+            renalware.destroy_user_session_path,
             class: "right",
             method: :delete,
             data: { action: "click->session#sendLogoutMessageToAnyOpenTabs" }

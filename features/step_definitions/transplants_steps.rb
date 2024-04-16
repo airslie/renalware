@@ -76,8 +76,7 @@ When(/^Clyde updates the donor assessment$/) do
   update_donor_workup(patient: @don, user: @clyde)
 end
 
-When(/^Clyde registers Patty on the wait list with status "(.*?)" starting on "(.*?)"$/) \
-  do |status, started_on|
+When(/^Clyde registers Patty on the wait list with status "(.*?)" starting on "(.*?)"$/) do |status, started_on|
   @registration = create_transplant_registration(
     patient: @patty,
     status: status, started_on: started_on,
@@ -153,8 +152,7 @@ When(/^Clyde submits a pre-dated registration$/) do
   )
 end
 
-When(/^Clyde sets the registration status to "(.*?)" and the start date to "(.*?)"$/) \
-  do |status, started_on|
+When(/^Clyde sets the registration status to "(.*?)" and the start date to "(.*?)"$/) do |status, started_on|
   set_transplant_registration_status(
     patient: @patty,
     status: status, started_on: started_on,

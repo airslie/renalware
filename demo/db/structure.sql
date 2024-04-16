@@ -24,6 +24,13 @@ CREATE SCHEMA renalware;
 
 
 --
+-- Name: renalware_demo; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA renalware_demo;
+
+
+--
 -- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -1034,6 +1041,101 @@ CREATE FUNCTION renalware.days_between(t_start timestamp without time zone, t_en
     -- calculate the days between 2 timestamps
     return (select (EXTRACT(epoch from age(t_end, t_start)) / 86400)::integer);
   end
+$$;
+
+
+--
+-- Name: feed_sausages_upsert_from_mirth(timestamp without time zone, renalware.hl7_message_type, renalware.hl7_event_type, character varying, renalware.enum_hl7_orc_order_status, character varying, text, character varying, date, character varying, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: renalware; Owner: -
+--
+
+CREATE FUNCTION renalware.feed_sausages_upsert_from_mirth(_sent_at timestamp without time zone, _message_type renalware.hl7_message_type, _event_type renalware.hl7_event_type, _orc_filler_order_number character varying, _orc_order_status renalware.enum_hl7_orc_order_status, _header_id character varying, _body text, _nhs_number character varying, _dob date, _local_patient_id character varying, _local_patient_id_2 character varying, _local_patient_id_3 character varying, _local_patient_id_4 character varying, _local_patient_id_5 character varying) RETURNS TABLE(sausage_id bigint, sausage_queue_id bigint)
+    LANGUAGE plpgsql
+    AS $$
+  declare id_of_upserted_feed_sausage bigint;
+  declare id_of_inserted_feed_sausage_queue bigint;
+  BEGIN
+
+    if _message_type = 'ORU' and (_orc_filler_order_number = '' or _orc_filler_order_number is null) then
+      RAISE EXCEPTION 'orc_filler_order_number cannot be blank';
+    end if;
+
+    -- The ON CONFLICT after this insert means that where orc_filler_order_number is not null or ''
+    -- (ie its an ORU path message, since ADTs do not have an orc_filler_order_number)
+    -- then only one unique value is allowed in the table (see index in a migration),
+    -- and if you try to insert a row with an
+    -- orc_filler_order_number that already exist, the DO UPDATE will execute to replace the
+    -- the row's content with the new content (body, nhs_number etc) but only if the messages was
+    -- sent from the lab _more recently_ than the stored one.
+    -- TODO: what happens if > 1 lab send the same value? Not a problem at MSE say where
+    -- a SHO- prefix is used on the orc_filler_order_number
+    insert into renalware.feed_sausages (
+      sent_at,
+      message_type,
+      event_type,
+      orc_filler_order_number,
+      orc_order_status,
+      header_id,
+      body,
+      nhs_number,
+      local_patient_id,
+      local_patient_id_2,
+      local_patient_id_3,
+      local_patient_id_4,
+      local_patient_id_5,
+      dob,
+      created_at,
+      updated_at
+    ) values (
+      _sent_at,
+      _message_type,
+      _event_type,
+      _orc_filler_order_number,
+      _orc_order_status,
+      _header_id,
+      _body,
+      _nhs_number,
+      _local_patient_id,
+      _local_patient_id_2,
+      _local_patient_id_3,
+      _local_patient_id_4,
+      _local_patient_id_5,
+      _dob,
+      current_timestamp,
+      current_timestamp
+    )
+    on conflict (orc_filler_order_number) where (orc_filler_order_number is not null and orc_filler_order_number != '')
+    do update
+    set
+      sent_at             = EXCLUDED.sent_at,
+      version             = feed_sausages.version + 1,
+      message_type        = EXCLUDED.message_type,
+      event_type          = EXCLUDED.event_type,
+      orc_order_status    = EXCLUDED.orc_order_status,
+      header_id           = EXCLUDED.header_id,
+      body                = EXCLUDED.body,
+      nhs_number          = EXCLUDED.nhs_number,
+      local_patient_id    = EXCLUDED.local_patient_id,
+      local_patient_id_2  = EXCLUDED.local_patient_id_2,
+      local_patient_id_3  = EXCLUDED.local_patient_id_3,
+      local_patient_id_4  = EXCLUDED.local_patient_id_4,
+      local_patient_id_5  = EXCLUDED.local_patient_id_5,
+      dob                 = EXCLUDED.dob,
+      updated_at          = current_timestamp
+      where EXCLUDED.sent_at >= feed_sausages.sent_at
+      and EXCLUDED.header_id::integer > feed_sausages.header_id::integer
+      RETURNING feed_sausages.id into id_of_upserted_feed_sausage;
+    --
+    if id_of_upserted_feed_sausage > 0 then
+      -- might be interesting here to know if its an insert or an update? ir as an extra col?
+      -- there is also some scope somewhere for storing the count of messages received or one
+      -- one orc_filler_order_number, but probably not that useful
+      insert into renalware.feed_sausage_queue (feed_sausage_id, created_at, updated_at)
+      values (id_of_upserted_feed_sausage, current_timestamp, current_timestamp)
+      returning feed_sausage_queue.id into id_of_inserted_feed_sausage_queue;
+    end if;
+
+    return query(select id_of_upserted_feed_sausage, id_of_inserted_feed_sausage_queue);
+  END;
 $$;
 
 
@@ -2120,6 +2222,51 @@ BEGIN
 END $$;
 
 
+--
+-- Name: ukrdc_update_send_to_renalreg(); Type: FUNCTION; Schema: renalware_demo; Owner: -
+--
+
+CREATE FUNCTION renalware_demo.ukrdc_update_send_to_renalreg(OUT records_added integer, OUT records_updated integer) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+declare countOfUpdatedRows int = 0;
+BEGIN
+  with candidates as(
+    select
+        p.id as patient_id,
+        convert_to_float(pcos.values -> 'EGFR' ->> 'result') as egfr,
+        md.code as modality_code
+    from
+        renalware.patients p
+        inner join renalware.patient_current_modalities pcm on pcm.patient_id = p.id
+        left join renalware.pathology_current_observation_sets pcos on pcos.patient_id = p.id
+        inner join modality_descriptions md on md.id = pcm.modality_description_id
+    where
+        p.send_to_renalreg = false
+        and p.renalreg_decision_on is null
+        and md.code in ('transplant', 'pd', 'hd', 'low_clearance', 'nephrology')
+  ),
+  updateables as (
+    select patient_id, egfr, modality_code from candidates
+    where
+      modality_code in ('transplant', 'pd', 'hd')
+      or (modality_code in ('low_clearance', 'nephrology') and egfr < 30.0)
+  )
+  update renalware.patients p
+    set
+        send_to_renalreg = true,
+        renalreg_decision_on = now(),
+        renalreg_recorded_by = 'Renalware System'
+    from updateables
+    where updateables.patient_id = p.id;
+
+  -- Return the number of updated rows in records_updated
+  GET DIAGNOSTICS countOfUpdatedRows = ROW_COUNT;
+  select into records_added, records_updated 0, countOfUpdatedRows;
+END
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -3149,7 +3296,10 @@ CREATE TABLE renalware.patients (
     named_nurse_id bigint,
     preferred_death_location_id bigint,
     preferred_death_location_notes text,
-    actual_death_location_id bigint
+    actual_death_location_id bigint,
+    ukrdc_anonymise boolean DEFAULT false NOT NULL,
+    ukrdc_anonymise_decision_on date,
+    ukrdc_anonymise_recorded_by character varying
 );
 
 
@@ -5294,6 +5444,41 @@ ALTER SEQUENCE renalware.feed_logs_id_seq OWNED BY renalware.feed_logs.id;
 
 
 --
+-- Name: feed_message_replays; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_message_replays (
+    id bigint NOT NULL,
+    replay_request_id bigint NOT NULL,
+    message_id bigint NOT NULL,
+    success boolean DEFAULT false NOT NULL,
+    error_message text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    urn character varying
+);
+
+
+--
+-- Name: feed_message_replays_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_message_replays_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_message_replays_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_message_replays_id_seq OWNED BY renalware.feed_message_replays.id;
+
+
+--
 -- Name: feed_messages; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -5467,6 +5652,121 @@ CREATE SEQUENCE renalware.feed_raw_hl7_messages_id_seq
 --
 
 ALTER SEQUENCE renalware.feed_raw_hl7_messages_id_seq OWNED BY renalware.feed_raw_hl7_messages.id;
+
+
+--
+-- Name: feed_replay_requests; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_replay_requests (
+    id bigint NOT NULL,
+    criteria jsonb DEFAULT '{}'::jsonb,
+    started_at timestamp(6) without time zone NOT NULL,
+    finished_at timestamp(6) without time zone,
+    total_messages integer DEFAULT 0 NOT NULL,
+    failed_messages integer DEFAULT 0 NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    patient_id bigint NOT NULL,
+    error_message text,
+    reason text
+);
+
+
+--
+-- Name: feed_replay_requests_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_replay_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_replay_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_replay_requests_id_seq OWNED BY renalware.feed_replay_requests.id;
+
+
+--
+-- Name: feed_sausage_queue; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_sausage_queue (
+    id bigint NOT NULL,
+    feed_sausage_id integer NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: feed_sausage_queue_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_sausage_queue_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_sausage_queue_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_sausage_queue_id_seq OWNED BY renalware.feed_sausage_queue.id;
+
+
+--
+-- Name: feed_sausages; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_sausages (
+    id bigint NOT NULL,
+    sent_at timestamp without time zone NOT NULL,
+    version integer DEFAULT 1 NOT NULL,
+    processed_at timestamp without time zone,
+    message_type renalware.hl7_message_type NOT NULL,
+    event_type renalware.hl7_event_type NOT NULL,
+    orc_filler_order_number character varying,
+    orc_order_status renalware.enum_hl7_orc_order_status,
+    header_id character varying,
+    body text NOT NULL,
+    nhs_number character varying,
+    local_patient_id character varying,
+    local_patient_id_2 character varying,
+    local_patient_id_3 character varying,
+    local_patient_id_4 character varying,
+    local_patient_id_5 character varying,
+    dob date,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: feed_sausages_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_sausages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_sausages_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_sausages_id_seq OWNED BY renalware.feed_sausages.id;
 
 
 --
@@ -6730,7 +7030,10 @@ CREATE TABLE renalware.hd_slot_requests (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     deletion_reason_id bigint,
-    external_referral boolean DEFAULT false NOT NULL
+    external_referral boolean DEFAULT false NOT NULL,
+    medically_fit_for_discharge boolean DEFAULT false NOT NULL,
+    medically_fit_for_discharge_at timestamp(6) without time zone,
+    medically_fit_for_discharge_by_id bigint
 );
 
 
@@ -6753,6 +7056,27 @@ COMMENT ON COLUMN renalware.hd_slot_requests."boolean" IS 'known to service <90 
 --
 
 COMMENT ON COLUMN renalware.hd_slot_requests.specific_requirements IS 'transport requirements, blood borne viruses etc';
+
+
+--
+-- Name: COLUMN hd_slot_requests.medically_fit_for_discharge; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.hd_slot_requests.medically_fit_for_discharge IS 'The datetime the MFFD checkbox was checked';
+
+
+--
+-- Name: COLUMN hd_slot_requests.medically_fit_for_discharge_at; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.hd_slot_requests.medically_fit_for_discharge_at IS 'The datetime the MFFD checkbox was checked';
+
+
+--
+-- Name: COLUMN hd_slot_requests.medically_fit_for_discharge_by_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.hd_slot_requests.medically_fit_for_discharge_by_id IS 'The id of the user show checked the MFFD checkbox on the HD Slot Request form';
 
 
 --
@@ -14518,6 +14842,54 @@ ALTER SEQUENCE renalware.virology_versions_id_seq OWNED BY renalware.virology_ve
 
 
 --
+-- Name: reporting_example_data; Type: VIEW; Schema: renalware_demo; Owner: -
+--
+
+CREATE VIEW renalware_demo.reporting_example_data AS
+ WITH dates AS (
+         SELECT (date_trunc('day'::text, dd.dd))::date AS dt
+           FROM generate_series('2023-01-01 00:00:00'::timestamp without time zone, '2023-12-31 00:00:00'::timestamp without time zone, '7 days'::interval) dd(dd)
+        )
+ SELECT dates.dt AS date,
+    (((10)::double precision + ((9)::double precision * random())) * (row_number() OVER ())::double precision) AS series1,
+    (((2)::double precision + ((7)::double precision * random())) * (row_number() OVER ())::double precision) AS series2
+   FROM dates;
+
+
+--
+-- Name: solid_cache_entries; Type: TABLE; Schema: renalware_demo; Owner: -
+--
+
+CREATE TABLE renalware_demo.solid_cache_entries (
+    id bigint NOT NULL,
+    key bytea NOT NULL,
+    value bytea NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    key_hash bigint NOT NULL,
+    byte_size integer NOT NULL
+);
+
+
+--
+-- Name: solid_cache_entries_id_seq; Type: SEQUENCE; Schema: renalware_demo; Owner: -
+--
+
+CREATE SEQUENCE renalware_demo.solid_cache_entries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: solid_cache_entries_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware_demo; Owner: -
+--
+
+ALTER SEQUENCE renalware_demo.solid_cache_entries_id_seq OWNED BY renalware_demo.solid_cache_entries.id;
+
+
+--
 -- Name: access_assessments id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -14959,6 +15331,13 @@ ALTER TABLE ONLY renalware.feed_logs ALTER COLUMN id SET DEFAULT nextval('renalw
 
 
 --
+-- Name: feed_message_replays id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_message_replays ALTER COLUMN id SET DEFAULT nextval('renalware.feed_message_replays_id_seq'::regclass);
+
+
+--
 -- Name: feed_messages id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -14984,6 +15363,27 @@ ALTER TABLE ONLY renalware.feed_practice_gps ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY renalware.feed_raw_hl7_messages ALTER COLUMN id SET DEFAULT nextval('renalware.feed_raw_hl7_messages_id_seq'::regclass);
+
+
+--
+-- Name: feed_replay_requests id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_replay_requests ALTER COLUMN id SET DEFAULT nextval('renalware.feed_replay_requests_id_seq'::regclass);
+
+
+--
+-- Name: feed_sausage_queue id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_sausage_queue ALTER COLUMN id SET DEFAULT nextval('renalware.feed_sausage_queue_id_seq'::regclass);
+
+
+--
+-- Name: feed_sausages id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_sausages ALTER COLUMN id SET DEFAULT nextval('renalware.feed_sausages_id_seq'::regclass);
 
 
 --
@@ -16338,6 +16738,13 @@ ALTER TABLE ONLY renalware.virology_versions ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: solid_cache_entries id; Type: DEFAULT; Schema: renalware_demo; Owner: -
+--
+
+ALTER TABLE ONLY renalware_demo.solid_cache_entries ALTER COLUMN id SET DEFAULT nextval('renalware_demo.solid_cache_entries_id_seq'::regclass);
+
+
+--
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -16874,6 +17281,14 @@ ALTER TABLE ONLY renalware.feed_logs
 
 
 --
+-- Name: feed_message_replays feed_message_replays_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_message_replays
+    ADD CONSTRAINT feed_message_replays_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: feed_messages feed_messages_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -16903,6 +17318,30 @@ ALTER TABLE ONLY renalware.feed_practice_gps
 
 ALTER TABLE ONLY renalware.feed_raw_hl7_messages
     ADD CONSTRAINT feed_raw_hl7_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_replay_requests feed_replay_requests_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_replay_requests
+    ADD CONSTRAINT feed_replay_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_sausage_queue feed_sausage_queue_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_sausage_queue
+    ADD CONSTRAINT feed_sausage_queue_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_sausages feed_sausages_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_sausages
+    ADD CONSTRAINT feed_sausages_pkey PRIMARY KEY (id);
 
 
 --
@@ -18490,6 +18929,14 @@ ALTER TABLE ONLY renalware.virology_versions
 
 
 --
+-- Name: solid_cache_entries solid_cache_entries_pkey; Type: CONSTRAINT; Schema: renalware_demo; Owner: -
+--
+
+ALTER TABLE ONLY renalware_demo.solid_cache_entries
+    ADD CONSTRAINT solid_cache_entries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: access_plan_uniqueness; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -19799,10 +20246,31 @@ CREATE INDEX index_event_versions_on_item_type_and_item_id ON renalware.event_ve
 
 
 --
+-- Name: index_events_on_created_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_events_on_created_at ON renalware.events USING btree (created_at DESC);
+
+
+--
+-- Name: index_events_on_created_at_as_date; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_events_on_created_at_as_date ON renalware.events USING btree (date(created_at) DESC NULLS LAST);
+
+
+--
 -- Name: index_events_on_created_by_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
 CREATE INDEX index_events_on_created_by_id ON renalware.events USING btree (created_by_id);
+
+
+--
+-- Name: index_events_on_date_time_desc_nulls_last; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_events_on_date_time_desc_nulls_last ON renalware.events USING btree (date_time DESC NULLS LAST);
 
 
 --
@@ -19852,6 +20320,13 @@ CREATE INDEX index_events_on_subtype_id ON renalware.events USING btree (subtype
 --
 
 CREATE INDEX index_events_on_type ON renalware.events USING btree (type);
+
+
+--
+-- Name: index_events_on_updated_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_events_on_updated_at ON renalware.events USING btree (updated_at DESC);
 
 
 --
@@ -19929,6 +20404,27 @@ CREATE INDEX index_feed_logs_on_message_id ON renalware.feed_logs USING btree (m
 --
 
 CREATE INDEX index_feed_logs_on_patient_id ON renalware.feed_logs USING btree (patient_id);
+
+
+--
+-- Name: index_feed_message_replays_on_message_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_message_replays_on_message_id ON renalware.feed_message_replays USING btree (message_id);
+
+
+--
+-- Name: index_feed_message_replays_on_replay_request_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_message_replays_on_replay_request_id ON renalware.feed_message_replays USING btree (replay_request_id);
+
+
+--
+-- Name: index_feed_message_replays_on_urn; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_message_replays_on_urn ON renalware.feed_message_replays USING btree (urn);
 
 
 --
@@ -20062,6 +20558,41 @@ CREATE INDEX index_feed_raw_hl7_messages_on_created_at ON renalware.feed_raw_hl7
 --
 
 COMMENT ON INDEX renalware.index_feed_raw_hl7_messages_on_created_at IS 'We query for rows ordering by created_at asc to give us a chance to process in FIFO order, so having an ordered index means when we use a LIMIT (batching) in the query, rows will be determined by index scan without having to look to the end of the table - or something like that! In fact the index is implicitly ordered already but having created_at: :asc here makes our intention more explicit.';
+
+
+--
+-- Name: index_feed_replay_requests_on_criteria; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_replay_requests_on_criteria ON renalware.feed_replay_requests USING gin (criteria);
+
+
+--
+-- Name: index_feed_replay_requests_on_patient_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_replay_requests_on_patient_id ON renalware.feed_replay_requests USING btree (patient_id);
+
+
+--
+-- Name: index_feed_sausage_queue_on_feed_sausage_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_sausage_queue_on_feed_sausage_id ON renalware.feed_sausage_queue USING btree (feed_sausage_id);
+
+
+--
+-- Name: index_feed_sausages_on_orc_filler_order_number; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_feed_sausages_on_orc_filler_order_number ON renalware.feed_sausages USING btree (orc_filler_order_number) WHERE ((orc_filler_order_number IS NOT NULL) AND ((orc_filler_order_number)::text <> ''::text));
+
+
+--
+-- Name: index_feed_sausages_on_sent_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_sausages_on_sent_at ON renalware.feed_sausages USING btree (sent_at);
 
 
 --
@@ -20783,6 +21314,13 @@ CREATE INDEX index_hd_slot_requests_on_deleted_at ON renalware.hd_slot_requests 
 --
 
 CREATE INDEX index_hd_slot_requests_on_deletion_reason_id ON renalware.hd_slot_requests USING btree (deletion_reason_id);
+
+
+--
+-- Name: index_hd_slot_requests_on_medically_fit_for_discharge_by_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_hd_slot_requests_on_medically_fit_for_discharge_by_id ON renalware.hd_slot_requests USING btree (medically_fit_for_discharge_by_id);
 
 
 --
@@ -22561,6 +23099,13 @@ CREATE INDEX index_patients_on_send_to_rpv ON renalware.patients USING btree (se
 --
 
 CREATE INDEX index_patients_on_sent_to_ukrdc_at ON renalware.patients USING btree (sent_to_ukrdc_at);
+
+
+--
+-- Name: index_patients_on_ukrdc_anonymise; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_patients_on_ukrdc_anonymise ON renalware.patients USING btree (ukrdc_anonymise);
 
 
 --
@@ -24566,6 +25111,27 @@ CREATE UNIQUE INDEX unique_study_participants ON renalware.research_participatio
 
 
 --
+-- Name: index_solid_cache_entries_on_byte_size; Type: INDEX; Schema: renalware_demo; Owner: -
+--
+
+CREATE INDEX index_solid_cache_entries_on_byte_size ON renalware_demo.solid_cache_entries USING btree (byte_size);
+
+
+--
+-- Name: index_solid_cache_entries_on_key_hash; Type: INDEX; Schema: renalware_demo; Owner: -
+--
+
+CREATE UNIQUE INDEX index_solid_cache_entries_on_key_hash ON renalware_demo.solid_cache_entries USING btree (key_hash);
+
+
+--
+-- Name: index_solid_cache_entries_on_key_hash_and_byte_size; Type: INDEX; Schema: renalware_demo; Owner: -
+--
+
+CREATE INDEX index_solid_cache_entries_on_key_hash_and_byte_size ON renalware_demo.solid_cache_entries USING btree (key_hash, byte_size);
+
+
+--
 -- Name: delayed_jobs feed_messages_preprocessing_trigger; Type: TRIGGER; Schema: renalware; Owner: -
 --
 
@@ -25614,6 +26180,14 @@ ALTER TABLE ONLY renalware.user_groups
 
 ALTER TABLE ONLY renalware.renal_aki_alerts
     ADD CONSTRAINT fk_rails_4d907ef0f1 FOREIGN KEY (action_id) REFERENCES renalware.renal_aki_alert_actions(id);
+
+
+--
+-- Name: feed_message_replays fk_rails_4ec42d8046; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_message_replays
+    ADD CONSTRAINT fk_rails_4ec42d8046 FOREIGN KEY (replay_request_id) REFERENCES renalware.feed_replay_requests(id);
 
 
 --
@@ -27249,6 +27823,14 @@ ALTER TABLE ONLY renalware.ukrdc_treatments
 
 
 --
+-- Name: feed_replay_requests fk_rails_d5fd4c152e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_replay_requests
+    ADD CONSTRAINT fk_rails_d5fd4c152e FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: access_plans fk_rails_d61e7c4674; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -27678,6 +28260,14 @@ ALTER TABLE ONLY renalware.pd_peritonitis_episodes
 
 ALTER TABLE ONLY renalware.clinic_appointments
     ADD CONSTRAINT fk_rails_f37cb95f48 FOREIGN KEY (consultant_id) REFERENCES renalware.clinic_consultants(id);
+
+
+--
+-- Name: feed_message_replays fk_rails_f392a7199e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_message_replays
+    ADD CONSTRAINT fk_rails_f392a7199e FOREIGN KEY (message_id) REFERENCES renalware.feed_messages(id);
 
 
 --
@@ -28116,795 +28706,813 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware,public,heroku_ext;
+SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20141004150240'),
-('20141010170329'),
-('20141020170329'),
-('20141023111038'),
-('20141024111715'),
-('20141024111716'),
-('20141107145549'),
-('20141107145614'),
-('20141107145615'),
-('20141208160813'),
-('20141222110119'),
-('20141223135723'),
-('20141223135724'),
-('20150109113417'),
-('20150109152145'),
-('20150119160039'),
-('20150120155952'),
-('20150203161438'),
-('20150213103855'),
-('20150213103856'),
-('20150213103857'),
-('20150224140027'),
-('20150302171638'),
-('20150312112909'),
-('20150312113937'),
-('20150313124325'),
-('20150514113239'),
-('20150515154952'),
-('20150515155052'),
-('20150602151910'),
-('20150605095934'),
-('20150605151945'),
-('20150608093000'),
-('20150608093001'),
-('20150608093002'),
-('20150623083220'),
-('20150623105816'),
-('20150701104744'),
-('20150702084036'),
-('20150709152737'),
-('20150717093153'),
-('20150923201215'),
-('20151014205537'),
-('20151021194419'),
-('20151022184845'),
-('20151022190252'),
-('20151103210628'),
-('20151104183740'),
-('20151111194419'),
-('20151116111600'),
-('20151116170100'),
-('20151116170200'),
-('20151207163303'),
-('20151207163304'),
-('20151207167020'),
-('20160106167020'),
-('20160114222043'),
-('20160120203747'),
-('20160120203748'),
-('20160120203753'),
-('20160120203754'),
-('20160120203755'),
-('20160120213000'),
-('20160120213001'),
-('20160121175711'),
-('20160121175712'),
-('20160202152252'),
-('20160203160040'),
-('20160203160041'),
-('20160208153327'),
-('20160209203446'),
-('20160218220145'),
-('20160302192055'),
-('20160303151449'),
-('20160303151540'),
-('20160304151449'),
-('20160304151540'),
-('20160304162205'),
-('20160314181446'),
-('20160327221550'),
-('20160412123106'),
-('20160419132410'),
-('20160420132524'),
-('20160426093341'),
-('20160426112409'),
-('20160503113814'),
-('20160505142813'),
-('20160505151102'),
-('20160506104710'),
-('20160506151356'),
-('20160509134401'),
-('20160509134929'),
-('20160509151927'),
-('20160509171244'),
-('20160510155932'),
-('20160518110836'),
-('20160518111325'),
-('20160524171947'),
-('20160525124151'),
-('20160527104432'),
-('20160530162708'),
-('20160530162720'),
-('20160530170058'),
-('20160531141853'),
-('20160613120910'),
-('20160616163622'),
-('20160620131148'),
-('20160628141349'),
-('20160726150709'),
-('20160726170852'),
-('20160728094200'),
-('20160728103933'),
-('20160729083654'),
-('20160729095901'),
-('20160805120015'),
-('20160809095951'),
-('20160812073616'),
-('20160812073900'),
-('20160817095514'),
-('20160818131917'),
-('20160822130644'),
-('20160823173525'),
-('20160824132805'),
-('20160829114845'),
-('20160830141439'),
-('20160905140623'),
-('20160906195949'),
-('20160916113152'),
-('20160922154638'),
-('20160930111424'),
-('20161003192717'),
-('20161003204347'),
-('20161004185820'),
-('20161010191529'),
-('20161014134639'),
-('20161018174711'),
-('20161019145606'),
-('20161027165025'),
-('20161028145040'),
-('20161031170940'),
-('20161101105519'),
-('20161103091319'),
-('20161107141354'),
-('20161108123101'),
-('20161111154939'),
-('20161114174727'),
-('20161114184444'),
-('20161115164413'),
-('20161117101457'),
-('20161117133825'),
-('20161118100149'),
-('20161118165332'),
-('20161121143011'),
-('20161122112905'),
-('20161123141041'),
-('20161123142841'),
-('20161124152732'),
-('20161129122629'),
-('20161201165330'),
-('20161201183449'),
-('20161202155429'),
-('20161207115413'),
-('20161207183903'),
-('20161212095607'),
-('20161212133822'),
-('20161212181500'),
-('20161214172314'),
-('20161215090417'),
-('20161216090417'),
-('20161216155218'),
-('20170103161015'),
-('20170106161800'),
-('20170106164639'),
-('20170110161149'),
-('20170120135631'),
-('20170124153334'),
-('20170203102941'),
-('20170203145405'),
-('20170207195029'),
-('20170210124019'),
-('20170210133517'),
-('20170213140513'),
-('20170217123531'),
-('20170217132644'),
-('20170217141529'),
-('20170217161409'),
-('20170220150611'),
-('20170222135148'),
-('20170227154311'),
-('20170228131923'),
-('20170306093012'),
-('20170308173219'),
-('20170313154020'),
-('20170314114614'),
-('20170314115111'),
-('20170314120712'),
-('20170315100152'),
-('20170320112730'),
-('20170320124532'),
-('20170323100125'),
-('20170331115718'),
-('20170331153349'),
-('20170403091407'),
-('20170403092407'),
-('20170403094115'),
-('20170424064032'),
-('20170427123530'),
-('20170427130642'),
-('20170502165422'),
-('20170505104641'),
-('20170505112521'),
-('20170512150125'),
-('20170515093430'),
-('20170515105635'),
-('20170522151032'),
-('20170523125610'),
-('20170524134229'),
-('20170526060804'),
-('20170526061000'),
-('20170601142904'),
-('20170602124855'),
-('20170605102519'),
-('20170605103133'),
-('20170605161951'),
-('20170606131948'),
-('20170606160731'),
-('20170606182242'),
-('20170608135553'),
-('20170608135953'),
-('20170608192234'),
-('20170609144233'),
-('20170614140457'),
-('20170615130714'),
-('20170615144802'),
-('20170615184503'),
-('20170619100927'),
-('20170620121255'),
-('20170621102157'),
-('20170621205538'),
-('20170622145529'),
-('20170627110058'),
-('20170627110619'),
-('20170628115247'),
-('20170703144902'),
-('20170703153949'),
-('20170705090219'),
-('20170705135512'),
-('20170705150913'),
-('20170705160726'),
-('20170707110155'),
-('20170711140607'),
-('20170711140926'),
-('20170712090217'),
-('20170720080033'),
-('20170725120242'),
-('20170809080925'),
-('20170810092953'),
-('20170810093532'),
-('20170821100353'),
-('20170823084127'),
-('20170824113401'),
-('20170830085137'),
-('20170830171726'),
-('20170831082043'),
-('20170831084331'),
-('20170831142819'),
-('20170908155011'),
-('20170908160250'),
-('20170911133224'),
-('20170912092135'),
-('20170915090544'),
-('20170915115228'),
-('20170916121019'),
-('20170917185426'),
-('20170920113628'),
-('20170925161033'),
-('20170925182738'),
-('20170926081426'),
-('20170926132845'),
-('20171002175804'),
-('20171003093347'),
-('20171003111228'),
-('20171003122425'),
-('20171004092235'),
-('20171004110909'),
-('20171005081224'),
-('20171005091202'),
-('20171005130109'),
-('20171005144505'),
-('20171009104106'),
-('20171009181615'),
-('20171012110133'),
-('20171012143050'),
-('20171013145849'),
-('20171016152223'),
-('20171017132738'),
-('20171017171625'),
-('20171101121130'),
-('20171101162244'),
-('20171106100216'),
-('20171109084751'),
-('20171113120217'),
-('20171114120904'),
-('20171116103230'),
-('20171118160030'),
-('20171123123712'),
-('20171123143534'),
-('20171123154116'),
-('20171127082158'),
-('20171127092158'),
-('20171127092359'),
-('20171128163543'),
-('20171204112150'),
-('20171206121652'),
-('20171206140738'),
-('20171208211206'),
-('20171211130716'),
-('20171211131918'),
-('20171211161400'),
-('20171213111513'),
-('20171214141335'),
-('20171214190849'),
-('20171215122454'),
-('20171219154529'),
-('20171222153815'),
-('20180102155055'),
-('20180105132358'),
-('20180108185400'),
-('20180112151706'),
-('20180112151813'),
-('20180119121243'),
-('20180121115246'),
-('20180122173922'),
-('20180125201356'),
-('20180126142314'),
-('20180130165803'),
-('20180201090444'),
-('20180202184954'),
-('20180206225525'),
-('20180207082540'),
-('20180208150629'),
-('20180213124203'),
-('20180213125734'),
-('20180213171805'),
-('20180214124317'),
-('20180216132741'),
-('20180221210458'),
-('20180222090501'),
-('20180223100420'),
-('20180226124724'),
-('20180226132410'),
-('20180301095040'),
-('20180305134959'),
-('20180306071308'),
-('20180306080518'),
-('20180307191650'),
-('20180307223111'),
-('20180309140316'),
-('20180311071146'),
-('20180311104609'),
-('20180313114927'),
-('20180313124819'),
-('20180319191942'),
-('20180323150241'),
-('20180326155400'),
-('20180327100423'),
-('20180328210434'),
-('20180419141524'),
-('20180422090043'),
-('20180427133558'),
-('20180502093256'),
-('20180502110638'),
-('20180510151959'),
-('20180511100345'),
-('20180511140415'),
-('20180511171835'),
-('20180514151627'),
-('20180516111411'),
-('20180524072633'),
-('20180524074320'),
-('20180605114332'),
-('20180605141806'),
-('20180605175211'),
-('20180622130552'),
-('20180625124431'),
-('20180628132323'),
-('20180702091222'),
-('20180702091237'),
-('20180702091352'),
-('20180712143314'),
-('20180718172750'),
-('20180725132557'),
-('20180725132808'),
-('20180730154454'),
-('20180802103013'),
-('20180802132417'),
-('20180802144507'),
-('20180803131157'),
-('20180814103916'),
-('20180815144429'),
-('20180831134606'),
-('20180831134926'),
-('20180907100545'),
-('20181001162513'),
-('20181008144324'),
-('20181008145159'),
-('20181013115138'),
-('20181025170410'),
-('20181026145459'),
-('20181106133500'),
-('20181109110616'),
-('20181126090401'),
-('20181126123745'),
-('20181217124025'),
-('20190104095254'),
-('20190104170135'),
-('20190107163734'),
-('20190109121934'),
-('20190109122032'),
-('20190110100057'),
-('20190117144832'),
-('20190120105229'),
-('20190121092403'),
-('20190121125239'),
-('20190121135548'),
-('20190125111045'),
-('20190125130940'),
-('20190125132911'),
-('20190128094652'),
-('20190131152758'),
-('20190201151346'),
-('20190209135334'),
-('20190210125211'),
-('20190210143717'),
-('20190213104817'),
-('20190218142207'),
-('20190225103005'),
-('20190226162607'),
-('20190306121545'),
-('20190307123232'),
-('20190315125638'),
-('20190322120025'),
-('20190325134823'),
-('20190327100851'),
-('20190401105149'),
-('20190422095620'),
-('20190424101709'),
-('20190511164137'),
-('20190512155900'),
-('20190513131826'),
-('20190513135312'),
-('20190516093707'),
-('20190520091324'),
-('20190531172829'),
-('20190602114659'),
-('20190603084428'),
-('20190603135247'),
-('20190603143834'),
-('20190603165812'),
-('20190607134717'),
-('20190611152859'),
-('20190612124015'),
-('20190617121528'),
-('20190624130020'),
-('20190627141751'),
-('20190705083727'),
-('20190705105921'),
-('20190709101610'),
-('20190716125837'),
-('20190718091430'),
-('20190718095851'),
-('20190722145936'),
-('20190723150737'),
-('20190822175644'),
-('20190822180201'),
-('20190823044107'),
-('20190823051014'),
-('20190823105642'),
-('20190830082736'),
-('20190830153416'),
-('20190902085216'),
-('20190909084425'),
-('20190915071451'),
-('20190915083424'),
-('20190916160231'),
-('20190917124204'),
-('20190919073410'),
-('20190920063447'),
-('20190925104902'),
-('20190925130052'),
-('20190925161724'),
-('20190925173849'),
-('20190927124840'),
-('20190927130911'),
-('20190928131032'),
-('20191008010839'),
-('20191008024636'),
-('20191008030154'),
-('20191008045159'),
-('20191012121433'),
-('20191018143635'),
-('20191018144917'),
-('20191026120029'),
-('20191029095202'),
-('20191105095304'),
-('20191108105923'),
-('20191203112310'),
-('20191205185835'),
-('20191209160151'),
-('20191209163151'),
-('20191213094611'),
-('20191219145651'),
-('20200106073329'),
-('20200106210851'),
-('20200110153522'),
-('20200110160241'),
-('20200114151225'),
-('20200122182018'),
-('20200122182036'),
-('20200122190909'),
-('20200127165951'),
-('20200127170711'),
-('20200129093835'),
-('20200131133223'),
-('20200204153231'),
-('20200205121805'),
-('20200205185151'),
-('20200219113324'),
-('20200226145010'),
-('20200301113102'),
-('20200301124200'),
-('20200301124300'),
-('20200306183423'),
-('20200313120655'),
-('20200316131136'),
-('20200318134807'),
-('20200320103052'),
-('20200401115705'),
-('20200408131217'),
-('20200421082715'),
-('20200421132911'),
-('20200421143546'),
-('20200427123229'),
-('20200616115709'),
-('20200618144228'),
-('20200622120232'),
-('20200626081248'),
-('20200626090256'),
-('20200628094228'),
-('20200812074223'),
-('20200815150303'),
-('20200817085618'),
-('20200817103930'),
-('20201001144512'),
-('20201001145452'),
-('20201009090959'),
-('20201012160414'),
-('20201012171428'),
-('20201015160542'),
-('20201020155510'),
-('20201020164524'),
-('20201020170921'),
-('20201020171139'),
-('20201021153832'),
-('20201021154809'),
-('20201023092859'),
-('20201105153422'),
-('20201110164344'),
-('20201112152752'),
-('20201217154345'),
-('20201217155107'),
-('20201229174653'),
-('20210105163944'),
-('20210115181817'),
-('20210126175527'),
-('20210127122810'),
-('20210305100015'),
-('20210305105830'),
-('20210305181345'),
-('20210305191214'),
-('20210308153253'),
-('20210310154134'),
-('20210315151618'),
-('20210329090650'),
-('20210410111401'),
-('20210410111402'),
-('20210410111406'),
-('20210412120604'),
-('20210412171437'),
-('20210413180237'),
-('20210414103735'),
-('20210419110721'),
-('20210419111931'),
-('20210419161507'),
-('20210531082528'),
-('20210604070039'),
-('20210611152736'),
-('20210701161843'),
-('20210705082359'),
-('20210709132605'),
-('20210722101902'),
-('20210723131206'),
-('20210812011726'),
-('20210812011910'),
-('20210818142810'),
-('20210818142811'),
-('20210903123803'),
-('20210920153420'),
-('20210920162339'),
-('20210920164152'),
-('20210920164222'),
-('20210921140641'),
-('20211008163436'),
-('20211020092822'),
-('20211021125142'),
-('20211021151707'),
-('20211022063251'),
-('20211028142853'),
-('20211028160832'),
-('20211028165711'),
-('20211028185908'),
-('20211028195511'),
-('20211029105908'),
-('20211029134250'),
-('20211029134446'),
-('20211103075628'),
-('20211107184117'),
-('20211108142747'),
-('20211110125711'),
-('20211111141233'),
-('20211118105354'),
-('20211118173235'),
-('20211119132257'),
-('20211121142636'),
-('20211121144203'),
-('20211123105422'),
-('20211125104700'),
-('20211202085557'),
-('20211208104601'),
-('20211208110337'),
-('20211208111353'),
-('20211208114210'),
-('20211208115229'),
-('20211208132638'),
-('20211209123828'),
-('20211215111646'),
-('20211216145755'),
-('20220107182152'),
-('20220110135105'),
-('20220113132731'),
-('20220114171857'),
-('20220116183123'),
-('20220120172755'),
-('20220210152018'),
-('20220301162239'),
-('20220307174658'),
-('20220405114521'),
-('20220407084109'),
-('20220507073059'),
-('20220512142640'),
-('20220512161700'),
-('20220518182012'),
-('20220519120540'),
-('20220520100619'),
-('20220601162848'),
-('20220606105217'),
-('20220620141323'),
-('20220621084947'),
-('20220701153541'),
-('20220812154454'),
-('20220813081749'),
-('20220824154208'),
-('20220907174253'),
-('20220915144534'),
-('20220915145956'),
-('20220915150710'),
-('20220915151614'),
-('20220926171513'),
-('20220926211723'),
-('20220928115421'),
-('20221006200436'),
-('20221012114542'),
-('20221013094654'),
-('20221027100532'),
-('20221205223711'),
-('20221206202033'),
-('20221208202357'),
-('20221209222847'),
-('20221209223110'),
-('20221210222443'),
-('20221211013808'),
-('20221220193005'),
-('20221220201434'),
-('20221221163602'),
-('20221221212557'),
-('20221221213000'),
-('20221222212557'),
-('20221222213600'),
-('20230104102024'),
-('20230105193358'),
-('20230109182535'),
-('20230112115053'),
-('20230203174406'),
-('20230203174407'),
-('20230206192010'),
-('20230206192011'),
-('20230206192012'),
-('20230213103715'),
-('20230215105027'),
-('20230221110514'),
-('20230223102724'),
-('20230302134826'),
-('20230323223232'),
-('20230329124526'),
-('20230329130612'),
-('20230329165043'),
-('20230403210211'),
-('20230406131911'),
-('20230411202441'),
-('20230411205557'),
-('20230416122815'),
-('20230416132329'),
-('20230424121332'),
-('20230427073423'),
-('20230503143211'),
-('20230503161542'),
-('20230503185921'),
-('20230510144745'),
-('20230511151434'),
-('20230523121919'),
-('20230531112529'),
-('20230531155854'),
-('20230602083513'),
-('20230607104435'),
-('20230608081348'),
-('20230608110737'),
-('20230608154421'),
-('20230608171855'),
-('20230621103930'),
-('20230703164605'),
-('20230704072649'),
-('20230704100221'),
-('20230705144308'),
-('20230705151013'),
-('20230705153656'),
-('20230706094637'),
-('20230714135534'),
-('20230718171106'),
-('20230808150041'),
-('20230816111543'),
-('20230825083329'),
-('20230825104746'),
-('20230825141714'),
-('20230825143006'),
-('20230913132527'),
-('20230913133958'),
-('20230915144448'),
-('20230915220000'),
-('20230918172419'),
-('20231004172532'),
-('20231006132259'),
-('20231009170341'),
-('20231009170342'),
-('20231019083713'),
-('20231025115724'),
-('20231101152934'),
-('20231106173109'),
-('20231112080224'),
-('20231113124516'),
-('20231115125057'),
-('20231115135028'),
-('20231115160013'),
-('20231120165114'),
-('20231120203514'),
-('20231121094056'),
-('20231130102622'),
-('20231130114143'),
-('20231206115315'),
-('20231211172855'),
-('20231212065241'),
-('20231212112543'),
-('20231213170649'),
-('20231221094630'),
-('20240111043244'),
-('20240118203934'),
+('20240411164343'),
+('20240405092805'),
+('20240405083738'),
+('20240321174505'),
+('20240321174504'),
+('20240321174503'),
+('20240321174502'),
+('20240318191505'),
+('20240318182553'),
+('20240314134618'),
+('20240314132659'),
+('20240307171400'),
+('20240305160414'),
+('20240227120942'),
 ('20240220091704'),
-('20240227120942');
-
+('20240206085751'),
+('20240126163515'),
+('20240118203934'),
+('20240111043244'),
+('20231221094630'),
+('20231213170649'),
+('20231212112543'),
+('20231212065241'),
+('20231211172855'),
+('20231206115315'),
+('20231130114143'),
+('20231130102622'),
+('20231121094056'),
+('20231120203514'),
+('20231120165114'),
+('20231115160013'),
+('20231115135028'),
+('20231115125057'),
+('20231113124516'),
+('20231112080224'),
+('20231106173109'),
+('20231101152934'),
+('20231025115724'),
+('20231019083713'),
+('20231009170342'),
+('20231009170341'),
+('20231006132259'),
+('20231004172532'),
+('20230918172419'),
+('20230915220000'),
+('20230915144448'),
+('20230913133958'),
+('20230913132527'),
+('20230912091352'),
+('20230911114828'),
+('20230831162729'),
+('20230825143006'),
+('20230825141714'),
+('20230825104746'),
+('20230825083329'),
+('20230816111543'),
+('20230808150041'),
+('20230718171106'),
+('20230714135534'),
+('20230706094637'),
+('20230705153656'),
+('20230705151013'),
+('20230705144308'),
+('20230704100221'),
+('20230704072649'),
+('20230703164605'),
+('20230621103930'),
+('20230608171855'),
+('20230608154421'),
+('20230608110737'),
+('20230608081348'),
+('20230607104435'),
+('20230602083513'),
+('20230531155854'),
+('20230531112529'),
+('20230523121919'),
+('20230511151434'),
+('20230510144745'),
+('20230503185921'),
+('20230503161542'),
+('20230503143211'),
+('20230427073423'),
+('20230424121332'),
+('20230416132329'),
+('20230416122815'),
+('20230411205557'),
+('20230411202441'),
+('20230406131911'),
+('20230403210211'),
+('20230329165043'),
+('20230329130612'),
+('20230329124526'),
+('20230323223232'),
+('20230302134826'),
+('20230223102724'),
+('20230221110514'),
+('20230215105027'),
+('20230213103715'),
+('20230206192012'),
+('20230206192011'),
+('20230206192010'),
+('20230203174407'),
+('20230203174406'),
+('20230112115053'),
+('20230109182535'),
+('20230105193358'),
+('20230104102024'),
+('20221222213600'),
+('20221222212557'),
+('20221221213000'),
+('20221221212557'),
+('20221221163602'),
+('20221220201434'),
+('20221220193005'),
+('20221211013808'),
+('20221210222443'),
+('20221209223110'),
+('20221209222847'),
+('20221208202357'),
+('20221206202033'),
+('20221205223711'),
+('20221027100532'),
+('20221013094654'),
+('20221012114542'),
+('20221006200436'),
+('20220928115421'),
+('20220926211723'),
+('20220926171513'),
+('20220915151614'),
+('20220915150710'),
+('20220915145956'),
+('20220915144534'),
+('20220907174253'),
+('20220824154208'),
+('20220813081749'),
+('20220812154454'),
+('20220701153541'),
+('20220621084947'),
+('20220620141323'),
+('20220606105217'),
+('20220601162848'),
+('20220520100619'),
+('20220519120540'),
+('20220518182012'),
+('20220512161700'),
+('20220512142640'),
+('20220507073059'),
+('20220407084109'),
+('20220405114521'),
+('20220307174658'),
+('20220301162239'),
+('20220210152018'),
+('20220120172755'),
+('20220116183123'),
+('20220114171857'),
+('20220113132731'),
+('20220110135105'),
+('20220107182152'),
+('20220105160514'),
+('20211216145755'),
+('20211215111646'),
+('20211209123828'),
+('20211208132638'),
+('20211208115229'),
+('20211208114210'),
+('20211208111353'),
+('20211208110337'),
+('20211208104601'),
+('20211202085557'),
+('20211125104700'),
+('20211123105422'),
+('20211121144203'),
+('20211121142636'),
+('20211119132257'),
+('20211118173235'),
+('20211118105354'),
+('20211111141233'),
+('20211110125711'),
+('20211108142747'),
+('20211107184117'),
+('20211103075628'),
+('20211029134446'),
+('20211029134250'),
+('20211029105908'),
+('20211028195511'),
+('20211028185908'),
+('20211028165711'),
+('20211028160832'),
+('20211028142853'),
+('20211022063251'),
+('20211021151707'),
+('20211021125142'),
+('20211020092822'),
+('20211008163436'),
+('20210921140641'),
+('20210920164222'),
+('20210920164152'),
+('20210920162339'),
+('20210920153420'),
+('20210903123803'),
+('20210818142811'),
+('20210818142810'),
+('20210812011910'),
+('20210812011726'),
+('20210723131206'),
+('20210722101902'),
+('20210709132605'),
+('20210705082359'),
+('20210701161843'),
+('20210611152736'),
+('20210604070039'),
+('20210531082528'),
+('20210419161507'),
+('20210419111931'),
+('20210419110721'),
+('20210414103735'),
+('20210413180237'),
+('20210412171437'),
+('20210412120604'),
+('20210410111406'),
+('20210410111402'),
+('20210410111401'),
+('20210329090650'),
+('20210315151618'),
+('20210310154134'),
+('20210308153253'),
+('20210305191214'),
+('20210305181345'),
+('20210305105830'),
+('20210305100015'),
+('20210127122810'),
+('20210126175527'),
+('20210115181817'),
+('20210105163944'),
+('20201229174653'),
+('20201217155107'),
+('20201217154345'),
+('20201112152752'),
+('20201110164344'),
+('20201105153422'),
+('20201023092859'),
+('20201021154809'),
+('20201021153832'),
+('20201020171139'),
+('20201020170921'),
+('20201020164524'),
+('20201020155510'),
+('20201015160542'),
+('20201012171428'),
+('20201012160414'),
+('20201009090959'),
+('20201001145452'),
+('20201001144512'),
+('20200817103930'),
+('20200817085618'),
+('20200815150303'),
+('20200812074223'),
+('20200628094228'),
+('20200626090256'),
+('20200626081248'),
+('20200622120232'),
+('20200618144228'),
+('20200616115709'),
+('20200427123229'),
+('20200421143546'),
+('20200421132911'),
+('20200421082715'),
+('20200408131217'),
+('20200401115705'),
+('20200320103052'),
+('20200318134807'),
+('20200316131136'),
+('20200313120655'),
+('20200306183423'),
+('20200301124300'),
+('20200301124200'),
+('20200301113102'),
+('20200226145010'),
+('20200219113324'),
+('20200205185151'),
+('20200205121805'),
+('20200204153231'),
+('20200131133223'),
+('20200129093835'),
+('20200127170711'),
+('20200127165951'),
+('20200122190909'),
+('20200122182036'),
+('20200122182018'),
+('20200114151225'),
+('20200110160241'),
+('20200110153522'),
+('20200106210851'),
+('20200106073329'),
+('20191219145651'),
+('20191213094611'),
+('20191209163151'),
+('20191209160151'),
+('20191205185835'),
+('20191203112310'),
+('20191108105923'),
+('20191105095304'),
+('20191029095202'),
+('20191026120029'),
+('20191018144917'),
+('20191018143635'),
+('20191012121433'),
+('20191008045159'),
+('20191008030154'),
+('20191008024636'),
+('20191008010839'),
+('20190928131032'),
+('20190927130911'),
+('20190927124840'),
+('20190925173849'),
+('20190925161724'),
+('20190925130052'),
+('20190925104902'),
+('20190920063447'),
+('20190919073410'),
+('20190917124204'),
+('20190916160231'),
+('20190915083424'),
+('20190915071451'),
+('20190909084425'),
+('20190902085216'),
+('20190830153416'),
+('20190830082736'),
+('20190823105642'),
+('20190823051014'),
+('20190823044107'),
+('20190822180201'),
+('20190822175644'),
+('20190723150737'),
+('20190722145936'),
+('20190718095851'),
+('20190718091430'),
+('20190716125837'),
+('20190709101610'),
+('20190705105921'),
+('20190705083727'),
+('20190627141751'),
+('20190624130020'),
+('20190617121528'),
+('20190612124015'),
+('20190611152859'),
+('20190607134717'),
+('20190603165812'),
+('20190603143834'),
+('20190603135247'),
+('20190603084428'),
+('20190602114659'),
+('20190531172829'),
+('20190520091324'),
+('20190516093707'),
+('20190513135312'),
+('20190513131826'),
+('20190512155900'),
+('20190511164137'),
+('20190424101709'),
+('20190422095620'),
+('20190401105149'),
+('20190327100851'),
+('20190325134823'),
+('20190322120025'),
+('20190315125638'),
+('20190307123232'),
+('20190306121545'),
+('20190226162607'),
+('20190225103005'),
+('20190218142207'),
+('20190213104817'),
+('20190210143717'),
+('20190210125211'),
+('20190209135334'),
+('20190201151346'),
+('20190131152758'),
+('20190128094652'),
+('20190125132911'),
+('20190125130940'),
+('20190125111045'),
+('20190121135548'),
+('20190121125239'),
+('20190121092403'),
+('20190120105229'),
+('20190117144832'),
+('20190110100057'),
+('20190109122032'),
+('20190109121934'),
+('20190107163734'),
+('20190104170135'),
+('20190104095254'),
+('20181217124025'),
+('20181126123745'),
+('20181126090401'),
+('20181109110616'),
+('20181106133500'),
+('20181026145459'),
+('20181025170410'),
+('20181013115138'),
+('20181008145159'),
+('20181008144324'),
+('20181001162513'),
+('20180907100545'),
+('20180831134926'),
+('20180831134606'),
+('20180815144429'),
+('20180814103916'),
+('20180803131157'),
+('20180802144507'),
+('20180802132417'),
+('20180802103013'),
+('20180730154454'),
+('20180725132808'),
+('20180725132557'),
+('20180718172750'),
+('20180712143314'),
+('20180702091352'),
+('20180702091237'),
+('20180702091222'),
+('20180628132323'),
+('20180625124431'),
+('20180622130552'),
+('20180605175211'),
+('20180605141806'),
+('20180605114332'),
+('20180524074320'),
+('20180524072633'),
+('20180516111411'),
+('20180514151627'),
+('20180511171835'),
+('20180511140415'),
+('20180511100345'),
+('20180510151959'),
+('20180502110638'),
+('20180502093256'),
+('20180427133558'),
+('20180422090043'),
+('20180419141524'),
+('20180328210434'),
+('20180327100423'),
+('20180326155400'),
+('20180323150241'),
+('20180319191942'),
+('20180313124819'),
+('20180313114927'),
+('20180311104609'),
+('20180311071146'),
+('20180309140316'),
+('20180307223111'),
+('20180307191650'),
+('20180306080518'),
+('20180306071308'),
+('20180305134959'),
+('20180301095040'),
+('20180226132410'),
+('20180226124724'),
+('20180223100420'),
+('20180222090501'),
+('20180221210458'),
+('20180216132741'),
+('20180214124317'),
+('20180213171805'),
+('20180213125734'),
+('20180213124203'),
+('20180208150629'),
+('20180207082540'),
+('20180206225525'),
+('20180202184954'),
+('20180201090444'),
+('20180130165803'),
+('20180126142314'),
+('20180125201356'),
+('20180122173922'),
+('20180121115246'),
+('20180119121243'),
+('20180112151813'),
+('20180112151706'),
+('20180108185400'),
+('20180105132358'),
+('20180102155055'),
+('20171222153815'),
+('20171219154529'),
+('20171215122454'),
+('20171214190849'),
+('20171214141335'),
+('20171213111513'),
+('20171211161400'),
+('20171211131918'),
+('20171211130716'),
+('20171208211206'),
+('20171206140738'),
+('20171206121652'),
+('20171204112150'),
+('20171128163543'),
+('20171127092359'),
+('20171127092158'),
+('20171127082158'),
+('20171123154116'),
+('20171123143534'),
+('20171123123712'),
+('20171118160030'),
+('20171116103230'),
+('20171114120904'),
+('20171113120217'),
+('20171109084751'),
+('20171106100216'),
+('20171101162244'),
+('20171101121130'),
+('20171017171625'),
+('20171017132738'),
+('20171016152223'),
+('20171013145849'),
+('20171012143050'),
+('20171012110133'),
+('20171009181615'),
+('20171009104106'),
+('20171005144505'),
+('20171005130109'),
+('20171005091202'),
+('20171005081224'),
+('20171004110909'),
+('20171004092235'),
+('20171003122425'),
+('20171003111228'),
+('20171003093347'),
+('20171002175804'),
+('20170926132845'),
+('20170926081426'),
+('20170925182738'),
+('20170925161033'),
+('20170920113628'),
+('20170917185426'),
+('20170916121019'),
+('20170915115228'),
+('20170915090544'),
+('20170912092135'),
+('20170911133224'),
+('20170908160250'),
+('20170908155011'),
+('20170831142819'),
+('20170831084331'),
+('20170831082043'),
+('20170830171726'),
+('20170830085137'),
+('20170824113401'),
+('20170823084127'),
+('20170821100353'),
+('20170810093532'),
+('20170810092953'),
+('20170809080925'),
+('20170725120242'),
+('20170720080033'),
+('20170712090217'),
+('20170711140926'),
+('20170711140607'),
+('20170707110155'),
+('20170705160726'),
+('20170705150913'),
+('20170705135512'),
+('20170705090219'),
+('20170703153949'),
+('20170703144902'),
+('20170628115247'),
+('20170627110619'),
+('20170627110058'),
+('20170622145529'),
+('20170621205538'),
+('20170621102157'),
+('20170620121255'),
+('20170619100927'),
+('20170615184503'),
+('20170615144802'),
+('20170615130714'),
+('20170614140457'),
+('20170609144233'),
+('20170608192234'),
+('20170608135953'),
+('20170608135553'),
+('20170606182242'),
+('20170606160731'),
+('20170606131948'),
+('20170605161951'),
+('20170605103133'),
+('20170605102519'),
+('20170602124855'),
+('20170601142904'),
+('20170526061000'),
+('20170526060804'),
+('20170524134229'),
+('20170523125610'),
+('20170522151032'),
+('20170515105635'),
+('20170515093430'),
+('20170512150125'),
+('20170505112521'),
+('20170505104641'),
+('20170502165422'),
+('20170427130642'),
+('20170427123530'),
+('20170424064032'),
+('20170403094115'),
+('20170403092407'),
+('20170403091407'),
+('20170331153349'),
+('20170331115718'),
+('20170323100125'),
+('20170320124532'),
+('20170320112730'),
+('20170315100152'),
+('20170314120712'),
+('20170314115111'),
+('20170314114614'),
+('20170313154020'),
+('20170308173219'),
+('20170306093012'),
+('20170228131923'),
+('20170227154311'),
+('20170222135148'),
+('20170220150611'),
+('20170217161409'),
+('20170217141529'),
+('20170217132644'),
+('20170217123531'),
+('20170213140513'),
+('20170210133517'),
+('20170210124019'),
+('20170207195029'),
+('20170203145405'),
+('20170203102941'),
+('20170124153334'),
+('20170120135631'),
+('20170110161149'),
+('20170106164639'),
+('20170106161800'),
+('20170103161015'),
+('20161216155218'),
+('20161216090417'),
+('20161215090417'),
+('20161214172314'),
+('20161212181500'),
+('20161212133822'),
+('20161212095607'),
+('20161207183903'),
+('20161207115413'),
+('20161202155429'),
+('20161201183449'),
+('20161201165330'),
+('20161129122629'),
+('20161124152732'),
+('20161123142841'),
+('20161123141041'),
+('20161122112905'),
+('20161121143011'),
+('20161118165332'),
+('20161118100149'),
+('20161117133825'),
+('20161117101457'),
+('20161115164413'),
+('20161114184444'),
+('20161114174727'),
+('20161111154939'),
+('20161108123101'),
+('20161107141354'),
+('20161103091319'),
+('20161101105519'),
+('20161031170940'),
+('20161028145040'),
+('20161027165025'),
+('20161019145606'),
+('20161018174711'),
+('20161014134639'),
+('20161010191529'),
+('20161004185820'),
+('20161003204347'),
+('20161003192717'),
+('20160930111424'),
+('20160922154638'),
+('20160916113152'),
+('20160906195949'),
+('20160905140623'),
+('20160830141439'),
+('20160829114845'),
+('20160824132805'),
+('20160823173525'),
+('20160822130644'),
+('20160818131917'),
+('20160817095514'),
+('20160812073900'),
+('20160812073616'),
+('20160809095951'),
+('20160805120015'),
+('20160729095901'),
+('20160729083654'),
+('20160728103933'),
+('20160728094200'),
+('20160726170852'),
+('20160726150709'),
+('20160628141349'),
+('20160620131148'),
+('20160616163622'),
+('20160613120910'),
+('20160531141853'),
+('20160530170058'),
+('20160530162720'),
+('20160530162708'),
+('20160527104432'),
+('20160525124151'),
+('20160524171947'),
+('20160518111325'),
+('20160518110836'),
+('20160510155932'),
+('20160509171244'),
+('20160509151927'),
+('20160509134929'),
+('20160509134401'),
+('20160506151356'),
+('20160506104710'),
+('20160505151102'),
+('20160505142813'),
+('20160503113814'),
+('20160426112409'),
+('20160426093341'),
+('20160420132524'),
+('20160419132410'),
+('20160412123106'),
+('20160327221550'),
+('20160314181446'),
+('20160304162205'),
+('20160304151540'),
+('20160304151449'),
+('20160303151540'),
+('20160303151449'),
+('20160302192055'),
+('20160218220145'),
+('20160209203446'),
+('20160208153327'),
+('20160203160041'),
+('20160203160040'),
+('20160202152252'),
+('20160121175712'),
+('20160121175711'),
+('20160120213001'),
+('20160120213000'),
+('20160120203755'),
+('20160120203754'),
+('20160120203753'),
+('20160120203748'),
+('20160120203747'),
+('20160114222043'),
+('20160106167020'),
+('20151207167020'),
+('20151207163304'),
+('20151207163303'),
+('20151116170200'),
+('20151116170100'),
+('20151116111600'),
+('20151111194419'),
+('20151104183740'),
+('20151103210628'),
+('20151022190252'),
+('20151022184845'),
+('20151021194419'),
+('20151014205537'),
+('20150923201215'),
+('20150717093153'),
+('20150709152737'),
+('20150702084036'),
+('20150701104744'),
+('20150623105816'),
+('20150623083220'),
+('20150608093002'),
+('20150608093001'),
+('20150608093000'),
+('20150605151945'),
+('20150605095934'),
+('20150602151910'),
+('20150515155052'),
+('20150515154952'),
+('20150514113239'),
+('20150313124325'),
+('20150312113937'),
+('20150312112909'),
+('20150302171638'),
+('20150224140027'),
+('20150213103857'),
+('20150213103856'),
+('20150213103855'),
+('20150203161438'),
+('20150120155952'),
+('20150119160039'),
+('20150109152145'),
+('20150109113417'),
+('20141223135724'),
+('20141223135723'),
+('20141222110119'),
+('20141208160813'),
+('20141107145615'),
+('20141107145614'),
+('20141107145549'),
+('20141024111716'),
+('20141024111715'),
+('20141023111038'),
+('20141020170329'),
+('20141010170329'),
+('20141004150240');
 

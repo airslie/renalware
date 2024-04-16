@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require_relative "./death_causes"
+require_relative "death_causes"

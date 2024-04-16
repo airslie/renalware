@@ -143,7 +143,7 @@ module World
 
         attributes = valid_simple_letter_attributes(patient)
         select attributes[:letterhead].name, from: "Letterhead"
-        select user.to_s, from: "Author"
+        slim_select user.to_s, from: "Author"
         slim_select attributes[:description], from: "Topic"
 
         within ".bottom" do
@@ -157,7 +157,7 @@ module World
         click_on "Preview Letter"
         click_on t("btn.edit")
 
-        select user.to_s, from: "Author"
+        slim_select user.to_s, from: "Author"
 
         within ".bottom" do
           click_on t("btn.save")

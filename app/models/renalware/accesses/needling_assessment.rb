@@ -7,7 +7,9 @@ module Renalware
       belongs_to :patient, class_name: "Renalware::Accesses::Patient"
       validates :difficulty, presence: true
       validates :patient, presence: true
-      enum difficulty_type: { easy: "easy", moderate: "moderate", hard: "hard" }
+      enum difficulty: { easy: "easy", moderate: "moderate", hard: "hard" }
+
+      # access_needling_assessment_difficulties
 
       DIFFICULTY_DESCRIPTIONS = {
         easy: "Easy (green)",
@@ -22,7 +24,7 @@ module Renalware
       end
 
       def self.difficulty_type_collection_options
-        difficulty_types.keys.map { |key|
+        difficulties.keys.map { |key|
           [DIFFICULTY_DESCRIPTIONS[key.to_sym], key, { class: key }]
         }
       end

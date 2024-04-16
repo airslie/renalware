@@ -9,11 +9,11 @@
   / some content so that content_for?(:flash_messages) returns true in application html
   span.hidden
 
-div class="bg-gray-50 w-full"
+div class="bg-gray-50 w-full overflow-y-auto"
   = render "renalware/system/messages/list"
   = render "warning"
 
-  div class="max-w-md w-full space-y-8 mx-auto px-4 mt-28"
+  div class="max-w-md w-full space-y-8 mx-auto px-4 mt-12"
     h2 class="text-3xl font-bold tracking-tight text-center" Sign in
 
     = simple_form_for(resource,

@@ -41,8 +41,10 @@ module Renalware
 
           def route_element
             create_node("Route") do |route|
-              route << create_node("CodingStandard", "RR22")
-              route << create_node("Code", prescription.medication_route&.rr_code)
+              if prescription.medication_route&.rr_code
+                route << create_node("CodingStandard", "RR22")
+                route << create_node("Code", prescription.medication_route&.rr_code)
+              end
             end
           end
 

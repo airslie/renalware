@@ -1,31 +1,31 @@
-- if patient.ever_been_a_recipient?
-  = link_to(patient_transplants_mdm_path(patient), class: "button with-icon secondary") do
-    i.fas.fa-group
-    = t(".mdm")
+.flex.items-center
+  - if patient.ever_been_a_recipient?
+    = link_to(patient_transplants_mdm_path(patient), class: "button with-icon secondary") do
+      = text_with_icon_prefix(t(".mdm"), :users, size: :md)
 
-a.button.dropdown(href="#"
-                  data-dropdown="tx-recip-options"
-                  aria-controls="tx-recip-options"
-                  aria-expanded="false")
-  = t("btn.add_")
-br
+  a.button.dropdown(href="#"
+                    data-dropdown="tx-recip-options"
+                    aria-controls="tx-recip-options"
+                    aria-expanded="false")
+    | Add&hellip;
+  br
 
-ul.f-dropdown#tx-recip-options(data-dropdown-content aria-hidden="true")
-  = dropdown_btn_item enabled: policy(recipient_workup).new?,
-                      title: t(".add_recipient_workup"),
-                      url: edit_patient_transplants_recipient_workup_path(patient)
+  ul.f-dropdown#tx-recip-options(data-dropdown-content aria-hidden="true")
+    = dropdown_btn_item enabled: policy(recipient_workup).new?,
+                        title: t(".add_recipient_workup"),
+                        url: edit_patient_transplants_recipient_workup_path(patient)
 
-  = dropdown_btn_item enabled: policy(registration).new?,
-                      title: t(".add_waitlist_registration"),
-                      url: edit_patient_transplants_registration_path(patient)
+    = dropdown_btn_item enabled: policy(registration).new?,
+                        title: t(".add_waitlist_registration"),
+                        url: edit_patient_transplants_registration_path(patient)
 
-  = dropdown_btn_item enabled: patient.ever_been_a_recipient?,
-                      title: t(".add_recipient_operation"),
-                      url: new_patient_transplants_recipient_operation_path(patient)
+    = dropdown_btn_item enabled: patient.ever_been_a_recipient?,
+                        title: t(".add_recipient_operation"),
+                        url: new_patient_transplants_recipient_operation_path(patient)
 
-  = dropdown_btn_item enabled: true,
-                      title: t(".add_investigation"),
-                      url: new_patient_investigation_path(patient)
+    = dropdown_btn_item enabled: true,
+                        title: t(".add_investigation"),
+                        url: new_patient_investigation_path(patient)
 
-- unless patient.ever_been_a_recipient?
-  = render "modality_missing_warning", message: t(".missing_modality_warning")
+  - unless patient.ever_been_a_recipient?
+    = render "modality_missing_warning", modality_name: "Transplant"

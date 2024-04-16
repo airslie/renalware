@@ -24,12 +24,12 @@ module Renalware::Pathology
               ordering_provider_name: "::name::",
               placer_order_number: "::pcs code::",
               filler_order_number: "::fillernum::",
-              date_time: "200911111841",
+              observed_at: "200911111841", # OBR:7 will be used for the OBX observed_at
               observations: [
                 double(
                   identifier: observation_description.code,
                   name: observation_description.name,
-                  date_time: "200911112026",
+                  observed_at: "200911112026", # will be discarded!
                   value: "::value::",
                   comment: "::comment::",
                   cancelled: nil,
@@ -76,7 +76,7 @@ module Renalware::Pathology
                 requested_at: "2009-11-11 18:41:00 +0000",
                 observations_attributes: [
                   description_id: observation_description.id,
-                  observed_at: "2009-11-11 20:26:00 +0000",
+                  observed_at: "2009-11-11 18:41:00 +0000", # Copied from OBR requested datetime!
                   result: "::value::",
                   comment: "::comment::",
                   cancelled: nil
@@ -102,11 +102,11 @@ module Renalware::Pathology
               ordering_provider_name: "::name::",
               placer_order_number: "::pcs code::",
               filler_order_number: "::fillernum::",
-              date_time: "200911111841",
+              observed_at: "200911111841",
               observations: [
                 double(
                   identifier: observation_description.code,
-                  date_time: "200911112026",
+                  observed_at: "200911112026",
                   value: "::value::",
                   comment: "::comment::",
                   cancelled: nil,
@@ -212,12 +212,12 @@ module Renalware::Pathology
                 ordering_provider_name: nil,
                 placer_order_number: "::pcs code::",
                 filler_order_number: "::fillernum::",
-                date_time: "200911111841",
+                observed_at: "200911111841",
                 observations: [
                   double(
                     identifier: observation_description.code,
                     name: observation_description.name,
-                    date_time: "200911112026",
+                    observed_at: "200911112026",
                     value: "::value::",
                     comment: "::comment::",
                     cancelled: nil,
@@ -249,7 +249,7 @@ module Renalware::Pathology
                 ordering_provider_name: "aasas",
                 placer_order_number: "::pcs code::",
                 filler_order_number: "::fillernum::",
-                date_time: "200911111841",
+                observed_at: "200911111841",
                 observations: []
               )
             ]
@@ -283,12 +283,12 @@ module Renalware::Pathology
                 ordering_provider_name: "aasas",
                 placer_order_number: "::pcs code::",
                 filler_order_number: "::fillernum::",
-                date_time: "200911111841",
+                observed_at: "200911111841",
                 observations: [
                   double(
                     identifier: "I_DO_NOT_EXIST_CODE",
                     name: "I_DO_NOT_EXIST_NAME",
-                    date_time: "200911112026",
+                    observed_at: "200911112026",
                     value: "::value::",
                     comment: "::comment::",
                     cancelled: nil,
@@ -329,12 +329,12 @@ module Renalware::Pathology
                 ordering_provider_name: "::name::",
                 placer_order_number: "::pcs code::",
                 filler_order_number: "::fillernum::",
-                date_time: "200911111841",
+                observed_at: "200911111841",
                 observations: [
                   double(
                     identifier: observation_description.code,
                     name: observation_description.name,
-                    date_time: "200911112026",
+                    observed_at: "200911112026",
                     value: "",
                     comment: "",
                     cancelled: nil,
@@ -343,7 +343,7 @@ module Renalware::Pathology
                   double(
                     identifier: "I_DO_NOT_EXIST_CODE",
                     name: "I_DO_NOT_EXIST_NAME",
-                    date_time: "200911112026",
+                    observed_at: "200911112026",
                     value: "",
                     comment: "",
                     cancelled: nil,
@@ -376,12 +376,12 @@ module Renalware::Pathology
                 ordering_provider_name: "::name::",
                 placer_order_number: "::pcs code::",
                 filler_order_number: "::fillernum::",
-                date_time: "200911111841",
+                observed_at: "200911111841",
                 observations: [
                   double(
                     identifier: observation_description.code,
                     name: observation_description.name,
-                    date_time: "200911112026",
+                    observed_at: "200911112026",
                     value: "123",
                     comment: "",
                     cancelled: nil,
@@ -390,7 +390,7 @@ module Renalware::Pathology
                   double(
                     identifier: "I_DO_NOT_EXIST_CODE",
                     name: "I_DO_NOT_EXIST_NAME",
-                    date_time: "200911112026",
+                    observed_at: "200911112026",
                     value: "",
                     comment: "",
                     cancelled: nil,

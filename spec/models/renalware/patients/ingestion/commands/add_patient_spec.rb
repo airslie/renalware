@@ -31,7 +31,7 @@ module Renalware::Patients::Ingestion
 
     describe "#call" do
       context "when the patient does not exist in Renalware" do
-        it "creates them" do
+        it "creates them" do # rubocop:disable RSpec/ExampleLength
           pattrs = OpenStruct.new(
             local_patient_id: "HA123",
             local_patient_id_2: "HB123",
@@ -67,8 +67,9 @@ module Renalware::Patients::Ingestion
           allow(Renalware::Patients::Ingestion::UpdateMasterPatientIndex).to receive(:call)
 
           result = nil
+          reason = "123"
           expect {
-            result = described_class.call(hl7_message)
+            result = described_class.call(hl7_message, reason)
           }.to change(Renalware::Patient, :count).by(1)
 
           expect(result).to be_a(Renalware::Patient)
@@ -92,7 +93,7 @@ module Renalware::Patients::Ingestion
             # Stub UpdateMasterPatientIndex so it does not get in the way
             allow(Renalware::Patients::Ingestion::UpdateMasterPatientIndex).to receive(:call)
             # Mock a patient..
-            patient = instance_double(Renalware::Patient, "by=": nil, new_record?: true)
+            patient = build(:patient, id: 123)
             allow(patient).to receive(:save!).and_return(true)
             # ..that is returned by a mock MessageMappers::Patient builder
             mapper_class = Renalware::Patients::Ingestion::MessageMappers::Patient
@@ -102,9 +103,10 @@ module Renalware::Patients::Ingestion
 
             # As the patient is not found by the Locator, the mapper will return our mock patient
             # and we will 'save' it and broadcast an event, passing the new patient as an arg
+            reason = "123"
             expect {
-              described_class.call(hl7_message)
-            }.to broadcast(:patient_added, patient)
+              described_class.call(hl7_message, reason)
+            }.to broadcast(:patient_added, patient, reason)
 
             # Sanity check that we did try and save the patient
             expect(patient).to have_received(:save!)

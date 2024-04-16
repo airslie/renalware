@@ -1,4 +1,4 @@
-.system-message.alert-box.radius(class=message.severity)
+.system-message.alert-box.radius.shadow-sm(class="#{message.severity} !m-1 !py-2 !border-gray-200 !mt-1 !mb-0")
   - if message.title.present?
-    h1= message.title
+    h2(class="!mb-1")= message.title
   = simple_format(message.body)

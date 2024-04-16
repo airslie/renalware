@@ -5,6 +5,8 @@ require_relative "../page_object"
 module Pages
   module Clinical
     class ProfilePage < Pages::PageObject
+      include SlimSelectHelper
+
       pattr_initialize :patient
 
       def edit
@@ -21,7 +23,7 @@ module Pages
       end
 
       def named_consultant=(user)
-        select user.to_s, from: "Named consultant"
+        slim_select user.to_s, from: "Named consultant"
       end
     end
   end

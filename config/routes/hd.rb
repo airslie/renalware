@@ -29,7 +29,7 @@ namespace :hd do
 
   resources :prescriptions, only: [] do
     resources :administrations,
-              only: %i(new create edit update),
+              only: %i(new create edit update destroy),
               controller: "prescription_administrations"
   end
   resources :prescription_administration, only: [] do

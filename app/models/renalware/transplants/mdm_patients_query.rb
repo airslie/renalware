@@ -7,8 +7,6 @@ module Renalware
     #  at the top) - the default sort order should be same for all of the
     #  different filter groups
     class MDMPatientsQuery
-      include ModalityScopes
-      include PatientPathologyScopes
       DEFAULT_SEARCH_PREDICATE = "cre_date DESC"
       attr_reader :params, :relation, :named_filter
 
@@ -27,8 +25,8 @@ module Renalware
       def search
         @search ||= begin
           relation
-            .extending(ModalityScopes)
-            .extending(PatientPathologyScopes)
+            .include(ModalityScopes)
+            .include(PatientPathologyScopes)
             .extending(NamedFilterScopes)
             .with_current_modality_of_class(Transplants::RecipientModalityDescription)
             .with_current_pathology

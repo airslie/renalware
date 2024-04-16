@@ -7,7 +7,7 @@ Ransack.configure do |config|
 
   # Raise errors if a query contains an unknown predicate or attribute.
   # Default is true (do not raise error on unknown conditions).
-  config.ignore_unknown_conditions = !(Rails.env.development? || Rails.env.test?)
+  config.ignore_unknown_conditions = !Rails.env.local?
 
   # Globally display sort links without the order indicator arrow.
   # Default is false (sort order indicators are displayed).

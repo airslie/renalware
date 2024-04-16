@@ -42,6 +42,7 @@ module Renalware
 
           def entered_at_element
             create_node("EnteredAt") do |elem|
+              elem << create_node("CodingStandard", "LOCAL")
               elem << create_node("Code", session.hospital_unit_renal_registry_code)
             end
           end

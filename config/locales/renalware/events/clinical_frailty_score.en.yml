@@ -3,15 +3,15 @@ en:
   enumerize:
     renalware/events/clinical_frailty_score/document:
       score:
-        '1': 1
-        '2': 2
-        '3': 3
-        '4': 4
-        '5': 5
-        '6': 6
-        '7': 7
-        '8': 8
-        '9': 9
+        '1': "1. Very Fit"
+        '2': "2. Well"
+        '3': "3. Managing Well"
+        '4': "4. Vulnerable"
+        '5': "5. Mildly Frail"
+        '6': "6. Moderately Frail"
+        '7': "7. Severely Frail"
+        '8': "8. Very Severely Frail"
+        '9': "9. Terminally Ill"
   renalware/events/clinical_frailty_score:
     description_column_title: Score
     title: Clinical Frailty Scores

@@ -32,11 +32,11 @@ module Renalware
       private
 
       def ids_of_users_having_created_events_for_this_patient
-        Event.for_patient(patient).pluck(:created_by_id)
+        Event.for_patient(patient).distinct.pluck(:created_by_id)
       end
 
       def all_event_type_ids_in_use_for_this_patient
-        Event.for_patient(patient).pluck(:event_type_id)
+        Event.for_patient(patient).distinct.pluck(:event_type_id)
       end
     end
   end

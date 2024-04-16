@@ -6,6 +6,7 @@
 = link_to(url,
          id: "create-admissions-request",
          data: { "reveal-id" => "admissions-request-modal", "reveal-ajax" => "true" }) do
-  - if local_assigns.fetch(:use_icon, true)
-    i.far.fa-link-annotation.fa-hand-point-right
-  = link_text
+  .flex.items-center
+    - if local_assigns.fetch(:use_icon, true)
+      = inline_icon("admission", class: "mr-2")
+    = link_text

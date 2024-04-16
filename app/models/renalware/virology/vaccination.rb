@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "document/base"
-require "document/embedded"
-require "document/enum"
-
 module Renalware
   module Virology
     class Vaccination < Events::Event

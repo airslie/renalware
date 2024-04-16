@@ -38,18 +38,14 @@ module Renalware
 
       private
 
-      # rubocop:disable Style/MultilineTernaryOperator
       def document_json(document)
-        protocol = Rails.env.development? ||
-          Rails.env.test? ||
-          ENV.fetch("HTTP_ONLY_LINKS_IN_JSON", false) ? :http : :https
+        protocol = Rails.env.local? || ENV.fetch("HTTP_ONLY_LINKS_IN_JSON", false) ? :http : :https
         {
           id: document.id,
           state: document.state,
           url: feeds_queued_outgoing_document_url(document, protocol: protocol, format: :json)
         }
       end
-      # rubocop:enable Style/MultilineTernaryOperator
 
       def renderable(document)
         renderable = document.renderable

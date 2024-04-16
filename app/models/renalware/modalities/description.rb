@@ -3,6 +3,8 @@
 module Renalware
   module Modalities
     class Description < ApplicationRecord
+      include RansackAll
+
       acts_as_paranoid
 
       has_paper_trail(

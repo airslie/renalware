@@ -15,7 +15,6 @@ RUN apt-get update && bash /tmp/library-scripts/github-debian.sh
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
         postgresql postgresql-client postgresql-contrib libpq-dev \
-        redis-server memcached \
         ffmpeg mupdf mupdf-tools libvips poppler-utils
 
 # Add the Rails main Gemfile and install the gems. This means the gem install can be done

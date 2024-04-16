@@ -10,6 +10,7 @@ module Pages
       class Form < PageObject
         include CapybaraSelect2
         include TextEditorHelpers
+        include SlimSelectHelper
 
         def navigate_here_from_admin_dashboard
           visit admin_dashboard_path
@@ -28,7 +29,7 @@ module Pages
         end
 
         def author=(user)
-          select user.to_s, from: "Author"
+          slim_select user.to_s, from: "Author"
         end
 
         def description=(value)

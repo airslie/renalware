@@ -40,7 +40,7 @@ module Renalware
     def self.generate_role_enforcement_hash = Renalware::Role.pluck(:name, :enforce).to_h
 
     def self.role_enforcement_hash
-      return generate_role_enforcement_hash if Rails.env.test? || Rails.env.development?
+      return generate_role_enforcement_hash if Rails.env.local?
 
       @role_enforcement_hash ||= generate_role_enforcement_hash
     end

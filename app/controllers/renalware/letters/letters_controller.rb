@@ -5,7 +5,8 @@
 module Renalware
   module Letters
     class LettersController < Letters::BaseController
-      include Concerns::Pageable
+      include Pagy::Backend
+
       before_action :load_patient, except: [:author]
 
       # The turbo-rails gem mixes in a concern that will access request.headers on each request
@@ -17,18 +18,26 @@ module Renalware
       end
 
       def index
-        render :index, locals: { letters: present_letters(find_letters), patient: patient }
+        pagy, letters = pagy(find_letters)
+        render(
+          locals: {
+            letters: present_letters(letters),
+            patient: patient,
+            pagy: pagy
+          }
+        )
       end
 
       def author
         user = Renalware::User.find(params[:author_id])
         author = Letters.cast_author(user)
-        letters = author.letters.ordered.page(page).per(per_page)
+        pagy, letters = pagy(author.letters.ordered)
         authorize letters
         render locals: {
           author: author,
           letters: present_letters(letters),
-          columns: %i(patient)
+          columns: %i(patient),
+          pagy: pagy
         }
       end
 

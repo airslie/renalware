@@ -11,7 +11,7 @@ module Renalware
           double(
             identifier: "I_DO_NOT_EXIST_CODE",
             name: "I_DO_NOT_EXIST_NAME",
-            date_time: "200911112026",
+            observed_at: "200911112026",
             value: "::value::",
             comment: "::comment::",
             cancelled: nil,

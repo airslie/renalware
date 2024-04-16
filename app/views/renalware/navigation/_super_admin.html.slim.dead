@@ -1,17 +1,17 @@
 li.has-dropdown
   = link_to "Super Admin", "#"
   ul.dropdown
-    li= link_to "Event Types", events_types_path
-    li= link_to "Drugs", drugs_drugs_path
-    li= link_to "Modalities", modalities_descriptions_path
-    li= link_to "PD Bags", pd_bag_types_path
-    li= link_to "Primary Care Physicians", patients_primary_care_physicians_path
-    li= link_to "Cache", admin_cache_path
-    li= link_to "File Imports", admin_feeds_files_path
-    li= link_to "User Feedback", system_user_feedback_index_path
-    li= link_to "System Messages", system_messages_path
-    li= link_to "HD Dialysates", hd_dialysates_path
-    li= link_to "HD Dialysers", hd_dialysers_path
-    li= link_to "HD Cannulation Types", hd_cannulation_types_path
-    li= link_to "Print batches", letters_batches_path
+    li= link_to "Event Types", renalware.events_types_path
+    li= link_to "Drugs", renalware.drugs_drugs_path
+    li= link_to "Modalities", renalware.modalities_descriptions_path
+    li= link_to "PD Bags", renalware.pd_bag_types_path
+    li= link_to "Primary Care Physicians", renalware.patients_primary_care_physicians_path
+    li= link_to "Cache", renalware.admin_cache_path
+    li= link_to "File Imports", renalware.admin_feeds_files_path
+    li= link_to "User Feedback", renalware.system_user_feedback_index_path
+    li= link_to "System Messages", renalware.system_messages_path
+    li= link_to "HD Dialysates", renalware.hd_dialysates_path
+    li= link_to "HD Dialysers", renalware.hd_dialysers_path
+    li= link_to "HD Cannulation Types", renalware.hd_cannulation_types_path
+    li= link_to "Print batches", renalware.letters_batches_path
     li= link_to "Pathology Code Groups", renalware.pathology_code_groups_path

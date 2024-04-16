@@ -3,7 +3,6 @@
 FactoryBot.define do
   factory :hd_prescription_administration, class: "Renalware::HD::PrescriptionAdministration" do
     accountable
-    patient
     prescription
     administered_by factory: %i(user)
     administrator_authorised { true }

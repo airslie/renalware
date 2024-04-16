@@ -40,6 +40,7 @@ en:
       transplant_type:
         kidney: Kidney only
         kidney_liver: Kidney and liver
+        kidney_other: Kidney and other
         kidney_pancreas: Kidney and pancreas
         liver: Liver only
         pancreas: Pancreas only

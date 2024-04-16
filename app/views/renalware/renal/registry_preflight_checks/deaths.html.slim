@@ -10,4 +10,5 @@
 
 = within_admin_layout(title: "Renal Registry Return: Preflight Checks") do
   = render "table", patients: patients, query: query, death_configuration: true
-  = paginate patients
+  == pagy_nav(pagy)
+

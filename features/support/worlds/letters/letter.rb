@@ -330,7 +330,7 @@ module World
 
         attributes = valid_simple_letter_attributes(patient)
         select attributes[:letterhead].name, from: "Letterhead"
-        select user.to_s, from: "Author"
+        slim_select user.to_s, from: "Author"
         slim_select attributes[:description], from: "Topic"
         fill_recipient(recipient)
         fill_ccs(ccs)

@@ -100,6 +100,30 @@ describe "Managing patients" do
         expect(response).to be_successful
       end
     end
+
+    it "updates UKRDC anonymisation attributes" do
+      attributes = {
+        ukrdc_anonymise: true,
+        ukrdc_anonymise_decision_on: Date.parse("01-01-2024"),
+        ukrdc_anonymise_recorded_by: "Dr John"
+      }
+      patch patient_path(patient), params: { patient: attributes }
+
+      expect(response).to have_http_status(:redirect)
+      expect(Renalware::Patient).to exist(attributes)
+
+      updated_patient = Renalware::Patient.find_by(attributes)
+      expect(updated_patient.updated_by).to eq(@current_user)
+
+      follow_redirect!
+
+      updated_patient = Renalware::Patient.find_by(attributes)
+      expect(updated_patient).to have_attributes(
+        attributes
+      )
+
+      expect(response).to be_successful
+    end
   end
 
   def build_document

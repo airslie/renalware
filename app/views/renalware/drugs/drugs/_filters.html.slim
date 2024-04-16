@@ -1,6 +1,6 @@
 .filters
   .filters__form
-    = search_form_for drugs_search,
+    = search_form_for drug_search,
                       html: { class: "fn-form",
                               autocomplete: "off" },
                       data: { turbo_frame: "drugs",
@@ -16,21 +16,21 @@
           = f.label "Drug type"
           = f.select(:drug_types_id_eq,
                      options_from_collection_for_select(\
-                     Renalware::Drugs::Type.all, "id", "name", drugs_search.drug_types_name_eq),
+                     Renalware::Drugs::Type.all, "id", "name", drug_search.drug_types_name_eq),
                      { include_blank: "Any" },
                      data: { controller: "slimselect", action: "change->form#submit" })
         .small-8.large-2.columns
           = f.label "dm+d drug"
           = f.select(:code_present,
                      options_from_collection_for_select(\
-                     [%w(Yes true), %w(No false)], :last, :first, drugs_search.code_present),
+                     [%w(Yes true), %w(No false)], :last, :first, drug_search.code_present),
                      { include_blank: "Any" },
                      data: { controller: "slimselect", action: "change->form#submit" })
         .small-8.large-2.columns
           = f.label "Inactive"
           = f.select(:inactive_eq,
                      options_from_collection_for_select(\
-                     [%w(No false),%w(Yes true)], :last, :first, drugs_search.inactive_eq),
+                     [%w(No false),%w(Yes true)], :last, :first, drug_search.inactive_eq),
                      data: { action: "change->form#submit" })
         .small-8.large-2.columns.actions.end
           .pt-px= link_to("Reset", renalware.drugs_drugs_path, class: "btn btn-secondary")

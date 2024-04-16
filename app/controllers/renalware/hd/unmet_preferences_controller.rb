@@ -4,14 +4,16 @@ module Renalware
   module HD
     class UnmetPreferencesController < BaseController
       include PresenterHelper
+      include Pagy::Backend
 
       def index
         query = PatientsWithUnmetPreferencesQuery.new(query_params)
-        patients = query.call.page(params[:page])
+        pagy, patients = pagy(query.call)
         authorize(patients)
         render locals: {
           query: query.search,
-          patients: present(patients, UnmetPreferencesPresenter)
+          patients: present(patients, UnmetPreferencesPresenter),
+          pagy: pagy
         }
       end
 

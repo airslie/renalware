@@ -20,6 +20,7 @@ module Renalware
       aggregate_failures do
         is_expected.to be_versioned
         is_expected.to have_db_index(:ukrdc_external_id)
+        is_expected.to have_db_index(:ukrdc_anonymise)
         is_expected.to have_db_index(:local_patient_id).unique(true)
         is_expected.to have_db_index(:local_patient_id_2).unique(true)
         is_expected.to have_db_index(:local_patient_id_3).unique(true)

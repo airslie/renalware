@@ -3,6 +3,8 @@
 module Renalware
   module Pathology
     class ObservationRequest < ApplicationRecord
+      include RansackAll
+
       has_many :observations,
                foreign_key: :request_id,
                inverse_of: :request,

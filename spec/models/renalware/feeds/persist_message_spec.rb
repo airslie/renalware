@@ -61,7 +61,7 @@ module Renalware::Feeds
 
           feed_message = service.call(hl7_message)
 
-          expect(feed_message).to have_attributes(
+          expect(feed_message.reload).to have_attributes(
             nhs_number: "1",
             local_patient_id: "1111",
             local_patient_id_2: "2222",

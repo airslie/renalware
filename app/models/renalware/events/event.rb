@@ -3,6 +3,7 @@
 module Renalware
   module Events
     class Event < ApplicationRecord
+      include RansackAll
       include Accountable
       include PatientScope
       acts_as_paranoid

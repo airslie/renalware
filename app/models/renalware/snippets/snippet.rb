@@ -3,6 +3,8 @@
 module Renalware
   module Snippets
     class Snippet < ApplicationRecord
+      include RansackAll
+
       validates :title, presence: true, uniqueness: { scope: :author }
       validates :body, presence: true
       validates :author, presence: true

@@ -5,5 +5,4 @@
 
 = within_patient_layout(title: "Events") do
   = render "filters", query: query, events: events
-  = render "table", events: events, query: query
-  = paginate(events)
+  = render "table", events: events, query: query, pagy: pagy

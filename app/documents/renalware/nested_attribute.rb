@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "document/embedded"
-
 module Renalware
   class NestedAttribute < Document::Embedded
     def nested_attribute?

@@ -1,0 +1,61 @@
+= content_for(:filters) do
+  = simple_form_for search,
+                  url: reporting.reports_path,
+                  remote: false,
+                  html: { class: "" },
+                  data: { controller: "form", action: "input->form#submit" },
+                  method: :get do |f|
+
+    .flex.flex-col.sm:flex-row.items-start.md:w-1/2.mb-6
+      = f.label :sub_category_eq, "Category", class: "mr-4 mt-1"
+      = f.select :sub_category_eq,
+                  Renalware::System::ViewMetadata.where(category: "report").order(:sub_category).pluck(:sub_category).uniq,
+                  { include_blank: "All" },
+                  data: { controller: "slimselect", action: "change->form#submit" }
+
+= within_admin_layout(title: "Reports") do
+  table
+    thead
+      tr
+        th.col-width-tiny
+        th= sort_link([:reporting, search], :title)
+        th= sort_link([:reporting, search], :sub_category, "Category")
+        - if current_user_is_super_admin?
+          th= sort_link([:reporting, search], :view_name)
+          th= sort_link([:reporting, search], :display_type, "Type")
+          th.col-width-tiny= sort_link([:reporting, search], :calls_count, "Views")
+          th.col-width-date-time= sort_link([:reporting, search], :last_called_at, "Last viewed")
+        th.col-width-date-time= sort_link([:reporting, search], :updated_at, "Updated")
+        th.col-width-date-time= sort_link([:reporting, search], :materialized_view_refreshed_at, " Last refreshed")
+        th
+    tbody
+      - reports.each do |report|
+        tr
+          td= link_to "View", reporting.report_path(report)
+          td= report.title
+          td=report.sub_category
+          - if current_user_is_super_admin?
+            td.code= [report.schema_name, report.view_name].compact.join(".")
+            td= report.display_type&.humanize
+            td= report.calls_count
+            td= l(report.last_called_at)
+          td= l(report.updated_at)
+          td = l(report.materialized_view_refreshed_at)
+          td.text-right
+            - if report.materialized?
+              = button_to("Refresh Data",
+                          reporting.view_metadata_refreshments_path(view_metadata_id: report.id),
+                          class: "button compact warning")
+
+
+
+  - if current_user_is_super_admin?
+    p.border.rounded.px-3.py-2.mb-10.shadow.bg-blue-50.mt-10.flex.items-center
+      i.fa.fa-info-circle.text-blue-400.mr-4
+      ' To create a new report, work out the SQL you need (and the columns to return) and create
+      ' a SQL view (ideally in the hospital's own schema eg
+      ' renalware_mse
+      ' so its clear it is not part of core Renalware)
+      ' and then add an entry for it into the
+      ' renalware.system_view_metadata
+      ' table using the category of 'report'

@@ -3,9 +3,8 @@
 module Renalware
   module Drugs
     class DrugsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
-      before_action :prepare_drugs_search, only: :index
       after_action :track_action, except: :selected_drugs
 
       # Return a list of drugs as JSON for specific drug type (medication_switch)
@@ -20,14 +19,15 @@ module Renalware
       end
 
       def index
-        @drugs = @drugs_search.result(distinct: true)
-        authorize @drugs
-
-        @drugs = @drugs.page(page).per(per_page) if request.format.html?
+        drugs = drug_search.result(distinct: true)
+        authorize drugs
 
         respond_to do |format|
-          format.html
-          format.json { render json: @drugs }
+          format.html do
+            pagy, drugs = pagy(drugs)
+            render locals: { drugs: drugs, pagy: pagy, drug_search: drug_search }
+          end
+          format.json { render json: drugs }
         end
       end
 
@@ -46,8 +46,7 @@ module Renalware
         authorize @drug
 
         if @drug.save
-          redirect_to drugs_drugs_path,
-                      notice: success_msg_for("drug")
+          redirect_to drugs_drugs_path, notice: success_msg_for("drug")
         else
           flash.now[:error] = failed_msg_for("drug")
           render :new
@@ -88,10 +87,11 @@ module Renalware
         )
       end
 
-      def prepare_drugs_search
-        search_params = params.fetch(:q, { inactive_eq: false })
-        @drugs_search = Drug.ransack(search_params)
-        @drugs_search.sorts = "name"
+      def drug_search
+        @drug_search ||= begin
+          search_params = params.fetch(:q, { inactive_eq: false })
+          Drug.ransack(search_params).tap { |query| query.sorts = "name" }
+        end
       end
     end
   end

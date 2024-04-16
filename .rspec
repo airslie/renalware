@@ -1,3 +1,4 @@
 --color
 --format doc
--r turnip/rspec
+--require packs/rails/rspec
+--require turnip/rspec

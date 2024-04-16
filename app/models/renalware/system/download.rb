@@ -4,6 +4,8 @@ module Renalware
   module System
     class Download < ApplicationRecord
       include Accountable
+      include RansackAll
+
       acts_as_paranoid
       validates :name, presence: true, uniqueness: true
       has_one_attached :file

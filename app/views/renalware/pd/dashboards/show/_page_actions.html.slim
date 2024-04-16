@@ -1,51 +1,52 @@
-=> link_to(patient_pd_mdm_path(patient), class: "button with-icon secondary") do
-  i.fas.fa-users
-  = t(".mdm")
+.flex.items-center
+  => link_to(patient_pd_mdm_path(patient), class: "button with-icon secondary") do
+    i.fas.fa-users
+    = t(".mdm")
 
-a.button.dropdown.with-icon(href="#"
-                  data-dropdown="pd-options"
-                  aria-controls="pd-options"
-                  aria-expanded="false")
-  i.fas.fa-plus
-  = t("btn.add_")
-br
+  a.button.dropdown.with-icon(href="#"
+                    data-dropdown="pd-options"
+                    aria-controls="pd-options"
+                    aria-expanded="false")
+    | Add&hellip;
+  br
 
-ul.f-dropdown#pd-options(data-dropdown-content aria-hidden="true")
+  ul.f-dropdown#pd-options(data-dropdown-content aria-hidden="true")
 
-  - patient_on_pd = patient.has_ever_been_on_pd?
+    - patient_on_pd = patient.has_ever_been_on_pd?
 
-  = dropdown_btn_item title: t(".add_pd_assessment"),
-                      url: new_patient_pd_assessment_path(patient)
+    = dropdown_btn_item title: t(".add_pd_assessment"),
+                        url: new_patient_pd_assessment_path(patient)
 
-  = dropdown_btn_item title: t(".add_pd_training_session"),
-                      url: new_patient_pd_training_session_path(patient)
+    = dropdown_btn_item title: t(".add_pd_training_session"),
+                        url: new_patient_pd_training_session_path(patient)
 
-  = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::CAPDRegime).new?,
-                      title: t(".add_capd_regime"),
-                      url: new_patient_pd_regime_path(patient, type: "PD::CAPDRegime")
+    = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::CAPDRegime).new?,
+                        title: t(".add_capd_regime"),
+                        url: new_patient_pd_regime_path(patient, type: "PD::CAPDRegime")
 
-  = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::APDRegime).new?,
-                      title: t(".add_apd_regime"),
-                      url: new_patient_pd_regime_path(patient, type: "PD::APDRegime")
+    = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::APDRegime).new?,
+                        title: t(".add_apd_regime"),
+                        url: new_patient_pd_regime_path(patient, type: "PD::APDRegime")
 
-  = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::PeritonitisEpisode).new?,
-                      title: t(".add_peritonitis_episode"),
-                      url: new_patient_pd_peritonitis_episode_path(patient)
+    = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::PeritonitisEpisode).new?,
+                        title: t(".add_peritonitis_episode"),
+                        url: new_patient_pd_peritonitis_episode_path(patient)
 
-  = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::ExitSiteInfection).new?,
-                      title: t(".add_exit_site_infection"),
-                      url: new_patient_pd_exit_site_infection_path(patient)
+    = dropdown_btn_item enabled: patient_on_pd && policy(Renalware::PD::ExitSiteInfection).new?,
+                        title: t(".add_exit_site_infection"),
+                        url: new_patient_pd_exit_site_infection_path(patient)
 
-  = dropdown_btn_item enabled: patient_on_pd,
-                      title: t(".add_unified_pet_adequacy"),
-                      url: new_patient_pd_unified_pet_adequacy_path(patient)
+    = dropdown_btn_item enabled: patient_on_pd,
+                        title: t(".add_unified_pet_adequacy"),
+                        url: new_patient_pd_unified_pet_adequacy_path(patient)
 
-  = dropdown_btn_item enabled: patient_on_pd,
-                      title: t(".add_pet"),
-                      url: new_patient_pd_pet_result_path(patient)
+    = dropdown_btn_item enabled: patient_on_pd,
+                        title: t(".add_pet"),
+                        url: new_patient_pd_pet_result_path(patient)
 
-  = dropdown_btn_item enabled: patient_on_pd,
-                      title: t(".add_adequacy"),
-                      url: new_patient_pd_adequacy_result_path(patient)
-- unless patient_on_pd
-  = render "modality_missing_warning", message: t(".missing_modality_warning")
+    = dropdown_btn_item enabled: patient_on_pd,
+                        title: t(".add_adequacy"),
+                        url: new_patient_pd_adequacy_result_path(patient)
+
+  - unless patient.has_ever_been_on_pd?
+    = render "modality_missing_warning", modality_name: "PD"

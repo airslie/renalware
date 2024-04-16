@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rubygems"
+require "packs-rails"
 require "view_component"
 require "activerecord-import"
 require "ahoy"
@@ -62,6 +63,9 @@ require "wisper"
 require "wisper/activejob"
 require "byebug" if ENV.fetch("RAILS_ENV", nil) == "development"
 
+# include packs
+require_relative "../../packs/reporting/lib/engine"
+
 module Renalware
   # Don't have prefix method return anything.
   # This will keep Rails Engine from generating all table prefixes with the engines name
@@ -114,7 +118,7 @@ module Renalware
             class: "Renalware::InvokeCommandJob",
             args: ["bundle exec rake reporting:send_daily_summary_email"],
             description: "Send an email report on the day's
-                          activity (exluding sensitive data) to configured recipients".squish
+                          activity (excluding sensitive data) to configured recipients".squish
           },
 
           ukrdc_export: {

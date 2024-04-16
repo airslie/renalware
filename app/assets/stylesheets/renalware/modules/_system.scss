@@ -1,5 +1,13 @@
 .system-message {
-  line-height: 1.5;
+  line-height: 1.4;
+  padding-top: .3rem;
+  padding-bottom: .4rem;
+
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+
   h1,
   h2,
   p,
@@ -7,6 +15,8 @@
   span {
     color: $white;
     margin-top: 0;
+    margin: 0;
+    padding: 0;
   }
 
   &.info,
@@ -17,7 +27,7 @@
     p,
     div,
     span {
-      color: $black;
+      color: $dark-grey;
     }
   }
 

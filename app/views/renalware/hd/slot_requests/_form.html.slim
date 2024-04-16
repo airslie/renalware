@@ -31,9 +31,20 @@
           div.block
             div.mt-3
               div
-                = f.label :inpatient, class: "inline-flex items-center" do
-                  = f.check_box :inpatient
-                  span.ml-2 Inpatient
+                .flex(data-controller="hd-slot-request",
+                      data-hd-slot-request-disabled-class="text-gray-400 border-gray-400")
+                  = f.label :inpatient, class: "inline-flex items-center pr-8" do
+                    = f.check_box :inpatient,
+                                  data: { action: "click->hd-slot-request#inpatient_checked",
+                                          "hd-slot-request-target" => "inpatient" }
+                    span.ml-2 Inpatient
+                  = f.label :medically_fit_for_discharge,
+                            class: "inline-flex items-center text-gray-400 border-gray-400",
+                            title: "Medically fit for discharge",
+                            data: { "hd-slot-request-target" => "mffdLabel" } do
+                    = f.check_box :medically_fit_for_discharge,
+                                  data: { "hd-slot-request-target" => "mffdCheckbox" }
+                    span.ml-2 MFFD
 
           div.block
             div.mt-1

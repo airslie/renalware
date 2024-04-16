@@ -16,16 +16,15 @@ tr.admissions_request(id=dom_id(request) class="sortable priority-#{request.prio
     = request.notes
   td(title=editing_history)= l(request.created_at)
   td.col-width-medium-with-ellipsis=request.created_by
-  td
-    = link_to admissions_request_path(request),
+  td.actions
+    = link_to t("btn.delete"),
+              admissions_request_path(request),
               remote: true,
               method: :delete,
               class: "remove",
-              data: { confirm: "Are you sure you want to remove this item?" } do
-      i.fas.fa-trash.fa-link-annotation
-      | &nbsp;|&nbsp;&nbsp;
-      = link_to t("btn.edit"),
-                edit_admissions_request_path(request, format: :html),
-                data: { "reveal-id" => "admissions-request-modal", "reveal-ajax" => "true" }
+              data: { confirm: "Are you sure you want to remove this item?" }
+    = link_to t("btn.edit"),
+              edit_admissions_request_path(request, format: :html),
+              data: { "reveal-id" => "admissions-request-modal", "reveal-ajax" => "true" }
   td.handle
     i.fas.fa-bars

@@ -1,15 +1,15 @@
 li.has-dropdown
   = link_to t(".menu_title"), "#"
   ul.dropdown
-    li= link_to t(".appointments"), appointments_path
-    li= link_to t(".clinic_visits"), clinic_visits_path
-    li= link_to t(".events"), events_filtered_list_path
-    li= link_to t(".letters"), letters_list_path
-    li= link_to t(".esa_prescriptions"), medications_esa_prescriptions_path
+    li= link_to t(".appointments"), renalware.appointments_path
+    li= link_to t(".clinic_visits"), renalware.clinic_visits_path
+    li= link_to t(".events"), renalware.events_filtered_list_path
+    li= link_to t(".letters"), renalware.letters_list_path
+    li= link_to t(".esa_prescriptions"), renalware.medications_esa_prescriptions_path
     li= link_to t(".home_delivery_prescriptions"),
                 renalware.medications_home_delivery_prescriptions_path(named_filter: "esa")
-    li= link_to t(".aki_alerts"), renal_aki_alerts_path
-    li= link_to t(".studies"), research_studies_path
+    li= link_to t(".aki_alerts"), renalware.renal_aki_alerts_path
+    li= link_to t(".studies"), renalware.research_studies_path
     li= link_to t(".users"), renalware.users_path
-    li= link_to t(".hospital_units"), hospitals_units_path
-    li= link_to t(".renal_registry_checks"), patients_renal_registry_preflight_checks_path
+    li= link_to t(".hospital_units"), renalware.hospitals_units_path
+    li= link_to t(".renal_registry_checks"), renalware.patients_renal_registry_preflight_checks_path

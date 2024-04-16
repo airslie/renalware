@@ -9,44 +9,49 @@
                               turbo_advance: true,
                               controller: "form",
                               action: "input->form#submit" } do |f|
-      .flex.flex-row
-        .w-1/4
-          = label_tag :identity_match, "Patient name/NHS/MRN"
-          = f.search_field :identity_match, class: ""
 
-        .w-1/4.pl-2
-          = f.label "Urgency"
-          = f.select(:urgency_eq,
-                     urgency_dropdown_options,
-                     include_blank: true,
-                     data: {  action: "change->form#submit" })
+      div
+        /.grid.grid-flow-col.auto-cols-max.gap-2
+        .grid.grid-cols-10.gap-2
+          .col-span-2
+            = label_tag :identity_match, "Patient name/NHS/MRN", class: "whitespace-nowrap overflow-hidden"
+            = f.search_field :identity_match, class: ""
 
-        .w-1/4.pl-2
-          = f.label "Modality"
-          = f.select(:patient_current_modality_description_id_eq,
-                     Renalware::Modalities::Description.pluck(:name, :id),
-                     include_blank: true,
-                     data: {  action: "change->form#submit" })
+          div
+            = f.label "Urgency"
+            = f.select(:urgency_eq, urgency_dropdown_options, include_blank: true)
 
-        - boolean_options = [["Any",nil], ["True", true], ["False", false]]
+          div
+            = f.label "Modality"
+            = f.select(:patient_current_modality_description_id_eq,
+                      Renalware::Modalities::Description.pluck(:name, :id),
+                      include_blank: true)
 
-        .w-1/6.pl-2
-          = label_tag :inpatient_eq, "Inpatient"
-          = f.select :inpatient_eq, boolean_options
+          - boolean_options = [["Any",nil], ["True", true], ["False", false]]
 
-        .w-1/6.pl-2
-          = label_tag :late_presenter_eq, "Late presenter"
-          = f.select :late_presenter_eq, boolean_options
+          div
+            = label_tag :inpatient_eq, "Inpatient"
+            = f.select :inpatient_eq, boolean_options
 
-        .w-1/6.pl-2
-          = label_tag :suitable_for_twilight_slots_eq, "Twilight slots?"
-          = f.select :suitable_for_twilight_slots_eq, boolean_options
+          div
+            = label_tag :medically_fit_for_discharge_eq, "MFFD"
+            = f.select :medically_fit_for_discharge_eq, boolean_options
+          div
+            = label_tag :late_presenter_eq, "Late presenter", class: "whitespace-nowrap overflow-hidden"
+            = f.select :late_presenter_eq, boolean_options
 
-        .w-1/6.pl-2
-          = label_tag :external_referral_eq, "External referral"
-          = f.select :external_referral_eq, boolean_options
+          div
+            = label_tag :suitable_for_twilight_slots_eq, "Twilight slots?", class: "whitespace-nowrap overflow-hidden"
+            = f.select :suitable_for_twilight_slots_eq, boolean_options
 
-        .w-1/4.pt-6.pl-2
-          = link_to("Reset", url, class: "btn btn-secondary", target: "_top")
-          noscript
-            = filter_or_reset(form: f, reset_path: url)
+          div
+            = label_tag :external_referral_eq, "External referral", class: "whitespace-nowrap overflow-hidden"
+            = f.select :external_referral_eq, boolean_options
+
+          .pt-6
+            = link_to(url, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+              .flex.items-center
+                .mr-1= inline_icon(:cross, size: :md)
+                | Reset
+            noscript
+              = filter_or_reset(form: f, reset_path: url)

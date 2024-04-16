@@ -121,6 +121,7 @@ $alert-transition-ease: ease-out !default;
 @include exports("alert-box") {
   @if $include-html-alert-classes {
     .alert-box {
+      line-height: 1.4;
       @include alert;
 
       .close {

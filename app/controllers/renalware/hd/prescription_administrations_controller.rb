@@ -47,6 +47,16 @@ module Renalware
         end
       end
 
+      def destroy
+        administration = HD::PrescriptionAdministration
+          .where(prescription: prescription)
+          .find(params[:id])
+
+        authorize administration
+        administration.destroy!
+        redirect_to patient_hd_dashboard_path(prescription.patient)
+      end
+
       private
 
       def clear_irrelevant_attributes_if_drug_was_not_administered(administration)
@@ -63,7 +73,7 @@ module Renalware
         )
       end
 
-      # Becuase for actions other than index we have no params[:patient_id] (secure_id guid) in
+      # Because for actions other than index we have no params[:patient_id] (secure_id guid) in
       # the url, here we set @patient (normally set in BaseController) based on the
       # prescription.patient_id. We need @patient set before calling hd_patient which is defined
       # dynamically in the PatientCasting concern (and will memoise on first call).

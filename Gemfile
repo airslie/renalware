@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby ">= 3.1"
+ruby ">= 3.3"
 
 gemspec
 
@@ -14,13 +14,11 @@ gem "activesupport_cache_database", github: "airslie/activesupport-cache-databas
 # opentelemetry is enabled with an ENV var.
 group :opentelemetry do
   gem "opentelemetry-exporter-otlp"
-  gem "opentelemetry-instrumentation-delayed_job"
   gem "opentelemetry-instrumentation-faraday"
   gem "opentelemetry-instrumentation-net_http"
   gem "opentelemetry-instrumentation-pg"
   gem "opentelemetry-instrumentation-rack"
   gem "opentelemetry-instrumentation-rails"
-  gem "opentelemetry-instrumentation-redis"
   gem "opentelemetry-sdk"
 end
 
@@ -37,10 +35,10 @@ gem "net-smtp", require: false # remove in Rails 7
 gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
 gem "paper_trail"
 gem "party_foul", "~> 1.5.5", github: "airslie/party_foul"
-gem "rails", "~> 7.0.8"
-gem "redis", "~> 4.8"
+gem "rails", "~> 7.1.0"
 gem "renalware-forms", ">=0.1", github: "airslie/renalware-forms", branch: "main"
 gem "ruby-prof", require: false
+gem "solid_cache"
 gem "terser"
 # Re wkhtmltopdf binary for letter generation
 # a host app could include the wkhtmltopdf-binary gem, or use the apt package.
@@ -48,10 +46,12 @@ gem "terser"
 # so in a docker image the apt package is a better choice
 gem "httparty", require: false
 gem "wkhtmltopdf-binary", "0.12.3.1"
-# For sentry error reporting and metrics
-# gem "sentry-rails"
-# gem "sentry-ruby"
+
 gem "rake"
+
+# For sentry error reporting and metrics
+gem "sentry-rails"
+gem "sentry-ruby"
 gem "strong_migrations"
 
 gem "good_job"
@@ -63,7 +63,7 @@ group :test do
   gem "capybara-select-2"
   gem "cucumber-rails", require: false # , "~> 2.6.1", require: false # must be loaded in env.rb
   gem "database_cleaner", require: false # for cucumber (now not needed for rspec)
-  gem "execjs", "2.7.0" # 2.8.1 raises an error
+  gem "execjs" # , "2.7.0" # 2.8.1 raises an error
   gem "fuubar", require: false
   gem "rails-controller-testing", "~> 1.0.4"
   gem "rspec-html-matchers", require: false

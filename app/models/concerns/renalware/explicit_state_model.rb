@@ -52,8 +52,6 @@ module Renalware
 
     module ClassMethods
       # Adds a ActiveRecord scopes for each state defined; e.g. `Letter.draft`
-      #
-      # rubocop :disable Naming/PredicateName
       def has_states(*states)
         states.each do |state|
           state_scope(state, state)
@@ -67,7 +65,6 @@ module Renalware
           states
         end
       end
-      # rubocop :enable Naming/PredicateName
 
       # Allows for custom scope names, example:
       #

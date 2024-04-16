@@ -18,7 +18,7 @@ namespace :pathology do
       raw_message = raw_message.gsub("--- !ruby/struct:FeedJob\n", "")
 
       # Replace the MSH date with now() to guarantee a unique message. not doing so results in
-      # an index violation becuase we calc am MD5 hash of the message and this has to be unique -
+      # an index violation because we calc am MD5 hash of the message and this has to be unique -
       # this prevents us importing the same message twice.
       raw_message = raw_message.gsub("20091112164645", Time.zone.now.strftime("%Y%m%d%H%M%S"))
 
@@ -39,11 +39,11 @@ namespace :pathology do
       # Make sure line endings are \r and not \n or as that is how the HL7 looks
       raw_message = raw_message.tr "\n", "\r"
 
-      # To do this in a loop be sure to add .L ms when gsubbing the msg
+      # To do this in a loop be sure to add .L ms when gsub-ing the msg
       # 10000.times do
       raw_msg = raw_message.dup
       # Replace the MSH date with now() to guarantee a unique message. not doing so results in
-      # an index violation becuase we calc am MD5 hash of the message and this has to be unique -
+      # an index violation because we calc am MD5 hash of the message and this has to be unique -
       # this prevents us importing the same message twice.
       # raw_msg = raw_msg.gsub("20091112164645", Time.zone.now.strftime("%Y%m%d%H%M%S.%L"))
       raw_msg = raw_msg.gsub("20091112164645", Time.zone.now.strftime("%Y%m%d%H%M%S"))

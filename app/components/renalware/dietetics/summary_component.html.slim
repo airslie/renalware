@@ -8,7 +8,7 @@ article
       dd = l(last_dietetic_clinic_visit.date)
 
       dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:ideal_body_weight)
-      dd = Renalware::Dietetics::WeightValuePresenter.new(last_dietetic_clinic_visit.document.ideal_body_weight).to_s
+      dd = Renalware::Clinics::WeightValuePresenter.new(last_dietetic_clinic_visit.document.ideal_body_weight).to_s
 
       dt = Renalware::Dietetics::ClinicVisit::Document.human_attribute_name(:sga)
       dd = I18n.t(last_dietetic_clinic_visit.document.sga_assessment, scope: "enumerize.renalware/dietetics/clinic_visit/document.sga_assessment") if last_dietetic_clinic_visit.document.sga_assessment

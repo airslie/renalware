@@ -1,3 +1,3 @@
 = within_admin_layout(title: "#{author.full_name}'s letters") do
   = render "table", letters: letters, columns: columns
-  = paginate letters
+  == pagy_nav pagy

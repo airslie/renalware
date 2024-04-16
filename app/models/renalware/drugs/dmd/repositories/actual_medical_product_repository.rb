@@ -28,6 +28,7 @@ module Renalware
           raise(OntologyClient::RequestFailed.new(response: response)) unless response.success?
 
           return [] if response.body["expansion"]["total"] == 0
+          return [] if response.body.dig("expansion", "contains").blank?
 
           response.body["expansion"]["contains"].filter_map do |row|
             next if row["extension"].blank?

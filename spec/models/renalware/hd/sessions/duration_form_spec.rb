@@ -161,7 +161,9 @@ describe Renalware::HD::Sessions::DurationForm do
     context "when allowing for a different server timestamp", tz: "Pacific Time (US & Canada)" do
       subject { described_class.new(start_date: "2021-12-12", start_time: "11:31").started_at }
 
-      it { is_expected.to eq(Time.zone.parse("Sun, 12 Dec 2021 11:31:00 -0800")) }
+      it do
+        is_expected.to eq(Time.zone.parse("Sun, 12 Dec 2021 11:31:00 -0800"))
+      end
     end
   end
 

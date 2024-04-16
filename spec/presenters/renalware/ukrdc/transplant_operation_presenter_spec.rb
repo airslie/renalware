@@ -17,13 +17,12 @@ module Renalware
       end
     end
 
-    # operation_type in %i(kidney kidney_dual kidney_pancreas pancreas kidney_liver liver)
     describe "#procedure_type_snomed_code" do
       subject { presenter.procedure_type_snomed_code }
 
       let(:operation) { build(:transplant_recipient_operation, operation_type: operation_type) }
 
-      %i(kidney_dual kidney kidney_dual kidney_liver liver).each do |operation_type|
+      %i(kidney_dual kidney kidney_dual kidney_liver liver kidney_other).each do |operation_type|
         context "when the operation_type is #{operation_type}" do
           let(:operation_type) { operation_type }
 

@@ -3,6 +3,7 @@
 module Renalware
   module Pathology
     class OBXMapping < ApplicationRecord
+      include RansackAll
       include Accountable
 
       belongs_to :sender

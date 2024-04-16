@@ -64,6 +64,7 @@ en:
         kidney: Kidney only
         kidney_dual: Kidney only - dual
         kidney_liver: Kidney and liver
+        kidney_other: Kidney and other
         kidney_pancreas: Kidney and pancreas
         liver: Liver only
         pancreas: Pancreas only

@@ -1,24 +1,38 @@
-.search-form.filters
-  = simple_form_for query,
-      as: :q,
-      url: patient_events_path(events.patient),
-      method: :get do |f|
-    .row
-      .medium-3.large-2.columns
-        = f.input :event_type_category_id_eq,
-                  collection: Renalware::Events::Category.all,
-                  label: "Category"
-      .medium-3.large-3.columns
-        = f.input :event_type_id_eq,
-                  as: :grouped_select,
-                  group_method: :types,
-                  collection: events.event_types_for_filtering,
-                  label: "Type",
-                  input_html: { class: "searchable_select" }
-      .medium-3.large-3.columns
-        = f.input :created_by_id_eq,
-                  as: :user_picker,
-                  collection: events.users_for_filtering,
-                  label: "Added by"
-      .medium-3.large-3.columns.actions.end
-        .mt-px= filter_or_reset(form: f, reset_path: patient_events_path(events.patient))
+- url = patient_events_path(events.patient)
+= simple_form_for query,
+    as: :q,
+    url: url,
+    html: { autocomplete: "off" },
+    remote: true,
+    method: :get,
+    data: { turbo_frame: "events-turbo-frame",
+            turbo: true,
+            turbo_advance: true,
+            controller: "form",
+            action: "input->form#submit" } do |f|
+
+  .md:flex.gap-x-4
+    .basis-4/12
+      = f.input :event_type_category_id_eq,
+                collection: Renalware::Events::Category.all,
+                label: "Category"
+    .basis-1/4
+      = f.input :event_type_id_eq,
+                as: :grouped_select,
+                group_method: :types,
+                collection: events.event_types_for_filtering,
+                label: "Type",
+                input_html: { data: { controller: "slimselect", action: "change->form#submit" }}
+    .basis-1/4
+      = f.input :created_by_id_eq,
+                as: :user_picker,
+                collection: events.users_for_filtering,
+                label: "Added by",
+                input_html: { data: { action: "change->form#submit" }}
+    .basis-1/4.mt-6
+      = link_to(url, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+        .flex.items-center
+          .mr-1= inline_icon(:cross, size: :md)
+          | Reset
+      noscript
+        = filter_or_reset(form: f, reset_path: url)

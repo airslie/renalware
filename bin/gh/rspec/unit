@@ -1,2 +1,2 @@
 #!/bin/sh
-bin/rspec --exclude-pattern "spec/{integration,requests,acceptance,system}/**/*_spec.rb"  --format progress
+bin/rspec --pattern "{spec,packs/**/spec}/**/*_spec.rb" --exclude-pattern "{spec,packs/**/spec}/{integration,requests,acceptance,system}/**/*_spec.rb" --format progress

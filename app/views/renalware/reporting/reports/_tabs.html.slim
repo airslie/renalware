@@ -1,9 +1,0 @@
-- if report.chart&.x_axis_column.present? || report.chart_raw&.keys.any?
-  dl.sub-nav(data-controller="tabbed-navigation")
-    dd= link_to "Table", renalware.reporting_report_path(report)
-    - if report.chart&.x_axis_column.present?
-      dd= link_to "Chart", renalware.chart_reporting_report_path(report)
-    - if report.chart_raw&.keys.any?
-      dd= link_to "Chart", renalware.chart_raw_reporting_report_path(report)
-- else
- .mb-2

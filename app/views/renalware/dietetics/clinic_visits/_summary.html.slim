@@ -7,10 +7,10 @@
 
   = list.sub_heading "Weight"
   = list.definition(:weight_notes)
-  = list.definition(:previous_weight) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:previous_weight) { |value| Renalware::Clinics::WeightValuePresenter.new(value).to_s }
   = list.definition(:previous_weight_date) { |value| l(value) }
   = list.definition(:weight_change) { |value| "#{value} %" if value.present? }
-  = list.definition(:ideal_body_weight) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:ideal_body_weight) { |value| Renalware::Clinics::WeightValuePresenter.new(value).to_s }
   = list.definition(:adjusted_bmi)
   = list.definition(:waist_circumference)
 
@@ -22,8 +22,8 @@
   = list.definition(:energy_intake) { |value| Renalware::Dietetics::EnergyValuePresenter.new(value).to_s }
 
   = list.sub_heading "Handgrip"
-  = list.definition(:handgrip_left) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
-  = list.definition(:handgrip_right) { |value| Renalware::Dietetics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:handgrip_left) { |value| Renalware::Clinics::WeightValuePresenter.new(value).to_s }
+  = list.definition(:handgrip_right) { |value| Renalware::Clinics::WeightValuePresenter.new(value).to_s }
   = list.definition(:dominant_hand)
 
   = list.sub_heading "Assessment"

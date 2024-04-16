@@ -3,7 +3,6 @@
 module Renalware
   module LowClearance
     class MDMPatientsQuery
-      include ModalityScopes
       DEFAULT_SEARCH_PREDICATE = "hgb_date DESC"
       attr_reader :params, :relation, :named_filter
 
@@ -21,9 +20,9 @@ module Renalware
       def search
         @search ||= begin
           relation
-            .extending(PatientTransplantScopes)
-            .extending(PatientPathologyScopes)
-            .extending(ModalityScopes)
+            .include(PatientTransplantScopes)
+            .include(PatientPathologyScopes)
+            .include(ModalityScopes)
             .extending(NamedFilterScopes)
             .with_registration_statuses
             .with_current_pathology

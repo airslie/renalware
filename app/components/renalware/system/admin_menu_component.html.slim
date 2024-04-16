@@ -57,6 +57,8 @@ ul.side-nav.side-nav--admin(data-controller="collapsible-DISABLED" data-collapsi
   ul.collapsible(data-collapsible-target="section")
     = super_admin_menu_item "Outgoing Documents", renalware.feeds_outgoing_documents_path, %r{outgoing_documents}
     = super_admin_menu_item "Logs", renalware.feeds_logs_path, %r{feeds/logs}
+    = super_admin_menu_item "Replay Requests", renalware.feeds_replay_requests_path, %r{feeds/replay_requests}
+
   li= link_to "System", "#", data: { action: "collapsible#open", collapsible_target: "link" }
   ul.collapsible(data-collapsible-target="section")
     = super_admin_menu_item "API Logs", renalware.system_api_logs_path, %r{system/api_logs}
@@ -68,6 +70,3 @@ ul.side-nav.side-nav--admin(data-controller="collapsible-DISABLED" data-collapsi
     = super_admin_menu_item "GPs", renalware.patients_primary_care_physicians_path, %r{patients/primary_care_physicians}
     = super_admin_menu_item "User Feedback", renalware.system_user_feedback_index_path, %r{system/user_feedback}
     = super_admin_menu_item "Config Settings", renalware.admin_config_path, %r{config}
-
-
-

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "document/enum"
-
 module Renalware
   class DatedConfirmation < NestedAttribute
     attribute :status, Document::Enum, enums: %i(yes no unknown)

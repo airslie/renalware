@@ -24,6 +24,75 @@ describe "Managing a patient's modalities", js: false do
 
   pending "adding a modality"
 
+  describe "listing modalities" do
+    context "when two modalities overlap" do
+      it "displays a warning" do
+        user = login_as_super_admin
+
+        pd_modality = change_patient_modality(
+          patient, pd_mod_desc, user, started_on: "2022-01-01"
+        )
+        change_patient_modality(
+          patient, hd_mod_desc, user, started_on: "2023-01-01"
+        )
+        # Let's set the old pd_modality end_date to overlap by 1d with the hd_modality start_date
+        pd_modality.update!(ended_on: "2023-01-02")
+
+        visit patient_modalities_path(patient)
+        within("#patient-modalities") do
+          expect(page).to have_css("tbody tr", count: 3) # 1 = hd, 2 = overlap msg, 3 = pd
+          expect(page).to have_content(
+            "Overlapping modality dates 02-Jan-2023 and 01-Jan-2023 (1 day)"
+          )
+        end
+      end
+    end
+
+    context "when two modalities leave a gap" do
+      it "displays a warning" do
+        user = login_as_super_admin
+
+        pd_modality = change_patient_modality(
+          patient, pd_mod_desc, user, started_on: "2022-01-01"
+        )
+        change_patient_modality(
+          patient, hd_mod_desc, user, started_on: "2023-01-01"
+        )
+        # Let's set the old pd_modality end_date to fall short and leave a 2d gap
+        # before the start of the hd_modality
+        pd_modality.update!(ended_on: "2022-12-30")
+
+        visit patient_modalities_path(patient)
+        within("#patient-modalities") do
+          expect(page).to have_css("tbody tr", count: 3) # 1 = hd, 2 = missing mod msg, 3 = pd
+          expect(page).to have_content(
+            "Missing modality data between 30-Dec-2022 and 01-Jan-2023 (2 days)"
+          )
+        end
+      end
+    end
+
+    context "when there is 0 day gap between modalities" do
+      it "no warning is shown" do
+        user = login_as_super_admin
+
+        pd_modality = change_patient_modality(
+          patient, pd_mod_desc, user, started_on: "2022-01-01"
+        )
+        hd_modality = change_patient_modality(
+          patient, hd_mod_desc, user, started_on: "2023-01-01"
+        )
+        # Sanity check that change_patient_modality has wired update pd ended_on correctly
+        expect(pd_modality.reload.ended_on).to eq(hd_modality.started_on)
+
+        visit patient_modalities_path(patient)
+        within("#patient-modalities") do
+          expect(page).to have_css("tbody tr", count: 2) # 1 = hd, 2 = pd
+        end
+      end
+    end
+  end
+
   describe "editing a modality" do
     context "when the patient has only one modality and we edit it" do
       it "we can edit the start date end dates to both be in the past, " \
@@ -145,24 +214,6 @@ describe "Managing a patient's modalities", js: false do
           expect(page).to have_current_path(patient_modalities_path(patient))
 
           expect(hd_modality.reload.state).to eq("current")
-
-          # # Change HD
-          # within("##{dom_id(hd_modality)}") do
-          #   click_on "Amend"
-          # end
-          # fill_in "Started on", with: "2022-12-01"
-          # click_on "Save"
-          # expect(page).to have_current_path(patient_modalities_path(patient))
-
-          # expect(pd_modality.reload).to have_attributes(
-          #   ended_on: Date.parse("2022-12-01"),
-          #   state: "terminated"
-          # )
-
-          # expect(hd_modality.reload).to have_attributes(
-          #   started_on: Date.parse("2022-12-01"),
-          #   state: "current"
-          # )
         end
       end
     end

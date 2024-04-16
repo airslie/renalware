@@ -16,6 +16,3 @@ en:
             add_pet_adequacy: PET Adequacy
             add_unified_pet_adequacy: PET & Adequacy
             mdm: MDM
-            missing_modality_warning: 'Some actions will be unavailable until you add the PD modality
-
-              '

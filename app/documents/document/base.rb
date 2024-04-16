@@ -5,7 +5,6 @@ module Document
     extend ActiveSupport::Concern
 
     class_methods do
-      # rubocop:disable Naming/PredicateName
       def has_document(class_name: "Document")
         document_class = const_get(class_name)
 
@@ -13,7 +12,6 @@ module Document
           document_class
         end
       end
-      # rubocop:enable Naming/PredicateName
     end
 
     included do

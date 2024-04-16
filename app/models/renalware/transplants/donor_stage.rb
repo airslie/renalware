@@ -5,6 +5,7 @@ module Renalware
     class DonorStage < ApplicationRecord
       include Accountable
       include PatientScope
+      include RansackAll
 
       belongs_to :patient, class_name: "Renalware::Patient", touch: true
       belongs_to :stage_position, class_name: "DonorStagePosition"

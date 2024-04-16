@@ -18,7 +18,6 @@ describe "View transmission logs" do
         expect(page).to have_content(log_2.direction)
         expect(page).to have_content(log_2.format)
         expect(page).to have_content("log_1")
-        expect(page).to have_content("Next ")
       end
     end
   end

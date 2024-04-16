@@ -9,8 +9,9 @@ en:
       clinical_summaries:
         show:
           page_title: Clinical Summary
-      show:
-        page_title: Demographics
+      patients:
+        show:
+          page_title: Demographics
     pd:
       dashboards:
         show:

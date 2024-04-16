@@ -18,6 +18,12 @@ module Renalware
         end
       end
 
+      # A custom action for an Azure robotsXXX.txt (eg robots456.txt) healthcheck request.
+      # As long as we return a 404, Azure knows we are running. See routes/fallbacks.
+      def not_found_for_healthcheck
+        render plain: "404 Not Found", status: :not_found
+      end
+
       def generate_test_internal_server_error
         raise "This is an intentionally raised error - please ignore it. " \
               "It is used only to test system integration. " \

@@ -6,7 +6,7 @@ module CoreExtensions
       require "activerecord/postgres_enum"
       # Used in migrations to ensure the objects created/updated/found are in the correct schema.
       # We ensure that the original schema_search_path defined in the database.yml in the host app
-      # is restored - this particularyl important for migations in an engine.
+      # is restored - this particularly important for migrations in an engine.
       #
       # Within this renalware core engine, use:
       #
@@ -26,7 +26,7 @@ module CoreExtensions
       #   end
       # end
       #
-      # If using from a host app eg renalware_blt (actualy this is optional):
+      # If using from a host app eg renalware_blt (actually this is optional):
       #
       # def change
       #   within_renalware_schema(:blt) do

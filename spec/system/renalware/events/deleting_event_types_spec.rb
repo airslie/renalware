@@ -25,7 +25,7 @@ describe "Deleting event types" do
     # 3. Check the event is displayed in the patient's event list with its type
     visit patient_events_path(patient)
 
-    within("tr#event_#{event.id}") do
+    within("tbody#event_#{event.id}") do
       expect(page).to have_content("TestType")
     end
 
@@ -41,20 +41,20 @@ describe "Deleting event types" do
     #    still there.
     visit patient_events_path(patient)
 
-    within("tr#event_#{event.id}") do
+    within("tbody#event_#{event.id}") do
       expect(page).to have_content("TestType")
     end
 
     # 6. make sure we can still edit and update the event.
     visit patient_events_path(patient)
-    within("tr#event_#{event.id}") do
+    within("tbody#event_#{event.id}") do
       click_on "Edit"
     end
     fill_in "Description", with: "ABC"
     click_on "Save"
 
-    # 7. Our edits are replfected in the events table.
-    within("tr#event_#{event.id}") do
+    # 7. Our edits are replicated in the events table.
+    within("tbody#event_#{event.id}") do
       expect(page).to have_content("TestType") # unchanged
       expect(page).to have_content("ABC") # new
     end

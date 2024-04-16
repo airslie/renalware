@@ -4,6 +4,7 @@ module Renalware
   module Admissions
     class Admission < ApplicationRecord
       include Accountable
+      include RansackAll
       # PatientsRansackHelper adds the :identity_match scope for querying by patient name,
       # local hospital id or NHS number. We use this scope from the filters on the admissions list
       # to enable searching for a patient. *Note* you must join onto the patients table first

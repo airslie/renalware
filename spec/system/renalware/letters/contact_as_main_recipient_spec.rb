@@ -66,7 +66,7 @@ describe "Assign a person as a main recipient" do
       within "#letter-form" do
         slim_select "::description::", from: "Topic"
         select Renalware::Letters::Letterhead.first.name, from: "Letterhead"
-        select Renalware::User.first.to_s, from: "Author"
+        slim_select Renalware::User.first.to_s, from: "Author"
         choose("Patient's Contact")
       end
       wait_for_ajax

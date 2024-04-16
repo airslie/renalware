@@ -79,6 +79,7 @@ module Renalware
                 <Description>F, G</Description>
               </EnteredBy>
               <EnteredAt>
+                <CodingStandard>LOCAL</CodingStandard>
                 <Code>RJZ</Code>
               </EnteredAt>
               <ExternalId>UUID</ExternalId>

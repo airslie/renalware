@@ -23,7 +23,7 @@ module Renalware
           end
 
           def acr_observed_at
-            acr_observation&.date_time
+            acr_observation&.observed_at
           end
 
           private

@@ -29,6 +29,5 @@ describe "A user views a list of users" do
     expect(page).to have_content("Julie Smith")
     expect(page).to have_content("julie@a.com")
     expect(page).to have_content("CEO")
-    expect(page).to have_content("Prev") # pagination present
   end
 end

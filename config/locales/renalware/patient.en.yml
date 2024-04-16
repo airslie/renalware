@@ -24,6 +24,9 @@ en:
         send_to_renalreg: Send data to Renal Registry
         send_to_rpv: Send data to Patients Know Best (PKB)
         sex: Sex
+        ukrdc_anonymise: Anonymise data at patient request
+        ukrdc_anonymise_decision_on: Anonymise decision on
+        ukrdc_anonymise_recorded_by: Anonymise recorded by
   enumerize:
     renalware/patient:
       allergy_status:

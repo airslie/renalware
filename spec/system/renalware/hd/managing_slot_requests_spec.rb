@@ -37,7 +37,10 @@ describe "Managing a list of HD Slot Requests" do
       end
       select2(patient.to_s(:long), css: "#person-id-select2", search: true)
       select "urgent", from: "Urgency"
+
       check "Inpatient"
+      check "MFFD"
+
       check "Late presenter"
       check "Suitable for twilight slots"
       check "External referral"
@@ -53,16 +56,24 @@ describe "Managing a list of HD Slot Requests" do
         expect(page).to have_content("urgent")
       end
 
-      expect(Renalware::HD::SlotRequest.last).to have_attributes(
+      slot_request = Renalware::HD::SlotRequest.last
+      expect(slot_request).to have_attributes(
         inpatient: true,
+        medically_fit_for_discharge: true,
         late_presenter: true,
         suitable_for_twilight_slots: true,
         external_referral: true
       )
+      # if medically_fit_for_discharge was set to true then it should have stored the datetime
+      # and user who made that change
+      expect(slot_request).to have_attributes(
+        medically_fit_for_discharge_at: Time.zone.now,
+        medically_fit_for_discharge_by_id: user.id
+      )
     end
   end
 
-  it "adding a slot request patient's page", js: true do
+  it "adding a slot request via patient's page", js: true do
     travel_to("01-Oct-2023 03:03") do
       user = login_as_super_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
@@ -171,30 +182,85 @@ describe "Managing a list of HD Slot Requests" do
     end
   end
 
-  it "edit a slot request" do
-    user = login_as_admin
-    patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
-    create(
-      :hd_slot_request,
-      patient: patient,
-      created_at: "2023-10-01 03:03:03",
-      urgency: "highly_urgent"
-    )
+  describe "editing a patient", js: true do
+    context "when setting inpatient and MFFD to true" do
+      it "stores the user and time when MFFD was checked" do
+        freeze_time do
+          user = login_as_admin
+          patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
+          create(
+            :hd_slot_request,
+            patient: patient,
+            medically_fit_for_discharge: false,
+            created_at: "2023-10-01 03:03:03",
+            urgency: "highly_urgent",
+            notes: "ABC"
+          )
 
-    visit renalware.hd_slot_requests_path
+          visit renalware.hd_slot_requests_path
 
-    within("table#slot-requests") do
-      expect(page).to have_content(patient.to_s)
-      click_on "Edit"
-    end
+          within("table#slot-requests") do
+            expect(page).to have_content(patient.to_s)
+            click_on "Edit"
+          end
 
-    select "Routine", from: "Urgency"
-    click_on "Save"
+          check "Inpatient"
+          check "MFFD"
+          click_on "Save"
 
-    expect(page).to have_current_path(renalware.hd_slot_requests_path)
+          # wait for modal to be dismissed by checking a field on the modal is no longer there
+          expect(page).to have_no_css("#hd_slot_request_urgency")
 
-    within("table#slot-requests") do
-      expect(page).to have_content("Routine")
+          # if medically_fit_for_discharge was set to true then it should have stored the datetime
+          # and user who made that change
+          expect(Renalware::HD::SlotRequest.last).to have_attributes(
+            inpatient: true,
+            medically_fit_for_discharge: true,
+            medically_fit_for_discharge_at: Time.zone.now,
+            medically_fit_for_discharge_by_id: user.id
+          )
+        end
+      end
+
+      context "when setting MFFD to false" do
+        it "clears the user and time when MFFD was checked", js: true do
+          freeze_time do
+            user = login_as_admin
+            patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
+            create(
+              :hd_slot_request,
+              patient: patient,
+              created_at: "2023-10-01 03:03:03",
+              inpatient: true,
+              medically_fit_for_discharge: true,
+              medically_fit_for_discharge_at: Time.zone.now,
+              medically_fit_for_discharge_by_id: user.id
+            )
+
+            visit renalware.hd_slot_requests_path
+
+            within("table#slot-requests") do
+              expect(page).to have_content(patient.to_s)
+              click_on "Edit"
+            end
+
+            uncheck "Inpatient" # will automatically uncheck MFFD
+            click_on "Save"
+
+            # wait for modal to be dismissed by checking a field on the modal is no longer there
+            expect(page).to have_no_css("#hd_slot_request_urgency")
+
+            # if medically_fit_for_discharge was set to true then it should have stored the datetime
+            # and user who made that change
+            expect(Renalware::HD::SlotRequest.last).to have_attributes(
+              inpatient: false,
+              medically_fit_for_discharge: false,
+              medically_fit_for_discharge_at: nil,
+              medically_fit_for_discharge_by_id: nil
+            )
+          end
+        end
+      end
     end
   end
 end

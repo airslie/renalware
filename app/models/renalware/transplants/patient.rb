@@ -3,7 +3,10 @@
 module Renalware
   module Transplants
     class Patient < Renalware::Patient
-      has_one :current_donor_stage, -> { current }, class_name: "DonorStage"
+      has_one :current_donor_stage,
+              -> { current },
+              class_name: "DonorStage",
+              dependent: :restrict_with_exception
 
       scope :with_registration_statuses, lambda {
         joins(<<-SQL.squish)

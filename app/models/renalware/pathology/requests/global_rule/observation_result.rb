@@ -20,10 +20,6 @@ module Renalware
               "#{param_comparison_value}"
           end
 
-          # def observation_description
-          #   @observation_description ||= ObservationDescription.where(id: param_id).first
-          # end
-
           def observation_description_code
             @observation_description_code ||= begin
               ObservationDescription.where(id: param_id).pick(:code)
@@ -75,17 +71,8 @@ module Renalware
                 patient,
                 observation_description_code
               ).call["result"]
-
-              # ObservationForPatientObservationDescriptionQuery.new(
-              #     @patient,
-              #     observation_description
-              #   ).call&.result
             end
           end
-
-          # def observation_description_code
-          #   rule.observation_description_code # ||= ObservationDescription.new(id: param_id)
-          # end
         end
       end
     end

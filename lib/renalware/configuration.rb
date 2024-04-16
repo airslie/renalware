@@ -19,7 +19,7 @@ module Renalware
     include ActiveSupport::Configurable
 
     # Force dotenv to load the .env file at this stage so we can read in the config defaults
-    Dotenv::Railtie.load
+    Dotenv::Rails.load
 
     config_accessor(:disable_dmd_synchroniser_job) { ENV["DISABLE_DMD_SYNCHRONISER_JOB"].to_i > 0 }
 
@@ -148,6 +148,12 @@ module Renalware
     # We default to false because this is an opt-in approach we want sites to migrate to.
     config_accessor(:process_hl7_via_raw_messages_table) {
       ENV.fetch("PROCESS_HL7_VIA_RAW_MESSAGES_TABLE", "false") == "true"
+    }
+
+    config_accessor(:replay_historical_pathology_when_new_patient_added) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("REPLAY_HISTORICAL_PATHOLOGY_WHEN_NEW_PATIENT_ADDED", "true")
+      )
     }
 
     config_accessor(:hd_session_prescriptions_require_signoff) { true }

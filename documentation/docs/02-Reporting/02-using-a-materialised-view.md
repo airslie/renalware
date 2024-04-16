@@ -21,7 +21,7 @@ Follow the same procedure as creating a normal report but with these differences
 There is slight difference to the [syntax](https://www.postgresql.org/docs/current/sql-creatematerializedview.html) used to create the view
 
 ```
-CREATE materialized VIEW reporting_patients_under_60
+CREATE materialized VIEW reporting_patients_under_40
   ....
 ```
 

@@ -29,11 +29,12 @@ module Renalware::Drugs
         "Psychiatric Medication", "Test", "Vaccine"
       )
       drug_type = Type.find_by(code: "controlled")
-      expect(drug_type).to have_attributes \
+      expect(drug_type).to have_attributes(
         name: "Test",
         position: -1,
         colour: "green",
         atc_codes: ["N02A"] # this is new
+      )
     end
   end
 end

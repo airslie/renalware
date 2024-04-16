@@ -50,6 +50,7 @@ module Renalware
               </ReceivingLocation>
               <PlacerId>#{placer_id}</PlacerId>
               <OrderCategory>
+                <CodingStandard>LOCAL</CodingStandard>
                 <Code>FBC</Code>
               </OrderCategory>
               <SpecimenCollectedTime>2019-01-01T00:00:00+00:00</SpecimenCollectedTime>

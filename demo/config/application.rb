@@ -7,9 +7,9 @@ Bundler.require(*Rails.groups)
 
 require "renalware"
 
-module Dummy
+module Demo
   class Application < Rails::Application
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     config.cache_store = :file_store, Rails.root.join("tmp/cache")
     config.active_record.time_zone_aware_types = [:datetime]
@@ -37,6 +37,10 @@ module Dummy
 
     console do
       ARGV.push "-r", Renalware::Engine.root.join("config/initializers/console_prompt.rb")
+    end
+
+    InlineSvg.configure do |config|
+      config.raise_on_file_not_found = true
     end
 
     # We want to start being agnostic about ActiveJob backend rather than being attached to

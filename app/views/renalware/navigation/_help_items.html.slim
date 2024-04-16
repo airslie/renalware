@@ -1,7 +1,7 @@
 li.has-dropdown
-  = link_to t("btn.help"), system_downloads_path
+  = link_to t("btn.help"), renalware.system_downloads_path
   ul.dropdown
-    li= link_to "Downloads", system_downloads_path
+    li= link_to "Downloads", renalware.system_downloads_path
     = render "renalware/navigation/more_help_items"
     li.info
       | Version #{semantic_app_version}

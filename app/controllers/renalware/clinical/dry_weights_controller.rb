@@ -7,17 +7,18 @@ module Renalware
     class DryWeightsController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         authorize DryWeight, :index?
         query = PatientDryWeightsQuery.new(patient: clinical_patient, search_params: params[:q])
-        dry_weights = query.call.page(page).per(per_page)
+        pagy, dry_weights = pagy(query.call)
 
         render locals: {
           search: query.search,
           dry_weights: CollectionPresenter.new(dry_weights, DryWeightPresenter),
-          patient: clinical_patient
+          patient: clinical_patient,
+          pagy: pagy
         }
       end
 

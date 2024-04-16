@@ -9,6 +9,7 @@ module Renalware
       include Accountable
       include ExplicitStateModel
       include TransactionRetry
+      include RansackAll
 
       acts_as_paranoid
 

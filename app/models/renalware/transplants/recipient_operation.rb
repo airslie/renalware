@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require "document/base"
-require "renalware/automatic_age_calculator"
+# require "renalware/automatic_age_calculator"
 
 module Renalware
   module Transplants
@@ -12,7 +11,10 @@ module Renalware
 
       belongs_to :patient, touch: true
       belongs_to :hospital_centre, class_name: "Hospitals::Centre"
-      has_one :followup, class_name: "RecipientFollowup", foreign_key: "operation_id"
+      has_one :followup,
+              class_name: "RecipientFollowup",
+              foreign_key: "operation_id",
+              dependent: :restrict_with_exception
 
       scope :ordered, -> { order(performed_on: :asc) }
       scope :reversed, -> { order(performed_on: :desc) }
@@ -40,7 +42,7 @@ module Renalware
                 allow_blank: true
 
       enumerize :operation_type,
-                in: %i(kidney kidney_dual kidney_pancreas pancreas kidney_liver liver)
+                in: %i(kidney kidney_dual kidney_pancreas kidney_other pancreas kidney_liver liver)
 
       def theatre_case_start_time
         TimeOfDay.new(self[:theatre_case_start_time])

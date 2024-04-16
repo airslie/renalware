@@ -5,8 +5,11 @@ module Renalware
     module Requests
       class Request < ApplicationRecord
         include Accountable
+        include RansackAll
 
         TEMPLATES = %w(crs manual).freeze
+
+        def self.ransackable_attributes(*) = super + %w(created_on)
 
         belongs_to :patient, class_name: "::Renalware::Pathology::Patient", touch: true
         belongs_to :clinic, -> { with_deleted }, class_name: "::Renalware::Clinics::Clinic"

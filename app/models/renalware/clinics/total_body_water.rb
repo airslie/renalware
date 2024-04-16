@@ -19,8 +19,12 @@ module Renalware
 
       NOTHING = nil
       SEX_PROC_MAP = {
-        M: ->(age:, height:, weight:) { 2.447 - 0.09156 * age + 0.1074 * height + 0.3362 * weight },
-        F: ->(height:, weight:, **) { -2.097 + 0.1069 * height + 0.2466 * weight }
+        M: ->(age:, height:, weight:) {
+          2.447 - (0.09156 * age) + (0.1074 * height) + (0.3362 * weight)
+        },
+        F: ->(height:, weight:, **) {
+          -2.097 + (0.1069 * height) + (0.2466 * weight)
+        }
       }.freeze
       NOOP = ->(**) { NullObject.instance }
 

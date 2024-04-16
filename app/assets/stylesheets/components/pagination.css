@@ -1,0 +1,58 @@
+@layer components {
+  .pagy {
+    @apply isolate inline-flex -space-x-px rounded-md shadow-sm mt-2;
+  }
+
+  .pagy .page {
+    @apply relative items-center border text-gray-700 font-normal;
+  }
+
+  .pagy .page:first-child {
+    @apply rounded-l;
+  }
+
+  .pagy .page:last-child {
+    @apply rounded-r;
+  }
+
+  /*
+  .pagy > :not([hidden]) ~ :not([hidden]) {
+  }
+
+  .pagy > :not([hidden]) ~ :not([hidden]) {
+  }
+  */
+
+  .pagy .page a {
+    @apply block py-1 px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 text-gray-700;
+  }
+
+  .pagy .page a:hover {
+    @apply bg-gray-200;
+  }
+
+  .pagy .page.active {
+    @apply border-sky-600 ;
+  }
+
+  .pagy .page.active a {
+    @apply bg-sky-600 text-white focus-visible:outline-sky-600;
+  }
+
+  .pagy .page.disabled a {
+    @apply text-gray-400 bg-gray-50 cursor-default font-normal;
+  }
+
+  .pagy .page.gap {
+    @apply w-10 text-center font-normal;
+  }
+
+  .pagy .pagy-combo-input, .pagy.pagy-items-selector-js {
+    @apply inline-block whitespace-nowrap bg-gray-200 rounded-lg px-3 py-0.5;
+  }
+
+  .pagy .pagy-combo-input input, .pagy.pagy-items-selector-js input {
+    @apply bg-gray-100 border-none rounded-md;
+  }
+
+}

@@ -5,6 +5,7 @@ module Renalware
     class AdministerPrescriptionDropdownComponent < ApplicationComponent
       include DropdownButtonHelper
       include PresenterHelper
+      include IconHelper
       pattr_initialize [:patient!]
 
       def prescriptions_to_give_on_hd

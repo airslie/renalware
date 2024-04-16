@@ -5,6 +5,7 @@ module Renalware
     class Modality < ApplicationRecord
       include Accountable
       include PatientScope
+      include RansackAll
 
       belongs_to :description
       belongs_to :patient, touch: true

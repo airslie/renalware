@@ -5,6 +5,8 @@ module Renalware
     class AKIAlert < ApplicationRecord
       include Accountable
       include PatientsRansackHelper
+      include RansackAll
+
       scope :ordered, -> { order(created_at: :desc) }
       belongs_to :patient, class_name: "Renal::Patient", touch: true
       belongs_to :action, class_name: "Renal::AKIAlertAction"
@@ -24,6 +26,10 @@ module Renalware
 
       ransacker :created_at_as_date do |_parent|
         Arel.sql("date(renal_aki_alerts.created_at)")
+      end
+
+      def self.ransackable_attributes(*)
+        super + ["created_at_as_date"]
       end
     end
   end

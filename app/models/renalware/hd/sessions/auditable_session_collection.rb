@@ -193,13 +193,13 @@ module Renalware
         # Example usage:
         #   mean_blood_pressure(:observations_after, :diastolic)
         def mean_blood_pressure(observation, measurement)
-          selector = lambda do |session|
+          selector = ->(session) {
             session
               .document
               .public_send(observation)
               .blood_pressure
               .public_send(measurement)
-          end
+          }
           MeanValueStrategy.new(sessions: sessions, selector: selector).call
         end
       end

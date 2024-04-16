@@ -23,7 +23,7 @@ describe "Batch printing letters", js: true do
       expect(page).to have_content(letter1.author.to_s)
       expect(page).to have_content(letter2.author.to_s)
 
-      select2 letter1.author.to_s, from: "Author"
+      slim_select letter1.author.to_s, from: "Author"
 
       click_on t("btn.filter")
 

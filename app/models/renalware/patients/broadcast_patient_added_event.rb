@@ -5,14 +5,14 @@ module Renalware
     class BroadcastPatientAddedEvent
       include Broadcasting
 
-      def self.call(patient)
+      def self.call(patient, reason = "")
         new
           .broadcasting_to_configured_subscribers
-          .call(patient)
+          .call(patient, reason)
       end
 
-      def call(patient)
-        broadcast(:patient_added, patient)
+      def call(patient, reason)
+        broadcast(:patient_added, patient, reason)
       end
     end
   end

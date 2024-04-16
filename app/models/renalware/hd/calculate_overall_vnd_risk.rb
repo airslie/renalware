@@ -3,9 +3,9 @@
 module Renalware
   module HD
     class CalculateOverallVNDRisk
-      pattr_initialize :vnd_risk_assessment
+      include Callable
 
-      def self.call(...) = new(...).call
+      pattr_initialize :vnd_risk_assessment
 
       def call
         {

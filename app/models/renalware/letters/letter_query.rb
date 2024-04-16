@@ -5,6 +5,10 @@ module Renalware
     module QueryableLetter
       extend ActiveSupport::Concern
       included do
+        def self.ransackable_attributes(*)
+          super + %w(effective_date)
+        end
+
         def self.state_eq(state = :draft)
           where(type: Letter.state_class_name(state))
         end

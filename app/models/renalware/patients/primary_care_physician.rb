@@ -8,7 +8,7 @@ module Renalware
     #
     class PrimaryCarePhysician < ApplicationRecord
       include ActiveModel::Validations
-      include Personable
+      # include Personable
       acts_as_paranoid
 
       has_one :address, as: :addressable

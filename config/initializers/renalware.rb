@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Don't rely on auto-loading in an initializer
-require "renalware/broadcasting"
+require_relative "../../app/models/concerns/renalware/broadcasting"
 
 # New subscription registry - previous implementation does not work across threads.
 # Each key in the map (hash) is the name of a class that broadcasts/publishes messages.
@@ -9,7 +9,7 @@ require "renalware/broadcasting"
 # publishing class. If you want a subscriber to listen asynchronously for events via ActiveJob,
 # use an Subscriber instance like so
 # "Renalware::Modalities::ChangePatientModality" => [
-#   Renalware::Broadcasting::Subscriber.new("Renalware::Patients::DummyListener", async: true),
+#   Renalware::Broadcasting::Subscriber.new("Renalware::Patients::DemoListener", async: true),
 #   ...
 # ]
 # TODO: Ideally we would like an API something like this:
@@ -25,6 +25,9 @@ require "renalware/broadcasting"
 # application with confusing outcomes.
 Renalware.configure do |config|
   config.broadcast_subscription_map = {
+    "Renalware::Patients::BroadcastPatientAddedEvent" => [
+      "Renalware::Feeds::PatientListener"
+    ],
     "Renalware::Modalities::ChangePatientModality" => [
       "Renalware::Medications::PatientListener",
       "Renalware::Letters::PatientListener",
@@ -43,6 +46,9 @@ Renalware.configure do |config|
     "Renalware::Pathology::CreateObservationRequests" => [],
     "Renalware::Events::CreateEvent" => [],
     "Renalware::Events::UpdateEvent" => [],
+    "Renalware::Feeds::ReplayHistoricalHL7PathologyMessages" => [
+      "Renalware::Pathology::Ingestion::MessageListener"
+    ],
     "Renalware::Feeds::MessageProcessor" => [
       "Renalware::Patients::Ingestion::MessageListener",
       "Renalware::Pathology::Ingestion::AKIListener",

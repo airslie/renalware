@@ -29,4 +29,4 @@ js: yarn build --watch
 css: yarn build:css --watch
 
 # Docusaurus
-docs: cd documentation && yarn run start -p 3001
+# docs: cd documentation && yarn run start -p 3001

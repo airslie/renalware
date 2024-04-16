@@ -7,8 +7,9 @@ class UserPickerInput < SimpleForm::Inputs::CollectionSelectInput
 
   def input_html_options
     options = super
-    options[:class] ||= []
-    options[:class] << :searchable_select
+    options[:data] ||= {}
+    options[:data][:controller] ||= {}
+    options[:data][:controller] = :slimselect
     options
   end
 end

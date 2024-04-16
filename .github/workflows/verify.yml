@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -44,7 +44,7 @@ jobs:
         run: bundle exec rubocop
 
       - name: Setup node and yarn with caching
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "yarn"
@@ -53,7 +53,7 @@ jobs:
         run: yarn install --frozen-lockfile # optional, --immutable
 
       - name: Asset cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             demo/public/assets
@@ -101,7 +101,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: "true"
 
@@ -111,7 +111,7 @@ jobs:
           bundler-cache: true
 
       - name: Setup node and yarn with caching
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "yarn"
@@ -120,7 +120,7 @@ jobs:
         run: yarn install --frozen-lockfile # optional, --immutable
 
       - name: Restore asset cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             demo/public/assets
@@ -153,7 +153,7 @@ jobs:
 
       - name: Store test failure screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-failure-screenshots
           path: demo/tmp/capybara

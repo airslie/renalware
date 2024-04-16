@@ -3,16 +3,14 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
 
-# We only run simple on CiricleCI or if you set the SIMPLECOV env var
-if ENV.key?("CC_TEST_REPORTER_ID") || ENV.key?("SIMPLECOV")
-  require "simplecov"
-  SimpleCov.command_name "RSpec"
-end
-
-require File.expand_path("../demo/config/environment", __dir__)
 require "spec_helper"
-require "fuubar"
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../demo/config/environment"
+# Prevent database truncation if the environment is production
+abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
+
+require "fuubar"
 require "factory_bot_rails"
 require "byebug"
 require "shoulda/matchers"
@@ -88,7 +86,7 @@ RSpec.configure do |config|
     driven_by :rw_headless_chrome
   end
 
-  # Make I18n t() and l() helpers availble
+  # Make I18n t() and l() helpers available
   config.include AbstractController::Translation
 
   # show retry status in spec process
@@ -115,10 +113,10 @@ RSpec.configure do |config|
     ActionController::Base.perform_caching = caching
   end
 
-  config.example_status_persistence_file_path = "#{Rails.root}/tmp/examples.txt"
+  config.example_status_persistence_file_path = Rails.root.join("tmp/examples.txt")
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{Rails.root}/spec/fixtures"
+  config.fixture_path = Rails.root.join("spec/fixtures")
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

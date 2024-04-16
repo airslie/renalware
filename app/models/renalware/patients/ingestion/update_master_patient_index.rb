@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "renalware/feeds"
-
 module Renalware
   module Patients
     module Ingestion

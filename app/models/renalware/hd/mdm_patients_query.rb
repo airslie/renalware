@@ -5,8 +5,6 @@
 module Renalware
   module HD
     class MDMPatientsQuery
-      include ModalityScopes
-      include PatientPathologyScopes
       DEFAULT_SEARCH_PREDICATE = "hgb_date desc"
       attr_reader :params, :named_filter, :relation
 
@@ -25,13 +23,13 @@ module Renalware
         @search ||= begin
           relation
             .include(QueryablePatient)
-            .extending(PatientTransplantScopes)
+            .include(PatientTransplantScopes)
+            .include(PatientPathologyScopes)
+            .include(ModalityScopes)
+            .extending(NamedFilterScopes)
             .merge(Accesses::Patient.with_current_plan)
             .merge(Accesses::Patient.with_profile)
             .eager_load(hd_profile: [:hospital_unit])
-            .extending(ModalityScopes)
-            .extending(PatientPathologyScopes)
-            .extending(NamedFilterScopes)
             .with_current_pathology
             .with_registration_statuses
             .with_current_modality_of_class(Renalware::HD::ModalityDescription)
@@ -62,6 +60,11 @@ module Renalware
             Arel.sql("access_types.name")
           end
         end
+
+        class_methods do
+          # Make sure we whitelist the ransackers defined above
+          def ransackable_attributes(*) = super + _ransackers.keys
+        end
       end
     end
 
@@ -69,7 +72,7 @@ module Renalware
     # on the UI for example.
     module NamedFilterScopes
       def none
-        self # NOOP - aka 'all'
+        self # NOOP
       end
 
       def patients_on_the_worry_board

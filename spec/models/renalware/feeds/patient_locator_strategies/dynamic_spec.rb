@@ -79,7 +79,6 @@ module Renalware::Feeds
       }
     ].each do |scenarios_overrides|
       hash = defaults.deep_merge(scenarios_overrides)
-      p hash[:comment]
       it hash[:comment] do
         patient = create_patient(hash)
         _other_patient = create_other_patient

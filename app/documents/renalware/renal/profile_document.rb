@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "document/embedded"
-require "document/enum"
-
 module Renalware
   module Renal
     class ProfileDocument < Document::Embedded

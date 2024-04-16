@@ -4,6 +4,8 @@ module Renalware
   module Feeds
     class OutgoingDocument < ApplicationRecord
       include Accountable
+      include RansackAll
+
       belongs_to :renderable, polymorphic: true
       validates :state, presence: true
       enum state: {

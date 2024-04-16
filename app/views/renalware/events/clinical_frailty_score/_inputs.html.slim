@@ -1,4 +1,10 @@
 / See ClinicalFrailtyScore.to_partial_path etc
 / Pulled into the New Event form via a js get to EventsController#new
 = f.simple_fields_for :document, event.document do |fd|
-  = fd.input :score, wrapper: :horizontal_tiny
+  = fd.input :score, wrapper: :horizontal_small
+
+span
+  = link_to(asset_path("renalware/clinical_frailty_score.pdf"), class: "button secondary", target: "_blank") do
+    .flex.mr-2
+      .mt-px.mr-2= inline_icon(:pdf)
+      | Rockwood Frailty Score Guide

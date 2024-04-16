@@ -10,7 +10,7 @@ module Renalware
       attribute :from_date_only, :boolean
       attribute :clinic_id, :integer
       attribute :consultant_id, :integer
-      attribute :s, :string # ransack sort_links
+      attribute :s, array: true # ransack sort_links
 
       def query
         @query ||= AppointmentQuery.new(query_options)

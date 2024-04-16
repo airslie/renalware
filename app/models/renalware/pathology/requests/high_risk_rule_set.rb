@@ -16,6 +16,16 @@ module Renalware
           :id
         end
 
+        # Added for rails 7.1
+        def self.has_query_constraints?
+          false
+        end
+
+        # Added for rails 7.1
+        def self.composite_primary_key?
+          false
+        end
+
         def self.base_class
           Renalware::Pathology::Requests::HighRiskRuleSet
         end

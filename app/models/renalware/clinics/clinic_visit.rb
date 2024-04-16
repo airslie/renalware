@@ -5,6 +5,7 @@ module Renalware
     class ClinicVisit < ApplicationRecord
       include Accountable
       include PatientScope
+      include RansackAll
       extend Enumerize
       include Document::Base
 
@@ -36,6 +37,7 @@ module Renalware
       scope :ordered, -> { order(date: :desc, created_at: :desc) }
       scope :most_recent_for_patient, ->(patient) { for_patient(patient).ordered.limit(1) }
       scope :most_recent, -> { ordered.limit(1) }
+      scope :recent, ->(max = 5) { ordered.limit(max) }
       scope :where_weight_was_measured, -> { where("weight > 0") }
 
       before_save :calculate_body_surface_area

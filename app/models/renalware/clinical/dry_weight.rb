@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-require "document/base"
-
 module Renalware
   module Clinical
     class DryWeight < ApplicationRecord
       include PatientScope
       include Accountable
+      include RansackAll
 
       belongs_to :patient, class_name: "Renalware::Clinical::Patient", touch: true
       belongs_to :assessor, class_name: "User"

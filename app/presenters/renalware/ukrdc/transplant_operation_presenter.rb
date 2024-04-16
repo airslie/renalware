@@ -13,6 +13,7 @@ module Renalware
         kidney_pancreas: SNOMED_KIDNEY_PANCREAS,
         pancreas: SNOMED_PANCREAS,
         kidney_liver: SNOMED_KIDNEY,
+        kidney_other: SNOMED_KIDNEY,
         liver: SNOMED_KIDNEY
       }.freeze
 

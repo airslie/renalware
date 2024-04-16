@@ -1,27 +1,27 @@
 -if Renalware.config.display_feedback_button_in_navbar && current_user.present?
   li.show-for-medium-up= link_to("Feedback",
-              new_system_user_feedback_path,
+              renalware.new_system_user_feedback_path,
               class: "button secondary")
 
 - unread_message_count_cmpnt = Renalware::Messaging::UnreadMessageCountComponent.new(current_user: current_user)
 
 li.has-dropdown.menu-item.menu-item--home
-  = link_to dashboard_path do
+  = link_to renalware.dashboard_path do
     .flex
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 mr-1" style="padding-bottom: 1px">
       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
       </svg>
       div=current_user.username
       = render unread_message_count_cmpnt
-      
+
   ul.dropdown
-    li= link_to t(".my_dashboard"), dashboard_path
-    li= link_to "Update Profile", edit_user_registration_path
-    li= link_to "View Letters", author_letters_path(current_user.id)
-    li= link_to "Manage Snippets", snippets_path
-    li.relative= link_to messaging_internal_inbox_path do
-      .flex 
-        span Messages 
+    li= link_to t(".my_dashboard"), renalware.dashboard_path
+    li= link_to "Update Profile", renalware.edit_user_registration_path
+    li= link_to "View Letters", renalware.author_letters_path(current_user.id)
+    li= link_to "Manage Snippets", renalware.snippets_path
+    li.relative= link_to renalware.messaging_internal_inbox_path do
+      .flex
+        span Messages
         = render unread_message_count_cmpnt
-      
-    li= link_to "Electronic CCs", unread_letters_electronic_receipts_path
+
+    li= link_to "Electronic CCs", renalware.unread_letters_electronic_receipts_path

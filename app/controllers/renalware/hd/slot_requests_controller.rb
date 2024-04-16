@@ -29,6 +29,7 @@ module Renalware
 
       def create
         slot_request = SlotRequest.new(slot_request_params)
+        assign_mffd_attributes(slot_request)
         authorize slot_request
 
         if slot_request.save_by(current_user)
@@ -77,7 +78,9 @@ module Renalware
         authorize slot_request
 
         if params.key?("commit") # submit via form
-          if slot_request.update_by(current_user, slot_request_params)
+          slot_request.assign_attributes(slot_request_params)
+          assign_mffd_attributes(slot_request)
+          if slot_request.save_by(current_user)
             redirect_to hd_slot_requests_path
           else
             render_edit(slot_request)
@@ -92,6 +95,22 @@ module Renalware
       end
 
       private
+
+      # If the Medically Fit For Discharge checkbox has been changed (for an #update) or is set
+      # (for a #create) then assign who checked the box and when. If unchecked, be sure to
+      # null-out those attributes. Note we save changes in hd_versions so its possible to find out
+      # who unchecked the box at any point during n update, in case that is needed.
+      def assign_mffd_attributes(slot_request)
+        if slot_request.attribute_changed?(:medically_fit_for_discharge)
+          if slot_request.medically_fit_for_discharge
+            slot_request.medically_fit_for_discharge_by_id = current_user.id
+            slot_request.medically_fit_for_discharge_at = Time.zone.now
+          else
+            slot_request.medically_fit_for_discharge_by_id = nil
+            slot_request.medically_fit_for_discharge_at = nil
+          end
+        end
+      end
 
       def redirect_to_patient_on_success? = params[:redirect_to_patient_on_success] == "true"
 
@@ -173,7 +192,8 @@ module Renalware
           .require(:hd_slot_request)
           .permit(:patient_id, :urgency, :notes, :allocated, :allocated_at,
                   :deletion_reason_id, :deleted_at,
-                  :inpatient, :suitable_for_twilight_slots, :late_presenter, :external_referral)
+                  :inpatient, :suitable_for_twilight_slots, :late_presenter, :external_referral,
+                  :medically_fit_for_discharge)
       end
 
       def remove_unchecked_boolean_ransack_filters(query, condition)

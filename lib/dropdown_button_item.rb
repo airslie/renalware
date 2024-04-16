@@ -3,6 +3,7 @@
 require "virtus"
 
 class DropdownButtonItem < ActionView::Base
+  include Renalware::IconHelper
   include ActionView::Helpers::TagHelper
   include Virtus.model(mass_assignment: false)
 
@@ -29,24 +30,27 @@ class DropdownButtonItem < ActionView::Base
   def enabled_html
     content_tag(:li) do
       capture do
-        link_to(url, url_options) do
-          concat(icon_html)
-          concat(title) if title.present?
-        end
+        link_to(url, url_options, class: "flex") { icon_and_title_html }
       end
     end
   end
 
   def disabled_html
-    content_tag(:li, class: "disabled") do
+    content_tag(:li, class: "disabled") { icon_and_title_html }
+  end
+
+  def icon_and_title_html
+    tag.div(class: "flex items-center") do
       concat(icon_html)
-      concat(title) if title.present?
+      concat(title_html)
     end
   end
 
   def icon_html
-    return if icon.blank?
+    inline_icon(icon) if icon.present?
+  end
 
-    "<i class='fa fa-link-annotation #{icon}'></i>".html_safe
+  def title_html
+    tag.span(class: "ml-2") { title } if title.present?
   end
 end

@@ -1,12 +1,12 @@
 li.has-dropdown
   = link_to t(".menu_title"), "#"
   ul.dropdown
-    li= link_to t(".hd"), hd_mdm_patients_path
-    li= link_to t(".pd"), pd_mdm_patients_path
-    li= link_to t(".transplants"), transplants_mdm_patients_path
-    li= link_to t(".low_clearance"), low_clearance_mdm_patients_path
+    li= link_to t(".hd"), renalware.hd_mdm_patients_path
+    li= link_to t(".pd"), renalware.pd_mdm_patients_path
+    li= link_to t(".transplants"), renalware.transplants_mdm_patients_path
+    li= link_to t(".low_clearance"), renalware.low_clearance_mdm_patients_path
 
     - if Renalware.config.enable_new_mdms
       li.info Beta MDMs
       - Renalware::Patients::MDMMenu.items.each do |scope, title|
-        li= link_to title, patients_mdms_path(scope: scope)
+        li= link_to title, renalware.patients_mdms_path(scope: scope)

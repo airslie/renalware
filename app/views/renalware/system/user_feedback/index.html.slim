@@ -15,4 +15,4 @@
           td.col-width-mediumish-with-ellipsis= feedback.comment
           td.col-width-tiny= yes_no(feedback.acknowledged)
 
-  = paginate feedback_msgs
+  == pagy_nav(pagy)

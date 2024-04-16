@@ -5,8 +5,6 @@ module Renalware
     module Registry
       module PreflightChecks
         class DeathsQuery
-          include ModalityScopes
-
           attr_reader :relation, :query_params
 
           def self.missing_data_for(_patient)
@@ -22,15 +20,16 @@ module Renalware
           end
 
           def default_relation
-            Renalware::Renal::Patient.left_outer_joins(:profile)
+            Renalware::Renal::Patient.all
           end
 
           def call
             search
               .result
-              .extending(ModalityScopes)
-              .preload(current_modality: [:description])
+              .include(ModalityScopes)
               .with_current_modality_of_class(Renalware::Deaths::ModalityDescription)
+              .preload(current_modality: [:description])
+              .left_outer_joins(:profile).includes(:profile)
               .where("patients.first_cause_id is NULL AND renal_profiles.esrf_on IS NOT NULL")
           end
 

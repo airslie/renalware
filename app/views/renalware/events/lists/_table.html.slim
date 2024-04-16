@@ -2,27 +2,30 @@
 
 - toggle_prefix ||= "event"
 
-table.has-togglable-rows.events-table
-  thead
-    tr
-      th.noprint.togglers= table_toggler
-      th.col-width-tiny
-      th.col-width-date= sort_link(q, :created_at, "Added", default_order: :desc)
-      th.col-width-large= sort_link(q, :event_type_name, "Type", default_order: :asc)
-      th.col-width-large= sort_link(q, :patient_family_name, ["patient_family_name", "patient_given_name asc"], "Patient")
-      th Desscription
-      th.created_at.col-width-date-time= sort_link(q, :date_time, "Date/Time", default_order: :desc)
-      th.created_by.col-width-medium= sort_link(q, :created_by_family_name, ["created_by_family_name", "created_by_given_name asc"], "Created by", default_order: :asc)
-  tbody
-    / Note we can't use cached: true yet when rendering the events collection, as each row is
-    / used in a different context and displays there slightly differently, for example showing
-    / an Edit link or Type column in certain circumstances.
-    = render partial: "renalware/events/events/event",
-             collection: events,
-             locals: { \
-              exclude_type_column: false,
-              include_patient_column: true,
-              toggle_prefix: toggle_prefix \
-            }
+= turbo_frame_tag("events-list-turbo-frame", "data-turbo-action" => "advance") do
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      table.events-table.toggleable(data-controller="toggle")
+        thead
+          tr
+            th.noprint.togglers.noprint= rows_toggler
+            th.col-width-tiny
+            th.col-width-date= sort_link(q, :created_at, "Added", default_order: :desc)
+            th.col-width-large= sort_link(q, :event_type_name, "Type", default_order: :asc)
+            th.col-width-large= sort_link(q, :patient_family_name, ["patient_family_name", "patient_given_name asc"], "Patient")
+            th Desscription
+            th.created_at.col-width-date-time= sort_link(q, :date_time, "Date/Time", default_order: :desc)
+            th.created_by.col-width-medium= sort_link(q, :created_by_family_name, ["created_by_family_name", "created_by_given_name asc"], "Created by", default_order: :asc)
+        tbody
+          / Note we can't use cached: true yet when rendering the events collection, as each row is
+          / used in a different context and displays there slightly differently, for example showing
+          / an Edit link or Type column in certain circumstances.
+          = render partial: "renalware/events/events/event",
+                  collection: events,
+                  locals: { \
+                    exclude_type_column: false,
+                    include_patient_column: true,
+                    toggle_prefix: toggle_prefix \
+                  }
 
-= paginate events
+      == pagy_nav pagy

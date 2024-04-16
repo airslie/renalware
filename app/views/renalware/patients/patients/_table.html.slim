@@ -15,4 +15,4 @@ table#patients
   tbody
     = render partial: "patient", collection: patients
 
-= paginate patients
+== pagy_nav(pagy)

@@ -3,6 +3,8 @@
 module Renalware
   module Events
     class Type < ApplicationRecord
+      include RansackAll
+
       self.table_name = "event_types"
       has_many(
         :alert_triggers,
@@ -43,12 +45,6 @@ module Renalware
                 allow_nil: true
 
       scope :visible, -> { where(hidden: false) }
-
-      enum editable_by_actor: {
-        superadmins: "superadmins",
-        all_admins: "all_admins",
-        author_and_all_admins: "author_and_all_admins"
-      }
 
       # For use in migrations to reset the events_count counter cache column
       def self.reset_counters!

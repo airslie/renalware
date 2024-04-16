@@ -15,7 +15,7 @@ describe "API request for a patient's prescriptions as JSON" do
       it "forbids access to the resource" do
         visit api_v1_patient_prescriptions_path(patient)
         expect(page.status_code).to eq(401)
-        expect(json["error"]).to match("You need to sign in or sign up before continuing.")
+        expect(json["error"]).to match("Please sign in or sign up before continuing.")
       end
     end
 

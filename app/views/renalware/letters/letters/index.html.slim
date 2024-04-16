@@ -4,6 +4,7 @@
 
 = within_patient_layout(title: "Letters") do
   = render "table", letters: letters, patient: patient
+  == pagy_nav(pagy)
 
   / If the host app has a views/renalware/letters/_legacy_letters.html.slim partial
   / then render it - provides a way for the host app a change to augment this page.

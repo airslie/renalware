@@ -1,27 +1,40 @@
-.search-form.filters
-  = simple_form_for form,
-                    as: :filters,
-                    url: renalware.events_filtered_list_path(named_filter: :all),
-                    html: { autocomplete: "off" },
-                    method: :get do |f|
-    .row
-      .small-6.medium-3.large-2.columns
-        = f.input :event_type_id_eq,
-              collection: form.event_type_options,
-              input_html: { class: "searchable_select" },
-              label: "Event type"
-      .small-6.medium-3.large-2.columns
-        = f.input :created_by_id_eq,
-                  as: :user_picker,
-                  collection: form.created_by_options,
-                  label: "Created by"
-      .small-6.medium-2.large-2.columns
-        = f.input :created_at_gteq,
-                  as: :flatpickr,
-                  label: "From"
-      .small-6.medium-2.large-2.columns
-        = f.input :created_at_lteq,
-                  as: :flatpickr,
-                  label: "To"
-      .small-12.medium-2.large-2.columns.actions.end
-        .mt-px= filter_or_reset(form: f, reset_path: renalware.events_filtered_list_path(named_filter: :all))
+- url = renalware.events_filtered_list_path(named_filter: :all)
+= simple_form_for form,
+                  as: :filters,
+                  remote: true,
+                  url: url,
+                  html: { autocomplete: "off" },
+                  method: :get,
+                  data: { turbo_frame: "events-list-turbo-frame",
+                          turbo: true,
+                          turbo_advance: true,
+                          controller: "form",
+                          action: "input->form#submit" } do |f|
+  .md:flex.gap-x-4
+    .basis-4/12
+      = f.input :event_type_id_eq,
+                collection: form.event_type_options,
+                input_html: { data: { controller: "slimselect", action: "change->form#submit" }},
+                label: "Event type"
+    .basis-1/4
+      = f.input :created_by_id_eq,
+              as: :user_picker,
+              collection: form.created_by_options,
+              label: "Created by",
+              input_html: { data: { action: "change->form#submit" }}
+    div
+      = f.input :created_at_gteq,
+                as: :flatpickr,
+                label: "From"
+    div
+      = f.input :created_at_lteq,
+                as: :flatpickr,
+                label: "To"
+    .basis-1/12
+      .mt-6
+        = link_to(url, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+          .flex.items-center
+            .mr-1= inline_icon(:cross, size: :md)
+            | Reset
+        noscript
+          = filter_or_reset(form: f, reset_path: url)

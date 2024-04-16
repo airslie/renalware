@@ -64,15 +64,6 @@ module Renalware
               ).call
           end
 
-          # def last_request
-          #   raise 'u'
-          #   @last_request ||=
-          #     RequestForPatientRequestDescriptionQuery.new(
-          #       patient,
-          #       rule_set.request_description
-          #     ).call
-          # end
-
           def last_request_date
             @last_request_date ||=
               RequestForPatientRequestDescriptionQuery.new(

@@ -101,13 +101,13 @@ module Renalware
         next_modality = nil
         patient_modalities.to_a.each_with_object([]) do |modality, rows|
           if next_modality && modality.ended_on
-            days_missing = (next_modality.started_on - modality.ended_on).to_i - 1
+            days_missing = (next_modality.started_on - modality.ended_on).to_i
             if days_missing > 0
               rows << "Missing modality data between #{I18n.l(modality.ended_on)} and " \
                       "#{I18n.l(next_modality.started_on)} (#{pluralize(days_missing, 'day')})"
             elsif days_missing < 0
               rows << "Overlapping modality dates #{I18n.l(modality.ended_on)} and " \
-                      "#{I18n.l(next_modality.started_on)} (#{pluralize(days_missing + 1, 'day')})"
+                      "#{I18n.l(next_modality.started_on)} (#{pluralize(days_missing.abs, 'day')})"
             end
           end
           rows << modality

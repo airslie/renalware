@@ -1,0 +1,35 @@
+
+= within_new_admin_layout(title: "Replayed Feed Messages for Request #{replay_request.id}",
+                          breadcrumbs: breadcrumb_for("Replay Requests", feeds_replay_requests_path)) do
+
+  .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
+    i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+    ' An entry for every feed message we try and replay.
+
+  table
+    thead
+      tr
+        th.col-width-tiny
+        th.col-width-tiny Id
+        th.col-width-date-time Created
+        th.col-width-date-time Updated
+        th.col-width-tiny Success
+        th.col-width-tiny Replay Request
+        th.col-width-tiny Feed message
+        th.col-width-tiny Patient id
+        th Error
+        th
+
+    tbody
+      - replays.each do |replay|
+        tr
+          td
+          td= replay.id
+          td= l(replay.created_at)
+          td= l(replay.updated_at)
+          td= inline_check_icon(replay.success)
+          td= replay.replay_request_id
+          td= replay.message_id
+          td= replay_request.patient_id
+          td= replay.error_message
+          td

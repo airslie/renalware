@@ -11,7 +11,6 @@ module Renalware
     module Internal
       module_function
 
-      # def cast_patient(patient) = patient.becomes(Messaging::Internal::Patient)
       def cast_author(author) = author.becomes(Messaging::Internal::Author)
       def cast_recipient(recipient) = recipient.becomes(Messaging::Internal::Recipient)
     end

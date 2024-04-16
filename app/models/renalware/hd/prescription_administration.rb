@@ -6,6 +6,11 @@ module Renalware
       include Accountable
       acts_as_paranoid
 
+      has_paper_trail(
+        versions: { class_name: "Renalware::HD::Version" },
+        on: [:create, :update, :destroy]
+      )
+
       # Set to true by the parent hd_session if we are not signing off at this stage
       attr_accessor(
         :skip_witness_validation,

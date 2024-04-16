@@ -50,6 +50,8 @@ environment ENV.fetch("RAILS_ENV", "development")
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
 
+silence_fork_callback_warning
+
 # GoodJob puma config - see https://github.com/bensheldon/good_job#execute-jobs-async--in-process
 before_fork do
   GoodJob.shutdown

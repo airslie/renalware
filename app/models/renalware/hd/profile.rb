@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "document/base"
-
 module Renalware
   module HD
     class Profile < ApplicationRecord
@@ -9,6 +7,7 @@ module Renalware
       include PatientScope
       include Accountable
       include Supersedeable
+      include RansackAll
 
       belongs_to :patient, touch: true
       belongs_to :hospital_unit, class_name: "Hospitals::Unit"

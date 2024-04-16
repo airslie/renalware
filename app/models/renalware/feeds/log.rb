@@ -3,6 +3,8 @@
 module Renalware
   module Feeds
     class Log < ApplicationRecord
+      include RansackAll
+
       belongs_to :message
       belongs_to :patient
       validates :log_type, presence: true

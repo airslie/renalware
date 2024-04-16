@@ -6,6 +6,8 @@ module Renalware
       include Accountable
       include TransactionRetry
       extend Enumerize
+      include RansackAll
+
       # The letterhead is the only site-specific element in the letter, so we use this
       # to determine site-specific settings - in this case whether the letter should contain
       # pathology. At KCH for example, Darren Valley letters should not contain recent pathology.

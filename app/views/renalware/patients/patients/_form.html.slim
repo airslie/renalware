@@ -104,6 +104,10 @@
     = f.input :rpv_decision_on, as: :flatpickr, wrapper: :horizontal_datepicker
     = f.input :rpv_recorded_by, wrapper: :horizontal_medium
 
+    = f.input :ukrdc_anonymise, as: :inline_radio_buttons, wrapper: :horizontal_medium
+    = f.input :ukrdc_anonymise_decision_on, as: :flatpickr, wrapper: :horizontal_datepicker
+    = f.input :ukrdc_anonymise_recorded_by, wrapper: :horizontal_medium
+
 .columns.large-12
   = field_set_tag do
     legend Notes

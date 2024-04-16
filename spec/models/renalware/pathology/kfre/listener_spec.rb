@@ -12,8 +12,9 @@ module Renalware
       let(:dob) { "2015-04-01" }
       let(:observation_datetime) { "200911111841" }
       let(:patient) do
-        create(:pathology_patient, local_patient_id: local_patient_id,
-                                   born_on: Time.zone.today - 34.years) do |pat|
+        create(:pathology_patient,
+               local_patient_id: local_patient_id,
+               born_on: Time.zone.today - 34.years) do |pat|
           create(
             :modality,
             started_on: Date.parse(dob),
@@ -75,13 +76,13 @@ module Renalware
                       ordering_provider_name: "::name::",
                       placer_order_number: "::pcs code::",
                       filler_order_number: "::fillernum::",
-                      date_time: observation_datetime,
+                      observed_at: observation_datetime,
                       observations: [
                         instance_double(
                           Renalware::Feeds::HL7Message::Observation,
                           identifier: "ACR",
                           name: "ACR",
-                          date_time: observation_datetime,
+                          observed_at: observation_datetime,
                           value: "10",
                           comment: "",
                           cancelled: nil,
@@ -122,13 +123,13 @@ module Renalware
                       ordering_provider_name: "::name::",
                       placer_order_number: "::pcs code::",
                       filler_order_number: "::fillernum::",
-                      date_time: observation_datetime,
+                      observed_at: observation_datetime,
                       observations: [
                         instance_double(
                           Renalware::Feeds::HL7Message::Observation,
                           identifier: "ACR",
                           name: "ACR",
-                          date_time: observation_datetime,
+                          observed_at: observation_datetime,
                           value: "10",
                           comment: "",
                           cancelled: nil,

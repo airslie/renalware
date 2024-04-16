@@ -42,6 +42,7 @@ import NavbarController from "./navbar_controller"
 import TabbedNavigationController from "./tabbed_navigation_controller"
 import TurboModalController from "./turbo_modal_controller"
 import ChartsRawController from "./charts_raw_controller"
+import HDSlotRequestController from "./hd/slot_requests_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
@@ -100,3 +101,4 @@ application.register("dropdown", Dropdown) // https://www.stimulus-components.co
 application.register("tabbed-navigation", TabbedNavigationController)
 application.register("turbo-modal", TurboModalController)
 application.register("charts-raw", ChartsRawController)
+application.register("hd-slot-request", HDSlotRequestController)

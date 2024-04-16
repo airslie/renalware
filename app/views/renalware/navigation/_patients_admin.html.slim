@@ -1,10 +1,10 @@
 li.has-dropdown
-  = link_to t(".patients"), patients_path
+  = link_to t(".patients"), renalware.patients_path
   ul.dropdown
-    li= link_to "Patients List", patients_path
-    li= link_to "Add a New Patient", new_patient_path
-    li= link_to "Deceased Patients", patient_deaths_path
-    li= link_to "Worryboard", worryboard_path
-    li= link_to "Admission Requests", admissions_requests_path
-    li= link_to "Admission Consults", admissions_consults_path
-    li= link_to "Admission Inpatients", admissions_admissions_path
+    li= link_to "Patients List", renalware.patients_path
+    li= link_to "Add a New Patient", renalware.new_patient_path
+    li= link_to "Deceased Patients", renalware.patient_deaths_path
+    li= link_to "Worryboard", renalware.worryboard_path
+    li= link_to "Admission Requests", renalware.admissions_requests_path
+    li= link_to "Admission Consults", renalware.admissions_consults_path
+    li= link_to "Admission Inpatients", renalware.admissions_admissions_path

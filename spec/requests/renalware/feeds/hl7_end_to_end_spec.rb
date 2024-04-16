@@ -17,10 +17,10 @@ describe "HL7 message handling end to end" do
         PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
         ORC|RE|^PCS|09B0099478^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
-        OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
+        OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111000|200911111841|||||||200911111000|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB||6.09|10\S\12/L|||||F|||200911112026||BBKA^Donald DUCK|
         OBX|2|TX|RBC^RBC^MB||4.00|10\S\9/L|||||F|||200911112026||BBKA^Donald DUCK|
-        OBR|2|PLACER_ORDER_NO_2^PCS|FILLER_ORDER_NO_2^LA|RLU^RENAL/LIVER/UREA^HM||201801251204|201801250541||||||.|201801250541|B^Blood|RABRO^Rabbit, Roger||100000000||||201801251249||HM|F
+        OBR|2|PLACER_ORDER_NO_2^PCS|FILLER_ORDER_NO_2^LA|RLU^RENAL/LIVER/UREA^HM||201801251000|201801250541||||||.|201801250000|B^Blood|RABRO^Rabbit, Roger||100000000||||201801251249||HM|F
         OBX|1|NM|NA^Sodium^HM||136|mmol/L|||||F|||201801251249||XXXXXVC01^BHI Authchecker
         OBX|2|NM|POT^Potassium^HM||4.7|mmol/L|||||F|||201801251249||XXXXXVC01^BHI Authchecker
         OBX|3|NM|URE^Urea^HM||6.6|mmol/L|||||F|||201801251249||XXXXXVC01^BHI Authchecker
@@ -68,15 +68,19 @@ describe "HL7 message handling end to end" do
       expect(patient.observation_requests.count).to eq(2)
       request_fbc = patient.observation_requests.first
       expect(request_fbc.description.code).to eq("FBC")
-      expect(request_fbc.requestor_order_number).to eq("PLACER_ORDER_NO_1")
-      expect(request_fbc.filler_order_number).to eq("FILLER_ORDER_NO_1")
       expect(request_fbc.observations.count).to eq(2)
+
+      expect(request_fbc).to have_attributes(
+        requested_at: Time.zone.parse("200911111841"),
+        filler_order_number: "FILLER_ORDER_NO_1",
+        requestor_order_number: "PLACER_ORDER_NO_1"
+      )
 
       expect(request_fbc.observations.map { |obx| obx.description.code }).to eq(%w(WBC RBC))
 
       units = request_fbc.observations.map { |obx| obx.description.measurement_unit }
 
-      # Assert that any units that do not exist have been created and the unit assed to the
+      # Assert that any units that do not exist have been created and the unit added to the
       # description
       expect(units.compact.length).to eq(2)
       obx_descriptions = request_fbc.observations.map(&:description)
@@ -87,19 +91,23 @@ describe "HL7 message handling end to end" do
 
       expect(request_fbc.observations.first).to have_attributes(
         result: "6.09",
-        observed_at: Time.zone.parse("200911112026"),
+        observed_at: Time.zone.parse("200911111841"), # Copied from FBC OBR requested at!
         description: Renalware::Pathology::ObservationDescription.find_by(code: "WBC")
       )
 
       request_rlu = patient.observation_requests.last
-      expect(request_rlu.requestor_order_number).to eq("PLACER_ORDER_NO_2")
-      expect(request_rlu.filler_order_number).to eq("FILLER_ORDER_NO_2")
       expect(request_rlu.description.code).to eq("RLU")
       expect(request_rlu.observations.count).to eq(5)
 
+      expect(request_rlu).to have_attributes(
+        requested_at: Time.zone.parse("201801250541"),
+        filler_order_number: "FILLER_ORDER_NO_2",
+        requestor_order_number: "PLACER_ORDER_NO_2"
+      )
+
       expect(request_rlu.observations[3]).to have_attributes(
         result: "102",
-        observed_at: Time.zone.parse("201801251249"),
+        observed_at: Time.zone.parse("201801250541"), # from OBR.7
         description: Renalware::Pathology::ObservationDescription.find_by(code: "CRE")
       )
 
@@ -108,7 +116,7 @@ describe "HL7 message handling end to end" do
         .to eq(%w(NA POT URE CRE EGFR))
       expect(request_rlu.observations[4]).to have_attributes(
         result: "10",
-        observed_at: Time.zone.parse("201801251249"),
+        observed_at: Time.zone.parse("201801250541"), # from OBR
         description: Renalware::Pathology::ObservationDescription.find_by(code: "EGFR")
       )
     end
@@ -142,7 +150,7 @@ describe "HL7 message handling end to end" do
       <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
         PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
-        OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200901010101||HM|F||||||||||||||||||
+        OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111840|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200901010101||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB||6.09|10\\S\\12/L|||||F|||||BBKA^Donald DUCK|
       RAW
     end
@@ -158,12 +166,12 @@ describe "HL7 message handling end to end" do
     end
   end
 
-  context "when OBX.14 and OBR.7 dates is missing" do
+  context "when OBR.7 and OBR.14 dates are missing" do
     let(:raw_message) do
       <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
         PID|||Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
-        OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||200911111841||||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||||HM|F||||||||||||||||||
+        OBR|1|PLACER_ORDER_NO_1^PCS|FILLER_ORDER_NO_1^LA|FBC^FULL BLOOD COUNT^MB||||||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB||6.09|10\\S\\12/L|||||F|||||BBKA^Donald DUCK|
       RAW
     end

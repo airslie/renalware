@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "document/enum"
-
 module Renalware
   class LeftRightConfirmation < NestedAttribute
     attribute :left, Document::Enum, enums: %i(yes no)

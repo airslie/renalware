@@ -3,6 +3,7 @@
 module Renalware
   module Patients
     class Bookmark < ApplicationRecord
+      include RansackAll
       acts_as_paranoid
 
       belongs_to :user, class_name: "Renalware::Patients::User"

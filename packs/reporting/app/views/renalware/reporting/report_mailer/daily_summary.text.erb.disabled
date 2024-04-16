@@ -1,0 +1,15 @@
+<%= l(Time.zone.now) %>
+
+<% view_data.each do |view_name, data| %>
+<% rows = data["data"].first %>
+<% title =  t(:title, scope: "renalware.#{view_name}", default: view_name) %>
+<%= title %>
+<%= "-" * title.length %>
+<% rows.each do |row| %>
+<% description = row[0] %>
+<% value = row[1] %>
+<%= t(description,scope: "renalware.#{view_name}", default: description.humanize) -%>
+<%= ": #{value}" %>
+<% end %>
+
+<% end %>

@@ -2,8 +2,7 @@ a.button.dropdown.with-icon(href="#"
                             data-dropdown="hd-prescription-options"
                             aria-controls="hd-prescription-options"
                             aria-expanded="false")
-  i.fas.fa-capsules
-  | Record HD Drugs
+  = text_with_icon_prefix("Record HD Drugs", :capsules, size: :md, class: "fill-white")
 
 ul.f-dropdown#hd-prescription-options(data-dropdown-content aria-hidden="true")
 

@@ -10,9 +10,6 @@
       "options": {
         "version": "14"
       }
-    },
-    {
-      "plan": "heroku-redis:mini"
     }
   ],
   "env": {

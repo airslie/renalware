@@ -4,7 +4,6 @@ yarn install
 sudo chown -R vscode:vscode /usr/local/bundle
 
 sudo service postgresql start
-sudo service redis-server start
 sudo service memcached start
 
 Create PostgreSQL users and databases

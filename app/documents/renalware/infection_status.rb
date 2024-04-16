@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "document/enum"
-
 module Renalware
   class InfectionStatus < NestedAttribute
     attribute :value, Document::Enum,

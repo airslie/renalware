@@ -2,7 +2,6 @@
 
 module Renalware
   module Clinics
-    # TODO: Unused?
     class CurrentObservations
       NULL_DATE = nil
       pattr_initialize :patient

@@ -5,7 +5,7 @@ require "collection_presenter"
 module Renalware
   module Renal
     class RegistryPreflightChecksController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       module WithHDUnit
         def hd_unit
@@ -48,27 +48,33 @@ module Renalware
       def patients
         authorize_action
         query = build_query(query_params)
+        pagy, patients = patients_for(query)
         render locals: {
-          patients: patients_for(query),
-          query: query.search
+          patients: patients,
+          query: query.search,
+          pagy: pagy
         }
       end
 
       def deaths
         authorize_action
         query = build_query(query_params)
+        pagy, patients = patients_for(query)
         render locals: {
-          patients: patients_for(query),
-          query: query.search
+          patients: patients,
+          query: query.search,
+          pagy: pagy
         }
       end
 
       def missing_esrf
         authorize_action
         query = build_query(params.fetch(:q, {}))
+        pagy, patients = patients_for(query)
         render locals: {
-          patients: patients_for(query),
-          query: query.search
+          patients: patients,
+          query: query.search,
+          pagy: pagy
         }
       end
 
@@ -81,8 +87,8 @@ module Renalware
 
       def patients_for(query)
         presenter_class = self.class.const_get("#{action_name.to_s.camelize}Presenter")
-        patients = query.call.page(page).per(per_page)
-        CollectionPresenter.new(patients, presenter_class)
+        pagy, patients = pagy(query.call)
+        [pagy, CollectionPresenter.new(patients, presenter_class)]
       end
 
       def authorize_action

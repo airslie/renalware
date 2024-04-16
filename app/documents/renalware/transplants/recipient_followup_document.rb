@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "document/embedded"
-
 module Renalware
   module Transplants
     class RecipientFollowupDocument < Document::Embedded

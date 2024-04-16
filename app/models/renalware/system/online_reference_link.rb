@@ -10,6 +10,7 @@ module Renalware
     # html document that is referenced, in order to pre-populate title and description.
     class OnlineReferenceLink < ApplicationRecord
       include Accountable
+      include RansackAll
 
       validates(
         :url,

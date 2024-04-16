@@ -7,9 +7,9 @@ module Renalware
         class AddPatient < Command
           include Callable
 
-          def initialize(message, mapper_factory: MessageMappers::Patient)
+          def initialize(message, reason = "", mapper_factory: MessageMappers::Patient)
             @mapper_factory = mapper_factory
-
+            @reason = reason
             super(message)
           end
 
@@ -33,7 +33,7 @@ module Renalware
             new_record = patient.new_record?
             patient.save!
 
-            BroadcastPatientAddedEvent.call(patient) if new_record
+            BroadcastPatientAddedEvent.call(patient, @reason) if new_record
 
             patient
           end

@@ -23,8 +23,8 @@ div(data-controller="conditional-display" data-conditional-display-attribute-to-
                     id: "event-type-dropdown",
                     required: :required,
                     tabindex: 2001,
-                    data: { controller: "slimselect select", action: "change->select#refresh change->conditional-display#showhide"} \
-                  }
+                    data: { controller: "slimselect select",
+                            action: "change->select#refresh change->conditional-display#showhide"}}
 
     = f.input :date_time,
               as: :flatpickr_with_time,
@@ -35,7 +35,6 @@ div(data-controller="conditional-display" data-conditional-display-attribute-to-
     / event type in the drop-down above. See events.js.
     #event-type-specific-inputs
       = render partial: event.to_input_partial_path, locals: { event: event, f: f }
-
     = f.label :notes
     = snippets_modal_and_link_to_open_it(target_input_for_selected_snippet: ".event-notes")
     = f.input :notes, as: :trix_editor, class: "event-notes", wrapper: :zilch

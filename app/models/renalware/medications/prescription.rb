@@ -4,6 +4,7 @@ module Renalware
   module Medications
     class Prescription < ApplicationRecord
       include Accountable
+      include RansackAll
       extend Enumerize
 
       attr_accessor :drug_id_and_trade_family_id

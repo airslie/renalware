@@ -41,14 +41,14 @@ Rails.application.configure do
     config.public_file_server.headers = {
       "Cache-Control" => "public, max-age=172800"
     }
-    config.cache_store = :memory_store, { size: 64.megabytes }
+    config.cache_store = :solid_cache_store
+    # config.cache_store = :memory_store, { size: 64.megabytes }
   else
     config.action_controller.perform_caching = false
-
     config.cache_store = :null_store
   end
 
-  # Keep the developoment log no bigger than 10mb.
+  # Keep the development log no bigger than 10mb.
   # Keep at most 1 rotated file, so there will usually be a 10mb demo/log/developmen.log.0
   # file and the current development.log in existence
   config.logger = ActiveSupport::Logger.new(config.paths["log"].first, 1, 10 * 1024 * 1024)

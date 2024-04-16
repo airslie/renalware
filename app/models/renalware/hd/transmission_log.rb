@@ -5,6 +5,7 @@ module Renalware
     # Tracks the import of incoming HD Session data from an integrated dialysis provider
     # and the outgoing data back to that provider, for example HL7 messages.
     class TransmissionLog < ApplicationRecord
+      include RansackAll
       belongs_to :hd_provider_unit, class_name: "ProviderUnit"
       belongs_to :patient, class_name: "Renalware::Patient"
       belongs_to :session

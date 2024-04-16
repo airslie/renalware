@@ -5,9 +5,12 @@ module Renalware
     class SlotRequest < ApplicationRecord
       include Accountable
       include PatientsRansackHelper
+      include RansackAll
+
       acts_as_paranoid
       belongs_to :patient
       belongs_to :deletion_reason, class_name: "SlotRequestDeletionReason"
+      belongs_to :medically_fit_for_discharge_by, class_name: "User"
 
       scope :current, -> { where(allocated_at: nil) }
       scope :historical, lambda {

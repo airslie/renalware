@@ -15,21 +15,9 @@ describe Renalware::Medications::LatestReviewComponent, type: :component do
   end
 
   describe "displays details about the last medication review the patient had" do
-    before do
-      yaml = <<-YAML
-        renalware:
-          medications:
-            latest_review_component:
-              title: Text1 by %{user} on %{date}
-              compact_title: Text2 %{date} by %{user}
-      YAML
-      I18n.t("renalware.medications/latest_review_component") # load first
-      I18n.backend.store_translations(:en, YAML.safe_load(yaml)) # then replace
-    end
-
     {
-      false => "Text1 by A Person (Pos) on 01-Jan-2021",
-      true => "Text2 01-Jan-2021 by A Person (Pos)"
+      false => "Medications last confirmed by A Person (Pos) on 01-Jan-2021",
+      true => "last checked 01-Jan-2021 by A Person (Pos)"
     }.each do |compact, title|
       context "when the compact is #{compact}" do
         it "displays the correct format defined by the component's i18n yml" do

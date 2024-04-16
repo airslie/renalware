@@ -31,6 +31,7 @@ module Renalware
 
           def order_category_element
             create_node("OrderCategory") do |category|
+              category << create_node("CodingStandard", "LOCAL")
               category << create_node("Code", request.description.code)
             end
           end

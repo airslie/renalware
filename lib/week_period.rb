@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class WeekPeriod
-  attr_reader :year, :week_number, :date_on_first_day_of_week
+  attr_reader :year,
+              :week_number,
+              :date_on_first_day_of_week,
+              :last_day_of_week # The date of last day of the week (a Sunday)
 
   def self.from_date(date)
     date = date.to_date
@@ -14,6 +17,7 @@ class WeekPeriod
     validate_week_number
     validate_year
     @date_on_first_day_of_week = Date.commercial(@year, @week_number)
+    @last_day_of_week ||= (@date_on_first_day_of_week + 1.week - 1.minute).to_date
   end
 
   def next
@@ -31,11 +35,6 @@ class WeekPeriod
   def to_s
     "#{I18n.l(date_on_first_day_of_week, format: :long)} " \
       "to #{I18n.l(last_day_of_week, format: :long)}"
-  end
-
-  # The date of last day of the week (a Sunday)
-  def last_day_of_week
-    @last_day_of_week ||= (date_on_first_day_of_week + 1.week - 1.minute).to_date
   end
 
   def validate_week_number

@@ -73,7 +73,7 @@ module Renalware::Feeds
           expect(request.identifier).to eq("FBC")
           expect(request.ordering_provider_name).to eq("KINGS MIDWIVES")
           expect(request.placer_order_number).to eq("123456")
-          expect(request.date_time).to eq("200911111841")
+          expect(request.observed_at).to eq("200911111841")
         end
 
         it "assigns the observation attributes" do
@@ -83,7 +83,7 @@ module Renalware::Feeds
           obs = request.observations.first
           expect(obs.identifier).to eq("WBC")
           expect(obs.comment).to eq("")
-          expect(obs.date_time).to eq("200911112026")
+          expect(obs.observed_at).to eq("200911112026")
           expect(obs.value).to eq("6.09")
           expect(obs.units).to eq("10^12/L")
         end

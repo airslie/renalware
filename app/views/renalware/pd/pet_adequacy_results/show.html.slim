@@ -1,8 +1,5 @@
 - title = pet_adequacy_result.model_name.human
 
--content_for(:page_navigation) do
-  = back_link_to("Back to PD Summary", patient_pd_dashboard_path(patient))
-
 = within_patient_layout(title: title) do
   = definition_list_for(pet_adequacy_result, size: :xlarge) do |list|
     = list.definition(:pet_type) { |value| value.text }

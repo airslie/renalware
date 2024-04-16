@@ -57,7 +57,6 @@ describe "View a list of home delivery prescriptions filtered by delivery dates"
       expect(page).to have_content(l(prescription.prescribed_on))
       expect(page).to have_content("01-Nov-2020")
       expect(page).to have_content("01-Dec-2020")
-      expect(page).to have_content("Next ›")
     end
   end
 
@@ -83,7 +82,6 @@ describe "View a list of home delivery prescriptions filtered by delivery dates"
       expect(page).to have_content(l(prescription.prescribed_on))
       expect(page).to have_content("01-Nov-2020")
       expect(page).to have_content("01-Dec-2020")
-      expect(page).to have_content("Next ›")
     end
   end
 end

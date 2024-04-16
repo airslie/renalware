@@ -63,8 +63,8 @@ $font-family-sans-serif: "Helvetica Neue", -apple-system, BlinkMacSystemFont,
 $original-alert-color: #f04124;
 $alert-color: lighten($original-alert-color, 10%);
 // $success-color: #43AC6A;
-// $warning-color: #f08a24;
-// $info-color: #a0d3e8;
+$warning-color: #fb923c;// #f08a24;
+$info-color: #e0f2fe; //#a0d3e8;
 
 $white: #fff;
 $nearly-white: #fefefe;

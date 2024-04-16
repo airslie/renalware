@@ -105,6 +105,7 @@ describe "API request for a single UKRDC patient XML document" do
       expect(response).to be_successful
 
       xml = response.body
+
       validate(xml).each do |error|
         raise error.message
       end

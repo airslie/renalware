@@ -5,6 +5,7 @@ module Renalware
     class PreferenceSet < ApplicationRecord
       include PatientScope
       include Accountable
+      include RansackAll
 
       belongs_to :patient, touch: true
       belongs_to :hospital_unit, class_name: "Hospitals::Unit"

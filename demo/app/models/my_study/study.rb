@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "renalware/research"
-
 module MyStudy
   #
   # See comments in engine app/models/renalware/research/study.rb

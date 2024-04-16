@@ -11,8 +11,19 @@ This project adheres to Semantic Versioning.
 
 ## 2.4.2
 ### Added
+- Add Medically fit for discharge checkbox on HD slot requests #4670
+- Allow a superadmin to soft-delete an HD prescription administration #4668
+- Capture when a patients requests their UKRDC data be anonymised #4662
+- Alternative experimental 'open' chart support for reports #4618
 ### Changed
+- Add titles eg '2. Well' to Clinical Frailty Scores events #4697
+- Display runtime errors to superadmins #4687
+- Display L or D against prescription dates in HD protocol #4676
+- Load report data asynchronously after the page has loaded #4671
+- Ensure modality history is editable by Admins and Superadmins #4635
+- Update Rails to 7.1 #4695
 ### Fixed
+- Allow sign in page to scroll correctly #4698
 
 ## 2.4.1
 
@@ -46,6 +57,7 @@ This project adheres to Semantic Versioning.
 - Soft delete patient worries #4594
 - Support per-message type (ADT, ORU etc) patient location strategies #4612
 - Add 'dynamic' patient locator strategy for MSE ADT HL7 messages #4614
+- Terminate given HD stat prescriptions immediately if they have a future termination date #4631
 
 ### Fixed
 - Use prescription.drug_name when displaying #4539 to ensure trade family name is included

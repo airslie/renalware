@@ -32,7 +32,7 @@ module Renalware
           # has called policy_scope from the #index action on the controller. Its has no
           # function other than a check. We could disable in non-dev environments with e.g.
           # if: Rails.env.development? || Rails.env.test?
-          after_action :verify_policy_scoped, if: -> { Rails.env.development? || Rails.env.test? }
+          after_action :verify_policy_scoped, if: -> { Rails.env.local? }
 
           # Override policy_scope from BaseController
           def patient_scope(default_scope = Renalware::Patient.all)

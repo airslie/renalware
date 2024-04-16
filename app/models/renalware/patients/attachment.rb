@@ -17,8 +17,9 @@ module Renalware
     #
     class Attachment < ApplicationRecord
       include Accountable
-      acts_as_paranoid
+      include RansackAll
 
+      acts_as_paranoid
       belongs_to :patient, touch: true
       belongs_to :attachment_type, class_name: "Renalware::Patients::AttachmentType"
       has_one_attached :file

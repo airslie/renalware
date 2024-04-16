@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "document/base"
-require "document/enum"
-
 module Renalware
   module HD
     class Session::DNA < Session

@@ -3,6 +3,8 @@
 module Renalware
   module UKRDC
     class TransmissionLog < ApplicationRecord
+      include RansackAll
+
       validates :status, presence: true
       belongs_to :patient, class_name: "Renalware::Patient"
       enum status: {

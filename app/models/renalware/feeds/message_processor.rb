@@ -18,6 +18,7 @@ module Renalware
       # However we should be aware that any listeners raising an error will prevent successful
       # in all other listeners. So a listener should be careful to catch errors and not re-raise
       # them, or use the :message_processed message (lower down) which is safer.
+      # rubocop:disable Metrics/MethodLength
       def call(raw_message)
         @raw_message = raw_message
 
@@ -25,6 +26,7 @@ module Renalware
         ActiveRecord::Base.transaction do
           create_feed_message_using_raw_message_and_basic_extracted_patient_data
           allow_listeners_to_process_the_message
+          feed_message.update!(processed: true)
         end
 
         allow_listeners_to_post_process_the_message
@@ -34,6 +36,7 @@ module Renalware
         notify_exception(e)
         raise e
       end
+      # rubocop:enable Metrics/MethodLength
 
       private
 

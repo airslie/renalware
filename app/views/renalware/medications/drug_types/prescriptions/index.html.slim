@@ -2,4 +2,4 @@
   = render "filters", search: search
 
 = within_admin_layout(title: t(".heading")) do
-  = render "table", prescriptions: prescriptions, search: search
+  = render "table", prescriptions: prescriptions, search: search, pagy: pagy

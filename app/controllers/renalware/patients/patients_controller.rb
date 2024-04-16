@@ -4,24 +4,25 @@ module Renalware
   module Patients
     class PatientsController < Renalware::BaseController
       include PresenterHelper
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
       include Renalware::Concerns::PatientVisibility
 
       def index
         sort = params.dig(:q, :s)
         patient_search.sorts = sort if sort
-        patients = patient_search.result.page(page).per(per_page)
+        pagy, patients = pagy(patient_search.result)
         authorize patients
         render locals: {
           search: patient_search,
-          patients: present(patients, PatientPresenter)
+          patients: present(patients, PatientPresenter),
+          pagy: pagy
         }
       end
 
       def search
         skip_authorization
         query = Patients::SearchQuery.new(term: params[:term], scope: patient_scope)
-        patients = query.call.page(page).per(per_page)
+        _pagy, patients = pagy(query.call)
         render json: simplify(patients).to_json
       end
 
@@ -51,7 +52,7 @@ module Renalware
         if patient.save_by(current_user)
           # Reload in order to let pg generate the secure id
           patient.reload
-          BroadcastPatientAddedEvent.call(patient)
+          BroadcastPatientAddedEvent.call(patient, "Manual")
           redirect_to_patient_demographics(patient)
         else
           flash.now[:error] = failed_msg_for("patient")
@@ -94,7 +95,7 @@ module Renalware
         params.require(:patient).permit(patient_attributes)
       end
 
-      def patient_attributes
+      def patient_attributes # rubocop:disable Metrics/MethodLength
         [
           :nhs_number, :family_name, :given_name, :sex, :country_of_birth_id,
           :ethnicity_id, :born_on, :paediatric_patient_indicator, :cc_on_all_letters,
@@ -104,6 +105,7 @@ module Renalware
           :local_patient_id_4, :local_patient_id_5, :external_patient_id,
           :send_to_renalreg, :send_to_rpv, :renalreg_decision_on, :rpv_decision_on,
           :renalreg_recorded_by, :rpv_recorded_by, :hospital_centre_id,
+          :ukrdc_anonymise, :ukrdc_anonymise_decision_on, :ukrdc_anonymise_recorded_by,
           current_address_attributes: address_params,
           document: {}
         ]

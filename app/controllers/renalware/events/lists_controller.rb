@@ -3,13 +3,14 @@
 module Renalware
   module Events
     class ListsController < BaseController
+      include Pagy::Backend
       include Renalware::Concerns::Pageable
 
       def show
         query = EventListQuery.new(params: form.attributes)
-        events = query.call.page(page).per(per_page)
+        pagy, events = pagy(query.call, item_extras: true)
         authorize events
-        render locals: { events: events, q: query.search, form: form }
+        render locals: { events: events, q: query.search, form: form, pagy: pagy }
       end
 
       private

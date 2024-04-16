@@ -6,6 +6,9 @@ module Renalware
       include Personable
       include Accountable
 
+      def self.ransackable_attributes(*) = %w(family_name given_name name title)
+      def self.ransackable_associations(*) = %w(address created_by updated_by)
+
       has_one :address, as: :addressable
 
       accepts_nested_attributes_for :address

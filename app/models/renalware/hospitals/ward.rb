@@ -3,6 +3,8 @@
 module Renalware
   module Hospitals
     class Ward < ApplicationRecord
+      include RansackAll
+
       belongs_to :hospital_unit, class_name: "Hospitals::Unit", inverse_of: :wards
 
       validates :hospital_unit, presence: true

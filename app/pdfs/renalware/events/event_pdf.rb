@@ -104,14 +104,14 @@ module Renalware
 
       # Create new line if there is a <br>.
       # If there is an empty line (caused by <br><br>) move down to indicate a new paragraph.
-      def output_html_as_text_but_preserving_paragraph_breaks(text:, strip_tags: true, **)
+      def output_html_as_text_but_preserving_paragraph_breaks(text:, strip_tags: true, **args)
         return if text.blank?
 
         text.split("<br>").each do |paragraph|
           if strip_tags
-            text(ActionView::Base.full_sanitizer.sanitize(paragraph), **)
+            text(ActionView::Base.full_sanitizer.sanitize(paragraph), **args)
           else
-            text(paragraph, **)
+            text(paragraph, **args)
           end
           move_down(10) if ActionView::Base.full_sanitizer.sanitize(paragraph).blank?
         end

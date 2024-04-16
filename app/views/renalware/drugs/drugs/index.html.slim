@@ -4,7 +4,7 @@
             class: "button"
 
 = content_for(:filters) do
-  = render "filters", drugs_search: @drugs_search
+  = render "filters", drug_search: drug_search
 
 = within_new_admin_layout(title: "Drugs") do
   = turbo_frame_tag "drugs" do
@@ -18,7 +18,7 @@
               th Dm+d Virtual Product ID
               th Active
           tbody
-            - @drugs.each do |drug|
+            - drugs.each do |drug|
               tr
                 td.actions
                   = link_to t("btn.edit"), edit_drugs_drug_path(drug), target: "_top"
@@ -31,4 +31,4 @@
                 td= drug.code
                 td= inline_check_icon(!drug.inactive)
 
-        = paginate @drugs
+        == pagy_nav(pagy)

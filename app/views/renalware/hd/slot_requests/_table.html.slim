@@ -2,83 +2,91 @@
 - deletion_reasons = Renalware::HD::SlotRequestDeletionReason.all
 
 = turbo_frame_tag("hd-slot-requests-turbo-frame") do
-  table#slot-requests.toggleable(data-controller="toggle")
-    thead
-      th.togglers= rows_toggler
-      - unless historical
-        th.col-width-medium
-      th.col-width-date= sort_link(query, :created_at, "Requested")
-      - if historical
-        th.col-width-date= sort_link(query, :allocated_at, "Allocated")
-        th.col-width-date= sort_link(query, :deleted_at, "Deleted")
-        th.col-width-date Deletion reason
-      th Patient
-      th Hosp No
-      th= sort_link(query, :urgency)
-      th= sort_link(query, :patient_current_modality_description_name, "Modality")
-      th.col-width-tiny= sort_link(query, :inpatient, "Inpatient?")
-      th.col-width-tiny= sort_link(query, :late_presenter, "Late Presenter?")
-      th.col-width-tiny= sort_link(query, :suitable_for_twilight_slots, "Twilight slots?")
-      th.col-width-tiny= sort_link(query, :external_referral, "External referral?")
-
-    - slot_requests.each do |slot_request|
-      tbody.overflow-visible
-        tr
-          td= row_toggler
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      table#slot-requests.toggleable.toggleable--without-border-between-toggled-and-non-toggled-tr(data-controller="toggle")
+        thead
+          th.togglers= rows_toggler
           - unless historical
-            td.overflow-visible
-              .inline.pr-3
-                = link_to "Edit",
-                          renalware.edit_hd_slot_request_path(slot_request),
-                          class: "btn-compact btn btn-secondary",
-                          data: { turbo: true, turbo_frame: "modal" }
-
-              div.inline.relative(data-controller="dropdown")
-                button(class="btn-compact btn-dropdown btn btn-secondary" type="button" data-action="dropdown#toggle click@window->dropdown#hide") Resolve&hellip;
-
-                div.hidden.dropdown-drawer(data-dropdown-target="menu"
-                  data-transition-enter-from="opacity-0 scale-95"
-                  data-transition-enter-to="opacity-100 scale-100"
-                  data-transition-leave-from="opacity-100 scale-100"
-                  data-transition-leave-to="opacity-0 scale-95"
-                  style="z-index: 100")
-                  .py-1
-                    = link_to(renalware.hd_slot_request_path(slot_request, hd_slot_request: { allocated: true}),
-                              method: :put,
-                              data: { action: "dropdown#toggle" } ) do
-                      .flex.items-center
-                        .w-4= inline_icon(:check)
-                        .ml-3 Allocated
-                    hr.m-0.bg-gray-200.border-0.h-px
-                      .flex.text-gray-400.ml-4.mt-2.inline-block.items-center
-                        .w-4= inline_icon(:cross)
-                        .ml-3.py-1 Remove with reason
-                    span
-                    - deletion_reasons.each do |reason|
-                      = link_to(renalware.hd_slot_request_path(slot_request, hd_slot_request: { deletion_reason_id: reason.id }),
-                                method: :put,
-                                data: { action: "dropdown#toggle" } ) do
-                        span.ml-7= reason.reason
-
-          td= l(slot_request.created_at&.to_date)
+            th.col-width-medium
+          th.col-width-date= sort_link(query, :created_at, "Requested")
           - if historical
-            td= l(slot_request.allocated_at&.to_date)
-            td= l(slot_request.deleted_at&.to_date)
-            td.nowrap= slot_request.deletion_reason&.reason
+            th.col-width-date= sort_link(query, :allocated_at, "Allocated")
+            th.col-width-date= sort_link(query, :deleted_at, "Deleted")
+            th.col-width-date Deletion reason
+          th Patient
+          th Hosp No
+          th= sort_link(query, :urgency)
+          th= sort_link(query, :patient_current_modality_description_name, "Modality")
+          th.col-width-tiny= sort_link(query, :inpatient, "Inpatient?")
+          th.col-width-tiny= sort_link(query, :medically_fit_for_discharge, "MFFD?")
+          th.col-width-tiny= sort_link(query, :late_presenter, "Late Presenter?")
+          th.col-width-tiny= sort_link(query, :suitable_for_twilight_slots, "Twilight slots?")
+          th.col-width-tiny= sort_link(query, :external_referral, "External referral?")
 
-          td= default_patient_link(slot_request.patient)
-          td= slot_request.patient.hospital_identifier
-          td
-            .rounded.inline.py-px.px-2.nowrap(class="#{urgency_colors.fetch(slot_request.urgency, '')}")
-              = slot_request.urgency.to_s.humanize
-          td.nowrap= slot_request.patient.current_modality
-          td= inline_check_icon(slot_request.inpatient)
-          td= inline_check_icon(slot_request.late_presenter)
-          td= inline_check_icon(slot_request.suitable_for_twilight_slots)
-          td= inline_check_icon(slot_request.external_referral)
-        tr
-          td(colspan=10)
-            = definition_list_for(slot_request, size: :xlarge) do |list|
-              = list.definition(:notes)
+        - slot_requests.each do |slot_request|
+          tbody.overflow-visible
+            tr
+              td= row_toggler
+              - unless historical
+                td.overflow-visible
+                  .inline.pr-2
+                    = link_to "Edit",
+                              renalware.edit_hd_slot_request_path(slot_request),
+                              class: "btn-compact btn btn-secondary",
+                              data: { turbo: true, turbo_frame: "modal" }
 
-  == pagy_foundation_nav pagy
+                  div.inline.relative(data-controller="dropdown")
+                    button(class="btn-compact btn-dropdown btn btn-secondary" type="button" data-action="dropdown#toggle click@window->dropdown#hide") Resolve&hellip;
+
+                    div.hidden.dropdown-drawer(data-dropdown-target="menu"
+                      data-transition-enter-from="opacity-0 scale-95"
+                      data-transition-enter-to="opacity-100 scale-100"
+                      data-transition-leave-from="opacity-100 scale-100"
+                      data-transition-leave-to="opacity-0 scale-95"
+                      style="z-index: 100")
+                      .py-1
+                        = link_to(renalware.hd_slot_request_path(slot_request, hd_slot_request: { allocated: true}),
+                                  method: :put,
+                                  data: { action: "dropdown#toggle" } ) do
+                          .flex.items-center
+                            .w-4= inline_icon(:check)
+                            .ml-3 Allocated
+                        hr.m-0.bg-gray-200.border-0.h-px
+                          .flex.text-gray-400.ml-4.mt-2.inline-block.items-center
+                            .w-4= inline_icon(:cross)
+                            .ml-3.py-1 Remove with reason
+                        span
+                        - deletion_reasons.each do |reason|
+                          = link_to(renalware.hd_slot_request_path(slot_request, hd_slot_request: { deletion_reason_id: reason.id }),
+                                    method: :put,
+                                    data: { action: "dropdown#toggle" } ) do
+                            span.ml-7= reason.reason
+
+              td= l(slot_request.created_at&.to_date)
+              - if historical
+                td= l(slot_request.allocated_at&.to_date)
+                td= l(slot_request.deleted_at&.to_date)
+                td.nowrap= slot_request.deletion_reason&.reason
+
+              td= default_patient_link(slot_request.patient)
+              td= slot_request.patient.hospital_identifier
+              td
+                .rounded.inline.py-px.px-2.nowrap(class="#{urgency_colors.fetch(slot_request.urgency, '')}")
+                  = slot_request.urgency.to_s.humanize
+              td.nowrap= slot_request.patient.current_modality
+              td= inline_check_icon(slot_request.inpatient)
+              td= inline_check_icon(slot_request.medically_fit_for_discharge)
+              td= inline_check_icon(slot_request.late_presenter)
+              td= inline_check_icon(slot_request.suitable_for_twilight_slots)
+              td= inline_check_icon(slot_request.external_referral)
+            tr.quick-preview.remove-borders-on-toggle
+              - cols = historical ? 15 : 12
+              td(colspan=cols)
+                dl.dl-horizontal.xlarge
+                  dt.text-right Notes
+                  dd= slot_request.notes
+                  dt MFFD checkbox ticked
+                  dd= "#{slot_request.medically_fit_for_discharge_by} #{l(slot_request.medically_fit_for_discharge_at)}"
+
+      == pagy_nav pagy

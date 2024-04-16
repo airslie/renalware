@@ -3,6 +3,8 @@
 module Renalware
   module Hospitals
     class Centre < ApplicationRecord
+      include RansackAll
+
       has_many :units,
                class_name: "Hospitals::Unit",
                foreign_key: :hospital_centre_id,

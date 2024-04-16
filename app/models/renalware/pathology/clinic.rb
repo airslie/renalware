@@ -11,8 +11,6 @@ module Renalware
           .not(pathology_requests_global_rule_sets: { id: nil })
           .ordered
       }
-
-      # def self.model_name = ActiveModel::Name.new(self, nil, "Clinic")
     end
   end
 end

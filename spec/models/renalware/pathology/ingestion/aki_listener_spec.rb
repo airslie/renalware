@@ -133,17 +133,19 @@ module Renalware
             end
           end
 
+          # rubocop:disable RSpec/ChangeByZero
           context "when the patient exists and already has a modality" do
             it "does not change their modality" do
               transplant_patient
 
               expect {
                 Renalware::Feeds.message_processor.call(raw_message)
-              }.to not_change(Renalware::Patient, :count)
-                .and not_change(Renalware::Modalities::Modality, :count)
+              }.to change(Renalware::Patient, :count).by(0)
                 .and change(Renalware::Renal::AKIAlert, :count).by(1)
+                .and change(Renalware::Modalities::Modality, :count).by(0)
             end
           end
+          # rubocop:enable RSpec/ChangeByZero
 
           describe "creation of aki_alert" do
             context "when patient's curr modality description is marked 'ignore_for_aki_alerts'" do

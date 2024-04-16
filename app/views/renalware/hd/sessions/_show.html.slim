@@ -43,3 +43,14 @@
       = render "renalware/shared/documents/attributes_group",
           group: session.document.avf_avg_assessment,
           legend: "AVF/AVG Assessment", destination: "avf_avg_assessment"
+
+
+      .columns.small-12.medium-6.large-6.xlarge-4
+        div
+          article
+            header
+              h2 Patient Group Directions
+            dl.dl-horizontal
+              - session.patient_group_directions.each do |pgd|
+                dt Name
+                dd= pgd.name

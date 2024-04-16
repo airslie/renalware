@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require_relative "./dialysis_plans"
+require_relative "dialysis_plans"

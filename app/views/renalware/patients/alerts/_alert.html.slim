@@ -15,4 +15,6 @@ li.patient-alert(class=(klasses.join(" ")) id="alert-#{alert.id}")
               remote: true,
               method: :delete,
               data: { confirm: "Are you sure you want to remove this alert?" }) do
+
+      /= inline_icon(:trash, class: "inline text-white")
       i.fas.fa-trash

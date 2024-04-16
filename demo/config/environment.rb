@@ -6,7 +6,7 @@ require_relative "application"
 # Initialize the Rails application.
 Rails.application.initialize!
 
-unless Rails.env.test? || Rails.env.development?
+unless Rails.env.local?
   puts(<<-'ASC')
     ____                  _
    |  _ \ ___ _ __   __ _| |_      ____ _ _ __ ___

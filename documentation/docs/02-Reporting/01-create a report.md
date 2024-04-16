@@ -29,7 +29,7 @@ CREATE OR REPLACE VIEW renalware_kch.reporting_patients_under_40 AS
     P.born_on as dob,
     EXTRACT(years from AGE(P.born_on)) as age
   FROM renalware.patients P
-  WHERE AGE(P.born_on) <= '10 years';
+  WHERE AGE(P.born_on) < '40 years';
 ```
 
 Note
@@ -69,7 +69,7 @@ INSERT INTO renalware.system_view_metadata
 VALUES
 (
   'renalware',
-  'reporting_patients_under_60',
+  'reporting_patients_under_40',
   'patients',
   'Patients under 40',
   'Patients under 40 years of age',

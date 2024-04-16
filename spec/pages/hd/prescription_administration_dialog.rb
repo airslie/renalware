@@ -8,6 +8,8 @@ module Pages
   module HD
     class PrescriptionAdministrationDialog < PageObject
       include CapybaraSelect2
+      include SlimSelectHelper
+
       pattr_initialize [:prescription!]
       MODAL_CONTAINER_ID = "#hd-prescription-administration-modal"
 
@@ -59,7 +61,7 @@ module Pages
 
       def administered_by=(user)
         within ".user-and-password--administrator" do
-          select2 user.given_name, from: "Nurse"
+          slim_select user.given_name, from: "hd_prescription_administration_administered_by_id"
         end
       end
 
@@ -69,7 +71,7 @@ module Pages
 
       def administered_by_id
         within ".user-and-password--administrator" do
-          find("select option[selected='selected']")&.value&.to_i
+          find("select option[selected='selected']", visible: :all)&.value&.to_i
         end
       end
 
@@ -77,7 +79,7 @@ module Pages
         return if user.blank?
 
         within ".user-and-password--witness" do
-          select2 user.given_name, from: "Witness"
+          slim_select user.given_name, from: "hd_prescription_administration_witnessed_by_id"
         end
       end
 

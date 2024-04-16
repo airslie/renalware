@@ -34,12 +34,6 @@ module Renalware
       validates :patient, presence: true
       validates :description, presence: true
 
-      enum problem_date_display_style_enum: {
-        y: "y",
-        my: "my",
-        dmy: "dmy"
-      }
-
       def self.with_archived
         with_deleted
       end

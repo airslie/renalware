@@ -94,39 +94,41 @@ module Renalware
             end
           end
 
+          # rubocop:disable RSpec/ChangeByZero
           context "when GP exists but their properties have changed" do
             it "updates appropriate properties" do
               gp = create(
                 :primary_care_physician,
-                code: "G0102005",
-                name: "JONES AA",
+                code: "G1111111",
+                name: "MILNE AA",
                 telephone: "0111 0000000"
               )
 
               # code,name,f3,f4,street_1,street_2,street_3,town,county,postcode,f11,f12,status,f14,f15,f16,f17,telephone,f19,f20,f21,amended_record_indicator,f23,f24,f25,f26,f27
               # Name may have changed due to marriage
-              # Telephnne could change
+              # Telephone could change
               csv_content = <<~CSV
-                "G0102005","JONES-SMITHE AA","Y11","QAL","FIRCROFT, LONDON ROAD","ENGLEFIELD GREEN","EGHAM","SURREY","","TW20 0BS","19740401","","A","P","H81600","19740401","19910401","01232 232323","","","","0","","","","",""
+                "G1111111","MILNE AA","Y11","QAL","XYZ, LONDON ROAD","ENGLEFIELD GREEN","EGHAM","SURREY","","TW01 1BS","19730401","","A","P","H81600","19740401","19910401","01232 232323","","","","0","","","","",""
               CSV
 
               with_tmpfile(csv_content) do |tmpfile|
                 expect {
                   described_class.new(tmpfile).call
                 }
-                  .to not_change(Patients::PrimaryCarePhysician, :count)
-                  .and not_change(Patients::PrimaryCarePhysician.deleted, :count)
+                  .to change(Patients::PrimaryCarePhysician, :count).by(0)
+                  .and change(Patients::PrimaryCarePhysician.deleted, :count).by(0)
               end
 
               gp.reload
-              expect(gp.code).to eq("G0102005")
-              expect(gp.name).to eq("JONES-SMITHE AA")
+              expect(gp.code).to eq("G1111111")
+              expect(gp.name).to eq("MILNE AA")
               expect(gp.telephone).to eq("01232 232323") # changed
               expect(gp.address.to_s).to eq(
-                "FIRCROFT, LONDON ROAD, ENGLEFIELD GREEN, EGHAM, SURREY, TW20 0BS"
+                "XYZ, LONDON ROAD, ENGLEFIELD GREEN, EGHAM, SURREY, TW01 1BS"
               )
             end
           end
+          # rubocop:enable RSpec/ChangeByZero
         end
       end
     end

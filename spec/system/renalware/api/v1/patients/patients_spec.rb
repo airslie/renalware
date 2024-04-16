@@ -16,7 +16,7 @@ describe "API request for a single patient JSON document" do
       it "forbids access to the resource" do
         visit api_v1_patient_path(id: patient.local_patient_id)
         expect(page.status_code).to eq(401)
-        expect(json["error"]).to match("You need to sign in or sign up before continuing.")
+        expect(json["error"]).to match("Please sign in or sign up before continuing.")
       end
     end
 

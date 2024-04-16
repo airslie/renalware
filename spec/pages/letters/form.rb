@@ -23,7 +23,7 @@ module Pages
       end
 
       def author=(user)
-        select user.to_s, from: "Author"
+        slim_select user.to_s, from: "Author"
       end
 
       def description=(value)

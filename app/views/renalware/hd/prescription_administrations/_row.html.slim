@@ -1,6 +1,13 @@
 tbody(class=(administration.authorised? ? "authorised" : "unauthorised"))
   tr(class="administered-#{administration.administered?}")
     td= row_toggler
+    td.actions
+      - if policy(administration).destroy?
+        = link_to "Delete",
+          hd_prescription_administration_path(administration.prescription, administration),
+          method: :delete,
+          data: { confirm: "Are you sure?" }
+
     td= I18n.l(administration.recorded_on)
     td= Renalware::Medications::PrescriptionPresenter.new(administration.prescription).to_s
     td
@@ -19,7 +26,7 @@ tbody(class=(administration.authorised? ? "authorised" : "unauthorised"))
                     data: { "reveal-id" => "hd-prescription-administration-modal", "reveal-ajax" => "true" }
     td.col-width-medium-with-ellipsis.show-for-large-up= administration.notes
   tr
-    td(colspan=9)
+    td(colspan=10)
       .quick-preview
         = definition_list_for(administration, size: :large) do |list|
           = list.definition(:notes) { |value| simple_format(value) }

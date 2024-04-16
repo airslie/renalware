@@ -1,0 +1,7 @@
+ruby:
+  view = options.current_view
+
+div
+  div(data-controller="charts-raw" data-charts-raw-url-value=reporting.chart_raw_report_path(options.current_view, format: :json))
+    div(id="chart_id" data-charts-raw-target="chart")
+

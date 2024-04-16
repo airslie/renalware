@@ -32,6 +32,15 @@ Rails.application.configure do
                    "If we need mat views that refresh throughout the day then we can increase " \
                    "the frequency of this job so it will find and schedule those refreshes. " \
                    "Hope to replace this with pg_cron soon."
+    },
+    run_scheduled_function_ukrdc_update_send_to_renalreg: {
+      cron: "every day at 5am",
+      class: "Renalware::System::SqlFunctionJob",
+      args: ["renalware_demo.ukrdc_update_send_to_renalreg()"],
+      description: "This is a demo-only function serving as an example of how to update " \
+                   "patients.send_to_renalreg column according to any changes e.g. if their " \
+                   "eGFR drops below 30. To use this approach, copy the function to the hospital" \
+                   "app and configure in config/initializers/good_job.rb there."
     }
   ).except(
     :ods_sync,

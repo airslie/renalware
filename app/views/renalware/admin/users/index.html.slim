@@ -55,4 +55,4 @@
           td.show-for-xlarge-up= l(user.created_at)
           td= l(user.locked_at)
 
-  = paginate users
+  == pagy_nav(pagy)

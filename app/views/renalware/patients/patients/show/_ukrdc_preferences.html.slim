@@ -1,15 +1,20 @@
 article
   header
     h2 Renal Registry Preferences
-  dl.dl-horizontal
+  dl.dl-horizontal.xlarge
     dt Send data?
     dd= yes_no(patient.send_to_renalreg)
     dt Decision date:
     dd= l(patient.renalreg_decision_on)
     dt Recorded by:
     dd= patient.renalreg_recorded_by
-    dt Recorded by:
-    dd= patient.renalreg_recorded_by
+    dt Anonymise data:
+    dd= yes_no(patient.ukrdc_anonymise)
+    dt Anonymisation decision on:
+    dd= patient.ukrdc_anonymise_decision_on
+    dt Anonymisation recorded by:
+    dd= patient.ukrdc_anonymise_recorded_by
+
 
 article
   header

@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require "document/base"
-
 module Renalware
   module Renal
     class Profile < ApplicationRecord
       include Document::Base
+      include RansackAll
       extend Enumerize
 
       has_paper_trail(
@@ -15,7 +14,10 @@ module Renalware
 
       belongs_to :patient, touch: true
       belongs_to :prd_description
-      has_one :address_at_diagnosis, as: :addressable, class_name: "Address"
+      has_one :address_at_diagnosis,
+              as: :addressable,
+              class_name: "Address",
+              dependent: nil
 
       has_document class_name: "Renalware::Renal::ProfileDocument"
 

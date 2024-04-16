@@ -2,34 +2,37 @@
 - edit_proc = local_assigns[:edit_proc]
 - destroy_proc = local_assigns[:destroy_proc]
 
-tr(id="event_#{event.id}")
-  td.noprint= toggler("##{row_id}")
-  td.actions
-    / If the event supports editing (most don't as they are immuatble once created, to ensure a
-    / consistent clinical record), then use the supplied proc if passed (which will render a
-    / custom edit link (e.g. the Investigations event subclass, has its own slug, controllwe and
-    / and form) otherwise render a standard Event edit link.
-    - if policy(event).edit?
-      = link_to(t("btn.edit"), edit_proc&.call(event) || edit_patient_event_path(event.patient, event))
+tbody(id="event_#{event.id}")
+  tr
+    td.noprint= row_toggler
+    td.actions
+      / If the event supports editing (most don't as they are immuatble once created, to ensure a
+      / consistent clinical record), then use the supplied proc if passed (which will render a
+      / custom edit link (e.g. the Investigations event subclass, has its own slug, controllwe and
+      / and form) otherwise render a standard Event edit link.
+      - if policy(event).edit?
+        = link_to t("btn.edit"),
+                  edit_proc&.call(event) || edit_patient_event_path(event.patient, event),
+                  target: "_top"
 
-    - if policy(event).destroy?
-        = link_to(destroy_proc&.call(event) || patient_event_path(event.patient, event),
-                  method: :delete,
-                  data: { confirm: "Are you sure you want delete this event?\n" }) do
-          i.far.fa-trash-alt
+      - if policy(event).destroy?
+          = link_to(destroy_proc&.call(event) || patient_event_path(event.patient, event),
+                    method: :delete,
+                    data: { confirm: "Are you sure you want delete this event?\n" }) do
+            i.far.fa-trash-alt
 
-  td.nowrap= l event.created_at.to_date
-  - unless local_assigns[:exclude_type_column] == true
-    td= event.event_type
-  - if local_assigns[:include_patient_column] == true
-    td= default_patient_link(event.patient)
-  td.col-width-medium-with-ellipsis
-    = render partial: event.to_cell_partial_path,
-               locals: { event: event }
-  td.created_at= l(event.date_time)
-  td.created_by= event.created_by.full_name
-= content_tag(:tr, id: row_id, style: "display: none")
-  td(colspan=7)
-    .quick-preview
-      = render partial: event.to_toggled_cell_partial_path,
-               locals: { event: event }
+    td.nowrap= l event.created_at.to_date
+    - unless local_assigns[:exclude_type_column] == true
+      td= event.event_type
+    - if local_assigns[:include_patient_column] == true
+      td= default_patient_link(event.patient)
+    td.col-width-medium-with-ellipsis
+      = render partial: event.to_cell_partial_path,
+                locals: { event: event }
+    td.created_at= l(event.date_time)
+    td.created_by= event.created_by.full_name
+  tr
+    td(colspan=7)
+      .quick-preview
+        = render partial: event.to_toggled_cell_partial_path,
+                locals: { event: event }

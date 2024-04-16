@@ -2,7 +2,7 @@
 
 module Renalware
   class Admin::UsersController < BaseController
-    include Renalware::Concerns::Pageable
+    include Pagy::Backend
 
     def index
       query = params.fetch(:q, {})
@@ -11,9 +11,9 @@ module Renalware
         .includes(:roles, :hospital_centre)
         .where.not(username: :systemuser)
         .ransack(query)
-      users = search.result(distinct: true).page(page).per(per_page)
+      pagy, users = pagy(search.result(distinct: true))
       authorize users
-      render locals: { users: users, user_search: search }
+      render locals: { users: users, user_search: search, pagy: pagy }
     end
 
     def edit

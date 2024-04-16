@@ -11,11 +11,11 @@ module Renalware
         end
 
         def handgrip_left
-          WeightValuePresenter.new(clinic_visit.document.handgrip_left).to_s
+          Clinics::WeightValuePresenter.new(clinic_visit.document.handgrip_left).to_s
         end
 
         def handgrip_right
-          WeightValuePresenter.new(clinic_visit.document.handgrip_right).to_s
+          Clinics::WeightValuePresenter.new(clinic_visit.document.handgrip_right).to_s
         end
       end
 
