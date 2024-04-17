@@ -26,14 +26,15 @@
             = link_to 'View Msgs', renalware.feeds_replay_request_message_replays_path(rr)
           td= l(rr.started_at)
           td= l(rr.finished_at)
-          td= rr.patient
+          td= default_patient_link(rr.patient)
           td ORU
           td= rr.reason
           td= rr.total_messages
           td= rr.failed_messages
           td= rr.error_message
           td
-            pre
-              = JSON.pretty_generate(rr.criteria.as_json)
+            - if rr.criteria.present?
+              pre
+                = JSON.pretty_generate(rr.criteria.as_json)
 
-
+  == pagy_nav(pagy) if pagy.pages > 1
