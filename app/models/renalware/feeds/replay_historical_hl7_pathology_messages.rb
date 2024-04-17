@@ -12,7 +12,9 @@ module Renalware
   module Feeds
     class ReplayHistoricalHL7PathologyMessages
       include Broadcasting
-      pattr_initialize [:patient!, reason: ""]
+      pattr_initialize [
+        :patient!, reason: "", from: nil, to: nil, orc_filler_order_numbers: []
+      ]
 
       BATCH_SIZE = 200
 
@@ -22,9 +24,16 @@ module Renalware
           .call
       end
 
+      # rubocop:disable Metrics/MethodLength
       def call
-        query = ReplayableHL7PathologyMessagesQuery.call(patient: patient)
-        ReplayRequest.start_logging(patient, reason) do |replay_request|
+        query = ReplayableHL7PathologyMessagesQuery.call(
+          patient: patient,
+          to: to,
+          from: from,
+          orc_filler_order_numbers: orc_filler_order_numbers
+        )
+
+        ReplayRequest.start_logging(patient, reason, **criteria) do |replay_request|
           query.find_in_batches(batch_size: BATCH_SIZE) do |batch|
             batch.each do |feed_message|
               replay_request.log(feed_message, feed_message.orc_filler_order_number) do
@@ -33,6 +42,15 @@ module Renalware
             end
           end
         end
+      end
+      # rubocop:enable Metrics/MethodLength
+
+      def criteria
+        {
+          from: from,
+          to: to,
+          orc_filler_order_numbers: orc_filler_order_numbers
+        }.compact_blank
       end
 
       def allow_listeners_to_process_the_message(feed_message)

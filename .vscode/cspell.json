@@ -257,6 +257,7 @@
     "rcpt",
     "realpath",
     "recips",
+    "recvd",
     "referer",
     "registerable",
     "relkind",

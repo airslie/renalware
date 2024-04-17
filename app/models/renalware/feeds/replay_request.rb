@@ -24,13 +24,14 @@ module Renalware
       def self.policy_class = BasePolicy
 
       # Class method creates and yields a new replay_request which spans an entire replay operation
-      def self.start_logging(patient, reason)
+      def self.start_logging(patient, reason, **criteria)
         log_ongoing_replay(patient) && return if another_replay_ongoing?(patient)
 
         replay_request = create!(
           started_at: Time.zone.now,
           patient: patient,
-          reason: reason
+          reason: reason,
+          criteria: criteria
         )
         yield replay_request
         replay_request

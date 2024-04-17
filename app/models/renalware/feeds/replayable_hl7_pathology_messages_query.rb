@@ -23,70 +23,66 @@ module Renalware
     # 'replayed messages' table where success was indicated.
     class ReplayableHL7PathologyMessagesQuery
       include Callable
-      pattr_initialize [:patient!, search_before_patient_creation_only: true]
 
       class MissingNHSNumberError < StandardError; end
       class MissingDOBNumberError < StandardError; end
       class PatientNotPersistedError < StandardError; end
 
-      def call
+      def initialize(patient:, from: nil, to: nil, orc_filler_order_numbers: [])
         raise PatientNotPersistedError unless patient.persisted?
         raise MissingNHSNumberError if patient.nhs_number.blank?
         raise MissingDOBNumberError if patient.born_on.blank?
 
-        ids = feed_message_ids(
-          patient: patient,
-          before: datetime_to_search_back_from
-        )
-        Renalware::Feeds::Message.where(id: ids).order(sent_at: :asc)
+        @patient = patient
+        @from = from || Time.zone.at(0) # 1970-01-01 00:00:00
+        @to = to || patient&.created_at
+        @orc_filler_order_numbers = orc_filler_order_numbers
+      end
+
+      def call
+        Renalware::Feeds::Message
+          .where(id: feed_messages)
+          .order(sent_at: :asc)
       end
 
       private
 
-      def datetime_to_search_back_from
-        if search_before_patient_creation_only && patient.created_at
-          patient.created_at
-        else
-          100.years.from_now
-        end
+      attr_reader :patient, :from, :to, :orc_filler_order_numbers
+
+      def orc_filler_order_numbers_already_successfully_imported(patient)
+        MessageReplay
+          .select(:urn)
+          .joins(:replay_request)
+          .group(:urn)
+          .where(success: true, replay_request: { patient_id: patient.id })
+          .pluck(:urn)
+          .compact_blank
       end
 
-      # Get a distinct feed message for each orc_filler_order_number, talking the most recently
-      # sent one. Return an array of matching ids.
       # rubocop:disable Metrics/MethodLength
-      def feed_message_ids(patient:, before:)
-        sql = <<-SQL.squish
-          WITH history as (
-            select distinct fmr.urn
-            from renalware.feed_message_replays fmr
-            inner join renalware.feed_replay_requests rr on rr.id = fmr.replay_request_id
-            where rr.patient_id = ? and fmr.success = true
-          )
-          SELECT distinct on (orc_filler_order_number) fm.id
-            FROM renalware.feed_messages fm
-            WHERE
-              fm.message_type = 'ORU'
-              AND fm.event_type = 'R01'
-              AND fm.orc_order_status = 'CM'
-              AND fm.nhs_number = ?
-              AND fm.dob = ?
-              AND fm.sent_at IS NOT NULL
-              AND fm.created_at <= ?
-              AND fm.orc_filler_order_number not in (select h.urn from history h where fm.orc_filler_order_number = h.urn)
-            ORDER BY
-              orc_filler_order_number, sent_at desc, id desc
-        SQL
+      def feed_messages
+        urns = orc_filler_order_numbers_already_successfully_imported(patient)
+        urns = ["9999999999"] if urns.empty?
 
-        sql = ActiveRecord::Base.sanitize_sql_array(
-          [
-            sql,
-            patient.id,
-            patient.nhs_number,
-            patient.born_on,
-            before
-          ]
-        )
-        ActiveRecord::Base.connection.execute(sql)&.values&.flatten
+        query = Message
+          .select("distinct on (orc_filler_order_number) *")
+          .where(
+            message_type: "ORU",
+            event_type: "R01",
+            orc_order_status: "CM",
+            nhs_number: patient.nhs_number,
+            dob: patient.born_on,
+            created_at: from..to
+          )
+          .where.not(orc_filler_order_number: urns)
+          .where.not(sent_at: nil)
+          .order(orc_filler_order_number: :asc, sent_at: :desc, id: :desc)
+
+        if orc_filler_order_numbers.present?
+          query = query.where(orc_filler_order_number: orc_filler_order_numbers)
+        end
+
+        query.map(&:id)
       end
       # rubocop:enable Metrics/MethodLength
     end

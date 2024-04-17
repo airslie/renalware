@@ -16,6 +16,8 @@
         th.col-width-medium Reason
         th.col-width-tiny Total msgs
         th.col-width-tiny Failed msgs
+        th Error msg
+        th Criteria
     tbody
       - replay_requests.each do |rr|
         tr
@@ -30,4 +32,8 @@
           td= rr.total_messages
           td= rr.failed_messages
           td= rr.error_message
+          td
+            pre
+              = JSON.pretty_generate(rr.criteria.as_json)
+
 
