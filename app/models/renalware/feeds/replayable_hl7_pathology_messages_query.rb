@@ -65,7 +65,7 @@ module Renalware
         urns = ["9999999999"] if urns.empty?
 
         query = Message
-          .select("distinct on (orc_filler_order_number) *")
+          .select("distinct on (orc_filler_order_number) id")
           .where(
             message_type: "ORU",
             event_type: "R01",
@@ -82,6 +82,7 @@ module Renalware
           query = query.where(orc_filler_order_number: orc_filler_order_numbers)
         end
 
+        # Don't use pluck here as it ignores the distinct on !
         query.map(&:id)
       end
       # rubocop:enable Metrics/MethodLength
