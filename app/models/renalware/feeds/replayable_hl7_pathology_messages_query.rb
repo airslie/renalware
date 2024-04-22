@@ -24,15 +24,20 @@ module Renalware
     class ReplayableHL7PathologyMessagesQuery
       include Callable
 
-      class MissingNHSNumberError < StandardError; end
+      class MissingNHSNumberOrLocalIdError < StandardError; end
       class MissingDOBNumberError < StandardError; end
       class PatientNotPersistedError < StandardError; end
 
-      def initialize(patient:, from: nil, to: nil, orc_filler_order_numbers: [])
-        raise PatientNotPersistedError unless patient.persisted?
-        raise MissingNHSNumberError if patient.nhs_number.blank?
-        raise MissingDOBNumberError if patient.born_on.blank?
+      IDENTIFIERS = %i(
+        nhs_number
+        local_patient_id
+        local_patient_id_2
+        local_patient_id_3
+        local_patient_id_4
+        local_patient_id_5
+      ).freeze
 
+      def initialize(patient:, from: nil, to: nil, orc_filler_order_numbers: [])
         @patient = patient
         @from = from || Time.zone.at(0) # 1970-01-01 00:00:00
         @to = to || patient&.created_at
@@ -40,12 +45,20 @@ module Renalware
       end
 
       def call
+        validate_patient
+
         Renalware::Feeds::Message
-          .where(id: feed_messages)
+          .where(id: feed_message_ids)
           .order(sent_at: :asc)
       end
 
       private
+
+      def validate_patient
+        raise PatientNotPersistedError unless patient.persisted?
+        raise MissingDOBNumberError if patient.born_on.blank?
+        raise MissingNHSNumberOrLocalIdError if identifiers.blank?
+      end
 
       attr_reader :patient, :from, :to, :orc_filler_order_numbers
 
@@ -59,24 +72,34 @@ module Renalware
           .compact_blank
       end
 
-      # rubocop:disable Metrics/MethodLength
-      def feed_messages
-        urns = orc_filler_order_numbers_already_successfully_imported(patient)
-        urns = ["9999999999"] if urns.empty?
+      def identifiers
+        @identifiers ||= IDENTIFIERS.index_with { |meth| patient.public_send(meth) }.compact_blank
+      end
 
-        query = Message
-          .select("distinct on (orc_filler_order_number) id")
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def feed_message_ids
+        urns = orc_filler_order_numbers_already_successfully_imported(patient)
+
+        query = Message.none
+        identifiers.each do |column, hosp_no|
+          query = query.or(Message.where(column => hosp_no))
+        end
+        query = query.select("distinct on (orc_filler_order_number) id")
           .where(
             message_type: "ORU",
             event_type: "R01",
             orc_order_status: "CM",
-            nhs_number: patient.nhs_number,
             dob: patient.born_on,
             created_at: from..to
           )
-          .where.not(orc_filler_order_number: urns)
           .where.not(sent_at: nil)
+          .where.not(orc_filler_order_number: nil)
+          .where.not(orc_filler_order_number: "")
           .order(orc_filler_order_number: :asc, sent_at: :desc, id: :desc)
+
+        if urns.any?
+          query = query.where.not(orc_filler_order_number: urns)
+        end
 
         if orc_filler_order_numbers.present?
           query = query.where(orc_filler_order_number: orc_filler_order_numbers)
@@ -85,7 +108,7 @@ module Renalware
         # Don't use pluck here as it ignores the distinct on !
         query.map(&:id)
       end
-      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
     end
   end
 end
