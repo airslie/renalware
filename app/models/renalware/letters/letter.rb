@@ -8,6 +8,8 @@ module Renalware
       extend Enumerize
       include RansackAll
 
+      acts_as_paranoid
+
       # The letterhead is the only site-specific element in the letter, so we use this
       # to determine site-specific settings - in this case whether the letter should contain
       # pathology. At KCH for example, Darren Valley letters should not contain recent pathology.
@@ -18,6 +20,7 @@ module Renalware
       belongs_to :submitted_for_approval_by, class_name: "User"
       belongs_to :approved_by, class_name: "User"
       belongs_to :completed_by, class_name: "User"
+      belongs_to :deleted_by, class_name: "User"
       belongs_to :patient, touch: true
       belongs_to :letterhead
       belongs_to :topic, class_name: "Letters::Topic", optional: true

@@ -3,16 +3,17 @@
 module Renalware
   module Research
     class InvestigatorshipsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         query = InvestigatorshipQuery.new(study: study, options: params[:q])
-        investigatorships = query.call.page(page).per(per_page)
+        pagy, investigatorships = pagy(query.call)
         authorize investigatorships
         render locals: {
           study: study,
           investigatorships: investigatorships,
-          query: query.search
+          query: query.search,
+          pagy: pagy
         }
       end
 

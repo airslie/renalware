@@ -14,4 +14,4 @@
     tbody
       = render primary_care_physicians
 
-  = paginate primary_care_physicians
+  == pagy_nav(pagy) if pagy.pages > 1

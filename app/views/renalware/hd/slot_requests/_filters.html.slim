@@ -30,8 +30,10 @@
           - boolean_options = [["Any",nil], ["True", true], ["False", false]]
 
           div
-            = label_tag :inpatient_eq, "Inpatient"
-            = f.select :inpatient_eq, boolean_options
+            = label_tag :location_id_eq, "Location"
+            = f.select(:location_id_eq,
+                       Renalware::HD::SlotRequests::Location.ordered.pluck(:name, :id),
+                       include_blank: true)
 
           div
             = label_tag :medically_fit_for_discharge_eq, "MFFD"

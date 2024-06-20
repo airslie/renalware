@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "benchmark"
+
 module Renalware
   module System
     class APILog < ApplicationRecord
@@ -11,8 +13,8 @@ module Renalware
 
       def self.with_log(identifier, **)
         log = create!(identifier: identifier, status: STATUS_WORKING, **)
-        yield(log) if block_given?
-        log.update!(status: STATUS_DONE)
+        elapsed_ms = Benchmark.ms { yield(log) } if block_given?
+        log.update!(status: STATUS_DONE, elapsed_ms: elapsed_ms)
         log
       rescue StandardError => e
         log.update(

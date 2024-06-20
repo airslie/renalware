@@ -15,4 +15,4 @@
           td.col-width-mediumish-with-ellipsis= feedback.comment
           td.col-width-tiny= yes_no(feedback.acknowledged)
 
-  == pagy_nav(pagy)
+  == pagy_nav(pagy) if pagy.pages > 1

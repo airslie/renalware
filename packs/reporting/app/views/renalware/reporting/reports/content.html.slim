@@ -5,7 +5,7 @@
         p.border.rounded.px-3.py-2.mb-10.shadow.bg-blue-50
           = options.current_view.description
 
-      - if options&.rows&.size&.zero?
-        p No matching data
+      - if options.pagination.count.zero?
+        = render "renalware/shared/no_data/table"
       - else
         = render "table", options: options

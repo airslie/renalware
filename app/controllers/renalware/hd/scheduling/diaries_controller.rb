@@ -9,12 +9,13 @@ module Renalware
     module Scheduling
       class DiariesController < BaseController
         include Renalware::Concerns::PdfRenderable
-        include Renalware::Concerns::Pageable
+        include Pagy::Backend
 
         # Renders a list of diaries for a hospital unit
         def index
           authorize WeeklyDiary, :index?
-          render locals: { unit: unit, diaries: weekly_diaries }
+          pagy, weekly_diaries = pagy(weekly_diaries_for_unit)
+          render locals: { unit: unit, pagy: pagy, diaries: weekly_diaries }
         end
 
         def show
@@ -77,11 +78,10 @@ module Renalware
           Hospitals::Unit.find(unit_id)
         end
 
-        def weekly_diaries
+        def weekly_diaries_for_unit
           WeeklyDiary
             .where(hospital_unit_id: unit_id)
             .ordered
-            .page(page).per(per_page)
         end
       end
     end

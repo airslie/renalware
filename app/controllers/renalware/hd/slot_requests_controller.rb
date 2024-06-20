@@ -190,8 +190,8 @@ module Renalware
       def slot_request_params
         params
           .require(:hd_slot_request)
-          .permit(:patient_id, :urgency, :notes, :allocated, :allocated_at,
-                  :deletion_reason_id, :deleted_at,
+          .permit(:patient_id, :urgency, :notes, :allocated, :allocated_at, :location_id,
+                  :access_state_id, :deletion_reason_id, :deleted_at,
                   :inpatient, :suitable_for_twilight_slots, :late_presenter, :external_referral,
                   :medically_fit_for_discharge)
       end

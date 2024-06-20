@@ -24,4 +24,4 @@ table#patients.toggleable(data-controller="toggle")
 
   = render partial: "worry", collection: worries
 
-== pagy_nav pagy
+== pagy_nav(pagy) if pagy.pages > 1

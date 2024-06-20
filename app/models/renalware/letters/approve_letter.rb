@@ -15,6 +15,7 @@ module Renalware
           add_missing_counterpart_cc_recipients
           archive_recipients
           sign(by: by)
+          store_page_count
           archive_content(by: by)
           # Cast the letter to the base Letter class in case it becomes a Letters::Completed
           # before any async listeners have time to process it.
@@ -48,6 +49,13 @@ module Renalware
             recipient.save!
           end
         end
+      end
+
+      def store_page_count
+        return unless Renalware.config.letters_render_pdfs_with_prawn
+
+        letter_presenter = LetterPresenterFactory.new(letter)
+        letter.page_count = Formats::Pdf::Document.new(letter_presenter, nil).build.page_count
       end
     end
   end

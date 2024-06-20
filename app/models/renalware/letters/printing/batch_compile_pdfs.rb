@@ -92,13 +92,13 @@ module Renalware
 
         def write_letter_to_pdf_file(letter)
           filename = "original_letter_#{letter.id}.pdf"
-          File.binwrite(filename, PdfRenderer.call(letter))
+          File.binwrite(filename, RendererFactory.renderer_for(letter, :pdf).call)
           filename
         end
 
         def write_recipient_cover_sheet_pdf(letter, recipient)
           filename = "letter_#{letter.id}_address_sheet_for_recipient_#{recipient.id}.pdf"
-          RecipientAddressPagePdf.new(recipient).render_file filename
+          Formats::Pdf::RecipientAddressPagePdf.new(recipient).render_file filename
           filename
         end
 

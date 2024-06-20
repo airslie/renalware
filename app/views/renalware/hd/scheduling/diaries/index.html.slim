@@ -6,4 +6,4 @@
 
 = within_admin_layout(title: "HD Unit Diaries") do
   = render "table", diaries: diaries
-  = paginate diaries
+  == pagy_nav(pagy) if pagy.pages > 1

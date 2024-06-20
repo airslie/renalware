@@ -1,9 +1,0 @@
-# frozen_string_literal: true
-
-if defined?(Sentry)
-  Sentry.init do |config|
-    config.dsn = Renalware.config.sentry_dsn
-    config.breadcrumbs_logger = [:active_support_logger, :http_logger]
-    config.traces_sample_rate = Renalware.config.sentry_sample_rate
-  end
-end

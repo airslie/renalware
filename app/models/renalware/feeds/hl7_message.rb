@@ -28,7 +28,7 @@ module Renalware
       class ObservationRequest < SimpleDelegator
         # rubocop:disable Lint/UselessMethodDefinition
         def initialize(observation_request_segment)
-          super(observation_request_segment)
+          super
         end
         # rubocop:enable Lint/UselessMethodDefinition
 

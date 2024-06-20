@@ -23,4 +23,4 @@
           td= patient.nhs_number
           td= patient.hospital_identifiers
           td
-  == pagy_nav pagy
+  == pagy_nav(pagy) if pagy.pages > 1

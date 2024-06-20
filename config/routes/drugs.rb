@@ -8,6 +8,7 @@ namespace :drugs do
     collection do
       scope format: true, constraints: { format: :json } do
         get :selected_drugs
+        get :prescribable, as: :prescribable
       end
     end
   end

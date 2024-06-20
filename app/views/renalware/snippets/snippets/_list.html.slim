@@ -18,4 +18,5 @@
 
   = render "search_form", search: search, author: author, remote: remote
   = render "table", snippets: snippets, author: author, search: search, remote: remote
-  = paginate snippets
+
+  == pagy_nav(pagy) if pagy.pages > 1

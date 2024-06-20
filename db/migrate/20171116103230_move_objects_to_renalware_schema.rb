@@ -47,7 +47,9 @@ class MoveObjectsToRenalwareSchema < ActiveRecord::Migration[5.1]
     execute "CREATE SCHEMA IF NOT EXISTS renalware"
 
     tables(in_schema: "public").each{ |table| execute("ALTER TABLE #{table} SET SCHEMA renalware") }
-    views(in_schema: "public").each{ |view| execute("ALTER VIEW #{view} SET SCHEMA renalware") }
+    # Removing views(in_schema.. call as it tried to move pg_stat_statements* views and this
+    # causes an error on Heroku
+    # views(in_schema: "public").each{ |view| execute("ALTER VIEW #{view} SET SCHEMA renalware") }
     materialized_views(in_schema: "public").each{ |view| execute("ALTER MATERIALIZED VIEW #{view} SET SCHEMA renalware") }
     FUNCTIONS.each{ |fn| execute "ALTER FUNCTION #{fn} SET SCHEMA renalware" }
     # This causes an error on Heroku

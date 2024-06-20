@@ -3,16 +3,18 @@
 module Renalware
   module Patients
     class AttachmentsController < BaseController
-      include Concerns::Pageable
+      include Pagy::Backend
       include Renalware::Concerns::PatientVisibility
 
       def index
+        pagy, attachments = pagy(self.attachments)
         authorize attachments
 
         render locals: {
           patient: patient,
           attachments: CollectionPresenter.new(attachments, AttachmentPresenter),
-          search: query.search
+          search: query.search,
+          pagy: pagy
         }
       end
 
@@ -93,8 +95,6 @@ module Renalware
           query
             .call
             .includes(:attachment_type, file_attachment: :blob)
-            .page(page)
-            .per(per_page)
         end
       end
 

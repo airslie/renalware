@@ -66,8 +66,7 @@ module Renalware::Letters
         end
       end
 
-      # In these states the letter should definitely not be destroyable even say if the
-      # user is a super admin or author.
+      # In these states the letter can only be (soft-) deleted by a superadmin
       %i(Approved Completed).each do |letter_klass|
         context "when the letter is #{letter_klass}" do
           let(:letter) { "Renalware::Letters::Letter::#{letter_klass}".constantize.new }
@@ -75,13 +74,21 @@ module Renalware::Letters
           context "when the user is a superadmin" do
             let(:user) { super_admin_user }
 
-            it { is_expected.not_to permit(user, letter) }
+            it "superadmin can soft-delete letters" do
+              is_expected.to permit(user, letter)
+            end
           end
 
           context "when the user is the author" do
             let(:user) { clinical_user }
 
             before { allow(letter).to receive(:author).and_return(user) }
+
+            it { is_expected.not_to permit(user, letter) }
+          end
+
+          context "when the user is a admin" do
+            let(:user) { admin_user }
 
             it { is_expected.not_to permit(user, letter) }
           end

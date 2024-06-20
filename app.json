@@ -6,9 +6,9 @@
   "stack": "heroku-22",
   "addons": [
     {
-      "plan": "heroku-postgresql:basic",
+      "plan": "heroku-postgresql:essential-1",
       "options": {
-        "version": "14"
+        "version": "15"
       }
     }
   ],

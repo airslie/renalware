@@ -125,6 +125,8 @@ module Renalware
           end
 
           def documents_element
+            return unless Renalware.config.ukrdc_include_letters
+
             create_node("Documents") do |documents_element|
               patient.letters.each do |letter|
                 documents_element << Rendering::Document.new(letter: letter).xml

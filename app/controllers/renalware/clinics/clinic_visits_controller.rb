@@ -5,15 +5,17 @@ module Renalware
     class ClinicVisitsController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
+      include Pagy::Backend
 
       def index
         query = VisitQuery.new(query_params, scope: clinics_patient.clinic_visits)
-        visits = query.call.where(patient_id: clinics_patient.id)
+        pagy, visits = pagy(query.call.where(patient_id: clinics_patient.id))
         authorize visits
         render locals: {
           patient: clinics_patient,
           clinic_visits: CollectionPresenter.new(visits, ClinicVisitPresenter),
-          query: query.search
+          query: query.search,
+          pagy: pagy
         }
       end
 

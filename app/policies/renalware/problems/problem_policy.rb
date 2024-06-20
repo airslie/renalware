@@ -3,13 +3,8 @@
 module Renalware
   module Problems
     class ProblemPolicy < BasePolicy
-      def sort?
-        edit?
-      end
-
-      def search?
-        edit?
-      end
+      def sort?   = edit?
+      def search? = edit?
     end
   end
 end

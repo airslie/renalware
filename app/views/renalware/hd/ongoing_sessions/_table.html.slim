@@ -17,4 +17,4 @@ table.report
   tbody
     = render partial: "session", collection: sessions
 
-= paginate sessions
+== pagy_nav(pagy) if pagy.pages > 1

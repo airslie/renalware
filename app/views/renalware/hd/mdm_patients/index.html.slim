@@ -15,7 +15,7 @@
 
 = within_admin_layout(title: presenter.page_title)
   = render "table", presenter: presenter
-  = paginate presenter.patients
+  = render "pagination", pagy: presenter.pagy
 
   #hd-session-form-batch-print-modal.reveal-modal.small(data-reveal
     data-options="close_on_background_click:false")

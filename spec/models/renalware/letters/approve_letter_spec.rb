@@ -49,16 +49,55 @@ module Renalware
           ActiveJob::Base.queue_adapter.enqueued_jobs.clear
         end
 
-        it "queues a job to calculate the page size" do
+        context "when using wicked_pdf/wkhtmltopdf" do
+          before do
+            allow(Renalware.config.broadcast_subscription_map)
+              .to receive(:[])
+              .with("Renalware::Letters::ApproveLetter")
+              .and_return(
+                Renalware::Broadcasting::Subscriber.new(
+                  "Renalware::Letters::CalculatePageCountJob",
+                  async: true
+                )
+              )
+          end
+
+          it "queues a job to calculate the page size" do
+            service.call(by: user)
+
+            expect(Wisper::ActiveJobBroadcaster::Wrapper).to(
+              have_been_enqueued.with(
+                "Renalware::Letters::CalculatePageCountJob",
+                "letter_approved",
+                [approved_letter]
+              )
+            )
+          end
+        end
+      end
+
+      context "when using prawn" do
+        before do
+          allow(Renalware.config).to receive(:letters_render_pdfs_with_prawn).and_return(true)
+          Renalware.config.broadcast_subscription_map["Renalware::Letters::ApproveLetter"] = []
+        end
+
+        it "does NOT queue a job to calculate the page size" do
           service.call(by: user)
 
-          expect(Wisper::ActiveJobBroadcaster::Wrapper).to(
+          expect(Wisper::ActiveJobBroadcaster::Wrapper).not_to(
             have_been_enqueued.with(
               "Renalware::Letters::CalculatePageCountJob",
               "letter_approved",
               [approved_letter]
             )
           )
+        end
+
+        it "calculates and stores the the page_count in real time" do
+          service.call(by: user)
+
+          expect(approved_letter.page_count).to eq(1)
         end
       end
     end

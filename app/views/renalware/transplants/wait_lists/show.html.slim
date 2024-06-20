@@ -68,4 +68,4 @@
       - registrations.each do |registration|
         = render "registration", registration: registration
 
-  = paginate registrations
+  == pagy_nav(pagy) if pagy.pages > 1

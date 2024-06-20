@@ -31,4 +31,4 @@
                 td= drug.code
                 td= inline_check_icon(!drug.inactive)
 
-        == pagy_nav(pagy)
+        == pagy_nav(pagy) if pagy.pages > 1

@@ -55,6 +55,9 @@ RSpec/VerifiedDoubleReference:
   Exclude:
     - "spec/models/renalware/pathology/observation_requests_attributes_builder_spec.rb"
 
+Rails/WhereRange:
+  Enabled: false
+
 Naming/PredicateName:
   Enabled: false
 

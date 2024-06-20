@@ -122,7 +122,7 @@ module World
         policy = letter.class.policy_class.new(user, letter)
 
         expect(policy.destroy?).to be_truthy
-        letter.destroy
+        letter.really_destroy!
       end
 
       def submit_for_review(patient:, user:)
@@ -184,7 +184,7 @@ module World
       end
 
       def expect_letter_to_be_deleted
-        expect(Renalware::Letters::Letter.count).to eq(0)
+        expect(Renalware::Letters::Letter.with_deleted.count).to eq(0)
       end
 
       def expect_letter_to_be_immutable(patient:, user:)

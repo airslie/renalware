@@ -1,0 +1,17 @@
+/ To avoid a dependency on as many aspects of Renalware as possible, in case one of those
+/ is not functioning, this page does not consume the asset pipeline or use a layout.
+h1 Renalware status
+
+h2 User activity
+
+table(style="border-spacing: 5px;")
+  tbody
+    tr
+      td Last successful login
+      td= l(status.last_user_login_at)
+    tr
+      td Last activity
+      td =l(status.last_activity_at)
+    tr
+      td Active users in the last 30 minutes
+      td= status.active_users(in_last: 30.minutes)

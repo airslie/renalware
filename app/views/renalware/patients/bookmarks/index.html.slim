@@ -1,4 +1,4 @@
 = within_admin_layout(title: "Bookmarked Patients") do
   #bookmarks
     = render "table", bookmarks: bookmarks, search: search
-  = paginate bookmarks
+  == pagy_nav(pagy) if pagy.pages > 1

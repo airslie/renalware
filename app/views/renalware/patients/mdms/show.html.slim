@@ -10,7 +10,7 @@ ruby:
   page_title = (title.present? && title != "All") ? title : scope
 
 = within_admin_layout(title: "#{page_title} MDMS") do
-  - if options.rows.size.zero?
-    p No matching data
+  - if options.pagination.count.zero?
+    = render "renalware/shared/no_data/table"
   - else
     = render "table", options: options

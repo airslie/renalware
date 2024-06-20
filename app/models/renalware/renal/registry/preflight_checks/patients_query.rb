@@ -54,18 +54,19 @@ module Renalware
           end
 
           def call
-            search
-              .result
+            search.result
+          end
+
+          def search
+            relation
               .include(ModalityScopes)
+              .include(QueryablePatient)
               .merge(HD::Patient.with_profile)
               .eager_load(:profile)
               .where(where_conditions)
               .preload(current_modality: [:description])
               .with_current_modality_matching(MODALITY_NAMES)
-          end
-
-          def search
-            @search ||= relation.include(QueryablePatient).ransack(query_params)
+              .ransack(query_params)
           end
 
           def where_conditions

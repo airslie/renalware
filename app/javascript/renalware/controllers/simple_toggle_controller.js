@@ -8,8 +8,6 @@ export default class extends Controller {
   }
 
   toggle(event) {
-    // event.preventDefault()
-
     this.toggleableTargets.forEach(target => {
       target.classList.toggle(this.toggleClass)
     })

@@ -3,7 +3,8 @@
 module Renalware
   module Patients
     class BookmarksController < BaseController
-      include Concerns::Pageable
+      include Pagy::Backend
+
       before_action :load_patient, only: :create
 
       # Display the user's bookmarks
@@ -13,9 +14,9 @@ module Renalware
           params: params[:q]
         ).search
 
-        bookmarks = search.result.page(page).per(per_page)
+        pagy, bookmarks = pagy(search.result)
         authorize bookmarks
-        render locals: { bookmarks: bookmarks, search: search }
+        render locals: { bookmarks: bookmarks, search: search, pagy: pagy }
       end
 
       # idempotent

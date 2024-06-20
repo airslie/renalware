@@ -84,7 +84,7 @@ describe "Managing alerts" do
 
         post(patient_alerts_path(patient, format: :js), params: params)
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         alert = Renalware::Patients::Alert.find_by(patient_id: patient.id)
         expect(alert).to be_nil
       end

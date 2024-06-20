@@ -71,6 +71,6 @@ Renalware::System::ViewMetadata.create!(
   view_name: "reporting_example_data",
   category: "report",
   scope: "patients",
-  title: "Example report demonstrating to charting",
+  title: "Example report to demonstrating charting",
   chart_raw: json
 )

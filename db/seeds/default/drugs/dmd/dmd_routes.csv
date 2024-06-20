@@ -1,76 +1,78 @@
-code,name
-10547007,Auricular
-420254004,Body cavity
-54471007,Buccal
-448598008,Cutaneous
-372449004,Dental
-372450004,Endocervical
-372451000,Endosinusial
-372452007,Endotracheopulmonary
-404820008,Epidural
-18246711000001107,Epilesional
-372453002,Extraamniotic
-372454008,Gastroenteral
-372457001,Gingival
-18682911000001103,Haemodialysis
-10334211000001103,Haemofiltration
-718329006,Infiltration
-18679011000001101,Inhalation
-58731000052100,Intestinal
-372458006,Intraamniotic
-58100008,Intraarterial
-12130007,Intraarticular
-372459003,Intrabursal
-418821007,Intracameral
-372460008,Intracardiac
-1078280005,Intracatheter instillation
-372461007,Intracavernous
-420719007,Intracerebroventricular
-372462000,Intracervical
-58761000052107,Intracholangiopancreatic
-372463005,Intracoronary
-372464004,Intradermal
-876824003,Intradialytic
-372465003,Intradiscal
-448077001,Intraepidermal
-58751000052109,Intraglandular
-372466002,Intralesional
-372467006,Intralymphatic
-78421000,Intramuscular
-372468001,Intraocular
-417255000,Intraosseous
-38239002,Intraperitoneal
-372469009,Intrapleural
-372470005,Intrasternal
-72607000,Intrathecal
-447122006,Intratumoral
-62226000,Intrauterine
-47625008,Intravenous
-420287000,Intraventricular cardiac
-372471009,Intravesical
-418401004,Intravitreal
-21856811000001103,Iontophoresis
-9907001000001103,Line lock
-46713006,Nasal
-7782811000001109,Obsolete-Intraventricular
-17320711000001106,Obsolete-Oromucosal other
-372472002,Ocular
-26643006,Oral
-372473007,Oromucosal
-372474001,Periarticular
-39338211000001108,Peribulbar ocular
-372475000,Perineural
-58811000052103,Peritumoral
-37161004,Rectal
-11564311000001109,Regional perfusion
-3594011000001102,Route of administration not applicable
-372476004,Subconjunctival
-34206005,Subcutaneous
-66621000052103,Sublabial
-37839007,Sublingual
-419874009,Submucosal
-11564211000001101,Submucosal rectal
-58831000052108,Subretinal
-45890007,Transdermal
-90028008,Urethral
-16857009,Vaginal
+"code","name"
+"10334211000001103","Haemofiltration"
+"10547007","Auricular"
+"1078280005","Intracatheter instillation"
+"11564211000001101","Submucosal rectal"
+"11564311000001109","Regional perfusion"
+"12130007","Intraarticular"
+"16857009","Vaginal"
+"17320711000001106","Obsolete-Oromucosal other"
+"18246711000001107","Epilesional"
+"18679011000001101","Inhalation"
+"18682911000001103","Haemodialysis"
+"21856811000001103","Iontophoresis"
+"26643006","Oral"
+"34206005","Subcutaneous"
+"3594011000001102","Route of administration not applicable"
+"37161004","Rectal"
+"372449004","Dental"
+"372450004","Endocervical"
+"372451000","Endosinusial"
+"372452007","Endotracheopulmonary"
+"372453002","Extraamniotic"
+"372454008","Gastroenteral"
+"372457001","Gingival"
+"372458006","Intraamniotic"
+"372459003","Intrabursal"
+"372460008","Intracardiac"
+"372461007","Intracavernous"
+"372462000","Intracervical"
+"372463005","Intracoronary"
+"372464004","Intradermal"
+"372465003","Intradiscal"
+"372466002","Intralesional"
+"372467006","Intralymphatic"
+"372468001","Intraocular"
+"372469009","Intrapleural"
+"372470005","Intrasternal"
+"372471009","Intravesical"
+"372472002","Ocular"
+"372473007","Oromucosal"
+"372474001","Periarticular"
+"372475000","Perineural"
+"372476004","Subconjunctival"
+"37839007","Sublingual"
+"38239002","Intraperitoneal"
+"39338211000001108","Peribulbar ocular"
+"404820008","Epidural"
+"41489711000001101","Intraputaminal"
+"417255000","Intraosseous"
+"418401004","Intravitreal"
+"418821007","Intracameral"
+"419874009","Submucosal"
+"420254004","Body cavity"
+"420287000","Intraventricular cardiac"
+"420719007","Intracerebroventricular"
+"42260111000001107","Implantation"
+"447122006","Intratumoral"
+"448077001","Intraepidermal"
+"448598008","Cutaneous"
+"45890007","Transdermal"
+"46713006","Nasal"
+"47625008","Intravenous"
+"54471007","Buccal"
+"58100008","Intraarterial"
+"58731000052100","Intestinal"
+"58751000052109","Intraglandular"
+"58761000052107","Intracholangiopancreatic"
+"58811000052103","Peritumoral"
+"58831000052108","Subretinal"
+"62226000","Intrauterine"
+"66621000052103","Sublabial"
+"718329006","Infiltration"
+"72607000","Intrathecal"
+"7782811000001109","Obsolete-Intraventricular"
+"78421000","Intramuscular"
+"876824003","Intradialytic"
+"90028008","Urethral"
+"9907001000001103","Line lock"

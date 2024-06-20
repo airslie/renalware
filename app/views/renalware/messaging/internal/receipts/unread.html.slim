@@ -7,4 +7,4 @@
 = within_admin_layout(title: "Messages") do
   .unread-messages
     = render "table", receipts: receipts
-  = paginate receipts
+  == pagy_nav(pagy) if pagy.pages > 1

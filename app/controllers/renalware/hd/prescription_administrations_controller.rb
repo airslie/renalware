@@ -7,19 +7,19 @@ module Renalware
     class PrescriptionAdministrationsController < BaseController
       include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PatientCasting
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       before_action :find_and_load_patient_from_prescription, except: [:index]
 
       def index
-        administrations = hd_patient
-          .prescription_administrations
-          .includes(:administered_by, :witnessed_by, :reason, :prescription)
-          .ordered
-          .page(page)
-          .per(per_page)
+        pagy, administrations = pagy(
+          hd_patient
+            .prescription_administrations
+            .includes(:administered_by, :witnessed_by, :reason, :prescription)
+            .ordered
+        )
         authorize administrations
-        render locals: { prescription_administrations: administrations }
+        render locals: { prescription_administrations: administrations, pagy: pagy }
       end
 
       # GET HTML

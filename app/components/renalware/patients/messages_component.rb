@@ -30,7 +30,7 @@ module Renalware
       private
 
       def load_messages
-        @pagination, @messages = pagy(scope, items: 5, link_extra: "data-remote='true'")
+        @pagination, @messages = pagy(scope, items: 5, anchor_string: "data-remote='true'")
       end
 
       def messaging_patient

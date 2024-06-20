@@ -19,6 +19,8 @@ ruby:
         wrapper: :horizontal_medium
     = f.input :cold_ischaemic_time_formatted, as: :string, wrapper: :horizontal_small
     = f.input :warm_ischaemic_time_formatted, as: :string, wrapper: :horizontal_small
+    = f.input :immunological_risk, wrapper: :horizontal_small
+    = f.association :induction_agent, wrapper: :horizontal_small
     = f.input :notes, as: :text, input_html: { rows: 5 }, wrapper: :horizontal_large
 
   = f.simple_fields_for :document, f.object.document do |fd|

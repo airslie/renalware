@@ -1,36 +1,39 @@
 - death_configuration = local_assigns[:death_configuration] || false
 
-table.renal-registry-preflight-checks
-  thead
-    tr
-      th.col-width-large= t("thead.patient")
-      td.col-width-nhs-no NHS No.
-      td.col-width-reference-no Hospital Nos.
-      td.col-width-reference-no
-        = sort_link([:renalware, query],
-                     :modality_descriptions_name,
-                      "Modality",
-                      default_order: :asc)
-      - unless death_configuration
-        td.col-width-small
-          = sort_link([:renalware, query],
-                      :hd_profile_unit_name,
-                      "HD Site")
-      td.col-width-date
-        = sort_link([:renalware, query],
-                    :profile_esrf_on,
-                    "ESRF date")
-      td Missing data
-  tbody
-    - patients.each do |patient|
-      tr
-        td= default_patient_link(patient)
-        td= patient.nhs_number
-        td= patient.hospital_identifiers
-        td= patient.current_modality
-        - unless death_configuration
-          td= patient.hd_unit
-        td= l(patient.renal_profile&.esrf_on)
-        td.missing-data
-          - patient.missing_data.map do |data_item|
-            span(class=data_item)= t(".#{data_item}")
+= turbo_frame_tag("renal-preflight-turbo-frame") do
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      table.renal-registry-preflight-checks
+        thead
+          tr
+            th.col-width-large= t("thead.patient")
+            td.col-width-nhs-no NHS No.
+            td.col-width-reference-no Hospital Nos.
+            td.col-width-reference-no
+              = sort_link([:renalware, query],
+                          :modality_descriptions_name,
+                            "Modality",
+                            default_order: :asc)
+            - unless death_configuration
+              td.col-width-small
+                = sort_link([:renalware, query],
+                            :hd_profile_unit_name,
+                            "HD Site")
+            td.col-width-date
+              = sort_link([:renalware, query],
+                          :profile_esrf_on,
+                          "ESRF date")
+            td Missing data
+        tbody
+          - patients.each do |patient|
+            tr
+              td= default_patient_link(patient)
+              td= patient.nhs_number
+              td= patient.hospital_identifiers
+              td= patient.current_modality
+              - unless death_configuration
+                td= patient.hd_unit
+              td= l(patient.renal_profile&.esrf_on)
+              td.missing-data
+                - patient.missing_data.map do |data_item|
+                  span(class=data_item)= t(".#{data_item}")

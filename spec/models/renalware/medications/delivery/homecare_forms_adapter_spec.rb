@@ -159,7 +159,7 @@ module Renalware
                 drug: "esa drug",
                 date: Date.parse("2020-01-01"),
                 dose: "100 mg",
-                route: "Per Oral"
+                route: "Oral"
               )
             end
           end

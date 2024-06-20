@@ -5,6 +5,8 @@ require "faraday"
 module Renalware
   module Drugs::DMD
     class OntologyClient
+      include Callable
+
       ENDPOINT = "https://ontology.nhs.uk"
       CLIENT_ID = Renalware.config.nhs_client_id
       CLIENT_SECRET = Renalware.config.nhs_client_secret
@@ -24,7 +26,10 @@ module Renalware
 
       class NoData < StandardError; end
 
-      def self.call
+      # Note due to the Callable concern you execute #call on the class
+      #   OntologyClient.call => OntologyClient.new.call
+      # or OntologyClient.new.call directly
+      def call
         Faraday.new(
           url: ENDPOINT,
           request: { params_encoder: Faraday::FlatParamsEncoder },
@@ -37,7 +42,7 @@ module Renalware
         end
       end
 
-      def self.access_token
+      def access_token
         response = Faraday.post(
           ACCESS_TOKEN_URL,
           {

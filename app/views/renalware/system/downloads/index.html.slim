@@ -41,4 +41,4 @@
                             method: :delete,
                             data: { confirm: "Are you sure you want to delete this item?" }
 
-  = paginate items
+  == pagy_nav(pagy) if pagy.pages > 1

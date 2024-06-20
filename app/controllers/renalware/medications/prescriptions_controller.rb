@@ -66,6 +66,9 @@ module Renalware
         prescription = patient.prescriptions.new(prescription_params)
         authorize prescription
 
+        termination = prescription.termination
+        termination.terminated_on_set_by_user = true if termination&.terminated_on_changed?
+
         allow_other_domains_to_alter_prescription_before_save(prescription)
 
         if prescription.save
@@ -75,9 +78,13 @@ module Renalware
         end
       end
 
+      # NB: allow_other_domains_to_alter_prescription_before_save is called in RevisePrescription
       def update
         prescription = patient.prescriptions.find(params[:id])
         authorize prescription
+
+        termination = prescription.termination
+        termination.terminated_on_set_by_user = true if termination&.terminated_on_changed?
 
         if RevisePrescription.new(prescription, current_user).call(prescription_params)
           redirect_to return_to_param || patient_prescriptions_path(patient)

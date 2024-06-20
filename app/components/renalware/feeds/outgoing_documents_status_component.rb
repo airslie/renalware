@@ -21,7 +21,7 @@ module Renalware
       # eg { queued: 3, sent: 300 }
       def stats
         arr = Renalware::Feeds::OutgoingDocument
-          .where("created_at >= ?", period_in_days.days.ago)
+          .where(created_at: period_in_days.days.ago..)
           .group(:state)
           .pluck(Arel.sql("state, count(*), max(updated_at)"))
         arr.map do |state, count, latest|

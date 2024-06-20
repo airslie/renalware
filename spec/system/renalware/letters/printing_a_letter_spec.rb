@@ -8,13 +8,17 @@ describe "Printing a letter",
   include AjaxHelpers
 
   def stub_out_pdf_generation
-    allow(Renalware::Letters::PdfLetterCache)
-      .to receive(:fetch)
-      .and_return("dummy pdf content")
+    unless Renalware.config.letters_render_pdfs_with_prawn
+      allow(Renalware::Letters::PdfLetterCache)
+        .to receive(:fetch)
+        .and_return("dummy pdf content")
+    end
   end
 
   def expect_a_pdf_to_have_been_generated_in_another_tab
-    expect(Renalware::Letters::PdfLetterCache).to have_received(:fetch)
+    unless Renalware.config.letters_render_pdfs_with_prawn
+      expect(Renalware::Letters::PdfLetterCache).to have_received(:fetch)
+    end
   end
 
   def create_an_approved_letter_ready_for_printing(user, patient)
@@ -95,7 +99,7 @@ describe "Printing a letter",
     end
   end
 
-  describe "when a user prints an item in renal letters list abut chooses not to mark as printed" do
+  describe "when a user prints an item in renal letters list but chooses not to mark as printed" do
     it "leaves the letter as Approved" do
       user = login_as_clinical
       patient = create(:patient, family_name: "Rabbit", by: user)

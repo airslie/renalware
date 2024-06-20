@@ -36,7 +36,7 @@ module Renalware::Letters
     end
 
     describe "#generate_archive" do
-      let(:presenter) { double(:presenter, content: "hello world") }
+      let(:presenter) { double(:presenter, content: "hello world", pdf_content: "pdf") }
 
       it "archives the letter" do
         archived_letter = letter.generate_archive(by: user, presenter: presenter)

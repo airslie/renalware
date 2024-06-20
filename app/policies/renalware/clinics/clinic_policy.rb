@@ -3,14 +3,10 @@
 module Renalware
   module Clinics
     class ClinicPolicy < BasePolicy
-      def index?
-        user_is_any_admin?
-      end
+      def index? = user_is_any_admin?
       alias show? index?
 
-      def new?
-        user_is_super_admin?
-      end
+      def new? = user_is_super_admin?
       alias create? new?
 
       def edit?

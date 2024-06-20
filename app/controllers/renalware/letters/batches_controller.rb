@@ -3,12 +3,12 @@
 module Renalware
   module Letters
     class BatchesController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
-        batches = Batch.order(created_at: :desc)
+        pagy, batches = pagy(Batch.order(created_at: :desc))
         authorize batches
-        render locals: { batches: batches.page(page).per(per_page) }
+        render locals: { batches: batches, pagy: pagy }
       end
 
       def show
@@ -33,11 +33,22 @@ module Renalware
       def create
         batch = create_unprocessed_batch_and_batch_items(ids_of_letters_to_batch_print)
         authorize batch
-        Printing::BatchPrintJob.perform_later(batch, current_user)
-        respond_to do |format|
-          format.js {
-            render locals: { batch: batch }
-          }
+
+        if Renalware.config.letters_render_pdfs_with_prawn
+          # TODO: open PDF in new window/modal for remove from queue etc
+          send_data(
+            Letters::Rendering::BatchPdfRenderer.new.call(batch),
+            type: "application/pdf",
+            disposition: "inline",
+            filename: "letter_batch_#{batch.id}.pdf"
+          )
+        else
+          Printing::BatchPrintJob.perform_later(batch, current_user)
+          respond_to do |format|
+            format.js {
+              render locals: { batch: batch }
+            }
+          end
         end
       end
 

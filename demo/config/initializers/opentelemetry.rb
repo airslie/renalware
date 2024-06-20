@@ -9,5 +9,8 @@ if !Rails.env.test? && ENV.fetch("ENABLE_OPENTELEMETRY", 0).to_i == 1
   OpenTelemetry::SDK.configure do |c|
     c.service_name = "Renalware Demo"
     c.use_all # enables all instrumentation!
+    # if defined?(Sentry)
+    #   c.add_span_processor(Sentry::OpenTelemetry::SpanProcessor.instance)
+    # end
   end
 end

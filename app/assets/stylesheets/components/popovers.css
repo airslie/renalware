@@ -1,0 +1,13 @@
+[data-popover-target=card] {
+  @apply max-w-sm rounded shadow-lg bg-yellow-100 absolute left-0 text-black py-2 px-3 font-normal;
+}
+
+[data-popover-target=card]:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 1rem;
+  border-width: .75rem;
+  border-color: rgb(254 249 155 / var(--tw-bg-opacity)) transparent transparent transparent;
+}
+

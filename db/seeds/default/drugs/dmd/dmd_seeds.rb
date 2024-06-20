@@ -34,6 +34,9 @@ module Renalware
       }
 
       APISynchronisers::RouteSynchroniser.new(route_repository: repository).call
+
+      Medications::MedicationRoute.where(name: "Oral").update!(weighting: 10)
+      Medications::MedicationRoute.where(name: "Subcutaneous").update!(weighting: 9)
     end
 
     log "DM+D -> UnitOfMeasures" do
@@ -76,7 +79,10 @@ module Renalware
           code: row["code"],
           form_code: row["form_code"],
           route_code: row["route_code"],
-          active_ingredient_strength_numerator_uom_code: row["unit_of_measure_code"],
+          unit_dose_uom_code: row["unit_dose_uom_code"],
+          unit_dose_form_size_uom_code: row["unit_dose_form_size_uom_code"],
+          active_ingredient_strength_numerator_uom_code:
+            row["active_ingredient_strength_numerator_uom_code"],
           basis_of_strength: row["basis_of_strength"],
           strength_numerator_value: row["strength_numerator_value"],
           virtual_therapeutic_moiety_code: row["virtual_therapeutic_moiety_code"],

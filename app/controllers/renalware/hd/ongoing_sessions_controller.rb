@@ -3,8 +3,7 @@
 module Renalware
   module HD
     class OngoingSessionsController < BaseController
-      # TODO: PatientVisibility
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def show
         query = Sessions::OngoingQuery.new(q: params[:q])
@@ -13,9 +12,9 @@ module Renalware
             :hospital_unit, :signed_on_by, :signed_off_by,
             patient: { current_modality: [:description] }
           )
-          .page(page).per(per_page || 15)
+        pagy, sessions = pagy(sessions)
         authorize sessions
-        render locals: { query: query.search, sessions: sessions }
+        render locals: { query: query.search, sessions: sessions, pagy: pagy }
       end
     end
   end

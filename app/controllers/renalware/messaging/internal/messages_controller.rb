@@ -12,8 +12,8 @@ module Renalware
         def index
           authorize Messaging::Internal::Message, :index?
           scope = patient.messages.where(public: true).order(created_at: :desc)
-          pagination, messages = pagy(scope, items: 20)
-          render locals: { patient: patient, messages: messages, pagination: pagination }
+          pagy, messages = pagy(scope, items: 20)
+          render locals: { patient: patient, messages: messages, pagy: pagy }
         end
 
         def new

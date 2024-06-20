@@ -1,3 +1,17 @@
+.ss-content.ss-open-above,
+.ss-content.ss-open-below {
+  border-color: #bbb;
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  -webkit-box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.ss-content {
+  border-top: none;
+  border-color: #bbb;
+}
+
 .ss-content .ss-list .ss-optgroup {
   .ss-option,
   .ss-optgroup-label {
@@ -7,22 +21,25 @@
 }
 
 .ss-content .ss-list .ss-option {
-  padding-top: 2px;
   padding-bottom: 2px;
+  padding-left: 10px;
+  white-space: preserve;
 }
 
 .ss-content .ss-list .ss-optgroup .ss-option,
 .ss-content .ss-list .ss-option {
   &.ss-option-selected,
   &.ss-option.ss-selected {
-    color: $dark-grey;
-    background-color: lighten($nhs-light-blue, 20);
+    color: $mid-grey;
+    background-color: #eee;
   }
 }
+
 
 .ss-main {
   color: $darkish-grey;
   padding-right: 0.5rem;
+  padding-left: 15px;
   border-color: #ccc;
 
   .ss-arrow {
@@ -33,4 +50,9 @@
   .ss-values {
     height: 18px;
   }
+}
+
+.ss-content .ss-list .ss-error,
+.ss-content .ss-list .ss-searching {
+  padding-left: 15px;
 }

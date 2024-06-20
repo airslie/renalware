@@ -6,7 +6,7 @@ module Renalware
   module Letters
     # This class is both a Wisper listener (subscribing to ApproveLetter events) and an ActiveJob.
     # Should be configured in the broadcast_subscription_map to listen to events from ApproveLetter
-    # and be invoked aysnchronously via a activejob.
+    # and be invoked asynchronously via a activejob.
     #
     # We generate a PDF version of the letter (or retrieve it from the cache) and inspect it
     # using a PDF tool to get the page count. We then save that away to the letters table.
@@ -41,8 +41,7 @@ module Renalware
       end
 
       def pdf_data
-        letter_presenter = LetterPresenter.new(letter)
-        StringIO.new(PdfRenderer.call(letter_presenter))
+        StringIO.new(RendererFactory.renderer_for(letter, :pdf).call)
       end
     end
   end

@@ -31,4 +31,4 @@
           td= l(study.started_on)
           td= l(study.terminated_on)
 
-  = paginate studies
+  == pagy_nav(pagy) if pagy.pages > 1

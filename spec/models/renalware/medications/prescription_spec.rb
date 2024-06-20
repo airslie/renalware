@@ -28,14 +28,14 @@ module Renalware
 
       describe "scopes" do
         before do
-          create_prescription(notes: ":expires_today:", terminated_on: "2010-01-02")
-          create_prescription(notes: ":expired_yesterday:", terminated_on: "2010-01-01")
+          create_prescription(notes: ":expires_today:", terminated_on: "2024-01-02")
+          create_prescription(notes: ":expired_yesterday:", terminated_on: "2024-01-01")
           create(:prescription, notes: ":not_specified:")
-          create_prescription(notes: ":expires_tomorrow:", terminated_on: "2010-01-03")
+          create_prescription(notes: ":expires_tomorrow:", terminated_on: "2024-01-03")
         end
 
         describe ".current" do
-          subject(:prescriptions) { described_class.current("2010-01-02") }
+          subject(:prescriptions) { described_class.current("2024-01-02") }
 
           it "returns prescriptions that terminate today or later, or not specified" do
             expect(prescriptions.map(&:notes)).to \
@@ -46,7 +46,7 @@ module Renalware
         end
 
         describe ".terminated" do
-          subject(:prescriptions) { described_class.terminated("2010-01-02") }
+          subject(:prescriptions) { described_class.terminated("2024-01-02") }
 
           it "returns prescriptions that terminate today or later, or not specified" do
             expect(prescriptions.map(&:notes)).to \
@@ -149,7 +149,7 @@ module Renalware
       def build_prescription(terminated_on:)
         build(
           :prescription,
-          prescribed_on: "2009-01-01",
+          prescribed_on: "2024-01-01",
           termination: build(
             :prescription_termination,
             terminated_on: terminated_on
@@ -161,7 +161,7 @@ module Renalware
         terminated_on:,
         notes: nil,
         administer_on_hd: false,
-        prescribed_on: "2009-01-01"
+        prescribed_on: "2024-01-01"
       )
         create(
           :prescription,

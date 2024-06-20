@@ -9,6 +9,14 @@ article
       = render Renalware::Medications::LatestReviewComponent.new(patient: patient, compact: true)
     ul
       li
+        - if Renalware::Medications::PrescriptionBatchRenewalPolicy.new(current_user, nil).new?
+          #renew_hd_prescriptions
+            = link_to new_patient_medications_prescription_batch_renewal_path(patient),
+                      data: { turbo: true, turbo_frame: "modal" },
+                      class: %i(button) do
+              = icon(:check, class: "h-4 w-4 inline stroke-white mb-1 mr-1")
+              | Renew HD Prescriptions
+
         - if policy(Renalware::Medications::Review).new?
           = link_to patient_medications_reviews_path(patient, format: :js),
               method: :post,

@@ -32,7 +32,7 @@
 
         - prescriptions.each do |prescription|
           tbody
-            tr class=Renalware::Drugs::DrugColourPresenter.new.css_class(prescription.drug)
+            tr(class=dom_id(prescription) class=Renalware::Drugs::DrugColourPresenter.new.css_class(prescription.drug))
               td= row_toggler
               - if current_scope
                 td.pr-2

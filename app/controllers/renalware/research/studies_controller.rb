@@ -3,13 +3,13 @@
 module Renalware
   module Research
     class StudiesController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         query = Study.ordered.ransack(params[:q])
-        studies = query.result.page(page).per(per_page)
+        pagy, studies = pagy(query.result)
         authorize studies
-        render locals: { studies: studies, query: query }
+        render locals: { studies: studies, query: query, pagy: pagy }
       end
 
       def show

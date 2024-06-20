@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 module Renalware
-  log "Adding Drugs" do
-    file_path = File.join(File.dirname(__FILE__), "drugs.csv")
-    drugs = CSV.foreach(file_path, headers: true).map do |row|
-      {
-        name: row["name"],
-        created_at: Time.zone.now,
-        updated_at: Time.zone.now
-      }
-    end
-    Drugs::Drug.insert_all(drugs)
-  end
+  # log "Adding Drugs" do
+  #   file_path = File.join(File.dirname(__FILE__), "drugs.csv")
+  #   drugs = CSV.foreach(file_path, headers: true).map do |row|
+  #     {
+  #       name: row["name"],
+  #       created_at: Time.zone.now,
+  #       updated_at: Time.zone.now
+  #     }
+  #   end
+  #   Drugs::Drug.insert_all(drugs)
+  # end
 
   log "Adding Vaccination drugs" do
     vaccination_drug_type = Drugs::Type.find_by!(code: "vaccine")

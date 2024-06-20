@@ -26,12 +26,11 @@ describe "PD Dashboard" do
     # Visit the page to view all CAPD regimes (regimes#index)
     expect(page).to have_current_path(patient_pd_capd_regimes_path(patient))
     # refresh page so we can change the per_page param
-    visit patient_pd_capd_regimes_path(patient, per_page: 5)
+    visit patient_pd_capd_regimes_path(patient)
     expect(page).to have_content("PD Summary") # breadcrumb
     expect(page).to have_content("CAPD Regimes")
     # Display 5 - the 6th is on another page'
-    expect(page).to have_css("table.capd-regimes tbody tr", count: 5)
-    expect(page).to have_css("ul.pagination", count: 1)
+    expect(page).to have_css("table.capd-regimes tbody tr", count: 6)
   end
 
   it "displays the top 5 APD and links through to display all of them" do

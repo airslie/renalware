@@ -15,4 +15,4 @@ table#patients
   tbody
     = render partial: "patient", collection: patients
 
-== pagy_nav(pagy)
+== pagy_nav(pagy) if pagy.pages > 1

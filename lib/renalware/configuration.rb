@@ -26,6 +26,9 @@ module Renalware
     config_accessor(:report_filter_cache_expiry_seconds) {
       ENV.fetch("REPORT_FILTER_CACHE_EXPIRY_SECONDS", "60").to_i
     }
+    config_accessor(:letters_render_pdfs_with_prawn) {
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("LETTERS_RENDER_PDFS_WITH_PRAWN", "false"))
+    }
     config_accessor(:allow_qr_codes_in_letters) do
       ENV.fetch("ALLOW_QR_CODES_IN_LETTERS", "false") == "true"
     end
@@ -67,6 +70,9 @@ module Renalware
     config_accessor(:allow_external_mail) { ENV.key?("ALLOW_EXTERNAL_MAIL") }
     config_accessor(:fallback_email_address_for_test_messages) do
       ENV.fetch("FALLBACK_EMAIL_ADDRESS_FOR_TEST_MESSAGES", nil)
+    end
+    config_accessor(:ukrdc_include_letters) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("UKRDC_INCLUDE_LETTERS", "true"))
     end
     config_accessor(:ukrdc_sending_facility_name) { ENV.fetch("UKRDC_SENDING_FACILITY_NAME", nil) }
     config_accessor(:ukrdc_schema_version) { ENV.fetch("UKRDC_SCHEMA_VERSION", "3.3.1") }
@@ -240,8 +246,13 @@ module Renalware
 
     # Sentry configuration
     config_accessor(:sentry_dsn) { ENV.fetch("SENTRY_DSN", "") }
-    config_accessor(:sentry_sample_rate) { 1.0 }
     config_accessor(:sentry_for_js_enabled) { false }
+    config_accessor(:sentry_profiles_sample_rate) do
+      ActiveModel::Type::Integer.new.cast(ENV.fetch("SENTRY_PROFILES_SAMPLE_RATE", 1.0))
+    end
+    config_accessor(:sentry_traces_sample_rate) do
+      ActiveModel::Type::Integer.new.cast(ENV.fetch("SENTRY_TRACES_SAMPLE_RATE", 1.0))
+    end
 
     # :simple or :dob_and_any_nhs_or_assigning_auth_number or nhs_or_any_assigning_auth_number
     config_accessor(:hl7_patient_locator_strategy) {

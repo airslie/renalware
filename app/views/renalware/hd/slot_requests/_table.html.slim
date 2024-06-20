@@ -1,5 +1,9 @@
-- urgency_colors = { "routine" => "bg-yellow-100 text-gray-500", "urgent" => "bg-orange-200 text-gray-800", "highly_urgent" => "bg-red-400 text-white" }
-- deletion_reasons = Renalware::HD::SlotRequestDeletionReason.all
+- urgency_colors = { "allocated" => "bg-green-400 text-gray-800",
+                     "routine" => "bg-yellow-200 text-gray-800",
+                     "urgent" => "bg-orange-400 text-white",
+                     "highly_urgent" => "bg-red-500 text-white" }
+
+- deletion_reasons = Renalware::HD::SlotRequests::DeletionReason.all
 
 = turbo_frame_tag("hd-slot-requests-turbo-frame") do
   = render Renalware::SpinnerComponent.new do |spinner|
@@ -18,15 +22,17 @@
           th Hosp No
           th= sort_link(query, :urgency)
           th= sort_link(query, :patient_current_modality_description_name, "Modality")
-          th.col-width-tiny= sort_link(query, :inpatient, "Inpatient?")
+          th.col-width-small= sort_link(query, :location_id, "Location")
+          th.col-width-medium= sort_link(query, :access_state_id, "Access")
           th.col-width-tiny= sort_link(query, :medically_fit_for_discharge, "MFFD?")
           th.col-width-tiny= sort_link(query, :late_presenter, "Late Presenter?")
           th.col-width-tiny= sort_link(query, :suitable_for_twilight_slots, "Twilight slots?")
           th.col-width-tiny= sort_link(query, :external_referral, "External referral?")
+          th Created by
 
         - slot_requests.each do |slot_request|
           tbody.overflow-visible
-            tr
+            tr(class="hd-slot-request-#{slot_request}")
               td= row_toggler
               - unless historical
                 td.overflow-visible
@@ -75,11 +81,13 @@
                 .rounded.inline.py-px.px-2.nowrap(class="#{urgency_colors.fetch(slot_request.urgency, '')}")
                   = slot_request.urgency.to_s.humanize
               td.nowrap= slot_request.patient.current_modality
-              td= inline_check_icon(slot_request.inpatient)
+              td= slot_request.location&.name
+              td= slot_request.access_state&.name
               td= inline_check_icon(slot_request.medically_fit_for_discharge)
               td= inline_check_icon(slot_request.late_presenter)
               td= inline_check_icon(slot_request.suitable_for_twilight_slots)
               td= inline_check_icon(slot_request.external_referral)
+              td= slot_request.created_by
             tr.quick-preview.remove-borders-on-toggle
               - cols = historical ? 15 : 12
               td(colspan=cols)
@@ -89,4 +97,4 @@
                   dt MFFD checkbox ticked
                   dd= "#{slot_request.medically_fit_for_discharge_by} #{l(slot_request.medically_fit_for_discharge_at)}"
 
-      == pagy_nav pagy
+      == pagy_nav(pagy) if pagy.pages > 1

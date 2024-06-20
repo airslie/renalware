@@ -8,4 +8,4 @@
 
 = within_admin_layout(title: presenter.page_title) do
   = render "table", presenter: presenter
-  = paginate presenter.patients
+  = render "pagination", pagy: presenter.pagy

@@ -9,4 +9,4 @@
       tbody
         = render dry_weights
 
-    == pagy_nav pagy
+    == pagy_nav(pagy) if pagy.pages > 1

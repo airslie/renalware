@@ -1,5 +1,4 @@
 .page-action-inline-form
-
   - if Renalware.config.batch_printing_enabled
     / This form lets us batch print the HD Session Forms for all patients in the list (all pages)
     = simple_form_for batch_print_form,
@@ -12,7 +11,7 @@
                   class: "button secondary",
                   disabled: presenter.patients.none?) do
         i.fas.fa-print
-        = "Batch Print #{presenter.patients.total_count} HD Session Forms"
+        = "Batch Print #{presenter.pagy.count} HD Session Forms"
 
   / This form lets us generate pathology request forms (eg for monthly bloods) for all patients
   / in the list (all pages)
@@ -26,4 +25,4 @@
                    class: "button secondary",
                    disabled: presenter.patients.none?) do
         i.fas.fa-copy
-        = "Generate #{presenter.patients.total_count} Request Forms"
+        = "Generate #{presenter.pagy.count} Request Forms"

@@ -27,7 +27,7 @@ module Renalware
                               .merge(Drugs::VMPClassification.where(drug_id: drug_id))
                               .distinct
                           }
-
+      scope :ordered, -> { order(weighting: :desc, name: :asc) }
       validates :code, presence: true
       validates :name, presence: true
 

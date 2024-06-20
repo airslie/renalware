@@ -6,11 +6,11 @@ FactoryBot.define do
       Renalware::Medications::MedicationRoute.find_or_create_by!(code: code, name: name)
     end
     code { "PO" }
-    name { "Per Oral" }
+    name { "Oral" }
 
     trait :po do
       code { "PO" }
-      name { "Per Oral" }
+      name { "Oral" }
     end
 
     trait :other do

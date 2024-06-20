@@ -16,7 +16,7 @@ module Renalware
 
       def call
         patient.prescriptions.current.each do |prescription|
-          prescription.terminate(by: by).save!
+          prescription.terminate(by: by).save!(validate: false)
         end
       end
     end

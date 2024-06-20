@@ -1,0 +1,15 @@
+en-GB:
+  renalware:
+    research:
+      studies:
+        form:
+          hints:
+            private_html: If Yes, only investigators in this study, or any user at the host site,
+                          can see the patients who are participants in a private study
+            application_url_html:
+              If there is an an external application associated with this study
+              you can enter it here and, for participating patients, the link
+              will appear at the top of patient pages.
+              Use the format https://my-research-app/participations/{external_id}
+              The {external_id} placeholder will be replaced with
+              research_participation_external_id

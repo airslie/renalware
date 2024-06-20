@@ -5,13 +5,13 @@ require "collection_presenter"
 module Renalware
   module Directory
     class PeopleController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         query = PersonQuery.new(q: params[:q])
-        people = call_query(query).page(page)
+        pagy, people = pagy(call_query(query))
         authorize people
-        render locals: { q: query.search, people: people }
+        render locals: { q: query.search, people: people, pagy: pagy }
       end
 
       def search

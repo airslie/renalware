@@ -20,4 +20,4 @@
     |  first
 
   = render "table", consults: consults, query: query
-  = paginate consults
+  == pagy_nav(pagy) if pagy.pages > 1

@@ -76,6 +76,87 @@ module Renalware::Medications
           expect(patient.prescriptions.current.first).to eq(original_prescription)
         end
       end
+
+      context "when prescription is in the future and with no future termination date" do
+        let(:original_prescribed_on) { 1.week.from_now.to_date }
+        let(:original_prescription) do
+          create(
+            :prescription,
+            patient: patient,
+            dose_amount: original_dose_amount,
+            dose_unit: "milligram",
+            prescribed_on: original_prescribed_on
+          )
+        end
+
+        it "terminates the original prescription using today for prescribed_on and terminated_on" do
+          original_prescription
+          today = Time.zone.today.to_date
+          new_dose = "123"
+
+          expect {
+            described_class
+              .new(original_prescription, user)
+              .call(dose_amount: new_dose, by: user)
+          }.to change(Prescription, :count).by(1)
+            .and change(PrescriptionTermination, :count).by(1)
+
+          original_prescription = patient.prescriptions.terminated.last
+          new_prescription = patient.prescriptions.last
+
+          # As the new prescription is on the future we should keep future prescription date.
+          expect(new_prescription).to have_attributes(
+            prescribed_on: original_prescribed_on,
+            dose_amount: new_dose
+          )
+          expect(new_prescription.termination).to be_nil
+
+          # we change the original prescription's dates to be today
+          # TODO: expect(original_prescription.prescribed_on).to eq(today)
+          expect(original_prescription.termination.terminated_on).to eq(today)
+        end
+      end
+
+      context "when prescription is in the future and has a future termination date" do
+        let(:original_prescribed_on) { 1.week.from_now.to_date }
+        let(:original_terminated_on) { 2.weeks.from_now.to_date }
+        let(:original_prescription) do
+          create(
+            :prescription,
+            patient: patient,
+            dose_amount: original_dose_amount,
+            dose_unit: "milligram",
+            prescribed_on: original_prescribed_on
+          ).tap { |pres| pres.terminate(by: user, terminated_on: original_terminated_on).save! }
+        end
+
+        it "terminates the original prescription using today for prescribed_on and terminated_on" do
+          original_prescription
+          today = Time.zone.today.to_date
+          new_dose = "123"
+
+          expect {
+            described_class
+              .new(original_prescription, user)
+              .call(dose_amount: new_dose, by: user)
+          }.to change(Prescription, :count).by(1)
+            .and change(PrescriptionTermination, :count).by(1)
+
+          original_prescription = patient.prescriptions.terminated.last
+          new_prescription = patient.prescriptions.last
+
+          # As the new prescription is on the future we should keep future prescription date.
+          expect(new_prescription).to have_attributes(
+            prescribed_on: original_prescribed_on,
+            dose_amount: new_dose
+          )
+          expect(new_prescription.termination.terminated_on).to eq(original_terminated_on)
+
+          # we change the original prescription's dates to be today
+          # expect(original_prescription.prescribed_on).to eq(today)
+          expect(original_prescription.termination.terminated_on).to eq(today)
+        end
+      end
     end
   end
 end

@@ -14,9 +14,19 @@ module Renalware
       end
 
       describe "#other?" do
-        it "case-insenstively matches the code 'other'" do
+        it "case-insensitively matches the code 'other'" do
           expect(described_class.new(name: "other").other?).to be(true)
           expect(described_class.new(name: "OTHER").other?).to be(true)
+        end
+      end
+
+      describe "#ordered scope" do
+        it do
+          xx = create(:medication_route, :po, weighting: 50, code: :xx)
+          po = create(:medication_route, :po, weighting: 100)
+          other = create(:medication_route, :other, weighting: 0)
+
+          expect(described_class.ordered.to_a).to eq([po, xx, other])
         end
       end
     end

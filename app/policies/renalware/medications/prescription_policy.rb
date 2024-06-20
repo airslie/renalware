@@ -3,29 +3,12 @@
 module Renalware
   module Medications
     class PrescriptionPolicy < BasePolicy
-      def new?
-        super && prescriber?
-      end
-
-      def create?
-        super && prescriber?
-      end
-
-      def edit?
-        super && (administer_on_hd? ? hd_prescriber? : prescriber?)
-      end
-
-      def update?
-        super && (administer_on_hd? ? hd_prescriber? : prescriber?)
-      end
-
-      def destroy?
-        super && (administer_on_hd? ? hd_prescriber? : prescriber?)
-      end
-
-      def new_hd_prescription?
-        hd_prescriber?
-      end
+      def new?                  = super && prescriber?
+      def create?               = super && prescriber?
+      def edit?                 = super && (administer_on_hd? ? hd_prescriber? : prescriber?)
+      def update?               = super && (administer_on_hd? ? hd_prescriber? : prescriber?)
+      def destroy?              = super && (administer_on_hd? ? hd_prescriber? : prescriber?)
+      def new_hd_prescription?  = hd_prescriber?
 
       private
 

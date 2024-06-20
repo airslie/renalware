@@ -12,8 +12,8 @@ module Renalware
           letter = args[:letter]
           to = args[:to]
           validate_letter(letter)
-          letter_presenter = LetterPresenterFactory.new(letter)
-          attachments["letter.pdf"] = Letters::PdfRenderer.call(letter_presenter)
+          renderer = RendererFactory.renderer_for(letter, :pdf)
+          attachments["letter.pdf"] = renderer.call
 
           # Note here we render the content in a block so that we can use the locals: {..} syntax
           # which is cleaner than using @vars.

@@ -4,6 +4,7 @@ resources :patients, only: [] do
   resources :prescriptions, controller: "medications/prescriptions", except: :destroy
 
   namespace :medications do
+    resources :prescription_batch_renewals, only: [:new, :create]
     resources :reviews, only: :create, defaults: { format: :js }
     namespace :home_delivery do
       resources :events, only: [:new, :create, :edit, :update, :show]

@@ -5,7 +5,7 @@ require "collection_presenter"
 module Renalware
   module Letters
     class ElectronicReceiptsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       # PATCH
       def mark_as_read
@@ -37,12 +37,13 @@ module Renalware
       def render_receipts(receipts)
         patient_filter = Patients::SearchFilter.new(search_term, request)
         receipts = receipts.joins(letter: [:patient])
-        receipts = patient_filter.call(receipts).ordered.page(page).per(per_page)
+        pagy, receipts = pagy(patient_filter.call(receipts).ordered)
         authorize receipts
 
         render locals: {
           receipts: present_receipts(receipts),
-          search_form: patient_filter.search_form
+          search_form: patient_filter.search_form,
+          pagy: pagy
         }
       end
 

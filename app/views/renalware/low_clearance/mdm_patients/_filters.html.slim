@@ -4,7 +4,7 @@
                   method: :get,
                   html: { autocomplete: "off" } do |f|
 
-  .flex.flex-col.sm:flex-row.items-end.pb-4
+  .flex.flex-col.sm:flex-row.pb-4
     .w-full.sm:max-w-xs.pr-2
       = f.input :hospital_centre_id,
           collection: Renalware::Hospitals::Centre.where(host_site: true).ordered,
@@ -21,4 +21,4 @@
                 collection: Renalware::User.ordered.select(:id, :given_name, :family_name)
 
     .w-full.sm:max-w-xs.pr-2
-      .mb-3= filter_or_reset(form: f, reset_path: filter_form.url)
+      .mt-6= filter_or_reset(form: f, reset_path: filter_form.url)

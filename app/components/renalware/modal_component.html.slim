@@ -1,10 +1,11 @@
+
 = turbo_frame_tag "modal" do
   div(data-controller="turbo-modal")
     .relative.z-10[aria-labelledby="modal-title" role="dialog" aria-modal="true"]
       .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
       .fixed.inset-0.z-10.w-screen.overflow-y-auto
         .flex.min-h-full.items-end.justify-center.p-4.text-center.sm:items-center.sm:p-0
-          .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pb-4.pt-3.text-left.shadow-xl.transition-all.sm:my-8.sm:w-full.sm:max-w-xl.sm:pt-0.sm:p-6
+          .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pb-4.pt-3.text-left.shadow-xl.transition-all.sm:mt-8.sm:mb-24.sm:w-full.sm:max-w-xl.sm:pt-0.sm:p-6
             - if title.present?
               h2.text-1xl.mt-5.mb-4 = title
             = content

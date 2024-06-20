@@ -15,7 +15,8 @@ module Renalware
           expect(log).to be_persisted
           expect(log).to have_attributes(
             identifier: "test",
-            status: described_class::STATUS_WORKING
+            status: described_class::STATUS_WORKING,
+            elapsed_ms: nil
           )
 
           log.update!(
@@ -32,6 +33,7 @@ module Renalware
           records_added: 99,
           records_updated: 1
         )
+        expect(the_log.elapsed_ms).to be > 0
       end
 
       it "logs any exception that occurs within the block, then re-raises the exception" do

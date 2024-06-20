@@ -12,12 +12,17 @@ module Renalware
       end
 
       def results
-        @results ||= begin
+        return if raw_results.blank?
+
+        @results ||= format_groups_into_string(raw_results)
+      end
+
+      def raw_results
+        @raw_results ||= begin
           snapshot = letter.pathology_snapshot.dup
           return if snapshot.blank?
 
-          groups = group_snapshot_by_code_and_date(snapshot)
-          format_groups_into_string(groups)
+          group_snapshot_by_code_and_date(snapshot)
         end
       end
 
@@ -33,6 +38,8 @@ module Renalware
       # However if, within a group, a code has come in separately with another date, we trigger
       # a new sub group so it gets its own date.
       def group_snapshot_by_code_and_date(snapshot)
+        return if snapshot.blank?
+
         groups = []
         PathologyLayout.new.each_group do |_group_number, obs_desc_group|
           groups << build_hash_of_snapshot_results_keyed_by_date(obs_desc_group, snapshot)

@@ -52,4 +52,4 @@
             td.result
               = log.error_messages.compact.uniq.join("<br>").html_safe
 
-    == pagy_nav pagy
+    == pagy_nav(pagy) if pagy.pages > 1

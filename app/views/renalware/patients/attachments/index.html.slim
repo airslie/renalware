@@ -8,4 +8,4 @@
 
 = within_patient_layout(title: "Linked Files") do
   = render "table", attachments: attachments, search: search
-  = paginate attachments
+  == pagy_nav(pagy) if pagy.pages > 1

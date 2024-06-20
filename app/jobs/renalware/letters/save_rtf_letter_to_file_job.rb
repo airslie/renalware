@@ -20,7 +20,7 @@ module Renalware
       end
 
       def rtf_data_for(letter)
-        RTFRenderer.new(LetterPresenterFactory.new(letter)).render
+        RendererFactory.renderer_for(letter, :rtf).call
       end
 
       def create_folder_if_not_exists(path)

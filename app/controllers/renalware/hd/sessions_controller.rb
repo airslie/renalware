@@ -7,20 +7,18 @@ module Renalware
     class SessionsController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
       include PresenterHelper
 
       def index
         query = sessions_query
-        sessions = query
-          .call
-          .eager_load(:hospital_unit, :patient, :signed_on_by, :signed_off_by)
-          .page(page)
-          .per(per_page || 15)
+        pagy, sessions = pagy(
+          query.call.eager_load(:hospital_unit, :patient, :signed_on_by, :signed_off_by)
+        )
         authorize sessions
         presenter = CollectionPresenter.new(sessions, SessionPresenter, view_context)
         @q = query.search
-        render :index, locals: { patient: hd_patient, sessions: presenter }
+        render :index, locals: { patient: hd_patient, sessions: presenter, pagy: pagy }
       end
 
       def show

@@ -1,0 +1,32 @@
+= render Renalware::ModalComponent.new(title: "Renew HD Prescriptions", size_css_classes: "sm:max-w-xl sm:w-full md:max-w-2xl lg:max-w-4xl") do
+  = form_for(form,
+            url: patient_medications_prescription_batch_renewals_path(patient),
+            as: :prescription_batch,
+            wrapper: :tw_default, html: { class: "" }) do |f|
+
+    - if form.prescriptions.empty?
+      ' No matching prescriptions to renew
+    - else
+      p.border.rounded.px-3.py-2.mb-4.shadow.bg-blue-50
+        ' Prescriptions will be renewed with a termination date of
+        b= Renalware.config.auto_terminate_hd_prescriptions_after_period.from_now.to_date
+      ul.m-0.p-0
+        = f.collection_check_boxes(:prescription_ids, form.prescriptions, :id, :to_s) do |presc|
+          li.flex.gap-6(id="renew_#{dom_id(presc.object)}")
+            div= presc.check_box
+            div.pt-px = presc.label
+
+    .mt-4
+      div.form-actions
+        - if form.prescriptions.any?
+          = link_to I18n.t("btn.cancel"),
+                    "#",
+                    class: "btn btn-secondary mr-3",
+                    data: { action: "turbo-modal#close"}
+          = f.submit("Renew", class: "btn btn-primary", autofocus: true)
+        - else
+          = link_to "Close",
+                    "#",
+                    autofocus: true,
+                    class: "btn btn-secondary mr-3",
+                    data: { action: "turbo-modal#close"}

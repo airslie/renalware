@@ -26,6 +26,7 @@ import SelectController from "./select_controller"
 import RadioResetController from "./radio_reset_controller"
 import ConditionalDisplayController from "./conditional_display_controller"
 import SlimselectController from "./slimselect_controller"
+import SlimselectAjaxController from "./slimselect_ajax_controller"
 import ModalController from "./modal_controller"
 import FormController from "./form_controller"
 import AlternativeFormSubmitterController from "./alternative_form_submitter_controller"
@@ -42,7 +43,8 @@ import NavbarController from "./navbar_controller"
 import TabbedNavigationController from "./tabbed_navigation_controller"
 import TurboModalController from "./turbo_modal_controller"
 import ChartsRawController from "./charts_raw_controller"
-import HDSlotRequestController from "./hd/slot_requests_controller"
+import PopoverController from "./popover_controller"
+import LettersBatchCompileController from "./letters/batch_compile_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
@@ -69,6 +71,7 @@ application.register("select", SelectController)
 application.register("radio-reset", RadioResetController)
 application.register("conditional-display", ConditionalDisplayController)
 application.register("slimselect", SlimselectController)
+application.register("slimselect-ajax", SlimselectAjaxController)
 application.register("modal", ModalController)
 application.register("form", FormController)
 application.register(
@@ -101,4 +104,5 @@ application.register("dropdown", Dropdown) // https://www.stimulus-components.co
 application.register("tabbed-navigation", TabbedNavigationController)
 application.register("turbo-modal", TurboModalController)
 application.register("charts-raw", ChartsRawController)
-application.register("hd-slot-request", HDSlotRequestController)
+application.register("popover", PopoverController)
+application.register("letters-batch-compile", LettersBatchCompileController)

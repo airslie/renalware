@@ -4,9 +4,7 @@ module Renalware
   module HD
     module SessionForms
       class BatchPolicy < BasePolicy
-        def status?
-          show?
-        end
+        def status? = show?
       end
     end
   end

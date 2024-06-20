@@ -1,0 +1,7 @@
+.mt-12(data-controller="simple-toggle")
+  a(href="#" data-action="click->simple-toggle#toggle")
+    flex
+      = inline_icon("chevron-down", class: "inline")
+      span Show report info
+  .hidden.text-sm.border.px-4.py-2.shadow.bg-gray-50(data-simple-toggle-target="toggleable")
+    pre = JSON.pretty_generate(options.current_view.attributes)

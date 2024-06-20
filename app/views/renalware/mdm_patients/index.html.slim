@@ -1,9 +1,0 @@
-= content_for(:filters) do
-  = render_if_exists "filters", presenter: presenter
-
-= content_for(:tabs) do
-  = render_if_exists "tabs", presenter: presenter
-
-= within_admin_layout(title: presenter.page_title)
-  = render "table", presenter: presenter
-  = paginate presenter.patients

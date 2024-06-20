@@ -14,7 +14,7 @@
   = render "renalware/shared/please_print_using_print_button_warning"
   = render "table", alerts: alerts, search: search
 
-  = paginate alerts
+  == pagy_nav(pagy) if pagy.pages > 1
 
   - if current_user_is_admin?
     .rounded.bg-blue-50.px-3.py-2.mt-20.text-gray-600

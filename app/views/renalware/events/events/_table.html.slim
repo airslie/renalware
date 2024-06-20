@@ -30,4 +30,5 @@
                     toggle_prefix: toggle_prefix \
                   }
 
-      == pagy_nav(pagy) if defined?(pagy)
+      - if defined?(pagy)
+        == pagy_nav(pagy) if pagy.pages > 1

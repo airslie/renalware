@@ -20,8 +20,7 @@ module Renalware
       end
 
       def pdf_data_for(letter)
-        letter = Renalware::Letters::LetterPresenter.new(letter)
-        Renalware::Letters::PdfRenderer.call(letter)
+        RendererFactory.renderer_for(letter, :pdf).call
       end
 
       def create_folder_if_not_exists(path)

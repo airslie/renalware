@@ -9,12 +9,45 @@ This project adheres to Semantic Versioning.
 ### Changed
 ### Fixed
 
+## 2.4.4
+### Added
+### Changed
+- Disable Edge autocomplete on prescription inputs #4821
+- Add optional weighting to medication_routes #4811
+  Change via database to make routes with a larger value float to the top of the list.
+- Highlight search hits in slim-select searchable dropdowns eg for drugs search on prescriptions form #4810
+### Fixed
+- Fix modality filter and modality sorting on RR Preflight Checks page #4833
+- Fix 'access token expired' error syncing dmd with ontology #4813
+
+## 2.4.3
+### Added
+- Add immunology risk and induction agent to Tx Recipient operation #4802
+- Add location, access state to HD Slot Requests, and in table view add location filter, display location, access state and creating user #4791
+- Allow a permitted user to renew selected HD Prescriptions for eg 6 months #4787
+- Add an 'allocated' urgency option to HD Slot Requests #4829
+### Changed
+- Include a reason in Historical Path ReplayRequest log when patient was created via AKI #4793
+- Do not overwrite HD prescription termination date (if entered) on creation #4780
+- Set future prescription termination date to be today when force terminating eg when renewing or clicking Terminate #4825
+- Do not validate prescription termination dates when renewing/revising a prescription #4818
+  this allows prescription_termination.terminated_on to be < prescriptions.prescribed_on,
+  when terminating future prescriptions by setting termination_on = today
+- Paginate patient clinic visits #4801
+### Fixed
+- Omit country code from UKRDC addresses if no country specified #4789
+- Do not validate prescriptions when terminating on death modality #4828
+
 ## 2.4.2
 ### Added
 - Add Medically fit for discharge checkbox on HD slot requests #4670
-- Allow a superadmin to soft-delete an HD prescription administration #4668
+- Allow a admin to soft-delete an HD prescription administration #4668, #4738
 - Capture when a patients requests their UKRDC data be anonymised #4662
-- Alternative experimental 'open' chart support for reports #4618
+- Alternative experimental chart support for reports using the chart_raw column on view_metadata #4618
+- Add a demo scheduled function to illustrate updating patient.send_to_renal_reg #4705
+- Display patient group directions on read-only HD Session view #4742
+- Add Tx 'Kidney and other' option to recipient operation and wait list registration #4739
+- Replay historical pathology messages when new patient added #4411
 ### Changed
 - Add titles eg '2. Well' to Clinical Frailty Scores events #4697
 - Display runtime errors to superadmins #4687
@@ -22,8 +55,25 @@ This project adheres to Semantic Versioning.
 - Load report data asynchronously after the page has loaded #4671
 - Ensure modality history is editable by Admins and Superadmins #4635
 - Update Rails to 7.1 #4695
+- Upgrade to Ruby 3.3.0 #4708
+- Icon housekeeping #4709
+- Use OBR.7, falling back to OBR.6 if missing, instead of OBX.14 when storing pathology_observation.obseved_at #4752
+- Performance and usability improvements to the Renal->Events and Patient->Events pages #4758
+- Switch from kaminari to pagy pagination library (already used in many places) in the following locations
+  - admin/users
+  - clinical/dry_weights
+  - admin/drugs
+  - hd/unmet preferences
+  - Patient -> letters
+  - admin/drug_types
+  - Patients -> Patients list
+  - Renal -> RR Preflight checks
+- Reporting module refactor - please test
 ### Fixed
 - Allow sign in page to scroll correctly #4698
+- Fix bug displaying unnecessary Overlapping Modality message #4704
+- Prevent bots crawling documentation #4710
+- Fix bug loading reports 'Configure columns' modal on MDMs/reports #4716
 
 ## 2.4.1
 

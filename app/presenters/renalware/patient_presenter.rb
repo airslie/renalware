@@ -7,7 +7,7 @@ module Renalware
     end
 
     def to_s(format = :long)
-      super(format)
+      super
     end
 
     def nhs_number

@@ -3,7 +3,7 @@
 module Renalware
   module Transplants
     class WaitListsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       # Here we display a named filter eg Active and query for patients based on registration
       # status and also any search criteria entered in the search form which is backed by our
@@ -11,13 +11,14 @@ module Renalware
       def show
         form = Registrations::WaitListForm.new(form_params)
         query = query_for(form)
-        registrations = query.call.page(page).per(per_page || 50)
+        pagy, registrations = pagy(query.call)
         authorize registrations
         render locals: {
           path_params: path_params,
           registrations: CollectionPresenter.new(registrations, WaitListRegistrationPresenter),
           q: query.search,
-          form: form
+          form: form,
+          pagy: pagy
         }
       end
 

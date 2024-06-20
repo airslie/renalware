@@ -6,7 +6,7 @@ module Renalware
   module Messaging
     module Internal
       class ReceiptsController < BaseController
-        include Renalware::Concerns::Pageable
+        include Pagy::Backend
         include PresenterHelper
 
         # GET aka inbox
@@ -40,17 +40,18 @@ module Renalware
           if search_term.present?
             receipts = patient_filter.call(receipts)
           end
-          receipts = receipts.page(page).per(per_page)
+          pagy, receipts = pagy(receipts)
           authorize receipts
 
           render locals: {
             receipts: present(receipts, ReceiptPresenter),
-            search_form: patient_filter.search_form
+            search_form: patient_filter.search_form,
+            pagy: pagy
           }
         end
 
         def receipts
-          @receipts ||= recipient.receipts.page(page).per(per_page)
+          @receipts ||= recipient.receipts
         end
 
         def receipt

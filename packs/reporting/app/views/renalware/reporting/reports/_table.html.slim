@@ -70,5 +70,7 @@ table
                 = value
         td
           / empty to allow table to expand to the right
-
-== pagy_nav options.pagination
+- pagy = options.pagination
+.flex.items-center.gap-x-8
+  == pagy_nav(pagy) if pagy.pages > 1
+  .grow.text-right== pagy_info(pagy)

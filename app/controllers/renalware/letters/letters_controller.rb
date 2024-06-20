@@ -80,7 +80,7 @@ module Renalware
         load_and_authorize_patient
         letter = find_letter(params[:id])
         authorize letter
-        letter.destroy
+        DeleteLetter.new(letter: letter, by: current_user).call
         redirect_to patient_letters_letters_path(patient)
       end
 

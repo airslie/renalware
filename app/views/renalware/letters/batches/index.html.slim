@@ -17,4 +17,4 @@
           td= batch.batch_items_count
           td= batch.created_by
 
-  = paginate batches
+  == pagy_nav(pagy) if pagy.pages > 1

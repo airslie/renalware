@@ -48,7 +48,19 @@ module Renalware
     end
 
     class TerminateExistingAndCreateNewPrescription
-      pattr_initialize :prescription, :current_user, :params
+      attr_reader :prescription,
+                  :current_user,
+                  :params,
+                  :prev_prescribed_on,
+                  :prev_terminated_on
+
+      def initialize(prescription, current_user, params)
+        @prescription = prescription
+        @current_user = current_user
+        @params = params
+        @prev_prescribed_on = prescription.prescribed_on
+        @prev_terminated_on = prescription.termination&.terminated_on
+      end
 
       def call
         Prescription.transaction do
@@ -59,17 +71,49 @@ module Renalware
 
       private
 
-      # If we are terminating a give_on_hd prescription then always force terminate it
       def terminate_existing_prescription
-        return if prescription.termination.present? && !new_prescription_is_administer_on_hd?
+        if ENV.key?("CHANGE_FUTURE_PRESCRIBED_ON_TO_TODAY_WHEN_TERMINATING")
+          update_prescription_dates_and_notes
+          prescription.save!(validate: false)
+        end
 
-        prescription.terminate(by: params[:by]).save!
+        # Now terminate the original prescription with a terminated_on of today
+        prescription
+          .terminate(by: params[:by], terminated_on: Date.current)
+          .save!(validate: false)
+      end
+
+      # Call this only if we decide to terminate future prescriptions by changing
+      # prescribed_on and terminated_on to today, including notes about what the original
+      # values were.
+      def update_prescription_dates_and_notes
+        if prescription.prescribed_on > Time.zone.today
+          prescription.prescribed_on = Time.zone.today
+          prescription.notes += "Terminated due to a change. " \
+                                "Was prescribed on #{prescription.prescribed_on}"
+          if prescription.termination.present?
+            prescription.notes += " and due to terminate on " \
+                                  "#{prescription.termination.terminated_on}"
+          end
+        end
       end
 
       def create_new_prescription
         new_prescription = Prescription.new(terminated_prescription_attributes)
         new_prescription.assign_attributes(params)
-        new_prescription.prescribed_on = Date.current
+
+        new_prescription.prescribed_on = if prev_prescribed_on > Time.zone.today
+                                           prev_prescribed_on
+                                         else
+                                           Date.current
+                                         end
+
+        if prev_terminated_on
+          new_prescription.build_termination(
+            terminated_on: prev_terminated_on,
+            by: current_user
+          )
+        end
         HD::AssignFuturePrescriptionTermination.call(
           prescription: new_prescription,
           by: current_user
@@ -94,6 +138,7 @@ module Renalware
           medication_route_id
           route_description
           frequency
+          prescribed_on
           notes
           provider
         )

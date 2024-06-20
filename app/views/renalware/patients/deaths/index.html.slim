@@ -41,4 +41,4 @@
           td= patient.current_modality
           td= patient.previous_modality
 
-  == pagy_nav pagy
+  == pagy_nav(pagy) if pagy.pages > 1

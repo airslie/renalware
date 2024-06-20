@@ -1,0 +1,25 @@
+div data-controller="show-on-selected"
+  ruby:
+    frequency_is_predefined = presenter.frequencies.find { _1.name == f.object.frequency }
+    select_other = presenter.frequencies.size == 1 || (f.object.frequency.present? && !frequency_is_predefined)
+
+  = f.input :frequency, wrapper: :horizontal_small,
+    collection: presenter.frequencies,
+    label_method: :title,
+    value_method: :name,
+    input_html: { data: { action: "show-on-selected#select" } },
+    selected: select_other ? Renalware::Drugs::Frequency::OTHER_NAME : f.object.frequency
+
+  div[ \
+    data-show-on-selected-target="item"
+    data-show-on-selected-option="other"
+    class=class_names(hidden: !select_other)
+  ]
+    = f.input :frequency, wrapper: :horizontal_small,
+      disabled: !select_other,
+      input_html: { value: (f.object.frequency if !frequency_is_predefined), autofocus: true },
+      label: t("activerecord.attributes.renalware/medications/prescription.frequency_freeform")
+
+= f.input :frequency_comment,
+          wrapper: :horizontal_medium,
+          input_html: { autocomplete: "off" }

@@ -3,9 +3,7 @@
 module Renalware
   module HD
     class DNASessionPolicy < BasePolicy
-      def destroy?
-        edit?
-      end
+      def destroy? = edit?
 
       def edit?
         return false unless record.persisted?

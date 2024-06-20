@@ -1,0 +1,21 @@
+span(data-prescriptions-target= "providers")
+  = f.input :provider,
+            collection: present(Renalware::Medications::Provider.codes, Renalware::Medications::ProviderCodePresenter),
+            as: :inline_radio_buttons,
+            label_method: :to_label,
+            wrapper: :horizontal_medium,
+            input_html: { data: { action: "change->prescriptions#toggleDeliveryDates", "prescriptions.target" => "providers"} }
+
+/ Only show this if home_delivery provider is active/selected. See prescriptions stimulus controller.
+.home_delivery_dates(style="display:none" data-prescriptions-target="homeDeliveryDates")
+  .row
+    .small-12.medium-4.large-3.columns
+    .small-12.medium-8.large-9.columns
+      label.right.inline Last home prescription date:
+      b= l(presenter.last_delivery_date)
+
+  .row
+    .small-12.medium-4.large-3.columns
+    .small-12.medium-8.large-9.columns
+      label.right.inline Next home prescription date:
+      b= l(presenter.next_delivery_date)

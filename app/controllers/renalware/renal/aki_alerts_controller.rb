@@ -3,7 +3,7 @@
 module Renalware
   module Renal
     class AKIAlertsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
 
       def index
@@ -47,11 +47,13 @@ module Renalware
       end
 
       def render_index_html(query, alerts)
+        pagy, alerts = pagy(alerts)
         render locals: {
-          alerts: alerts.page(page).per(per_page),
+          alerts: alerts,
           form: search_form,
           search: query.search,
-          path_params: path_params
+          path_params: path_params,
+          pagy: pagy
         }
       end
 

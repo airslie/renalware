@@ -2,4 +2,4 @@
   = render "filters", query: query
 
 = within_admin_layout(title: "Ongoing HD Sessions") do
-  = render "table", query: query, sessions: sessions
+  = render "table", query: query, sessions: sessions, pagy: pagy

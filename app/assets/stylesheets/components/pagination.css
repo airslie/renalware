@@ -1,58 +1,48 @@
 @layer components {
   .pagy {
-    @apply isolate inline-flex -space-x-px rounded-md shadow-sm mt-2;
-  }
+    @apply isolate inline-flex -space-x-px rounded-md  mt-2;
 
-  .pagy .page {
-    @apply relative items-center border text-gray-700 font-normal;
-  }
+    &.info {
+     margin: 0;
+    }
 
-  .pagy .page:first-child {
-    @apply rounded-l;
-  }
+    a.gap {
+      @apply w-10 text-center font-normal border shadow-sm;
+    }
 
-  .pagy .page:last-child {
-    @apply rounded-r;
-  }
+    a:not(.gap) {
+      @apply border block py-1 px-3 focus-visible:outline focus-visible:outline-2;
+      @apply focus-visible:outline-offset-2 text-gray-700 shadow-sm;
 
-  /*
-  .pagy > :not([hidden]) ~ :not([hidden]) {
-  }
+      &:hover {
+        @apply bg-gray-200;
+      }
 
-  .pagy > :not([hidden]) ~ :not([hidden]) {
-  }
-  */
+      &:not([href]) { /* disabled links */
+        @apply text-gray-400 bg-gray-50 cursor-default font-normal;
+      }
 
-  .pagy .page a {
-    @apply block py-1 px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 text-gray-700;
-  }
+      &.current {
+        @apply text-white bg-gray-400;
+        @apply border-sky-600 ;
+        @apply bg-sky-600 text-white focus-visible:outline-sky-600;
+      }
 
-  .pagy .page a:hover {
-    @apply bg-gray-200;
-  }
+      &:first-child {
+        @apply rounded-l;
+      }
 
-  .pagy .page.active {
-    @apply border-sky-600 ;
-  }
+      &:last-child {
+        @apply rounded-r;
+      }
+    }
 
-  .pagy .page.active a {
-    @apply bg-sky-600 text-white focus-visible:outline-sky-600;
-  }
+    label {
+      @apply inline-block whitespace-nowrap bg-gray-200 rounded-lg px-3 py-0.5;
 
-  .pagy .page.disabled a {
-    @apply text-gray-400 bg-gray-50 cursor-default font-normal;
+      input {
+        @apply bg-gray-100 border-none rounded-md;
+      }
+    }
   }
-
-  .pagy .page.gap {
-    @apply w-10 text-center font-normal;
-  }
-
-  .pagy .pagy-combo-input, .pagy.pagy-items-selector-js {
-    @apply inline-block whitespace-nowrap bg-gray-200 rounded-lg px-3 py-0.5;
-  }
-
-  .pagy .pagy-combo-input input, .pagy.pagy-items-selector-js input {
-    @apply bg-gray-100 border-none rounded-md;
-  }
-
 }

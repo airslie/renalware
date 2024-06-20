@@ -11,6 +11,7 @@ module Renalware
 
       belongs_to :patient, touch: true
       belongs_to :hospital_centre, class_name: "Hospitals::Centre"
+      belongs_to :induction_agent
       has_one :followup,
               class_name: "RecipientFollowup",
               foreign_key: "operation_id",
@@ -43,6 +44,8 @@ module Renalware
 
       enumerize :operation_type,
                 in: %i(kidney kidney_dual kidney_pancreas kidney_other pancreas kidney_liver liver)
+
+      enumerize :immunological_risk, in: %i(low intermediate high ABOi)
 
       def theatre_case_start_time
         TimeOfDay.new(self[:theatre_case_start_time])

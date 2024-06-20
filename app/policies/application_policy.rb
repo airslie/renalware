@@ -8,33 +8,13 @@ class ApplicationPolicy
     @record = record
   end
 
-  def index?
-    false
-  end
-
-  def show?
-    scope.exists?(id: record.id)
-  end
-
-  def new?
-    create?
-  end
-
-  def create?
-    false
-  end
-
-  def edit?
-    update?
-  end
-
-  def update?
-    false
-  end
-
-  def destroy?
-    false
-  end
+  def index?    = false
+  def show?     = scope.exists?(id: record.id)
+  def new?      = create?
+  def create?   = false
+  def edit?     = update?
+  def update?   = false
+  def destroy?  = false
 
   def scope
     Pundit.policy_scope!(user, record.class)

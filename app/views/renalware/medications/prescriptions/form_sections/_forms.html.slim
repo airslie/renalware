@@ -1,0 +1,32 @@
+- if presenter.forms_collection.size == 2
+  .mb-3
+    = f.hidden_field :form_id, value: presenter.forms_collection.last[1]
+    .row.select.optional.medications_prescription_form
+      .small-12.medium-4.large-3.columns
+        = f.label :form
+      .small-12.medium-8.large-9.columns.horizontal_medium
+        .border.bg-gray-50.border-gray-100.rounded.py-2.px-4.lg:mr-12= presenter.forms_collection.last[0]
+- elsif presenter.forms_collection.size > 20
+  .mb-4
+    = f.association :form,
+                    collection: presenter.forms_collection,
+                    include_blank: false,
+                    input_html: { \
+                      data: { \
+                        controller: "slimselect",
+                        action: "change->alternative-form-submitter#submit",
+                        "alternative-form": "drug_search_form",
+                      },
+                    },
+                    wrapper: :horizontal_medium
+- else
+  = f.association :form,
+                  collection: presenter.forms,
+                  include_blank: true,
+                  input_html: { \
+                    data: { \
+                      action: "change->alternative-form-submitter#submit",
+                      "alternative-form": "drug_search_form",
+                    },
+                  },
+                  wrapper: :horizontal_medium

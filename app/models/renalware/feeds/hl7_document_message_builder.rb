@@ -134,16 +134,21 @@ module Renalware
       end
 
       def base64_encoded_pdf_content
-        Base64.strict_encode64(pdf_renderer_class.call(renderable))
-      end
-
-      def pdf_renderer_class
         if renderable_type.letter?
-          Renalware::Letters::PdfRenderer
+          renderer = Letters::RendererFactory.renderer_for(renderable, :pdf)
+          Base64.strict_encode64(renderer.call)
         elsif renderable_type.event?
-          Renalware::Events::EventPdf
+          Base64.strict_encode64(Renalware::Events::EventPdf.call(renderable))
         end
       end
+
+      # def pdf_renderer_class
+      #   if renderable_type.letter?
+      #     Renalware::Letters::RendererFactory.renderer_for(lett) ::Rendering::PdfRenderer
+      #   elsif renderable_type.event?
+      #     Renalware::Events::EventPdf
+      #   end
+      # end
 
       def renderable_type
         @renderable_type ||= begin

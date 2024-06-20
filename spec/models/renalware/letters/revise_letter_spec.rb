@@ -18,7 +18,6 @@ module Renalware
                patient: patient,
                topic: topic,
                main_recipient: build(:letter_recipient, :main),
-               # How does `by` work?
                by: user)
       }
 

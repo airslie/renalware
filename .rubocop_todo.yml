@@ -428,13 +428,6 @@ RSpec/ExampleLength:
     - 'spec/models/renalware/pd/peritonitis_episode_spec.rb'
     - 'spec/requests/renalware/admissions/admissions_spec.rb'
 
-# Offense count: 1
-# Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
-# Include: **/*_spec*rb*, **/spec/**/*
-RSpec/FilePath:
-  Exclude:
-    - 'spec/components/renalware/letters/unread_electronic_ccs_component_spec.rb'
-
 # Offense count: 7
 RSpec/LeakyConstantDeclaration:
   Exclude:
@@ -560,6 +553,7 @@ Rails/ContentTag:
 Rails/FilePath:
   Exclude:
     - 'spec/rails_helper.rb'
+    - 'spec/components/renalware/letters/unread_electronic_ccs_component_spec.rb'
 
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).

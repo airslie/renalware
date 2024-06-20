@@ -4,21 +4,10 @@ module Renalware
   module Messaging
     module Internal
       class ReceiptPolicy < BasePolicy
-        def mark_as_read?
-          update?
-        end
-
-        def unread?
-          index?
-        end
-
-        def read?
-          index?
-        end
-
-        def sent?
-          index?
-        end
+        def mark_as_read? = update?
+        def unread?       = index?
+        def read?         = index?
+        def sent?         = index?
       end
     end
   end

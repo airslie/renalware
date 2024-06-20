@@ -3,4 +3,4 @@
 
 = within_admin_layout(title: "Clinic Visits") do
   = render "table", clinic_visits: visits
-  = paginate visits
+  == pagy_nav(pagy) if pagy.pages > 1

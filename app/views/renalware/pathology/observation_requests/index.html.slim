@@ -8,7 +8,7 @@
     .row
       = render "filters", search: search, patient: patient, obr_filter_options: obr_filter_options
       #observation-requests.large-6.columns data-controller="add-top-horizontal-scrollbar"
-        = render "table", observation_requests: observation_requests, patient: patient
+        = render "table", observation_requests: observation_requests, patient: patient, pagy: pagy
 
       .large-6.columns
         #observations

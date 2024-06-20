@@ -7,17 +7,9 @@ module Renalware
         !record.read? && (record.letter.approved? || record.letter.completed?)
       end
 
-      def unread?
-        index?
-      end
-
-      def read?
-        index?
-      end
-
-      def sent?
-        index?
-      end
+      def unread?   = index?
+      def read?     = index?
+      def sent?     = index?
     end
   end
 end

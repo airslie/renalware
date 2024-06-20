@@ -5,6 +5,8 @@ require "rails_helper"
 module Renalware
   module Letters
     describe Letter do
+      it_behaves_like "a Paranoid model"
+
       it :aggregate_failures do
         is_expected.to validate_presence_of(:letterhead)
         is_expected.to validate_presence_of(:patient)
@@ -18,6 +20,7 @@ module Renalware
         is_expected
           .to have_many(:online_reference_links)
           .through(:qr_encoded_online_reference_links)
+        is_expected.to have_db_index(:deleted_at)
       end
 
       describe "validate_presence_of(topic)" do

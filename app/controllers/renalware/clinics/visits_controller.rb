@@ -4,18 +4,19 @@
 module Renalware
   module Clinics
     class VisitsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         visits_query = VisitQuery.new(query_params)
-        visits = visits_query.call.page(page).per(per_page)
+        pagy, visits = pagy(visits_query.call)
         authorize visits
 
         render locals: {
           visits: CollectionPresenter.new(visits, ClinicVisitPresenter),
           query: visits_query.search,
           clinics: Clinic.ordered,
-          users: User.ordered
+          users: User.ordered,
+          pagy: pagy
         }
       end
 

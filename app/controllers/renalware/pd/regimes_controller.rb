@@ -5,21 +5,20 @@ module Renalware
     class RegimesController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
-        regimes = regime_type_class
-          .for_patient(pd_patient)
-          .with_bags
-          .ordered
-          .page(page).per(per_page)
+        pagy, regimes = pagy(
+          regime_type_class.for_patient(pd_patient).with_bags.ordered
+        )
 
         authorize regimes
 
         render locals: {
           patient: pd_patient,
           regimes: regimes,
-          pd_type_string: pd_type_string
+          pd_type_string: pd_type_string,
+          pagy: pagy
         }
       end
 

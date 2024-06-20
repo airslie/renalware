@@ -38,6 +38,30 @@ module Renalware
 
           expect(xml).to eq(expected_xml)
         end
+
+        it "omits Country if country code is blank" do
+          address = build(
+            :address,
+            street_1: "S1",
+            street_2: "S2",
+            street_3: "S3",
+            town: "T",
+            postcode: "P",
+            county: nil
+          )
+          expected_xml = <<~XML.squish.gsub("> <", "><")
+            <Address use="H">
+              <Street>S1, S2, S3</Street>
+              <Town>T</Town>
+              <County/>
+              <Postcode>P</Postcode>
+            </Address>
+          XML
+
+          xml = Ox.dump(described_class.new(address: address).xml, indent: -1)
+
+          expect(xml).to eq(expected_xml)
+        end
       end
     end
   end

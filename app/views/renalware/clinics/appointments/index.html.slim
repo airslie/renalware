@@ -99,4 +99,4 @@
                   = list.definition(:outcome_notes){ |value| simple_format(value) }
                   = list.definition(:dna_notes){ |value| simple_format(value) }
 
-    = paginate appointments
+    == pagy_nav(pagy) if pagy.pages > 1

@@ -3,13 +3,13 @@
 module Renalware
   module System
     class DownloadsController < BaseController
-      include Concerns::Pageable
+      include Pagy::Backend
 
       def index
         query = DownloadQuery.new(params[:q])
-        items = query.call.page(page).per(per_page)
+        pagy, items = pagy(query.call)
         authorize items
-        render locals: { items: items, search: query.search }
+        render locals: { items: items, search: query.search, pagy: pagy }
       end
 
       # Redirects the uploaded file eg PDF etc

@@ -5,16 +5,18 @@ module Renalware
     class ObservationRequestsController < BaseController
       include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PatientCasting
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         authorize pathology_patient
-        observation_requests = find_observation_requests
+        query = find_observation_requests
+        pagy, observation_requests = pagy(query.result)
         render locals: {
-          observation_requests: observation_requests.result.page(page).per(per_page),
-          search: observation_requests,
+          observation_requests: observation_requests,
+          search: query,
           obr_filter_options: obr_filter_options,
-          patient: pathology_patient
+          patient: pathology_patient,
+          pagy: pagy
         }
       end
 

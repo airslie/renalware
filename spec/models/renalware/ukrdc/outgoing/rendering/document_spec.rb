@@ -43,7 +43,7 @@ module Renalware
 
         it do
           create(:hospital_unit, unit_code: "KCH", renal_registry_code: "123")
-          allow(Renalware::Letters::PdfRenderer).to receive(:call).and_return("xxx")
+          allow(Renalware::Letters::Rendering::PdfRenderer).to receive(:call).and_return("xxx")
           expected_stream = Base64.encode64("xxx")
           letter = create_a_letter
           expected_xml = <<~XML.squish.gsub("> <", "><")

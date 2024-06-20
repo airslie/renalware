@@ -6,4 +6,4 @@
           body_compositions: body_compositions,
           patient: patient
 
-  = paginate body_compositions
+  == pagy_nav(pagy) if pagy.pages > 1

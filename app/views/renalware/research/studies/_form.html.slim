@@ -9,17 +9,18 @@ br
   = f.input :leader, wrapper: :horizontal_small
   = f.input :private,
             wrapper: :horizontal_small,
-            hint: "Only investigators in this study, or any user at the host site, can see "\
-                  "the patients who are participants in a private study"
+            hint: t(".hints.private_html")
   = f.input :application_url,
             wrapper: :horizontal_medium,
-            hint: "If there is an an external application associated with this study " \
-                  "you can enter it here and, for participanting patients, the link " \
-                  "will appear at the top of patient pages.<br/>" \
-                  "Use the format https://my-research-app/participations/{external_id}<br/> if you " \
-                  "The {external_id} placeholder will be replaced with " \
-                  "research_participation_external_id".html_safe,
-            placeholder: "e.g. https://my-research-app/participations/{external_id}"
+            placeholder: "e.g. https://my-research-app/participations/{external_id}",
+            hint: t(".hints.application_url_html")
+            / "If there is an an external application associated with this study " \
+            /       "you can enter it here and, for participanting patients, the link " \
+            /       "will appear at the top of patient pages.<br/>" \
+            /       "Use the format https://my-research-app/participations/{external_id}<br/> if you " \
+            /       "The {external_id} placeholder will be replaced with " \
+            /       "research_participation_external_id".html_safe,
+
   = f.input :started_on, as: :flatpickr, wrapper: :horizontal_datepicker
   = f.input :terminated_on, as: :flatpickr, wrapper: :horizontal_datepicker
   = f.input :notes, as: :text, wrapper: :horizontal_large, input_html: { rows: 6 }

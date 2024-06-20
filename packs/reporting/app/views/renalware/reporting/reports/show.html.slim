@@ -31,3 +31,5 @@
     = render Renalware::SpinnerComponent.new do |spinner|
       = spinner.with_main_content do
         p.text-center Loading please wait...
+
+  = render("info", options: options) if current_user_is_super_admin?

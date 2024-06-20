@@ -33,4 +33,4 @@
                 ' Sent to:
               span = message.recipients.map(&:to_s).join(" & ")
             p= message.body
-  == pagy_nav pagination
+  == pagy_nav(pagy) if pagy.pages > 1

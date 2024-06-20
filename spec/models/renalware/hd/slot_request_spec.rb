@@ -11,9 +11,13 @@ module Renalware
         is_expected.to be_versioned
         is_expected.to belong_to(:patient)
         is_expected.to belong_to(:deletion_reason)
+        is_expected.to belong_to(:location)
+        is_expected.to belong_to(:access_state)
         is_expected.to validate_presence_of(:patient_id)
         is_expected.to validate_presence_of(:urgency)
         is_expected.to validate_presence_of(:notes)
+        is_expected.to validate_presence_of(:location)
+        is_expected.to validate_presence_of(:access_state)
       end
 
       describe "uniqueness" do

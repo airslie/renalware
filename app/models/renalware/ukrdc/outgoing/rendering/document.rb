@@ -37,7 +37,7 @@ module Renalware
           # rubocop:enable Metrics/AbcSize
 
           def encoded_document_content
-            Base64.encode64(Renalware::Letters::PdfRenderer.call(letter))
+            Base64.encode64(Renalware::Letters::Rendering::PdfRenderer.call(letter))
           end
         end
       end

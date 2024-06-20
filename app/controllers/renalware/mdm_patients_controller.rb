@@ -7,7 +7,7 @@
 module Renalware
   class MDMPatientsController < BaseController
     include PresenterHelper
-    include Renalware::Concerns::Pageable
+    include Pagy::Backend
 
     protected
 
@@ -19,13 +19,15 @@ module Renalware
 
     def build_presenter(**args)
       query = args.fetch(:query)
+      pagy, patients = pagy(query.call)
 
       MDMPatientsPresenter.new(
-        patients: query.call.page(page).per(per_page),
+        patients: patients,
         page_title: args.fetch(:page_title),
         view_proc: args.fetch(:view_proc),
         q: query.search,
-        patient_presenter_class: args[:patient_presenter_class]
+        patient_presenter_class: args[:patient_presenter_class],
+        pagy: pagy
       )
     end
   end

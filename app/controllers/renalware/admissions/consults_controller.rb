@@ -5,7 +5,7 @@ require "collection_presenter"
 module Renalware
   module Admissions
     class ConsultsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
 
       # rubocop:disable Metrics/AbcSize
@@ -27,11 +27,12 @@ module Renalware
             render_with_wicked_pdf options
           end
           format.html do
-            consults = query.call.page(page).per(per_page)
+            pagy, consults = pagy(query.call)
             authorize consults
             render locals: {
               consults: CollectionPresenter.new(consults, ConsultPresenter),
-              query: query.search
+              query: query.search,
+              pagy: pagy
             }
           end
         end

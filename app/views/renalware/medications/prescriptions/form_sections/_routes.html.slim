@@ -1,0 +1,23 @@
+- if presenter.medication_routes_collection.count == 2
+  .mb-3
+    - name, id = presenter.medication_routes_collection.last
+    = f.hidden_field :medication_route_id, value: id
+    .row.select.optional.medications_prescription_form
+      .small-12.medium-4.large-3.columns
+        = f.label :medication_route
+      .small-12.medium-8.large-9.columns.horizontal_medium
+        .border.bg-gray-50.border-gray-100.rounded.py-2.px-4.lg:mr-12= name
+- else
+  - if presenter.medication_routes_collection.size > 20
+    .mb-4= f.association :medication_route,
+                          collection: presenter.medication_routes_collection,
+                          include_blank: false,
+                          input_html: { \
+                            data: { controller: "slimselect" },
+                          },
+                          wrapper: :horizontal_medium
+  - else
+    = f.association :medication_route,
+                    collection: presenter.medication_routes_collection,
+                    include_blank: false,
+                    wrapper: :horizontal_medium

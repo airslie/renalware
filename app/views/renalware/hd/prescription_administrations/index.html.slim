@@ -1,4 +1,4 @@
 = within_patient_layout(title: "Drugs Given on HD") do
   = render "renalware/hd/prescription_administrations/dialog_placeholder"
   = render "table", prescription_administrations: prescription_administrations
-  = paginate prescription_administrations
+  == pagy_nav(pagy) if pagy.pages > 1

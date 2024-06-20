@@ -27,18 +27,32 @@ module Renalware
           end
 
           def call
-            search
-              .result
-              .include(ModalityScopes)
-              .preload(current_modality: [:description])
-              .merge(HD::Patient.with_profile)
-              .eager_load(:profile)
-              .with_current_modality_matching(MODALITY_NAMES)
-              .where("renal_profiles.esrf_on IS NULL")
+            search.result
           end
 
           def search
-            @search ||= relation.ransack(query_params)
+            relation
+              .include(ModalityScopes)
+              .include(QueryablePatient)
+              .merge(HD::Patient.with_profile)
+              .eager_load(:profile)
+              .preload(current_modality: [:description])
+              .with_current_modality_matching(MODALITY_NAMES)
+              .where("renal_profiles.esrf_on IS NULL")
+              .ransack(query_params)
+          end
+
+          module QueryablePatient
+            extend ActiveSupport::Concern
+            included do
+              ransacker :hd_profile_unit_name, type: :string do
+                Arel.sql("hospital_units.name")
+              end
+
+              ransacker :hd_profile_unit_id, type: :string do
+                Arel.sql("hospital_units.id")
+              end
+            end
           end
         end
       end

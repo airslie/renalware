@@ -3,13 +3,18 @@
 module Renalware
   module Research
     class ParticipationsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         authorize Participation, :index?
         query = ParticipationQuery.new(study: study, options: params[:q])
-        participations = query.call.page(page).per(per_page)
-        render locals: { study: study, participations: participations, query: query.search }
+        pagy, participations = pagy(query.call)
+        render locals: {
+          study: study,
+          participations: participations,
+          query: query.search,
+          pagy: pagy
+        }
       end
 
       def show

@@ -5,6 +5,5 @@
   = render "filters", q: q
 
 = within_admin_layout(title: "Directory")
-  = page_entries_info people
   = render "table", people: people
-  = paginate people
+  == pagy_nav(pagy) if pagy.pages > 1

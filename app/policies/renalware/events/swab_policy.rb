@@ -3,9 +3,7 @@
 module Renalware
   module Events
     class SwabPolicy < EventPolicy
-      def edit?
-        true
-      end
+      def edit? = true
       alias update? edit?
     end
   end

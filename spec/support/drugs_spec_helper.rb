@@ -18,7 +18,7 @@ module DrugsSpecHelper
 
   def load_med_routes
     medication_routes = {
-      "PO" => "Per Oral",
+      "PO" => "Oral",
       "IV" => "Intravenous",
       "SC" => "Subcutaneous",
       "IM" => "Intramuscular",
@@ -29,6 +29,14 @@ module DrugsSpecHelper
       route = create(:medication_route, code: code, name: name)
       instance_variable_set(:"@#{code.downcase}", route)
     end
+  end
+
+  def refresh_prescribable_drugs_materialized_view
+    Scenic.database.refresh_materialized_view(
+      "drug_prescribable_drugs",
+      concurrently: false,
+      cascade: false
+    )
   end
 
   private

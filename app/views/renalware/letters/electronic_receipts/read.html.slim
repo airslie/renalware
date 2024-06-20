@@ -6,4 +6,4 @@
 
 = within_admin_layout(title: "Electronic CCs") do
   = render "table", receipts: receipts
-  = paginate receipts
+  == pagy_nav(pagy) if pagy.pages > 1

@@ -31,4 +31,4 @@
           td= log.pages
           td= log.error&.truncate(3000)
 
-  == pagy_nav pagy
+  == pagy_nav(pagy) if pagy.pages > 1

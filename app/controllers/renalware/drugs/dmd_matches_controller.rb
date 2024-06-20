@@ -1,17 +1,24 @@
 # frozen_string_literal: true
 
+require "csv"
+
 module Renalware
   module Drugs
     class DMDMatchesController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
-        dmd_matches_search = DMDMatch.ransack(params.fetch(:q, {}))
-        dmd_matches_search.sorts = "name"
-        dmd_matches = dmd_matches_search.result.page(page).per(per_page)
         authorize Drug
 
-        render locals: { dmd_matches: dmd_matches, dmd_matches_search: dmd_matches_search }
+        dmd_matches_search = DMDMatch.ransack(params.fetch(:q, {}))
+        dmd_matches_search.sorts = "name"
+        pagy, dmd_matches = pagy(dmd_matches_search.result)
+
+        render locals: {
+          dmd_matches: dmd_matches,
+          dmd_matches_search: dmd_matches_search,
+          pagy: pagy
+        }
       end
 
       def new

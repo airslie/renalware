@@ -3,13 +3,15 @@
 module Renalware
   module Snippets
     class SnippetsController < BaseController
+      include Pagy::Backend
+
       def index
         authorize Snippet, :index?
         snippets = snippets_for_author(author)
         search = snippets.ransack(params[:q])
         search.sorts = ["times_used desc", "last_used_on desc"] if search.sorts.empty?
-        snippets = paginate(search.result, default_per_page: 10)
-        render locals: { snippets: snippets, search: search, author: author }
+        pagy, snippets = pagy(search.result)
+        render locals: { snippets: snippets, search: search, author: author, pagy: pagy }
       end
 
       def new

@@ -1,3 +1,3 @@
 = within_admin_layout(title: "Admission Requests (TCI list)") do
   = render "table", requests: requests
-  = paginate requests
+  == pagy_nav(pagy) if pagy.pages > 1

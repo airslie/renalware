@@ -5,6 +5,8 @@ module Renalware
     class PrescriptionFormPresenter
       attr_reader :selected_drug_id, :selected_form_id, :prescription, :selected_trade_family_id
 
+      delegate_missing_to :prescription
+
       SEPARATOR = ":"
 
       OTHER_FREQUENCY = OpenStruct.new(name: Drugs::Frequency::OTHER_NAME,
@@ -50,9 +52,15 @@ module Renalware
                         vmps
                       end
 
-          MedicationRoute.where(id: selection.map(&:route_id))
-            .presence || MedicationRoute.all
+          MedicationRoute
+            .ordered
+            .where(id: selection.map(&:route_id))
+            .presence || MedicationRoute.ordered
         end
+      end
+
+      def medication_routes_collection
+        default_placeholder + medication_routes.pluck(:name, :id)
       end
 
       def forms
@@ -62,13 +70,15 @@ module Renalware
                    Drugs::Form.all
       end
 
+      def forms_collection
+        default_placeholder + forms.pluck(:name, :id)
+      end
+
       def drugs_collection
-        if prescription.drug&.inactive?
-          [[prescription.drug.name, prescription.drug.id]]
-        elsif esi_or_peritonitis_episode?
-          antibiotics_drug_list
+        if esi_or_peritonitis_episode?
+          antibiotics_drug_list # TODO: add query param filter to prescribable drugs
         else
-          drugs_and_trade_families_list
+          [[effective_drug_name, effective_drug_id]]
         end
       end
 
@@ -91,11 +101,29 @@ module Renalware
         end
       end
 
+      def unit_of_measures_collection
+        default_placeholder + unit_of_measures.pluck(:name, :id)
+      end
+
+      def default_placeholder
+        [["Please select", nil, "data-placeholder": "true"]]
+      end
+
       def frequencies
         Drugs::Frequency.ordered.to_a + [OTHER_FREQUENCY]
       end
 
       private
+
+      def effective_drug_id
+        [
+          prescription.drug_id,
+          prescription.trade_family_id
+        ].compact_blank.join(SEPARATOR)
+      end
+
+      # drug_name here is the concatenation of drug name and tf name (if present)
+      def effective_drug_name = prescription.drug_name
 
       def antibiotics_drug_list
         Drugs::Drug.active.for(:antibiotic).order(:name).pluck(:name, :id)
@@ -138,18 +166,18 @@ module Renalware
         Drugs::Drug.from(Drugs::Drug.arel_table.create_table_alias(union, :drugs))
           .with_deleted
           .order(:name, "trade_family_name NULLS FIRST")
-          .pluck(
-            Arel.sql(
-              "CASE when trade_family_name is null " \
-              "THEN name ELSE (name || ' (' || trade_family_name || ')') " \
-              "END"
-            ),
-            Arel.sql(
-              "CASE when trade_family_name is null " \
-              "THEN id::text ELSE (id || '#{SEPARATOR}' || trade_family_id) " \
-              "END"
-            )
-          )
+        # .pluck(
+        #   Arel.sql(
+        #     "CASE when trade_family_name is null " \
+        #     "THEN name ELSE (name || ' (' || trade_family_name || ')') " \
+        #     "END"
+        #   ),
+        #   Arel.sql(
+        #     "CASE when trade_family_name is null " \
+        #     "THEN id::text ELSE (id || '#{SEPARATOR}' || trade_family_id) " \
+        #     "END"
+        #   )
+        # )
       end
     end
   end

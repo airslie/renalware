@@ -35,7 +35,7 @@ gem "net-smtp", require: false # remove in Rails 7
 gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
 gem "paper_trail"
 gem "party_foul", "~> 1.5.5", github: "airslie/party_foul"
-gem "rails", "~> 7.1.0"
+gem "rails", "7.1.3.4"
 gem "renalware-forms", ">=0.1", github: "airslie/renalware-forms", branch: "main"
 gem "ruby-prof", require: false
 gem "solid_cache"
@@ -45,13 +45,17 @@ gem "terser"
 # Bear in mind the gem contains several platform-specific binaries so is pretty large,
 # so in a docker image the apt package is a better choice
 gem "httparty", require: false
-gem "wkhtmltopdf-binary", "0.12.3.1"
 
 gem "rake"
 
-# For sentry error reporting and metrics
-gem "sentry-rails"
+# For sentry error reporting and metrics - load stackprof first
+# rubocop:disable Bundler/OrderedGems
+gem "stackprof"
+gem "sentry-opentelemetry"
 gem "sentry-ruby"
+gem "sentry-rails"
+# rubocop:enable Bundler/OrderedGems
+
 gem "strong_migrations"
 
 gem "good_job"
@@ -61,6 +65,7 @@ group :test do
   gem "capybara" # , "~> 3.32"
   gem "capybara-screenshot" # , "~> 1.0"
   gem "capybara-select-2"
+  gem "cucumber", "~> 9.2"
   gem "cucumber-rails", require: false # , "~> 2.6.1", require: false # must be loaded in env.rb
   gem "database_cleaner", require: false # for cucumber (now not needed for rspec)
   gem "execjs" # , "2.7.0" # 2.8.1 raises an error
@@ -80,7 +85,7 @@ end
 group :uat, :pr do
   # For redirecting renalware-demo.herokuapp.com => demo.renalware.app
   gem "rack-host-redirect", github: "airslie/rack-host-redirect"
-  gem "wkhtmltopdf-heroku", "~> 2.12.3"
+  gem "wkhtmltopdf-heroku", "3.0.0.pre.rc0"
 end
 
 group :development do
@@ -90,11 +95,14 @@ group :development do
   gem "binding_of_caller"
   gem "bullet"
   gem "foreman", require: false
+  gem "rubocop-capybara", require: false
+  gem "rubocop-factory_bot", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rake", require: false
   gem "rubocop-rspec", require: false
-  gem "turnip", "~> 4.0", github: "airslie/turnip", require: false
+  gem "rubocop-rspec_rails", require: false
+  gem "turnip", github: "airslie/turnip", require: false
   # gem 'sql_tracker'
   gem "solargraph"
   gem "web-console"
@@ -111,4 +119,5 @@ group :development, :test do
   gem "pry-rails"
   gem "rspec-rails"
   gem "rubocop", require: false
+  gem "wkhtmltopdf-binary", "0.12.6.7"
 end

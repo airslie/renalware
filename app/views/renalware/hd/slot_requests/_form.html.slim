@@ -18,6 +18,7 @@
               = f.input :patient_id,
                         collection: collection,
                         selected: 1,
+                        error: false,
                         input_html: { \
                           class: "patient-id-select2 patient-ajax-search",
                           data: { "ajax--url" => search_patients_path(format: :json),
@@ -28,23 +29,18 @@
 
           = f.input :urgency, collection: urgency_dropdown_options, error: false
 
+          = f.association :location, error: false
+          = f.association :access_state, label: "Current Access", error: false
+
           div.block
-            div.mt-3
+            div.mt-1
               div
-                .flex(data-controller="hd-slot-request",
-                      data-hd-slot-request-disabled-class="text-gray-400 border-gray-400")
-                  = f.label :inpatient, class: "inline-flex items-center pr-8" do
-                    = f.check_box :inpatient,
-                                  data: { action: "click->hd-slot-request#inpatient_checked",
-                                          "hd-slot-request-target" => "inpatient" }
-                    span.ml-2 Inpatient
-                  = f.label :medically_fit_for_discharge,
-                            class: "inline-flex items-center text-gray-400 border-gray-400",
-                            title: "Medically fit for discharge",
-                            data: { "hd-slot-request-target" => "mffdLabel" } do
-                    = f.check_box :medically_fit_for_discharge,
-                                  data: { "hd-slot-request-target" => "mffdCheckbox" }
-                    span.ml-2 MFFD
+                = f.label :medically_fit_for_discharge,
+                          class: "inline-flex items-center mt-2",
+                          title: "Medically fit for discharge" do
+                  = f.check_box :medically_fit_for_discharge
+                  span.ml-2 MFFD
+
 
           div.block
             div.mt-1
@@ -68,7 +64,7 @@
                   = f.check_box :external_referral
                   span.ml-2 External referral
 
-          = f.input :notes, as: :text, input_html: { rows: 2 }
+          = f.input :notes, as: :text, input_html: { rows: 3 }
 
   .mt-5
     div.form-actions

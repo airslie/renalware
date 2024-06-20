@@ -66,10 +66,10 @@ describe Renalware::HD::ProtocolPresenter do
 
       presenter = described_class.new(patient, nil)
 
-      expect(presenter.prescriptions.to_a).to eq(
+      expect(presenter.prescriptions.map(&:id)).to eq(
         [
-          prescriptions[:hd_current],
-          prescriptions[:hd_starting_7d_hence]
+          prescriptions[:hd_current].id,
+          prescriptions[:hd_starting_7d_hence].id
         ]
       )
     end

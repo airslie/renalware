@@ -34,15 +34,10 @@ Renalware.configure do |config|
       "Renalware::HD::PatientListener",
       "Renalware::Patients::PatientListener"
     ],
-    "Renalware::Letters::ApproveLetter" => [
-      Renalware::Broadcasting::Subscriber.new(
-        "Renalware::Letters::CalculatePageCountJob",
-        async: true
-      )
-    ],
     "Renalware::Letters::ResolveDefaultElectronicCCs" => [
       "Renalware::HD::PatientListener"
     ],
+    "Renalware::Letters::ApproveLetter" => [],
     "Renalware::Pathology::CreateObservationRequests" => [],
     "Renalware::Events::CreateEvent" => [],
     "Renalware::Events::UpdateEvent" => [],
@@ -57,4 +52,16 @@ Renalware.configure do |config|
       "Renalware::Pathology::KFRE::Listener"
     ]
   }
+
+  unless config.letters_render_pdfs_with_prawn
+    # If using WickedPDF (wkhtmltopdf) then after letter is signed-off, run a job to
+    # calculate and store the number of pages in the file - useful to batch printing.
+    # If using prawn, we can quickly create the PDF and get the page count a the point of
+    # approval, because, unlike wkhtmltopdf, the PDF generation is very fast.
+    job = Renalware::Broadcasting::Subscriber.new(
+      "Renalware::Letters::CalculatePageCountJob",
+      async: true
+    )
+    config.broadcast_subscription_map["Renalware::Letters::ApproveLetter"] << job
+  end
 end

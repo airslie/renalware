@@ -134,7 +134,7 @@ module Renalware
         end
 
         def add_patient_if_not_exists(hl7_message)
-          Patients::Ingestion::Commands::AddPatient.call(hl7_message)
+          Patients::Ingestion::Commands::AddPatient.call(hl7_message, "AKI")
         end
       end
     end

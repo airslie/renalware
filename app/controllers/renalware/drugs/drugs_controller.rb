@@ -5,7 +5,15 @@ module Renalware
     class DrugsController < BaseController
       include Pagy::Backend
 
-      after_action :track_action, except: :selected_drugs
+      after_action :track_action, except: [:selected_drugs, :prescribable]
+
+      def prescribable
+        authorize Renalware::Drugs::Drug, :prescribable?
+        term = params[:term]
+        type = params[:type]
+
+        render json: find_drugs_matching_term_and_ordered_by_relevance(term, type)
+      end
 
       # Return a list of drugs as JSON for specific drug type (medication_switch)
       # TODO: Make a separate resource eg drug_/esa/drugs.json. E.g.
@@ -80,6 +88,26 @@ module Renalware
       end
 
       private
+
+      def sanitize(*) = Arel.sql(ActiveRecord::Base.sanitize_sql_array(*))
+
+      def find_drugs_matching_term_and_ordered_by_relevance(term, type)
+        drugs = Drugs::PrescribableDrug
+        if type.present?
+          drugs = drugs.joins(:drug_types).where(drug_types: { code: type })
+        end
+        drugs.where(sanitize(["compound_name ilike ?", "%#{term}%"]))
+          .or(
+            Drugs::PrescribableDrug.where(
+              sanitize(["SIMILARITY(compound_name,?) > 0.3", "%#{term}%"])
+            )
+          )
+          .order(
+            sanitize(["compound_name ilike ? desc", "#{term}%"]),
+            sanitize(["SIMILARITY(compound_name,?) desc", term]),
+            "compound_name"
+          )
+      end
 
       def drug_params
         params.require(:drugs_drug).permit(

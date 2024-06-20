@@ -1,0 +1,3 @@
+.clear-both.flex.items-center
+  == pagy_nav(pagy) if pagy.pages > 1
+  .pl-4.pt-2.text-right.text-gray-600== pagy_info(pagy) if pagy.count > 0

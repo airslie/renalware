@@ -64,7 +64,7 @@ module Renalware
       private
 
       def load_patients
-        @pagination, @patients = pagy(scope, items: 10, link_extra: "data-remote='true'")
+        @pagination, @patients = pagy(scope, items: 10, anchor_string: "data-remote='true'")
       end
 
       def scope

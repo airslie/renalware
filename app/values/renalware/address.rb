@@ -45,5 +45,20 @@ module Renalware
     def street
       [street_1, street_2, street_3].compact_blank.join(", ")
     end
+
+    # Used eg in prawn pdf rendering
+    def to_a
+      [
+        name,
+        organisation_name,
+        street_1,
+        street_2,
+        street_3,
+        town,
+        county,
+        postcode,
+        country
+      ].compact_blank
+    end
   end
 end

@@ -1,0 +1,6 @@
+- [ ] make parts view components?
+- [ ] render prawn in view components
+- [ ] keep section logic centralised
+- [ ] think about which folder pdf files live
+- [ ] are all letter parts view components with different 'views'
+- [ ] do we need prawn views a la https://github.com/cortiz/prawn-rails/blob/master/README.md ?

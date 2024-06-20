@@ -3,13 +3,8 @@
 module Renalware
   module System
     class ViewMetadataPolicy < BasePolicy
-      def edit?
-        user_is_super_admin?
-      end
-
-      def restore?
-        edit?
-      end
+      def edit?     = user_is_super_admin?
+      def restore?  = edit?
 
       alias :chart? :show?
       alias :chart_raw? :show?

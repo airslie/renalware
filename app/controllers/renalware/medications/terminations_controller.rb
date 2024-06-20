@@ -20,7 +20,7 @@ module Renalware
       def create
         termination = prescription.build_termination(termination_params)
 
-        if termination.save
+        if termination.save(validate: false)
           redirect_to return_to_param || patient_prescriptions_path(patient)
         else
           render_form(

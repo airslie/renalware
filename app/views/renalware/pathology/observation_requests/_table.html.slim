@@ -13,4 +13,4 @@ table data-behaviour="highlight"
                     remote: true
         td= observation_request.description.name
 
-= paginate observation_requests
+== pagy_nav(pagy) if pagy.pages > 1

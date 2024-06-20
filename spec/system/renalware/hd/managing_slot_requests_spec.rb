@@ -5,13 +5,23 @@ require "rails_helper"
 describe "Managing a list of HD Slot Requests" do
   include PatientsSpecHelper
 
+  let(:location) { create(:hd_slot_request_location, name: "ABC") }
+  let(:access_state) { create(:hd_slot_request_access_state) }
+
+  before do
+    location
+    access_state
+  end
+
   it "listing slot requests" do
     user = login_as_admin
     patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
     create(:hd_slot_request,
            patient: patient,
            created_at: "2023-10-01 03:03:03",
-           urgency: "highly_urgent")
+           urgency: "highly_urgent",
+           access_state: access_state,
+           location: location)
 
     visit renalware.hd_slot_requests_path
 
@@ -22,6 +32,8 @@ describe "Managing a list of HD Slot Requests" do
       expect(page).to have_content(patient.to_s)
       expect(page).to have_content(patient.local_patient_id)
       expect(page).to have_content("Highly urgent")
+      expect(page).to have_content(location.name)
+      expect(page).to have_content(access_state.name)
     end
   end
 
@@ -38,7 +50,9 @@ describe "Managing a list of HD Slot Requests" do
       select2(patient.to_s(:long), css: "#person-id-select2", search: true)
       select "urgent", from: "Urgency"
 
-      check "Inpatient"
+      select location.name, from: "Location"
+      select access_state.name, from: "Current Access"
+
       check "MFFD"
 
       check "Late presenter"
@@ -58,7 +72,8 @@ describe "Managing a list of HD Slot Requests" do
 
       slot_request = Renalware::HD::SlotRequest.last
       expect(slot_request).to have_attributes(
-        inpatient: true,
+        location_id: location.id,
+        access_state_id: access_state.id,
         medically_fit_for_discharge: true,
         late_presenter: true,
         suitable_for_twilight_slots: true,
@@ -87,7 +102,8 @@ describe "Managing a list of HD Slot Requests" do
       within("#modal") do
         # select2(patient.to_s(:long), css: "#person-id-select2", search: true)
         select "urgent", from: "Urgency"
-        check "Inpatient"
+        select location.name, from: "Location"
+        select access_state.name, from: "Current Access"
         check "Late presenter"
         check "Suitable for twilight slots"
         check "External referral"
@@ -101,7 +117,8 @@ describe "Managing a list of HD Slot Requests" do
       # TODO: Check the nag is displayed here on the page refresh!
 
       expect(Renalware::HD::SlotRequest.last).to have_attributes(
-        inpatient: true,
+        location_id: location.id,
+        access_state_id: access_state.id,
         late_presenter: true,
         suitable_for_twilight_slots: true,
         external_referral: true
@@ -113,9 +130,12 @@ describe "Managing a list of HD Slot Requests" do
     travel_to("01-Oct-2023 03:03") do
       user = login_as_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
+
       slot_request = create(
         :hd_slot_request,
         patient: patient,
+        location: location,
+        access_state: access_state,
         created_at: "2023-10-01 03:03:03",
         urgency: "highly_urgent"
       )
@@ -148,9 +168,12 @@ describe "Managing a list of HD Slot Requests" do
     travel_to("01-Oct-2023 03:03") do
       user = login_as_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
+
       slot_request = create(
         :hd_slot_request,
         patient: patient,
+        location: location,
+        access_state: access_state,
         created_at: "2023-10-01 03:03:03",
         urgency: "highly_urgent"
       )
@@ -183,14 +206,17 @@ describe "Managing a list of HD Slot Requests" do
   end
 
   describe "editing a patient", js: true do
-    context "when setting inpatient and MFFD to true" do
+    context "when setting MFFD to true" do
       it "stores the user and time when MFFD was checked" do
         freeze_time do
           user = login_as_admin
           patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
+
           create(
             :hd_slot_request,
             patient: patient,
+            location: location,
+            access_state: access_state,
             medically_fit_for_discharge: false,
             created_at: "2023-10-01 03:03:03",
             urgency: "highly_urgent",
@@ -204,7 +230,6 @@ describe "Managing a list of HD Slot Requests" do
             click_on "Edit"
           end
 
-          check "Inpatient"
           check "MFFD"
           click_on "Save"
 
@@ -214,7 +239,6 @@ describe "Managing a list of HD Slot Requests" do
           # if medically_fit_for_discharge was set to true then it should have stored the datetime
           # and user who made that change
           expect(Renalware::HD::SlotRequest.last).to have_attributes(
-            inpatient: true,
             medically_fit_for_discharge: true,
             medically_fit_for_discharge_at: Time.zone.now,
             medically_fit_for_discharge_by_id: user.id
@@ -227,11 +251,13 @@ describe "Managing a list of HD Slot Requests" do
           freeze_time do
             user = login_as_admin
             patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
+
             create(
               :hd_slot_request,
               patient: patient,
               created_at: "2023-10-01 03:03:03",
-              inpatient: true,
+              location: location,
+              access_state: access_state,
               medically_fit_for_discharge: true,
               medically_fit_for_discharge_at: Time.zone.now,
               medically_fit_for_discharge_by_id: user.id
@@ -244,7 +270,7 @@ describe "Managing a list of HD Slot Requests" do
               click_on "Edit"
             end
 
-            uncheck "Inpatient" # will automatically uncheck MFFD
+            uncheck "MFFD"
             click_on "Save"
 
             # wait for modal to be dismissed by checking a field on the modal is no longer there
@@ -253,7 +279,6 @@ describe "Managing a list of HD Slot Requests" do
             # if medically_fit_for_discharge was set to true then it should have stored the datetime
             # and user who made that change
             expect(Renalware::HD::SlotRequest.last).to have_attributes(
-              inpatient: false,
               medically_fit_for_discharge: false,
               medically_fit_for_discharge_at: nil,
               medically_fit_for_discharge_by_id: nil

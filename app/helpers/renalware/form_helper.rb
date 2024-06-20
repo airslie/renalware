@@ -29,9 +29,11 @@ module Renalware
       end
     end
 
+    # Given a string value of eg "ASDF" and w width of 5, return a span containing a left
+    # padded string with nbsp for padding eg "<span class='monospaced'>&nbsp;ASDF"</span>"
     def monospace(value, width = 5)
       tag.span(class: "monospaced") do
-        concat("%#{width}s" % value).gsub(/ /, "&nbsp;").html_safe
+        concat(("%#{width}s" % value).gsub(" ", "&nbsp;").html_safe)
       end
     end
 

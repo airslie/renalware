@@ -3,16 +3,16 @@
 module Renalware
   module Admissions
     class RequestsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         requests = Request
           .ordered
           .includes(:patient, :reason, :created_by, :updated_by, :hospital_unit)
           .all
-          .page(page).per(per_page)
+        pagy, requests = pagy(requests)
         authorize requests
-        render locals: { requests: requests }
+        render locals: { requests: requests, pagy: pagy }
       end
 
       def new

@@ -1,4 +1,4 @@
 = within_patient_layout(title: "HD Sessions") do
   .document.hd-sessions
     = render "renalware/hd/sessions/table", sessions: sessions
-    = paginate sessions
+    == pagy_nav(pagy) if pagy.pages > 1

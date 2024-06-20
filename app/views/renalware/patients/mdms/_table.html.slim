@@ -69,4 +69,8 @@ table#mdm-patients-table
         td
           / empty to allow table to expand to the right
 
-== pagy_nav options.pagination
+- pagy = options.pagination
+.clear-both.flex.items-center
+  == pagy_nav(pagy) if pagy.pages > 1
+  .pl-4.pt-2.text-right.text-gray-600== pagy_info(pagy) if pagy.count > 0
+

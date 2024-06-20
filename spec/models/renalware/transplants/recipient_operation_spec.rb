@@ -7,6 +7,7 @@ module Renalware
     describe RecipientOperation do
       it :aggregate_failures do
         is_expected.to belong_to(:patient).touch(true)
+        is_expected.to belong_to(:induction_agent)
         is_expected.to validate_presence_of(:performed_on)
         is_expected.to validate_presence_of(:operation_type)
         is_expected.to validate_presence_of(:hospital_centre)

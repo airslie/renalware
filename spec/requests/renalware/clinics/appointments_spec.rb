@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "Appointments" do
   describe "GET index" do
-    it "responds with a a list of appointments" do
+    it "responds with a ist of appointments" do
       user = login_as_clinical
       consultant = create(:consultant)
       patient = create(:clinics_patient, by: user)

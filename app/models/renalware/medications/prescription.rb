@@ -69,13 +69,12 @@ module Renalware
           .where("terminated_on IS NULL OR terminated_on > ?", date)
       }
       scope :terminated, lambda { |date = Date.current|
-        joins(:termination)
-          .where("terminated_on <= ?", date)
+        joins(:termination).where(termination: { terminated_on: ..date })
       }
       scope :to_be_administered_on_hd, lambda {
         current
           .where(administer_on_hd: true)
-          .where("prescribed_on <= ?", Time.zone.today)
+          .where(prescribed_on: ..Time.zone.today)
       }
       scope :having_drug_of_type, lambda { |drug_type_name|
         where("lower(drug_types.code) = lower(?)", drug_type_name)
@@ -83,12 +82,22 @@ module Renalware
       scope :to_be_administered_on_hd_and_starting_before, lambda { |date|
         current
           .where(administer_on_hd: true)
-          .where("prescribed_on <= ?", date)
+          .where(prescribed_on: ..date)
       }
       # Prescriptions created or changed since 14 days ago (and potentially into
       # the future). Because editing a prescription terminates it and creates a new one,
       # we are essentially searching on prescribed_on date here.
-      scope :recently_changed, -> { where("prescribed_on >= ?", 14.days.ago) }
+      scope :recently_changed, -> { where(prescribed_on: 14.days.ago..) }
+      scope :current_non_hd, -> { current.where.not(administer_on_hd: true) }
+      scope :current_hd, -> { current.where(administer_on_hd: true) }
+      scope :recently_changed_current, -> { current.recently_changed }
+
+      # Find non-current prescriptions terminated within 14 days
+      scope :recently_stopped, lambda {
+        terminated
+          .terminated_between(from: 14.days.ago, to: ::Time.zone.now)
+          .where.not(drug_id: current.map(&:drug_id))
+      }
 
       # This is a Ransack-compatible search predicate
       def self.default_search_order
@@ -100,6 +109,7 @@ module Renalware
               "medication_prescriptions.created_at <= ?", from, to)
       end
 
+      # Need to write a testing for this scope before using a range here
       def self.terminated_between(from:, to:)
         where("terminated_on >= ? and terminated_on <= ?", from, to)
       end

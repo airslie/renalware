@@ -1,8 +1,3 @@
-/ locals: (prescription:)
-/ Rails 7.1 strict locals:
-
-ruby:
-
 .max-w-4xl.document(data-controller="prescriptions alternative-form-submitter")
   br
 
@@ -14,107 +9,50 @@ ruby:
 
   = simple_form_for prescription,
                     url: update_url,
+                    input_html: { autocomplete: "off" },
                     html: { class: "fn-form prescription-form" },
                     wrapper: :horizontal_form do |f|
 
     = f.hidden_field :treatable_type
     = f.hidden_field :treatable_id
-
     = hidden_field_tag :return_to, return_to_param
-
     = render "renalware/shared/errors", model: f.object
-
 
     .med-form.content
       div
         .mb-4
           = f.input :drug_id_and_trade_family_id,
-            collection: presenter.drugs_collection,
-            prompt: :translate,
+            include_blank: false,
+            collection: prescription&.drug.present? ? presenter.drugs_collection : [["Please select", nil, "data-placeholder": "true"]],
             disabled: prescription.drug&.inactive?,
             hint: prescription.drug&.inactive? ? "No longer available": nil,
             input_html: { \
               data: { \
-                controller: "slimselect",
+                controller: "slimselect-ajax",
+                options_url: renalware.prescribable_drugs_drugs_path(term: "REPLACEME", format: :json),
                 action: "change->alternative-form-submitter#submit",
                 "alternative-form": "drug_search_form",
-              },
+              } \
             },
             wrapper: :horizontal_medium
 
         = turbo_frame_tag "drug_search_form_frame" do
-          .mb-4
-            = f.association :form,
-                            collection: presenter.forms,
-                            label_method: :name,
-                            input_html: { \
-                              data: { \
-                                controller: "slimselect",
-                                action: "change->alternative-form-submitter#submit",
-                                "alternative-form": "drug_search_form",
-                              },
-                            },
-                            prompt: (presenter.forms.size == 1 ? false : :translate),
-                            wrapper: :horizontal_medium
+          = render "renalware/medications/prescriptions/form_sections/forms", f: f, presenter: presenter
 
-          = f.input :dose_amount, wrapper: :horizontal_small
-
-          .mb-4
-            = f.association :unit_of_measure,
-                            collection: presenter.unit_of_measures,
-                            label_method: :name,
-                            input_html: { \
-                              data: { controller: "slimselect" },
-                            },
-                            prompt: (presenter.unit_of_measures.size == 1 ? false : :translate),
-                            wrapper: :horizontal_medium
-
-          .mb-4
-            = f.association :medication_route,
-                            collection: presenter.medication_routes,
-                            label_method: :name,
-                            input_html: { \
-                              data: { controller: "slimselect" },
-                            },
-                            prompt: (presenter.medication_routes.size == 1 ? false : :translate),
-                            wrapper: :horizontal_medium
-
-
-      div data-controller="show-on-selected"
-        ruby:
-          frequency_is_predefined = presenter.frequencies.find { _1.name == f.object.frequency }
-          select_other = presenter.frequencies.size == 1 || (f.object.frequency.present? && !frequency_is_predefined)
-
-        = f.input :frequency, wrapper: :horizontal_small,
-          collection: presenter.frequencies,
-          label_method: :title,
-          value_method: :name,
-          input_html: { data: { action: "show-on-selected#select" } },
-          selected: select_other ? Renalware::Drugs::Frequency::OTHER_NAME : f.object.frequency
-
-        div[ \
-          data-show-on-selected-target="item"
-          data-show-on-selected-option="other"
-          class=class_names(hidden: !select_other)
-        ]
-          = f.input :frequency, wrapper: :horizontal_small,
-            disabled: !select_other,
-            input_html: { value: (f.object.frequency if !frequency_is_predefined), autofocus: true },
-            label: t("activerecord.attributes.renalware/medications/prescription.frequency_freeform")
-
-      = f.input :frequency_comment, wrapper: :horizontal_medium
-
-      div(data-controller="simple-toggle" class="#{'disabled-input' unless policy(f.object).new_hd_prescription?}")
-        = f.input :administer_on_hd,
-                  wrapper: :horizontal_small,
-                  input_html: { disabled: !policy(f.object).new_hd_prescription?, data: { action: "click->simple-toggle#toggle"}}
-
-        div(data-simple-toggle-target="toggleable" class="#{'hidden' unless f.object.administer_on_hd?}")
-          = f.input :stat,
+          = f.input :dose_amount,
                     wrapper: :horizontal_small,
-                    hint: "if checked, the prescription will be automatically terminated once given"
+                    input_html: { autocomplete: "off", spellcheck: "false" }
 
-      = f.input :notes, wrapper: :horizontal_medium
+          = render "renalware/medications/prescriptions/form_sections/unit_of_measures", f: f, presenter: presenter
+          = render "renalware/medications/prescriptions/form_sections/routes", f: f, presenter: presenter
+
+      = render "renalware/medications/prescriptions/form_sections/frequency", f: f, presenter: presenter
+      = render "renalware/medications/prescriptions/form_sections/hd", f: f, presenter: presenter
+
+      = f.input :notes,
+                wrapper: :horizontal_medium,
+                input_html: { autocomplete: "off" }
+
       = f.input :prescribed_on, as: :flatpickr, wrapper: :horizontal_datepicker
 
       = f.simple_fields_for(:termination) do |tf|
@@ -123,27 +61,7 @@ ruby:
                     required: false,
                     wrapper: :horizontal_datepicker
 
-      span(data-prescriptions-target= "providers")
-        = f.input :provider,
-                  collection: present(Renalware::Medications::Provider.codes, Renalware::Medications::ProviderCodePresenter),
-                  as: :inline_radio_buttons,
-                  label_method: :to_label,
-                  wrapper: :horizontal_medium,
-                  input_html: { data: { action: "change->prescriptions#toggleDeliveryDates", "prescriptions.target" => "providers"} }
-
-      / Only show this if home_delivery provider is active/selected. See prescriptions stimulus controller.
-      .home_delivery_dates(style="display:none" data-prescriptions-target="homeDeliveryDates")
-        .row
-          .small-12.medium-4.large-3.columns
-          .small-12.medium-8.large-9.columns
-            label.right.inline Last home prescription date:
-            b= l(prescription.last_delivery_date)
-
-        .row
-          .small-12.medium-4.large-3.columns
-          .small-12.medium-8.large-9.columns
-            label.right.inline Next home prescription date:
-            b= l(prescription.next_delivery_date)
+      = render "renalware/medications/prescriptions/form_sections/provider", f: f, presenter: presenter
 
     .mt-6
       - back_path = back_url(patient_prescriptions_path(patient, treatable_id: prescription.treatable_id, treatable_type: prescription.treatable_type))

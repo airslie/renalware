@@ -8,7 +8,7 @@ module Renalware
       def self.model_name = ActiveModel::Name.new(self, nil, "Patient")
 
       def to_s(format = :long)
-        super(format)
+        super
       end
     end
   end

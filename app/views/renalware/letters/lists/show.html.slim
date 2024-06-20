@@ -1,3 +1,15 @@
+ruby:
+  form_opts = if Renalware.config.letters_render_pdfs_with_prawn
+                {
+                  data: {
+                    controller: "letters-batch-compile",
+                    action: "submit->letters-batch-compile#submit"
+                  }
+                }
+              else
+                {}
+              end
+
 - named_filter = params[:named_filter]&.to_sym || :all
 
 = content_for(:tabs) do
@@ -54,7 +66,7 @@
                     collection: form.page_count_options,
                     label: "Pages",
                     include_blank: form.allow_blank_inputs.include?(:page_count_in_array)
-        
+
   - if named_filter == :batch_printable
 
     ruby:
@@ -72,11 +84,13 @@
     / new window. At the same time on the original page we close the modal and display another one
     / which asks the user if the print batch was successful - if so we send a patch to update
     / the batch status and set letter status to Completed.
+
     = simple_form_for form,
                       as: :batch,
                       url: letters_batches_path,
                       method: :post,
-                      remote: true do |f|
+                      remote: true,
+                      **form_opts do |f|
       = f.input :enclosures_present, as: :hidden
       = f.input :notes_present, as: :hidden
       = f.input :state_eq, as: :hidden
@@ -85,7 +99,7 @@
       = f.input :letterhead_id_eq, as: :hidden
       = f.input :page_count_in_array, as: :hidden
       - if letters.total_count > 0
-        = f.submit button_title, class: "button", disabled: letters.none?
+        = f.submit button_title, class: "button", disabled: letters.none?, formtarget: "_blank"
 
     #batch-print-modal.reveal-modal.small(data-reveal
       data-options="close_on_background_click:false")

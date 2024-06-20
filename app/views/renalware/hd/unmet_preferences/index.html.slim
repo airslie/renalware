@@ -1,4 +1,4 @@
 = within_admin_layout(title: "HD Patients with un-met preferences") do
   = render "filters", query: query
   = render "table", patients: patients
-  == pagy_nav(pagy)
+  == pagy_nav(pagy) if pagy.pages > 1

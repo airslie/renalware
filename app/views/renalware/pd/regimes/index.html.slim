@@ -4,4 +4,4 @@
   breadcrumbs: breadcrumb_for("PD Summary", patient_pd_dashboard_path(patient))) do
 
   = render "renalware/pd/#{pd_type_string.downcase}_regimes", local_assigns
-  = paginate regimes
+  == pagy_nav(pagy) if pagy.pages > 1

@@ -7,15 +7,17 @@ module Renalware
     class BodyCompositionsController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
         authorize BodyComposition, :index?
-        body_compositions = BodyComposition
-          .for_patient(clinical_patient)
-          .ordered.page(page)
-          .per(per_page)
-        render locals: { patient: clinical_patient, body_compositions: body_compositions }
+        pagy, body_compositions = pagy(BodyComposition.for_patient(clinical_patient).ordered)
+
+        render locals: {
+          patient: clinical_patient,
+          body_compositions: body_compositions,
+          pagy: pagy
+        }
       end
 
       def show

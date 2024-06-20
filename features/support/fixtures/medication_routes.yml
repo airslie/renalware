@@ -1,6 +1,6 @@
 po:
   code: "PO"
-  name: "Per Oral"
+  name: "Oral"
 iv:
   code: "IV"
   name: "Intravenous"

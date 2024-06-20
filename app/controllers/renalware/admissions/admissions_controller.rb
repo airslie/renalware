@@ -5,15 +5,16 @@ require "collection_presenter"
 module Renalware
   module Admissions
     class AdmissionsController < BaseController
-      include Renalware::Concerns::Pageable
+      include Pagy::Backend
 
       def index
-        admissions = search_form.submit.page(page).per(per_page)
+        pagy, admissions = pagy(search_form.submit)
         authorize admissions
 
         render locals: {
           admissions: CollectionPresenter.new(admissions, AdmissionPresenter),
-          form: search_form
+          form: search_form,
+          pagy: pagy
         }
       end
 

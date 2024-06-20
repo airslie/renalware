@@ -24,6 +24,13 @@ module Renalware
         letter_event.description
       end
 
+      def simple_event_description
+        clinic = letter_event.clinic
+        return if clinic.blank?
+
+        "Clinic: #{clinic.description} on #{::I18n.l(letter_event.date.to_date, format: :long)}"
+      end
+
       def main_recipient
         @main_recipient ||= recipient_presenter_class.new(super)
       end
@@ -65,11 +72,19 @@ module Renalware
         html
       end
 
+      def pdf_content
+        if archived?
+          archive.pdf_content
+        else
+          @pdf_content ||= Formats::Pdf::Document.new(self, nil).build.render
+        end
+      end
+
       def content
         if archived?
           archive.content
         else
-          @content ||= HtmlRenderer.new.call(self)
+          @content ||= Rendering::HtmlRenderer.new(self).call
         end
       end
 
@@ -112,6 +127,14 @@ module Renalware
 
       def typist
         created_by
+      end
+
+      def patient_summary_string
+        <<-PAT.squish
+          #{patient.title.presence || patient.sex.salutation} #{patient.full_name}
+          (#{patient.sex.code} DOB: #{::I18n.l(patient.born_on)}
+          #{patient.hospital_identifiers} NHS No: #{patient.nhs_number})
+        PAT
       end
 
       private

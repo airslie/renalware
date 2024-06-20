@@ -15,7 +15,7 @@ module Renalware
           authorize Patient, :index?
           pagy, patients = pagy(
             Mailshot.new(sql_view_name: sql_view_name).recipient_patients,
-            link_extra: "data-remote='true'"
+            anchor_string: "data-remote='true'"
           )
           render locals: {
             patients: patients,

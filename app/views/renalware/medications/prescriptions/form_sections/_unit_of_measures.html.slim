@@ -1,0 +1,27 @@
+
+- if presenter.unit_of_measures_collection.size == 2
+  / Readonly text as there is just one option
+  .mb-3
+    - name, id = presenter.unit_of_measures_collection.last
+    = f.hidden_field :unit_of_measure_id, value: id
+    .row.select.optional.medications_prescription_unit_of_measure
+      .small-12.medium-4.large-3.columns
+        = f.label :unit_of_measure
+      .small-12.medium-8.large-9.columns.horizontal_medium
+        .border.bg-gray-50.border-gray-100.rounded.py-2.px-4.lg:mr-12= name
+- elsif presenter.unit_of_measures_collection.size > 20
+  / Searchable slimselect
+  .mb-4
+    = f.association :unit_of_measure,
+                    collection: presenter.unit_of_measures_collection,
+                    include_blank: false,
+                    input_html: { \
+                      data: { controller: "slimselect" },
+                    },
+                    wrapper: :horizontal_medium
+- else
+  / Normal select
+  = f.association :unit_of_measure,
+                  collection: presenter.unit_of_measures,
+                  include_blank: true,
+                  wrapper: :horizontal_medium

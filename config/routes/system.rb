@@ -34,6 +34,9 @@ devise_for :users,
 get "/check_session_expired" => "session_timeout#check_session_expired", as: "check_session_expired"
 get "/keep_session_alive" => "session_timeout#keep_session_alive", as: "keep_session_alive"
 
+# Status page
+get "/status" => "system/status#show", as: "status"
+
 # enable mail previews in all environments
 get "/rails/mailers" => "rails/mailers#index"
 get "/rails/mailers/*path" => "rails/mailers#preview"

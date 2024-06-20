@@ -3,13 +3,8 @@
 module Renalware
   module Admin
     class ConfigPolicy < BasePolicy
-      def show?
-        user_is_super_admin?
-      end
-
-      def update?
-        false
-      end
+      def show?   = user_is_super_admin?
+      def update? = false
       alias edit? update?
       alias create? update?
       alias destroy? update?

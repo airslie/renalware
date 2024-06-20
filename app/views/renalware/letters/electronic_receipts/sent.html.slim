@@ -42,4 +42,4 @@
               = simple_format letter.body
           td
 
-  = paginate receipts
+  == pagy_nav(pagy) if pagy.pages > 1

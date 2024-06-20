@@ -60,6 +60,11 @@ en:
         warm_ischaemic_time_formatted: Warm Ischaemic Time
   enumerize:
     renalware/transplants/recipient_operation:
+      immunological_risk:
+        low: Low
+        intermediate: Intermediate
+        high: High
+        ABOi: ABOi
       operation_type:
         kidney: Kidney only
         kidney_dual: Kidney only - dual
