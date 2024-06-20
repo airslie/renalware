@@ -9,7 +9,7 @@ require "combine_pdf"
 module Renalware
   module Letters
     module Rendering
-      class WickedBatchPdf
+      class WickedBatchPdfRenderer
         MAX_PAGE_COUNT = 10
 
         # TODO: insert blank pages if odd/even etc
