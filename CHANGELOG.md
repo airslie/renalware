@@ -11,14 +11,22 @@ This project adheres to Semantic Versioning.
 
 ## 2.4.4
 ### Added
+- Continue building out support for rendering PDF letter using prawn (no change to current wkhtmltopdf rendering so nothing to test yet) #4682
+- Add a simple status page at /status #4838
+
 ### Changed
 - Disable Edge autocomplete on prescription inputs #4821
 - Add optional weighting to medication_routes #4811
   Change via database to make routes with a larger value float to the top of the list.
-- Highlight search hits in slim-select searchable dropdowns eg for drugs search on prescriptions form #4810
+- Use type-ahead ajax fuzzy lookup when searching for drugs in prescriptions form #4806 #4810
+- Allow superadmin to soft-delete approved letters #4831
+- Add configuration to allow letters to be omitted from UKRDC XML #4853
+- Display readonly research study settings on Study Summary page #4843
+- Update to Ruby 3.3.3
 ### Fixed
 - Fix modality filter and modality sorting on RR Preflight Checks page #4833
 - Fix 'access token expired' error syncing dmd with ontology #4813
+- Change research_participations.external_id column from int to text to allow for alphanumeric references #4844
 
 ## 2.4.3
 ### Added

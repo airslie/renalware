@@ -13,10 +13,12 @@ module Renalware
       def self.call(...) = new(...).broadcasting_to_configured_subscribers.call
 
       def call
-        letter.approved? ? soft_delete : hard_delete
+        letter_approved? ? soft_delete : hard_delete
       end
 
       private
+
+      def letter_approved? = letter.approved? || letter.completed?
 
       def hard_delete
         letter.really_destroy!
