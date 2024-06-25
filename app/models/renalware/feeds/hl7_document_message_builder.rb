@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "base64"
+
 # rubocop:disable Metrics/AbcSize
 module Renalware
   module Feeds

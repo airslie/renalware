@@ -28,7 +28,7 @@ describe "Managing clinical study participation" do
   end
 
   describe "GET new" do
-    it "renders new pariticipation form provided the the current user is an investigator" do
+    it "renders new participation form provided the the current user is an investigator" do
       study = create_study
       create(:research_investigatorship, study: study, user: user)
 
@@ -65,7 +65,12 @@ describe "Managing clinical study participation" do
         study = create_study
         create(:research_investigatorship, study: study, user: user)
         patient = create(:patient, by: user)
-        params = { patient_id: patient.id, joined_on: "01-Oct-2017", left_on: "02-Oct-2017" }
+        params = {
+          patient_id: patient.id,
+          joined_on: "01-Oct-2017",
+          left_on: "02-Oct-2017",
+          external_reference: "123"
+        }
 
         post(
           research_study_participations_path(study),
@@ -79,7 +84,10 @@ describe "Managing clinical study participation" do
 
         expect(Renalware::Research::Participation.count).to eq(1)
         participant = Renalware::Research::Participation.first
-        expect(participant.patient.id).to eq(patient.id)
+        expect(participant).to have_attributes(
+          patient_id: patient.id,
+          external_reference: "123"
+        )
         expect(l(participant.joined_on)).to eq("01-Oct-2017")
         expect(l(participant.left_on)).to eq("02-Oct-2017")
       end

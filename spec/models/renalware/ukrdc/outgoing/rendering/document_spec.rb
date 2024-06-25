@@ -43,7 +43,8 @@ module Renalware
 
         it do
           create(:hospital_unit, unit_code: "KCH", renal_registry_code: "123")
-          allow(Renalware::Letters::Rendering::PdfRenderer).to receive(:call).and_return("xxx")
+          renderer = double(call: "xxx") # rubocop:disable RSpec/VerifiedDoubles
+          allow(Renalware::Letters::RendererFactory).to receive(:renderer_for).and_return(renderer)
           expected_stream = Base64.encode64("xxx")
           letter = create_a_letter
           expected_xml = <<~XML.squish.gsub("> <", "><")

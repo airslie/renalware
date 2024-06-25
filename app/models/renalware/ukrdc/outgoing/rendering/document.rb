@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "base64"
+
 module Renalware
   module UKRDC
     module Outgoing
@@ -37,7 +39,8 @@ module Renalware
           # rubocop:enable Metrics/AbcSize
 
           def encoded_document_content
-            Base64.encode64(Renalware::Letters::Rendering::PdfRenderer.call(letter))
+            renderer = Letters::RendererFactory.renderer_for(letter, :pdf)
+            Base64.encode64(renderer.call)
           end
         end
       end

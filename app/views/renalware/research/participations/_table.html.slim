@@ -11,6 +11,7 @@
         th Sex
         th Site
         th External ID
+        th= sort_link(query, :external_reference)
         th.col-width-medium
     tbody
       = render participations, study: study

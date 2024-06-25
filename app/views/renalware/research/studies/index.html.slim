@@ -21,7 +21,7 @@
     tbody
       - studies.each do |study|
         tr
-          td.actions.left
+          td.actions
             = link_to t("btn.view"), research_study_path(study)
           td= study.code
           td= study.description.truncate(60)

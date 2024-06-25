@@ -5,7 +5,7 @@ require "rails_helper"
 describe "Edit a patient's participation in a study" do
   include AjaxHelpers
 
-  context "when the user is an investogator in the study" do
+  context "when the user is an investigator in the study" do
     it "Updating a participation" do
       user = login_as_admin
       participation = create(:research_participation, by: user)
@@ -29,11 +29,13 @@ describe "Edit a patient's participation in a study" do
 
       # Add a left_on date
       fill_in "Left on", with: "2019-02-01"
+      fill_in "Reference within study", with: "123xx"
       click_on "Save"
 
       expect(page).to have_current_path(research_study_participations_path(participation.study))
       expect(page).to have_content(participation.patient.to_s)
       expect(page).to have_content("01-Feb-2019")
+      expect(page).to have_content("123xx")
     end
   end
 end

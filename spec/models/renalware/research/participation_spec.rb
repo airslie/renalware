@@ -10,12 +10,13 @@ module Renalware
     it { is_expected.to validate_presence_of :patient_id }
     it { is_expected.to belong_to :patient }
     it { is_expected.to belong_to :study }
+    it { is_expected.to have_db_index([:study_id, :external_reference]).unique(true) }
 
     describe "uniqueness" do
       subject {
         described_class.new(
           patient_id: patient.id,
-          study_id: study.id,
+          study: study,
           joined_on: "2018-01-01"
         )
       }
@@ -24,6 +25,8 @@ module Renalware
       let(:patient) { create(:patient) }
 
       it { is_expected.to validate_uniqueness_of(:external_id) }
+      it { is_expected.to validate_uniqueness_of(:external_reference).scoped_to(:study_id) }
+      it { is_expected.to validate_uniqueness_of(:patient_id).scoped_to(:study_id) }
     end
 
     describe ".external_application_participation_url" do

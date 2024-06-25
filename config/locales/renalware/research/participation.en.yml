@@ -4,6 +4,7 @@ en:
     attributes:
       renalware/research/participation:
         patient_id: Patient
+        external_reference: Reference within study
     errors:
       models:
         renalware/research/participation:

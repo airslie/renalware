@@ -9,7 +9,7 @@ article
       = render Renalware::Medications::LatestReviewComponent.new(patient: patient, compact: true)
     ul
       li
-        - if Renalware::Medications::PrescriptionBatchRenewalPolicy.new(current_user, nil).new?
+        - if Renalware::Medications::PrescriptionBatchRenewalPolicy.new(current_user, nil).create?
           #renew_hd_prescriptions
             = link_to new_patient_medications_prescription_batch_renewal_path(patient),
                       data: { turbo: true, turbo_frame: "modal" },

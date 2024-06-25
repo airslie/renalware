@@ -21,8 +21,9 @@
 
   = f.input :joined_on, as: :flatpickr
   = f.input :left_on, as: :flatpickr
+  = f.input :external_reference, wrapper: nil
 
   - if participation.study.type.present?
     = render path_to_research_document_form_partial(participation.study.type, :participations), f: f
 
-  = save_or_cancel(form: f, back_path: research_study_participations_path(participation.study))
+  .mt-6= save_or_cancel(form: f, back_path: research_study_participations_path(participation.study))

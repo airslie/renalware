@@ -17,7 +17,7 @@
             i.fas(class=("fa-check" if investigatorship.manager?))
           td= l(investigatorship.started_on)
           td= l(investigatorship.left_on)
-          td.right.actions
+          td.actions
             = link_to_if_allowed \
               policy(investigatorship).edit?,
               "Edit",

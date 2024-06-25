@@ -35,7 +35,8 @@ li.link.action
 
 - if policy(patient).debug?
   li.link.action
-    = link_to "Debug: UKRDC XML", api_ukrdc_patient_path(patient, changes_since: "2018-01-01")
+    = link_to "Debug: UKRDC XML",
+              api_ukrdc_patient_path(patient, changes_since: 1.year.ago.to_date.to_s)
   / li.link.action
   /   = link_to "Debug: MPI", patients_abridgements_path("search[criteria]" => patient.local_patient_id)
 

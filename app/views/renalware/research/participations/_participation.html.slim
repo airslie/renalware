@@ -9,7 +9,8 @@ tr
   td.col-width-mediumish-with-ellipsis(title=participation.patient&.hospital_centre)
     = participation.patient&.hospital_centre
   td= participation.external_id
-  td.right.actions
+  td= participation.external_reference
+  td.actions
     = link_to_if_allowed \
         policy(participation).destroy?,
         "Delete",

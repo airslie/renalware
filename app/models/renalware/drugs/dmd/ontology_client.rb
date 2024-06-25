@@ -15,12 +15,10 @@ module Renalware
       class Unauthenticated < StandardError; end
 
       class RequestFailed < StandardError
-        attr_reader :status, :body
-
         def initialize(message = nil, response: nil)
-          @status = response.status if response&.respond_to?(:status)
-          @body = response.body if response&.respond_to?(:body)
-          super("#{message} status: #{@status} body: #{@body}")
+          status = response.status if response&.respond_to?(:status)
+          hash = response.to_hash if response&.respond_to?(:to_hash)
+          super("#{message} status: #{status} response: #{hash}")
         end
       end
 

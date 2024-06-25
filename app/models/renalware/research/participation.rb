@@ -14,9 +14,12 @@ module Renalware
         on: [:create, :update, :destroy]
       )
 
-      validates :patient_id, presence: true, uniqueness: { scope: :study }
+      before_validation { self.external_reference = external_reference&.strip }
+
+      validates :patient_id, presence: true, uniqueness: { scope: :study_id }
       validates :study, presence: true
       validates :external_id, uniqueness: true # added by a trigger
+      validates :external_reference, uniqueness: { scope: :study_id, allow_blank: true }
       belongs_to :study, touch: true
       belongs_to :patient,
                  class_name: "Renalware::Patient",

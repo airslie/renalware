@@ -97,13 +97,13 @@ module Renalware
       end
 
       def participation_params_for_update
-        participation_params.slice(:joined_on, :left_on, :document)
+        participation_params.slice(:joined_on, :left_on, :external_reference, :document)
       end
 
       def participation_params
         params
           .require(:participation)
-          .permit(:patient_id, :joined_on, :left_on, document: {})
+          .permit(:patient_id, :joined_on, :left_on, :external_reference, document: {})
       end
     end
   end

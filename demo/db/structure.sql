@@ -1862,7 +1862,7 @@ begin
         ,document ->> 'score'
     from events e
     inner join event_types et on et.id = e.event_type_id
-    where e.patient_id = p_id 
+    where e.patient_id = p_id
       and e.deleted_at is null
       and et.slug = 'clinical_frailty_score'
     order by e.date_time desc
@@ -8348,6 +8348,16 @@ ALTER SEQUENCE renalware.letter_mailshot_mailshots_id_seq OWNED BY renalware.let
 
 
 --
+-- Name: letter_mailshot_patients_where_surname_starts_with_r; Type: VIEW; Schema: renalware; Owner: -
+--
+
+CREATE VIEW renalware.letter_mailshot_patients_where_surname_starts_with_r AS
+ SELECT patients.id AS patient_id
+   FROM renalware.patients
+  WHERE ((patients.family_name)::text ~~ 'R%'::text);
+
+
+--
 -- Name: letter_qr_encoded_online_reference_links; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -12144,7 +12154,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -12224,7 +12234,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -12485,7 +12495,8 @@ CREATE TABLE renalware.research_participations (
     external_id text,
     type character varying,
     document jsonb,
-    external_id_deprecated integer
+    external_id_deprecated integer,
+    external_reference character varying
 );
 
 
@@ -12493,7 +12504,7 @@ CREATE TABLE renalware.research_participations (
 -- Name: COLUMN research_participations.external_id_deprecated; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON COLUMN renalware.research_participations.external_id_deprecated IS 'Backup of external_id taken 2024-06-20 15:40:18 +0100 before changing its type from int to text';
+COMMENT ON COLUMN renalware.research_participations.external_id_deprecated IS 'Backup of external_id taken 2024-06-25 09:49:03 +0100 before changing its type from int to text';
 
 
 --
@@ -19341,6 +19352,13 @@ CREATE INDEX idx_medication_prescriptions_type ON renalware.medication_prescript
 --
 
 CREATE INDEX idx_mp_patient_id_medication_route_id ON renalware.medication_prescriptions USING btree (patient_id, medication_route_id);
+
+
+--
+-- Name: idx_on_study_id_external_reference_a07278c0eb; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_study_id_external_reference_a07278c0eb ON renalware.research_participations USING btree (study_id, external_reference) WHERE ((deleted_at IS NULL) AND ((COALESCE(external_reference, ''::character varying))::text <> ''::text));
 
 
 --
@@ -29085,6 +29103,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240625085012'),
 ('20240523145856'),
 ('20240520100213'),
 ('20240519153121'),
