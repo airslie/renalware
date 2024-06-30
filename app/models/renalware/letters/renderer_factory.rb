@@ -20,7 +20,7 @@ module Renalware
       end
 
       def self.ensure_letter_is_a_presenter(letter)
-        return letter if letter.respond_to?(:pdf_content)
+        return letter if letter.respond_to?(:to_html)
 
         LetterPresenterFactory.new(letter)
       end

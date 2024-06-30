@@ -72,13 +72,13 @@ module Renalware
         html
       end
 
-      def pdf_content
-        if archived?
-          archive.pdf_content
-        else
-          @pdf_content ||= Formats::Pdf::Document.new(self, nil).build.render
-        end
-      end
+      # def pdf_content
+      #   if archived?
+      #     archive.pdf_content
+      #   else
+      #     @pdf_content ||= Formats::Pdf::Document.new(self, nil).build.render
+      #   end
+      # end
 
       def content
         if archived?

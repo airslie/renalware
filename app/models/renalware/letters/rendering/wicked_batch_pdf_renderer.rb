@@ -13,7 +13,9 @@ module Renalware
         MAX_PAGE_COUNT = 10
 
         # TODO: insert blank pages if odd/even etc
-        def call(batch)
+        def call(batch) # rubocop:disable Metrics/MethodLength
+          raise "Unused?" if 0.to_i == 0
+
           pdf = CombinePDF.new
 
           batch.items.each do |item|

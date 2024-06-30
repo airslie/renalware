@@ -40,6 +40,7 @@ module Renalware
 
       context "when the letter is archived" do
         it "uses the pdf content in letter_archive.pdf_content rather than rendering afresh" do
+          pending "reinstate with prawn"
           letter = pending_review_letter
           letter = approve_letter(letter)
           expect(letter).to be_archived

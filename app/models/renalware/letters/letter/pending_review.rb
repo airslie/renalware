@@ -35,7 +35,7 @@ module Renalware
           letter.build_archive(
             by: by,
             content: presenter.content,
-            pdf_content: presenter.pdf_content,
+            pdf_content: nil, # presenter.pdf_content, was using prawn
             letter_id: id
           )
         end

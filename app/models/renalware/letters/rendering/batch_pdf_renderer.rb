@@ -13,7 +13,9 @@ module Renalware
         MAX_PAGE_COUNT = 10
 
         # TODO: insert blank pages if odd/even etc
-        def call(batch)
+        def call(batch) # rubocop:disable Metrics/MethodLength
+          raise "Do not use prawn in prod yet" if Rails.env.production?
+
           pdf = CombinePDF.new
 
           batch.items.each do |item|
