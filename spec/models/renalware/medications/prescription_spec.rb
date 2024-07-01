@@ -63,12 +63,15 @@ module Renalware
               yesterday = Date.current - 1.day
               create_prescription(administer_on_hd: false,
                                   terminated_on: tomorrow,
+                                  prescribed_on: 2.months.ago,
                                   notes: ":expires_tomorrow:")
               target = create_prescription(administer_on_hd: true,
                                            terminated_on: tomorrow,
+                                           prescribed_on: 2.months.ago,
                                            notes: ":expires_tomorrow:")
               create_prescription(administer_on_hd: true,
                                   terminated_on: yesterday,
+                                  prescribed_on: 2.months.ago,
                                   notes: ":expired_yesterday:")
               _future = create_prescription(administer_on_hd: true,
                                             prescribed_on: tomorrow,

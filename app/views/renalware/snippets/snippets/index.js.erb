@@ -1,6 +1,6 @@
 // Populate the modal div with the snippets view
 $("#snippets-modal").html("<%= escape_javascript(
-  render "list", snippets: snippets, search: search, author: author, remote: true
+  render "list", snippets: snippets, search: search, author: author, pagy: pagy, remote: true
 ) %>");
 
 // Show the snippets modal
