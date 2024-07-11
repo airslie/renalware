@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
+# rubocop:disable FactoryBot/AssociationStyle
 FactoryBot.define do
   factory :prescription, class: "Renalware::Medications::Prescription" do
     accountable
     patient
     drug
     dose_amount { "20" }
-    dose_unit { "milligram" }
+    association :unit_of_measure, :mg, factory: :drug_unit_of_measure
     medication_route
     frequency { "daily" }
     notes { "with food" }
@@ -14,3 +17,4 @@ FactoryBot.define do
     after(:build) { |prescription| prescription.treatable ||= prescription.patient }
   end
 end
+# rubocop:enable FactoryBot/AssociationStyle

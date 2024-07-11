@@ -1,5 +1,6 @@
 RSpec.describe "Print a patient's ESA drug list", :js do
   let(:esa_drug_type) { create(:drug_type, :esa) }
+  let(:mg) { create(:drug_unit_of_measure, :mg) }
   let(:immuno_drug_type) { create(:drug_type, :immunosuppressant) }
   let(:esa_drug) do
     create(:drug, name: "esa drug").tap { |drug| drug.drug_types << esa_drug_type }
@@ -14,7 +15,7 @@ RSpec.describe "Print a patient's ESA drug list", :js do
       drug:,
       by: user,
       dose_amount: "100",
-      dose_unit: "milligram",
+      unit_of_measure: mg,
       patient:,
       medication_route: create(:medication_route, :po),
       prescribed_on: "2020-01-01",
@@ -22,7 +23,7 @@ RSpec.describe "Print a patient's ESA drug list", :js do
     )
   end
 
-  def create_homecare_form_definintion_for(drug_type, prescription_durations: [3, 6, 9], **)
+  def create_homecare_form_defintion_for(drug_type, prescription_durations: [3, 6, 9], **)
     create(
       :homecare_form,
       drug_type:,
@@ -55,7 +56,7 @@ RSpec.describe "Print a patient's ESA drug list", :js do
       user = login_as_clinical
       patient = create(:patient, by: user)
       create_prescription(user, patient, esa_drug, home_delivery: false)
-      create_homecare_form_definintion_for(esa_drug_type)
+      create_homecare_form_defintion_for(esa_drug_type)
 
       dialog = Pages::Medications::HomeDeliveryDialog.new(patient:)
       dialog.open
@@ -72,11 +73,11 @@ RSpec.describe "Print a patient's ESA drug list", :js do
       user = login_as_clinical
       patient = create(:patient, by: user)
       prescription = create_prescription(user, patient, immuno_drug, home_delivery: true)
-      create_homecare_form_definintion_for(
+      create_homecare_form_defintion_for(
         esa_drug_type,
         prescription_duration_default: 6
       )
-      immuno_homecare_form_definition = create_homecare_form_definintion_for(
+      immuno_homecare_form_definition = create_homecare_form_defintion_for(
         immuno_drug_type,
         prescription_duration_default: 9,
         prescription_durations: [2, 9, 111]

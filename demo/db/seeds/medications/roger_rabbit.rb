@@ -8,7 +8,7 @@ module Renalware
       drug_id: 296, # ESA
       treatable: patient,
       dose_amount: "25",
-      dose_unit: "milligram",
+      unit_of_measure: Drugs::UnitOfMeasure.find_by!(name: "mg"),
       medication_route: Medications::MedicationRoute.find_by(name: "Oral"),
       frequency: "nocte",
       prescribed_on: "2014-10-10",
@@ -20,7 +20,7 @@ module Renalware
       drug_id: 208, # Immunosuppressant
       treatable: patient,
       dose_amount: "100",
-      dose_unit: "milligram",
+      unit_of_measure: Drugs::UnitOfMeasure.find_by!(name: "mg"),
       medication_route: Medications::MedicationRoute.find_by(name: "Oral"),
       frequency: "bd",
       prescribed_on: "2015-06-16",
@@ -32,7 +32,7 @@ module Renalware
       drug_id: 126,
       treatable: patient.peritonitis_episodes.first!,
       dose_amount: "100",
-      dose_unit: "milligram",
+      unit_of_measure: Drugs::UnitOfMeasure.find_by!(name: "mg"),
       medication_route: Medications::MedicationRoute.find_by(name: "Oral"),
       frequency: "tid for 7d",
       prescribed_on: "2015-09-21",
@@ -44,7 +44,7 @@ module Renalware
       drug_id: 208, # Immunosuppressant
       treatable: patient,
       dose_amount: "50",
-      dose_unit: "milligram",
+      unit_of_measure: Drugs::UnitOfMeasure.find_by!(name: "mg"),
       medication_route: Medications::MedicationRoute.find_by(name: "Oral"),
       frequency: "bd for 7 days",
       prescribed_on: "2015-09-13",

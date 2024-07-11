@@ -256,6 +256,7 @@ Metrics/MethodLength:
     - 'app/models/renalware/letters/printing/pdf_combining.rb'
     - 'app/models/renalware/letters/revise_letter.rb'
     - 'app/models/renalware/medications/dose_unit.rb'
+    - 'app/models/renalware/medications/delivery/prescriptions_due_for_delivery_query.rb'
     - 'app/models/renalware/medications/revise_prescription.rb'
     - 'app/models/renalware/pathology/find_or_create_observation_description.rb'
     - 'app/models/renalware/pathology/observation_request.rb'

@@ -5,6 +5,7 @@ module Renalware
         include PatientsSpecHelper
 
         let(:user) { create(:user) }
+        let(:mg) { create(:drug_unit_of_measure, :mg) }
 
         let(:patient) {
           create(
@@ -112,8 +113,8 @@ module Renalware
                 :prescription,
                 drug: esa_drug,
                 by: user,
+                unit_of_measure: mg,
                 dose_amount: "100",
-                dose_unit: "milligram",
                 patient:,
                 medication_route: create(:medication_route, :po),
                 prescribed_on: "2020-01-01",
@@ -121,6 +122,7 @@ module Renalware
               )
               create(
                 :prescription,
+                unit_of_measure: mg,
                 drug: immuno_drug,
                 by: user,
                 patient:,
@@ -128,6 +130,7 @@ module Renalware
               )
               create(
                 :prescription,
+                unit_of_measure: mg,
                 drug: immuno_drug,
                 by: user,
                 patient:,

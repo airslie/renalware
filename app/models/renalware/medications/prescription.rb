@@ -5,7 +5,7 @@ module Renalware
       include RansackAll
       extend Enumerize
 
-      attr_accessor :drug_id_and_trade_family_id
+      attr_accessor :drug_id_and_trade_family_id, :allow_deprecated_dose_unit_to_be_set
 
       has_paper_trail(
         versions: { class_name: "Renalware::Medications::PrescriptionVersion" },
@@ -45,13 +45,9 @@ module Renalware
       validates :frequency, presence: true
       validates :prescribed_on, presence: true
       validates :provider, presence: true
+      validate :deprecated_dose_unit_is_not_populated
 
       enum :provider, Provider.codes
-
-      # deprecated, use `unit_of_measure` instead
-      enumerize :dose_unit,
-                in: DoseUnit.codes,
-                i18n_scope: "enumerize.renalware.medications.prescription.dose_unit"
 
       scope :ordered, lambda {
         joins(:drug)
@@ -147,6 +143,17 @@ module Renalware
 
       def drug_name
         trade_family.present? ? "#{drug.name} (#{trade_family.name})" : drug.name
+      end
+
+      # dose_unit was a string description of the unit of measure eg 'milligram' that was
+      # deprecated when we moved to dm+d. We now have a unit_of_measure association on
+      # prescription. Do if some is setting dose_unit .. its an error! Except if the virtual
+      # attribute allow_deprecated_dose_unit_to_be_set has been set, which indicates we are testing
+      # e.g. the dose_unit to dm+d uom migration, so need to be able to set it.
+      def deprecated_dose_unit_is_not_populated
+        if dose_unit.present? && dose_unit_changed? && allow_deprecated_dose_unit_to_be_set != true
+          errors.add(:dose_unit, "Deprecated dose_unit attribute should not be populated!")
+        end
       end
     end
   end

@@ -31,7 +31,7 @@ module Renalware
       end
 
       def dose
-        unit = unit_of_measure.present? ? unit_of_measure.name : translated_dose_unit
+        unit = unit_of_measure&.name.presence || dose_unit
 
         "#{dose_amount} #{unit}"
       end
@@ -80,12 +80,6 @@ module Renalware
       def last_administration_on_hd
         @last_administration_on_hd ||=
           HD::PrescriptionAdministrationsQuery.new(prescription: self).call.first
-      end
-
-      def translated_dose_unit
-        return nil if dose_unit.nil?
-
-        ::I18n.t(dose_unit, scope: "enumerize.renalware.medications.prescription.dose_unit")
       end
     end
   end

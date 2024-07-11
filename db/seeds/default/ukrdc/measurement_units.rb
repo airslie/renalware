@@ -8,6 +8,7 @@ module Renalware
       CSV.foreach(file_path, headers: true) do |row|
         MeasurementUnit.find_or_create_by!(name: row["name"]) do |mu|
           mu.description = row["description"]
+          mu.alias = row["alias"]&.split(",")
         end
       end
     end

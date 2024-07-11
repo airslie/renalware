@@ -16501,7 +16501,8 @@ CREATE TABLE renalware.ukrdc_measurement_units (
     name character varying NOT NULL,
     description character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    alias character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -32216,6 +32217,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240808154403'),
 ('20240807111645'),
 ('20240716103158'),
+('20240711113718'),
 ('20240709161234'),
 ('20240709161233'),
 ('20240709161232'),
