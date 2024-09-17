@@ -37,13 +37,27 @@ module Renalware
               font_size 9
               text "PRIVATE AND CONFIDENTIAL"
               text " "
-              presenter.address.to_a.each { |line| text line }
+
+              presenter
+                .address
+                .to_a
+                .map { |val| replace_characters_not_in_windows1252_charset(val) }
+                .each { |line| text line }
             end
           end
 
           def render_blank_second_page
             start_new_page
           end
+
+          # rubocop:disable Style/AsciiComments
+          # Replace characters we can't handle in the default Windows-1252
+          # character set used by Prawn (note we should switch to UTF8 but that is a larger change).
+          # E.g "Bacău" => "Bac?u"
+          def replace_characters_not_in_windows1252_charset(value)
+            value&.encode("Windows-1252", invalid: :replace, undef: :replace)
+          end
+          # rubocop:enable Style/AsciiComments
         end
       end
     end

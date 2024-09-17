@@ -68,6 +68,7 @@ module Renalware
       scope :ordered, -> { order(Arel.sql(effective_date_sort) => :desc) }
       scope :with_letterhead, -> { includes(:letterhead) }
       scope :with_main_recipient, -> { includes(main_recipient: [:address, :addressee]) }
+      scope :with_deleted_by, -> { includes(:deleted_by) }
       scope :with_author, -> { includes(:author) }
       scope :with_patient, -> { includes(patient: :primary_care_physician) }
       scope :with_event, -> { includes(:event) }
@@ -85,11 +86,15 @@ module Renalware
         NilClass => Event::Unknown
       }.freeze
 
-      def self.policy_class = LetterPolicy
+      enum gp_send_status: {
+        not_applicable: "not_applicable",
+        pending: "pending",
+        success: "success",
+        failure: "failure"
+      }, _prefix: true
 
-      def self.for_event(event)
-        where(event: event).first
-      end
+      def self.policy_class     = LetterPolicy
+      def self.for_event(event) = where(event: event).first
 
       attribute :effective_date_sort
 
@@ -104,9 +109,7 @@ module Renalware
         SQL
       end
 
-      def effective_date_sort
-        self.class.effective_date_sort
-      end
+      def effective_date_sort = self.class.effective_date_sort
 
       # A Letter Event is unrelated to Events::Event. Instead it is an un-persisted decorator
       # around the polymorphic event relationship (determined by event_class and event_id);
@@ -122,10 +125,6 @@ module Renalware
         EVENTS_MAP.fetch(event.class, Event::ClinicVisit).new(event, clinical: clinical?)
       end
 
-      def subject?(other_patient)
-        patient.id == other_patient.id
-      end
-
       def find_cc_recipient_for_contact(contact)
         cc_recipients.detect { |recipient| recipient.for_contact?(contact) }
       end
@@ -134,21 +133,11 @@ module Renalware
         DetermineCounterpartCCs.new(self).call
       end
 
-      def signed?
-        signature.present?
-      end
-
-      def archived?
-        archive.present?
-      end
-
-      def archived_by
-        archive.created_by
-      end
-
-      def archive_recipients!
-        recipients.each(&:archive!)
-      end
+      def subject?(other_patient) = patient.id == other_patient.id
+      def signed?                 = signature.present?
+      def archived?               = archive.present?
+      def archived_by             = archive.created_by
+      def archive_recipients!     = recipients.each(&:archive!)
 
       def effective_date
         completed_at || approved_at || submitted_for_approval_at || created_at
@@ -156,25 +145,15 @@ module Renalware
 
       # The date to display on the letter.
       # Once the letter is approved it can be emailed out, hence this is the real date of issue.
-      def date
-        datetime.to_date
-      end
-
-      def datetime
-        approved_at || submitted_for_approval_at || created_at
-      end
+      def date = datetime.to_date
+      def datetime = approved_at || submitted_for_approval_at || created_at
 
       class ExternalDocumentType
         rattr_initialize :code, :name
       end
 
-      def external_document_type_code
-        clinical? ? "CL" : "AL"
-      end
-
-      def external_document_type_description
-        clinical? ? "Clinic Letter" : "Adhoc Letter"
-      end
+      def external_document_type_code         = clinical? ? "CL" : "AL"
+      def external_document_type_description  = clinical? ? "Clinic Letter" : "Adhoc Letter"
 
       # Can be used when exported to external sytems eg via HL7/Mirth.
       # id e.g. 123 => "RW0000000123"
@@ -182,6 +161,19 @@ module Renalware
         return if id.blank?
 
         ["RW", id.to_s.rjust(10, "0")].join
+      end
+
+      # Helper method to coerce a Letters::Letter instance into its STI type
+      def to_typed_instance
+        is_a?(type.constantize) ? self : becomes(type.constantize)
+      end
+
+      def gp_is_a_recipient?
+        gp_recipient.present?
+      end
+
+      def gp_recipient
+        recipients.find(&:primary_care_physician?)
       end
     end
   end

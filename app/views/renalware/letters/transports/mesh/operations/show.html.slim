@@ -1,0 +1,88 @@
+ruby:
+  title_opts = {
+    title: operation.id,
+    breadcrumbs: [
+      breadcrumb_for(
+        "GP Connect / All Operations",
+        letters_transports_mesh_operations_path
+      )
+    ]
+  }
+= content_for(:title) { generate_page_title(local_assigns: title_opts) }
+
+
+/ - if operation.action.to_sym == :send_message
+/   = link_to "Preview Letter as it will appear to the GP",
+/             preview_reconstituted_letter_letters_transports_mesh_operation_path(operation),
+/             class: "btn btn-secondary mt-2 mb-6"
+
+table
+  tr
+    th.col-width-large Id
+    td= operation.id
+  tr
+    th.col-width-large Action
+    td= operation.action
+  tr
+    th Direction
+    td= operation.direction
+  tr
+    th Created
+    td= l(operation.created_at)
+  tr
+    th Last Updated
+    td= l(operation.updated_at)
+  tr
+    th UUID
+    td= operation.uuid
+  tr
+    th URN
+    td= "urn::uuid:#{operation.uuid}"
+  tr
+    th MESH Message Id
+    td= operation.mesh_message_id
+  tr
+    th HTTP Response
+    td= [operation.http_response_code, operation.http_response_description].compact.join
+  tr
+    th MESH Error
+    td= [operation.mesh_response_error_event, operation.mesh_response_error_code, operation.mesh_response_error_description].compact.join(" ")
+  tr
+    th ITK3 Response Type
+    td= operation.itk3_response_type
+  tr
+    th ITK3 Outcome Type
+    td= operation.itk3_operation_outcome_type
+  tr
+    th ITK3 Outcome Severity
+    td= operation.itk3_operation_outcome_severity
+  tr
+    th ITK3 Outcome Code
+    td= operation.itk3_operation_outcome_code
+  tr
+    th ITK3 Outcome Description
+    td= operation.itk3_operation_outcome_description
+  tr
+    th.align-top Request Headers
+    td
+      pre= operation.request_headers && JSON.pretty_generate(operation.request_headers)
+  tr
+    th.align-top Response Headers
+    td
+      pre= operation.response_headers && JSON.pretty_generate(operation.response_headers)
+    / JSON.parse(JSON.pretty_generate(my_object)
+  tr
+    th.align-top Payload
+    td
+      pre= operation.payload && Nokogiri::XML(operation.payload).to_xml
+  tr
+    th.align-top Exception
+    td= operation.unhandled_error
+  tr
+    th.align-top Response Body
+    td
+      - if (operation.response_headers && operation.response_headers["content-type"]) == "application/octet-stream"
+        pre= Nokogiri::XML(operation.response_body)
+      - else
+        pre= operation.response_body
+

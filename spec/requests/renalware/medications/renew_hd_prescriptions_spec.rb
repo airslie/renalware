@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Renew HD prescription" do
   let(:patient) { create(:hd_patient, family_name: "Rabbit", local_patient_id: "KCH12345") }
 

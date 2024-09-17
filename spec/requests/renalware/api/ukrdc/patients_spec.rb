@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "API request for a single UKRDC patient XML document" do
   include PatientsSpecHelper
   include LettersSpecHelper

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Patients::MessagesComponent, type: :component do
   def send_message_about(patient:, to:, subject: "subject1", body: "body1")
     form = Renalware::Messaging::Internal::MessageForm.new(

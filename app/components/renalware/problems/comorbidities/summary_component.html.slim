@@ -6,8 +6,8 @@ table.toggleable.easy-read.comorbidities(style="width:auto" data-controller="tog
       td Recognised
       td Date
   - rows.each do |row|
-    tbody
-      tr(id=dom_id(row))
+    tbody(id=dom_id(row))
+      tr
         td= row_toggler
         td= row.name
         td.col-width-small= row.recognised&.capitalize
@@ -21,3 +21,9 @@ table.toggleable.easy-read.comorbidities(style="width:auto" data-controller="tog
               = "#{row.updated_by} at #{l(row.updated_at)}" if row.updated_by.present?
             dt SNOMED code:
             dd= row.snomed_code
+            - if row.has_malignancy_site?
+              dt Malignancy site
+              dd = row.malignancy_site_description
+            - if row.has_diabetes_type?
+              dt Diabetes type
+              dd = row.diabetes_type

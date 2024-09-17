@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "New Visit from existing Appointment" do
   describe "GET index" do
     context "with no appointment id" do

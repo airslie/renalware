@@ -10,7 +10,20 @@ module Renalware::Letters
   module Delivery
   end
 
+  module Formats
+    module FHIR
+      module Resources
+      end
+    end
+  end
+
   module Mailshots
     def self.table_name_prefix = "letter_mailshot_"
+
+    # module Delivery
+    #   module TransferOfCare
+    #     def self.table_name_prefix = "letter_delivery_toc_"
+    #   end
+    # end
   end
 end

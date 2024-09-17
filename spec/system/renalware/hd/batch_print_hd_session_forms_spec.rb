@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Batch printing HD Session form PDFs from the HD MDM list", js: true do
   include PatientsSpecHelper
   include AjaxHelpers

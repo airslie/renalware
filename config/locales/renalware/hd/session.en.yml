@@ -91,6 +91,12 @@ en:
               more_than_7kg_between_pre_post_weights: More than 7kg difference in pre/post weights
               out_of_range: Please enter a weight between 5.0 and 300.0 kg
   activerecord:
+    errors:
+      models:
+        renalware/hd/session:
+          attributes:
+            patient_group_directions:
+              blank: Please choose one or more
     attributes:
       renalware/hd/session:
         dialysate: Dialysis Solution Used

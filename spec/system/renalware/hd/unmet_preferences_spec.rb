@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Viewing patients whose HD preferences do not match their profile" do
   let(:hospital) { create(:hospital_centre) }
   let(:current_unit) do

@@ -1,0 +1,7 @@
+.search-form.filters
+  = simple_form_for q, as: :q, url: directory.people_path, method: :get do |f|
+    .row
+      .small-8.medium-6.large-4.columns
+        = f.input :name_cont, label: "Name contains"
+      .small-4.end.columns.actions
+        .mt-px= filter_or_reset(form: f, reset_path: directory.people_path)

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "View transmission logs" do
   describe "GET index" do
     it "displays a paginated list of transmission logs, most recent first" do

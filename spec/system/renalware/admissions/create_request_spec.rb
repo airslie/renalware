@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Create an Admission Request", js: true do
   it "Creating a new request from the patient LH menu" do
     user = login_as_clinical

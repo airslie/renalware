@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "PD Assessment management", js: true do
     it "Add a PD Assessment" do

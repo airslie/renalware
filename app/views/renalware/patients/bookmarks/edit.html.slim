@@ -1,0 +1,8 @@
+= within_new_admin_layout do
+  = simple_form_for bookmark,
+                    url: bookmark_path(bookmark),
+                    html: { autocomplete: "off" } do |f|
+    = f.input :urgent, as: :boolean, boolean_style: :inline
+    = f.input :tags, label: "Tags", placeholder: "Optional comma-delimited list"
+    = f.input :notes, as: :text, input_html: { autofocus: :autofocus }
+    = save_or_cancel(form: f, back_path: :back)

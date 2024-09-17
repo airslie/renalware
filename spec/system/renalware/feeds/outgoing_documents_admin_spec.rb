@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Outgoing document management" do
   it "allows listing outgoing documents for a superadmin" do
     user = login_as_super_admin

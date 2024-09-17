@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Filtering consults" do
     let(:consult_site1) { create(:admissions_consult_site, name: "Site1") }

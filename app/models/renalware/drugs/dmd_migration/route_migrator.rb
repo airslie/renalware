@@ -30,7 +30,8 @@ module Renalware
 
         def call
           # TODO: where inactive??
-          dmd_only_routes_by_name = Medications::MedicationRoute.where(rr_code: nil)
+          dmd_only_routes_by_name = Medications::MedicationRoute
+            .where.not(code: nil)
             .index_by(&:name)
 
           Medications::MedicationRoute.where.not(rr_code: nil).find_each do |old_route|

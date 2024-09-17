@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::LowClearance::DialysisPlan do
   it_behaves_like "a Paranoid model"
 

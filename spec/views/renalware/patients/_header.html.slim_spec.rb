@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "renalware/patients/_header" do
   helper(Renalware::ApplicationHelper, Renalware::PatientHelper)
 

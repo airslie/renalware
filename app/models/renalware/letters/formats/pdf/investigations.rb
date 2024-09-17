@@ -17,6 +17,8 @@ module Renalware
               pad_bottom(5) { text "Recent Investigations", style: :bold }
               buffer = []
               Array(results).each do |results_hash|
+                next if results_hash.empty?
+
                 results_hash.each do |date, hash|
                   buffer << { text: "#{date}: ", styles: [:italic] }
                   hash.each.with_index do |(obx, value), idx|

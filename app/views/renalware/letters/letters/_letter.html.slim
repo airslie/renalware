@@ -20,6 +20,8 @@
         i.fas.fa-paperclip.text-green-500.pr-1(title=letter.enclosures)
     td.state
       span= letter.state_description
+    - if Renalware.config.send_gp_letters_over_mesh
+      td= t(letter.gp_send_status, scope: "letters.gp_send_status")
     td= l(letter.effective_date)
     - if columns.include?(:author)
       td.col-width-medium-with-ellipsis= letter.author

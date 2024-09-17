@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Pathology
   describe MeasurementUnit do
     it :aggregate_failures do

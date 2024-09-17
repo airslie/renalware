@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Viewing a report", js: true do
   it "displays a report" do
     report = create(

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Copying a snippet" do
   let(:user) { Renalware::Snippets.cast_user(@current_user) }
 

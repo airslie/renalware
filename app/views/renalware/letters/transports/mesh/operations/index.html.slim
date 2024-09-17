@@ -1,0 +1,10 @@
+= content_for(:tabs)    { render "renalware/letters/transports/mesh/tabs" }
+= content_for(:actions) { render "renalware/letters/transports/mesh/actions" }
+= content_for(:filters) { render "filters", search: search }
+= content_for(:title)   { "GP Connect / All Operations" }
+
+table.text-sm.stripeless.mt-4
+  thead.text-sm= render "renalware/letters/transports/mesh/thead"
+  tbody= render operations
+
+== pagy_nav pagy

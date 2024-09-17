@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Drugs
   describe DMDMigration::RouteMigrator do
     let(:previous_route) {
@@ -14,7 +12,7 @@ module Renalware::Drugs
     end
 
     context "when there's a match" do
-      let(:dmd_route) { create(:medication_route, code: "oral", name: "Oral") }
+      let(:dmd_route) { create(:medication_route, code: "oral", name: "Oral", rr_code: "1") }
 
       it "migrates from the previous route to the new DMD ones" do
         described_class.new.call

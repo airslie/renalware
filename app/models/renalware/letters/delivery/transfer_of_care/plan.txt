@@ -1,0 +1,21 @@
+1. Wire up end to end with mesh sandbox
+1. Wire up to INT env? SSL mayhem
+6. Backfill tests once we know the approach works
+7. Write tests for each IKT3 assurance
+
+keep in mind spitting everything out to a separate gem
+document mesh sandbox docker setup in mailbox.jsonl
+
+Send msg
+
+curl -k \
+--request 'POST' \
+--header 'Authorization: NHSMESH RAJ01OT001:6597c29a-cc87-4432-9d5d-d70b64081593:0:202303011755:2dcbb61622a334b7f7bb33b594c56779e50992d6f7bae1ef84dcb196856e6039' \
+--header 'Content-Type: application/octet-stream' \
+--header 'Mex-From: RAJ01OT001' \
+--header 'Mex-To: RAJ01OT001' \
+--header 'Mex-WorkflowID: API-DOCS-TEST' \
+--header 'Mex-FileName: None' \
+--header 'Mex-LocalID: api-docs-bob-greets-alice' \
+--data 'This is a message' \
+http://localhost:8700/messageexchange/RAJ01OT001/outbox

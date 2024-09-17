@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe Gender, type: :model do
     describe "validating the gender code" do

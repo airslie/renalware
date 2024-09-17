@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing an HD DNA Session" do
   describe "GET show" do
     it "renders successfully" do

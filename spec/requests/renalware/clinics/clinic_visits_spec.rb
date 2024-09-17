@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Clinic Visits Management" do
   let(:user) { @current_user }
   let(:clinic) { create(:clinic) }

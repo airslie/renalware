@@ -36,11 +36,19 @@ module Renalware
               ukrdc_patient_elem << procedures_element
               ukrdc_patient_elem << documents_element
               ukrdc_patient_elem << encounters_element
+              ukrdc_patient_elem << opt_outs_element
             end
           end
           # rubocop:enable Metrics/AbcSize
 
           private
+
+          def opt_outs_element
+            ukrr_opt_out_element = Rendering::OptOut.new(patient: patient).xml
+            if ukrr_opt_out_element
+              create_node("OptOuts") { |opt_outs| opt_outs << ukrr_opt_out_element }
+            end
+          end
 
           def sending_facility_element
             create_node("SendingFacility", Renalware.config.ukrdc_sending_facility_name) do |fac|

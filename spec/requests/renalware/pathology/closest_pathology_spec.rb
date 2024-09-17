@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Patient's closest pathology to a date, filtered by code group" do
   # For example given pathology_code_group A containing OBX codes X,Y,Z, find the results for
   # X,Y,Z which are clostest to the specified date. We use this for example when looking for

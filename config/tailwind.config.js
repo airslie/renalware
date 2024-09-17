@@ -6,21 +6,37 @@ const plugin = require("tailwindcss/plugin")
   https://github.com/NHS-digital-website/design-system/blob/main/src/nhsd/scss-core/tokens/_colours.scss
 */
 
+/*
+Specifying paths for css class purging
+--------------------------------------
+Include relevant paths in:
+  - engine ./app
+  - engine ./packs/app folder
+  - current host app's ./app folder (${process.cwd() resolves to ./demo in this project but will
+    resolve to ./app in eg the hospital rails project.
+
+Note that this config file is used by each consuming hos app. Tailwind thee is run using
+eg 'yarn build:css' which will invoke the tailwind binary like so:
+
+  tailwindcss -c `bundle show renalware-core`/config/tailwind.config.js
+
+*/
+
 module.exports = {
   content: {
     relative: true,
     files: [
-      "../app/helpers/**/*.rb",
-      `${process.cwd()}../app/helpers/**/*.rb`,
-      "../app/inputs/**/*.rb",
+      "../**/app/helpers/**/*.rb",
+      `${process.cwd()}/app/helpers/**/*.rb`,
+      "../**/app/inputs/**/*.rb",
       `${process.cwd()}/app/inputs/**/*.rb`,
-      "../app/views/**/*.{erb,haml,html,slim}",
+      "../**/app/views/**/*.{erb,haml,html,slim}",
       `${process.cwd()}/app/views/**/*.{erb,haml,html,slim}`,
-      "../app/components/**/*.{erb,haml,html,slim,rb}",
+      "../**/app/components/**/*.{erb,haml,html,slim,rb}",
       `${process.cwd()}/app/components/**/*.{erb,haml,html,slim,rb}`,
-      "../app/presenters/**/*.rb",
+      "../**/app/presenters/**/*.rb",
       `${process.cwd()}/app/presenters/*.rb`,
-      "../app/javascript/**/*",
+      "../**/app/javascript/**/*",
       `${process.cwd()}/app/javascript/**/*`,
     ],
   },

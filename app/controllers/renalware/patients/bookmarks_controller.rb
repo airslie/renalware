@@ -43,6 +43,23 @@ module Renalware
                       notice: success_msg_for("bookmark"))
       end
 
+      def edit
+        bookmark = user.bookmarks.find_by(id: params[:id])
+        authorize bookmark
+        render locals: { bookmark: bookmark }
+      end
+
+      def update
+        bookmark = user.bookmarks.find_by(id: params[:id])
+        authorize bookmark
+        if bookmark.update(bookmark_params)
+          redirect_to bookmarks_path, notice: success_msg_for("Bookmark")
+        else
+          flash.now[:error] = failed_msg_for("Bookmark")
+          render :edit, locals: { bookmark: bookmark }
+        end
+      end
+
       private
 
       def user

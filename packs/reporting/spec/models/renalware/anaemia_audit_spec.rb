@@ -1,8 +1,6 @@
 # TODO: list
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # Anaemia Audit
 # - Refactor helpers into an AuditHelper mixin as some duplication here with other audit tests.
 # - Remove rubocop disable above

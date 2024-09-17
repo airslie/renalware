@@ -1,0 +1,28 @@
+= content_for(:tabs) { render "renalware/letters/transports/mesh/tabs" }
+= content_for(:title) { "GP Connect / Inbox" }
+= content_for(:actions) do
+  = link_to "Process All",
+          renalware.check_inbox_letters_transports_mesh_operations_path,
+          class: "btn btn-secondary",
+          remote: true
+
+.mt-2
+- if message_ids.blank?
+  .flex.flex-col.justify-center.text-gray-400.mt-12.items-center
+    = inline_icon(:inbox, size: "", style: "width: 5rem")
+- else
+  table
+    thead
+      tr
+        th.col-width-large MESH Message ID
+        th
+        th
+    tbody
+      - message_ids.each do |message_id|
+        tr
+          td= message_id
+          td.actions
+            = link_to("Peek", letters_transports_mesh_inbox_message_path(message_id))
+            = link_to("Process", letters_transports_mesh_inbox_message_path(message_id), method: :patch)
+          td
+

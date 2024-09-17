@@ -9,7 +9,7 @@ module Renalware
     private
 
     def join_arg
-      "<br>"
+      "<br/>"
     end
 
     def presentable_attrs

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Editing the virology profile" do
   let(:patient) { create(:virology_patient) }
 

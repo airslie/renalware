@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Viewing a list of reports" do
   let(:user) { create(:user, :clinical) }
 

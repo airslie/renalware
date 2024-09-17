@@ -1,0 +1,29 @@
+= content_for(:tabs) do
+  = render "tabs", study: study, active: :settings
+
+= within_admin_layout(title: study.code,
+                      breadcrumbs: breadcrumb_for("Clinical Studies",
+                                   research.studies_path)) do
+
+  = render "form", study: study, url: research.study_path(study)
+
+  br
+  hr
+  br
+  .panel.danger-zone
+    h4 Danger zone
+    br
+    - super_admin = current_user.has_role?(:super_admin)
+    - if super_admin
+      p= link_to "Delete this study",
+              research.study_path(study),
+              method: :delete,
+              data: { confirm: "Are you sure you want to delete this study?", disable: true },
+              class: "button"
+    - else
+      p= link_to "Delete this study",
+              "#",
+              class: "button",
+              disabled: true
+      p
+        i You need to have the super_admin role to delete a study

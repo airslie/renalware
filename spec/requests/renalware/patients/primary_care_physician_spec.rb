@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Changing a patient's GP (primary care physician)" do
   let(:patient) { create(:patient) }
   let(:primary_care_physician) { create(:primary_care_physician) }

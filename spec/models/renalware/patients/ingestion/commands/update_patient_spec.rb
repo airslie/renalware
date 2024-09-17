@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Patients::Ingestion
   describe Commands::UpdatePatient do
     include HL7Helpers

@@ -1,4 +1,4 @@
-- death_configuration = local_assigns[:death_configuration] || false
+- # locals: (death_configuration: false, patients:, pagy:, query: nil)
 
 = turbo_frame_tag("renal-preflight-turbo-frame") do
   = render Renalware::SpinnerComponent.new do |spinner|
@@ -37,3 +37,5 @@
               td.missing-data
                 - patient.missing_data.map do |data_item|
                   span(class=data_item)= t(".#{data_item}")
+
+      == pagy_nav(pagy) if pagy.pages > 1

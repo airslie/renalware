@@ -2,7 +2,7 @@ var Renalware = typeof Renalware === 'undefined' ? {} : Renalware;
 
 Renalware.Renal = (function () {
 
-  var setAllComobidityOptionsToNo = function() {
+  var setAllComorbidityOptionsToNo = function() {
     $(document).on( "click", "a.set_all_comorbidities_to_no", function(e) {
       e.preventDefault();
       $(".comorbidities input[type=radio]").filter("[value=no],[value=non_smoker]")
@@ -25,7 +25,7 @@ Renalware.Renal = (function () {
 
   return {
     init : function() {
-      setAllComobidityOptionsToNo();
+      setAllComorbidityOptionsToNo();
       wireUpUseCurrentAddressButton();
     }
   }

@@ -76,6 +76,7 @@ module Renalware
 
         alias_attribute :observed_at, :observation_date
         alias_attribute :value, :observation_value
+        alias_attribute :result_status, :observation_result_status
 
         def identifier
           observation_id.split("^").first

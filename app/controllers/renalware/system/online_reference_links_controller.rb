@@ -7,7 +7,9 @@ module Renalware
 
       def index
         ransack_params = params[:q] || {}
-        search = OnlineReferenceLink.order(title: :asc).ransack(ransack_params)
+        search = OnlineReferenceLink
+          .includes(:updated_by)
+          .order(title: :asc).ransack(ransack_params)
         pagy, references = pagy(search.result)
         authorize references
         render locals: { references: references, search: search, pagy: pagy }
@@ -63,7 +65,7 @@ module Renalware
       def online_reference_params
         params
           .require(:system_online_reference_link)
-          .permit(:description, :title, :url)
+          .permit(:description, :title, :url, :include_in_letters_from, :include_in_letters_until)
       end
     end
   end

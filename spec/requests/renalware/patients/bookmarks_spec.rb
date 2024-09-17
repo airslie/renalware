@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing bookmarks" do
   let(:user) { @current_user }
   let(:patient) { create(:patient, by: user) }
@@ -81,7 +79,7 @@ describe "Managing bookmarks" do
              patient: patient)
     end
 
-    it "lists the user's bokmarks" do
+    it "lists the user's bookmarks" do
       patients = [
         create(:patient, by: user, given_name: "A"),
         create(:patient, by: user, given_name: "B"),
@@ -104,6 +102,38 @@ describe "Managing bookmarks" do
       expect(response.body).to match(bookmarks[0].patient.to_s)
       expect(response.body).to match(bookmarks[1].patient.to_s)
       expect(response.body).not_to match(bookmarks[2].patient.to_s)
+    end
+  end
+
+  describe "GET edit" do
+    let(:bookmark) do
+      create(:patients_bookmark,
+             user: Renalware::Patients.cast_user(user),
+             patient: patient)
+    end
+
+    it do
+      get edit_bookmark_path(bookmark)
+
+      expect(response).to be_successful
+    end
+  end
+
+  describe "PATCH update" do
+    let(:bookmark) do
+      create(:patients_bookmark,
+             user: Renalware::Patients.cast_user(user),
+             patient: patient,
+             urgent: false,
+             notes: "ABC")
+    end
+
+    it do
+      attributes = { urgent: true, notes: "XYZ" }
+      patch bookmark_path(bookmark), params: { patients_bookmark: attributes }
+
+      expect(response).to be_redirect
+      expect(bookmark.reload).to have_attributes(attributes)
     end
   end
 end

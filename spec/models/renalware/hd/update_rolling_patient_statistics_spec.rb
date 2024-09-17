@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::HD
   describe UpdateRollingPatientStatistics do
     subject(:command) { described_class.new(patient: patient) }

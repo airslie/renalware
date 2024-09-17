@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating an event", js: true do
   it "successfully adds a simple event" do
     user = login_as_clinical

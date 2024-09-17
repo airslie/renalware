@@ -73,7 +73,8 @@ module Renalware
 
           Dir.chdir(working_folder) do
             letter_filename = write_letter_to_pdf_file(letter)
-            letter.recipients.each do |recipient|
+
+            printable_recipients_for(letter).each do |recipient|
               next if recipient.emailed_at.present?
 
               Rails.logger.info " Recipient #{recipient.id}"
@@ -83,6 +84,13 @@ module Renalware
             end
             combine_multiple_pdfs_using_filenames(filenames, working_folder, output_filepath)
           end
+        end
+
+        def printable_recipients_for(letter)
+          CollectionPresenter.new(
+            Recipient.printable_recipients_for(letter),
+            RecipientPresenter::WithCurrentAddress
+          )
         end
 
         # Remove letter and recipient working files

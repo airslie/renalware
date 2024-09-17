@@ -1,0 +1,38 @@
+tr(classs="!bg-green-50")
+  td
+    .nowrap= link_to "View Opn", letters_transports_mesh_operation_path(operation)
+  td
+  td= l(operation.created_at)
+  td
+    .flex
+      .mr-1= (operation.action.to_sym == :download_message) ? inline_icon(:download, size: :md, class: "text-neutral-500") : inline_icon(:upload, size: :md, class: "text-neutral-500")
+      = operation.action.humanize.split(" message").first
+
+  td.bg-neutral-100
+    - bg = operation.http_response_code.to_i > 300 ? "bg-red-500 text-gray-50" : "bg-neutral-100"
+    .rounded.py-0.px-1(class=bg)
+      .flex.items-center.justify-center
+        = operation.http_response_code
+
+  td.bg-neutral-50= operation.mesh_message_id
+  td.bg-neutral-50
+    .rounded.bg-red-500.py-0.px-1.flex.whitespace-nowrap.justify-center.text-gray-50
+        = operation.mesh_response_error_code
+  td.bg-neutral-50= operation.mesh_response_error_description
+
+  - if operation.action.to_sym == :download_message
+    td.bg-neutral-100= operation.itk3_response_type
+    td.bg-neutral-100
+      - if operation.itk3_response_code&.to_sym != :ok
+        .rounded.bg-red-500.py-0.px-1.text-gray-50
+          .flex.items-center.justify-center
+            = operation.itk3_response_code
+      - else
+        .rounded.bg-neutral-100.py-0.px-1
+          .flex.items-center.justify-center
+            = operation.itk3_response_code
+    td.bg-neutral-100= operation.itk3_operation_outcome_severity
+    td.bg-neutral-100(title=operation.itk3_operation_outcome_description)= operation.itk3_operation_outcome_code
+    td.bg-neutral-100= operation.itk3_operation_outcome_description
+  - else
+    td.bg-neutral-100(colspan=5)

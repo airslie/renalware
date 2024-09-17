@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing Cannulation Types" do
   let(:cannulation_type) { create(:hd_cannulation_type) }
 

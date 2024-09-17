@@ -14,7 +14,7 @@ namespace :patients do
   resources :abridgements, only: :index
 end
 
-resources :bookmarks, controller: "patients/bookmarks", only: [:destroy, :index]
+resources :bookmarks, controller: "patients/bookmarks"
 resource :dashboard, only: :show, controller: "dashboard/dashboards"
 resource :worryboard, only: :show, controller: "patients/worryboard"
 resources :worry_categories, controller: "patients/worry_categories"

@@ -1,0 +1,82 @@
+ruby:
+  letter = transmission.letter
+  title_opts = {
+    title: transmission.id,
+    breadcrumbs: [
+      breadcrumb_for(
+        "GP Connect / Transmissions",
+        letters_transports_mesh_transmissions_path
+      )
+    ]
+  }
+= content_for(:title) { generate_page_title(local_assigns: title_opts) }
+
+table
+  tr
+    th.col-width-large Id
+    td= transmission.id
+  tr
+    th Created
+    td= l(transmission.created_at)
+  tr
+    th Last Updated
+    td= l(transmission.updated_at)
+  tr
+    th Status
+    td= transmission.status
+  tr
+    th UUID
+    td= transmission.uuid
+  tr
+    th URN
+    td= "urn::uuid:#{transmission.uuid}"
+  tr
+    th Letter Id
+    td
+      - if letter.present?
+        = link_to letter.id,
+                  patient_letters_letter_path(letter.patient, transmission.letter)
+  tr
+    th Letter URN
+    td= "urn:uuid:#{letter.uuid}" if letter&.uuid.present?
+  / tr
+  /   th HTTP Response
+  /   td= [message.http_response_code, message.http_response_description].compact.join
+  / tr
+  /   th Response Body
+  /   td= message.response_body
+  / tr
+  /   th MESH Error
+  /   td= [message.mesh_response_error_event, message.mesh_response_error_code, message.mesh_response_error_description].compact.join(" ")
+  / tr
+  /   th ITK3 Response Type
+  /   td= message.itk3_response_type
+  / tr
+  /   th ITK3 Outcome Type
+  /   td= message.itk3_operation_outcome_type
+  / tr
+  /   th ITK3 Outcome Severity
+  /   td= message.itk3_operation_outcome_severity
+  / tr
+  /   th ITK3 Outcome Code
+  /   td= message.itk3_operation_outcome_code
+  / tr
+  /   th ITK3 Outcome Description
+  /   td= message.itk3_operation_outcome_description
+  / tr
+  /   th Request Headers
+  /   td
+  /     pre= message.request_headers && JSON.pretty_generate(message.request_headers)
+  / tr
+  /   th Response Headers
+  /   td
+  /     pre= message.response_headers && JSON.pretty_generate(message.response_headers)
+  /   / JSON.parse(JSON.pretty_generate(my_object)
+  / tr
+  /   th(style="vertical-align: top") Payload
+  /   td
+  /     pre= message.payload && Nokogiri::XML(message.payload).to_xml
+  / tr
+  /   th Exception
+  /   td= message.unhandled_error
+

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Feeds
   describe MessageParser do
     subject(:message) { message_parser.parse(raw_message) }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Document
   describe Embedded, type: :lib do
     include TranslationsHelper

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Problems" do
   let(:patient) { create(:pathology_patient) }
 

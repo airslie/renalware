@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Listing admissions for the current patient" do
     let(:user) { create(:user) }

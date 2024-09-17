@@ -1,0 +1,46 @@
+= turbo_frame_tag("letter-mesh-turbo-frame") do
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      table.letters
+        thead
+          tr
+            th.border-0(colspan=3)
+            th.border-0.text-center.bg-neutral-100(colspan=2) ODS
+          tr
+            th.col-width-tiny Letter
+            th.col-width-small State
+            th.col-width-medium GP Send Status
+            th.col-width-tiny.bg-neutral-100 Expected
+            th.col-width-tiny.bg-neutral-100 Actual
+            th.col-width-medium Patient
+            th Author
+            th Typist
+            th Send error
+            th Infrastructure error
+            th Business error
+        - letters.each do |letter|
+          - state = letter.letter_type.demodulize.downcase
+          tbody
+            tr(class=state.dasherize)
+              td= link_to(letter.id, renalware.patient_letters_letter_path(letter.patient_secure_id, letter.id))
+              td.state
+                span= ::I18n.t(state, scope: "enums.letter.state")
+              td= t(letter.gp_send_status, scope: "letters.gp_send_status")
+              - ods_klass = letter.patient_practice_ods_code == letter.sent_to_practice_ods_code ? "" : "bg-rose-100"
+              td(class=ods_klass)= letter.patient_practice_ods_code
+              td(class=ods_klass)= letter.sent_to_practice_ods_code
+              td.col-width-patient
+                = link_to(letter.patient_name,
+                          renalware.patient_clinical_summary_path(letter.patient_secure_id),
+                          data: { turbo_frame: "_top" })
+              td= letter.author_name
+              td= letter.typist_name
+              td= [letter.send_operation_mesh_response_error_code, letter.send_operation_mesh_response_error_description].join(" ")
+              td
+                - unless [0,20013].include?(letter.inf_download_operation_itk3_operation_outcome_code.to_i)
+                  = [letter.inf_download_operation_itk3_operation_outcome_code, letter.inf_download_operation_itk3_operation_outcome_description].join(" ")
+              td
+                - unless [0,30001].include?(letter.bus_download_operation_itk3_operation_outcome_code.to_i)
+                  = [letter.bus_download_operation_itk3_operation_outcome_code, letter.bus_download_operation_itk3_operation_outcome_description].join(" ")
+
+

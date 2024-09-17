@@ -91,3 +91,4 @@ config/master.key
 *.keystore
 config/brakeman.ignore
 renalware.code-workspace
+.unused-env

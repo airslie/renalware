@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "turnip/capybara"
 
 # If a feature has the @web tag and ENV['TURNIP_WEB'] is something, then #web_steps will

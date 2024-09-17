@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Insert letter.event notes (e.g. from a clinic visit) into the letter body",
          js: true do
   before do

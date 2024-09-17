@@ -8,7 +8,7 @@
   = render "filters", options: options
 
 = within_admin_layout(title: options.current_view.title,
-  breadcrumbs: breadcrumb_for("Reports", reporting.reports_path)) do
+  breadcrumbs: breadcrumb_for("Reports", reports_path)) do
 
   = turbo_frame_tag "report_content" do
     = render Renalware::SpinnerComponent.new do |spinner|

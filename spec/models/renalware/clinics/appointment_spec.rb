@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Clinics::Appointment do
   it_behaves_like "an Accountable model"
   it :aggregate_failures do

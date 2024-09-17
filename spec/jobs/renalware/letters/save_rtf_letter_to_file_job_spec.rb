@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Letters::SaveRTFLetterToFileJob do
   include LettersSpecHelper
   subject(:job) { described_class.new }

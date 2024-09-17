@@ -1,3 +1,9 @@
+:root {
+  --ss-main-height: 32px;
+  /*--ss-spacing-s: 0.25rem 1rem; */
+  --ss-spacing-s: 4px;
+}
+
 .ss-content.ss-open-above,
 .ss-content.ss-open-below {
   border-color: #bbb;
@@ -35,11 +41,10 @@
   }
 }
 
-
 .ss-main {
   color: $darkish-grey;
-  padding-right: 0.5rem;
-  padding-left: 15px;
+  // padding-right: 0.5rem;
+  // padding-left: 15px;
   border-color: #ccc;
 
   .ss-arrow {
@@ -48,11 +53,15 @@
   }
 
   .ss-values {
-    height: 18px;
+    /* height: 18px; */
   }
 }
 
 .ss-content .ss-list .ss-error,
 .ss-content .ss-list .ss-searching {
   padding-left: 15px;
+}
+
+.ss-disabled .ss-values .ss-value {
+  background-color: #888;
 }

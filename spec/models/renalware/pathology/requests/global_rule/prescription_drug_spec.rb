@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::Requests::GlobalRule::PrescriptionDrug do
   describe "#drug_present" do
     include_context "with a global_rule_set"

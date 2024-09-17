@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Beta banner and capturing user feedback" do
   let(:user) { create(:user, :unapproved, :clinician) }
 

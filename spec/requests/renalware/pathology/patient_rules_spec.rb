@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "patient_rules Requests" do
   let(:patient) { create(:pathology_patient) }
   let(:lab) { create(:pathology_lab) }

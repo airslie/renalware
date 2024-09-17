@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Patients
   describe PatientHospitalIdentifiers do
     # This represents the order of preference of local_patient_ids database columns and also

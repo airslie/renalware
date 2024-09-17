@@ -30,7 +30,7 @@ module Renalware
         build_salutation
         letter.pathology_timestamp = Time.zone.now
         stub_letter_electronic_cc_recipient_ids_using_patients_default_eccs
-
+        include_default_qr_codes
         letter
       end
 
@@ -113,6 +113,12 @@ module Renalware
             .for(patient)
             .broadcasting_to_configured_subscribers
             .call
+        end
+      end
+
+      def include_default_qr_codes
+        if building_new_letter?
+          letter.online_reference_links << System::OnlineReferenceLink.default_in_new_letters
         end
       end
 

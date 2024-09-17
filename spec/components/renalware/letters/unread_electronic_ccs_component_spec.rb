@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Letters::UnreadElectronicCCsComponent, type: :component do
   include LettersSpecHelper
 

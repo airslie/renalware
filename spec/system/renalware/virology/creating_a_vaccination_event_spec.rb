@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating an vaccination", js: true do
   include AjaxHelpers
   let(:event_date_time) { Time.zone.now }

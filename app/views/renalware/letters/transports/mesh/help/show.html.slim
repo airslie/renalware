@@ -1,0 +1,19 @@
+= content_for(:tabs)  { render "renalware/letters/transports/mesh/tabs" }
+= content_for(:title) { "GP Connect / Help" }
+
+.mt-4
+
+.flex.items-center
+  = link_to "Send a test handshake",
+            handshake_letters_transports_mesh_operations_path,
+            class: "btn btn-secondary",
+            remote: true
+  .ml-4 then check All Operations for an HTTP 200 OK
+
+p.my-3 Look at the GoodJob admin cron schedule to see how often the handshake job runs
+
+
+= link_to "Run test cases",
+          renalware.letters_transports_mesh_testcase_invocations_path,
+          class: "btn btn-secondary",
+          method: :post

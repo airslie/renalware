@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::System::ViewMetadata do
   describe "#edit HTML" do
     it "renders a form" do

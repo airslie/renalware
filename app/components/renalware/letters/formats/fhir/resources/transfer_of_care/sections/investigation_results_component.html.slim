@@ -1,0 +1,12 @@
+table(width="100%")
+  tbody
+    tr
+      th Investigation Results
+    - groups.each do |group|
+      - group.each do |key, values|
+        tr
+          td= key
+          td
+            - values.each do |code, result|
+              = "#{code}: #{result}; "
+

@@ -1,0 +1,30 @@
+- generate_page_title(local_assigns: local_assigns)
+
+= content_for(:content) do
+  nav.patient-side-nav.admin-side-nav.full-screenable
+    .layout-wrapper
+      = render Renalware::System::AdminMenuComponent.new(current_user: current_user)
+
+  .non-patient-page.main-content
+    .layout-wrapper
+      .non-patient-page-header(class=("with-tabs" if content_for?(:tabs)))
+        .row
+          .columns.small-12
+            ul.page-heading
+              li
+                h1= content_for?(:title) ? yield(:title) : breadcrumbs_and_title(breadcrumbs: local_assigns[:breadcrumbs], title: local_assigns[:title])
+
+              li.page-actions
+                / Output any page-level actions
+                = yield(:actions)
+
+            - if content_for?(:tabs)
+
+              = yield(:tabs)
+
+      .row
+        .columns.small-12
+          = yield(:filters)
+          = yield
+
+= render template: "layouts/renalware"

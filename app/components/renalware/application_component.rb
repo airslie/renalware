@@ -14,6 +14,10 @@ module Renalware
       Renalware::Engine.routes.url_helpers
     end
 
+    def hospitals
+      Renalware::Hospitals::Engine.routes.url_helpers
+    end
+
     # Added this helper as I can't seem to get the Pundit #policy helper to be included
     # in the context when rendering a component template.
     def policy(record)

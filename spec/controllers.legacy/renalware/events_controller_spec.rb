@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails-controller-testing"
-require "rails_helper"
 
 module Renalware::Events
   describe EventsController, type: :controller do

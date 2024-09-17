@@ -9,6 +9,8 @@ en:
           cancel: Cancel
           save: Save
           title: Create a bookmark for this patient
+        edit:
+          title: Edit bookmark
         none: There are no patients bookmarked.
         table:
           age: Age
@@ -21,3 +23,5 @@ en:
           patient_name: Name
           sex: Sex
           tags: Tags
+        bookmark:
+          confirm: Are you sure you want to remove this bookmark?

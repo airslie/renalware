@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe WeekPeriod do
   describe "#new" do
     it "raises an error if the week/year combination is not valid" do

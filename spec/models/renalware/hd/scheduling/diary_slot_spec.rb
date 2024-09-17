@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::HD::Scheduling
   describe DiarySlot do
     it_behaves_like "an Accountable model"

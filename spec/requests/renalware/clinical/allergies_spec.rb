@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Allergy management" do
   let(:patient) { create(:clinical_patient, by: user) }
   let(:user) { @current_user }

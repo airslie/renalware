@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Problems
   describe MalignancySite do
     it { is_expected.to validate_presence_of(:description) }

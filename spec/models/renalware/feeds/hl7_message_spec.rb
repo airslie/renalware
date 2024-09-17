@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Feeds
   describe HL7Message do
     # We are sort of testing the MessageParser here also which is not ideal, but its role in parsing

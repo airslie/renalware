@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Configuring PD Bag Types" do
   let(:bag_type) { create(:bag_type) }
 

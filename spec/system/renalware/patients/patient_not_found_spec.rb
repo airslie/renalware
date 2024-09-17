@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Redirect to dashboard when patient not found" do
     context "when patient is not found by secure_id" do

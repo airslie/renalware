@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "core_extensions/i18n/handle_blank_value"
 
 module CoreExtensions

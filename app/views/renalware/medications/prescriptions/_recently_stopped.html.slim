@@ -1,6 +1,3 @@
-/ locals: (prescriptions:)
-/ Rails 7.1 strict locals:
-
 b.subtitle Recently Stopped Medications
 
 - if prescriptions.blank?
@@ -9,6 +6,6 @@ b.subtitle Recently Stopped Medications
   ul
     - prescriptions.each do |prescription|
       = render "renalware/medications/prescriptions/prescription",
-                 prescription: prescription,
-                 date_changed: prescription.terminated_on,
-                 recently_changed: false
+               prescription: prescription,
+               date_changed: prescription.terminated_on,
+               recently_changed: false

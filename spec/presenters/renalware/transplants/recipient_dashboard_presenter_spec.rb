@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Transplants::RecipientDashboardPresenter do
   subject { described_class.new(instance_double(Renalware::Patient)) }
 

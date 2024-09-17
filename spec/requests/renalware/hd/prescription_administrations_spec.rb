@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "HD Prescription Administrations" do
   let(:user1) { create(:user) }
   let(:user2) { create(:user) }

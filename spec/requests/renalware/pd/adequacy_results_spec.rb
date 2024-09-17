@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing PD Adequacy Results" do
   let(:patient) { create(:pd_patient, by: user) }
   let(:user) { create(:user) }

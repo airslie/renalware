@@ -16,6 +16,7 @@ module Renalware
           :created_by,
           :updated_by,
           :clinic,
+          :location,
           patient: [current_modality: [:description]]
         )
       end

@@ -1,6 +1,3 @@
-/ locals: (prescriptions:)
-/ Rails 7.1 strict locals:
-
 - if prescriptions.any?
   b.subtitle Drugs to give on Haemodialysis
 
@@ -8,9 +5,9 @@
       - prescriptions.each do |prescription|
         - if recently_changed.include?(prescription)
             = render "renalware/medications/prescriptions/prescription",
-                    prescription: prescription,
-                    date_changed: prescription.prescribed_on,
-                    recently_changed: true
+                     prescription: prescription,
+                     date_changed: prescription.prescribed_on,
+                     recently_changed: true
         - else
             = render "renalware/medications/prescriptions/prescription",
-                    prescription: prescription
+                     prescription: prescription

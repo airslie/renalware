@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   module Letters
     describe Lists::Form do
@@ -34,7 +32,7 @@ module Renalware
               author_id_eq: 2,
               created_by_id_eq: 3,
               letterhead_id_eq: 4,
-              page_count_in_array: 5
+              page_count_in_array: "5"
             }
           end
 

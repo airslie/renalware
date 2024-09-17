@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 
 describe "Managing PD PET Adequacy Results", type: :request do
   let(:patient) { create(:pd_patient, by: user) }

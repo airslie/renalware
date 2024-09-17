@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Update Admission Request", js: true do
   include AjaxHelpers
 

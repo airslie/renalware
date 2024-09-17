@@ -1,0 +1,53 @@
+table(width="100%")
+  thead
+    tr
+      th(style="width:100%") Current Medications
+  tbody
+    - if prescriptions.current.none?
+      tr
+        td No medications listed
+    - else
+      - prescriptions.current.each do |prescription|
+        tr
+          - if recently_changed.include?(prescription)
+            td= render "renalware/medications/prescriptions/prescription",
+                        prescription: prescription,
+                        date_changed: prescription.prescribed_on,
+                        recently_changed: true
+          - else
+            td= render "renalware/medications/prescriptions/prescription",
+                       prescription: prescription
+
+- if prescriptions.current_hd.any?
+  table(width="100%")
+    thead
+      tr
+        th(style="width:100%") Drugs to give on Haemodialysis
+    tbody
+      - prescriptions.current_hd.each do |prescription|
+        tr
+          - if recently_changed.include?(prescription)
+            td= render "renalware/medications/prescriptions/prescription",
+                        prescription: prescription,
+                        date_changed: prescription.prescribed_on,
+                        recently_changed: true
+          - else
+            td= render "renalware/medications/prescriptions/prescription",
+                      prescription: prescription
+
+table(width="100%")
+  thead
+    tr
+      th(style="width:100%") Recently Stopped Medications
+  tbody
+    - if prescriptions.recently_stopped.none?
+      tr
+        td None
+    - else
+      - prescriptions.recently_stopped.each do |prescription|
+        tr
+          td= render "renalware/medications/prescriptions/prescription",
+                     prescription: prescription,
+                     date_changed: prescription.terminated_on,
+                     recently_changed: false
+

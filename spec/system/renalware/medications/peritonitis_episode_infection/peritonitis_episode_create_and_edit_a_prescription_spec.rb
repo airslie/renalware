@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Prescriptions from a peritonitis episode, matches exit site infection 1-to-1", js: true do
   include DrugsSpecHelper
   let(:user) { create(:user, :clinical, additional_roles: :prescriber) }

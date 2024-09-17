@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Changing a patient's modality", js: true do
   it "allows specifying a source hospital if the change type requires it" do
     user = login_as_clinical

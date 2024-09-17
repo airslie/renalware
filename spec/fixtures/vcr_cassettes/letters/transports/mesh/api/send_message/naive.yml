@@ -1,0 +1,57 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8700/messageexchange/RAJ01OT001/outbox
+    body:
+      encoding: UTF-8
+      string: <Bundle xmlns="http://hl7.org/fhir"></Bundle>
+    headers:
+      Authorization:
+      - NHSMESH RAJ01OT001:8b43e38f-f5bc-4110-a93e-a4a769b4ea62:0:202303011839:f5e36d449af00c8ab8fb77984c8593c3acfae7d11cd8a97b1ef5b74f57a4057a
+      Mex-Clientversion:
+      - ApiDocs==0.0.1
+      Mex-Filename:
+      - None
+      Mex-Messagetype:
+      - DATA
+      Mex-Osarchitecture:
+      - x86_64
+      Mex-Osname:
+      - Linux
+      Mex-Osversion:
+      - ''
+      Mex-Workflowid:
+      - API-DOCS-TEST
+      Mex-From:
+      - RAJ01OT001
+      Mex-To:
+      - DEST
+      To:
+      - DEST
+      Content-Type:
+      - application/xml
+      User-Agent:
+      - Faraday v1.10.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 202
+      message: Accepted
+    headers:
+      Date:
+      - Wed, 01 Mar 2023 18:39:48 GMT
+      Server:
+      - uvicorn
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"messageID":"DC15F15F29D5487EA444310EE5222322"}'
+  recorded_at: Wed, 01 Mar 2023 18:39:48 GMT
+recorded_with: VCR 6.1.0

@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   module Transplants
     describe RecipientFollowup do
-      require "rails_helper"
 
       it :aggregate_failures do
         is_expected.to belong_to(:operation).touch(true)

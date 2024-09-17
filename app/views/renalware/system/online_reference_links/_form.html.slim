@@ -23,6 +23,16 @@ ruby:
               as: :text,
               hint: "A description of the resource that will be displayed next to the link or QR code."
 
+    span Automatic inclusion in new letters
+    .flex.gap-2
+      = f.input :include_in_letters_from,
+                as: :flatpickr,
+                label: "From"
+
+      = f.input :include_in_letters_until,
+                as: :flatpickr,
+                label: "To"
+
     = turbo_frame_tag("qr_code_preview", "data-preview-target" => "turboframe") do
       - if svg.present?
         h5.mt-3= "QR code preview for #{qr_url}"

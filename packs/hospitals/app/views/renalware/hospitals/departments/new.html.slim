@@ -1,0 +1,6 @@
+= within_new_admin_layout(title: "Add",
+                      breadcrumbs: [breadcrumb_for(centre, hospitals.centres_path(centre)), breadcrumb_for("Departments", hospitals.centre_departments_path(centre))]) do
+  = render "form",
+           centre: centre,
+           department: department,
+           url: hospitals.centre_departments_path(centre)

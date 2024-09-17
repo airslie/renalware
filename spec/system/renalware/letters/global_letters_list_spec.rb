@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "View global letters list", js: false do
   include LettersSpecHelper
 

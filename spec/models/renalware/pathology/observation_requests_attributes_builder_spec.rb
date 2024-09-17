@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # rubocop:disable RSpec/VerifiedDoubles
 module Renalware::Pathology
   describe ObservationRequestsAttributesBuilder do
@@ -33,7 +31,8 @@ module Renalware::Pathology
                   value: "::value::",
                   comment: "::comment::",
                   cancelled: nil,
-                  units: "mg"
+                  units: "mg",
+                  result_status: "F"
                 )
               ]
             )
@@ -79,7 +78,8 @@ module Renalware::Pathology
                   observed_at: "2009-11-11 18:41:00 +0000", # Copied from OBR requested datetime!
                   result: "::value::",
                   comment: "::comment::",
-                  cancelled: nil
+                  cancelled: nil,
+                  result_status: "F"
                 ]
               }
             }
@@ -221,7 +221,8 @@ module Renalware::Pathology
                     value: "::value::",
                     comment: "::comment::",
                     cancelled: nil,
-                    units: "mg"
+                    units: "mg",
+                    result_status: "F"
                   )
                 ]
               )
@@ -292,7 +293,8 @@ module Renalware::Pathology
                     value: "::value::",
                     comment: "::comment::",
                     cancelled: nil,
-                    units: ""
+                    units: "",
+                    result_status: "F"
                   )
                 ]
               )
@@ -300,7 +302,7 @@ module Renalware::Pathology
           )
         }
 
-        it "creates the OBX code dynamcically" do
+        it "creates the OBX code dynamically" do
           described_class.new(hl7_message).parse
 
           sender = create(:pathology_sender, sending_facility: "Fac", sending_application: "*")
@@ -385,7 +387,8 @@ module Renalware::Pathology
                     value: "123",
                     comment: "",
                     cancelled: nil,
-                    units: "mg"
+                    units: "mg",
+                    result_status: "F"
                   ),
                   double(
                     identifier: "I_DO_NOT_EXIST_CODE",
@@ -394,7 +397,8 @@ module Renalware::Pathology
                     value: "",
                     comment: "",
                     cancelled: nil,
-                    units: "mg"
+                    units: "mg",
+                    result_status: "P"
                   )
                 ]
               )

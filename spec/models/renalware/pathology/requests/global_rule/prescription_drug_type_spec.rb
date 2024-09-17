@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::Requests::GlobalRule::PrescriptionDrugType do
   let(:drug_type) { create(:drug_type) }
 

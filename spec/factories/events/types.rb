@@ -21,6 +21,8 @@ FactoryBot.define do
       name { "Swab" }
       event_class_name { "Renalware::Events::Swab" }
       slug { "swabs" }
+      author_change_window_hours { -1 }
+      admin_change_window_hours { -1 }
     end
 
     factory :biopsy_event_type do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe Admissions::AdmissionSearchForm do
     it "extracts inputs and invokes the query object with them" do

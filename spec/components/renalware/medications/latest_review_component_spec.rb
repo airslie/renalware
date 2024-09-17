@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Medications::LatestReviewComponent, type: :component do
   it "renders nothing if the patient has no medication reviews" do
     user = create(:user)

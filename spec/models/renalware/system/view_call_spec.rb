@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::System
   describe ViewCall do
     it { is_expected.to belong_to(:view_metadata).counter_cache(:calls_count) }

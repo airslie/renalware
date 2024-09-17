@@ -1,8 +1,6 @@
 # TODO
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Patient Group Directions (PGD)" do
   it "listing PGDs" do
     pgd = create(:patient_group_direction, name: "PGD name1", code: "PCG code1")

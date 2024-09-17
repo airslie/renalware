@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # We also implictly testing AppointmentQuery here.
 # Note there is a known ransacker issue where if there was an appointment at 00:00 in 5-Apr
 # created in BST then it will be stored in UTC as 23:00 4-Apr and the ransacker :started_on in

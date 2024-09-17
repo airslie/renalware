@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rubygems"
-require "packs-rails"
+require "dotenv-rails"
 require "view_component"
 require "activerecord-import"
 require "ahoy"
@@ -17,7 +17,6 @@ require "devise-security"
 require "delayed_job_active_record"
 require "diffy"
 require "diff-lcs"
-require "dotenv-rails"
 require "dumb_delegator"
 require "email_validator"
 require "enumerize"
@@ -61,10 +60,15 @@ require "virtus"
 require "wicked_pdf"
 require "wisper"
 require "wisper/activejob"
-require "byebug" if ENV.fetch("RAILS_ENV", nil) == "development"
+require "debug" if ENV.fetch("RAILS_ENV", nil) == "development"
 
+# Require engines inside /packs
+Dir["#{File.dirname(__FILE__)}/../../packs/*/lib/**/engine.rb"].each { |f| require f }
+# # include packs
+# require_relative "../../packs/reporting/lib/engine"
+# require_relative "../../packs/nhs_letter_messaging/lib/engine"
 # include packs
-require_relative "../../packs/reporting/lib/engine"
+# require_relative "../../packs/reporting/lib/engine"
 
 module Renalware
   # Don't have prefix method return anything.
@@ -88,6 +92,7 @@ module Renalware
 
     # Scheduled jobs; Compatible with GoodJob
     class << self
+      # rubocop:disable Metrics/MethodLength
       def scheduled_jobs_config
         {
           ods_sync: {
@@ -139,9 +144,28 @@ module Renalware
             cron: "every day at 2am",
             class: "Renalware::HD::TerminateAdministeredUnwitnessedStatPrescriptionsJob",
             description: "Does what it says on the tin :)"
+          },
+
+          mesh_handshake: {
+            cron: "every day at 2am",
+            class: "Renalware::Letters::Transports::Mesh::HandshakeJob",
+            description: "Lets ToC know to keep the inbox connection alive"
+          },
+
+          mesh_check_inbox_for_outstanding_responses: {
+            cron: "every 2 minute",
+            class: "Renalware::Letters::Transports::Mesh::CheckInboxJob",
+            description: "Check our MESH inbox for incoming ToC messages"
+          },
+
+          reconcile_mesh_transmissions_job: {
+            cron: "every 2 minutes",
+            class: "Renalware::Letters::Transports::Mesh::ReconcileOperationsJob",
+            description: ""
           }
         }.merge(good_job_config_to_enable_feed_import_via_raw_hl7_messages_table)
       end
+      # rubocop:enable Metrics/MethodLength
     end
 
     def good_job_config_to_enable_feed_import_via_raw_hl7_messages_table
@@ -249,6 +273,17 @@ module Renalware
       end
       app.config.action_mailer.preview_path = Engine.root.join("app", "mailers", "renalware")
       app.config.action_mailer.deliver_later_queue_name = "mailers"
+    end
+
+    config.before_initialize do
+      # Load the config at this stage to make sure we
+      # load from the demo/.env
+      require "renalware/configuration"
+
+      # In development don't ajax poll so often for a timeout as it can upset our byebug sessions.
+      Renalware.configure do |config|
+        config.session_timeout_polling_frequency = 1.hour
+      end
     end
 
     config.to_prepare do

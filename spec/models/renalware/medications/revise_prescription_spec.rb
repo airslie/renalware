@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Medications
   describe RevisePrescription do
     let(:patient) { create(:patient) }

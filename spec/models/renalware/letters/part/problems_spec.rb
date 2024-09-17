@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Letters
   describe Part::Problems do
     let(:instance) { described_class.new(letter: Letter.new(patient: patient)) }

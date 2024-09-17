@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::System::SqlFunctionJob do
   it "raises an error if the sql fn does not exist" do
     expect {

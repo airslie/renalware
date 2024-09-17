@@ -17,6 +17,7 @@ module Demo
     config.autoloader = :zeitwerk
     config.active_record.belongs_to_required_by_default = false
     config.active_record.collection_cache_versioning = false
+    config.view_component.preview_paths << Renalware::Engine.root.join("spec/components/previews")
 
     # Important!!
     # Unless set to :all, pg extensions are not put into structure.sql so certain
@@ -32,7 +33,7 @@ module Demo
     config.active_support.escape_html_entities_in_json = false
 
     initializer :add_locales do
-      config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
+      config.i18n.load_path += Rails.root.glob("config/locales/**/*.{rb,yml}")
     end
 
     console do

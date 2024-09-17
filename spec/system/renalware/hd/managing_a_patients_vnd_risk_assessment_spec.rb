@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing a patient's Venal Needle Dislodgment (VND) risk assessment" do
   include PatientsSpecHelper
 

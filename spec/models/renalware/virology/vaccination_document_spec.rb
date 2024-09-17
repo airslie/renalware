@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe Virology::Vaccination::Document do
     it { is_expected.to validate_presence_of(:type) }

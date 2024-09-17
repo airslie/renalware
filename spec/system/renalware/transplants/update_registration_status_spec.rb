@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Update wait list registration status" do
   # This exercises a bug I am trying to fix, where in certain circumstances
   # (I'm trying to ascertain these) adding a new registration status causes the error

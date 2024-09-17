@@ -8,60 +8,41 @@
                   method: :post,
                   wrapper: :horizontal_form) do |f|
 
+  / Hidden fields
   = f.input :station_id, as: :hidden
   = f.input :diurnal_period_code_id, as: :hidden
   = f.input :day_of_week, as: :hidden
 
+  / Data to drive the patient_search_scope select and the dynamically built patient_id select
+  - patient_search_options = slot.patient_search_options(request.url)
+  - patient_search_collection_options = patient_search_options.map { |key, options| [options[:text], key, options[:meta]] }
+
   .row
     .col-small-4
-      = f.input :change_type,
-                input_html: { id: :change_type },
-                collection: slot.patient_search_options,
+      = f.input :patient_search_scope,
+                input_html: { \
+                  id: :patient_search_scope, \
+                  data: { \
+                    controller: "select-update-frame",
+                    "select-update-frame-frame-id-value": "slotpatientid",
+                    "action": "change->select-update-frame#change" }},
+                collection: patient_search_collection_options,
                 include_blank: false,
                 label: "Search"
+
     .col-small-8
-
-      / We will post 3 patient_id values in slot[patient_id][]
-      / The value selected in in change_type above will determine which one to choose.
-      #patient_select2s
-        #dialysing_on_day_and_period
-          = f.input :patient_id,
-                   collection: slot.patients_preferring_to_dialyse_today_in_this_period,
-                   label_method: :text,
-                   value_method: :id,
-                   input_html: { class: "searchable_select patient-id-select2",
-                                 id: "patient_id1",
-                                 name: "slot[patient_ids][]" }
-
-        #dialysing_on_day(style="display:none")
-          = f.input :patient_id,
-                   collection: slot.patients_preferring_to_dialyse_today,
-                   label_method: :text,
-                   value_method: :id,
-                   input_html: { class: "searchable_select patient-id-select2",
-                                 id: "patient_id2",
-                                 name: "slot[patient_ids][]" }
-        #dialysing_at_unit(style="display:none")
-          = f.input :patient_id,
-                    collection: [],
-                    input_html: { \
-                      class: "patient-id-select2 patient-ajax-search",
-                      name: "slot[patient_ids][]",
-                      data: { "ajax--url" => hd_patients_dialysing_at_unit_path(unit_id: slot.diary.hospital_unit_id, format: :json),
-                              placeholder: "Search by patient name or NHS/hosp no." } \
-                    }
-
-        #dialysing_at_hospital(style="display:none")
-          = f.input :patient_id,
-                    collection: [],
-                    input_html: { \
-                      class: "patient-id-select2 patient-ajax-search",
-                      name: "slot[patient_ids][]",
-                      data: { "ajax--url" => hd_patients_dialysing_at_hospital_path(format: :json),
-                              placeholder: "Search by patient name or NHS/hosp no." } \
-                    }
-  / This is the one that actually gets posted
-  = f.input :patient_id, as: :hidden, input_html: { id: "patient_id" }
+      / When the above patient_search_scope select changes, this turboframe refreshes
+      / and displays a patient_id input relevant to the chosen scope; so for example if
+      / the scope is :dialysing_on_day then we might display a static collecton of patients, becuase
+      / there are not too many of them, but if scope
+      / is :dialysing_at_hospital then because there maybe hundreds rather than tens,
+      / we use an ajax search to allow the user to find the patient, and the JSON endpoint for the
+      / ajax search is defined in patient_search_options[:options_url].
+      / See DiarySlotPresenter#patient_search_options for the configuration that drives this
+      / by defining scopes in a hash.
+      = turbo_frame_tag "slotpatientid" do
+        = render Renalware::Patients::LookupComponent.new(form: f,
+            **patient_search_options[slot.patient_search_scope.to_sym])
 
   = f.input :arrival_time, as: :clock_picker, wrapper: :horizontal_clockpicker
   = f.submit "Add for this week only", class: "button save weekly"
@@ -75,14 +56,11 @@
            class: "reveal-modal-close"
 
 javascript:
-  $(document).ready(function() {
+  document.addEventListener("turbo:frame-load", function (e) {
+    $('.searchable_select', modal).select2();
+    Renalware.PatientSearch.init();
 
-    $(".patient-id-select2").on("select2:select", function(e) {
-      var selected_patient_id = $(this).find(':selected').val();
-      $("#patient_id").val(selected_patient_id);
-    })
-
-    // 1. add handler for button if master set action
+    // add handler for button if master set action
     $('input.master[type=submit]').click(function (e) {
       var master_slots_url = $(".diary").data("master-diary-slots-path");
       $("#slot-form").attr('action', master_slots_url);
@@ -91,29 +69,5 @@ javascript:
     $('input.weekly[type=submit]').click(function (e) {
       var weekly_slots_url = $(".diary").data("weekly-diary-slots-path");
       $("#slot-form").attr('action', weekly_slots_url);
-    });
-
-    refreshSelect2s("#{slot.change_type}");
-
-    function resizeSelect2ToFitModalWidth(container) {
-      $('.select2', container).css('width', "100%");
-    }
-
-    function refreshSelect2s(change_type) {
-      if (change_type == '') return;
-      // Hide any showing patient select2's then display just the one corresponding to
-      // what was selected in change_type. The value in the change_type option
-      // will exist as an html id, wrapping the patient select2s
-      var container = $("#patient_select2s")
-      $("#patient_select2s > div").hide();
-      $("#patient_select2s > #" + change_type).show();
-      $("#patient_select2s .patient-id-select2").val("").trigger('change');
-      resizeSelect2ToFitModalWidth(container);
-    }
-
-    $("#change_type").on("change", function() {
-      change_type = $(this).val(); // e.g. "dialysing_at_unit"
-       $("#patient_id").val("");
-      refreshSelect2s(change_type);
     })
-  });
+  })

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Simulation of Mirth inserting an HL7 message using our helper function" do
   include DatabaseFunctionsSpecHelper
 

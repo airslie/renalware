@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing Users" do
   let(:user) { create(:user, :unapproved, :clinical, prescriber: false) }
 

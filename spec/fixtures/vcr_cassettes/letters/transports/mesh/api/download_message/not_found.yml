@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8700/messageexchange/RAJ01OT001/inbox/123
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - NHSMESH RAJ01OT001:24d2ee89-2cbb-4693-bba6-9fca3c45f935:0:202303011309:58cecdb98541145cb272cf364ea1413767ac671dda1fab8290ffbc6ccb86a1d5
+      Mex-Clientversion:
+      - ApiDocs==0.0.1
+      Mex-Filename:
+      - None
+      Mex-Messagetype:
+      - DATA
+      Mex-Osarchitecture:
+      - x86_64
+      Mex-Osname:
+      - Linux
+      Mex-Osversion:
+      - ''
+      User-Agent:
+      - Faraday v1.10.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Wed, 01 Mar 2023 13:09:55 GMT
+      Server:
+      - uvicorn
+      Content-Length:
+      - '85'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"errorEvent":"RECEIVE","errorCode":"20","errorDescription":"Message
+        does not exist"}'
+  recorded_at: Wed, 01 Mar 2023 13:09:55 GMT
+recorded_with: VCR 6.1.0

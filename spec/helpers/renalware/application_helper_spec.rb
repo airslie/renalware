@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::ApplicationHelper do
   describe ".default_patient_link" do
     it "creates a link going to the patient's clinical summary" do

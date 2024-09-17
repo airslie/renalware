@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Add person to directory and assign as a contact for a patient",
          js: true do
   include AjaxHelpers

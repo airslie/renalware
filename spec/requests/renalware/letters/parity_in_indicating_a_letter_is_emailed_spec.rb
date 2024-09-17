@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   module Letters
     # This is an attempt to explore the two ways we have of determining if the practice will
@@ -46,13 +44,13 @@ module Renalware
         end
 
         it "PracticeEmail.address returns the practice email" do
-          practice_email_address = Delivery::PracticeEmail.new(letter).address
+          practice_email_address = Delivery::Email::PracticeEmail.new(letter).address
 
           expect(practice_email_address).to eq(email)
         end
 
         it "DeliveryPolicy#email_letter_to_practice? returns true" do
-          policy = Delivery::DeliveryPolicy.new(letter)
+          policy = Delivery::Email::DeliveryPolicy.new(letter)
 
           expect(policy.email_letter_to_practice?).to be(true)
         end
@@ -78,13 +76,13 @@ module Renalware
         end
 
         it "PracticeEmail.address returns the practice email" do
-          practice_email_address = Delivery::PracticeEmail.new(letter).address
+          practice_email_address = Delivery::Email::PracticeEmail.new(letter).address
 
           expect(practice_email_address).to eq(email)
         end
 
         it "DeliveryPolicy#email_letter_to_practice? returns true" do
-          policy = Delivery::DeliveryPolicy.new(letter)
+          policy = Delivery::Email::DeliveryPolicy.new(letter)
 
           expect(policy.email_letter_to_practice?).to be(true)
         end
@@ -103,13 +101,13 @@ module Renalware
         end
 
         it "PracticeEmail.address returns the practice email" do
-          practice_email_address = Delivery::PracticeEmail.new(letter).address
+          practice_email_address = Delivery::Email::PracticeEmail.new(letter).address
 
           expect(practice_email_address).to eq(email)
         end
 
         it "DeliveryPolicy#email_letter_to_practice? returns true" do
-          policy = Delivery::DeliveryPolicy.new(letter)
+          policy = Delivery::Email::DeliveryPolicy.new(letter)
 
           expect(policy.email_letter_to_practice?).to be(true)
         end
@@ -135,13 +133,13 @@ module Renalware
           end
 
           it "PracticeEmail.address returns the practice email" do
-            practice_email_address = Delivery::PracticeEmail.new(letter).address
+            practice_email_address = Delivery::Email::PracticeEmail.new(letter).address
 
             expect(practice_email_address).to be_nil
           end
 
           it "DeliveryPolicy#email_letter_to_practice? returns true" do
-            policy = Delivery::DeliveryPolicy.new(letter)
+            policy = Delivery::Email::DeliveryPolicy.new(letter)
 
             expect(policy.email_letter_to_practice?).to be(false)
           end

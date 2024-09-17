@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::HD::PrescriptionAdministrationsQuery do
   let(:administrator) { create(:user, password: "password") }
   let(:witness) { create(:user, password: "password") }

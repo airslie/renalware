@@ -1,0 +1,18 @@
+- active_tab = local_assigns[:active]
+
+dl.sub-nav.no-js-selection
+  dd(class=("active" if active_tab == :summary))
+    = link_to "Summary", research.study_path(study)
+  - if policy(study).edit?
+    dd(class=("active" if active_tab == :settings))
+      = link_to research.edit_study_path(study) do
+        i.fas.fa-cogs
+        | Settings
+  dd(class=("active" if active_tab == :participations))
+    = link_to research.study_participations_path(study) do
+      i.fas.fa-users
+      | Participants
+  dd(class=("active" if active_tab == :investigatorships))
+    = link_to research.study_investigatorships_path(study) do
+      i.fas.fa-user
+      | Investigators

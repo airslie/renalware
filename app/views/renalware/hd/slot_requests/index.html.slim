@@ -10,8 +10,7 @@
            url: renalware.hd_slot_requests_path,
            urgency_dropdown_options: urgency_dropdown_options
 
-- content_for(:tabs) do
-  = render "tabs"
+- content_for(:tabs) { render "tabs" }
 
 = within_admin_layout(title: t(".page-title")) do
   = render "table", **local_assigns

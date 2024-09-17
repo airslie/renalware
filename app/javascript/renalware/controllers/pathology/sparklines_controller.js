@@ -110,7 +110,6 @@ export default class extends Controller {
 
   /*
   window.Highcharts.SparkLine = function (a, b, c) {
-  console.log("defining1");
   var hasRenderToArg = typeof a === 'string' || a.nodeName,
       options = arguments[hasRenderToArg ? 1 : 0],
       defaultOptions = {

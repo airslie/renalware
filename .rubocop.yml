@@ -44,11 +44,21 @@ AllCops:
     - "demo/bin/**/*"
     - "demo/lib/tasks/**/*"
     - "demo/db/**/*"
+    - "demo/db/migrate/*"
     - "tmp/**/*"
     - "demo/tmp/**/*"
     - "vendor/bundle/**/*"
     - "config/initializers/devise.rb"
     - "features/support/env.xaction_view.rb"
+
+Rails/EnumHash:
+  Enabled: false
+
+Rails/EnumSyntax:
+  Enabled: false
+
+Style/CommentAnnotation:
+  Enabled: false
 
 RSpec/VerifiedDoubleReference:
   Enabled: true
@@ -106,6 +116,16 @@ RSpec/SpecFilePathFormat:
   Exclude:
     - "spec/components/renalware/letters/unread_electronic_ccs_component_spec.rb"
 
+Metrics/MethodLength:
+  Exclude:
+    - app/models/renalware/letters/formats/fhir/**/resources/**/*
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: true
+  Exclude:
+    - "lib/renalware/engine.rb"
 Layout/LineLength:
   Exclude:
     - "spec/acceptance/renalware/steps/**/*"
@@ -122,13 +142,14 @@ Metrics/AbcSize:
     - "spec/acceptance/renalware/steps/**/*"
     - "features/**/*"
     - "db/**/*"
+    - app/models/renalware/letters/formats/fhir/**/resources/**/*
   Max: 25
 RSpec/ExampleLength:
   Max: 40
   Exclude:
     - "spec/system/**/*"
 RSpec/NestedGroups:
-  Max: 4
+  Max: 5
 RSpec/MultipleExpectations:
   Max: 10
   Exclude:

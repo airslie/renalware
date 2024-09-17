@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Updating a Event triggers an event_updated broadcast" do
   context "when updating a simple event" do
     class TestEventListener

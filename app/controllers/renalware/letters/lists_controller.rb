@@ -4,6 +4,7 @@ module Renalware
   module Letters
     class ListsController < Letters::BaseController
       include Renalware::Concerns::Pageable
+      layout -> { turbo_frame_request? ? "turbo_rails/frame" : "renalware/layouts/simple" }
 
       # TODO: Use a presenter here
       def show
@@ -11,6 +12,8 @@ module Renalware
         form = form_for(named_filter)
         query = LetterQuery.new(q: form.attributes)
         letters = find_and_authorize_letters(query)
+        letters = letters.only_deleted if form.include_deleted
+        letters = present_letters(letters)
 
         q = query.search
 
@@ -38,8 +41,9 @@ module Renalware
       end
 
       def find_and_authorize_letters(query)
-        collection = call_query(query).page(page).per(per_page)
-        present_letters(collection).tap { |letters| authorize letters }
+        letters = call_query(query).page(page).per(per_page)
+        authorize letters
+        letters
       end
 
       def present_letters(letters)
@@ -51,6 +55,7 @@ module Renalware
           .call
           .with_patient
           .with_main_recipient
+          .with_deleted_by
           .with_letterhead
           .with_author
           .with_created_by
@@ -71,7 +76,8 @@ module Renalware
             :letterhead_id_eq,
             :page_count_in_array,
             :clinic_visit_clinic_id_eq,
-            :s
+            :s,
+            gp_send_status_in: []
           )
       end
     end

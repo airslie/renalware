@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe MicrosoftGraph::Client do
   subject(:client) do
     described_class.new(

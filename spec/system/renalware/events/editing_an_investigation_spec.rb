@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Editing an investigation", js: true do
   include AjaxHelpers
   include PatientsSpecHelper

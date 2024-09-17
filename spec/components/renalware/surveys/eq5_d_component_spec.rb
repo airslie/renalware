@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Surveys::EQ5DComponent, type: :component do
   let(:patient) { build_stubbed(:patient) }
 

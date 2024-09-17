@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Get formatted letter HTML content" do
   include LettersSpecHelper
 

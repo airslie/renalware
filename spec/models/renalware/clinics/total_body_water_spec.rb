@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Clinics::TotalBodyWater do
   describe "#calculate" do
     context "when no recent weight measurement found" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Feeds
   describe PersistMessage do
     subject(:service) { described_class.new }

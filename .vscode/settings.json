@@ -10,5 +10,13 @@
   },
   "solargraph.autoformat": true,
   "solargraph.diagnostics": true,
-  "solargraph.formatting": true
+  "solargraph.formatting": true,
+  "cSpell.language": "en,en-GB",
+  "cSpell.words": [
+    "datetime",
+    "FHIR",
+    "MESHAPI",
+    "Renalware",
+    "snomed"
+  ]
 }

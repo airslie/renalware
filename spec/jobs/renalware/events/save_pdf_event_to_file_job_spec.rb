@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Events::SavePdfEventToFileJob do
   subject(:job) { described_class.new }
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::Requests::PatientRule do
   subject(:patient_rule) do
     create(

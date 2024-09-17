@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Daily average glucose(ml) calculated from bags per type assigned during one week",
            js: true do

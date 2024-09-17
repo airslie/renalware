@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Prescriptions - create / edit / terminate", js: true do
   include DrugsSpecHelper
 

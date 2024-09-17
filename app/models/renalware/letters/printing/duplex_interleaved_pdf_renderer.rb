@@ -26,10 +26,17 @@ module Renalware
           WickedPdf.new.pdf_from_string(
             LettersController.new.render_to_string(
               template: "/renalware/letters/printable_letters/show",
-              locals: { letter: letter, recipients: PrintableRecipients.for(letter) },
+              locals: { letter: letter, recipients: printable_recipients_for(letter) },
               encoding: "UTF-8"
             ),
             OPTIONS
+          )
+        end
+
+        def self.printable_recipients_for(letter)
+          CollectionPresenter.new(
+            Recipient.printable_recipients_for(letter),
+            RecipientPresenter::WithCurrentAddress
           )
         end
       end

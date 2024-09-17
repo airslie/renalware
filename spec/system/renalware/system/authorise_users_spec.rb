@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "action_view/record_identifier"
 
 module Renalware
@@ -28,7 +27,7 @@ module Renalware
       click_on "Approve"
 
       expect(page).to have_current_path(admin_users_path)
-      expect(page).to have_content("You have successfully updated this user.")
+      expect(page).to have_content("User updated")
       expect(@unapproved.reload).to be_approved
       expect(@unapproved.roles).to contain_exactly(@clinician_role)
     end
@@ -43,7 +42,7 @@ module Renalware
 
       expect(page).to have_current_path(admin_user_path(@unapproved))
       expect(@unapproved.reload).not_to be_approved
-      expect(page).to have_content("You have failed to update this user.")
+      expect(page).to have_content("User could not be updated")
       expect(page).to have_content(/approved users must have a role/)
     end
 
@@ -55,7 +54,7 @@ module Renalware
       click_on t("btn.update")
 
       expect(page).to have_current_path(admin_user_path(@approved))
-      expect(page).to have_content("You have failed to update this user.")
+      expect(page).to have_content("User could not be updated")
       expect(page).to have_content(/approved users must have a role/)
     end
 
@@ -69,7 +68,7 @@ module Renalware
       click_on t("btn.update")
 
       expect(page).to have_current_path(admin_users_path)
-      expect(page).to have_content("You have successfully updated this")
+      expect(page).to have_content("User updated")
       expect(@approved.reload).to be_approved
       expect(@approved.roles).to include(@clinician_role)
     end
@@ -84,7 +83,7 @@ module Renalware
       click_on t("btn.update")
 
       expect(page).to have_current_path(admin_users_path)
-      expect(page).to have_content("You have successfully updated this")
+      expect(page).to have_content("User updated")
       expect(@expired.reload.expired_at).to be_nil
 
       click_link "Inactive"

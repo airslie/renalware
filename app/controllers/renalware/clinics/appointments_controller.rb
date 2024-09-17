@@ -4,6 +4,7 @@ module Renalware
   module Clinics
     class AppointmentsController < BaseController
       include Pagy::Backend
+      use_layout :simple
 
       def index
         query = search_form.query

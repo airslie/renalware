@@ -17,8 +17,10 @@ module Renalware
           def call
             return if rwclinic.blank?
 
+            patient = find_or_create_patient
+
             Appointment.create!(
-              patient: Clinics.cast_patient(find_or_create_patient),
+              patient: Clinics.cast_patient(patient),
               starts_at: expected_admit_date,
               clinic: rwclinic,
               consultant: rwconsultant,
@@ -32,7 +34,14 @@ module Renalware
             reason = "Clinic appt"
             Patients::Ingestion::Commands::AddPatient.call(message, reason).tap do |patient|
               assign_the_clinic_default_modality_to_new_patients(patient)
+              update_patient_demographics(patient)
             end
+          end
+
+          def update_patient_demographics(patient)
+            patient = Patients::Ingestion::MessageMappers::Patient.new(message, patient).fetch
+            patient.by = SystemUser.find
+            patient.save!
           end
 
           # If the clinic has a default modality description against it, assign that to the patient

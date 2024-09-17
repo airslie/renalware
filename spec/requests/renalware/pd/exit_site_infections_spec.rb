@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Exit Site Infections" do
   describe "GET show as pdf" do
     it "responds successfully with a pdf form for the nurse to print out and use to gather " \

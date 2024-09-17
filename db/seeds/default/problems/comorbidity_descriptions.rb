@@ -12,6 +12,8 @@ module Renalware
         name: row["name"],
         position: row["position"],
         snomed_code: row["snomed_code"],
+        has_malignancy_site: row["has_malignancy_site"],
+        has_diabetes_type: row["has_diabetes_type"],
         created_at: Time.zone.now,
         updated_at: Time.zone.now
       }

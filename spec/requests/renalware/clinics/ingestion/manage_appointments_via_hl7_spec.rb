@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "manage appointments via HL7 ADT messages" do
   include HL7Helpers
   include PatientsSpecHelper
 
-  let(:nhs_number) { "1092192328" }
-  let(:local_patient_id) { "123" }
-  let(:visit_number) { "123" }
-  let(:clinic_code) { "clinic1" }
-  let(:consultant_code) { "doc1" }
-  let(:starts_at) { "20210809130000" }
+  let(:nhs_number)        { "1092192328" }
+  let(:local_patient_id)  { "123" }
+  let(:visit_number)      { "123" }
+  let(:clinic_code)       { "clinic1" }
+  let(:consultant_code)   { "doc1" }
+  let(:starts_at)         { "20210809130000" }
 
   let(:data) do
     OpenStruct.new(
@@ -23,7 +21,8 @@ describe "manage appointments via HL7 ADT messages" do
         family_name: "Smith",
         given_name: "John",
         sex: "M",
-        born_on: "19440922"
+        born_on: "19440922",
+        address: OpenStruct.new(postcode: "AA1 1AA")
       ),
       clinic: OpenStruct.new(
         code: clinic_code
@@ -43,7 +42,9 @@ describe "manage appointments via HL7 ADT messages" do
       nhs_number: nhs_number,
       local_patient_id: local_patient_id,
       born_on: Date.parse("19440922")
-    )
+    ).tap do |pat|
+      pat.current_address.update!(postcode: "OLD POSTCODE")
+    end
   end
 
   before do
@@ -186,6 +187,21 @@ describe "manage appointments via HL7 ADT messages" do
         end
       end
       # rubocop:enable RSpec/ChangeByZero
+    end
+
+    it "updates patient demographics (eg postcode) if patient found" do
+      patient = create_matching_patient
+      patient.current_address.update!(postcode: "OLD_POSTCODE")
+      create(:clinic, code: clinic_code)
+
+      data.patient.address.postcode = "NEW_POSTCODE"
+      msg = hl7_message_from_file("clinics/ADT_A05_create_appointment", data)
+
+      expect {
+        Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
+      }.to change(Renalware::Clinics::Appointment, :count).by(1)
+
+      expect(patient.current_address.reload.postcode).to eq("NEW_POSTCODE")
     end
   end
 

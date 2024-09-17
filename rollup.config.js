@@ -2,7 +2,6 @@
 
 import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs" // required for uglify
-import babel from "rollup-plugin-babel"
 import pkg from "./package.json"
 
 const watchDirectories = [
@@ -28,7 +27,6 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    babel(),
     resolve(),
     commonjs()
   ],

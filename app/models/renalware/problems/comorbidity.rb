@@ -17,6 +17,7 @@ module Renalware
       )
 
       belongs_to :patient
+      belongs_to :malignancy_site
       belongs_to :description, class_name: "Comorbidities::Description"
 
       validates :patient, presence: true

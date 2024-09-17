@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "net/sftp"
 
 describe Renalware::UKRDC::Outgoing::TransferFilesJob do

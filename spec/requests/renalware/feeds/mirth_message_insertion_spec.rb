@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # Note the handling of \S\ and \\S\\ in this file is a bit confusing.
 # Where you see \\S\\ think \S\ and \\\\S\\\\ think \\S\\/
 # We can use quoted heredocs to avoid Ruby escaping these strings - I tried this but

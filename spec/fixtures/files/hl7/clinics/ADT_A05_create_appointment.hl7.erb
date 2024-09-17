@@ -1,5 +1,5 @@
 MSH|^~\&|CSCLRC|RAJ32|Renalware|MSE|20210809151002||ADT^A05|650058171210|P|2.4|||AL|NE|||
 EVN|A05|20210809151002||OPT-C|||
-PID||<%= data.patient.nhs_number %>^^^NHS|<%= data.patient.hospital_number %>^^^KCH||<%= data.patient.family_name %>^<%= data.patient.given_name %>^^^MS||<%= data.patient.born_on %>|<%= data.patient.sex.to_s %>|||address1^address2^address3^address4^postcode||||||||||||||||||<%= data.patient.died_at&.strftime('%Y%m%d') %>|
+PID||<%= data.patient.nhs_number %>^^^NHS|<%= data.patient.hospital_number %>^^^KCH||<%= data.patient.family_name %>^<%= data.patient.given_name %>^^^MS||<%= data.patient.born_on %>|<%= data.patient.sex.to_s %>|||address1^address2^address3^address4^<%= data.patient.address.postcode || 'postcode' %>||||||||||||||||||<%= data.patient.died_at&.strftime('%Y%m%d') %>|
 PV1||O|<%= data.clinic.code %>^TEST01 - Testing - Raynard - BMFD^A208clinic^RQ8|||||G9710887^MOHABIR^NA^^^DR^^^^^^^NATGP|<%= data.consultant.code %>^<%= data.consultant.family_name %>^<%= data.consultant.given_name %>^^^<%= data.consultant.title %>^^^^^^^SDSID|300|||||||||<%= data.visit_number %>|||||||||||||||||||||||||||||||||
 PV2||||||||<%= data.starts_at %>|||||||||||||||||||||||||||||||||||||||

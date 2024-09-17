@@ -1,8 +1,10 @@
 = content_for(:actions) do
   = render "actions", options: options
 
-= content_for(:filters) do
-  = render "filters", options: options
+/ Do not re-render filters unneccessarily if we are refreshing the page due to a filter change
+- unless turbo_frame_request
+  = content_for(:filters) do
+    = render "filters", options: options
 
 ruby:
   scope = options.current_view.scope&.humanize
@@ -10,7 +12,11 @@ ruby:
   page_title = (title.present? && title != "All") ? title : scope
 
 = within_admin_layout(title: "#{page_title} MDMS") do
-  - if options.pagination.count.zero?
-    = render "renalware/shared/no_data/table"
-  - else
-    = render "table", options: options
+  / See also _filters
+  = turbo_frame_tag "mdm_list" do
+    = render Renalware::SpinnerComponent.new do |spinner|
+      = spinner.with_main_content do
+        - if options.pagination.count.zero?
+          = render "renalware/shared/no_data/table"
+        - else
+          = render "table", options: options

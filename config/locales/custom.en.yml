@@ -1,12 +1,15 @@
 ---
 en:
   create:
-    failed: You have failed to add a new %{model_name}.
-    success: You have successfully added a new %{model_name}.
+    failed: "%{model_name} could not be added"
+    success: "%{model_name} added"
   destroy:
-    failed: You have failed to remove this %{model_name}.
-    success: You have successfully removed this %{model_name}.
-    success_with_name: You have successfully removed '%{name}'.
+    failed: "%{model_name} could not be removed"
+    success: "%{model_name} removed"
+    success_with_name: "'%{name}' removed"
+  update:
+    failed: "%{model_name} could not be updated"
+    success: "%{model_name} updated"
   renalware:
     beta_message:
       body: 'This is the Renalware 2.0 test system. Not for clinical use. Any data entered will not be retained.
@@ -18,14 +21,14 @@ en:
       form:
         prd_prompt: Please select primary renal diagnosis
       update:
-        success: Successfully updated.
+        success: Successfully updated
     letters:
       approved_letters:
         create:
-          success: You have successfully approved and archived the letter.
+          success: Letter approved and archived
       completed_letters:
         create:
-          success: You have successfully marked the letter as printed.
+          success: Letter marked as printed
       hints:
         cc_hint:
           cc_on_all_letters: If not the recipient, the patient <b>will be CCd</b> on the letter.
@@ -34,10 +37,8 @@ en:
             This can be changed in the patients profile.
       pending_review_letters:
         create:
-          success: You have successfully submitted the letter for review.
+          success: Letter submitted for review
       rejected_letters:
         create:
-          success: You have successfully rejected the letter.
-  update:
-    failed: You have failed to update this %{model_name}.
-    success: You have successfully updated this %{model_name}.
+          success: Letter rejected
+

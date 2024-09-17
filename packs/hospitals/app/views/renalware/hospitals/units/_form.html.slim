@@ -1,0 +1,15 @@
+= render "renalware/shared/errors", model: hospital_unit
+
+= simple_form_for [hospitals, hospital_unit],
+                  wrapper: :horizontal_form,
+                  html: { autocomplete: "off" } do |f|
+  = f.association :hospital_centre,
+                  collection: Renalware::Hospitals::Centre.ordered,
+                  wrapper: :horizontal_medium
+  = f.input :unit_code, wrapper: :horizontal_small
+  = f.input :name, wrapper: :horizontal_medium
+  = f.input :renal_registry_code, wrapper: :horizontal_small
+  = f.input :unit_type, wrapper: :horizontal_small
+  = f.input :is_hd_site, wrapper: :horizontal_small
+
+  = save_or_cancel(form: f, back_path: hospitals.units_path)

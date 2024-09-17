@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Prescriptions - from an exit site infection", js: true do
   include DrugsSpecHelper
 

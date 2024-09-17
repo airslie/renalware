@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Problem notes management", js: true do
   it "adding a problem note" do
     user = login_as_clinical

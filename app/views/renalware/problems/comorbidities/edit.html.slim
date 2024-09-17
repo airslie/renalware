@@ -5,7 +5,7 @@
                     as: :comorbidity_form,
                     html: { autocomplete: "off", id: "comorbidities-form" }) do |f|
 
-    div(data-controller="radio-reset" data-radio-reset-match-value="no")
+    div(data-controller="select-reset" data-select-reset-match-value="no")
       .rounded.bg-blue-100.py-2.px-4.mb-4.w-1/2.border
         | Enter year diagnosed (if known) when Recognised is 'Yes'
 
@@ -13,10 +13,12 @@
         thead
           tr
             td Name
-            td
+            td.text-center
               | Recognised
-              a.ml-3.small-helper-button(href="#" data-action="radio-reset#reset_all") Set all to No
+              br
+              a.small-helper-button(href="#" data-action="select-reset#reset_all") Set all to No
             td Date
+            td
         tbody
           = f.simple_fields_for :comorbidities do |fc|
             tr(id=dom_id(fc.object.description))
@@ -26,14 +28,33 @@
                 = fc.input :id, as: :hidden
               td
                 = fc.input :recognised,
-                          as: :inline_radio_buttons,
-                          label: false,
-                          wrapper: "vertical_form",
-                          collection: [["Yes", "yes"] ,["No", "no"], ["Unknown", "unknown"]]
+                           label: false,
+                           collection: [["Unknown", "unknown"],["Yes", "yes"] ,["No", "no"]],
+                           include_blank: false,
+                           input_html: { style: "margin: 0"}
               td
                 = fc.input :recognised_at,
                           label: false,
                           as: :flatpickr,
-                          wrapper: :bare
+                          wrapper: :bare,
+                          input_html: { style: "margin: 0"}
+              td
+                - if fc.object.description.has_malignancy_site?
+                  .flex.items-center.gap-2
+                    = fc.label :malignancy_site, "Site"
+                    = fc.association :malignancy_site,
+                                    label_method: :description,
+                                    label: false,
+                                    wrapper: :bare,
+                                    input_html: { style: "margin: 0" }
+
+                - if fc.object.description.has_diabetes_type?
+                  .flex.items-center.gap-2
+                    = fc.label :diabetes_type, "Type"
+                    = fc.input :diabetes_type,
+                                collection: ["TYPE1", "TYPE2", "TYPE UNKNOWN"],
+                                wrapper: :bare,
+                                input_html: { style: "margin: 0" }
+
       .w-3/4
         = save_or_cancel(form: f, back_path: patient_comorbidities_path(form.patient))

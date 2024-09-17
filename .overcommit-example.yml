@@ -23,7 +23,8 @@ PreCommit:
  TrailingWhitespace:
    enabled: true
    exclude:
-     - '**/db/structure.sql' # Ignore trailing whitespace in generated files
+    - '**/db/structure.sql' # Ignore trailing whitespace in generated files
+    - 'vendor/**/*'
 
 BundleAudit:
   enabled: true

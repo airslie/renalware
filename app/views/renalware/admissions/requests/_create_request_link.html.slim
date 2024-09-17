@@ -1,3 +1,5 @@
+- # locals: (patient:, link_text:, use_icon: true)
+
 / This partial is pulled in when the whole page renders, and creates the link and
 / associated modal dialog wiring for creating an admission request (TCI).
 - url = new_admissions_request_path(patient_id: patient, format: :html)
@@ -7,6 +9,6 @@
          id: "create-admissions-request",
          data: { "reveal-id" => "admissions-request-modal", "reveal-ajax" => "true" }) do
   .flex.items-center
-    - if local_assigns.fetch(:use_icon, true)
+    - if use_icon
       = inline_icon("admission", class: "mr-2")
     = link_text

@@ -12,17 +12,9 @@ module Renalware
         </style>
       STYLE
 
-      def type
-        letter_event.to_link.call(patient)
-      end
-
-      def patient
-        @patient ||= PatientPresenter.new(super)
-      end
-
-      def event_description
-        letter_event.description
-      end
+      def type              = letter_event.to_link.call(patient)
+      def patient           = @patient ||= PatientPresenter.new(super)
+      def event_description = letter_event.description
 
       def simple_event_description
         clinic = letter_event.clinic
@@ -36,35 +28,26 @@ module Renalware
       end
 
       def cc_recipients
-        @cc_recipients ||= begin
-          recipients = build_cc_recipients
-          present_cc_recipients(recipients)
-        end
+        @cc_recipients ||= present_cc_recipients(build_cc_recipients)
       end
 
-      def cc_recipients_for_envelop_stuffing
-        @cc_recipients_for_envelop_stuffing ||= begin
-          recipients = build_cc_recipients
-          present_cc_recipients(recipients)
-        end
-      end
+      # Unused can be removed
+      # def cc_recipients_for_envelope_stuffing
+      #   @cc_recipients_for_envelope_stuffing ||= begin
+      #     recipients = build_cc_recipients
+      #     present_cc_recipients(recipients)
+      #   end
+      # end
 
-      def electronic_cc_receipts
-        @electronic_cc_receipts ||=
-          CollectionPresenter.new(super, Letters::ElectonicReceiptPresenter)
-      end
+      # Unused, can be removed
+      # def electronic_cc_receipts
+      #   @electronic_cc_receipts ||=
+      #     CollectionPresenter.new(super, Letters::ElectonicReceiptPresenter)
+      # end
 
-      def description
-        "(#{letterhead.site_code}) #{super}"
-      end
-
-      def view_label
-        "Preview"
-      end
-
-      def sections
-        SectionManager.new(__getobj__).sections
-      end
+      def description = "(#{letterhead.site_code}) #{super}"
+      def view_label = "Preview"
+      def sections = SectionManager.new(__getobj__).sections
 
       def to_html(adhoc_printing: false)
         html = content
@@ -88,17 +71,13 @@ module Renalware
         end
       end
 
-      def hospital_unit_code
-        letterhead.site_code
-      end
+      def hospital_unit_code = letterhead.site_code
 
       def hospital_unit_renal_registry_code
         ::Renalware::Hospitals::Unit.find_by(unit_code: hospital_unit_code)&.renal_registry_code
       end
 
-      def title
-        pdf_stateless_filename
-      end
+      def title = pdf_stateless_filename
 
       def pdf_filename
         build_filename_from(
@@ -125,9 +104,7 @@ module Renalware
         ::I18n.t(state.to_sym, scope: "enums.letter.state")
       end
 
-      def typist
-        created_by
-      end
+      def typist = created_by
 
       def patient_summary_string
         <<-PAT.squish
@@ -167,9 +144,7 @@ module Renalware
         ::CollectionPresenter.new(recipients, recipient_presenter_class)
       end
 
-      def recipient_presenter_class
-        RecipientPresenter
-      end
+      def recipient_presenter_class = RecipientPresenter
 
       # @section sub-classes
 
@@ -190,15 +165,11 @@ module Renalware
       end
 
       class Approved < LetterPresenter
-        def view_label
-          "View"
-        end
+        def view_label = "View"
       end
 
       class Completed < LetterPresenter
-        def view_label
-          "View"
-        end
+        def view_label = "View"
       end
     end
   end

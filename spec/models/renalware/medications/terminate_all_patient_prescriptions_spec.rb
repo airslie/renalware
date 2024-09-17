@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Medications
   describe TerminateAllPatientPrescriptions do
     it "terminates all patient prescriptions but leaves untouched previously terminated ones" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing user feedback" do
   it "adding notes and acknowledgement to feedback" do
     user = login_as_super_admin

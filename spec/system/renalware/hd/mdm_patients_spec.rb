@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "HD MDM Patients" do
   include PatientsSpecHelper
   let(:user) { create(:user) }

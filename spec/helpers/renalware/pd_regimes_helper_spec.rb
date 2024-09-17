@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe PDRegimesHelper do
     describe "default_daily_glucose_average" do

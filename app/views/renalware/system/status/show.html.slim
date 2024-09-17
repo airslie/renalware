@@ -11,7 +11,19 @@ table(style="border-spacing: 5px;")
       td= l(status.last_user_login_at)
     tr
       td Last activity
-      td =l(status.last_activity_at)
+      td=l(status.last_activity_at)
     tr
       td Active users in the last 30 minutes
       td= status.active_users(in_last: 30.minutes)
+    tr
+      td Ruby version
+      td= defined?(RUBY_VERSION) && RUBY_VERSION
+    tr
+      td Rail version
+      td= Rails.version
+    tr
+      td Mirth connect version
+      td= ENV.fetch("MIRTH_CONNECT_VERSION", "-")
+    tr
+      td Mirth Java version
+      td= ENV.fetch("MIRTH_JAVA_VERSION", "-")

@@ -13,16 +13,7 @@ module Renalware
       end
 
       def prescriptions
-        @prescriptions ||= begin
-          presenter_klass = ::Renalware::Medications::PrescriptionPresenter
-          ::OpenStruct.new(
-            current: present(current_non_hd, presenter_klass),
-            recently_changed: present(recently_changed_current_prescriptions, presenter_klass),
-            recently_stopped: present(recently_stopped_prescriptions, presenter_klass),
-            current_hd: present(current_hd, presenter_klass),
-            patient: @patient
-          )
-        end
+        @prescriptions ||= Medications::PrescriptionsPresenter.new(patient).prescriptions
       end
       delegate_missing_to :prescriptions
 

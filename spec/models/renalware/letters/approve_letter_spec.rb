@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe Letters::ApproveLetter do
     include LettersSpecHelper
+
     subject(:service) do
       described_class
         .build(letter)
@@ -28,10 +27,32 @@ module Renalware
     end
 
     it "touches the patient" do
-      patient
       expect {
         service.call(by: user)
       }.to change(patient, :updated_at)
+    end
+
+    it "sets gp send status to pending if there is a gp recipient" do
+      expect(letter.gp_send_status).to eq("not_applicable")
+      service.call(by: user)
+      expect(letter.becomes(Renalware::Letters::Letter).reload.gp_send_status).to eq("pending")
+    end
+
+    it "sets gp send status to not_applicable if the gp is not among the recipients" do
+      # Remove the patients GP so they are not automatically added as a CC
+      # in DetermineCounterpartCCs.
+      expect(letter.gp_send_status).to eq("not_applicable")
+      patient.primary_care_physician = patient.practice = nil
+      patient.save_by!(user)
+
+      service.call(by: user)
+
+      # Cast the letter to a base Letter so it can be found when reloading (otherwise letter class)
+      # is PendingApproval and reloading fails as a PendingApproval letter with the current id
+      # no longer exists - its now Approved
+      expect(
+        letter.becomes(Renalware::Letters::Letter).reload.gp_send_status
+      ).to eq("not_applicable")
     end
 
     describe "broadcasting" do

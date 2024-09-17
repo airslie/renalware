@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "HL7 message handling end to end" do
   before do
     allow(Renalware.config.hl7_patient_locator_strategy)
@@ -25,7 +23,7 @@ describe "HL7 message handling end to end" do
         OBX|2|NM|POT^Potassium^HM||4.7|mmol/L|||||F|||201801251249||XXXXXVC01^BHI Authchecker
         OBX|3|NM|URE^Urea^HM||6.6|mmol/L|||||F|||201801251249||XXXXXVC01^BHI Authchecker
         NTE|1|L|This should be ignored
-        OBX|4|NM|CRE^Creatinine^HM||102|umol/L|||||F|||201801251249||XXXXXVC01^BHI Authchecker
+        OBX|4|NM|CRE^Creatinine^HM||102|umol/L|||||P|||201801251249||XXXXXVC01^BHI Authchecker
         OBX|4|NM|EGFR^EGFR^HM||10|mmol/L|||||F|||201801251249||XXXXXVC01^BHI Authchecker
       RAW
     end
@@ -108,16 +106,19 @@ describe "HL7 message handling end to end" do
       expect(request_rlu.observations[3]).to have_attributes(
         result: "102",
         observed_at: Time.zone.parse("201801250541"), # from OBR.7
-        description: Renalware::Pathology::ObservationDescription.find_by(code: "CRE")
+        description: Renalware::Pathology::ObservationDescription.find_by(code: "CRE"),
+        result_status: "P"
       )
 
       # EGFR should be imported as normal
       expect(request_rlu.observations.map { |obx| obx.description.code })
         .to eq(%w(NA POT URE CRE EGFR))
+
       expect(request_rlu.observations[4]).to have_attributes(
         result: "10",
         observed_at: Time.zone.parse("201801250541"), # from OBR
-        description: Renalware::Pathology::ObservationDescription.find_by(code: "EGFR")
+        description: Renalware::Pathology::ObservationDescription.find_by(code: "EGFR"),
+        result_status: "F"
       )
     end
     # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength

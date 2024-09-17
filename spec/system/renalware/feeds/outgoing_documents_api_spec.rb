@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Outgoing Documents API" do
   let(:api_user) do
     create(

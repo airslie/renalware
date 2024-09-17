@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing Dialysates" do
   describe "creating a new dialysate" do
     it do

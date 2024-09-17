@@ -1,0 +1,12 @@
+= link_to t("btn.add"),
+          new_appointment_path,
+          class: "button"
+= simple_form_for request_html_form_params,
+                url: pathology_requests_new_request_path,
+                html: { autocomplete: "off", style: "display: inline" },
+                as: :request do |f|
+
+  = f.input :patient_ids, as: :hidden_array
+  = button_tag(type: "submit", class: "button secondary") do
+    i.fas.fa-copy
+    | Generate request forms

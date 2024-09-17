@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating a swab", js: true do
   it "allows creation of a new swab event" do
     user = login_as_clinical

@@ -71,7 +71,24 @@ module Renalware
     ) do |view|
       view.title = "PD"
       view.position = 1
-      view.filters = [{ code: :on_worryboard, type: :list }]
+      view.filters = [
+        {
+          code: "on_worryboard",
+          type: 0
+        },
+        {
+          code: "hospital_centre",
+          type: 0
+        },
+        {
+          code: "named_consultant",
+          type: 0
+        },
+        {
+          code: "named_nurse",
+          type: 0
+        }
+      ]
       view.columns = [].to_json
     end
 

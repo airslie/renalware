@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Renalware status page" do
   around do |example|
     # Use freeze_time here because we check e.g. last_login_at = now in tests

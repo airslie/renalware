@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Drugs
   describe DMDMigration::FormMigrator do
     let(:form) { create(:drug_form, name: "Capsule") }

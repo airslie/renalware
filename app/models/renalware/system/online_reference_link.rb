@@ -12,13 +12,32 @@ module Renalware
       include Accountable
       include RansackAll
 
-      validates(
-        :url,
-        presence: true,
-        uniqueness: true,
-        format: %r(\A(https?://)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*/?\z)
-      )
+      validates :url,
+                presence: true,
+                uniqueness: true,
+                format: %r(\A(https?://)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*/?\z)
+
       validates :title, presence: true, uniqueness: true
+      validate :validate_letter_inclusion_dates
+      validates :include_in_letters_from,
+                presence: true,
+                if: ->(rec) { rec.include_in_letters_until.present? }
+
+      scope :default_in_new_letters, -> {
+        where(include_in_letters_from: ..Time.zone.today)
+          .and(where(include_in_letters_until: Time.zone.today..)
+          .or(where(include_in_letters_until: nil)))
+      }
+
+      # rubocop:disable Style/SoleNestedConditional
+      def validate_letter_inclusion_dates
+        if include_in_letters_from.present? && include_in_letters_until.present?
+          if include_in_letters_from > include_in_letters_until
+            errors.add(:include_in_letters_until, "cannot be before the from date")
+          end
+        end
+      end
+      # rubocop:enable Style/SoleNestedConditional
     end
   end
 end

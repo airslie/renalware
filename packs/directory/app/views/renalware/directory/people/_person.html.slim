@@ -1,0 +1,8 @@
+tr
+  td.actions
+    = link_to t("btn.view"), directory.person_path(person)
+    = link_to t("btn.edit"), directory.edit_person_path(person)
+  td= person.title
+  td= link_to person.family_name, directory.person_path(person)
+  td= link_to person.given_name, directory.person_path(person)
+  td.col-width-large-with-ellipsis= person.address

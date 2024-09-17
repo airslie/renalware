@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Assign a contact to a patient", js: true do
   include AjaxHelpers
 

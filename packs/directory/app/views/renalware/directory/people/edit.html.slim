@@ -1,0 +1,5 @@
+= within_admin_layout(title: "Edit Person",
+                      breadcrumbs: breadcrumb_for("Directory", directory.people_path))
+
+  = render "renalware/shared/errors", model: person
+  = render "form", person: person

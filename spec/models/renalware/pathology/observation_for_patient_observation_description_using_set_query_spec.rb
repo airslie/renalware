@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::ObservationForPatientObservationDescriptionUsingSetQuery do
   describe "#call" do
     it "returns the most recent observation for the specified observation description" do

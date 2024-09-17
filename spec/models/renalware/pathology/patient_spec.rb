@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Pathology
   describe Patient do
     it { is_expected.to have_one(:current_observation_set) }

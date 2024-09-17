@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Patient's Protocol PDF" do
   include PathologySpecHelper
   let(:password) { "(&*G986111" }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Clinical::HeaderPresenter do
   include PathologySpecHelper
   subject(:presenter) { described_class.new(patient) }

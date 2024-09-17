@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating an Advanced Care Plan event", js: true do
   context "when adding the event" do
     it "allows a user to also select the state from an event-specfic dropdown" do

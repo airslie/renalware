@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe("Persisting the correct recipients when a letter is saved", js: true) do
   include AjaxHelpers
 

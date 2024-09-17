@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "devise"
 
 describe "API request for a patient's prescriptions as JSON" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Global Clinic Visits list" do
   describe "GET index" do
     it "responds successfully" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Renal Profile", js: true do
   describe "GET #show" do
     it "updating the renal profile" do

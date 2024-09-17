@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating a Event triggers an event_created broadcast" do
   context "when creating a simple event" do
     it "broadcasts a Wisper 'event_created' message" do

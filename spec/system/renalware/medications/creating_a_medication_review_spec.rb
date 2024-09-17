@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating a medication review on the prescriptions page", js: true do
   it "after accepting an alert it adds the latest review to the page using ajax" do
     create(:medication_review_event_type)

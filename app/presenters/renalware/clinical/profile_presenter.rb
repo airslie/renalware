@@ -15,6 +15,7 @@ module Renalware
       def swabs
         @swabs ||= Renalware::Events::Swab
           .for_patient(patient)
+          .includes([:event_type])
           .ordered
           .page(params[:page])
           .per(params.fetch(:per_page, 10))

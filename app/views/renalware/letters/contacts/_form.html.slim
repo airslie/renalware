@@ -5,7 +5,7 @@
             selected: 1,
             input_html: { \
               class: "person-ajax-search",
-              data: { "ajax--url" => search_directory_people_path(format: :json),
+              data: { "ajax--url" => directory.search_people_path(format: :json),
                       placeholder: "Start entering the person's name (min. 2 characters)" } \
             }
 = f.input :description_id, collection: contact_descriptions

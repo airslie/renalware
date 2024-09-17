@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Pathology
   describe ObservationDescriptionsByCodeQuery do
     subject { described_class.new(relation: relation, codes: codes).call }

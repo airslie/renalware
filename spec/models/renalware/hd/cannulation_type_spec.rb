@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::HD
   describe CannulationType do
     it_behaves_like "a Paranoid model"

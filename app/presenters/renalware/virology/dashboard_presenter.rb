@@ -25,7 +25,10 @@ module Renalware
 
       def vaccinations
         CollectionPresenter.new(
-          Vaccination.for_patient(patient).order(date_time: :desc),
+          Vaccination
+            .includes([:created_by, :event_type])
+            .for_patient(patient)
+            .order(date_time: :desc),
           Events::EventPresenter
         )
       end

@@ -1,0 +1,24 @@
+tr
+  td= l(participation.joined_on)
+  td= l(participation.left_on)
+  td= default_patient_link(participation.patient)
+  td= participation.patient.nhs_number
+  td= participation.patient.hospital_identifiers
+  td= participation.patient.age
+  td= participation.patient.sex
+  td.col-width-mediumish-with-ellipsis(title=participation.patient&.hospital_centre)
+    = participation.patient&.hospital_centre
+  td= participation.external_id
+  td= participation.external_reference
+  td.actions
+    = link_to_if_allowed \
+        policy(participation).destroy?,
+        "Delete",
+        research.study_participation_path(participation.study, participation),
+        method: :delete,
+        data: { confirm: "Are you sure?" }
+    = link_to_if_allowed \
+      policy(participation).edit?,
+      "Edit",
+      research.edit_study_participation_path(participation.study, participation),
+      data: { "reveal-id" => "study-participation-modal", "reveal-ajax" => "true" }

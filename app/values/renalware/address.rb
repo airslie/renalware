@@ -7,6 +7,7 @@ module Renalware
     delegate :uk?, to: :country, allow_nil: true
 
     belongs_to :addressable, polymorphic: true
+    before_validation :upcase_postcode
 
     # Set to true to avoid address validation - useful when archiving a letter with a migrated
     # address that might not have a postcode for instance
@@ -59,6 +60,14 @@ module Renalware
         postcode,
         country
       ].compact_blank
+    end
+
+    private
+
+    def upcase_postcode
+      return if postcode.blank?
+
+      self.postcode = postcode.upcase
     end
   end
 end

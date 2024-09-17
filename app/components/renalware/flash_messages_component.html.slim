@@ -1,11 +1,13 @@
 - flash_messages.each do |key, msg|
   - if toast?
-    div.flex.flex-center.right-3.rounded-lg.py-3.px-4.z-50(class=css_class_for_flash(key) style="position: fixed; top: 4rem" data-controller="flash")
-      = msg
-      button.hover:bg-inherit.hover:text-inherit.p-0.m-0.text-inherit(type="button" data-action="flash#dismiss")
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-4 w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+    div.flex.flex-center.items-center.rounded-sm.right-2.py-2.px-3.pr-6.z-50.mt-1.shadow-sm(class=css_class_for_flash(key) style="position: fixed;" data-controller="flash")
+      .mr-3= icon_for_flash(key)
+      .font-medium= msg
+      / Removed the 'close' button for now
+      / button.hover:bg-inherit.hover:text-inherit.p-0.m-0.text-inherit(type="button" data-action="flash#dismiss")
+      /   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-4 w-6 h-6">
+      /     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      /   </svg>
   - else
     .rounded-md.bg-yellow-50.p-4.mb-6.shadow-sm
       .flex

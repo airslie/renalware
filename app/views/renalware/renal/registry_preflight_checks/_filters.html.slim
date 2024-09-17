@@ -1,3 +1,5 @@
+- # locals: (query: nil, url: nil, display_esrf_date_filter: true, display_modality_filter: true, display_hd_site_filter: true)
+
 .search-form.filters
   = simple_form_for query,
                     url: url,
@@ -9,17 +11,17 @@
                             controller: "form",
                             action: "input->form#submit" } do |f|
     .flex.flex-col.sm:flex-row.items-start.pb-4
-      - if local_assigns.fetch(:display_esrf_date_filter, true)
+      - if display_esrf_date_filter
         .w-full.sm:w-min.pr-2.pt-5
           = f.input :profile_esrf_on_gteq, as: :flatpickr, label: "ESRF after"
 
-      -if local_assigns.fetch(:display_modality_filter, true)
+      -if display_modality_filter
         .w-full.sm:w-1/4.max-w-64.pr-2.pt-5
           = f.input :current_modality_description_id_eq,
                     collection: Renalware::Modalities::Description.pluck("name", "id"),
                     label: "Modality"
 
-      -if local_assigns.fetch(:display_hd_site_filter, true)
+      -if display_hd_site_filter
         .w-full.sm:w-1/4.max-w-64.pr-2.pt-5
           = f.input :hd_profile_unit_id_eq,
                     collection: Renalware::Hospitals::Unit.pluck("name", "id"),

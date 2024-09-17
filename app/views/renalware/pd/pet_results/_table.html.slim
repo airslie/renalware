@@ -1,10 +1,12 @@
+- # locals: (results:, display_patient: false, patient: nil, pagination: nil, current_user:)
+
 table.toggleable(data-controller="toggle" )
   thead
     tr
       th.togglers= rows_toggler
       - if Pundit.policy(current_user, Renalware::PD::PETResult).edit? # only eg admin can edit or delete
         th.col-width-tiny
-      - if local_assigns.fetch(:display_patient, false)
+      - if display_patient
         th.col-width-medium= t("thead.patient")
       th.col-width-date Date
       th.col-width-tiny.text-center Complete
@@ -28,7 +30,7 @@ table.toggleable(data-controller="toggle" )
           - if Pundit.policy(current_user, Renalware::PD::PETResult).edit?
             td.actions
               - if Pundit.policy(current_user, result).edit?
-                - if local_assigns.fetch(:display_patient, false)
+                - if display_patient
                   = link_to renalware.edit_patient_pd_pet_result_path(result.patient, result)
                     i.fas.fa-external-link-alt
                     |  Edit
@@ -38,7 +40,7 @@ table.toggleable(data-controller="toggle" )
                 = link_to t("btn.delete"),
                           renalware.patient_pd_pet_result_path(result.patient, result),
                           data: { method: :delete, confirm: "Are you sure?" }
-          - if local_assigns.fetch(:display_patient, false)
+          - if display_patient
             td= result.patient
           td= l(result.performed_on)
           td.text-center

@@ -1,25 +1,22 @@
-/ locals: (prescription:)
-/ Rails 7.1 strict locals:
-
 - recently_changed = defined?(recently_changed) && recently_changed
 li.prescription class=("recently_changed" if recently_changed)
   = prescription.drug_name
-  = blank_separator
+  '
   = prescription.dose
-  = blank_separator
+  '
   = prescription.medication_route.name
-  = blank_separator
+  '
   = prescription.frequency
-  = blank_separator
+  '
   i
     b= prescription.provider_suffix
 
   / We pass in date_changed if the prescription is recently_changed or recently_stopped
   / It could be the prescribed_on or terminated_on date
   - if defined?(date_changed)
-    = blank_separator
+    '
     span.date-changed= l(date_changed)
 
   - if recently_changed
-    = blank_separator
+    '
     | *

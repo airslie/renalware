@@ -3,7 +3,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
 
-require "spec_helper"
+require_relative "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../demo/config/environment"
 # Prevent database truncation if the environment is production
@@ -12,7 +12,6 @@ require "rspec/rails"
 
 require "fuubar"
 require "factory_bot_rails"
-require "byebug"
 require "shoulda/matchers"
 require "pundit/rspec"
 require "paper_trail/frameworks/rspec"
@@ -20,6 +19,15 @@ require "wisper/rspec/matchers"
 require "view_component/test_helpers"
 require "capybara/rspec"
 require "capybara-screenshot/rspec"
+require "vcr"
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
+  config.ignore_request do |request|
+    request.uri.include?("__identify__") || request.uri.include?("session")
+  end
+end
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

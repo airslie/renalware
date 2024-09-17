@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Events
   describe Simple do
     # See Event for validation specs etc

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing Dialysers" do
   let(:dialyser) { create(:hd_dialyser) }
 

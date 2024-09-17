@@ -5,6 +5,8 @@ html lang="en"
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     / Force turbo to refresh the page when it cannot find the expected frame in the response.
     meta name="turbo-visit-control" content="reload"
+    / Prevent turbo pre-fetching links on hover eg inside a turboframe
+    meta name="turbo-prefetch" content="false"
 
     - if defined?(page_title)
       title= page_title
@@ -50,7 +52,8 @@ html lang="en"
         = render(Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: true)) unless content_for?(:flash_messages)
 
     main
-      = yield
+      / Allow nested layouts https://guides.rubyonrails.org/layouts_and_rendering.html#using-nested-layouts
+      = content_for?(:content) ? yield(:content) : yield
       = turbo_frame_tag "modal"
 
     - unless user_signed_in?

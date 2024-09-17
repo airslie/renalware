@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # This test currently targets a dummy patient/abridgements path so we can simulate
 # a user searching for a patient in the master index, At some point that functionality will be moved
 # to patients/new and this test will need updating.

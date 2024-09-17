@@ -34,10 +34,14 @@ Renalware.configure do |config|
       "Renalware::HD::PatientListener",
       "Renalware::Patients::PatientListener"
     ],
+    "Renalware::Letters::ApproveLetter" => [
+      Renalware::Broadcasting::Subscriber.new(
+        "Renalware::Letters::CalculatePageCountJob", async: true
+      )
+    ],
     "Renalware::Letters::ResolveDefaultElectronicCCs" => [
       "Renalware::HD::PatientListener"
     ],
-    "Renalware::Letters::ApproveLetter" => [],
     "Renalware::Pathology::CreateObservationRequests" => [],
     "Renalware::Events::CreateEvent" => [],
     "Renalware::Events::UpdateEvent" => [],

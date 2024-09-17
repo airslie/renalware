@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::Requests::PatientAlgorithm do
   subject(:patient_algorithm) do
     described_class.new(pathology_patient)

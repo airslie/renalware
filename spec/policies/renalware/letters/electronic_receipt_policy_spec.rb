@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Letters
   describe ElectronicReceiptPolicy, type: :policy do
     subject(:policy) { described_class }

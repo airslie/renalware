@@ -1,5 +1,3 @@
-/ locals: (prescriptions:, search:, treatable:, current_scope:)
-/ Rails 7.1 strict locals:
 - if prescriptions.any?
   - display_termination_date = !current_scope || local_assigns.fetch(:display_termination_date, false)
   .row

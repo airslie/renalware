@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::Requests::SampleDescription do
   let(:sample_type) { "red cap" }
   let(:sample_number_bottles) { 2 }

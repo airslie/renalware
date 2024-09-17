@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   module LowClearance
     describe ProfilePolicy, type: :policy do

@@ -1,0 +1,9 @@
+---
+en:
+  renalware:
+    letters:
+      transports:
+        mesh:
+          warnings_component:
+            title: Mesh - Transmission failures
+            # (%{displayed} of %{count})

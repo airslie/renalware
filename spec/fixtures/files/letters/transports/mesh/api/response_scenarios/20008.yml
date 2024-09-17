@@ -1,0 +1,123 @@
+scenario:
+  name: Infrastructure Level Response 20008 Fatal-Error - Duplicate Document Received
+  notes:
+  url: https://nhsconnect.github.io/ITK3-FHIR-Messaging-Distribution/explore_response_examples.html#infrastructure-level-response-20008-fatal-error---duplicate-document-received
+  test_case_name: Sender_ITK_Response_20008
+  expectation:
+    state: "errored"
+    outcome_code: duplicate
+    infrastructure_response_severity: "fatal"
+    inf_ack_code: "20008"
+    inf_ack_description: Duplicate Document received
+  xml: !xml
+    <Bundle xmlns="http://hl7.org/fhir">
+      <id value="016941b4-6d37-4b26-94c6-fa5ea4b04b16"/>
+      <meta>
+        <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"/>
+      </meta>
+      <identifier>
+        <system value="https://tools.ietf.org/html/rfc4122"/>
+        <value value="0bcb5098-ce5a-4a85-a547-2574f90310e4"/>
+      </identifier>
+      <type value="message"/>
+      <entry>
+        <fullUrl value="urn:uuid:24771db3-9999-4f4d-83ac-1b60ad6f4a15"/>
+        <resource>
+          <MessageHeader>
+            <id value="24771db3-9999-4f4d-83ac-1b60ad6f4a15"/>
+            <meta>
+              <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2"/>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-ITK-MessageHandling-2">
+              <!--The value of this handling specification is dependant on the response pattern.-->
+              <extension url="BusAckRequested">
+                <valueBoolean value="false"/>
+              </extension>
+              <extension url="InfAckRequested">
+                <valueBoolean value="false"/>
+              </extension>
+              <extension url="RecipientType">
+                <valueCoding>
+                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1"/>
+                  <code value="FA"/>
+                  <display value="For Action"/>
+                </valueCoding>
+              </extension>
+              <extension url="MessageDefinition">
+                <valueReference>
+                  <reference value="https://fhir.nhs.uk/STU3/MessageDefinition/ITK-Response-MessageDefinition-1"/>
+                </valueReference>
+              </extension>
+              <extension url="SenderReference">
+                <valueString value="None"/>
+              </extension>
+              <extension url="LocalExtension">
+                <valueString value="None"/>
+              </extension>
+            </extension>
+            <event>
+              <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-MessageEvent-2"/>
+              <code value="ITK008M"/>
+              <display value="ITK Response"/>
+            </event>
+            <sender>
+              <reference value="urn:uuid:935105bc-f998-4e86-b15e-8ff3fa9121d5"/>
+            </sender>
+            <timestamp value="2017-01-23T10:10:16+00:00"/>
+            <source>
+              <endpoint value="NOROT003"/>
+            </source>
+            <response>
+              <identifier value="03788f28-d6c9-4893-8f8a-68f8f0ad1f06"/>
+              <code value="fatal-error"/>
+              <details>
+                <reference value="urn:uuid:519b188a-ac9f-49fc-b548-6ab300451049"/>
+              </details>
+            </response>
+          </MessageHeader>
+        </resource>
+      </entry>
+      <!--Practitioner-->
+      <entry>
+        <fullUrl value="urn:uuid:935105bc-f998-4e86-b15e-8ff3fa9121d5"/>
+        <resource>
+          <Practitioner>
+            <id value="935105bc-f998-4e86-b15e-8ff3fa9121d5"/>
+            <meta>
+              <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Header-Practitioner-1"/>
+            </meta>
+            <identifier>
+              <system value="https://fhir.nhs.uk/Id/sds-user-id"/>
+              <value value="033345750888"/>
+            </identifier>
+            <name>
+              <family value="Kemble"/>
+              <given value="Richard"/>
+              <prefix value="Dr"/>
+            </name>
+          </Practitioner>
+        </resource>
+      </entry>
+      <entry>
+        <fullUrl value="urn:uuid:519b188a-ac9f-49fc-b548-6ab300451049"/>
+        <resource>
+          <OperationOutcome>
+            <id value="519b188a-ac9f-49fc-b548-6ab300451049"/>
+            <meta>
+              <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Response-OperationOutcome-1"/>
+            </meta>
+            <issue>
+              <severity value="fatal"/>
+              <code value="duplicate"/>
+              <details>
+                <coding>
+                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-ResponseCodes-1"/>
+                  <code value="20008"/>
+                  <display value="Duplicate Document received"/>
+                </coding>
+              </details>
+            </issue>
+          </OperationOutcome>
+        </resource>
+      </entry>
+    </Bundle>

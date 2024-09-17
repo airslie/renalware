@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "pdf/reader"
 
 describe "Rendering a letter for printing in an envelope stuffer" do

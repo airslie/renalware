@@ -1,0 +1,31 @@
+br
+= simple_form_for(study,
+                  url: url,
+                  as: :study,
+                  wrapper: :horizontal_form,
+                  html: { autocomplete: "off" }) do |f|
+  = f.input :code, wrapper: :horizontal_small
+  = f.input :description, wrapper: :horizontal_large
+  = f.input :leader, wrapper: :horizontal_small
+  = f.input :private,
+            wrapper: :horizontal_small,
+            hint: t(".hints.private_html")
+  = f.input :application_url,
+            wrapper: :horizontal_medium,
+            placeholder: "e.g. https://my-research-app/participations/{external_id}",
+            hint: t(".hints.application_url_html")
+            / "If there is an an external application associated with this study " \
+            /       "you can enter it here and, for participanting patients, the link " \
+            /       "will appear at the top of patient pages.<br/>" \
+            /       "Use the format https://my-research-app/participations/{external_id}<br/> if you " \
+            /       "The {external_id} placeholder will be replaced with " \
+            /       "research_participation_external_id".html_safe,
+
+  = f.input :started_on, as: :flatpickr, wrapper: :horizontal_datepicker
+  = f.input :terminated_on, as: :flatpickr, wrapper: :horizontal_datepicker
+  = f.input :notes, as: :text, wrapper: :horizontal_large, input_html: { rows: 6 }
+
+  - if study.type.present?
+    = render path_to_research_document_form_partial(study.type, :studies), f: f
+
+  = save_or_cancel(form: f, back_path: research.studies_path)

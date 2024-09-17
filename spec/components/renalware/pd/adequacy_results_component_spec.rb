@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::PD::AdequacyResultsComponent, type: :component do
   context "when there are no results" do
     it "renders nothing" do

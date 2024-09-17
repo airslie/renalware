@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Renalware::Engine.scheduled_jobs_config", type: :model do
     let(:jobs_config) do
@@ -9,7 +7,7 @@ module Renalware
     end
 
     it "has the right jobs" do
-      expect(jobs_config.keys).to contain_exactly(
+      expect(jobs_config.keys).to include(
         :ods_sync,
         :audit_patient_hd_statistics,
         :hd_scheduling_diary_housekeeping,

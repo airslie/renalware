@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Editing an Access Plan" do
   include DateHelpers
 

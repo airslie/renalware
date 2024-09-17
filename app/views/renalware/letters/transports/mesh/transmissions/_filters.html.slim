@@ -1,0 +1,40 @@
+.filters
+  .filters__form
+    = simple_form_for search,
+      as: :q,
+      url: letters_transports_mesh_transmissions_path,
+      method: :get,
+      html: { class: "fn-form" } do |f|
+
+      .flex.items-center
+        div.mr-4
+          = f.input :created_at_eq, as: :flatpickr, label: "Date"
+        div.mr-4
+          = f.input :status_eq,
+                    collection: %w(pending success failure),
+                    include_blank: "",
+                    label: "Status"
+        div.mr-4
+          = f.input :letter_id_eq, label: "Letter id"
+        div.mr-4
+          = f.input :letter_patient_nhs_number_eq, label: "NHS"
+        div.mr-4
+          = f.input :operations_http_response_code_eq,
+                    collection: %w(200 201 202 400 401 402 403 404 500),
+                    include_blank: "",
+                    label: "HTTP code"
+        div.mr-4
+          = f.input :operations_mesh_message_id_eq, label: "MESH message id"
+        div.mr-4
+          = f.input :operations_itk3_operation_outcome_code_eq,
+                    collection: %w(10001 10002 10003 10004 10005 10007 10008 10009 10010 20001 20002 20003 20004 20005 20006 20007 20008 20009 20010 20011 20012 20013 20014 20015 30001 30002 30003 30004 IB001 IB002 IB003 IB004),
+                    include_blank: "",
+                    label: "ITK3 code"
+        div.mr-4
+          = f.input :operations_itk3_response_type_eq,
+                    collection: %w(bus inf),
+                    include_blank: "",
+                    label: "ACK type"
+
+        .mt-2
+          = filter_or_reset(form: f, reset_path: letters_transports_mesh_transmissions_path)

@@ -7,6 +7,9 @@
 
   - if current_user_is_admin?
     .row
+      - if Renalware.config.send_gp_letters_over_mesh
+        = render Renalware::Letters::Transports::Mesh::WarningsComponent.new(current_user: current_user)
+        = render Renalware::Letters::Transports::Mesh::ActivityComponent.new(current_user: current_user)
       = render Renalware::UKRDC::ActivityComponent.new(current_user: current_user)
       = render Renalware::System::UsersAwaitingApprovalComponent.new(current_user: current_user)
       = render Renalware::System::APILogActivityComponent.new(current_user: current_user)

@@ -109,7 +109,11 @@ module Renalware
               "medication_prescriptions.created_at <= ?", from, to)
       end
 
-      # Need to write a testing for this scope before using a range here
+      def self.prescribed_between(from:, to:)
+        where("medication_prescriptions.prescribed_on >= ? and " \
+              "medication_prescriptions.prescribed_on <= ?", from, to)
+      end
+
       def self.terminated_between(from:, to:)
         where("terminated_on >= ? and terminated_on <= ?", from, to)
       end

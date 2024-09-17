@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Transplant Recipient Operation" do
   let(:patient) { create(:transplant_patient, family_name: "Rabbit", local_patient_id: "KCH12345") }
 

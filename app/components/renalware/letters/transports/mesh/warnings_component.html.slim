@@ -1,0 +1,44 @@
+.columns.medium-12.large-6
+  article
+    header
+      h2= t(".title", displayed: number_to_display, count: total_errors)
+      ul
+        li= link_to "View All", letters_transports_mesh_transmissions_path(q: { status_eq: :failure }), class: "button"
+
+    table
+      thead
+        tr
+          th.col-width.tiny
+          th
+          th.col-width-date-time Created
+      tbody
+        - errors.each do |txn|
+          tr
+            td= inline_icon(:exclamation, class: "text-red-600")
+            td= link_to("View", letters_transports_mesh_transmissions_path(q: { letter_id_eq: txn.letter_id }))
+            td= l(txn.updated_at)
+            td= txn.operations.map{ |op| [op.itk3_operation_outcome_code, op.itk3_operation_outcome_description].join(" ")}.reject(&:blank?).join(", ")
+
+    / table
+    /   thead
+    /     tr
+    /       th
+    /       th Pending
+    /       th Success
+    /       th Failure
+    /   tbody
+    /     tr
+    /       td Today
+    /       td 2
+    /       td 4
+    /       td 0
+    /     tr
+    /       td This week
+    /       td 2
+    /       td 4
+    /       td 0
+    /     tr
+    /       td All time
+    /       td 2
+    /       td 4
+    /       td 0

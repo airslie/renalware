@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Searching patients" do
   describe "GET index" do
     context "with a hospital code filter" do

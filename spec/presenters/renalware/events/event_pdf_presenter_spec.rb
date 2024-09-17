@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Events::EventPdfPresenter do
   subject(:presenter) { described_class.new(event) }
 

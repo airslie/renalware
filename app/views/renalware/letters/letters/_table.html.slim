@@ -8,6 +8,8 @@ table.auto-layout.letters.has-togglable-rows
       th.col-width-tiny Notes
       th.col-width-tiny Enc.
       th.col-width-tiny= t("thead.state")
+      - if Renalware.config.send_gp_letters_over_mesh
+        th.col-width-small GP Send
       th.col-width-date-time= t("thead.date_")
       - if columns.include?(:author)
         th.col-width-medium = t("thead.author")

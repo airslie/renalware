@@ -33,8 +33,6 @@ $(document).ready(function(){
     selection.removeAllRanges();
     selection.addRange(range);
 
-    console.log(range);
-
     try {
       document.execCommand('copy');
       selection.removeAllRanges();

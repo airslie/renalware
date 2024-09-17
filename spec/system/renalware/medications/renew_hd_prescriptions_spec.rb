@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Renewing all Give On HD prescriptions via a button", js: true do
   let(:hd_prescriber_role) { create(:role, :hd_prescriber, enforce: true) }
 

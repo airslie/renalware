@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Bringing in new pathology results into a letter while editing" do
     include LettersSpecHelper

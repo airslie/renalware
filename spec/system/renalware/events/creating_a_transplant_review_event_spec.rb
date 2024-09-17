@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating an medication review event", js: true do
   it "captures extra data" do
     user = login_as_clinical

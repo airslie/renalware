@@ -11,6 +11,11 @@ module Renalware
     before_action :set_paper_trail_whodunnit
     after_action :verify_authorized
 
+    # A layout helper macro that will ensure correct layout for turboframe requests
+    def self.use_layout(name)
+      layout(-> { turbo_frame_request? ? "turbo_rails/frame" : "renalware/layouts/#{name}" })
+    end
+
     # A note on ahoy tracking:
     # check_session_expired is defined on SessionTimeoutController
     # using this in the that controller
@@ -58,11 +63,11 @@ module Renalware
     end
 
     def success_msg_for(model_name)
-      t("#{action_name}.success", model_name: model_name)
+      t("#{action_name}.success", model_name: model_name&.to_s&.humanize)
     end
 
     def failed_msg_for(model_name)
-      t("#{action_name}.failed", model_name: model_name)
+      t("#{action_name}.failed", model_name: model_name&.humanize)
     end
 
     def paginate(collection, default_per_page: 25)

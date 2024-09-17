@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "A superadmin lists groups", js: true do
   it "lists all user groups in the system" do
     user = login_as_super_admin

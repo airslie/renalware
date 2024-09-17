@@ -2,7 +2,13 @@
 
 Renalware::Engine.routes.draw do
   root to: "dashboard/dashboards#show"
+
   mount Renalware::Reporting::Engine => "reporting", as: :reporting
+  mount Renalware::Research::Engine => "research", as: :research
+  mount Renalware::Hospitals::Engine => "hospitals", as: :hospitals
+  mount Renalware::Directory::Engine => "directory", as: :directory
+  # mount Renalware::NHSLetterMessaging::Engine => "nhs_letter_messaging", as: :nhs_letter_messaging
+
   draw :accesses
   draw :admin
   draw :admissions
@@ -11,12 +17,10 @@ Renalware::Engine.routes.draw do
   draw :clinics
   draw :dietetics
   draw :deaths
-  draw :directory
   draw :drugs
   draw :events
   draw :feeds
   draw :hd
-  draw :hospitals
   draw :letters
   draw :low_clearance
   draw :medications
@@ -27,8 +31,6 @@ Renalware::Engine.routes.draw do
   draw :problems
   draw :pd
   draw :renal
-  # draw :reporting
-  draw :research
   draw :snippets
   draw :system
   draw :transplants

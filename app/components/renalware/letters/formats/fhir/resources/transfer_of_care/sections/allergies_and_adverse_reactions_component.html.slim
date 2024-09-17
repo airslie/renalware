@@ -1,0 +1,38 @@
+- if allergies.any?
+  - allergies.each do |allergy|
+    table(width="100%")
+      tbody
+        tr
+          th Causative agent
+          td= allergy.description
+        tr
+          th Description of reaction
+          td Unknown
+        tr
+          th Severity
+          td Unknown
+        tr
+          th Certainty
+          td Unknown
+        tr
+          th Type of reaction
+          td Allergic
+        tr
+          th Evidence
+          td Not Tested
+        tr
+          th Probability of recurrence
+          td Unknown
+- elsif allergy_status.unrecorded?
+  table(width="100%")
+    tbody
+      tr
+        th Causative agent
+        td No recorded allergies
+
+- elsif allergy_status.no_known_allergies?
+  table(width="100%")
+    tbody
+      tr
+        th Causative agent
+        td No known allergy

@@ -1,5 +1,5 @@
 tr.letters_contact(id=dom_id(contact))
-  td= link_to contact, directory_person_path(contact.person)
+  td= link_to contact, directory.person_path(contact.person)
   td= contact.description_name
   td= yes_no(contact.default_cc)
   td= contact.address

@@ -1,0 +1,223 @@
+---
+
+#
+# ITK3 response codes
+#
+# These are lifted as-is from
+# https://nhsconnect.github.io/ITK3-FHIR-Messaging-Distribution/explore_response_codes.html
+# and we load this yaml when processing MESH API responses
+#
+# There are two types of response codes:
+# - Positive Response codes
+# - Negative Response codes
+# Note: All Negative response codes are deemed to be fatal and no further processing will be
+# carried out on the message. There will be no further response message following the response
+# message that contains the negative response code regardless of what acknowledgement
+# flags are set.
+#
+# The ITK3 Response Codes have three prefixes.
+# The codes are returned in response to the handling specification acknowledgement flags in the
+# header of the incoming message eg InfAckRequested=true or BusAckRequested=true.
+# The validation of the incoming message may vary from system to system however the following
+# rules apply to the codes:
+#
+#   InfAckRequested=true
+#     Prefix 1 and 2 (10001 to 20014) used
+#   BusAckRequested=true
+#     Prefix 3 (30001 to 30004) used
+10001:
+  type: negative
+  name: Handling Specification Error
+  description: A generic error code which gives a minimum level of assurance that systems can share the minimum information relating to Handling Specification faults.
+10002:
+  type: negative
+  name: Infrastructure Level Response Value - Processing Error
+  description: The handling specification for infrastructure level response is present but cannot be processed. For example, may be unreadable or contain an incorrect value.
+10003:
+  type: negative
+  name: Business Level Response Value - Processing Error
+  description: The handling specification for Business level response is present but cannot be processed. For example, may be unreadable or contain an incorrect value.
+10004:
+  type: negative
+  name: Message Definition Value - Processing Error
+  description: The handling specification for Message Definition is present but cannot be processed. For example, may be unreadable or contain an incorrect value. This may also be returned when the message type is not supported (known) by the receiving system.
+10005:
+  type: negative
+  name: Message Definition Version Value - Processing Error
+  description: The handling specification for Message Definition is present but the version is not supported by the receiving system.
+10007:
+  type: negative
+  name: Sender Reference Value - Processing Error
+  description: The handling specification for Sender Reference is present but cannot be processed. For example, may be unreadable, contain an incorrect value or the use of Sender Reference is not supported by receiving system.
+10008:
+  type: negative
+  name: Handling Specification Business Rule Error
+  description: The Handling Specification usage does not match business rules for included Payload. For example, an acknowledgement flag defined as mandatory to contain the value 'true' by the Payload specification contains the value 'false'.
+10009:
+  type: negative
+  name: Unreadable message received
+  description: A message has been received that is either corrupted or malformed and cannot be read by the receiving system.
+10010:
+  type: negative
+  name: Recipient Type - Processing Error
+  description: The handling specification for Recipient Type is present but cannot be processed. For example, may be unreadable or contain an incorrect value.
+20001:
+  type: negative
+  name: Unrecognised Recipient Person
+  description: The person referred to as the recipient in the ITK3 MessageHeader is not recognised.
+20002:
+  type: negative
+  name: Unrecognised Recipient Organisation
+  description: The organization referred to as the recipient in the ITK3 MessageHeader is not recognised.
+20003:
+  type: negative
+  name: Unrecognised Sender
+  description: The organization or person referred to as the sender in the ITK3 MessageHeader is not recognised. Note This code should not be used where the domain makes use of the GP look-up functionality in MESH.
+20004:
+  type: negative
+  name: Non-Approved file type received as an attachment
+  description: The Receiving system has received an attached file whose file type is not approved for the business domain.
+20005:
+  type: negative
+  name: Unsupported file type received as an attachment
+  description: The Receiving system has received an attached file which it does not support.
+20006:
+  type: negative
+  name: ITK3 Header validation failure
+  description: The ITK3 Header resources or elements are not correct or understandable. For example, ITK3 Bundle or ITK3 MessageHeader.
+20007:
+  type: negative
+  name: Duplicate Message received
+  description: Bundle with this message identifier has already been processed. A Payload with this ITK3 MessageHeader identifier has already been received and processed by this recipient.
+20008:
+  type: negative
+  name: Duplicate Document received
+  description: Bundle with this document identifier has already been processed. A Payload with this document identifier has already been received and processed by this recipient.
+20009:
+  type: negative
+  name: Payload validation failure
+  description: Payload content validation has failed.
+20010:
+  type: negative
+  name: Unrecognised Payload Recipient Organisation
+  description: The Recipient Organisation identified in the Payload, is not supported by this End Point (Receiving System).
+20011:
+  type: negative
+  name: Unrecognised Payload Recipient Person
+  description: The Recipient person identified in the Payload, is not supported by this End Point (Receiving System).
+20012:
+  type: negative
+  name: Unauthorised Sender
+  description: The Receiving system identified in the Payload is configured to reject messages from unauthorised senders. This code should not be used where the domain makes use of the 'GP look-up' functionality in MESH.
+20013:
+  type: positive
+  name: Success
+  description: The Message has been processed successfully at the infrastructure level. A response will be returned stating the fact. However, the message may still fail after further processing and result in another response if the business acknowledgement request flag has been sent to 'true'.
+20014:
+  type: negative
+  name: Unable to Process Replacement Document
+  description: A replacement document was received, but the receiver could not process the new document correctly and has therefore marked the new and original documents as 'bad' on its system.
+20015:
+  type: negative
+  name: Message too large
+  description: Payload is too large to be processed normally by the recipient system and has been rejected to avoid potential for manual intervention and subsequent loss of automated response codes. The recommended maximum size limit is 5MB.
+30001:
+  type: positive
+  name: Patient known here. (e.g. Patient is registered here)
+  description:
+30002:
+  type: negative
+  name: Patient not known here. (aka 'patient record not present in system')
+  description:
+30003:
+  type: negative
+  name: Patient no longer at this clinical setting
+  description:
+30004:
+  type: positive
+  name: Patient known here and recently deceased (i.e. patient record current in GP practice system at time of patient's death and deduction subsequently occurred for this reason)
+  description: This response is only applicable for a window of less than 6-months and would start at Date of Death of Patient (or Date of Deduction when reason for this is patient's death). If an ITK3 payload message is then received at 6 months or beyond, then the response code would revert to a 30003.
+30005:
+  type: positive
+  name: Referral open
+  description: Referral open.
+30006:
+  type: positive
+  name: Referral completed
+  description: Referral completed.
+30007:
+  type: negative
+  name: Referral escalated back to GP
+  description: Referral escalated back to GP.
+30008:
+  type: positive
+  name: Signposting to GP (non-urgent)
+  description: Patient signposted back to GP. Not a clinically urgent issue.
+30009:
+  type: positive
+  name: Clinical escalation to UTC/111/GPOOH
+  description: Clinical escalation to 111, UTC or GP Out of Hours once consultation has completed.
+30010:
+  type: positive
+  name: Clinical escalation to A&E or 999
+  description: Clinical escalation to 999 or A&E once consultation has completed.
+30011:
+  type: positive
+  name: Advised to go elsewhere/self-referral
+  description: Patient advised to go elsewhere once consultation has completed.
+30012:
+  type: negative
+  name: Unable to contact the patient
+  description: Attempted to contact the patient at least three times unsuccessfully.
+30013:
+  type: positive
+  name: Closure (service not needed)
+  description: Patient advises that the service is no longer needed.
+30014:
+  type: negative
+  name: Closure (service not accepted)
+  description: Patient does not accept the service being offered.
+30015:
+  type: negative
+  name: Closure (duplicate referral)
+  description: Duplicate referral.
+30016:
+  type: positive
+  name: Referral accepted
+  description: Referral accepted.
+30017:
+  type: negative
+  name: Referral rejected
+  description: Referral rejected.
+30018:
+  type: negative
+  name: Did Not Attend
+  description: Patient failed to attend the appointment/answer the call.
+30019:
+  type: positive
+  name: GP Registration - Application accepted
+  description: The registration has been accepted by the GP practice.
+30020:
+  type: negative
+  name: GP Registration - Application pending (contact practice)
+  description: The registration has not been accepted. The patient needs to contact the GP practice.
+30021:
+  type: negative
+  name: GP Registration - Application rejected (patient already registered)
+  description: The registration has not been accepted. The patient is already registered at the practice.
+30022:
+  type: negative
+  name: GP Registration - Application rejected (at capacity)
+  description: The registration has not been accepted. The practice is at capacity and is not currently taking any new registrations.
+30023:
+  type: negative
+  name: GP Registration - Application rejected (out of boundary)
+  description: The registration has not been accepted. The patient is out of boundary.
+30024:
+  type: negative
+  name: GP Registration - Application rejected (Previously removed from this practice)
+  description: The registration has not been accepted. The patient has previously been removed from this practice.
+30025:
+  type: negative
+  name: GP Registration - Application rejected (Previously removed from another practice)
+  description: The registration has not been accepted. The patient has previously been removed from another practice.

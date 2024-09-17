@@ -25,7 +25,6 @@ end
 # These are visible to demo app only
 gem "autoprefixer-rails"
 gem "aws-sdk-s3", require: false # for active storage when using Heroku for test environments
-# gem "babel-transpiler" # not sure this is need now that we user rollupjs + babel npmm packages?
 gem "bootsnap", require: false # speeds up rspec and rails server boot time in development
 gem "daemons", require: false # to use cmds like `bin/delayed_job start`
 gem "faker"
@@ -48,17 +47,11 @@ gem "httparty", require: false
 
 gem "rake"
 
-# For sentry error reporting and metrics - load stackprof first
-# rubocop:disable Bundler/OrderedGems
-gem "stackprof"
-gem "sentry-opentelemetry"
-gem "sentry-ruby"
-gem "sentry-rails"
-# rubocop:enable Bundler/OrderedGems
-
 gem "strong_migrations"
 
-gem "good_job"
+gem "fhir_stu3_models", github: "airslie/fhir_stu3_models"
+gem "good_job", "~> 4.0"
+
 gem "matrix"
 
 group :test do
@@ -78,6 +71,7 @@ group :test do
   gem "shoulda-matchers", "~> 6.1"
   gem "simplecov", "~> 0.17", require: false # only loaded if required
   gem "test-prof"
+  gem "vcr", require: false
   gem "webmock", "~> 3.7", require: false
   gem "wisper-rspec", "~> 1.1.0"
 end
@@ -106,16 +100,22 @@ group :development do
   # gem 'sql_tracker'
   gem "solargraph"
   gem "web-console"
+
+  # For sentry error reporting and metrics - load stackprof first
+  # rubocop:disable Bundler/OrderedGems
+  gem "stackprof"
+  gem "sentry-opentelemetry"
+  gem "sentry-ruby"
+  gem "sentry-rails"
+  # rubocop:enable Bundler/OrderedGems
 end
 
 group :development, :test do
   gem "bundler-audit", require: false
-  gem "byebug"
   # Start debugger with binding.b [https://github.com/ruby/debug]
   gem "debug", ">= 1.0.0", platforms: %i(mri mingw x64_mingw)
   gem "factory_bot_rails", "~> 6.2"
   gem "launchy", require: false
-  gem "pry-byebug"
   gem "pry-rails"
   gem "rspec-rails"
   gem "rubocop", require: false

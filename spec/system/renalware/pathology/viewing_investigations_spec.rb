@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Pathology
   describe "Viewing patient investigations (a.k.a. obervation requests or OBRs)" do
     context "when the patient has no investigations" do

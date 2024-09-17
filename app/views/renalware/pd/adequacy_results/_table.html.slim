@@ -1,7 +1,9 @@
+- # locals: (results:, display_patient: false, current_user:)
+
 table.toggleable(data-controller="toggle")
   thead
     tr
-      - if local_assigns.fetch(:display_patient, false)
+      - if display_patient
         th style="border-bottom: none" colspan=5
       - else
         th style="border-bottom: none" colspan=4
@@ -12,7 +14,7 @@ table.toggleable(data-controller="toggle")
       th.togglers= rows_toggler
       - if Pundit.policy(current_user, Renalware::PD::AdequacyResult).edit? # only eg admin can edit or delete
         th.col-width-tiny
-      - if local_assigns.fetch(:display_patient, false)
+      - if display_patient
         th.col-width-medium= t("thead.patient")
       th.col-width-date Date
       th.col-width-tiny.text-center Complete
@@ -35,7 +37,7 @@ table.toggleable(data-controller="toggle")
         - if Pundit.policy(current_user, Renalware::PD::AdequacyResult).edit?
           td.actions
             - if Pundit.policy(current_user, result).edit?
-              - if local_assigns.fetch(:display_patient, false)
+              - if display_patient
                 = link_to renalware.edit_patient_pd_adequacy_result_path(result.patient, result), target: :blank do
                   i.fas.fa-external-link-alt
                   |  Edit
@@ -47,7 +49,7 @@ table.toggleable(data-controller="toggle")
               = link_to t("btn.delete"),
                         renalware.patient_pd_adequacy_result_path(result.patient, result),
                         data: { method: :delete, confirm: "Are you sure?" }
-        - if local_assigns.fetch(:display_patient, false)
+        - if display_patient
           td= result.patient
         td.col-width-date= l(result.performed_on)
         td.text-center

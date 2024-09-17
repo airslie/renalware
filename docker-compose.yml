@@ -9,7 +9,7 @@
 #   docker-compose down -v --rmi all
 
 db:
-  image: postgres:9.6
+  image: postgres:16.4
   # volumes:
   #    - ./data/postgresql:/var/lib/postgresql/data
 web:

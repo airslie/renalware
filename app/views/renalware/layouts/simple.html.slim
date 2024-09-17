@@ -1,0 +1,25 @@
+/ This layout has not side bar or patient header etc - just the main top menu
+/ It supports optional content areas for title, page-actions, tabs, filters.
+/ Example usage is Renalware -> Letters.
+= content_for(:content) do
+  - generate_page_title(local_assigns: local_assigns)
+  .non-patient-page.main-content
+    .layout-wrapper
+      .non-patient-page-header(class=("with-tabs" if content_for?(:tabs)))
+        .row
+          .columns.small-12
+            ul.page-heading
+              li
+                h1= content_for?(:title) ? yield(:title) : breadcrumbs_and_title(breadcrumbs: local_assigns[:breadcrumbs], title: local_assigns[:title])
+              li.page-actions
+                / Output any page-level actions
+                = yield(:actions)
+
+            = yield(:tabs)
+
+      .row
+        .columns.small-12
+          = yield(:filters)
+          = yield
+
+= render template: "layouts/renalware"

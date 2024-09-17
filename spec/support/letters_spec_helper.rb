@@ -50,7 +50,8 @@ module LettersSpecHelper
     practice_email: nil,
     patient: nil,
     clinical: false,
-    author: nil
+    author: nil,
+    gp_send_status: nil
   )
     user ||= create(:user)
 
@@ -120,7 +121,12 @@ module LettersSpecHelper
       addressee: contact
     )
     Renalware::Letters::ApproveLetter.new(letter).call(by: user)
-    Renalware::Letters::Letter.find(letter.id)
+    letter = Renalware::Letters::Letter.find(letter.id)
+
+    # This is a bit of a hack: as ApproveLetter will set the gp_send_status to pending,
+    # but we might want it to be something else for testing purposes, update the status here
+    letter.update_column(:gp_send_status, gp_send_status) if gp_send_status.present?
+    letter
   end
 end
 # rubocop:enable Metrics/MethodLength, Metrics/ParameterLists

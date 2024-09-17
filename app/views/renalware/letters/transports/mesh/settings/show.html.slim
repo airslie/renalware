@@ -1,0 +1,7 @@
+= content_for(:tabs)  { render "renalware/letters/transports/mesh/tabs" }
+= content_for(:title) { "GP Connect / Settings" }
+
+dl.mt-4
+  - settings.each do |key, value|
+    dt= key
+    dd= value

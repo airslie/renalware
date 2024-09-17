@@ -32,7 +32,7 @@ module Renalware
           view_proc: view_proc,
           pagination: pagy
         )
-        render locals: { options: options }
+        render locals: { options: options, turbo_frame_request: turbo_frame_request? }
       end
 
       private

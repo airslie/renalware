@@ -63,7 +63,7 @@ module World
 
       def create_person(user:, attributes: {})
         login_as user
-        visit new_directory_person_path
+        visit directory.new_person_path
 
         attr = valid_person_attributes.merge(attributes)
 
@@ -80,7 +80,7 @@ module World
 
       def update_person(user:)
         login_as user
-        visit directory_people_path
+        visit directory.people_path
         click_on t("btn.edit")
 
         fill_in t_person(:title), with: "Monsieur"

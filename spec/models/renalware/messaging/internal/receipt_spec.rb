@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Messaging::Internal
   describe Receipt do
     it :aggregate_failures do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Death location management" do
   it "enables me to list locations" do
     login_as_super_admin

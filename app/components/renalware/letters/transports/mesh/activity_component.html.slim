@@ -1,0 +1,30 @@
+.columns.medium-12.large-6
+  article
+    header
+      h2= t(".title")
+      ul
+        li= link_to "View All", letters_transports_mesh_transmissions_path, class: "button"
+
+    table
+        thead
+          tr
+            th
+            th Pending
+            th Success
+            th Failure
+        tbody
+          tr
+            td Today
+            td 2
+            td 4
+            td 0
+          tr
+            td This week
+            td 2
+            td 4
+            td 0
+          tr
+            td All time
+            td 2
+            td 4
+            td 0

@@ -1,5 +1,6 @@
-- query ||= nil
-- sortable = query.present? && local_assigns.fetch(:sortable_columns, false)
+- # locals: (clinic_visits:, patient:, query: nil, sortable_columns: false)
+
+- sortable = query.present? && sortable_columns
 
 table.clinics.auto-layout
   thead

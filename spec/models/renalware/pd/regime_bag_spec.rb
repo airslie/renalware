@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "./spec/support/login_macros"
 
 module Renalware

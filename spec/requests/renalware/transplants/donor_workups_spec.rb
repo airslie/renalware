@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Donor stage management" do
   let(:patient) { create(:transplant_patient, by: @current_user) }
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Users::LastSigninComponent, type: :component do
   context "when the user has never logged in" do
     it "renders nothing" do

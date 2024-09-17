@@ -1,0 +1,65 @@
+= content_for(:filters) do
+  .filters
+    .filters__form
+      = search_form_for search,
+                        url: hospitals.centres_path,
+                        html: { class: "fn-form" },
+                        data: { turbo_frame: "hospital_centres",
+                              turbo: true,
+                              turbo_advance: true,
+                              controller: "form",
+                              action: "input->form#submit" } do |f|
+        .row
+          .small-4.columns
+            = f.label "Name or code contains"
+            = f.search_field :name_or_code_cont, autofocus: true
+          .small-2.columns
+            = f.label "Default site"
+            = f.select :default_site_eq, [["Yes", true], ["No", false] ], include_blank: true
+          .small-2.columns
+            = f.label "Host site"
+            = f.select :host_site_eq, [["Yes", true], ["No", false] ], include_blank: true
+          .small-2.columns.end
+            = f.label "Transplant site"
+            = f.select :is_transplant_site_eq, [["Yes", true], ["No", false] ], include_blank: true
+
+          .small-2.columns.actions.end
+            .mt-px= filter_or_reset(form: f, reset_path: hospitals.centres_path)
+
+
+= within_new_admin_layout(title: "Hospital Centres") do
+  = turbo_frame_tag "hospital_centres" do
+    = render Renalware::SpinnerComponent.new do |spinner|
+      = spinner.with_main_content do
+        table.auto-layout
+          thead
+            tr
+              th= sort_link([:hospitals, search], :name)
+              th= sort_link([:hospitals, search], :code)
+              th= sort_link([:hospitals, search], :abbrev)
+              th= sort_link([:hospitals, search], :default_site)
+              th= sort_link([:hospitals, search], :host_site)
+              th= sort_link([:hospitals, search], :is_transplant_site, "Transplant site")
+              th= sort_link([:hospitals, search], :active)
+              th= sort_link([:hospitals, search], :departments_count, "Departments")
+              th= sort_link([:hospitals, search], :units_count, "Units")
+          tbody
+            - centres.each do |centre|
+              tr(id=dom_id(centre))
+                td= centre.name
+                td= centre.code
+                td= centre.abbrev
+                td= inline_check_icon(centre.default_site)
+                td= inline_check_icon(centre.host_site)
+                td= inline_check_icon(centre.is_transplant_site)
+                td= inline_check_icon(centre.active)
+                td.departments_count
+                  .flex
+                    .w-8= centre.departments_count
+                    .p-0= link_to "View", hospitals.centre_departments_path(centre), target: "_top"
+                td.units_count
+                  .flex
+                    .w-8= centre.units_count
+                    .p-0= link_to "View", hospitals.units_path, target: "_top"
+
+        == pagy_nav(pagy) if pagy.pages > 1

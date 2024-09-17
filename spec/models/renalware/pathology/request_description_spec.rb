@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::RequestDescription do
   subject(:request_description) { build(:pathology_request_description) }
 

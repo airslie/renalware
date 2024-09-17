@@ -23,12 +23,18 @@
   table
     thead
       tr
+        th(colspan=3)
+        th(colspan=2) Inc. in letters
+        th(colspan=3)
+      tr
         th.col-width-tiny
         th= sort_link(search, :title, "Title", data: { turbo: true, turbo_advance: false })
         th Displayed URL and description
-        th.col-width-tiny= sort_link(search, :usage_count, "Times used", data: { turbo: true, turbo_advance: false })
+        th From
+        th To
+        th.col-width-tiny= sort_link(search, :usage_count, "Usage", data: { turbo: true, turbo_advance: false })
         th.col-width-date-time= sort_link(search, :last_used_at, "Last used", data: { turbo: true, turbo_advance: false })
-        th Last edited by
+        th Last editor
     tbody
       - references.each do |reference|
         tr(id=dom_id(reference))
@@ -42,6 +48,8 @@
               | &nbsp;&nbsp;
               = reference.url
             = reference.description
+          td.nowrap= reference.include_in_letters_from
+          td.nowrap= reference.include_in_letters_until || "-"
           td= reference.usage_count
           td= l(reference.last_used_at)
           td= reference.updated_by

@@ -29,6 +29,7 @@ en:
           tab:
             all: All
             batch_printable: Batch Printable
+            deleted: Deleted
       summary_part:
         btn:
           draft_letter: Draft Letter
@@ -36,3 +37,9 @@ en:
     hints:
       letters_letter:
         notes: These notes will not appear on the letter
+  letters:
+    gp_send_status:
+      pending: Pending
+      not_applicable: N/A
+      success: Success
+      failure: Failure

@@ -8,6 +8,8 @@ en:
           thead:
             bookmarked_on: Bookmarked
             patient_name: Name
+        bookmark:
+          confirm: Are you sure you want to remove this bookmark?
       dashboards:
         content:
           bookmarks:

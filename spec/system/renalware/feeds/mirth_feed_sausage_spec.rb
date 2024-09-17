@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Mirth HL7 feed processing simulation" do
   def oru_message(
     sent_at: "20240316235859",

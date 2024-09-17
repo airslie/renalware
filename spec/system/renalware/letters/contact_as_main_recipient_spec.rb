@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Assign a person as a main recipient" do
   include AjaxHelpers
 

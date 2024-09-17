@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "renalware/letters/parts/_clinical_observations" do
     helper(Renalware::LettersHelper)

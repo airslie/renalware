@@ -18,7 +18,7 @@
 #
 # Note that PDF Letters are stored in the rails cache, which is currently Filestore. If we move
 # to a multi-server environment we would need to switch to Memcached or Redis, and the PDF files
-# would be poked into that - using quite a lot of memory I am sure (ag 25k per PDF), so would be
+# would be poked into that - using quite a lot of memory I am sure (avg 25k per PDF), so would be
 # unable to keep PDFs in the cache for as long as we can in the FileStore implementation, which is
 # only limited by disc space. However PDFs can be regenerated on demand so there is no need to be
 # bothered about not keeping them other than as mentioned the wasted resources in creating the

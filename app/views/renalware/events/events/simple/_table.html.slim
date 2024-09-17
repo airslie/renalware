@@ -1,15 +1,14 @@
-- toggle_prefix ||= "event"
+- # locals: (exclude_type_column: false, toggle_prefix: "event", events:)
 
 table.has_togglable_rows
   thead
     tr
       th.col-width-tiny
       th.created_at.col-width-date-time= t("thead.date_time")
-      - unless local_assigns.fetch(:exclude_type_column, false)
+      - unless exclude_type_column
         th.col-width-large= t("thead.type")
       th.created_by.col-width-medium= t("thead.created_by")
   tbody
     = render partial: "renalware/events/events/simple/event",
              collection: events,
-             locals: { exclude_type_column: local_assigns[:exclude_type_column],
-                       toggle_prefix: toggle_prefix }
+             locals: { exclude_type_column: exclude_type_column, toggle_prefix: toggle_prefix }

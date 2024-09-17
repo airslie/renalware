@@ -1,0 +1,14 @@
+- recipients.each do |recipient|
+  table(width="100%")
+    tbody
+      tr
+        th Name
+        td= recipient.name
+      - if recipient.role.present?
+        tr
+          th Role
+          td= recipient.role
+      - if recipient.organisation.present?
+        tr
+          th Organisation name
+          td= recipient.organisation

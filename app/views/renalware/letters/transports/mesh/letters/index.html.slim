@@ -1,0 +1,4 @@
+= content_for(:title)     { "Letters" }
+= content_for(:tabs)      { render "renalware/letters/lists/tabs" }
+= content_for(:filters)   { render "filters", form: form }
+= render "table", local_assigns

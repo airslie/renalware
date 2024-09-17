@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Print a patient's ESA drug list", js: true do
   include AjaxHelpers
   let(:esa_drug_type) { create(:drug_type, :esa) }

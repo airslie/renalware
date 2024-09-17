@@ -25,7 +25,7 @@ module Renalware
         public :to_ary
 
         # Virtual attribute used on a form to determine what action as preformed on the slot
-        attr_accessor :change_type
+        attr_accessor :patient_search_scope
         # Virtual to help the pre-population of select2 with the offending patient if an error
         attr_accessor :patient_ids
 

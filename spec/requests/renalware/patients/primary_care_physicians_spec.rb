@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Configuring Primary Care Physicians" do
     let(:primary_care_physician) { create(:primary_care_physician) }

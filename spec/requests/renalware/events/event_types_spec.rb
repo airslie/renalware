@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Configuring Event Types" do
   let(:event_type) { create(:access_clinic_event_type) }
 

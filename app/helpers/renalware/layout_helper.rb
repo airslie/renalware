@@ -2,6 +2,8 @@
 
 module Renalware
   module LayoutHelper
+    # Partial layout helpers.
+    # https://guides.rubyonrails.org/layouts_and_rendering.html#partial-layouts
     # If you don't want the title argument to be used in the browser bar, pass in
     # page_title: in opts also.
     def within_admin_layout(title: nil, **opts)

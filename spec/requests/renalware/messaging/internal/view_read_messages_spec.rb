@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Read internal messages for a user" do
   describe "GET read" do
     it "responds successfully" do

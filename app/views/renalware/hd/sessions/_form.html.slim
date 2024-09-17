@@ -193,7 +193,11 @@ ruby:
         = fcm.input :blown_fistula_arterial, as: :inline_radio_buttons, wrapper: :horizontal_small
         = fcm.input :multiple_cannulation_attempts, as: :inline_radio_buttons, wrapper: :horizontal_small
         = fcm.input :prolonged_bleeding, as: :inline_radio_buttons, wrapper: :horizontal_small
-        = f.input :notes, as: :text, input_html: { rows: 5 }, wrapper: :horizontal_large
+
+        / Trix notes and insert snippet button
+        = f.label :notes, class: "mb-2"
+        = snippets_modal_and_link_to_open_it(target_input_for_selected_snippet: ".hd-session-notes")
+        = f.input :notes, as: :trix_editor, class: "hd-session-notes", wrapper: :zilch
 
       = render layout: "renalware/shared/fieldset",
         locals: { legend: "Patient Group Direction medications given", name: "pgd" } do
@@ -202,7 +206,6 @@ ruby:
                           label: false,
                           wrapper: :zilch,
                           input_html: { data: { controller: "slimselect" }}
-
 .row
   .large-12.columns
     = render "form_actions", f: f, back_path: back_path, session: session, patient: @patient

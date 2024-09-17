@@ -115,7 +115,8 @@ module Renalware
               observed_at: parse_time(request.observed_at), # OBR.7
               result: observation.value,
               comment: observation.comment,
-              cancelled: observation.cancelled
+              cancelled: observation.cancelled,
+              result_status: observation.result_status
             }
           else
             nil # will be removed by compact

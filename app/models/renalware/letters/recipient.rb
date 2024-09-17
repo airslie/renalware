@@ -19,6 +19,19 @@ module Renalware
       validates :addressee_id, presence: { if: :contact? }
       validate :person_role_present?
 
+      # Return all recipients excluding
+      # - any that have been emailed (ie emailed to practice)
+      # - the GP if their copy has been successfully sent via eg MESH
+      # TODO: Improve the mess here
+      def self.printable_recipients_for(letter)
+        recipients = [letter.main_recipient]
+        recipients.concat(letter.cc_recipients)
+        recipients.reject! { |recipient| recipient.emailed_at.present? }
+        recipients.reject!(&:statement_to_indicate_letter_will_be_emailed)
+        recipients.reject!(&:primary_care_physician?) if letter.gp_send_status.to_sym == :success
+        CollectionPresenter.new(recipients, RecipientPresenter::WithCurrentAddress)
+      end
+
       # Check we have a person_role. If we don't add an error to the parent letter if one is
       # present, otherwise add to our errors.
       def person_role_present?
@@ -124,7 +137,7 @@ module Renalware
       end
 
       # Make sure we have a 'name' set in the address record set as this is used in the letter
-      # e.g. Roger Robar <- address.name
+      # e.g. Roger Robbit <- address.name
       #      123 Toon Town
       #      ...
       # Note address.name is a redundant field not consistently populated in the app

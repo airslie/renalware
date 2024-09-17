@@ -27,6 +27,7 @@ module Renalware
 
       def call
         letter.update_column(:page_count, pdf_reader.page_count)
+        letter.archive.update_column(:pdf_content, pdf_data) if letter.archive.present?
       rescue StandardError => e
         # In Wisper async jobs, rescue_from blocks defined on the ApplicationJob class
         # do not seem to be called, so we need to invoke them ourselves with this call to a fn on
@@ -37,11 +38,11 @@ module Renalware
       private
 
       def pdf_reader
-        PDF::Reader.new(pdf_data)
+        PDF::Reader.new(StringIO.new(pdf_data))
       end
 
       def pdf_data
-        StringIO.new(RendererFactory.renderer_for(letter, :pdf).call)
+        @pdf_data ||= RendererFactory.renderer_for(letter, :pdf).call
       end
     end
   end

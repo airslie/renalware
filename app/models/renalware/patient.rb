@@ -14,9 +14,10 @@ module Renalware
     # Before creation generate a UUID to use in urls with friendly_id (i.e. in #to_param)
     # Note if inserting directly into the database (bypassing Rails) this will still work as there
     # is a default new uuid value on the secure_id column
-    before_create { self.secure_id ||= SecureRandom.uuid }
     before_save :upcase_local_patient_ids
     before_save :nullify_unused_patient_ids
+    before_create { self.secure_id ||= SecureRandom.uuid }
+    before_create :generate_renal_registry_id
     # before_validation :strip_spaces_from_nhs_number
     friendly_id :secure_id, use: [:finders]
 
@@ -114,6 +115,7 @@ module Renalware
     validates :local_patient_id_3, uniqueness: { case_sensitive: false }, allow_blank: true
     validates :local_patient_id_4, uniqueness: { case_sensitive: false }, allow_blank: true
     validates :local_patient_id_5, uniqueness: { case_sensitive: false }, allow_blank: true
+    validates :renal_registry_id, uniqueness: { case_sensitive: true }, allow_blank: true
     validates :family_name, presence: true
     validates :given_name, presence: true
     validates :born_on, presence: true
@@ -187,6 +189,32 @@ module Renalware
     def hospital_identifiers
       @hospital_identifiers ||= Patients::PatientHospitalIdentifiers.new(self)
     end
+
+    # Renal Registry requires a 'IDN07' id:
+    #  "Unique identifier not attributable to patient, Site code plus internal record
+    #   number or similar eg. RAJ01-12345"
+    # Since we do not like to hand out primary keys for security reasons, and the uuids we already
+    # have on patient, which might otherwise satisfy this requirement, are rather long (the
+    # IDN07 identifier spec says max 20 chars) we generate a unique 10 char base 58 string.
+    # I am unsure about storing the site code eg RAJ01 in the patient record as it duplicates
+    # a relationship we already have (patient.hospital_centre) so here we generate a string that
+    # is unique across all patients in all sites, and when we sent to RReg we will
+    # prepend the site code at that point. We need to bear in mind however that users might search
+    # RW using the id we generate here, and might include the prepended site code in their search
+    # term.
+    def generate_renal_registry_id
+      return renal_registry_id if renal_registry_id.present?
+
+      rr_id = nil
+      loop do
+        rr_id = SecureRandom.base58(10)
+        break unless Patient.exists?(renal_registry_id: rr_id) # clash unlikely but need to be sure
+      end
+      self.renal_registry_id = rr_id
+    end
+
+    # This should perhaps be in a presenter?
+    def full_renal_registry_id = [hospital_centre&.code, renal_registry_id].join("-")
 
     private
 

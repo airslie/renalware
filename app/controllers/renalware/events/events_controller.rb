@@ -59,7 +59,7 @@ module Renalware
 
         if UpdateEvent.call(event: event, params: event_params, by: current_user)
           redirect_to(
-            session.delete(:events_edit_back_url) || events_path,
+            session.delete(:events_edit_back_url) || patient_events_path,
             notice: success_msg_for("event")
           )
         else

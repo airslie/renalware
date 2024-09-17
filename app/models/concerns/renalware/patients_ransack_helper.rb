@@ -58,9 +58,15 @@ module Renalware
       end
 
       def identity_params(query)
-        { fuzzy_term: "#{query}%", exact_term: query, ucase_term: query&.upcase }
+        {
+          starts_with_term: "#{query}%",
+          ends_with_term: "%#{query}",
+          exact_term: query,
+          ucase_term: query&.upcase
+        }
       end
 
+      # rubocop:disable Metrics/MethodLength
       def identity_sql(query)
         sql = <<-SQL.squish
           patients.local_patient_id = :ucase_term OR
@@ -70,11 +76,13 @@ module Renalware
           patients.local_patient_id_5 = :ucase_term OR
           patients.external_patient_id = :exact_term OR
           patients.nhs_number = :exact_term OR
-          patients.family_name ILIKE :fuzzy_term
+          patients.family_name ILIKE :starts_with_term OR
+          patients.renal_registry_id LIKE :exact_term
         SQL
         sql += " OR patients.ukrdc_external_id = :exact_term" if query_is_a_uuid?(query)
         sql
       end
+      # rubocop:enable Metrics/MethodLength
 
       def query_is_a_uuid?(query)
         query.match(UUID_REGEXP)

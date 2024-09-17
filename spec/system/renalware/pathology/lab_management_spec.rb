@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Manage pathology labs" do
   it "enables listing labs for a superadmin" do
     login_as_super_admin

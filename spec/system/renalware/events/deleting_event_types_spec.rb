@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Deleting event types" do
   it "a deleted type is visible wherever it has been used but is not available prospectively" do
     create(:event_category, name: "MyCategory")

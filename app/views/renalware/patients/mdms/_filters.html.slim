@@ -11,15 +11,19 @@
 - url = patients_mdms_path(scope: params[:scope], filter: params[:filter])
 = simple_form_for options.search,
                   url: patients_mdms_path(scope: params[:scope], filter: params[:filter]),
-                  method: :get do |f|
+                  method: :get,
+                  data: { turbo_frame: "mdm_list",
+                          turbo: true,
+                          turbo_advance: true,
+                          controller: "form",
+                          action: "input->form#submit" } do |f|
 
-  .flex.flex-col.sm:flex-row.items-end.pb-4
+  .flex.flex-col.sm:flex-row.items-center.pb-4
     - options.current_view.filters.each do |filter|
 
       - column = filter.code
       - type = filter.type
       - filter_type = ActiveSupport::StringInquirer.new(type)
-
       - if filter_type.list?
         / Build and cache the filter dropdown options
         - cache_key = [options.current_view.view_name, column, filter.type]
@@ -32,12 +36,16 @@
                     include_blank: true,
                     collection: collection,
                     label: column.humanize
-          / input_html: { onchange: "this.form.submit();" }
       - elsif filter_type.search?
         / Free text inputs
         .w-full.sm:max-w-xs.pr-2
           = f.input "#{column}_cont", label: column.humanize
 
-    .w-full.sm:max-w-xs.pr-2
-      .mb-4= filter_or_reset(form: f, reset_path: url)
+    .mt-2
+      = link_to(url, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+        .flex.items-center
+          .mr-1= inline_icon(:cross, size: :md)
+          | Reset
+      noscript
+        = filter_or_reset(form: f, reset_path: url)
 

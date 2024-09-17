@@ -1,111 +1,9 @@
-ruby:
-  form_opts = if Renalware.config.letters_render_pdfs_with_prawn
-                {
-                  data: {
-                    controller: "letters-batch-compile",
-                    action: "submit->letters-batch-compile#submit"
-                  }
-                }
-              else
-                {}
-              end
-
 - named_filter = params[:named_filter]&.to_sym || :all
 
-= content_for(:tabs) do
-  = render "tabs"
-
-= content_for(:filters) do
-  .search-form.filters
-    = simple_form_for form,
-                      as: :q,
-                      url: renalware.letters_filtered_letters_list_path(named_filter: named_filter),
-                      html: { autocomplete: "off" },
-                      method: :get do |f|
-      .row
-        .small-12.columns
-          .mb-2= filter_or_reset(form: f, reset_path: renalware.letters_filtered_letters_list_path(named_filter: named_filter))
-      .row
-        .small-6.medium-1.large-1.columns
-            = f.input :enclosures_present,
-                      as: :select,
-                      label: "Enclosure",
-                      input_html: { disabled: form.disabled_inputs.include?(:enclosures_present) }
-        .small-6.medium-1.large-1.columns
-            = f.input :notes_present,
-                      as: :select,
-                      label: "Notes",
-                      input_html: { disabled: form.disabled_inputs.include?(:notes_present) }
-        .small-6.medium-2.large-2.columns
-          = f.input :state_eq,
-                    collection: form.letter_state_options,
-                    label: "State",
-                    include_blank: form.allow_blank_inputs.include?(:state_eq),
-                    input_html: { disabled: form.disabled_inputs.include?(:state_eq) }
-        .small-6.medium-2.large-2.columns
-          = f.input :author_id_eq,
-                    as: :user_picker,
-                    collection: form.author_options,
-                    label: "Author",
-                    input_html: { disabled: form.disabled_inputs.include?(:author_id_eq) }
-        .small-6.medium-2.large-2.columns
-          = f.input :created_by_id_eq,
-                    as: :user_picker,
-                    collection: form.typist_options,
-                    label: "Typist"
-        .small-6.medium-2.large-1.columns
-          = f.input :letterhead_id_eq,
-                    collection: form.letterhead_options,
-                    label: "Letterhead"
-        .small-6.medium-3.large-2.columns
-          = f.input :clinic_visit_clinic_id_eq,
-                    collection: form.clinic_visit_clinic_options,
-                    label: "Clinic Visit Clinic"
-        .small-6.medium-1.large-1.columns.end
-          = f.input :page_count_in_array,
-                    collection: form.page_count_options,
-                    label: "Pages",
-                    include_blank: form.allow_blank_inputs.include?(:page_count_in_array)
-
-  - if named_filter == :batch_printable
-
-    ruby:
-      button_title = if letters.total_count > Renalware.config.max_batch_print_size
-                       "Batch print #{Renalware.config.max_batch_print_size} of #{letters.total_count} letters"
-                     else
-                       "Batch print all #{letters.total_count} letters"
-                     end
-
-    / This form will all hidden fields and one button is otherwise a mirror of the above filter form.
-    / It POSTs the form to create a batch and its items (which really just help us to keep track)
-    / or what was printed and the user does not need to know about it) and once created
-    / it pops up a dialog with a spinner and an asycn_render partial that, once the PDFs are compiled
-    / will return with a partial containing a link to the PDF. The user clicks on this to open it in a
-    / new window. At the same time on the original page we close the modal and display another one
-    / which asks the user if the print batch was successful - if so we send a patch to update
-    / the batch status and set letter status to Completed.
-
-    = simple_form_for form,
-                      as: :batch,
-                      url: letters_batches_path,
-                      method: :post,
-                      remote: true,
-                      **form_opts do |f|
-      = f.input :enclosures_present, as: :hidden
-      = f.input :notes_present, as: :hidden
-      = f.input :state_eq, as: :hidden
-      = f.input :author_id_eq, as: :hidden
-      = f.input :created_by_id_eq, as: :hidden
-      = f.input :letterhead_id_eq, as: :hidden
-      = f.input :page_count_in_array, as: :hidden
-      - if letters.total_count > 0
-        = f.submit button_title, class: "button", disabled: letters.none?, formtarget: "_blank"
-
-    #batch-print-modal.reveal-modal.small(data-reveal
-      data-options="close_on_background_click:false")
-
-= within_admin_layout(title: "Letters") do
-  = render "table", letters: letters, q: q
+= content_for(:tabs)    { render "tabs" }
+= content_for(:title)   { "Letters" }
+= content_for(:filters) { render "filters", form: form, named_filter: named_filter, letters: letters }
+= render "table", letters: letters, q: q, named_filter: named_filter
 
 / The modal dialog container for the dialog which will ask the user
 / if they want to mark the letter as printed. We load this dialog via ajax.
@@ -115,7 +13,7 @@ ruby:
 / - ./show.js.erb
 / - letters.js
 / for the complete works. Using ujs for these sort of dialog -> -> post -> page refresh
-/ cycles is a bit complex and we could move to using something like stimulus
+/ cycles is a bit complex and we could move to using something like turbo
 / to keep thing a bit simpler
 #letter-print-modal.reveal-modal.medium(data-reveal
   data-refresh-url=request.original_fullpath

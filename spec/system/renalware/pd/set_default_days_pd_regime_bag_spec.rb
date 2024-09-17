@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "pd regime bag's days assigned are by default set all to true" do
     it "days can be deleselected when creating a new pd regime", js: true do

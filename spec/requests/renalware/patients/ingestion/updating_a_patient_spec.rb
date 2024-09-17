@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "HL7 ADT~A31 message handling: 'Update person information'" do
   let(:local_patient_id) { "P123" }
   let(:family_name) { "SMITH" }

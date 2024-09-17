@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe PDRegimeBagsHelper do
     let(:bag_type) { build_stubbed(:bag_type) }

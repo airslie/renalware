@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing event subtypes" do
   def create_subtype
     event_type = create(:research_study_event_type, name: "EventType1")

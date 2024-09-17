@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Pathology
   describe "Managing pathology observation descriptions (OBX)" do
     # Index HTML GET

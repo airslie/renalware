@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating an biopsy", js: true do
   context "when adding a biopsy event" do
     it "captures extra data" do

@@ -42,11 +42,12 @@ namespace :letters do
   # If you use the helper list_batch_printable_path, the named route is used to build the url,
   # but when it is accessed it is actually the first, dynamic route definition that matches first,
   # so the named_filter parameters is populated when we hit the controller.
-  constraints(named_filter: /(all|batch_printable)/) do
+  constraints(named_filter: /(all|batch_printable|deleted)/) do
     get "list/:named_filter", to: "lists#show", as: :filtered_letters_list
   end
   get "list/batch_printable", to: "lists#show", as: :list_batch_printable
   get "list/all", to: "lists#show", as: :list_all
+  get "list/deleted", to: "lists#show", as: :deleted
   get "list", to: "lists#show", as: :list, defaults: { named_filter: :all }
 
   resources :letters, only: [] do
@@ -59,6 +60,30 @@ namespace :letters do
       get :unread
       get :read
       get :sent
+    end
+  end
+
+  # Mesh etc
+  namespace :transports do
+    namespace :mesh do
+      resources :testcase_invocations
+      get "help", to: "help#show"
+      resource :settings
+      resources :transmissions
+      resources :letters, only: :index
+
+      resources :inbox_messages
+      resources :jobs, only: :index
+
+      resources :operations do
+        collection do
+          get :check_inbox
+          get :handshake
+        end
+        member do
+          get :preview_reconstituted_letter
+        end
+      end
     end
   end
 end

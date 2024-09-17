@@ -1,7 +1,7 @@
 / We allow cross-module references in the UI but not in the controller hence:
 - unit = Renalware::Hospitals::Unit.find(unit_id)
-- breadcrumbs = [breadcrumb_for("HD Units", hospitals_units_path),
-                 breadcrumb_for(unit.unit_code, edit_hospitals_unit_path(unit)),
+- breadcrumbs = [breadcrumb_for("HD Units", hospitals.units_path),
+                 breadcrumb_for(unit.unit_code, hospitals.edit_unit_path(unit)),
                  breadcrumb_for("Stations", hd_unit_stations_path(unit))]
 
 = within_admin_layout(title: "New", breadcrumbs: breadcrumbs) do

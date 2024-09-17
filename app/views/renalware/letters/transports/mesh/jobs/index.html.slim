@@ -1,0 +1,30 @@
+= content_for(:tabs) { render "renalware/letters/transports/mesh/tabs" }
+= content_for(:title) { "GP Connect / Job Queue" }
+= content_for(:actions) do
+  = link_to "GoodJob Admin",
+          good_job.jobs_path,
+          class: "btn btn-secondary"
+
+= render "stats", stats: stats
+
+table
+  thead
+    th.col-width-tiny
+    th.col-width-small Job
+    th.col-width-date-time Queued
+    th.col-width-date-time Performed
+    th.col-width-date-time Finished
+    th
+    th
+  tbody
+    - jobs.each do |job|
+      tr
+        td= link_to "View", good_job.job_path(job)
+        td= job.job_class&.demodulize
+        td= l(job.created_at)
+        td= l(job.performed_at)
+        td= l(job.finished_at)
+        td= job.error
+        td
+
+== pagy_nav pagy

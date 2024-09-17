@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Create new appointment manually (not via HL7 message)", js: true do
   context "with valid inputs" do
     it "creates a new clinic appointment" do

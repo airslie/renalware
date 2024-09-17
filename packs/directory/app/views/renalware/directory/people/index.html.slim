@@ -1,0 +1,9 @@
+= content_for(:actions) do
+  = link_to "Add Person", directory.new_person_path, class: "button"
+
+= content_for(:filters) do
+  = render "filters", q: q
+
+= within_admin_layout(title: "Directory")
+  = render "table", people: people
+  == pagy_nav(pagy) if pagy.pages > 1

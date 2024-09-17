@@ -11,6 +11,7 @@ module Renalware
       def reject?             = false
       def approve?            = false
       def complete?           = false
+      def deleted?            = user_is_super_admin?
 
       def destroy?
         return false if user_is_read_only?

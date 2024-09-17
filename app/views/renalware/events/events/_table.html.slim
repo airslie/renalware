@@ -1,3 +1,5 @@
+- # locals: (events:, query: nil, pagy: nil, exclude_type_column: false, description_column_title: t("thead.description"), include_patient_column: false, edit_proc: nil, destroy_proc: nil)
+
 - toggle_prefix ||= "event"
 
 = turbo_frame_tag("events-turbo-frame", "data-turbo-action" => "advance") do
@@ -9,11 +11,11 @@
             th.noprint.togglers.noprint= rows_toggler
             th.col-width-tiny
             th.col-width-date=t("thead.created_at")
-            - unless local_assigns.fetch(:exclude_type_column, false)
+            - unless exclude_type_column
               th.col-width-large= t("thead.type")
-            - if local_assigns.fetch(:include_patient_column, false)
+            - if include_patient_column
               th.col-width-large= t(".patient")
-            th= local_assigns.fetch(:description_column_title, t("thead.description"))
+            th= description_column_title
             th.created_at.col-width-date-time= t("thead.date_time")
             th.created_by.col-width-medium= t("thead.created_by")
         tbody
@@ -23,12 +25,12 @@
           = render partial: "renalware/events/events/event",
                   collection: events,
                   locals: { \
-                    exclude_type_column: local_assigns[:exclude_type_column],
-                    include_patient_column: local_assigns[:include_patient_column],
-                    edit_proc: local_assigns[:edit_proc],
-                    destroy_proc: local_assigns[:destroy_proc],
+                    exclude_type_column: exclude_type_column,
+                    include_patient_column: include_patient_column,
+                    edit_proc: edit_proc,
+                    destroy_proc: destroy_proc,
                     toggle_prefix: toggle_prefix \
                   }
 
-      - if defined?(pagy)
+      - if pagy.present?
         == pagy_nav(pagy) if pagy.pages > 1

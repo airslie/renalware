@@ -34,7 +34,8 @@ module Renalware
       }
 
       APISynchronisers::RouteSynchroniser.new(route_repository: repository).call
-
+      rr22_other_code = Medications::MedicationRoute.rr22_code_for("Other")
+      Medications::MedicationRoute.where(rr_code: nil).update!(rr_code: rr22_other_code)
       Medications::MedicationRoute.where(name: "Oral").update!(weighting: 10)
       Medications::MedicationRoute.where(name: "Subcutaneous").update!(weighting: 9)
     end

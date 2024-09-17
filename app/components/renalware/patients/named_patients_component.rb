@@ -25,8 +25,8 @@ module Renalware
       end
 
       def formatted_title(title)
-        if pagination.items < pagination.count
-          "#{title} (#{pagination.items} of #{pagination.count})"
+        if pagination.limit < pagination.count
+          "#{title} (#{pagination.limit} of #{pagination.count})"
         else
           "#{title} (#{pagination.count})"
         end

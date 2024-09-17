@@ -1,0 +1,19 @@
+.study-participations-table
+  table
+    thead
+      tr
+        th.col-width-date= sort_link([:research, query], :joined_on, "Joined on")
+        th.col-width-date= sort_link([:research, query], :left_on, "Left on")
+        th Patient
+        th.col-width-nhs-no NHS Number
+        th.col-width-reference-no Hosp no
+        th.col-width-tiny Age
+        th Sex
+        th Site
+        th External ID
+        th= sort_link([:research, query], :external_reference)
+        th.col-width-medium
+    tbody
+      = render participations, study: study
+
+  == pagy_nav(pagy) if pagy.pages > 1

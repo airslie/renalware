@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Feed Log messages" do
   it "lists them" do
     login_as_super_admin

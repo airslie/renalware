@@ -1,0 +1,84 @@
+table#appointments.toggleable(data-controller="toggle")
+  thead
+    tr
+      th.togglers.noprint= rows_toggler
+      th.col-width-small.text-center
+        | Generate request form?
+        br
+        |
+        = link_to "(Uncheck all)", "#", id: "uncheck_all_appointments_link"
+      th.col-width-small Clinic Visit
+      th.col-width-date-time
+        = sort_link([:renalware, search],
+                    :starts_at,
+                    [:starts_at],
+                    "Date and Time",
+                    default_order: :asc)
+      th.col-width-large
+        = sort_link([:renalware, search],
+                    :patient_family_name,
+                    [:patient_family_name, "starts_at asc"],
+                    "Patient",
+                    default_order: :asc)
+      th.col-width-tiny.show-for-large-up Sex
+      th.col-width-tiny.show-for-large-up Age
+      th.col-width-medium.show-for-large-up
+        = sort_link([:renalware, search],
+                    :patient_current_modality_description_name,
+                    [:patient_current_modality_description_name, "starts_at asc"],
+                    "Modality",
+                    default_order: :asc)
+      th.col-width-medium
+        = sort_link([:renalware, search],
+                    :clinic_name,
+                    [:clinic_name, "starts_at asc"],
+                    "Clinic",
+                    default_order: :asc)
+      th.col-width-medium
+        = sort_link([:renalware, search],
+                    :consultant_name,
+                    [:consultant_name, "starts_at asc"],
+                    "Consultant",
+                    default_order: :asc)
+      th.col-width-medium Visit Number
+      th.show-for-xlarge-up.col-width-date-time Created
+      th.show-for-xlarge-up Outcome notes
+      th.show-for-xlarge-up DNA notes
+
+  - appointments.each do |appointment|
+    tbody(class=("bg-green-100" if appointment.becomes_visit_id.present?))
+      tr
+        td= row_toggler
+        td.text-center= check_box_tag nil, appointment.patient.id, true, class: "patient_checkbox"
+        td.nowrap.actions
+          - if appointment.becomes_visit_id.present?
+            = link_to edit_patient_clinic_visit_path(appointment.patient,
+                                                      id: appointment.becomes_visit_id) do
+              i.fas.fa-eye
+              '  View
+          - else
+            = link_to new_patient_clinic_visit_path(appointment.patient,
+                                                    appointment_id: appointment.id),
+                                                    title: "Create Clinic Visit"  do
+              i.fas.fa-plus
+              '  Create
+
+        td= I18n.l appointment.starts_at
+        td= default_patient_link(appointment.patient)
+        td.show-for-large-up= appointment.patient.sex.code
+        td.show-for-large-up= appointment.patient.age
+        td.show-for-large-up= appointment.patient.current_modality
+        td= appointment.clinic.name
+        td= appointment.consultant&.name
+        td= appointment.visit_number
+        td.show-for-xlarge-up= l(appointment.created_at)
+        td.show-for-xlarge-up.col-width-medium-with-ellipsis= appointment.outcome_notes
+        td.show-for-xlarge-up.col-width-medium-with-ellipsis= appointment.dna_notes
+      tr
+        td(colspan=13)
+          .quick-preview
+            = definition_list_for(appointment, size: :large) do |list|
+              = list.definition(:outcome_notes){ |value| simple_format(value) }
+              = list.definition(:dna_notes){ |value| simple_format(value) }
+
+== pagy_nav(pagy) if pagy.pages > 1

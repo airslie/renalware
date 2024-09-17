@@ -1,0 +1,15 @@
+= render "renalware/shared/errors", model: department
+
+= simple_form_for department,
+                  url: url,
+                  as: :department,
+                  wrapper: :horizontal_form,
+                  html: { autocomplete: "off" } do |f|
+
+  = f.input :name, wrapper: :horizontal_medium
+
+  = f.simple_fields_for :address_attributes, department.address do |a|
+      = a.input :id, as: :hidden
+      = render "renalware/addresses/form", a: a
+
+  = save_or_cancel(form: f, back_path: hospitals.centre_departments_path(centre))

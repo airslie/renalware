@@ -16,6 +16,7 @@ module Renalware
           new(**).call
         end
 
+        # We only update comorbidities that have significant data changes
         def call
           return unless comorbidity
 

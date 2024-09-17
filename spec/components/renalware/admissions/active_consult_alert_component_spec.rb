@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Admissions::ActiveConsultAlertComponent, type: :component do
   context "when the patient has no active consults" do
     it "renders nothing" do

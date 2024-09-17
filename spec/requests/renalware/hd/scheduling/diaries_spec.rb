@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing Diaries" do
   describe "GET edit a weekly diary" do
     it "creates the diary for the requested week (and the missing unit master diary), " \

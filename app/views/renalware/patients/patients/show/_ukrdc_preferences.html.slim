@@ -2,6 +2,8 @@ article
   header
     h2 Renal Registry Preferences
   dl.dl-horizontal.xlarge
+    dt Identifier (IDN07)
+    dd= patient.full_renal_registry_id
     dt Send data?
     dd= yes_no(patient.send_to_renalreg)
     dt Decision date:

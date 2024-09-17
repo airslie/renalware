@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Renal Registry Preflight checks" do
   describe "GET patients" do
     it "renders a list of patients with incomplete data" do

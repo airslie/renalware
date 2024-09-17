@@ -1,17 +1,17 @@
-"abbrv","name","snomed_code","position"
-"diabetes","Diabetes",73211009,1
-"ischaemic_heart_dis","Ischaemic Heart Disease",414545008,2
-"cabg_or_angioplasty","CABG or Coronary Angioplasty",232717009,3
-"heart_failure","Episode of heart failure (R or L)",84114007,4
-"atrial_fibrill","Atrial Fibrillation",49436004,5
-"malignancy","Malignancy",86049000,6
-"cerebrovascular_dis","Cerebrovascular Disease",62914000,7
-"chronic_obstr_pulm_dis","Chronic Obstructive Pulmonary Disease",13645005,8
-"liver_disease","Liver disease",235856003,9
-"periph_vascular_dis","Peripheral Vascular Disease",400047006,10
-"amputation_for_pvd","Amputation for PVD",81723002,11
-"claudication","Claudication",275520000,12
-"ischaemic_neuropathic_ulcers","Ischaemic/Neuropathic ulcers",13954005,13
-"non_coronary_intervention","Angioplasty, vascular graft, aneurysm, stent (non-coronary)",418285008,14
-"dementia","Dementia",52448006,15
-"smoking","Smoking",,16
+"abbrv","name","snomed_code","position","has_malignancy_site","has_diabetes_type"
+"diabetes","Diabetes",73211009,1,false,true
+"ischaemic_heart_dis","Ischaemic Heart Disease",414545008,2,false,false
+"cabg_or_angioplasty","CABG or Coronary Angioplasty",232717009,3,false,false
+"heart_failure","Episode of heart failure (R or L)",84114007,4,false,false
+"atrial_fibrill","Atrial Fibrillation",49436004,5,false,false
+"malignancy","Malignancy",86049000,6,true,false
+"cerebrovascular_dis","Cerebrovascular Disease",62914000,7,false,false
+"chronic_obstr_pulm_dis","Chronic Obstructive Pulmonary Disease",13645005,8,false,false
+"liver_disease","Liver disease",235856003,9,false,false
+"periph_vascular_dis","Peripheral Vascular Disease",400047006,10,false,false
+"amputation_for_pvd","Amputation for PVD",81723002,11,false,false
+"claudication","Claudication",275520000,12,false,false
+"ischaemic_neuropathic_ulcers","Ischaemic/Neuropathic ulcers",13954005,13,false,false
+"non_coronary_intervention","Angioplasty, vascular graft, aneurysm, stent (non-coronary)",418285008,14,false,false
+"dementia","Dementia",52448006,15,false,false
+"smoking","Smoking",,16,false,false

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Prescriptions
   describe SummaryComponent do
     subject(:component) { described_class.new(patient: patient) }

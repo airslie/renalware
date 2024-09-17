@@ -11,6 +11,8 @@ tr class=("urgent" if bookmark.urgent?)
   td.show-for-medium-up= bookmark.notes
   td.show-for-medium-up= bookmark.tags
   td= I18n.l bookmark.created_at&.to_date
-  td.nowrap= render "renalware/patients/bookmarks/delete",
-                    bookmark: bookmark,
-                    link_text: t("btn.remove")
+  td.nowrap.actions
+    = link_to("Edit", edit_bookmark_path(bookmark))
+    = link_to("Remove", bookmark_path(bookmark),
+              method: :delete,
+              data: { confirm: t(".confirm") })

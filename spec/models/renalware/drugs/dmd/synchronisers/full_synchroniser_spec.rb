@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Drugs::DMD
   describe Synchronisers::FullSynchroniser do
     describe "#call" do

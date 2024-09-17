@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Clinical::Patient do
   it { is_expected.to have_many :allergies }
   it { is_expected.to have_one(:igan_risk) }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Cancel out of the new prescription form" do
   it "returns the original location" do
     user = login_as_clinical(:prescriber)

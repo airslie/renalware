@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating a investigation event", js: true do
   context "when adding a investigation event through the Events screen" do
     it "captures extra data" do

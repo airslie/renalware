@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe Modalities::ChangePatientModality do
     subject(:command) { described_class.new(patient: patient, user: user) }

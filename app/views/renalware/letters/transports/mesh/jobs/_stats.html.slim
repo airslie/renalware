@@ -1,0 +1,8 @@
+
+.flex.flex-row.mb-2
+  - stats.each do |key, value|
+    - bg_class, count = value
+    .rounded.border.border-slate-200.px-3.py-1.m-3.shadow-sm(class=bg_class)
+      .flex
+        h4.mt-1.mr-3.p-0.font-light.text-lg.text-slate-500= key.capitalize
+        p.m-0.p-0.font-bold.text-2xl.text-slate-500=count

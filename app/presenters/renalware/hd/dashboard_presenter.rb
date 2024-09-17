@@ -44,12 +44,14 @@ module Renalware
         end
       end
 
+      # rubocop:disable Metrics/MethodLength
       def sessions
         @sessions ||= begin
           hd_sessions = Session
             .eager_load(
               :hospital_unit,
               :patient,
+              :station,
               :signed_on_by,
               :signed_off_by
             )
@@ -58,6 +60,7 @@ module Renalware
           CollectionPresenter.new(hd_sessions, SessionPresenter, view_context)
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
       def prescription_administrations
         patient

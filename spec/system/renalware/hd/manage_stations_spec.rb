@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing HD Stations for a Hospital Unit" do
   before do
     create(:hd_station_location, name: "Side room")

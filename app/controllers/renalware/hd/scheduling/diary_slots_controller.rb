@@ -33,7 +33,8 @@ module Renalware
             diary: weekly_diary,
             station_id: params[:station_id],
             day_of_week: params[:day_of_week],
-            diurnal_period_code_id: params[:diurnal_period_code_id]
+            diurnal_period_code_id: params[:diurnal_period_code_id],
+            patient_search_scope: patient_search_scope_from_query_string
           )
           authorize slot
           render locals: locals_for(slot), layout: false
@@ -41,6 +42,7 @@ module Renalware
 
         def edit
           authorize slot
+          slot.patient_search_scope = patient_search_scope_from_query_string
           render layout: false, locals: { slot: DiarySlotPresenter.new(slot) }
         end
 
@@ -55,7 +57,7 @@ module Renalware
         def create
           diary = Diary.find(params[:diary_id])
           slot = diary.slots.new(slot_params)
-          slot.patient_id = posted_patient_id
+          # slot.patient_id = posted_patient_id
           authorize slot
           if slot.save_by(current_user)
             render locals: { diary: diary, slot: diary.decorate_slot(slot) }
@@ -87,6 +89,10 @@ module Renalware
         end
 
         private
+
+        def patient_search_scope_from_query_string
+          params.fetch(:patient_search_scope, :dialysing_on_day_and_period)
+        end
 
         # Find the corresponding slot in the master if there is one, otherwise an empty slot
         # with an 'Add' button ready to set up a new patient
@@ -155,10 +161,9 @@ module Renalware
               :diurnal_period_code_id,
               :station_id,
               :target_diary_id,
-              :change_type,
+              :patient_search_scope,
               :patient_id,
-              :arrival_time,
-              patient_ids: []
+              :arrival_time
             )
         end
       end

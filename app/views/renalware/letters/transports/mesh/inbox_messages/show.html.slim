@@ -1,0 +1,9 @@
+= within_new_admin_layout(title: "Inbox Message") do
+  table
+    tr
+      th(style='vertical-align: top') Payload
+      td
+        - if response.headers["content-type"] != "application/octet-stream"
+          b Non-XML content!
+        - else
+          pre= Nokogiri::XML(response.body)

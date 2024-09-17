@@ -16,7 +16,7 @@ module Renalware
           def transplant_element
             create_node("Transplant") do |elem|
               elem << procedure_type_element
-              elem << procecure_time_element
+              elem << procedure_time_element
               elem << entered_at_element
               elem << attributes_element
             end
@@ -32,7 +32,7 @@ module Renalware
             end
           end
 
-          def procecure_time_element
+          def procedure_time_element
             create_node("ProcedureTime", operation.performed_at&.iso8601)
           end
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
 require "devise"
 
 describe "API request for a single patient JSON document" do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # rubocop:disable Layout/LineLength
-require "rails_helper"
 
 module Renalware
   module Feeds

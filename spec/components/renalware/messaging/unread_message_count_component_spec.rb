@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Messaging::UnreadMessageCountComponent, type: :component do
   let(:internal_author) { create(:internal_author) }
   let(:messaging_patient) { create(:messaging_patient) }

@@ -1,6 +1,6 @@
 // To initially hide the patient menu on a page, add the class "collapse-patient-menu" to
 // the body. However the menu will re-show on browser window resize unless you also add the
-// bosy class "always-collapse-patient-menu".
+// body class "always-collapse-patient-menu".
 // Example usage in a slim view e.g MDM show:
 //  - content_for(:body_class) { "collapse-patient-menu always-collapse-patient-menu" }
 //

@@ -1,36 +1,42 @@
+- # locals: (named_filter: nil, letter:)
+
 tbody
   tr(class=letter.state.dasherize)
     td.noprint= row_toggler
-    /toggler("#letter-quick-preview-#{letter.id}")
     td.noprint
-      = link_to t("btn.view"), patient_letters_letter_path(letter.patient, letter)
-      - if letter.approved?
-        | &nbsp;
-        / The Print link will:
-        / - open a new tab with the PDF, ready to print
-        / - display a modal on this page (ready for when the user returns here after
-        /   printing) that asks if they want to mark the letters as printed or not.
-        / See letters.js where it binds to .printing-pdf.
-        / See also completed letters controller and the comments in
-        / ./show.js.erb and and ./show.html.slim
-        = link_to patient_letters_letter_print_path(letter),
-                  target: "_blank",
-                  class: "printing-pdf button secondary compact",
-                  data: { \
-                    "modal-url" => new_patient_letters_letter_completed_path(letter.patient, letter) \
-                  } do
-          i.fas.fa-print
-          | Print
-      - if letter.approved? && letter.page_count
-        | &nbsp;
-        = link_to patient_letters_letter_printable_path(letter.patient, letter),
-                  target: "_blank",
-                  class: "printing-pdf button secondary compact",
-                  data: { \
-                    "modal-url" => new_patient_letters_letter_completed_path(letter.patient, letter) \
-                  } do
-          i.fas.fa-envelope
-          | Env Print
+      - if named_filter != :deleted
+        = link_to t("btn.view"), patient_letters_letter_path(letter.patient, letter)
+        - if letter.approved?
+            | &nbsp;
+            / The Print link will:
+            / - open a new tab with the PDF, ready to print
+            / - display a modal on this page (ready for when the user returns here after
+            /   printing) that asks if they want to mark the letters as printed or not.
+            / See letters.js where it binds to .printing-pdf.
+            / See also completed letters controller and the comments in
+            / ./show.js.erb and and ./show.html.slim
+            / Do not show this dialog if the gp_send_status is pending, ie the gp is a recipient and
+            / the we are trying to send their copy via over MESH. We disable dialog by removing the
+            / printing-pdf class from the link that causes the dialog to show.
+            - klass = letter.gp_send_status&.to_sym == :pending ? "" : "printing-pdf"
+            = link_to patient_letters_letter_print_path(letter),
+                      target: "_blank",
+                      class: "#{klass} button secondary compact",
+                      data: { \
+                        "modal-url" => new_patient_letters_letter_completed_path(letter.patient, letter) \
+                      } do
+              i.fas.fa-print
+              | Print
+            - if letter.page_count
+              | &nbsp;
+              = link_to patient_letters_letter_printable_path(letter.patient, letter),
+                        target: "_blank",
+                        class: "#{klass} button secondary compact",
+                        data: { \
+                          "modal-url" => new_patient_letters_letter_completed_path(letter.patient, letter) \
+                        } do
+                i.fas.fa-envelope
+                | Env Print
     td.text-center
       - if letter.notes.present?
         i.fas.fa-comment.text-yellow-500.hover:text-yellow-600(title=letter.notes)
@@ -40,17 +46,21 @@ tbody
     td.col-width-medium-with-ellipsis= letter.type
     td.state
       span= letter.state_description
+    - if Renalware.config.send_gp_letters_over_mesh
+      td
+        span= t(letter.gp_send_status, scope: "letters.gp_send_status")
     td.full-name= default_patient_link(letter.patient)
     td= letter.patient.nhs_number
-
-
     td= l(letter.effective_date)
     td.col-width-medium-with-ellipsis= letter.author
     td.col-width-medium-with-ellipsis= letter.typist
     td= letter.page_count
     td.col-width-medium-with-ellipsis= letter.main_recipient.address
     td.col-width-medium-with-ellipsis= letter.description
-  /= content_tag(:tr, id: "letter-quick-preview-#{letter.id}", style: "display: none")
+    if named_filter == :deleted
+      td.col-width-date-time = l(letter.deleted_at)
+      td = letter.deleted_by
+
   tr
     td
     td(colspan=13)

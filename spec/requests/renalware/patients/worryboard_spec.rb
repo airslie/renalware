@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Displaying the patient worryboard" do
   let(:user) { @current_user }
 

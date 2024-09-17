@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "File Import viewing and uploading" do
   describe "Listing file imports" do
     it "responds successfully with a paginated list of file imports" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Creating an clinical frailty score event", js: true do
   context "when adding the event" do
     it "allows a user to also select the score from an event-specific dropdown" do

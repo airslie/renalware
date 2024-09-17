@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::Feeds
   describe PatientIdentification do
     subject(:pi) { MessageParser.parse(raw_message).patient_identification }

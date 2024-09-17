@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Batch printing letters", js: true do
   include LettersSpecHelper
   include ActiveJob::TestHelper
@@ -24,8 +22,6 @@ describe "Batch printing letters", js: true do
       expect(page).to have_content(letter2.author.to_s)
 
       slim_select letter1.author.to_s, from: "Author"
-
-      click_on t("btn.filter")
 
       within ".letters-table" do
         expect(page).to have_content(letter1.author.to_s)

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "RecipientFollowup", js: true do
   include AjaxHelpers
   let(:patient) { create(:transplant_patient, family_name: "Rabbit", local_patient_id: "KCH12345") }

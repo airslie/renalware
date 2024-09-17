@@ -1,26 +1,25 @@
-= content_for(:filters) do
-  = render "filters", user_search: user_search
+= content_for(:filters) { render "filters", user_search: user_search }
+= content_for(:title) { "Users" }
 
-= within_admin_layout(title: "Users") do
-  table.all-users
-    thead
+table.all-users
+  thead
+    tr
+      th Name
+      th Username
+      th Position
+      th Email
+      th Role
+      th.col-width-date-time Expired at
+  tbody
+    - users.each do |user|
       tr
-        th Name
-        th Username
-        th Position
-        th Email
-        th Role
-        th.col-width-date-time Expired at
-    tbody
-      - users.each do |user|
-        tr
-          td= user.full_name
-          td= user.username
-          td= user.professional_position
-          td= user.email
-          td
-            - user.roles.each do |role|
-              span.tag(class=role.name)= role.name.humanize
-          td= l(user.expired_at)
+        td= user.full_name
+        td= user.username
+        td= user.professional_position
+        td= user.email
+        td
+          - user.roles.each do |role|
+            span.tag(class=role.name)= role.name.humanize
+        td= l(user.expired_at)
 
-  == pagy_nav(pagy) if pagy.pages > 1
+== pagy_nav(pagy) if pagy.pages > 1

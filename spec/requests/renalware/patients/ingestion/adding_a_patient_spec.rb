@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 #
 # See http://www.hl7.org.uk/repository/uploads/871/1/HL72UKA.3%20v2.pdf
 #

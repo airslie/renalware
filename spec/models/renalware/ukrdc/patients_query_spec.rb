@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe UKRDC::PatientsQuery do
     let(:patient) { build(:patient, by: user) }

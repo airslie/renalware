@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Viewing Feed Replay Requests" do
   it do
     login_as_super_admin

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Pathology::Requests::GlobalRuleSet do
   subject(:global_rule_set) do
     build(

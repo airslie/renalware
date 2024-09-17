@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::HD::VNDRiskAssessmentsComponent, type: :component do
   let(:user) { create(:user) }
   let(:patient) { create(:hd_patient, by: user) }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Managing nag definitions" do
     describe "Displaying a list of nag definitions" do

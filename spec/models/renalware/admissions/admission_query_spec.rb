@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe Admissions::AdmissionQuery do
     it "returns all admissions if no options passed" do

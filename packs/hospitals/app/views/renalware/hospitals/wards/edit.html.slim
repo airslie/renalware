@@ -1,0 +1,12 @@
+= within_admin_layout(title: "Edit", breadcrumbs: [ \
+      breadcrumb_for(ward.hospital_unit.name, hospitals.units_path),
+      breadcrumb_for("Wards", hospitals.unit_wards_path(ward.hospital_unit)) \
+  ]) do
+
+  = simple_form_for ward,
+        url: hospitals.unit_ward_path(ward.hospital_unit, ward),
+        html: { autocomplete: "off" },
+        as: :ward,
+        wrapper: "horizontal_form" do |f|
+
+      = render "form", f: f

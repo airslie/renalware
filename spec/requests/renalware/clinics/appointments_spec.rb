@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Appointments" do
   describe "GET index" do
     it "responds with a ist of appointments" do

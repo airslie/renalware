@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe UKRDC::XmlRenderer do
     context "when data is valid" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing a list of HD Slot Requests" do
   include PatientsSpecHelper
 

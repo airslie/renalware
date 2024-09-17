@@ -29,6 +29,7 @@ module Renalware
     config_accessor(:letters_render_pdfs_with_prawn) {
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("LETTERS_RENDER_PDFS_WITH_PRAWN", "false"))
     }
+    config_accessor(:letters_mesh_workflow) { :gp_connect } # or :transfer_of_care
     config_accessor(:allow_qr_codes_in_letters) do
       ENV.fetch("ALLOW_QR_CODES_IN_LETTERS", "false") == "true"
     end
@@ -83,7 +84,7 @@ module Renalware
       ENV.fetch("UKRDC_GPG_RECIPIENT", "Patient View (Renal)") # or "UKRDC"
     end
     config_accessor(:ukrdc_public_key_name) do
-      ENV.fetch("UKRDC_PUBLIC_KEY_NAME", "patientview.asc") # migfhtr become ukrdc.asc
+      ENV.fetch("UKRDC_PUBLIC_KEY_NAME", "patientview.asc") # might become ukrdc.asc
     end
     config_accessor(:ukrdc_working_path) do
       ENV.fetch("UKRDC_WORKING_PATH", File.join("/var", "ukrdc"))
@@ -95,11 +96,11 @@ module Renalware
     config_accessor(:ukrdc_remove_stale_outgoing_files) do
       ENV.fetch("UKRDC_REMOVE_STALE_OUTGOING_FILES", "true") == "true"
     end
-    config_accessor(:ukrdc_sftp_host) { ENV.fetch("UKRDC_SFTP_HOST", nil) }
-    config_accessor(:ukrdc_sftp_user) { ENV.fetch("UKRDC_SFTP_USER", nil) }
-    config_accessor(:ukrdc_sftp_password) { ENV.fetch("UKRDC_SFTP_PASSWORD", nil) }
-    config_accessor(:ukrdc_sftp_port) { ENV.fetch("UKRDC_SFTP_PORT", 22) }
-    config_accessor(:ukrdc_sftp_remote_path) { ENV.fetch("UKRDC_SFTP_REMOTE_PATH", "") }
+    config_accessor(:ukrdc_sftp_host)         { ENV.fetch("UKRDC_SFTP_HOST", nil) }
+    config_accessor(:ukrdc_sftp_user)         { ENV.fetch("UKRDC_SFTP_USER", nil) }
+    config_accessor(:ukrdc_sftp_password)     { ENV.fetch("UKRDC_SFTP_PASSWORD", nil) }
+    config_accessor(:ukrdc_sftp_port)         { ENV.fetch("UKRDC_SFTP_PORT", 22) }
+    config_accessor(:ukrdc_sftp_remote_path)  { ENV.fetch("UKRDC_SFTP_REMOTE_PATH", "") }
 
     # To use a date other that the default changes_since date when
     # compiling pathology to send to UKRDC, you can set an ENV var as follows:
@@ -118,9 +119,63 @@ module Renalware
       ENV.fetch("UKRDC_SEND_RREG_PATIENTS", "true") == "true"
     }
 
-    config_accessor(:nhs_client_id) { ENV.fetch("NHS_CLIENT_ID", nil) }
+    config_accessor(:nhs_client_id)     { ENV.fetch("NHS_CLIENT_ID", nil) }
     config_accessor(:nhs_client_secret) { ENV.fetch("NHS_CLIENT_SECRET", nil) }
-    config_accessor(:nhs_trud_api_key) { ENV.fetch("NHS_TRUD_API_KEY", nil) }
+    config_accessor(:nhs_trud_api_key)  { ENV.fetch("NHS_TRUD_API_KEY", nil) }
+
+    # MESHAPI
+    # Introduce an optional delay between letter approval and letter send, in order to allow
+    # any human errors to be resolved (letter rescinded etc)
+    #
+    config_accessor(:send_gp_letters_over_mesh) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SEND_GP_LETTERS_OVER_MESH", "false"))
+    end
+    config_accessor(:mesh_timeout_transmissions_with_no_response_after) do
+      # Duration#parse uses the ISO8601 duration format
+      ActiveSupport::Duration.parse(
+        ENV.fetch("MESH_TIMEOUT_TRANSMISSIONS_WITH_NO_RESPONSE_AFTER", "PT24H")
+      )
+    end
+    config_accessor(:mesh_delay_minutes_between_letter_approval_and_mesh_send) do
+      ActiveModel::Type::Integer.new.cast(
+        ENV.fetch("MESH_DELAY_MINUTES_BETWEEN_LETTER_APPROVAL_AND_MESH_SEND", "0")
+      )
+    end
+    config_accessor(:mesh_mailbox_id) { ENV.fetch("MESH_MAILBOX_ID", "?") }
+    config_accessor(:mesh_mailbox_password) { ENV.fetch("MESH_MAILBOX_PASSWORD", "?") }
+    config_accessor(:mesh_api_base_url) {
+      # This default is the Integration environment
+      ENV.fetch("MESH_API_BASE_URL", "https://msg.intspineservices.nhs.uk/messageexchange")
+    }
+    config_accessor(:mesh_api_secret) { ENV.fetch("MESH_API_SECRET", "?") }
+    config_accessor(:mesh_use_endpoint_lookup) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("MESH_USE_ENDPOINT_LOOKUP", "false")
+      )
+    }
+    config_accessor(:mesh_recipient_mailbox_id) {
+      ENV.fetch("MESH_RECIPIENT_MAILBOX", "X26OT112") # X26OT112 is in the NHS INT env
+    }
+    config_accessor(:mesh_workflow_id) {
+      {
+        gp_connect: "GPFED_CONSULT_REPORT", # GPCONNECT_SEND_DOCUMENT", # GPFED_CONSULT_REPORT
+        transfer_of_care: "TOC_FHIR_OP_ATTEN"
+      }[letters_mesh_workflow]
+    }
+    config_accessor(:mesh_path_to_nhs_ca_file)    { ENV.fetch("MESH_PATH_TO_NHS_CA_FILE", "??") }
+    config_accessor(:mesh_nhs_ca_cert)            { ENV.fetch("MESH_NHS_CA_CERT", "??") }
+    config_accessor(:mesh_client_key)             { ENV.fetch("MESH_CLIENT_KEY", "") }
+    config_accessor(:mesh_path_to_client_cert)    { ENV.fetch("MESH_PATH_TO_CLIENT_CERT", "??") }
+    config_accessor(:mesh_client_cert)            { ENV.fetch("MESH_CLIENT_CERT", "") }
+    config_accessor(:mesh_path_to_client_key)     { ENV.fetch("MESH_PATH_TO_CLIENT_KEY", "??") }
+    config_accessor(:mesh_client_key)             { ENV.fetch("MESH_CLIENT_KEY", "") }
+    config_accessor(:mesh_organisation_uuid)      { ENV.fetch("MESH_ORGANISATION_UUID", "??") }
+    config_accessor(:mesh_itk_organisation_uuid)  { ENV.fetch("MESH_ORGANISATION_UUID", "??") }
+    config_accessor(:mesh_organisation_ods_code)  { ENV.fetch("MESH_ORGANISATION_ODS_CODE", "??") }
+    config_accessor(:mesh_practitioner_phone)     { ENV.fetch("MESH_PRACTITIONER_PHONE", "??") }
+    config_accessor(:mesh_organisation_phone)     { ENV.fetch("MESH_ORGANISATION_PHONE", "??") }
+    config_accessor(:mesh_organisation_email)     { ENV.fetch("MESH_ORGANISATION_EMAIL", "??") }
+    config_accessor(:mesh_organisation_name)      { ENV.fetch("MESH_ORGANISATION_NAME", "??") }
 
     # On Azure we use a mapped path otherwise we will use Rails.root.join("tmp")
     # However Rails.root is not yet defined so we need we use a proc to load the config
@@ -163,6 +218,11 @@ module Renalware
     }
 
     config_accessor(:hd_session_prescriptions_require_signoff) { true }
+    config_accessor(:hd_session_require_patient_group_directions) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("HD_SESSION_REQUIRE_PATIENT_GROUP_DIRECTIONS", "false")
+      )
+    }
 
     # How many days ahead to look for prescriptions having a future prescribed_on date when
     # determining which 'give on hd' prescriptions to show on the HD session form. Could be eg 10

@@ -1,0 +1,30 @@
+table
+  tbody(width="100%")
+    tr
+      th Patient name
+      td
+        | Official name
+        p= "Prefix: #{patient.title}"
+        p= "Given Name: #{patient.given_name}"
+        p= "Family Name: #{patient.family_name}"
+    tr
+      th Date of birth
+      td= l(patient.born_on)
+    tr
+      th Gender
+      td= patient.sex&.name
+    tr
+      th NHS number
+      td= patient.nhs_number
+    tr
+      th Other identifier
+      td
+    tr
+      th Patient address
+      td= patient.current_address
+    tr
+      th Patient email address
+      td = patient.email
+    tr
+      th Patient telephone number
+      td= patient.telephone1

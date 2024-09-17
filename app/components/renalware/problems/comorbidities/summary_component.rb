@@ -45,11 +45,15 @@ module Renalware
         # may be missing).
         class ComorbidityPresenter
           rattr_initialize [:description!, :comorbidity!]
-          delegate :name, :snomed_code, to: :description
+          delegate :name, :snomed_code, :has_malignancy_site?, :has_diabetes_type?, to: :description
+          delegate :description, to: :malignancy_site, prefix: true, allow_nil: true
           delegate :recognised_at,
                    :recognised,
                    :updated_by,
-                   :updated_at, to: :comorbidity, allow_nil: true
+                   :updated_at,
+                   :malignancy_site,
+                   :diabetes_type,
+                   to: :comorbidity, allow_nil: true
           delegate :id, to: :comorbidity, allow_nil: true, prefix: true
           delegate :id, :to_key, :model_name, :param_key, to: :description, allow_nil: true
         end

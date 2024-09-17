@@ -1,0 +1,6 @@
+= within_admin_layout(title: "Add",
+                      breadcrumbs: research_study_participants_breadcrumb(participation.study)) do
+
+  = render "form",
+           participation: participation,
+           url: research.study_participations_path(participation.study)

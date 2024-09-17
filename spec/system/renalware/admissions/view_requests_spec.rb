@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "View Admission Request" do
   it "Use the top menu to navigate to the list of admission requests" do
     login_as_clinical

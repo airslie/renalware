@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # What does the api look like?
 # We need to
 # - test if a session exists (? or do we upsert)

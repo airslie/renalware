@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+module Renalware
+  module Letters
+    module Formats::FHIR
+      class Resources::Practitioner
+        include Support::Construction
+        include Support::Helpers
+
+        def call
+          {
+            fullUrl: arguments.author_urn,
+            resource: FHIR::STU3::Practitioner.new(
+              id: arguments.author_uuid,
+              meta: {
+                profile: "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Header-Practitioner-1"
+              }
+            )
+          }
+        end
+      end
+    end
+  end
+end

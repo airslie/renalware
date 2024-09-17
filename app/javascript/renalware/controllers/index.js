@@ -24,6 +24,7 @@ import PatientSearchController from "./patients/search_controller"
 import SortableController from "./sortable_controller"
 import SelectController from "./select_controller"
 import RadioResetController from "./radio_reset_controller"
+import SelectResetController from "./select_reset_controller"
 import ConditionalDisplayController from "./conditional_display_controller"
 import SlimselectController from "./slimselect_controller"
 import SlimselectAjaxController from "./slimselect_ajax_controller"
@@ -69,6 +70,7 @@ application.register("patient-search", PatientSearchController)
 application.register("sortable", SortableController)
 application.register("select", SelectController)
 application.register("radio-reset", RadioResetController)
+application.register("select-reset", SelectResetController)
 application.register("conditional-display", ConditionalDisplayController)
 application.register("slimselect", SlimselectController)
 application.register("slimselect-ajax", SlimselectAjaxController)

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Listing patient events" do
   it "A user views a list of patient events" do
     user = login_as_clinical

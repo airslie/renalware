@@ -8,7 +8,7 @@ class ChangeResearchParticipationExternalIdType < ActiveRecord::Migration[7.1]
                        :external_id_deprecated,
                        :integer,
                        if_not_exists: true,
-                       comment: "Backup of external_id taken #{Time.zone.now} before changing " \
+                       comment: "Backup of external_id taken before changing " \
                                 "its type from int to text"
             execute(<<~SQL.squish)
               update research_participations set external_id_deprecated = external_id

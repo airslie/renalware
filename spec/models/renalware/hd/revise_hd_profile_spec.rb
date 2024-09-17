@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware::HD
   describe ReviseHDProfile do
     let(:patient) { create(:hd_patient) }

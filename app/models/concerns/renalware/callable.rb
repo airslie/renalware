@@ -6,8 +6,8 @@ module Renalware
     # and then invoke instance#call (without args).
     extend ActiveSupport::Concern
 
-    included do
-      def self.call(...)
+    class_methods do
+      def call(...)
         new(...).call
       end
     end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Patients::BookmarksComponent, type: :component do
   context "when a user has bookmarks" do
     it "displays the user's bookmarks" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Clearing the Rails cache" do
   it "A super admin clears the Redis cache" do
     login_as_super_admin

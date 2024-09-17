@@ -1,0 +1,119 @@
+scenario:
+  name: Infrastructure Level Response 10009 Fatal-Error - Unreadable Message Received
+  notes:
+  url: https://nhsconnect.github.io/ITK3-FHIR-Messaging-Distribution/explore_response_examples.html#infrastructure-level-response-10009-fatal-error---unreadable-message-received
+  test_case_name: Sender_ITK_Response_10009
+  expectation:
+    state: "errored"
+    outcome_code: processing
+    infrastructure_response_severity: "fatal"
+    inf_ack_code: "10009"
+    inf_ack_description: Unreadable message received
+  xml: !xml
+    <Bundle xmlns="http://hl7.org/fhir">
+      <id value="ed1743ef-4016-4fc0-b463-75c5322deb53"/>
+      <meta>
+        <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"/>
+      </meta>
+      <identifier>
+        <system value="https://tools.ietf.org/html/rfc4122"/>
+        <value value="c9c229c8-2062-4931-be3e-d219d01aed81"/>
+      </identifier>
+      <type value="message"/>
+      <entry>
+        <fullUrl value="urn:uuid:a4409d7c-b613-477c-b623-87e60406c2f0"/>
+        <resource>
+          <MessageHeader>
+            <id value="a4409d7c-b613-477c-b623-87e60406c2f0"/>
+            <meta>
+              <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2"/>
+            </meta>
+            <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-ITK-MessageHandling-2">
+              <!--The value of this handling specification is dependant on the response pattern.-->
+              <extension url="BusAckRequested">
+                <valueBoolean value="false"/>
+              </extension>
+              <extension url="InfAckRequested">
+                <valueBoolean value="false"/>
+              </extension>
+              <extension url="RecipientType">
+                <valueCoding>
+                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1"/>
+                  <code value="FA"/>
+                  <display value="For Action"/>
+                </valueCoding>
+              </extension>
+              <extension url="MessageDefinition">
+                <valueReference>
+                  <reference value="https://fhir.nhs.uk/STU3/MessageDefinition/ITK-Response-MessageDefinition-1"/>
+                </valueReference>
+              </extension>
+              <extension url="SenderReference">
+                <valueString value="None"/>
+              </extension>
+              <extension url="LocalExtension">
+                <valueString value="None"/>
+              </extension>
+            </extension>
+            <event>
+              <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-MessageEvent-2"/>
+              <code value="ITK008M"/>
+              <display value="ITK Response"/>
+            </event>
+            <sender>
+              <!--This is an organization-->
+              <reference value="urn:uuid:ba660aeb-5d46-43c2-8ec0-1cefd07aff8e"/>
+            </sender>
+            <timestamp value="2017-01-23T10:10:16+00:00"/>
+            <source>
+              <endpoint value="NOROT003"/>
+            </source>
+            <response>
+              <identifier value="UNREADABLE-IN-ORIGINAL-MESSAGE"/>
+              <code value="fatal-error"/>
+              <details>
+                <reference value="urn:uuid:8bbc50ab-785c-41d2-9c32-abe84f522a5c"/>
+              </details>
+            </response>
+          </MessageHeader>
+        </resource>
+      </entry>
+      <!--Organization-->
+      <entry>
+        <fullUrl value="urn:uuid:ba660aeb-5d46-43c2-8ec0-1cefd07aff8e"/>
+        <resource>
+          <Organization>
+            <id value="ba660aeb-5d46-43c2-8ec0-1cefd07aff8e"/>
+            <meta>
+              <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Header-Organization-1"/>
+            </meta>
+            <identifier>
+              <system value="https://fhir.nhs.uk/Id/ods-organization-code"/>
+              <value value="RR8"/>
+            </identifier>
+          </Organization>
+        </resource>
+      </entry>
+      <entry>
+        <fullUrl value="urn:uuid:8bbc50ab-785c-41d2-9c32-abe84f522a5c"/>
+        <resource>
+          <OperationOutcome>
+            <id value="8bbc50ab-785c-41d2-9c32-abe84f522a5c"/>
+            <meta>
+              <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Response-OperationOutcome-1"/>
+            </meta>
+            <issue>
+              <severity value="fatal"/>
+              <code value="processing"/>
+              <details>
+                <coding>
+                  <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-ResponseCodes-1"/>
+                  <code value="10009"/>
+                  <display value="Unreadable message received"/>
+                </coding>
+              </details>
+            </issue>
+          </OperationOutcome>
+        </resource>
+      </entry>
+    </Bundle>

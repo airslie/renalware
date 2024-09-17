@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Managing online reference links" do
     let(:user) { create(:user) }
@@ -40,6 +38,8 @@ module Renalware
         fill_in "Title", with: "Title"
         fill_in "Description", with: "Desc"
         fill_in "URL", with: "https://example.com/2"
+        fill_in "From", with: "2024-01-01"
+        fill_in "To", with: "2024-01-02"
 
         click_on "Save"
 
@@ -48,7 +48,9 @@ module Renalware
         expect(Renalware::System::OnlineReferenceLink.last).to have_attributes(
           description: "Desc",
           title: "Title",
-          url: "https://example.com/2"
+          url: "https://example.com/2",
+          include_in_letters_from: Date.parse("2024-01-01"),
+          include_in_letters_until: Date.parse("2024-01-02")
         )
       end
     end

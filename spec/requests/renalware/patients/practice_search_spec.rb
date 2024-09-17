@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Changing a patient's GP (primary care physician)" do
   describe "GET show" do
     context "when there is a match" do

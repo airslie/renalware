@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "View a list of home delivery prescriptions filtered by delivery dates" do
   let(:esa_drug_type) { create(:drug_type, :esa) }
   let(:esa_drug) do

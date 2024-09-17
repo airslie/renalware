@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::Events::AlertableEventsQuery do
   describe "#call" do
     it "returns the most recent event matching the trigger" do

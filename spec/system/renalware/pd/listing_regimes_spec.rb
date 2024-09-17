@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "PD Dashboard" do
   it "displays the top 5 CAPD and links through to display all of them" do
     user = login_as_clinical

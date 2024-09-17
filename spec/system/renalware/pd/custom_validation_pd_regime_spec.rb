@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   describe "Validate for at least one bag per PD regime", js: true do
     include PatientsSpecHelper

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 module Renalware
   module Drugs
     describe DMD::APISynchronisers::FormSynchroniser do

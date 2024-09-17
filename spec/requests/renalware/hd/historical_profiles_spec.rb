@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Viewing historical HD Profiles" do
   describe "GET index" do
     it "renders successfully" do

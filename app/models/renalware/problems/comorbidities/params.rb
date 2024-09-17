@@ -35,6 +35,8 @@ module Renalware
           unknown? && !recognised_at?
         end
         alias insignificant_data? ignore?
+
+        def malignancy_site_id = fetch(:malignancy_site_id)
       end
     end
   end

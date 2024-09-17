@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 # rubocop:disable all
 describe(
   "Administering drugs from HD Dashboard, independent of HD Session",

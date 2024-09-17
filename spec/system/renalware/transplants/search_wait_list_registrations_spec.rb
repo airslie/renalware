@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Search wait list registrations by UKT number" do
   def create_tx_patient_with_active_status_and_ukt_number(ukt_number, user)
     modality_description = create(:modality_description, :transplant)

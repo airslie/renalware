@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Renalware::HD::Sessions::WashbackQualityDialogComponent, type: :component do
   before do
     yaml = <<-YAML

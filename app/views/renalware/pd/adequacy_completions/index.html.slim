@@ -1,4 +1,4 @@
 = within_admin_layout(title: "Adequacy Results") do
   = render "filters", query: query
-  = render "renalware/pd/adequacy_results/table", results: results, display_patient: true
+  = render "renalware/pd/adequacy_results/table", results: results, display_patient: true, current_user: current_user
   == pagy_nav(pagy) if pagy.pages > 1

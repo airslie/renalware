@@ -29,7 +29,6 @@
 //= require jquery_nested_form
 //= require foundation-datepicker/js/foundation-datepicker
 //= require cocoon
-//= require mousetrap/mousetrap
 //= require renalware/iframeResizer
 //= require clipboard
 //= require masonry-layout/dist/masonry.pkgd

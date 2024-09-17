@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe "Managing an existing letter contact", js: true do
   include AjaxHelpers
 
