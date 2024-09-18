@@ -10,7 +10,7 @@ module Renalware::Letters
         def call
           {
             fullUrl: "urn:uuid:cef7f8d5-78e3-4866-89f1-62470d6fd636",
-            resource: FHIR::STU3::List.new(
+            resource: ::FHIR::STU3::List.new(
               id: "cef7f8d5-78e3-4866-89f1-62470d6fd636",
               meta: {
                 profile: "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Medication-List-1"

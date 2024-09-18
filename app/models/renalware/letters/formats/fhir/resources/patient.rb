@@ -14,7 +14,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.patient_urn,
-            resource: FHIR::STU3::Patient.new(
+            resource: ::FHIR::STU3::Patient.new(
               id: arguments.patient_uuid,
               meta: {
                 profile: "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"

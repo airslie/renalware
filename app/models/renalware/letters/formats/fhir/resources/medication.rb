@@ -14,7 +14,7 @@ module Renalware
           prescription_uuid = SecureRandom.uuid # TODO
           {
             fullUrl: "urn:uuid:#{prescription_uuid}",
-            resource: FHIR::STU3::Medication.new(
+            resource: ::FHIR::STU3::Medication.new(
               id: prescription_uuid,
               meta: {
                 profile: "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Medication-1"

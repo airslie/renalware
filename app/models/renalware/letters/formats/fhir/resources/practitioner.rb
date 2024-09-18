@@ -13,7 +13,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.author_urn,
-            resource: FHIR::STU3::Practitioner.new(
+            resource: ::FHIR::STU3::Practitioner.new(
               id: arguments.author_uuid,
               meta: {
                 profile: "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"

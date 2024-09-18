@@ -14,7 +14,7 @@ module Renalware::Letters
           def call
             {
               fullUrl: arguments.letter_urn,
-              resource: FHIR::STU3::Composition.new(
+              resource: ::FHIR::STU3::Composition.new(
                 id: arguments.letter_uuid,
                 identifier: system_identifier(SecureRandom.uuid), # TODO
                 meta: {

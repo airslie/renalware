@@ -15,7 +15,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.encounter_urn,
-            resource: FHIR::STU3::Encounter.new(
+            resource: ::FHIR::STU3::Encounter.new(
               id: arguments.encounter_uuid,
               meta: {
                 profile: "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Encounter-1"

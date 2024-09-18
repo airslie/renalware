@@ -25,7 +25,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.letter_urn,
-            resource: FHIR::STU3::Bundle.new(
+            resource: ::FHIR::STU3::Bundle.new(
               type: "document",
               id: arguments.transmission_uuid,
               meta: {

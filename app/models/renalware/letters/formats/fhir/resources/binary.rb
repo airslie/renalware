@@ -15,7 +15,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.binary_urn,
-            resource: FHIR::STU3::Binary.new(
+            resource: ::FHIR::STU3::Binary.new(
               meta: {
                 profile: PROFILE
               },

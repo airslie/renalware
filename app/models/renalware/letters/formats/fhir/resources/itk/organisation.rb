@@ -12,7 +12,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.itk_organisation_urn,
-            resource: FHIR::STU3::Organization.new(
+            resource: ::FHIR::STU3::Organization.new(
               id: arguments.itk_organisation_uuid,
               meta: {
                 profile: PROFILE_URL

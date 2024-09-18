@@ -13,7 +13,7 @@ module Renalware
           def call
             {
               fullUrl: arguments.letter_urn,
-              resource: FHIR::STU3::Composition.new(
+              resource: ::FHIR::STU3::Composition.new(
                 id: arguments.letter_uuid,
                 title: letter.description,
                 date: letter.updated_at.to_datetime.to_s,

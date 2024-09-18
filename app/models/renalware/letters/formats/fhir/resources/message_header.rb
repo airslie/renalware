@@ -16,7 +16,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.transaction_urn, # the send_message operation
-            resource: FHIR::STU3::MessageHeader.new(
+            resource: ::FHIR::STU3::MessageHeader.new(
               id: arguments.transaction_uuid,
               timestamp: Time.zone.now.iso8601,
               meta: {

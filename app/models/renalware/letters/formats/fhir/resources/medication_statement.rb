@@ -19,7 +19,7 @@ module Renalware
         end
 
         def resource
-          FHIR::STU3::MedicationStatement.new(
+          ::FHIR::STU3::MedicationStatement.new(
             id: prescription_uuid,
             meta: {
               profile: "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-MedicationStatement-1"

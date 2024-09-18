@@ -15,7 +15,7 @@ module Renalware
           PROFILE_URL = "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"
 
           def call
-            FHIR::STU3::Bundle.new(
+            ::FHIR::STU3::Bundle.new(
               type: "message",
               id: arguments.transmission_uuid,
               meta: {

@@ -13,7 +13,7 @@ module Renalware
         def call
           {
             fullUrl: arguments.organisation_urn,
-            resource: FHIR::STU3::Organization.new(
+            resource: ::FHIR::STU3::Organization.new(
               id: arguments.organisation_uuid,
               meta: {
                 profile: PROFILE
@@ -38,7 +38,7 @@ module Renalware
         def telecoms      = [telecom_phone, telecom_email].compact
 
         def contact_point(system, value, use = "work")
-          FHIR::STU3::ContactPoint.new(system: system, value: value, use: use)
+          ::FHIR::STU3::ContactPoint.new(system: system, value: value, use: use)
         end
       end
     end

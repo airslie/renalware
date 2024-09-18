@@ -10,7 +10,7 @@ module Renalware::Letters
         def call
           {
             fullUrl: "urn:uuid:ecbeffa7-1adf-4301-a94f-1e297e4fed93",
-            resource: FHIR::STU3::List.new(
+            resource: ::FHIR::STU3::List.new(
               id: "ecbeffa7-1adf-4301-a94f-1e297e4fed93", # TODO
               meta: {
                 profile: "https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Allergy-List-1"
