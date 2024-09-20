@@ -13,17 +13,30 @@ module Renalware
         # Load the certificate from disk if a configured file path is present and the file exists.
         # For Azure deployments, certs might be in the docker image, or as ENV vars.
         # On Heroku certs will be stored as ENV vars.
+        # rubocop:disable Metrics/MethodLength
         def mesh_certificate(cert_type)
           path = Renalware.config.public_send(:"mesh_path_to_#{cert_type}")
           if path && File.exist?(path)
             File.read(path)
           else
             config_method_name = :"mesh_#{cert_type}"
-            Renalware.config.public_send(config_method_name).tap do |cert_content|
-              raise(ArgumentError, "Missing config #{config_method_name}") if cert_content.blank?
+            cert_content = Renalware.config.public_send(config_method_name)
+            raise(ArgumentError, "Missing config #{config_method_name}") if cert_content.blank?
+
+            # If cert is present but contains no new lines, add them.
+            # This is because on Azure, pasting a cert into an ENV var in settings results
+            # in \n being replaces with " "
+            first_line_feed = cert_content.index("\n")
+            if first_line_feed.blank? || first_line_feed > 28 # Normally first \n should be pos 27
+              # Replace spaces in the cert string with \n unless they are the spaces between the
+              # words BEGIN CERTIFICATE or BEGIN PRIVATE KEY
+              cert_content.gsub(/ (?!(CERTIFICATE|PRIVATE|KEY))/, "\n")
+            else
+              cert_content
             end
           end
         end
+        # rubocop:enable Metrics/MethodLength
 
         # Return an absolute path to the NHA CA (Certificate Authority) certificate, required for
         # our SSL setup.
