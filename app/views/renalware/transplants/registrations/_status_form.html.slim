@@ -1,5 +1,5 @@
 = render layout: "renalware/shared/fieldset",
-    locals: { legend: "Status", name: "status" } do
+    locals: { legend: "Waiting List Status", name: "status" } do
       - f.object.statuses.build(started_on: Time.zone.today) if f.object.statuses.empty?
       = f.simple_fields_for :statuses, f.object.statuses do |fs|
         = render "renalware/transplants/registration_statuses/inputs", f: fs

@@ -50,6 +50,7 @@ module Renalware
         @transaction_uuid = transaction_uuid
         @organisation_uuid = organisation_uuid || config.mesh_organisation_uuid
         @itk_organisation_uuid = itk_organisation_uuid || config.mesh_itk_organisation_uuid
+        validate_arguments
       end
 
       def workflow                = Renalware.config.letters_mesh_workflow
@@ -112,6 +113,13 @@ module Renalware
       private
 
       def config = Renalware.config
+
+      def validate_arguments
+        # The try here is because we have a lot of tests that don't stub letter.archive
+        if letter.try(:archive).present? && pdf_content.blank?
+          raise Letters::MissingPdfContentError
+        end
+      end
     end
   end
 end

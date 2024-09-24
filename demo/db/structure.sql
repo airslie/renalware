@@ -4803,7 +4803,7 @@ CREATE MATERIALIZED VIEW renalware.dietetic_mdm_patients AS
 --
 
 CREATE TABLE renalware.directory_people (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     given_name character varying NOT NULL,
     family_name character varying NOT NULL,
     title character varying,
@@ -5834,7 +5834,7 @@ ALTER SEQUENCE renalware.events_id_seq OWNED BY renalware.events.id;
 --
 
 CREATE TABLE renalware.feed_file_types (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying NOT NULL,
     description text NOT NULL,
     prompt text NOT NULL,
@@ -13203,7 +13203,7 @@ ALTER SEQUENCE renalware.roles_users_id_seq OWNED BY renalware.roles_users.id;
 --
 
 CREATE TABLE renalware.snippets_snippets (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     title character varying NOT NULL,
     body text NOT NULL,
     last_used_on timestamp without time zone,
@@ -29864,6 +29864,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240917092223'),
 ('20240909111139'),
 ('20240830091929'),
 ('20240821160342'),

@@ -22,10 +22,17 @@ module Renalware
         false
       end
       alias update? edit?
-      alias destroy? edit?
 
       def event_type
         record.event_type || fallback_event_type
+      end
+
+      def destroy?
+        # Allow a superadmin to delete events even if they have been sent to EPR as a PDF.
+        return true if user_is_super_admin? && save_pdf_to_electronic_public_register?
+
+        # Otherwise default behaviour
+        edit?
       end
 
       private

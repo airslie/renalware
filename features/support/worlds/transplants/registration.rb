@@ -135,7 +135,8 @@ module World
         end
 
         select "Kidney only", from: "Transplant Type"
-        within_fieldset "Status" do
+
+        within_fieldset "Waiting List Status" do
           fill_in "Started on", with: started_on
           select "Active", from: "Description"
         end

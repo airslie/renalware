@@ -13,7 +13,7 @@ module Renalware
         include Callable
         include Support::Helpers
 
-        pattr_initialize :arguments # [:transmission!, transaction_uuid: nil]
+        pattr_initialize :arguments
 
         def call
           build_fhir_bundle_xml

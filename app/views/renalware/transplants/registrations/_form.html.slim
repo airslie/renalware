@@ -4,6 +4,26 @@ ruby:
 .form-content
   = f.simple_fields_for :document, f.object.document do |fd|
 
+    = render "status_form", f: f if f.object.new_record?
+
+    = render layout: "renalware/shared/fieldset", locals: { legend: "Organs", name: "organs" } do
+      = fd.simple_fields_for :organs, fd.object.organs do |fcm|
+        table.no-stripes
+          = fcm.input :transplant_type, wrapper: :horizontal_medium
+          = fcm.input :pancreas_only_type,
+                      as: :inline_radio_buttons,
+                      wrapper: :horizontal_medium
+          = fcm.input :rejection_risk, wrapper: :horizontal_small
+          = fcm.input :also_listed_for_kidney_only,
+                      as: :inline_radio_buttons,
+                      wrapper: :horizontal_medium
+          = fcm.input :to_be_listed_for_other_organs,
+                      as: :inline_radio_buttons,
+                      wrapper: :horizontal_medium
+          = fcm.input :received_previous_kidney_or_pancreas_grafts,
+                      as: :inline_radio_buttons,
+                      wrapper: :horizontal_medium
+
     = render layout: "renalware/shared/fieldset",
         locals: { legend: "Codes", name: "codes" } do
       = fd.simple_fields_for :codes, fd.object.codes do |fcm|
@@ -59,24 +79,7 @@ ruby:
                       hint: "To be updated by feed",
                       input_html: { "data-controlled-by-tissue-typing-feed": true }
 
-    = render layout: "renalware/shared/fieldset",
-        locals: { legend: "Organs", name: "organs" } do
-      = fd.simple_fields_for :organs, fd.object.organs do |fcm|
-        table.no-stripes
-          = fcm.input :transplant_type, wrapper: :horizontal_medium
-          = fcm.input :pancreas_only_type,
-                      as: :inline_radio_buttons,
-                      wrapper: :horizontal_medium
-          = fcm.input :rejection_risk, wrapper: :horizontal_small
-          = fcm.input :also_listed_for_kidney_only,
-                      as: :inline_radio_buttons,
-                      wrapper: :horizontal_medium
-          = fcm.input :to_be_listed_for_other_organs,
-                      as: :inline_radio_buttons,
-                      wrapper: :horizontal_medium
-          = fcm.input :received_previous_kidney_or_pancreas_grafts,
-                      as: :inline_radio_buttons,
-                      wrapper: :horizontal_medium
+
 
     = render layout: "renalware/shared/fieldset",
         locals: { legend: "Admin", name: "admin" } do
@@ -85,7 +88,5 @@ ruby:
       = f.input :entered_on, as: :flatpickr, wrapper: :horizontal_datepicker, input_html: { "data-controlled-by-tissue-typing-feed": true }
       = f.input :contact, as: :text, wrapper: :horizontal_large, input_html: { rows: 5, "data-controlled-by-tissue-typing-feed": true }
       = f.input :notes, as: :text, wrapper: :horizontal_large, input_html: { rows: 5, "data-controlled-by-tissue-typing-feed": true }
-
-    = render "status_form", f: f if f.object.new_record?
 
 = save_or_cancel(form: f, back_path: back_path)

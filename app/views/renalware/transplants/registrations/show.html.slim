@@ -11,7 +11,7 @@
   .document-view
     .mgrid
       .row
-          - ["Codes", "CRF", "HLA", "Transplant", "Organs"].each do |group|
+          - ["Organs", "Codes", "CRF", "HLA", "Transplant"].each do |group|
             = render "renalware/shared/documents/attributes_group",
                 group: registration.document.public_send(group.parameterize(separator: "_")),
                 legend: group, destination: group.parameterize(separator: "_")

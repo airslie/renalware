@@ -76,12 +76,9 @@ class LetterListener
   def mesh = Renalware::Letters::Transports::Mesh
 
   def enqueue_a_scheduled_job_to_deliver_to_gp_over_mesh(letter)
-    delay = Renalware.config.mesh_delay_minutes_between_letter_approval_and_mesh_send
-    # transmission = nil
-    # mesh::Transmission.transaction do
+    delay = Renalware.config.mesh_delay_seconds_between_letter_approval_and_mesh_send
     transmission = mesh::Transmission.create!(letter: letter)
-    # end
-    job = mesh::SendMessageJob.set(wait: delay.minutes).perform_later(transmission)
+    job = mesh::SendMessageJob.set(wait: delay).perform_later(transmission)
     transmission.update!(active_job_id: job.job_id) if job.respond_to?(:job_id)
   end
 

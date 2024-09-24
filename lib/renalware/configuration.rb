@@ -136,10 +136,10 @@ module Renalware
         ENV.fetch("MESH_TIMEOUT_TRANSMISSIONS_WITH_NO_RESPONSE_AFTER", "PT24H")
       )
     end
-    config_accessor(:mesh_delay_minutes_between_letter_approval_and_mesh_send) do
+    config_accessor(:mesh_delay_seconds_between_letter_approval_and_mesh_send) do
       ActiveModel::Type::Integer.new.cast(
-        ENV.fetch("MESH_DELAY_MINUTES_BETWEEN_LETTER_APPROVAL_AND_MESH_SEND", "0")
-      )
+        ENV.fetch("MESH_DELAY_SECONDS_BETWEEN_LETTER_APPROVAL_AND_MESH_SEND", "15")
+      ).seconds
     end
     config_accessor(:mesh_mailbox_id) { ENV.fetch("MESH_MAILBOX_ID", "?") }
     config_accessor(:mesh_mailbox_password) { ENV.fetch("MESH_MAILBOX_PASSWORD", "?") }

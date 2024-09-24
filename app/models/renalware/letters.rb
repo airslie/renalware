@@ -7,6 +7,9 @@ module Renalware::Letters
   def self.cast_patient(patient) = patient.becomes(Renalware::Letters::Patient)
   def self.cast_primary_care_physician(gp) = gp.becomes(Letters::PrimaryCarePhysician)
 
+  # Errors
+  class MissingPdfContentError < StandardError; end
+
   module Delivery
   end
 
@@ -19,11 +22,5 @@ module Renalware::Letters
 
   module Mailshots
     def self.table_name_prefix = "letter_mailshot_"
-
-    # module Delivery
-    #   module TransferOfCare
-    #     def self.table_name_prefix = "letter_delivery_toc_"
-    #   end
-    # end
   end
 end

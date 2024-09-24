@@ -19,6 +19,8 @@ module Renalware
     class CalculatePageCountJob < ApplicationJob
       pattr_initialize :letter
 
+      queue_with_priority 0 # high
+
       # This method is the name of an event raised elsewhere by a Wisper publisher.
       # It needs to be a class method in order to be invoked asynchronously by activejob
       def self.letter_approved(letter)

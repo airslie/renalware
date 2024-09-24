@@ -97,6 +97,7 @@ Style/AsciiComments:
     - "app/models/renalware/feeds/hl7_message.rb"
     - "app/models/renalware/reporting/fetch_audit_json.rb"
 
+
 Rails/ActionOrder:
   Enabled: false
 

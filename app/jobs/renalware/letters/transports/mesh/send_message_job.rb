@@ -5,10 +5,12 @@ module Renalware
     module Transports::Mesh
       class SendMessageJob < ApplicationJob
         queue_as :mesh
-        queue_with_priority 10
+        queue_with_priority 10 # low
 
         class PatientHasNoPracticeError < StandardError; end
         class GPNotInRecipientsError < StandardError; end
+
+        retry_on Renalware::Letters::MissingPdfContentError, wait: 30.seconds
 
         def perform(transmission)
           Perform.new(transmission).call

@@ -17,7 +17,7 @@ module Renalware
             { role: :admin,       author: false, superadmin_can_always_change: true,  admin_change_window_hours: 0, author_change_window_hours: 0, expected: false },
             { role: :admin,       author: true,  superadmin_can_always_change: true,  admin_change_window_hours: 0, author_change_window_hours: 0, expected: false },
             { role: :admin,       author: false, superadmin_can_always_change: true,  admin_change_window_hours: 1, author_change_window_hours: 0, expected: true  },
-            { role: :super_admin,  author: false, superadmin_can_always_change: false, admin_change_window_hours: 1, author_change_window_hours: 0, expected: true  },
+            { role: :super_admin, author: false, superadmin_can_always_change: false, admin_change_window_hours: 1, author_change_window_hours: 0, expected: true  },
             { role: :admin,       author: false, superadmin_can_always_change: true,  admin_change_window_hours: 1, author_change_window_hours: 0, created_at: 2.hours.ago, expected: false },
             { role: :admin,       author: true,  superadmin_can_always_change: true,  admin_change_window_hours: 0, author_change_window_hours: 1, expected: true  },
             { role: :admin,       author: true,  superadmin_can_always_change: true,  admin_change_window_hours: 0, author_change_window_hours: 1, created_at: 2.hours.ago, expected: false },
@@ -51,6 +51,16 @@ module Renalware
               end
             end
           end
+        end
+      end
+
+      permissions :destroy? do
+        it do
+          user = user_double_with_role(:super_admin)
+          type = Events::Type.new(save_pdf_to_electronic_public_register: true)
+          event = Event.new(event_type: type)
+
+          is_expected.to permit(user, event)
         end
       end
     end
