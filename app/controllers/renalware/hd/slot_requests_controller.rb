@@ -173,6 +173,7 @@ module Renalware
 
       def default_relation
         SlotRequest
+          .joins(:patient)
           .includes(patient: [current_modality: :description])
           .ordered
       end

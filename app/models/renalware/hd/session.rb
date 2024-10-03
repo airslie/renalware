@@ -28,7 +28,7 @@ module Renalware
       belongs_to :dialysate
       belongs_to :signed_on_by, class_name: "User"
       belongs_to :signed_off_by, class_name: "User"
-      has_many :session_patient_group_directions, dependent: :destroy
+      has_many :session_patient_group_directions, dependent: :destroy, inverse_of: :session
       has_many :patient_group_directions,
                through: :session_patient_group_directions,
                class_name: "Drugs::PatientGroupDirection"
@@ -54,9 +54,6 @@ module Renalware
       validates :signed_on_by, presence: true
       validates :started_at, presence: true, timeliness: { type: :datetime }
       validates :stopped_at, timeliness: { type: :datetime, allow_blank: true }
-      validates :patient_group_directions,
-                presence: true,
-                if: -> { Renalware.config.hd_session_require_patient_group_directions }
 
       delegate :hospital_centre, to: :hospital_unit, allow_nil: true
 

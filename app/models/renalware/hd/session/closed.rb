@@ -11,6 +11,9 @@ module Renalware
       validates :stopped_at, presence: true
       validates :signed_off_at, presence: true
       validates :dialysate, presence: true
+      validates :patient_group_directions,
+                presence: true,
+                if: -> { Renalware.config.hd_session_require_patient_group_directions }
 
       def self.policy_class = ClosedSessionPolicy
 

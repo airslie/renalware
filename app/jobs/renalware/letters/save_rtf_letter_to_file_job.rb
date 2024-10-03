@@ -10,6 +10,7 @@ module Renalware
       self.log_arguments = false
       queue_as :rtf_generation
       queue_with_priority 1
+      retry_on Errno::EPIPE, wait: 10.minutes, attempts: 3
 
       def perform(args)
         letter = args[:letter]

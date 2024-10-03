@@ -14,7 +14,7 @@
         /.grid.grid-flow-col.auto-cols-max.gap-2
         .grid.grid-cols-10.gap-2
           .col-span-2
-            = label_tag :identity_match, "Patient name/NHS/MRN", class: "whitespace-nowrap overflow-hidden"
+            = f.label :identity_match, "Patient name/NHS/MRN", class: "whitespace-nowrap overflow-hidden"
             = f.search_field :identity_match, class: ""
 
           div

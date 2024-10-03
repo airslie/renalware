@@ -6,8 +6,8 @@ module Renalware
       describe SaveSession, type: :command do
         include ActiveJob::TestHelper
 
-        let(:patient) { build_stubbed(:hd_patient) }
-        let(:user) { build_stubbed(:user) }
+        let(:patient)       { build_stubbed(:hd_patient) }
+        let(:user)          { build_stubbed(:user) }
 
         def test_listener
           Class.new do
@@ -24,6 +24,34 @@ module Renalware
               @saved_session = session
               @success = false
             end
+          end
+        end
+
+        describe "Simple creation of session without signoff" do
+          let(:patient)       { create(:hd_patient) }
+          let(:user)          { create(:user) }
+          let(:hospital_unit) { create(:hospital_unit) }
+
+          it "creates a session when args are valid" do
+            pgd = create(:patient_group_direction, name: "PGD name1", code: "PCG code1")
+            obj = described_class.new(patient: patient, current_user: user)
+            params = {
+              type: "Renalware::HD::Session::Open",
+              hospital_unit: hospital_unit,
+              signed_on_by: user,
+              patient_group_direction_ids: ["", pgd.id.to_s],
+              duration_form: {
+                start_date: Time.zone.today,
+                start_time: Time.zone.now
+              }
+            }
+            listener = test_listener.new
+            obj.subscribe listener
+            obj.call(params: params, signing_off: false, id: nil)
+
+            session = listener.saved_session
+            expect(session).to be_persisted
+            expect(session.patient_group_directions).to eq([pgd])
           end
         end
 

@@ -22,7 +22,7 @@ describe Renalware::Letters::SaveRTFLetterToFileJob do
 
   # rubocop:disable RSpec/AnyInstance
   describe "#perform" do
-    it "creates the specific file with the pdf letter content" do
+    it "creates the specific file with the RTF letter content" do
       file_path = Renalware::Engine.root.join("tmp", "test.rtf")
 
       allow_any_instance_of(Renalware::Letters::LetterPresenter)

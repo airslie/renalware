@@ -89,6 +89,8 @@ group :development do
   gem "binding_of_caller"
   gem "bullet"
   gem "foreman", require: false
+  gem "query_count"
+  gem "rack-mini-profiler"
   gem "rubocop-capybara", require: false
   gem "rubocop-factory_bot", require: false
   gem "rubocop-performance", require: false
