@@ -56,16 +56,7 @@ module Renalware
       end
 
       def pdf_content
-        if archived?
-          archive.pdf_content
-        elsif ::Renalware.config.letters_render_pdfs_with_prawn
-          Formats::Pdf::Document.new(self, nil).build.render
-        else
-          unless ::Rails.env.local?
-            raise ::ArgumentError, "PDF content not available!"
-          end
-          # ???
-        end
+        archive&.pdf_content || RendererFactory.renderer_for(self, :pdf).call
       end
 
       def content
