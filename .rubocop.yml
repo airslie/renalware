@@ -51,6 +51,10 @@ AllCops:
     - "config/initializers/devise.rb"
     - "features/support/env.xaction_view.rb"
 
+Style/SafeNavigationChainLength:
+  Enabled: true
+  Max: 3
+
 Rails/EnumHash:
   Enabled: false
 

@@ -38,8 +38,7 @@ ruby:
         h5.mt-3= "QR code preview for #{qr_url}"
         .w-1/2.lg:w-1/4
           .mt-4.mb-6= svg&.html_safe
-          .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-6
-            i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+          = help_panel do
             ' Please be sure to test your QR code before saving, for example by pointing your phone's camera at it
 
     br

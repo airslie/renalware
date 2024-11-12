@@ -10,8 +10,9 @@
       = button_tag(type: "submit",
                   class: "button secondary",
                   disabled: presenter.patients.none?) do
-        i.fas.fa-print
-        = "Batch Print #{presenter.pagy.count} HD Session Forms"
+        .flex.items-center.gap-2
+          = inline_icon(:printer, size: :md)
+          = "Batch Print #{presenter.pagy.count} HD Session Forms"
 
   / This form lets us generate pathology request forms (eg for monthly bloods) for all patients
   / in the list (all pages)

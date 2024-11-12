@@ -57,7 +57,7 @@ module World
         # "23:59"
         valid_open_session_attributes(patient).merge(
           started_at: Time.zone.now,
-          stopped_at: Time.zone.now + 3.hours,
+          stopped_at: 3.hours.from_now,
           dialysate_id: Renalware::HD::Dialysate.first,
           document: JSON.parse(json)
         )

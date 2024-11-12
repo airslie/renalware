@@ -17,7 +17,7 @@ describe "Add a patient to a study (creating a participation)" do
       )
       visit research.study_participations_path(study)
 
-      click_on "Add participant"
+      click_on "Add"
 
       expect(page).to have_current_path(research.new_study_participation_path(study))
       select2(patient.to_s(:long), css: "#patient-select2", search: true)

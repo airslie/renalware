@@ -31,8 +31,7 @@ ruby:
       - title = [view.category&.humanize, view.scope&.humanize, view.title&.humanize].join(" / ")
       h2= "Edit columns for #{title}"
     .modal__body(style="max-height: 400px")
-      .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mx-1.mb-5
-        i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+      = help_panel do
         | Please bear in mind that changes you make will be visible by all users.
 
       / Tabs - see also js stimulus tabs-controller

@@ -105,7 +105,7 @@ module Renalware
             end
 
             create_lcc_patient.tap do |urea_lt_30_but_was_gt_30|
-              create_observation(urea_lt_30_but_was_gt_30, ure, 31, at: Time.zone.now - 1.month)
+              create_observation(urea_lt_30_but_was_gt_30, ure, 31, at: 1.month.ago)
               create_observation(urea_lt_30_but_was_gt_30, ure, 29, at: Time.zone.now)
             end
 
@@ -130,19 +130,19 @@ module Renalware
             end
 
             create_lcc_patient.tap do |hgb_gt_100_was_lt_100|
-              create_observation(hgb_gt_100_was_lt_100, hgb, 99.9, at: Time.zone.now - 1.month)
+              create_observation(hgb_gt_100_was_lt_100, hgb, 99.9, at: 1.month.ago)
               create_observation(hgb_gt_100_was_lt_100, hgb, 100.1, at: Time.zone.now)
             end
 
             # Target
             patient_w_hgb_lt_100 = create_lcc_patient
-            create_observation(patient_w_hgb_lt_100, hgb, 99.9, at: Time.zone.now - 1.month)
+            create_observation(patient_w_hgb_lt_100, hgb, 99.9, at: 1.month.ago)
 
             # This is a test to make sure that patients with a textual result, which is effectively
             # NULL (which is < 100 in the postgres world as far as ordering is concerned) still
             # appears in the < 100 group
             patient_w_textual_hgb = create_lcc_patient
-            create_observation(patient_w_textual_hgb, hgb, "CANCELLED", at: Time.zone.now - 1.month)
+            create_observation(patient_w_textual_hgb, hgb, "CANCELLED", at: 1.month.ago)
 
             patients = described_class.new(named_filter: :hgb_low).call
 
@@ -161,7 +161,7 @@ module Renalware
             end
 
             create_lcc_patient.tap do |hgb_lt_130_but_was_gt_130|
-              create_observation(hgb_lt_130_but_was_gt_130, hgb, 400, at: Time.zone.now - 1.month)
+              create_observation(hgb_lt_130_but_was_gt_130, hgb, 400, at: 1.month.ago)
               create_observation(hgb_lt_130_but_was_gt_130, hgb, 129, at: Time.zone.now)
             end
 

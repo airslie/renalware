@@ -1,4 +1,8 @@
-[submodule "vendor/xsd/ukrdc"]
-  path = vendor/xsd/ukrdc
+[submodule "ukrdc4"]
+  path = vendor/xsd/ukrdc4
+  url = https://github.com/renalreg/resources.git
+  branch = master
+[submodule "ukrdc3"]
+  path = vendor/xsd/ukrdc3
   url = https://github.com/renalreg/resources.git
   branch = rda_schema_v3

@@ -73,10 +73,8 @@ module Renalware
       # This differs from the base controller implementation because we are looking
       # up by id not patient_id
       def patient
-        @patient ||= begin
-          patient_scope.find_by(secure_id: params[:id]).tap do |patient_|
-            raise PatientNotFoundError unless patient_
-          end
+        @patient ||= patient_scope.find_by(secure_id: params[:id]).tap do |patient_|
+          raise PatientNotFoundError unless patient_
         end
       end
 

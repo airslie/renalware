@@ -3,9 +3,10 @@
 = content_for(:actions) do
   = link_to(t("btn.add"), new_admissions_consult_path, class: :button)
   = link_to(admissions_consults_path(q: params[:q]&.permit!, format: :pdf), class: "button secondary") do
-    i.fas.fa-print
-    | Print (PDF)
-  /data: { target: admissions_consults_path(format: :pdf)
+    .flex.items-center.gap-2
+      = inline_icon(:printer, size: :md)
+      | Print (PDF)
+
 
 = content_for(:filters) do
   = render "filters", query: query

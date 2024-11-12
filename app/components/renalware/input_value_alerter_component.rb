@@ -2,6 +2,7 @@
 
 module Renalware
   class InputValueAlerterComponent < ApplicationComponent
+    include IconHelper
     renders_one :input
 
     attr_reader :not_recommended_values, :message

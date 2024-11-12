@@ -124,7 +124,7 @@ table.letters {
 
   .modal__footer {
     .left {
-      color: $dashboard-muted-color;
+      color: var(--dashboard-muted-color);
     }
   }
 }
@@ -144,7 +144,7 @@ table.letters {
     color: $nhs-green;
 
     &:hover {
-      color: $nhs-dark-green;
+      color: var(--nhs-dark-green);
     }
 
     i {
@@ -163,13 +163,13 @@ table.letters {
   &.mailshot-status--failure,
   &.mailshot-status--failure:hover {
     background-color: red;
-    color: $white;
+    color: var(--white);
   }
 
   &.mailshot-status--success,
   &.mailshot-status--success:hover {
     background-color: $nhs-green;
-    color: $white;
+    color: var(--white);
   }
 }
 

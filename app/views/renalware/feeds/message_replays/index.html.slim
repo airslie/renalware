@@ -2,8 +2,7 @@
 = within_new_admin_layout(title: "Replayed Feed Messages for Request #{replay_request.id}",
                           breadcrumbs: breadcrumb_for("Replay Requests", feeds_replay_requests_path)) do
 
-  .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
-    i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+  = help_panel do
     ' An entry for every feed message we try and replay.
 
   table

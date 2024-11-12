@@ -61,13 +61,11 @@ module Renalware
       end
 
       def load_profile
-        @profile = begin
-          Profile
-            .for_patient(hd_patient)
-            .first_or_initialize
-            .tap { |profile| profile.named_nurse_id = hd_patient.named_nurse_id }
-            .tap { |profile| authorize(profile) }
-        end
+        @profile = Profile
+          .for_patient(hd_patient)
+          .first_or_initialize
+          .tap { |profile| profile.named_nurse_id = hd_patient.named_nurse_id }
+          .tap { |profile| authorize(profile) }
       end
 
       def profile_params

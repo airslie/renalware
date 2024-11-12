@@ -37,7 +37,7 @@ module Renalware
           let(:persisted) { true }
 
           context "when the creation date is outside the deletion window" do
-            let(:created_at) { Time.zone.now - 25.hours }
+            let(:created_at) { 25.hours.ago }
 
             it do
               is_expected.not_to permit(user, clinic_visit)
@@ -46,7 +46,7 @@ module Renalware
           end
 
           context "when the creation date is within the deletion window" do
-            let(:created_at) { Time.zone.now - 23.hours }
+            let(:created_at) { 23.hours.ago }
 
             it do
               is_expected.to permit(user, clinic_visit)
@@ -69,7 +69,7 @@ module Renalware
           let(:persisted) { true }
 
           context "when the visit was created within 7 days" do
-            let(:created_at) { Time.zone.now - 7.days + 1.hour }
+            let(:created_at) { 7.days.ago + 1.hour }
 
             it do
               is_expected.to permit(user, clinic_visit)
@@ -78,7 +78,7 @@ module Renalware
           end
 
           context "when the visit was created more than 7 days ago" do
-            let(:created_at) { Time.zone.now - 7.days - 1.hour }
+            let(:created_at) { 7.days.ago - 1.hour }
 
             it do
               is_expected.not_to permit(user, clinic_visit)

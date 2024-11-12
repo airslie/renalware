@@ -5,8 +5,7 @@
               class: "button"
 
 = within_new_admin_layout(title: "Consultants") do
-  .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
-    i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+  = help_panel do
     ' These consultants are referenced with creating a clinic appointment, but are
     ' not neccessarily Renalware users.
     br

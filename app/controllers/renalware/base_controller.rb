@@ -40,10 +40,8 @@ module Renalware
     alias_attribute :current_patient, :patient
 
     def patient
-      @patient ||= begin
-        patient_scope.find_by(secure_id: params[:patient_id]).tap do |patient_|
-          raise PatientNotFoundError unless patient_
-        end
+      @patient ||= patient_scope.find_by(secure_id: params[:patient_id]).tap do |patient_|
+        raise PatientNotFoundError unless patient_
       end
     end
 
@@ -92,10 +90,8 @@ module Renalware
     end
 
     def patient
-      @patient ||= begin
-        patient_scope.find_by(secure_id: params[:patient_id]).tap do |pat|
-          raise PatientNotFoundError unless pat
-        end
+      @patient ||= patient_scope.find_by(secure_id: params[:patient_id]).tap do |pat|
+        raise PatientNotFoundError unless pat
       end
     end
 

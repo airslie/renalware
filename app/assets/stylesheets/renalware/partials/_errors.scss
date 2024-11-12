@@ -1,23 +1,23 @@
 .alert-box.warning {
-  //background-color: $nhs-orange;
+  //background-color: var(--nhs-orange);
 }
 
 .error-page {
   overflow-y: scroll;
 
   .title-area .name {
-    color: $white;
+    color: var(--white);
     font-size: 1.3rem;
     line-height: 3rem;
     padding-left: 1rem;
 
     a {
-      color: $white;
+      color: var(--white);
     }
   }
 
   .error-code {
-    color: $light-grey;
+    color: var(--light-grey);
     font-size: 3rem;
   }
 
@@ -56,12 +56,12 @@
 }
 
 .error small.error {
-  background-color: $nhs-red;
+  background-color: var(--nhs-red);
 }
 
 .error label,
 .error label.error {
-  color: $nhs-red;
+  color: var(--nhs-red);
 }
 
 #new-form input.field_with_errors {
@@ -78,8 +78,8 @@
 
 ul.error-messages,
 .non-patient-page ul.error-messages {
-  background-color: $error-background;
-  color: $nhs-red;
+  background-color: var(--off-white);
+  color: var(--nhs-red);
   margin: 0;
   margin-bottom: 1rem;
   padding: 0 1rem;

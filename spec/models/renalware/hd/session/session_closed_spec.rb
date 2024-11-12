@@ -19,21 +19,21 @@ module Renalware
 
         describe "immutable?" do
           it "returns true is the appropriate window has elapsed" do
-            session = described_class.new(signed_off_at: Time.zone.now - 10.days)
+            session = described_class.new(signed_off_at: 10.days.ago)
             allow(session).to receive(:persisted?).and_return(true)
 
             expect(session.immutable?).to be(true)
           end
 
           it "returns false if the appropriate window has not yet elapsed" do
-            session = described_class.new(signed_off_at: Time.zone.now - 1.minute)
+            session = described_class.new(signed_off_at: 1.minute.ago)
             allow(session).to receive(:persisted?).and_return(true)
 
             expect(session.immutable?).to be(false)
           end
 
           it "returns true if not yet persisted" do
-            session = described_class.new(signed_off_at: Time.zone.now - 1.minute)
+            session = described_class.new(signed_off_at: 1.minute.ago)
             allow(session).to receive(:persisted?).and_return(false)
 
             expect(session.immutable?).to be(true)

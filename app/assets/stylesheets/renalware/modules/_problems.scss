@@ -32,14 +32,14 @@ strong.snomed_id {
 
   .problem-freetext-option {
     font-style: italic;
-    color: $mid-grey;
+    color: var(--mid-grey);
     margin-left: 1rem;
   }
 
   .select2-results__option--highlighted[aria-selected] {
     .problem-option,
     .problem-freetext-option {
-      color: $off-white;
+      color: var(--off-white);
     }
   }
 }

@@ -48,9 +48,8 @@ module Renalware
       end
 
       def patients_with_a_closed_hd_session_in_period
-        @patients_with_a_closed_hd_session_in_period ||= begin
+        @patients_with_a_closed_hd_session_in_period ||=
           Sessions::AuditablePatientsInPeriodQuery.new(period: period).call
-        end
       end
 
       def default_month

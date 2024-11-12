@@ -4,15 +4,11 @@ describe "Creating an Access Plan" do
   include DateHelpers
 
   it "A clinician adds the first access plan to a patient using menus" do
-    user = plan_type = nil
-
     user = login_as_clinical
     patient = create(:accesses_patient, by: user)
     plan_type = create(:access_plan_type, name: "Continue dialysis line")
     notes = "Lorem ipsum delor"
 
-    # on circlci, this call taking ages because it is the first test using capybara
-    # and causes the CSS to compile, taking 20s or so
     visit patient_accesses_dashboard_path(patient)
 
     expect(page).to have_no_content("Plan History")

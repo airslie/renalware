@@ -31,28 +31,28 @@ module Renalware
       let(:display_until) { nil }
 
       context "when display_from is in the future" do
-        let(:display_from) { Time.zone.now + 1.day }
+        let(:display_from) { 1.day.from_now }
 
         it { is_expected.to be(false) }
       end
 
       context "when display_from is in the past and there is no display_until set" do
-        let(:display_from) { Time.zone.now - 1.day }
+        let(:display_from) { 1.day.ago }
         let(:display_until) { nil }
 
         it { is_expected.to be(true) }
       end
 
       context "when display_from and display_until are in the past" do
-        let(:display_from) { Time.zone.now - 2.days }
-        let(:display_until) { Time.zone.now - 1.day }
+        let(:display_from) { 2.days.ago }
+        let(:display_until) { 1.day.ago }
 
         it { is_expected.to be(false) }
       end
 
       context "when display_from is in the past and display_until is in the future" do
-        let(:display_from) { Time.zone.now - 1.day }
-        let(:display_until) { Time.zone.now + 1.day }
+        let(:display_from) { 1.day.ago }
+        let(:display_until) { 1.day.from_now }
 
         it { is_expected.to be(true) }
       end

@@ -6,4 +6,4 @@ tr.sortable(id="hd-station-#{station.id}")
   td= station.location&.name
   - if policy(station).sort?
     td.handle
-      i.fas.fa-bars
+      = inline_icon(:menu, size: :md)

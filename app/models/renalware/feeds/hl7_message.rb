@@ -26,49 +26,28 @@ module Renalware
       }.freeze
 
       class ObservationRequest < SimpleDelegator
-        # rubocop:disable Lint/UselessMethodDefinition
-        def initialize(observation_request_segment)
+        def initialize(observation_request_segment) # rubocop:disable Lint/UselessMethodDefinition
           super
-        end
-        # rubocop:enable Lint/UselessMethodDefinition
-
-        def observed_at = observation_date.presence || requested_date
-
-        def identifier
-          universal_service_id.split("^").first
-        end
-
-        def name
-          universal_service_id.split("^")[1]
         end
 
         # Select only OBX children. OBR can have other types of child
         # segments but we want to ignore those.
         def observations
-          @observations ||= begin
-            children
-              .select { |segment| segment.is_a? HL7::Message::Segment::OBX }
-              .map { |obx_segment| Observation.new(obx_segment) }
-          end
+          @observations ||= children
+            .select { |segment| segment.is_a? HL7::Message::Segment::OBX }
+            .map { |obx_segment| Observation.new(obx_segment) }
         end
 
-        def ordering_provider_name
-          ordering_provider.last
-        end
-
-        def placer_order_number
-          super.split("^").first
-        end
-
-        def filler_order_number
-          super.split("^").first
-        end
+        def filler_order_number       = super.split("^").first
+        def identifier                = universal_service_id.split("^").first
+        def name                      = universal_service_id.split("^")[1]
+        def observed_at               = observation_date.presence || requested_date
+        def ordering_provider_name    = ordering_provider.last
+        def placer_order_number       = super.split("^").first
 
         private
 
-        def ordering_provider
-          super.split("^")
-        end
+        def ordering_provider = super.split("^")
       end
 
       class Observation < SimpleDelegator
@@ -78,19 +57,11 @@ module Renalware
         alias_attribute :value, :observation_value
         alias_attribute :result_status, :observation_result_status
 
-        def identifier
-          observation_id.split("^").first
-          # Apply aliases logic to return the OBX code
-        end
-
-        def name
-          observation_id.split("^")[1]
-        end
-
+        # Apply aliases logic to return the OBX code
+        def identifier  = observation_id.split("^").first
+        def name        = observation_id.split("^")[1]
         # TODO: Implement comment extraction
-        def comment
-          @comment || ""
-        end
+        def comment     = @comment || ""
 
         # Some messages may come through with result text like
         #   ##TEST CANCELLED## Insufficient specimen received
@@ -145,60 +116,27 @@ module Renalware
         Array(self[:OBR]).map { |obr| ObservationRequest.new(obr) }
       end
 
-      def orc_order_status
-        first_orc_segment.order_status
-      end
-
-      def orc_filler_order_number
-        first_orc_segment.filler_order_number
-      end
-
       def patient_dob
         dob = self[:PID]&.patient_dob
         Date.parse(dob) if dob.present?
       end
 
-      def patient_identification
-        Renalware::Feeds::PatientIdentification.new(self[:PID])
-      end
-
-      def pv1
-        Renalware::Feeds::HL7Segments::PV1.new(self[:PV1])
-      end
-
-      def pv2
-        Renalware::Feeds::HL7Segments::PV2.new(self[:PV2])
-      end
-
-      def time
-        self[:MSH].time
-      end
-
-      def type
-        self[:MSH].message_type
-      end
-
-      def header_id
-        self[:MSH].message_control_id
-      end
+      def action                  = ACTIONS.fetch(type, :no_matching_command)
+      def patient_identification  = Renalware::Feeds::PatientIdentification.new(self[:PID])
+      def orc_order_status        = first_orc_segment.order_status
+      def orc_filler_order_number = first_orc_segment.filler_order_number
+      def pv1                     = Renalware::Feeds::HL7Segments::PV1.new(self[:PV1])
+      def pv2                     = Renalware::Feeds::HL7Segments::PV2.new(self[:PV2])
+      def time                    = self[:MSH].time
+      def type                    = self[:MSH].message_type
+      def header_id               = self[:MSH].message_control_id
+      def message_type            = type.split("^").first
+      def sending_app             = self[:MSH].sending_app
+      def sending_facility        = self[:MSH].sending_facility
 
       # Adding this so it is part of the interface and we can mock an HL7Message in tests
-      # rubocop:disable Lint/UselessMethodDefinition
-      def to_hl7
+      def to_hl7 # rubocop:disable Lint/UselessMethodDefinition
         super
-      end
-      # rubocop:enable Lint/UselessMethodDefinition
-
-      def message_type
-        type.split("^").first
-      end
-
-      def sending_app
-        self[:MSH].sending_app
-      end
-
-      def sending_facility
-        self[:MSH].sending_facility
       end
 
       def event_type
@@ -210,10 +148,6 @@ module Renalware
         define_method(:"#{msg_type.to_s.downcase}?") do
           msg_type.to_s == message_type
         end
-      end
-
-      def action
-        ACTIONS.fetch(type, :no_matching_command)
       end
 
       def practice_code

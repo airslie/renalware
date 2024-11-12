@@ -98,8 +98,7 @@ ruby:
             = fcm.input :line_exit_site_status,
                         wrapper: :horizontal_tiny,
                         wrapper_hint_class: "",
-                        hint: link_to("", "#",
-                                      data: { "reveal-id" => "mr-victor-help-modal" }),
+                        hint: help_link(data: { "reveal-id" => "mr-victor-help-modal" }),
                         hint_html: { class: "hint-help-link" }
 
     = render layout: "renalware/shared/fieldset",
@@ -108,8 +107,7 @@ ruby:
         = favf.input :score,
                      wrapper: :horizontal_small,
                      wrapper_hint_class: "",
-                     hint: link_to("", "#",
-                           data: { "reveal-id" => "avf-assessment-help-modal" }),
+                     hint: help_link(data: { "reveal-id" => "avf-assessment-help-modal" }),
                      hint_html: { class: "hint-help-link" }
         = favf.input :aneurysm, as: :inline_radio_buttons, wrapper: :horizontal_medium
         = favf.input :bruit, as: :inline_radio_buttons, wrapper: :horizontal_medium
@@ -155,7 +153,7 @@ ruby:
         = fcm.input :washback_quality,
                     wrapper: :horizontal_tiny,
                     wrapper_hint_class: "",
-                    hint: link_to("", "#", data: { "reveal-id" => "washback-quality-modal" }),
+                    hint: help_link(data: { "reveal-id" => "washback-quality-modal" }),
                     hint_html: { class: "hint-help-link" }
 
         = fcm.input :machine_urr, wrapper: :horizontal_tiny

@@ -11,8 +11,9 @@
                        data-dropdown="prescription-print-options"
                        aria-controls="prescription-print-options"
                        aria-expanded="false")
-    i.fas.fa-print
-    = "#{t('btn.print')}&hellip;".html_safe
+    .flex.items-center.gap-2
+      = inline_icon(:printer, size: :md)
+      = "#{t('btn.print')}&hellip;".html_safe
 
   ul.f-dropdown#prescription-print-options(data-dropdown-content aria-hidden="true")
     - [{ hd_only: false, title: "All Drugs" }, { hd_only: true, title: "HD Drugs" }].each do |opts|

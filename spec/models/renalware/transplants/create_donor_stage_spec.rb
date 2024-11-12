@@ -51,7 +51,7 @@ module Renalware
             existing_status = DonorStage.new(patient: patient,
                                              stage_position: position1,
                                              stage_status: status,
-                                             started_on: Time.zone.now - 1.day,
+                                             started_on: 1.day.ago,
                                              by: user)
             existing_status.save!
             expect(DonorStage.for_patient(patient).count).to eq(1)

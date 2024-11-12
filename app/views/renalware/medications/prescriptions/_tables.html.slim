@@ -31,9 +31,10 @@ article
                       treatable_id: treatable.id),
                     data: { turbo: true },
                     class: %i(button add_prescription) do
-            i.fas.fa-plus
-            | Add Prescription
 
+            .flex.items-center.gap-1
+              = inline_icon(:plus, size: :sm)
+              | Add Prescription
 
   = render "renalware/medications/prescriptions/table",
             id: "current-prescriptions",

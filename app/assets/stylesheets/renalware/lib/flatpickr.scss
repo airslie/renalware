@@ -661,7 +661,7 @@ span.flatpickr-weekday {
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
   box-shadow: none;
-  background: $nhs-bright-blue;
+  background: var(--nhs-bright-blue);
   color: #ffffff;
   border-color: transparent;
 }
@@ -1132,7 +1132,7 @@ span.flatpickr-weekday {
   cursor: pointer;
   outline: 0;
   background: #f1faff;
-  color: $nhs-bright-blue;
+  color: var(--nhs-bright-blue);
   border-color: transparent;
 }
 .flatpickr-day.today {
@@ -1161,7 +1161,7 @@ span.flatpickr-weekday {
   cursor: pointer;
   outline: 0;
   background: #f1faff;
-  color: $nhs-bright-blue;
+  color: var(--nhs-bright-blue);
   border-color: transparent;
 }
 .flatpickr-day.today {

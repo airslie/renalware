@@ -93,7 +93,7 @@
     = f.input :cc_on_all_letters,  as: :inline_radio_buttons, wrapper: :horizontal_small
     = f.input :cc_decision_on, as: :flatpickr, wrapper: :horizontal_datepicker
 
-- if policy(patient).update_renalreg_preferences?
+- if policy(patient).update_pkb_renalreg_preferences?
   .columns.large-12
     = field_set_tag do
       legend Renal Registry Preferences
@@ -106,13 +106,12 @@
       = f.input :ukrdc_anonymise_decision_on, as: :flatpickr, wrapper: :horizontal_datepicker
       = f.input :ukrdc_anonymise_recorded_by, wrapper: :horizontal_medium
 
-- if policy(patient).update_pkb_preferences?
-  .columns.large-12
-    = field_set_tag do
-      legend Patients Know Best (PKB) Preferences
-      = f.input :send_to_rpv, as: :inline_radio_buttons, wrapper: :horizontal_small
-      = f.input :rpv_decision_on, as: :flatpickr, wrapper: :horizontal_datepicker
-      = f.input :rpv_recorded_by, wrapper: :horizontal_medium
+    .columns.large-12
+      = field_set_tag do
+        legend Patients Know Best (PKB) Preferences
+        = f.input :send_to_rpv, as: :inline_radio_buttons, wrapper: :horizontal_small
+        = f.input :rpv_decision_on, as: :flatpickr, wrapper: :horizontal_datepicker
+        = f.input :rpv_recorded_by, wrapper: :horizontal_medium
 
 .columns.large-12
   = field_set_tag do

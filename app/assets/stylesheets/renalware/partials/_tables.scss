@@ -30,6 +30,13 @@ table.column_hover .hover { // for js column hovering via stimulus controller
   }
 }
 
+td.actions2 {
+  *:not(:first-child) {
+    padding-left: .3rem;
+    margin-left: .3rem;
+    border-left: 1px solid #eee
+  }
+}
 /*
   Add a pipe between action links (Edit, Delete etc) in tables
 */
@@ -39,13 +46,14 @@ td.actions {
 
   /* If the action link is just an icon, make it quite subtle so it does not draw attention */
   > a.icon-only {
-    color: $link-hover-colour;
+    color: var(--link-focus-colour);
 
     &:hover {
       color: $link-colour;
     }
   }
 
+  .flex a,
   > a,
   > span {
     &:after {
@@ -126,7 +134,7 @@ table {
     //border-top: solid 1px $letter-preview-background-colour;
 
     a {
-      color: $muted-dark-grey;
+      color: var(--muted-dark-grey);
       text-decoration: underline;
     }
 
@@ -215,7 +223,7 @@ table {
   tr td {
     border-bottom: 1px solid $table-border-colour;
     border-left-width: 0;
-    border-right: solid 1px $white;
+    border-right: solid 1px var(--white);
     font-size: 1rem;
 
     &:last-child {

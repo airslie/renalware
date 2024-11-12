@@ -33,8 +33,7 @@ ruby:
                           data: { controller: "select", action: "change->select#refresh" }}
 
   - if subtype.blank?
-    .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
-        i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+    = help_panel do
         | This event type must have sub-types, so please set them up first&nbsp;
         = link_to 'here', renalware.events_type_subtypes_path(event_type)
   - else
@@ -42,8 +41,7 @@ ruby:
     - labels_hash = subtype.definition.each_with_object(ActiveSupport::OrderedHash.new) { |k, h| h[k.keys[0]] = k.values[0]["label"] }
 
     - if subtype.description.present?
-      .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
-        i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+      = help_panel do
         = subtype.description
 
     / .rounded-md.bg-green-100.px-3.py-2.flex.items-start.shadow.mb-5

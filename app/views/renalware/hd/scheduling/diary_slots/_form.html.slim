@@ -54,20 +54,3 @@
            "#",
            "aria-label" => "Close",
            class: "reveal-modal-close"
-
-javascript:
-  document.addEventListener("turbo:frame-load", function (e) {
-    $('.searchable_select', modal).select2();
-    Renalware.PatientSearch.init();
-
-    // add handler for button if master set action
-    $('input.master[type=submit]').click(function (e) {
-      var master_slots_url = $(".diary").data("master-diary-slots-path");
-      $("#slot-form").attr('action', master_slots_url);
-    });
-
-    $('input.weekly[type=submit]').click(function (e) {
-      var weekly_slots_url = $(".diary").data("weekly-diary-slots-path");
-      $("#slot-form").attr('action', weekly_slots_url);
-    })
-  })

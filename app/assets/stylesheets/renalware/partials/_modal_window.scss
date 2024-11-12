@@ -1,6 +1,6 @@
 .modal {
   .modal__header {
-    border-bottom: solid 1px $winter-sky;
+    border-bottom: solid 1px var(--winter-sky);
     margin-bottom: 10px;
 
     &.modal__header-no-decoration {
@@ -18,12 +18,12 @@
     }
 
     h3 {
-      color: $dashboard-muted-color;
+      color: var(--dashboard-muted-color);
       font-weight: normal;
     }
 
     .reveal-modal-close {
-      color: $winter-sky;
+      color: var(--winter-sky);
       font-size: 1.5rem;
       font-weight: normal;
       padding: 0.2rem;
@@ -77,7 +77,7 @@
 }
 
 .modal-window {
-  background: $white;
+  background: var(--white);
   border-radius: 5px;
   box-shadow: 1px 1px 1px $oil;
   height: 460px;

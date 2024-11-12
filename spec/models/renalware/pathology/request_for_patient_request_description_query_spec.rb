@@ -24,7 +24,7 @@ describe Renalware::Pathology::RequestForPatientRequestDescriptionQuery do
       patient: patient,
       consultant: consultant,
       request_descriptions: [request_description],
-      created_at: Time.current - 1.day
+      created_at: 1.day.ago
     )
   end
   let(:request_old) do
@@ -34,7 +34,7 @@ describe Renalware::Pathology::RequestForPatientRequestDescriptionQuery do
       patient: patient,
       consultant: consultant,
       request_descriptions: [request_description],
-      created_at: Time.current - 2.days
+      created_at: 2.days.ago
     )
   end
 

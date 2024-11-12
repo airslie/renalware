@@ -4,7 +4,7 @@
 }
 
 .patient-nag {
-  color: $white;
+  color: var(--white);
   display: inline-block;
   margin: 0.1rem 0.3rem 0 0;
   padding: 0 0.1rem;
@@ -45,7 +45,7 @@
 }
 
 .patient-nag-severity-none {
-  background-color: $off-white !important;
+  background-color: var(--off-white) !important;
 
   i {
     width: 0;
@@ -70,31 +70,31 @@
 }
 
 .patient-nag-severity-low {
-  background-color: $nhs-yellow !important;
-  color: $muted-dark-grey !important;
+  background-color: var(--nhs-yellow) !important;
+  color: var(--muted-dark-grey) !important;
 
   span.date,
   span.value {
-    border-left: 1px solid lighten($nhs-yellow, 10);
+    border-left: 1px solid var(--nhs-yellow-lighter);
   }
 }
 
 .patient-nag-severity-medium {
-  background-color: $nhs-orange !important;
-  color: $off-white !important;
+  background-color: var(--nhs-orange) !important;
+  color: var(--off-white) !important;
 
   span.date,
   span.value {
-    border-left: 1px solid lighten($nhs-orange, 10);
+    border-left: 1px solid var(--nhs-orange);
   }
 }
 
 .patient-nag-severity-high {
-  background-color: $nhs-red !important;
-  color: $off-white !important;
+  background-color: var(--nhs-red) !important;
+  color: var(--off-white) !important;
 
   span.date,
   span.value {
-    border-left: 1px solid lighten($nhs-red, 10);
+    border-left: 1px solid var(--nhs-red-lighter);
   }
 }

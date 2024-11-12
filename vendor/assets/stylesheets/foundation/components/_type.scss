@@ -73,7 +73,7 @@ $code-padding: rem-calc(2) rem-calc(5) rem-calc(1) !default;
 // We use these to style anchors
 $anchor-text-decoration: none !default;
 $anchor-text-decoration-hover: none !default;
-$anchor-font-color: $primary-color !default;
+$anchor-font-color: #1d4ed8 ;// #2563eb; // #3344dd !default; // $primary-color !default;
 $anchor-font-color-hover: scale-color(
   $anchor-font-color,
   $lightness: -14%

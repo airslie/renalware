@@ -17,13 +17,11 @@ module Renalware
       private
 
       def query
-        @query ||= begin
-          LowClearance::MDMPatientsQuery.new(
-            relation: policy_scope(LowClearance::Patient),
-            params: filter_form.ransacked_parameters.merge(query_params).with_indifferent_access,
-            named_filter: named_filter
-          )
-        end
+        @query ||= LowClearance::MDMPatientsQuery.new(
+          relation: policy_scope(LowClearance::Patient),
+          params: filter_form.ransacked_parameters.merge(query_params).with_indifferent_access,
+          named_filter: named_filter
+        )
       end
 
       def named_filter

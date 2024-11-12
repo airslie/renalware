@@ -1,7 +1,6 @@
 .flex.items-center
   => link_to(patient_pd_mdm_path(patient), class: "button with-icon secondary") do
-    i.fas.fa-users
-    = t(".mdm")
+    = text_with_icon_prefix(t(".mdm"), :users, size: :md)
 
   a.button.dropdown.with-icon(href="#"
                     data-dropdown="pd-options"

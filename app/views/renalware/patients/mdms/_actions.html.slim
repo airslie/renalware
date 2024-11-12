@@ -2,8 +2,9 @@
   = link_to edit_system_view_metadatum_path(options.current_view, format: :html),
             data: { "reveal-id" => "system-view-metadata-modal", "reveal-ajax" => "true" },
             class: "right rounded px-2 py-1 mt-1 text-gray-600 text-sm" do
-      i.fas.fa-cogs.pr-2
-      | Configure this table for everyone
+      .flex.items-center.gap-2
+        = inline_icon(:cog)
+        | Configure this table for everyone
 
   / The modal dialog container for internal message sending
   #system-view-metadata-modal.reveal-modal.medium(data-reveal data-options="close_on_background_click:false")

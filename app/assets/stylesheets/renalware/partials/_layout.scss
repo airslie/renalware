@@ -17,7 +17,7 @@ body {
 }
 
 body.uat {
-  border-top: 3px solid $nhs-yellow;
+  border-top: 3px solid var(--nhs-yellow);
 }
 
 html {
@@ -85,7 +85,7 @@ html {
 
 footer {
   background-color: $footer-bg-colour;
-  border-top: 1px solid $light-grey;
+  border-top: 1px solid var(--light-grey);
   color: $footer-colour;
   font-size: 0.8rem;
   padding: 0 1rem;
@@ -155,7 +155,7 @@ section.display {
     padding: 0;
 
     &.with-tabs {
-      border-bottom: 1px solid $tab-border-color;
+      border-bottom: 1px solid var(--tab-border-color);
       margin-bottom: 1.5rem;
 
       .page-heading {

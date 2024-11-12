@@ -6,13 +6,10 @@ dl.sub-nav.no-js-selection
   - if policy(study).edit?
     dd(class=("active" if active_tab == :settings))
       = link_to research.edit_study_path(study) do
-        i.fas.fa-cogs
-        | Settings
+        = text_with_icon_prefix("Settings", :cog)
   dd(class=("active" if active_tab == :participations))
     = link_to research.study_participations_path(study) do
-      i.fas.fa-users
-      | Participants
+      = text_with_icon_prefix("Participants", :users)
   dd(class=("active" if active_tab == :investigatorships))
     = link_to research.study_investigatorships_path(study) do
-      i.fas.fa-user
-      | Investigators
+      = text_with_icon_prefix("Investigators", :user)

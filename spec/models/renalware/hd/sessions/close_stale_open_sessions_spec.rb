@@ -37,11 +37,10 @@ module Renalware
         it "does nothing" do
           create(
             :hd_open_session,
-            **options.merge(
-              signed_off_by: system_user,
-              started_at: 24.hours.ago,
-              stopped_at: nil
-            )
+            **options,
+            signed_off_by: system_user,
+            started_at: 24.hours.ago,
+            stopped_at: nil
           )
 
           expect {
@@ -56,12 +55,11 @@ module Renalware
             it "closes the session" do
               session = create(
                 :hd_open_session,
-                **options.merge(
-                  signed_off_by: system_user,
-                  started_at: 4.days.ago,
-                  stopped_at: nil,
-                  document: nil
-                )
+                **options,
+                signed_off_by: system_user,
+                started_at: 4.days.ago,
+                stopped_at: nil,
+                document: nil
               )
               session.update!(document: build(:hd_session_document).marshal_dump)
               session = session.reload
@@ -82,11 +80,10 @@ module Renalware
             it "logs the error" do
               session = create(
                 :hd_open_session,
-                **options.merge(
-                  signed_off_by: system_user,
-                  started_at: 4.days.ago,
-                  document: nil
-                )
+                **options,
+                signed_off_by: system_user,
+                started_at: 4.days.ago,
+                document: nil
               )
 
               results = nil

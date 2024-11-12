@@ -8,8 +8,7 @@
   = form.input :name
   = form.input :description, as: :text
 
-  .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
-    i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+  = help_panel do
     'Fields with no label will be hidden.
     ' Reorder fields by dragging and dropping the icon
 
@@ -22,7 +21,8 @@
       - layout.fields.each do |field|
         tr.border-t.sm:pt-5.list-group-item
           td.handle.sm:pt-2
-            i.fas.fa-bars
+            = inline_icon(:menu, size: :md)
+
           td
             = label_tag "layout[fields][#{field.name}][label]",
                         field.name,

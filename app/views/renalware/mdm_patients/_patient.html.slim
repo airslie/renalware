@@ -1,10 +1,11 @@
 - observation_set = patient.current_observation_set
 - transplant_patient = Renalware::Transplants::PatientPresenter.new(patient)
 tr
-  td.actions
-    = link_to view_proc.call(patient), target: "_blank" do
-      i.fa.fa-external-link-square-alt
-      =< t(".view")
+  td
+    = external_link_to t(".view"),
+                       view_proc.call(patient),
+                       class: "btn btn-compact btn-primary py-0 font-normal"
+
   td.full-name= link_to patient.to_s(:default), view_proc.call(patient)
   td.nowrap= patient.nhs_number
   td.nowrap= patient.hospital_identifier

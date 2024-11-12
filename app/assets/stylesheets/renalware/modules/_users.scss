@@ -5,16 +5,16 @@
     text-align: center;
 
     .unapproved {
-      color: $nhs-red;
+      color: var(--nhs-red);
       font-weight: bold;
     }
   }
 
   .tag {
-    background-color: $mid-grey;
+    background-color: var(--mid-grey);
     border: 0;
     border-radius: 0.3rem;
-    color: $white;
+    color: var(--white);
     margin: 0.1rem 0.3rem 0.2rem 0;
     padding: 0.05rem 0.5rem 0.15rem 0.5rem;
     white-space: nowrap;
@@ -27,19 +27,19 @@
     }
 
     &.admin {
-      background-color: $nhs-blue;
+      background-color: var(--nhs-blue);
     }
 
     &.super_admin {
-      background-color: $nhs-red;
+      background-color: var(--nhs-red);
     }
 
     &.prescriber {
-      background-color: $nhs-warm-yellow;
+      background-color: var(--nhs-warm-yellow);
     }
 
     &.hd_prescriber {
-      background-color: $nhs-orange;
+      background-color: var(--nhs-orange);
     }
   }
 }

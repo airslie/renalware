@@ -55,9 +55,8 @@ module Renalware
         # are on the master or weekly diary; if we always refresh the diary slot in the ui after any
         # action, then it will always update correctly.
         def create
-          diary = Diary.find(params[:diary_id])
+          diary = load_weekly_or_master_diary_on_create
           slot = diary.slots.new(slot_params)
-          # slot.patient_id = posted_patient_id
           authorize slot
           if slot.save_by(current_user)
             render locals: { diary: diary, slot: diary.decorate_slot(slot) }
@@ -89,6 +88,15 @@ module Renalware
         end
 
         private
+
+        # If the 'master' submit btn was clicked, make sure we are targetting the master diary
+        # ie the url might not could be diaries/123 where 123 is the weekly diary, but if master btn
+        # was clicked, load the master diary for that week.
+        def load_weekly_or_master_diary_on_create
+          diary = Diary.find(params[:diary_id]) # could be master or weekly
+          diary = master_diary if params.key?(:master) && !diary.master?
+          diary
+        end
 
         def patient_search_scope_from_query_string
           params.fetch(:patient_search_scope, :dialysing_on_day_and_period)

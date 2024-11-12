@@ -4,9 +4,9 @@ article#igan_risk
     - btn_title = patient.igan_risk&.persisted? ? t("btn.update") : t("btn.add")
     = link_to btn_title, edit_patient_clinical_igan_risk_path(patient), class: "button"
 
-  .rounded-md.bg-blue-50.px-3.py-2.flex.items-start.shadow.mb-5
-      i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
-      | The risk of a 50% decline in estimated GFR or progression to end-stage renal disease 5 years after renal biopsy
+  = help_panel do
+    ' The risk of a 50% decline in estimated GFR or progression to end-stage renal disease 5 years after renal biopsy
+
   dl.dl-horizontal
     dt Risk
     dd= patient.igan_risk&.risk

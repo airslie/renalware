@@ -67,5 +67,16 @@ module Renalware
         concat(link_to(reset_title, reset_path))
       end
     end
+
+    def help_panel
+      tag.div(class: "rounded-md bg-blue-100 px-3 py-2 flex items-start shadow mb-5") do
+        concat(
+          tag.span do
+            inline_icon(:info_circle, size: :md, class: "mt-px mr-2 text-blue-500")
+          end
+        )
+        concat(tag.span { yield if block_given? })
+      end
+    end
   end
 end

@@ -37,7 +37,7 @@ article.clinical-allergies {
 
   ul {
     li {
-      background-color: $light-grey;
+      background-color: var(--light-grey);
       border: 0;
       border-radius: 0.3rem;
       display: inline-block;
@@ -63,7 +63,7 @@ article.clinical-allergies {
 
     ul {
       li {
-        background-color: $light-grey;
+        background-color: var(--light-grey);
         border: 0;
         border-radius: 0.3rem;
         padding: 0.3rem 0.4rem;
@@ -84,7 +84,7 @@ article.clinical-allergies {
     padding: 0;
 
     li {
-      border-bottom: 1px solid $winter-sky;
+      border-bottom: 1px solid var(--winter-sky);
       display: inline-block;
       margin: 0.2rem 0.6rem 0.2rem 0;
       padding: 0;
@@ -113,7 +113,7 @@ article.clinical-allergies {
       padding-left: 0.2rem;
 
       &.date {
-        color: $muted-dark-grey;
+        color: var(--muted-dark-grey);
         font-style: italic;
         font-weight: normal;
       }
@@ -138,7 +138,7 @@ article.clinical-allergies {
 }
 
 .patient-alerts {
-  color: $white;
+  color: var(--white);
   background-color: transparent;
   padding-top: 1px;
 
@@ -151,8 +151,8 @@ article.clinical-allergies {
       margin: 0;
 
       li {
-        background-color: $nhs-orange;
-        color: $white;
+        background-color: var(--nhs-orange);
+        color: var(--white);
         display: inline-block;
         margin: 0 0.3rem 0 0;
         margin: 0.1rem 0.3rem 0.1rem 0;
@@ -160,27 +160,40 @@ article.clinical-allergies {
         line-height: 1.6rem;
 
         &:hover {
-          background-color: darken($nhs-orange, 5);
+          // TODO: darken($nhs-orange, 5);
+          // background-color: darken($nhs-orange, 5);
         }
 
         &.urgent {
-          background-color: $alert-urgent-colour;
+          background-color: var(--nhs-red);
 
           &:hover {
-            background-color: $alert-urgent-hover-colour;
+            background-color: var(--nhs-red-lighter);
+          }
+
+          .date,
+          .author,
+          .actions {
+            border-left: 1px solid var(--nhs-red-lighter);
           }
         }
 
         &.covid_19 {
-          background-color: $alert-covid19-colour;
+          background-color: var(--nhs-yellow);
           color: $dark-grey;
 
           &:hover {
-            background-color: $alert-covid19-hover-colour;
+            background-color: var(--nhs-yellow-lighter);
           }
 
           .actions i:before {
             color: $dark-grey;
+          }
+
+          .date,
+          .author,
+          .actions {
+            border-left: 1px solid var(--nhs-yellow-lighter);
           }
         }
 
@@ -193,7 +206,7 @@ article.clinical-allergies {
 
           .title a,
           i:before {
-            color: $white;
+            color: var(--white);
           }
         }
 
@@ -206,15 +219,15 @@ article.clinical-allergies {
 
           .title a,
           i:before {
-            color: $white;
+            color: var(--white);
           }
         }
 
         &.event {
-          background-color: $nhs-yellow;
+          background-color: var(--nhs-yellow);
 
           &:hover {
-            background-color: darken($nhs-yellow, 7);
+            background-color: var(--nhs-yellow-darker);
           }
 
           .title a,
@@ -226,23 +239,23 @@ article.clinical-allergies {
 
         &.research-study-participant {
           background-color: darken($nhs-green, 3);
-          color: $white;
+          color: var(--white);
 
           &:hover {
             background-color: darken($nhs-green, 5);
           }
 
           a {
-            border-bottom: 1px solid $white;
-            color: $white;
+            border-bottom: 1px solid var(--white);
+            color: var(--white);
           }
 
           .date {
-            border-left: 1px solid $mid-grey;
+            border-left: 1px solid var(--mid-grey);
           }
 
           span {
-            color: $white;
+            color: var(--white);
           }
         }
 
@@ -258,16 +271,16 @@ article.clinical-allergies {
         .date,
         .author,
         .actions {
-          border-left: 1px solid $winter-sky;
+          border-left: 1px solid var(--winter-sky);
           font-style: italic;
           white-space: nowrap;
 
           .fa,
           .fas,
           .far {
-            color: $light-grey;
+            color: var(--light-grey);
             &:hover {
-              color: $white;
+              color: var(--white);
             }
           }
         }
@@ -275,6 +288,10 @@ article.clinical-allergies {
         .actions {
           padding-left: 0.6rem;
           padding-right: 0.1rem;
+
+          a {
+            color: var(--white);
+          }
         }
       }
     }

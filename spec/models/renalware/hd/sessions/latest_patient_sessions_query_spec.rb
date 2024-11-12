@@ -32,8 +32,8 @@ module Renalware
         end
 
         it "does not select sessions older than 4 weeks" do
-          expected_session = create(:hd_closed_session, **options.merge(started_at: 3.weeks.ago))
-          create(:hd_closed_session, **options.merge(started_at: 5.weeks.ago)) # unexpected
+          expected_session = create(:hd_closed_session, **options, started_at: 3.weeks.ago)
+          create(:hd_closed_session, **options, started_at: 5.weeks.ago) # unexpected
 
           sessions = query.new(patient: patient).call
 
@@ -42,7 +42,7 @@ module Renalware
         end
 
         it "selects only the last 12 sessions" do
-          create_list(:hd_closed_session, 13, **options.merge(started_at: 3.weeks.ago))
+          create_list(:hd_closed_session, 13, **options, started_at: 3.weeks.ago)
           sessions = query.new(patient: patient).call
           expect(sessions.count).to eq(12)
         end

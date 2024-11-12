@@ -5,20 +5,20 @@
 
   .status span {
     border-radius: 0.3rem;
-    color: $white;
+    color: var(--white);
     padding: 0.2rem 0.5rem;
   }
 
   .waiting .status span {
-    background-color: $muted-dark-grey;
+    background-color: var(--muted-dark-grey);
   }
 
   .processing .status span {
-    background-color: $nhs-warm-yellow;
+    background-color: var(--nhs-warm-yellow);
   }
 
   .failure .status span {
-    background-color: $nhs-red;
+    background-color: var(--nhs-red);
   }
 
   .success .status span {

@@ -4,7 +4,7 @@
 @mixin badge {
   background-color: $letter-state-unknown;
   border-radius: 0.2rem;
-  color: $white;
+  color: var(--white);
   font-size: 0.9rem;
   font-weight: normal;
   padding: 0.15rem 0.4rem;

@@ -37,12 +37,10 @@ module Renalware
       end
 
       def registration
-        @registration ||= begin
-          Registration
-            .for_patient(transplants_patient)
-            .first_or_initialize
-            .tap { |reg| authorize reg }
-        end
+        @registration ||= Registration
+          .for_patient(transplants_patient)
+          .first_or_initialize
+          .tap { |reg| authorize reg }
       end
 
       def registration_params

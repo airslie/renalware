@@ -16,15 +16,13 @@ module Renalware
       end
 
       def search
-        @search ||= begin
-          Prescription
-            .current
-            .includes(:medication_route, :drug)
-            .includes(patient: { current_modality: :description })
-            .eager_load(drug: [:drug_types])
-            .where("lower(drug_types.name) = lower(?)", drug_type_name)
-            .ransack(search_params)
-        end
+        @search ||= Prescription
+          .current
+          .includes(:medication_route, :drug)
+          .includes(patient: { current_modality: :description })
+          .eager_load(drug: [:drug_types])
+          .where("lower(drug_types.name) = lower(?)", drug_type_name)
+          .ransack(search_params)
       end
     end
   end

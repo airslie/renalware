@@ -3,6 +3,9 @@
 module Renalware
   module Dietetics
     class VisitsComponent < ApplicationComponent
+      include LinkHelper
+      include IconHelper
+
       DEFAULT_COUNT = 5
 
       def initialize(

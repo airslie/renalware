@@ -109,7 +109,7 @@ module Renalware
     # For example given the the feature flag FANCY_GRAPHS = 2, we if they user should see these with
     #   FANCY_GRAPHS & feature_flags == FANCY_GRAPHS
     def wants_feature?(flag)
-      (flag & feature_flags) == flag
+      flag.allbits?(feature_flags)
     end
 
     private

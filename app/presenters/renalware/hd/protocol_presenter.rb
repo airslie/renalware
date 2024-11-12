@@ -53,6 +53,9 @@ module Renalware
         lookahead_datetime = days_to_lookahead.days.since.end_of_day
         prescriptions = patient
           .prescriptions
+          .order("drugs.name asc, " \
+                 "medication_prescriptions.prescribed_on asc, " \
+                 "medication_prescriptions.created_at asc")
           .includes([:drug, :unit_of_measure, :trade_family])
           .to_be_administered_on_hd_and_starting_before(lookahead_datetime)
         ::CollectionPresenter.new(prescriptions, ::Renalware::Medications::PrescriptionPresenter)

@@ -52,7 +52,7 @@ Given(/^Patty is currently prescribed Ephedrine Tablet (yes|no)$/) do |prescribe
       dose_amount: "20",
       dose_unit: "milligram",
       frequency: "daily",
-      prescribed_on: Time.current - 1.week,
+      prescribed_on: 1.week.ago,
       provider: 0,
       treatable: @patty,
       by: Renalware::SystemUser.find

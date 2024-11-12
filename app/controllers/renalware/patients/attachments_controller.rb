@@ -91,11 +91,9 @@ module Renalware
       end
 
       def attachments
-        @attachments ||= begin
-          query
-            .call
-            .includes(:attachment_type, file_attachment: :blob)
-        end
+        @attachments ||= query
+          .call
+          .includes(:attachment_type, file_attachment: :blob)
       end
 
       def find_and_authorize_attachment

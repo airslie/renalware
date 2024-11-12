@@ -18,7 +18,7 @@
 
 .chart-periods {
   position: relative;
-  background-color: $white;
+  background-color: var(--white);
 
   nav {
     position: absolute;
@@ -28,21 +28,21 @@
     padding-right: 2rem;
 
     a {
-      background-color: $white; // $nhs-light-blue;
+      background-color: var(--white); // $nhs-light-blue;
       padding: 0.1rem 0.4rem;
       color: $dark-grey;
       border-radius: 0.2rem;
       font-size: 0.9rem;
 
       &.current-period {
-        background-color: $nhs-blue;
-        color: $white;
+        background-color: var(--nhs-blue);
+        color: var(--white);
       }
     }
   }
 }
 
 .path-chart-link {
-  color: $nhs-blue;
+  color: var(--nhs-blue);
   text-decoration: none;
 }

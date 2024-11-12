@@ -34,12 +34,15 @@ module Renalware::Letters::Transports::Mesh
           :mesh_error,
           :itk3_error
         ].each do |attr_name|
+          letter.update!(gp_send_status: :pending)
           transmission = Transmission.create!(letter: letter)
           transmission.operations.create!(action: "download_message", attr_name => true)
 
           expect {
             described_class.perform_now
           }.to change { transmission.reload.status }.from("pending").to("failure")
+
+          expect(letter.reload.gp_send_status).to eq("failure")
         end
       end
 
@@ -110,23 +113,28 @@ module Renalware::Letters::Transports::Mesh
 
     describe "no MESH response after configured period elapsed" do
       it "flags transmission as failed when x hours have elapsed and no response forthcoming" do
-        # Create transmission with a successful send operation
-        transmission = Transmission.create!(letter: letter, status: :pending)
+        # Create transmission with single send operation, no info or bus responses
+        transmission = Transmission.create!(
+          letter: letter,
+          status: :pending,
+          created_at: Time.zone.now
+        )
         transmission.operations.create!(action: "send_message")
+        letter.update!(gp_send_status: :pending)
 
         # Before the period has elapsed, no change
         expect {
           described_class.perform_now
         }.not_to change { transmission.reload.status }
+        expect(letter.reload.gp_send_status).to eq("pending")
 
-        pending "implement me"
-
-        # After the period has elapsed, new status will be failure as no corresponding
-        # inf and bus responses to our send_message operation have been received.
-        travel_to 1.year.from_now do # TODO: use config value
+        travel_to 25.hours.from_now do
+          # After the period has elapsed, new status will be failure as no corresponding
+          # inf and bus responses to our send_message operation have been received.
           expect {
             described_class.perform_now
           }.to change { transmission.reload.status }.from("pending").to("failure")
+          expect(letter.reload.gp_send_status).to eq("failure")
         end
       end
     end

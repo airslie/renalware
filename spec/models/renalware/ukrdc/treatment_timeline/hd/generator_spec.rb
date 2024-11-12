@@ -75,7 +75,7 @@ module Renalware
         context "when they have an HD Profile created within 100yrs of the modality start date" do
           it "finds this initial profile, regardless of how far in the future it is, and " \
              "uses its type etc when creating the Treatment" do
-            create_profile(start_date: Time.zone.now + 99.years, end_date: nil, hd_type: :hdf_pre)
+            create_profile(start_date: 99.years.from_now, end_date: nil, hd_type: :hdf_pre)
 
             expect {
               generator.call

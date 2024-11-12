@@ -3,8 +3,9 @@
   - if policy(study.participations.new).new?
     .filter-actions
       = link_to(research.new_study_participation_path, class: "button left add-participation") do
-        i.fas.fa-plus
-        | Add participant
+        .flex.items-center.gap-2
+          = inline_icon(:plus, size: :sm)
+          | Add
 
 = content_for(:tabs) do
   = render "renalware/research/studies/tabs", study: study, active: :participations

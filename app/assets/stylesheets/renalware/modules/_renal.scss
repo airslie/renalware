@@ -1,6 +1,6 @@
 .patient-missing-data {
-  background-color: $nhs-red;
-  color: $white;
+  background-color: var(--nhs-red);
+  color: var(--white);
   padding: 0 0.2rem;
   border-radius: 0.2rem;
 }
@@ -10,7 +10,7 @@
     span {
       background-color: $renal-reg-missing-data-default;
       border-radius: 0.2rem;
-      color: $white;
+      color: var(--white);
       font-size: 0.9rem;
       font-weight: normal;
       margin-right: 0.2rem;
@@ -38,7 +38,7 @@
 
 table.aki-alerts tr {
   &:nth-of-type(even) {
-    background: $white;
+    background: var(--white);
   }
 
   &.aki_alert--hotlist {

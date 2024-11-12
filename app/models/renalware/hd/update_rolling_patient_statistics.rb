@@ -31,12 +31,12 @@ module Renalware
       end
 
       def rolling_stats_for_this_patient
-        @rolling_stats_for_this_patient ||= begin
-          PatientStatistics.where(patient: patient,
-                                  rolling: true,
-                                  year: nil,
-                                  month: nil).first_or_initialize
-        end
+        @rolling_stats_for_this_patient ||= PatientStatistics.where(
+          patient: patient,
+          rolling: true,
+          year: nil,
+          month: nil
+        ).first_or_initialize
       end
 
       def most_recently_used_hospital_unit

@@ -24,8 +24,8 @@ describe "AKI alert management" do
     describe "with no filters and date_range 'all'" do
       it "renders a list of AKI Alerts" do
         a1 = aki_alert(at: Time.zone.now)
-        a2 = aki_alert(at: Time.zone.now - 1.day)
-        a3 = aki_alert(at: Time.zone.now + 1.day)
+        a2 = aki_alert(at: 1.day.ago)
+        a3 = aki_alert(at: 1.day.from_now)
 
         get renal_aki_alerts_path(
           q: {
@@ -78,7 +78,7 @@ describe "AKI alert management" do
     describe "filtering by date" do
       it "renders a list of just today's AKI Alerts" do
         a1 = aki_alert(at: Time.zone.now)
-        a2 = aki_alert(at: Time.zone.now - 1.day)
+        a2 = aki_alert(at: 1.day.ago)
 
         get renal_aki_alerts_path(
           q: {

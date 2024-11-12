@@ -49,7 +49,7 @@ module Renalware
             patient = create(:hd_patient)
 
             travel_to Date.new(2017, 01, 31) do
-              create(:hd_closed_session, patient: patient, signed_off_at: Time.zone.now - 1.month)
+              create(:hd_closed_session, patient: patient, signed_off_at: 1.month.ago)
 
               allow(GenerateMonthlyStatisticsForPatientJob).to receive(:perform_later)
 

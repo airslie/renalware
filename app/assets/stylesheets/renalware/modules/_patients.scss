@@ -22,7 +22,7 @@
       color: $dark-grey;
 
       &:hover {
-        color: $black;
+        color: var(--black);
       }
     }
   }
@@ -115,18 +115,6 @@ ul.provider {
     list-style-type: none;
     margin: 0 1.5rem 0 0;
     padding: 0;
-
-    &.missing-modality-warning {
-      background-color: lighten($nhs-yellow, 45);
-      border: solid 1px #eee;
-      color: #666;
-      padding: 0.35rem;
-      padding-left: 0.8rem;
-      padding-right: 1rem;
-      i {
-        margin-right: 0.5rem;
-      }
-    }
   }
 }
 
@@ -136,14 +124,14 @@ ul.provider {
     margin-bottom: 1rem;
   }
 
-  background-color: $nhs-blue;
+  background-color: var(--nhs-blue);
   dl {
     font-size: 1.1rem;
     margin: 0 0 0 0.5em;
     line-height: 1.5;
 
     dt {
-      color: $white;
+      color: var(--white);
       display: inline-block;
       font-size: 0.6em;
       font-weight: normal;
@@ -161,7 +149,7 @@ ul.provider {
     }
 
     dd {
-      color: $white;
+      color: var(--white);
       display: inline;
       font-size: 1em;
       margin: 0 0.5em 0 0.1em;
@@ -190,16 +178,16 @@ ul.provider {
 
         a,
         a:visited {
-          color: $white;
+          color: var(--white);
 
           &:hover {
             i {
-              color: $white;
+              color: var(--white);
             }
           }
 
           i {
-            color: lighten($nhs-blue, 35%);
+            color: var(--nhs-light-blue);
             display: inline-block;
             font-size: 0.9em;
             padding-right: 0.4rem;
@@ -391,7 +379,7 @@ form {
     }
 
     .urgent {
-      background-color: $nhs-yellow;
+      background-color: var(--nhs-yellow);
       padding: 0.05rem 0.6rem;
       display: inline-block;
       border-radius: 0.3rem;
@@ -413,7 +401,7 @@ form {
           padding: 0 0.4rem;
           background-color: $nhs-green;
           line-height: 1.4rem;
-          color: $white;
+          color: var(--white);
           margin-right: 0.3rem;
         }
       }

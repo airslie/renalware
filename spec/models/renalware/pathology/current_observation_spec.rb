@@ -19,7 +19,7 @@ module Renalware
             # not current
             create_observations(patient,
                                 descriptions,
-                                observed_at: Time.zone.now - 1.day,
+                                observed_at: 1.day.ago,
                                 result: 1)
 
             obs = patient.current_observations.all

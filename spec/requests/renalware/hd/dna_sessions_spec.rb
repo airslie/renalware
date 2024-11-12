@@ -20,7 +20,7 @@ describe "Managing an HD DNA Session" do
 
     context "when the session is no longer mutable" do
       it "redirects to #show with a flash message", type: :system do
-        dna_session = travel_to(Time.zone.now - 1.day) do
+        dna_session = travel_to(1.day.ago) do
           create(:hd_dna_session)
         end
 

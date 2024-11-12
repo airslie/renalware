@@ -40,11 +40,9 @@ table
       tr
         - if options.view_proc.present?
           td.actions
-            - if options.view_proc.present?
-              = link_to options.view_proc.call(row), target: "_blank" do
-                i.fa.fa-external-link-square-alt
-                | &nbsp;&nbsp;
-                | MDM
+            = external_link_to "MDM",
+                                options.view_proc.call(row),
+                                class: "btn btn-compact btn-primary py-0 font-normal"
         - columns.each do |col|
           - next if col.hidden
           - klass = "col-width-#{col.width}-with-ellipsis" if col.truncate

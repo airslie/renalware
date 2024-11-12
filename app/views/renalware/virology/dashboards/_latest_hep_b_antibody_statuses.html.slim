@@ -1,7 +1,8 @@
 - # locals: (dashboard:)
 
 article.hep_b_antibody_path_results
-  h2 Latest Hep B Surface Antibody Titre
+  header
+    h2 Latest Hep B Surface Antibody Titre
   - if dashboard.latest_hep_b_antibody_statuses?
     = render "renalware/pathology/historical_observation_results/table",
              table: dashboard.latest_hep_b_antibody_statuses,

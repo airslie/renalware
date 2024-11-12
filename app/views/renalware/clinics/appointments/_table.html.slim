@@ -7,7 +7,7 @@ table#appointments.toggleable(data-controller="toggle")
         br
         |
         = link_to "(Uncheck all)", "#", id: "uncheck_all_appointments_link"
-      th.col-width-small Clinic Visit
+      th.col-width-small.text-center Clinic Visit
       th.col-width-date-time
         = sort_link([:renalware, search],
                     :starts_at,
@@ -50,18 +50,17 @@ table#appointments.toggleable(data-controller="toggle")
       tr
         td= row_toggler
         td.text-center= check_box_tag nil, appointment.patient.id, true, class: "patient_checkbox"
-        td.nowrap.actions
+        td.nowrap.text-center
           - if appointment.becomes_visit_id.present?
-            = link_to edit_patient_clinic_visit_path(appointment.patient,
-                                                      id: appointment.becomes_visit_id) do
-              i.fas.fa-eye
-              '  View
+            = link_to "View",
+                      edit_patient_clinic_visit_path(appointment.patient,
+                                                     id: appointment.becomes_visit_id)
           - else
-            = link_to new_patient_clinic_visit_path(appointment.patient,
+            = link_to "Create",
+                      new_patient_clinic_visit_path(appointment.patient,
                                                     appointment_id: appointment.id),
-                                                    title: "Create Clinic Visit"  do
-              i.fas.fa-plus
-              '  Create
+                      title: "Create Clinic Visit",
+                      class: "btn btn-secondary btn-compact py-0 font-normal"
 
         td= I18n.l appointment.starts_at
         td= default_patient_link(appointment.patient)

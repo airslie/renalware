@@ -12,7 +12,7 @@
 
   .modal__footer {
     .left {
-      color: $dashboard-muted-color;
+      color: var(--dashboard-muted-color);
     }
   }
 }
@@ -26,7 +26,7 @@
     }
     &.file {
       td {
-        background: $off-white;
+        background: var(--off-white);
         border-bottom: solid 2px $charcoal;
       }
     }
@@ -66,7 +66,7 @@
   width: 50%;
 
   .diary__key--master-diary {
-    background-color: $white;
+    background-color: var(--white);
   }
 
   .diary__key--weekly-diary {
@@ -84,7 +84,7 @@
     list-style: none;
 
     li {
-      border: solid 1px $mid-grey;
+      border: solid 1px var(--mid-grey);
       display: inline;
       font-size: 0.9rem;
       margin: 0 0.1rem;
@@ -116,7 +116,7 @@
   }
 
   h2 {
-    color: $mid-grey;
+    color: var(--mid-grey);
   }
 
   h3 {
@@ -126,7 +126,7 @@
 
   tr {
     &:nth-of-type(even) {
-      background: $white;
+      background: var(--white);
     }
   }
 
@@ -151,7 +151,7 @@
 
   tbody {
     th {
-      border-left: 5px solid $white;
+      border-left: 5px solid var(--white);
     }
 
     tr:hover {
@@ -176,15 +176,15 @@
   }
 
   td {
-    background-color: $white;
-    border: 1px solid $light-grey;
+    background-color: var(--white);
+    border: 1px solid var(--light-grey);
     padding: 0;
     text-align: center;
 
     // Creates a red triangle top left. Some work to do overlaying cell.
     &.infected-patient {
       div {
-        border-color: $nhs-red transparent transparent transparent;
+        border-color: var(--nhs-red) transparent transparent transparent;
         border-style: solid;
         border-width: 2rem 2rem 0 0;
         height: 0;
@@ -194,7 +194,7 @@
     }
 
     &:empty {
-      background-color: $light-grey;
+      background-color: var(--light-grey);
     }
 
     &:hover {
@@ -215,16 +215,16 @@
 
     &[data-master] {
       &:hover {
-        background-color: $almost-white;
+        background-color: var(--almost-white);
       }
 
       .diary__button:hover {
-        background-color: $almost-white;
+        background-color: var(--almost-white);
       }
     }
 
     &[data-master] {
-      background-color: $white;
+      background-color: var(--white);
       a {
         color: $dark-grey;
       }
@@ -238,7 +238,7 @@ label#toggle-full-hd-profile {
   display: inline-block;
 
   &:focus {
-    color: $link-focus-colour;
+    color: var(--link-focus-colour);
   }
 }
 
@@ -396,7 +396,7 @@ use flexbox to layout items inside each prescription.
     .hd-drug {
       flex: 1 1 auto;
       padding-bottom: 0.5rem;
-      color: $mid-grey;
+      color: var(--mid-grey);
 
       .hd-drug--name {
         font-weight: bold;
@@ -416,7 +416,7 @@ use flexbox to layout items inside each prescription.
 
       .hd-drug--prescriber-name,
       .hd-drug--prescriber-position {
-        color: $muted-dark-grey;
+        color: var(--muted-dark-grey);
         padding-right: 0.3rem;
       }
 
@@ -467,7 +467,7 @@ use flexbox to layout items inside each prescription.
   }
 
   &.administered {
-    border-right-color: $nhs-red;
+    border-right-color: var(--nhs-red);
 
     /* The 'status' values for the prescription-administration */
     &[data-token-count="2"] {
@@ -535,7 +535,7 @@ use flexbox to layout items inside each prescription.
 
       .select2-container--default.select2-container--disabled
         .select2-selection--single {
-        background-color: $white;
+        background-color: var(--white);
       }
 
       .spinner {
@@ -548,7 +548,7 @@ use flexbox to layout items inside each prescription.
         }
 
         .user-password {
-          background: $mid-grey;
+          background: var(--mid-grey);
         }
       }
 
@@ -622,7 +622,7 @@ table#hd-session-drugs {
 
     &.administered-false {
       span.given {
-        background-color: $nhs-red;
+        background-color: var(--nhs-red);
       }
     }
   }

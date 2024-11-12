@@ -1,9 +1,4 @@
-= link_to patient_prescriptions_path(patient),
-            class: "button secondary",
-            target: "_blank" do
-    i.fa.fa-external-link-square-alt
-    | Update
-    end
+= external_link_to("Update", patient_prescriptions_path(patient), class: "button secondary")
 
 = link_to t("btn.view_all"),
           patient_prescriptions_path(patient),

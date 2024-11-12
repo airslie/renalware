@@ -3,6 +3,8 @@
 module Renalware
   module Patients
     class NagComponent < ApplicationComponent
+      include IconHelper
+
       attr_reader :definition, :patient, :nag
 
       delegate :title, :always_expire_cache_after_minutes, to: :definition

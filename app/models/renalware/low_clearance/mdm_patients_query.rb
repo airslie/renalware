@@ -18,19 +18,17 @@ module Renalware
       end
 
       def search
-        @search ||= begin
-          relation
-            .include(PatientTransplantScopes)
-            .include(PatientPathologyScopes)
-            .include(ModalityScopes)
-            .extending(NamedFilterScopes)
-            .with_registration_statuses
-            .with_current_pathology
-            .left_outer_joins(:current_observation_set)
-            .with_current_modality_of_class(LowClearance::ModalityDescription)
-            .public_send(named_filter.to_s)
-            .ransack(params)
-        end
+        @search ||= relation
+          .include(PatientTransplantScopes)
+          .include(PatientPathologyScopes)
+          .include(ModalityScopes)
+          .extending(NamedFilterScopes)
+          .with_registration_statuses
+          .with_current_pathology
+          .left_outer_joins(:current_observation_set)
+          .with_current_modality_of_class(LowClearance::ModalityDescription)
+          .public_send(named_filter.to_s)
+          .ransack(params)
       end
 
       module NamedFilterScopes

@@ -60,7 +60,7 @@ module.exports = {
       colors: {
         "nhs-blue": {
           light: "#41B6E6",
-          DEFAULT: "#005EB8",
+          DEFAULT: "var(--nhs-blue)",
           dark: "#003087",
           bright: "#0072CE",
           aqua: "#00A9CE",

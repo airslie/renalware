@@ -35,20 +35,19 @@ table.toggleable(data-controller="toggle")
       tr
         td= row_toggler
         - if Pundit.policy(current_user, Renalware::PD::AdequacyResult).edit?
-          td.actions
-            - if Pundit.policy(current_user, result).edit?
-              - if display_patient
-                = link_to renalware.edit_patient_pd_adequacy_result_path(result.patient, result), target: :blank do
-                  i.fas.fa-external-link-alt
-                  |  Edit
-              - else
-                = link_to t("btn.edit"),
-                          renalware.edit_patient_pd_adequacy_result_path(result.patient, result)
+          td.actions2
+            .flex.items-center
+              - if Pundit.policy(current_user, result).edit?
+                - if display_patient
+                  = external_link_to("Edit", renalware.edit_patient_pd_adequacy_result_path(result.patient, result), gap: 1)
+                - else
+                  = link_to t("btn.edit"),
+                            renalware.edit_patient_pd_adequacy_result_path(result.patient, result)
 
-            - if Pundit.policy(current_user, result).destroy?
-              = link_to t("btn.delete"),
-                        renalware.patient_pd_adequacy_result_path(result.patient, result),
-                        data: { method: :delete, confirm: "Are you sure?" }
+              - if Pundit.policy(current_user, result).destroy?
+                = link_to t("btn.delete"),
+                          renalware.patient_pd_adequacy_result_path(result.patient, result),
+                          data: { method: :delete, confirm: "Are you sure?" }
         - if display_patient
           td= result.patient
         td.col-width-date= l(result.performed_on)

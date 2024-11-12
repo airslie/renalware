@@ -18,13 +18,11 @@ module Renalware
       private
 
       def query
-        @query ||= begin
-          MDMPatientsQuery.new(
-            relation: patient_scope(HD::Patient),
-            params: filter_form.ransacked_parameters.merge(query_params).with_indifferent_access,
-            named_filter: named_filter
-          )
-        end
+        @query ||= MDMPatientsQuery.new(
+          relation: patient_scope(HD::Patient),
+          params: filter_form.ransacked_parameters.merge(query_params).with_indifferent_access,
+          named_filter: named_filter
+        )
       end
 
       # Pass in the current path to the filter form so it can render the correct URI in form and

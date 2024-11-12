@@ -31,17 +31,15 @@ module Renalware
         return [] unless defined?(patient_id_list)
         return [] if patient_id_list.blank?
 
-        @hospital_identifiers ||= begin
-          patient_id_list
-            .split("~")
-            .each_with_object({}) do |field, hash|
-              parts = field.split("^")
-              hospno = parts.first
-              assigning_authority = parts[3]&.to_sym
-              hash[assigning_authority] = hospno
-            end
-            .compact_blank
-        end
+        @hospital_identifiers ||= patient_id_list
+          .split("~")
+          .each_with_object({}) do |field, hash|
+            parts = field.split("^")
+            hospno = parts.first
+            assigning_authority = parts[3]&.to_sym
+            hash[assigning_authority] = hospno
+          end
+          .compact_blank
       end
 
       # Given a PID segment like this

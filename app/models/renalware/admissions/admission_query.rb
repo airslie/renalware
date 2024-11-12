@@ -11,17 +11,15 @@ module Renalware
       end
 
       def search
-        @search ||= begin
-          Admission
-            .extending(Scopes)
-            .joins(:patient) # required for PatientsRansackHelper - see Admission
-            .includes(
-              hospital_ward: [:hospital_unit],
-              patient: { current_modality: [:description] }
-            )
-            .order(created_at: :desc)
-            .ransack(query)
-        end
+        @search ||= Admission
+          .extending(Scopes)
+          .joins(:patient) # required for PatientsRansackHelper - see Admission
+          .includes(
+            hospital_ward: [:hospital_unit],
+            patient: { current_modality: [:description] }
+          )
+          .order(created_at: :desc)
+          .ransack(query)
       end
 
       module Scopes

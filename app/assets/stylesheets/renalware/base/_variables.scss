@@ -17,79 +17,39 @@
 //
 
 // NHS Colours
-$nhs-yellow: #fae100;
-$nhs-warm-yellow: #ffb81c;
-$nhs-orange: #ed8b00;
-$nhs-red: #d81e05;
-
-$nhs-emergency-red: #da291c;
-$nhs-dark-red: #8a1538;
-$nhs-dark-pink: #7c2855;
-$nhs-purple: #330072;
-$nhs-pink: #ae2573;
-
-$nhs-dark-blue: #003087;
-$nhs-blue: #005eb8;
-$nhs-bright-blue: #0072ce;
-$nhs-light-blue: #41b6e6;
-$nhs-aqua-blue: #00a9ce;
-
-$nhs-aqua-green: #00a499;
-$nhs-light-green: #78be20;
-$nhs-green: #009639;
-$nhs-dark-green: #006747;
-
-$dashboard-muted-color: #888;
+$nhs-red: #d81e05; // has lighten/darken
+$nhs-pink: #ae2573; // has lighten/darken
+$nhs-light-blue: #41b6e6; // has lighten/darken
+$nhs-aqua-green: #00a499; // has lighten/darken
+$nhs-light-green: #78be20; // has lighten/darken
+$nhs-green: #009639; // has lighten/darken
 $link-colour: $primary-color; // #008CBA;
-$link-focus-colour: #0078a0;
-$link-hover-colour: #64d6fb;
-$white: #fff;
-$off-white: #eee;
-$dark-grey: #222;
-$darkish-grey: #333;
-$muted-dark-grey: #555;
-$winter-sky: #aaa;
-$light-grey: #ddd;
-$mid-grey: #999;
-$very-light-grey: #f5f5f5;
-$error-background: $off-white;
-$almost-white: rgb(252, 252, 252);
-$light-yellow: #fff066;
-$light-green: #00e658;
-
-// Drug type colours
-$drug-type-default-colour: none;
-$drug-type-esa-colour: #ff9;
-$drug-type-immunosuppressant-colour: #ccfeff;
+$dark-grey: #222;  // has lighten/darken
+$off-white: #eee; // darken
 
 $tab-border-color: #ddd;
-
-// Patient header/banner
-$patient-header-muted-color: #777;
-$patient-header-icon-color: #bbb;
-$patient-header-bg-color: $nhs-blue;
 
 // Bookmarks
 $bookmark-urgent-colour: #ffffc8;
 
 // Letter states
-$letter-state-unknown: $mid-grey;
-$letter-state-draft: $nhs-aqua-blue;
-$letter-state-pending-review: $nhs-orange;
+$letter-state-unknown: var(--mid-grey);
+$letter-state-draft: var(--nhs-aqua-blue);
+$letter-state-pending-review: var(--nhs-orange);
 $letter-state-approved: $nhs-green;
-$letter-state-completed: $nhs-dark-green;
+$letter-state-completed: var(--nhs-dark-green);
 
 // Renal reg missing data labels
 $renal-reg-missing-data-default: $dark-grey;
-$renal-reg-missing-data-comorbidities-at-esrf: $nhs-aqua-blue;
-$renal-reg-missing-data-prd: $nhs-orange;
+$renal-reg-missing-data-comorbidities-at-esrf: var(--nhs-aqua-blue);
+$renal-reg-missing-data-prd: var(--nhs-orange);
 $renal-reg-missing-data-first-seen-on: $nhs-green;
-$renal-reg-missing-data-ethnicity: $nhs-dark-green;
+$renal-reg-missing-data-ethnicity: var(--nhs-dark-green);
 
 // Admission Request priority but can be used elsewhere
-$priority-urgent: $nhs-dark-red;
+$priority-urgent: var(--nhs-dark-red);
 $priority-high: $nhs-red;
-$priority-medium: $nhs-warm-yellow;
+$priority-medium: var(--nhs-warm-yellow);
 $priority-low: $nhs-green;
 
 // Modals
@@ -111,7 +71,7 @@ $table-row-hover-colour: #f9f9f9;
 $patient-menu-background-colour: #eee;
 $menu-divider-colour: #e6e6e6;
 
-$footer-colour: $patient-header-muted-color;
+$footer-colour: #777;
 $footer-bg-colour: $patient-menu-background-colour;
 
 // Forms
@@ -122,7 +82,7 @@ $pipe-separator-colour: #ccc;
 
 // Menus
 $patient-menu-icon-color: $gainsboro;
-$patient-menu-icon-hover-color: $white;
+$patient-menu-icon-hover-color: var(--white);
 
 // HD Diaries
 $hd-weekly-diary-colour: #ffedd4;
@@ -138,8 +98,3 @@ $patient-side-nav-width: 14.5rem;
 // Select2
 $select2-input-height: 2.2rem;
 
-// Alert
-$alert-urgent-colour: #dc2626; // red-600
-$alert-urgent-hover-colour: #b91c1c; // red-700
-$alert-covid19-colour: #fef08a; // yellow-200
-$alert-covid19-hover-colour: #fde047; // yellow-300

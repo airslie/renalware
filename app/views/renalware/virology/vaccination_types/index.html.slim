@@ -4,8 +4,7 @@
             class: "button"
 
 = within_new_admin_layout(title: "Virology Vaccination Types") do
-  .rounded-md.bg-blue-100.px-3.py-2.flex.items-start.shadow.mb-5
-    i.fas.fa-info-circle.mr-2.mt-1.text-blue-500
+  = help_panel do
     ' Deleting a type sets the 'deleted at' date, preventing the type from
     ' being used prospectively.
     br
@@ -35,8 +34,8 @@
 
           td= type.name
           td= type.code
-          td.handle
+          td.handle.text-center
             - unless type.deleted?
-              i.fas.fa-bars
+              .inline-block= inline_icon(:menu, size: :sm)
           td= l(type.created_at)
           td= l(type.deleted_at)

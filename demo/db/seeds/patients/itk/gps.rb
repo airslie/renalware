@@ -21,8 +21,8 @@ module Renalware
         practice.save!
 
         Renalware::Patients::PrimaryCarePhysician
-          .find_or_create_by!(code: row["IDENTIFIER"]) do |gp|
-          gp.name = ["FULLNAME"]
+          .find_or_create_by!(code: row["PERSON_UUID"]) do |gp|
+          gp.name = row["FULLNAME"]
           gp.practitioner_type = "GP"
           gp.practice_ids = [practice.id]
         end

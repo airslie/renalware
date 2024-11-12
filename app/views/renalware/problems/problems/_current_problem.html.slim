@@ -15,4 +15,4 @@ tr(id=dom_id(problem) class="problems_problem sortable #{'snomed-problem' if pro
   td= l problem.updated_on
   td= problem.updated_by.full_name
   td.handle
-    i.fas.fa-bars
+    .inline-block.content-center= inline_icon(:menu, size: :md)

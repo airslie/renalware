@@ -6,6 +6,7 @@ ruby:
   type = Renalware::Virology::VaccinationType.with_deleted.find_by(code: code)
   title = type&.name || code&.titleize
 li.patient-alert.vaccination
-    i.fas.fa-syringe
+  .flex.items-center
+    = inline_icon(:syringe)
     span.title= link_to title, renalware.patient_virology_dashboard_path(event.patient)
     span.date= l(event.date_time.to_date)

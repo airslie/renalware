@@ -19,7 +19,7 @@ table#observations {
       // position: sticky;
       // z-index: 1;
       // top: 0;
-      // background-color: $white;
+      // background-color: var(--white);
     }
   }
 
@@ -29,7 +29,7 @@ table#observations {
       // position: sticky;
       // z-index: 1;
       // left: 0;
-      // background-color: $white;
+      // background-color: var(--white);
     }
 
     td {
@@ -48,7 +48,7 @@ table#observations {
 
       // Generated with http://triangle.designyourcode.io/
       .triangle-top-right {
-        border-color: transparent $nhs-bright-blue transparent transparent;
+        border-color: transparent var(--nhs-bright-blue) transparent transparent;
         border-style: solid;
         border-width: 0 11px 10px 0;
         display: inline-block;
@@ -78,7 +78,7 @@ table#observations {
   // tr.even,
   // tr.alt,
   // tr:nth-of-type(even) {
-  //   background-color: $white;
+  //   background-color: var(--white);
   // }
   //
 
@@ -90,7 +90,7 @@ table#observations {
   // th:hover::after {
   //   content: "";
   //   position: absolute;
-  //   background-color: $off-white;
+  //   background-color: var(--off-white);
   //   left: 0;
   //   top: -5000px;
   //   height: 10000px;

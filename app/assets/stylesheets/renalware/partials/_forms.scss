@@ -11,18 +11,18 @@ a.small-helper-button {
   margin-left: 4;
   border-radius: 0.25rem;
   background-color: $nhs-light-blue;
-  color: $white;
+  color: var(--white);
   text-decoration: none;
   font-weight: normal;
   padding: 0.1rem 0.4rem;
 
   &:visited,
   &:active {
-    color: $white;
+    color: var(--white);
   }
 
   &:hover {
-    background-color: $nhs-blue;
+    background-color: var(--nhs-blue);
   }
 }
 .panel {
@@ -35,7 +35,7 @@ a.small-helper-button {
   }
 
   .muted {
-    color: $dashboard-muted-color;
+    color: var(--dashboard-muted-color);
   }
 }
 
@@ -161,7 +161,7 @@ form {
 }
 
 article {
-  background-color: $white;
+  background-color: var(--white);
   border: 0;
   border-top: 1px solid $link-colour;
   float: left;
@@ -207,7 +207,7 @@ article {
       // float: left;
 
       span {
-        color: $mid-grey;
+        color: var(--mid-grey);
         font-size: 1.1rem;
         // line-height: 1.78rem;
         margin: 0 0.5rem 0 0;
@@ -224,7 +224,7 @@ article {
     }
 
     h3 {
-      color: $muted-dark-grey;
+      color: var(--muted-dark-grey);
       font-size: 1.1rem;
     }
 
@@ -241,7 +241,7 @@ article {
     .button {
       background-color: $steel;
       border-radius: 3px !important;
-      color: $white;
+      color: var(--white);
       display: block;
       float: right;
       padding: 0.2rem 0.4rem;
@@ -249,12 +249,12 @@ article {
       margin-left: 0.5rem;
 
       &.button-danger {
-        background-color: $nhs-red;
+        background-color: var(--nhs-red);
       }
     }
 
     .button:hover {
-      background-color: $nhs-blue;
+      background-color: var(--nhs-blue);
       text-decoration: underline;
     }
   }
@@ -297,7 +297,7 @@ article {
   }
 
   dt {
-    color: $dashboard-muted-color;
+    color: var(--dashboard-muted-color);
     font-weight: normal;
   }
 
@@ -480,8 +480,8 @@ fieldset {
 }
 
 .panel.danger-zone {
-  background-color: $white;
-  color: $nhs-red;
+  background-color: var(--white);
+  color: var(--nhs-red);
 
   h4 {
     color: inherit;
@@ -494,8 +494,8 @@ fieldset {
 
     &:hover,
     &:active {
-      background-color: $nhs-red;
-      color: $white;
+      background-color: var(--nhs-red);
+      color: var(--white);
     }
   }
 }

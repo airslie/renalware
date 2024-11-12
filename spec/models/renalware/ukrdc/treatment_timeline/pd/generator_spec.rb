@@ -93,7 +93,7 @@ module Renalware
           it "finds this initial regime, regardless of how far in the future it is, and " \
              "uses its type etc when creating the Treatment" do
             apd_ukrdc_modality_code
-            create_regime(start_date: Time.zone.now + 99.years, end_date: nil, type: :apd_regime)
+            create_regime(start_date: 99.years.from_now, end_date: nil, type: :apd_regime)
 
             expect {
               generator.call
@@ -146,7 +146,7 @@ module Renalware
             )
 
             capd_regime = create_regime(
-              start_date: Time.zone.now + 1.month,
+              start_date: 1.month.from_now,
               end_date: nil,
               type: :capd_regime
             )
@@ -174,7 +174,7 @@ module Renalware
         it "creates uses the regime type when creating the Treatment" do
           apd_assisted_ukrdc_modality_code
           create_regime(
-            start_date: Time.zone.now + 13.days,
+            start_date: 13.days.from_now,
             end_date: nil,
             type: :apd_assisted_regime
           )
@@ -193,7 +193,7 @@ module Renalware
         it "creates uses the regime type when creating the Treatment" do
           capd_assisted_ukrdc_modality_code
           create_regime(
-            start_date: Time.zone.now + 13.days,
+            start_date: 13.days.from_now,
             end_date: nil,
             type: :capd_assisted_regime
           )

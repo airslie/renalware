@@ -1,0 +1,39 @@
+:root {
+  /*
+  Colours
+  */
+  --nhs-yellow:             #fae100;
+  --nhs-yellow-lighter:       color-mix(in srgb, var(--nhs-yellow), white 50%);
+  --nhs-yellow-darker:        color-mix(in srgb, var(--nhs-yellow), black 10%);
+  --nhs-warm-yellow:        #ffb81c;
+  --nhs-orange:             #ed8b00;
+  --nhs-red:                #d81e05;
+  --nhs-red-darker:           color-mix(in srgb, var(--nhs-red), black 10%);
+  --nhs-red-lighter:          color-mix(in srgb, var(--nhs-red), white 30%);
+  --nhs-dark-red:           #8a1538;
+  --nhs-pink:               #ae2573;
+  --nhs-blue:               #005eb8;
+  --nhs-bright-blue:        #0072ce;
+  --nhs-light-blue:         #41b6e6;
+  --nhs-aqua-blue:          #00a9ce;
+  --nhs-aqua-green:         #00a499;
+  --nhs-light-green:        #78be20;
+  --nhs-green:              #009639;
+  --nhs-dark-green:         #006747;
+
+  --white:                  #fff;
+  --black:                  #000;
+  --off-white:              #eee;
+  --dark-grey:              #222;
+  --darkish-grey:           #333;
+  --muted-dark-grey:        #555;
+  --winter-sky:             #aaa;
+  --light-grey:             #ddd;
+  --mid-grey:               #999;
+  --almost-white:           rgb(252, 252, 252);
+
+  --dashboard-muted-color:  #888;
+  --link-focus-colour:      #0078a0;
+  --link-hover-colour:      #64d6fb;
+  --tab-border-color:       #ddd;
+}

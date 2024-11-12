@@ -4,6 +4,8 @@ module Renalware
   module Admissions
     # rubocop:disable Rails/Pick
     class ActiveConsultAlertComponent < ApplicationComponent
+      include IconHelper
+
       pattr_initialize [:current_user, :patient!]
 
       def consult_id

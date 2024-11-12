@@ -6,8 +6,8 @@ describe "Managing system messages that are displayed on the login page" do
       :system_message,
       title: "Test title",
       body: "Test body",
-      display_from: Time.zone.now - 1.day,
-      display_until: Time.zone.now + 1.day
+      display_from: 1.day.ago,
+      display_until: 1.day.from_now
     )
     login_as_super_admin
 
@@ -94,8 +94,8 @@ describe "Managing system messages that are displayed on the login page" do
       :system_message,
       title: "Test title",
       body: "Test body",
-      display_from: Time.zone.now - 1.day,
-      display_until: Time.zone.now + 1.day
+      display_from: 1.day.ago,
+      display_until: 1.day.from_now
     )
 
     visit new_user_session_path

@@ -8,7 +8,9 @@
 }
 
 .page-actions {
+
   .button {
+    vertical-align: top;
     margin-bottom: 0;
     margin-right: 0.8rem;
     padding: 0.4rem 1rem;
@@ -25,7 +27,7 @@
   padding: 0.6rem 1.2rem;
 
   &:hover {
-    background-color: $nhs-blue;
+    background-color: var(--nhs-blue);
   }
 
   i.fa,
@@ -56,17 +58,17 @@
   }
 
   &.low-key {
-    background-color: $off-white;
-    border: solid 1px $light-grey;
+    background-color: var(--off-white);
+    border: solid 1px var(--light-grey);
     color: $dark-grey;
 
     &:hover {
-      background-color: $white;
+      background-color: var(--white);
     }
   }
 
   &.alternative {
-    background-color: $dashboard-muted-color;
+    background-color: var(--dashboard-muted-color);
   }
 }
 
@@ -78,33 +80,6 @@
 .radius.radius-left {
   border-bottom-right-radius: 0 !important;
   border-top-right-radius: 0 !important;
-}
-
-.button.dropdown.actions {
-  @extend %fa-icon;
-  @extend .fas;
-  background-color: $white;
-  color: $monsoon;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0.3rem 0 0;
-  padding: 0.2rem 0.9rem;
-  border: solid 1px $light-grey;
-  vertical-align: middle;
-
-  &:hover {
-    background-color: darken(#efefef, 10);
-    color: darken(#555, 10);
-  }
-
-  &:before {
-    content: fa-content($fa-var-ellipsis-h);
-  }
-
-  &:after {
-    border: 0;
-    position: relative;
-  }
 }
 
 .f-dropdown {

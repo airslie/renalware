@@ -22,21 +22,19 @@ module Renalware
       # note that adding .includes(:created_by) here creates an ambiguous column
       # 'family_name' error
       def search
-        @search ||= begin
-          Consult
-            .extend(RansackScopes)
-            .joins(:patient)
-            .eager_load(patient: [current_modality: :description])
-            .includes(
-              :consult_site,
-              :created_by,
-              :specialty,
-              patient: { current_modality: :description },
-              hospital_ward: :hospital_unit
-            )
-            .order(created_at: :desc)
-            .ransack(query)
-        end
+        @search ||= Consult
+          .extend(RansackScopes)
+          .joins(:patient)
+          .eager_load(patient: [current_modality: :description])
+          .includes(
+            :consult_site,
+            :created_by,
+            :specialty,
+            patient: { current_modality: :description },
+            hospital_ward: :hospital_unit
+          )
+          .order(created_at: :desc)
+          .ransack(query)
       end
 
       module RansackScopes

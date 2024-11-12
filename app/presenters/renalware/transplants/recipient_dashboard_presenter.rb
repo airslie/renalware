@@ -10,11 +10,9 @@ module Renalware
       end
 
       def registration
-        @registration ||= begin
-          WaitListRegistrationPresenter.new(
-            Registration.for_patient(patient).first_or_initialize
-          )
-        end
+        @registration ||= WaitListRegistrationPresenter.new(
+          Registration.for_patient(patient).first_or_initialize
+        )
       end
 
       def recipient_operations

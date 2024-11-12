@@ -33,12 +33,10 @@ module Renalware
 
       # Find prescriptions terminated within 14 days
       def recently_stopped_prescriptions
-        @recently_stopped_prescriptions ||= begin
-          patient_prescriptions
-            .terminated
-            .terminated_between(from: 14.days.ago, to: ::Time.zone.now)
-            .where.not(drug_id: current_prescriptions.map(&:drug_id))
-        end
+        @recently_stopped_prescriptions ||= patient_prescriptions
+          .terminated
+          .terminated_between(from: 14.days.ago, to: ::Time.zone.now)
+          .where.not(drug_id: current_prescriptions.map(&:drug_id))
       end
 
       def current_hd
@@ -46,16 +44,14 @@ module Renalware
       end
 
       def patient_prescriptions
-        @patient_prescriptions ||= begin
-          patient
-            .prescriptions
-            .with_created_by
-            .with_medication_route
-            .with_units_of_measure
-            .with_drugs
-            .with_termination
-            .ordered
-        end
+        @patient_prescriptions ||= patient
+          .prescriptions
+          .with_created_by
+          .with_medication_route
+          .with_units_of_measure
+          .with_drugs
+          .with_termination
+          .ordered
       end
     end
   end

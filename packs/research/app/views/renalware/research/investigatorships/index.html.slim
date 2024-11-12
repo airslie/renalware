@@ -1,9 +1,7 @@
 = content_for(:filters) do
   - if policy(study.investigatorships.build).create?
     .filter-actions
-      = link_to research.new_study_investigatorship_path, class: "button right" do
-        i.fas.fa-plus
-        | Add
+      = svg_btn("Add", :plus, research.new_study_investigatorship_path, class: "btn-primary right")
 
 = content_for(:tabs) do
   = render "renalware/research/studies/tabs", study: study, active: :investigatorships

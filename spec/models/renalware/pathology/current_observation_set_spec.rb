@@ -156,7 +156,7 @@ module Renalware
 
             context "when the triggered fn updates the obs set because a new value arrives" do
               it "sets updated_at to the current time" do
-                old_time = Time.zone.now - 1.day
+                old_time = 1.day.ago
                 travel_to(old_time) do
                   create_hgb_observation(
                     patient: patient,
@@ -180,7 +180,7 @@ module Renalware
 
             context "when the triggered fn skips updating the obs set cos inserted obs is older" do
               it "does not change #updated_at" do
-                newer_time = Time.zone.now + 1.day
+                newer_time = 1.day.from_now
                 travel_to(newer_time) do
                   create_hgb_observation(
                     patient: patient,

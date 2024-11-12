@@ -1,5 +1,6 @@
 / The default markup for an alertable event
 li.patient-alert.event
-  i.fas.fa-exclamation-triangle
-  span.title= link_to event.description&.truncate(12), patient_events_path
-  span.date= l(event.date_time.to_date)
+  .flex.items-center
+    = inline_icon(:exclamation)
+    span.title= link_to event.description&.truncate(12), patient_events_path
+    span.date= l(event.date_time.to_date)

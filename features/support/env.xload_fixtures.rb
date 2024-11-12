@@ -63,9 +63,8 @@ class Fixtures
   end
 
   def fixtures
-    @fixtures ||= begin
-      Dir[File.join(fixtures_folder, "*.yml")].map { |f| File.basename(f, ".yml") }
-    end
+    @fixtures ||= Dir[File.join(fixtures_folder, "*.yml")]
+      .map { |f| File.basename(f, ".yml") }
   end
 
   def web_depth?

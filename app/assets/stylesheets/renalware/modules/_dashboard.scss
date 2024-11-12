@@ -11,13 +11,13 @@
 
     &.empty-section {
       clear: both;
-      color: $dashboard-muted-color;
+      color: var(--dashboard-muted-color);
       padding-left: 0;
     }
   }
 }
 
 .dashboard-owner {
-  color: $mid-grey;
+  color: var(--mid-grey);
   font-style: normal;
 }

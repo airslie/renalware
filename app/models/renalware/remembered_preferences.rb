@@ -30,9 +30,7 @@ module Renalware
     attr_accessor :session
 
     def remembered_attributes
-      @remembered_attributes ||= begin
-        session.fetch(self.class::SESSION_KEY, {}).with_indifferent_access
-      end
+      @remembered_attributes ||= session.fetch(self.class::SESSION_KEY, {}).with_indifferent_access
     end
   end
 end

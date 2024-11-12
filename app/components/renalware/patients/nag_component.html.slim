@@ -4,14 +4,15 @@
 - else
   - cache_if(cache?, self, expires_in: always_expire_cache_after_seconds) do
     li.patient-alert.patient-nag.event(class="patient-nag-severity-#{severity}")
-      - if severity != :info
-        i.fas.fa-exclamation-triangle
-      span.title
-        - if formatted_relative_link.present?
-          = link_to title, formatted_relative_link, title: hint
-        - else
-          = title
-      - if value.present?
-        span.value= value
-      - if date.present?
-        span.date= l(date)
+      .flex.items-center
+        - if severity != :info
+          .pl-1= inline_icon(:exclamation)
+        span.title
+          - if formatted_relative_link.present?
+            = link_to title, formatted_relative_link, title: hint
+          - else
+            = title
+        - if value.present?
+          span.value= value
+        - if date.present?
+          span.date= l(date)

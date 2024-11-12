@@ -6,20 +6,21 @@ tbody(id="event_#{event.id}")
   tr
     td.noprint= row_toggler
     td.actions
-      / If the event supports editing (most don't as they are immuatble once created, to ensure a
-      / consistent clinical record), then use the supplied proc if passed (which will render a
-      / custom edit link (e.g. the Investigations event subclass, has its own slug, controllwe and
-      / and form) otherwise render a standard Event edit link.
-      - if policy(event).edit?
-        = link_to t("btn.edit"),
-                  edit_proc&.call(event) || edit_patient_event_path(event.patient, event),
-                  target: "_top"
+      .flex.items-center
+        / If the event supports editing (most don't as they are immuatble once created, to ensure a
+        / consistent clinical record), then use the supplied proc if passed (which will render a
+        / custom edit link (e.g. the Investigations event subclass, has its own slug, controllwe and
+        / and form) otherwise render a standard Event edit link.
+        - if policy(event).edit?
+          = link_to t("btn.edit"),
+                    edit_proc&.call(event) || edit_patient_event_path(event.patient, event),
+                    target: "_top"
 
-      - if policy(event).destroy?
-          = link_to(destroy_proc&.call(event) || patient_event_path(event.patient, event),
-                    method: :delete,
-                    data: { confirm: "Are you sure you want delete this event?\n" }) do
-            i.far.fa-trash-alt
+        - if policy(event).destroy?
+            = link_to(destroy_proc&.call(event) || patient_event_path(event.patient, event),
+                      method: :delete,
+                      data: { confirm: "Are you sure you want delete this event?\n" }) do
+              = inline_icon(:trash, size: :md, class: "inline-block")
 
     td.nowrap= l event.created_at.to_date
     - unless local_assigns[:exclude_type_column] == true

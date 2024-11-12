@@ -27,4 +27,4 @@ tr.admissions_request(id=dom_id(request) class="sortable priority-#{request.prio
               edit_admissions_request_path(request, format: :html),
               data: { "reveal-id" => "admissions-request-modal", "reveal-ajax" => "true" }
   td.handle
-    i.fas.fa-bars
+    = inline_icon(:menu, size: :md)

@@ -5,9 +5,8 @@ div data-controller="input-value-alerter" data-input-value-alerter-not-recommend
     .col-span-12.sm:col-span-4.lg:col-span-3
     .col-span-12.sm:col-span-8.lg:col-span-9
       .border-l-4.border-yellow-400.bg-yellow-50.px-4.py-2.mb-4 data-input-value-alerter-target="message"
-        .flex
-          .flex-shrink-0
-            i.fas.fa-exclamation-triangle.h-5.w-5.text-yellow-400.align-text-top
-          .ml-2
-            p.mb-0.text-sm.text-yellow-700
-              = message
+        .flex.items-center
+          .pr-2.flex-shrink-0
+            = inline_icon(:exclamation, class: "text-yellow-400 h-6")
+          .text-sm.text-yellow-700
+            = message

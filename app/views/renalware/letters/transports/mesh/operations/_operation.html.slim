@@ -9,24 +9,24 @@ tr(classs="!bg-green-50")
       = operation.action.humanize.split(" message").first
 
   td.bg-neutral-100
-    - bg = operation.http_response_code.to_i > 300 ? "bg-red-500 text-gray-50" : "bg-neutral-100"
+    - bg = operation.http_response_code.to_i > 300 ? "bg-red-600 text-white" : "bg-neutral-100"
     .rounded.py-0.px-1(class=bg)
       .flex.items-center.justify-center
         = operation.http_response_code
 
   td.bg-neutral-50= operation.mesh_message_id
   td.bg-neutral-50
-    .rounded.bg-red-500.py-0.px-1.flex.whitespace-nowrap.justify-center.text-gray-50
-        = operation.mesh_response_error_code
+    .rounded.bg-red-600.py-0.px-1.flex.whitespace-nowrap.justify-center.text-white
+      = operation.mesh_response_error_code
   td.bg-neutral-50= operation.mesh_response_error_description
 
   - if operation.action.to_sym == :download_message
     td.bg-neutral-100= operation.itk3_response_type
     td.bg-neutral-100
       - if operation.itk3_response_code&.to_sym != :ok
-        .rounded.bg-red-500.py-0.px-1.text-gray-50
+        .rounded.bg-red-600.py-0.px-1.text-white
           .flex.items-center.justify-center
-            = operation.itk3_response_code
+            .text-white= operation.itk3_response_code
       - else
         .rounded.bg-neutral-100.py-0.px-1
           .flex.items-center.justify-center

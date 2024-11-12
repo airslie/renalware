@@ -3,8 +3,14 @@
 module Renalware
   module Patients
     class PatientPolicy < BasePolicy
-      def update_renalreg_preferences?  = user_is_any_admin?
-      def update_pkb_preferences?       = user_is_any_admin?
+      def update_pkb_renalreg_preferences?
+        if Renalware.config.only_admins_can_update_pkb_renalreg_preferences
+          user_is_any_admin?
+        else
+          edit?
+        end
+      end
+
       def dialysing_at_hospital?        = true
       def dialysing_at_unit?            = true
 

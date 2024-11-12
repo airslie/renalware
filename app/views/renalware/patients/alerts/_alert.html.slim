@@ -5,16 +5,16 @@ ruby:
   title = "Alert:"
   title = "COVID-19 (CONFIRMED) Alert:" if alert.covid_19?
 li.patient-alert(class=(klasses.join(" ")) id="alert-#{alert.id}")
-  i.fas.fa-exclamation-triangle
-  span.title= title
-  span.body= alert.notes
-  span.author= alert.created_by.username
-  span.date= l(alert.created_at.to_date)
-  span.actions
-    = link_to(patient_alert_path(alert.patient, alert),
-              remote: true,
-              method: :delete,
-              data: { confirm: "Are you sure you want to remove this alert?" }) do
+  .flex.items-center
+    = inline_icon(:exclamation)
+    span.title= title
+    span.body= alert.notes
+    span.author= alert.created_by.username
+    span.date= l(alert.created_at.to_date)
+    span.actions
+      = link_to(patient_alert_path(alert.patient, alert),
+                remote: true,
+                method: :delete,
+                data: { confirm: "Are you sure you want to remove this alert?" }) do
 
-      /= inline_icon(:trash, class: "inline text-white")
-      i.fas.fa-trash
+        = inline_icon(:trash)

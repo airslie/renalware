@@ -15,13 +15,11 @@ module Renalware
       end
 
       def query
-        @query ||= begin
-          MDMPatientsQuery.new(
-            relation: policy_scope(PD::Patient),
-            params: filter_form.ransacked_parameters.merge(query_params).with_indifferent_access,
-            named_filter: named_filter
-          )
-        end
+        @query ||= MDMPatientsQuery.new(
+          relation: policy_scope(PD::Patient),
+          params: filter_form.ransacked_parameters.merge(query_params).with_indifferent_access,
+          named_filter: named_filter
+        )
       end
 
       def named_filter

@@ -59,12 +59,10 @@ module Renalware
       end
 
       def selected_physician_id
-        @selected_physician_id ||= begin
-          PrimaryCarePhysician
-            .select(:id)
-            .find_by(id: patient_params[:primary_care_physician_id])
-            &.id
-        end
+        @selected_physician_id ||= PrimaryCarePhysician
+          .select(:id)
+          .find_by(id: patient_params[:primary_care_physician_id])
+          &.id
       end
 
       def patient_params

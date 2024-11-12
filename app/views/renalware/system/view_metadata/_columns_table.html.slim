@@ -23,7 +23,7 @@ table.sortables(style="list-style-type: none;")
     - view.columns.each_with_index do |col, _idx|
       tr.sortable
           td.handle.border-0.text-left
-            i.fas.fa-bars
+            = inline_icon(:menu, size: :sm)
             input(type="hidden" name="view_metadata[columns][][code]" value=col.code)
           td.border-0
             code= col.code

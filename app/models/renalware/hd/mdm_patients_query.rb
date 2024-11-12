@@ -20,22 +20,20 @@ module Renalware
       end
 
       def search
-        @search ||= begin
-          relation
-            .include(QueryablePatient)
-            .include(PatientTransplantScopes)
-            .include(PatientPathologyScopes)
-            .include(ModalityScopes)
-            .extending(NamedFilterScopes)
-            .merge(Accesses::Patient.with_current_plan)
-            .merge(Accesses::Patient.with_profile)
-            .eager_load(hd_profile: [:hospital_unit])
-            .with_current_pathology
-            .with_registration_statuses
-            .with_current_modality_of_class(Renalware::HD::ModalityDescription)
-            .public_send(named_filter.to_s)
-            .ransack(params)
-        end
+        @search ||= relation
+          .include(QueryablePatient)
+          .include(PatientTransplantScopes)
+          .include(PatientPathologyScopes)
+          .include(ModalityScopes)
+          .extending(NamedFilterScopes)
+          .merge(Accesses::Patient.with_current_plan)
+          .merge(Accesses::Patient.with_profile)
+          .eager_load(hd_profile: [:hospital_unit])
+          .with_current_pathology
+          .with_registration_statuses
+          .with_current_modality_of_class(Renalware::HD::ModalityDescription)
+          .public_send(named_filter.to_s)
+          .ransack(params)
       end
 
       # Module to allow us to mixin ransackers

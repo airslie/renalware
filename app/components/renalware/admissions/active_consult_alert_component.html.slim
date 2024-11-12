@@ -1,4 +1,5 @@
 li.patient-alert.active-consult
-  i.fas.fa-exclamation-triangle
-  span.title
-    = link_to "Active Consult", renalware.edit_admissions_consult_path(id: consult_id)
+  .flex.items-center
+    = inline_icon(:exclamation)
+    span.title
+      = link_to "Active Consult", renalware.edit_admissions_consult_path(id: consult_id)

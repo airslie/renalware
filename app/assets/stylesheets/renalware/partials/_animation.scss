@@ -1,6 +1,6 @@
 @keyframes highlight {
   0% {
-    background: $nhs-yellow;
+    background: var(--nhs-yellow);
   }
 
   100% {

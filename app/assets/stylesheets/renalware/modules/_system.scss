@@ -13,7 +13,7 @@
   p,
   div,
   span {
-    color: $white;
+    color: var(--white);
     margin-top: 0;
     margin: 0;
     padding: 0;
@@ -43,7 +43,7 @@
 }
 
 .download {
-  border: solid 1px $light-grey;
+  border: solid 1px var(--light-grey);
   border-radius: 0.2rem;
   margin-bottom: 1rem;
   padding: 0.3rem 0.5rem;
@@ -59,13 +59,13 @@
     vertical-align: top;
 
     a {
-      color: $winter-sky;
+      color: var(--winter-sky);
       &:active,
       &:visited {
-        color: $winter-sky;
+        color: var(--winter-sky);
       }
       &:hover {
-        color: $winter-sky;
+        color: var(--winter-sky);
       }
     }
   }
@@ -83,7 +83,7 @@
           color: $oil;
         }
         &:hover {
-          color: $black;
+          color: var(--black);
           text-decoration: underline;
         }
       }

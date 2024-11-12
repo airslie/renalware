@@ -214,7 +214,12 @@ module Renalware
     end
 
     # This should perhaps be in a presenter?
-    def full_renal_registry_id = [hospital_centre&.code, renal_registry_id].join("-")
+    def full_renal_registry_id
+      [
+        Renalware.config.ukrdc_sending_facility_name,
+        renal_registry_id
+      ].join("-")
+    end
 
     private
 

@@ -3,14 +3,16 @@
       class: "button secondary",
       style: "margin-left: 2rem",
       data: { confirm: "IMPORTANT! (Warning here about data protection)"}) do
-  i.fa.fa-download
-  | Download CSV
+  .flex.items-center.gap-1
+    = inline_icon(:download_file)
+    | Download CSV
 
 - if current_user_is_super_admin?
   = link_to renalware.edit_system_view_metadatum_path(options.current_view, format: :html),
             data: { "reveal-id" => "system-view-metadata-modal", "reveal-ajax" => "true" },
             class: "button secondary" do
-      i.fas.fa-cogs.pr-2
-      | Configure columns
+    .flex.items-center.gap-2
+        = inline_icon(:cog)
+        | Configure columns
   / The modal dialog container
   #system-view-metadata-modal.reveal-modal.medium(data-reveal)

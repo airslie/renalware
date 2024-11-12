@@ -1,8 +1,9 @@
 = content_for(:actions) do
   = link_to(patient_pd_exit_site_infection_path(patient, exit_site_infection, format: :pdf),
             class: "button") do
-    i.fas.fa-print
-    |  Print
+    .flex.items-center.gap-2
+      = inline_icon(:printer, size: :md)
+      | Print
 
 = within_patient_layout(title: "Exit Site Infection",
                         breadcrumbs: pd_summary_breadcrumb(patient)) do

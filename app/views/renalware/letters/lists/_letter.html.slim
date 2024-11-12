@@ -25,8 +25,10 @@ tbody
                       data: { \
                         "modal-url" => new_patient_letters_letter_completed_path(letter.patient, letter) \
                       } do
-              i.fas.fa-print
-              | Print
+              .flex.items-center.gap-2
+                = inline_icon(:printer, size: :sm)
+                | Print
+
             - if letter.page_count
               | &nbsp;
               = link_to patient_letters_letter_printable_path(letter.patient, letter),
@@ -35,8 +37,10 @@ tbody
                         data: { \
                           "modal-url" => new_patient_letters_letter_completed_path(letter.patient, letter) \
                         } do
-                i.fas.fa-envelope
-                | Env Print
+                /i.fas.fa-envelope
+                .flex.items-center.gap-2
+                  = inline_icon(:mail, size: :sm)
+                  | Env Print
     td.text-center
       - if letter.notes.present?
         i.fas.fa-comment.text-yellow-500.hover:text-yellow-600(title=letter.notes)

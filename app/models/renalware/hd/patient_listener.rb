@@ -3,10 +3,15 @@
 module Renalware
   module HD
     class PatientListener
+      # Listens for this message
       def patient_modality_changed_to_death(args)
-        nullify_significant_hd_profile_attributes(args[:patient], by: args[:actor])
+        supersede_old_hd_profile_with_new_one_with_nulled_attributes(
+          args[:patient],
+          by: args[:actor]
+        )
       end
 
+      # Listens for this message
       def request_default_electronic_cc_recipients_for_use_in_letters(args)
         array_of_user_ids = args[:array_of_user_ids]
         patient = HD.cast_patient(args[:patient])
@@ -18,13 +23,15 @@ module Renalware
 
       private
 
-      def nullify_significant_hd_profile_attributes(patient, by:)
-        hd_profile = HD.cast_patient(patient).hd_profile
-        return if hd_profile.nil?
+      def supersede_old_hd_profile_with_new_one_with_nulled_attributes(patient, by:)
+        profile = HD.cast_patient(patient).hd_profile
+        return if profile.nil?
 
-        hd_profile.hospital_unit = nil
-        hd_profile.schedule_definition = nil
-        hd_profile.save_by!(by)
+        ReviseHDProfile.new(profile).call(
+          hospital_unit: nil,
+          schedule_definition: nil,
+          by: by
+        )
       end
     end
   end

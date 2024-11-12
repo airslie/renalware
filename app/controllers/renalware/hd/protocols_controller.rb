@@ -28,12 +28,10 @@ module Renalware
       end
 
       def pdf_renderer
-        @pdf_renderer ||= begin
-          SessionForms::PdfRenderer.new(
-            patients: patient,
-            output_html_for_debugging: params.key?(:debug)
-          )
-        end
+        @pdf_renderer ||= SessionForms::PdfRenderer.new(
+          patients: patient,
+          output_html_for_debugging: params.key?(:debug)
+        )
       end
 
       def pdf_filename

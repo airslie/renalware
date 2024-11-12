@@ -4,8 +4,9 @@
   /   url_for(request.filtered_parameters&.merge({format: :pdf})
   / however this seems to loose the ransack sort option in  params[:q][:s]
   = link_to(renal_aki_alerts_path(q: params[:q]&.permit!, format: :pdf), class: "button secondary") do
-    i.fas.fa-print
-    | Print (PDF)
+    .flex.items-center.gap-2
+      = inline_icon(:printer, size: :md)
+      | Print (PDF)
 
 = content_for(:filters) do
   = render "filters", form: form, path_params: path_params
@@ -17,9 +18,7 @@
   == pagy_nav(pagy) if pagy.pages > 1
 
   - if current_user_is_admin?
-    .rounded.bg-blue-50.px-3.py-2.mt-20.text-gray-600
-      .flex
-        i.fas.fa-info-circle.mr-2.pt-1.text-blue-500
+    .mt-20= help_panel do
         div
           .block.mb-4 AKI Alerts are generated when an AKI score (1, 2 or 3) is received from the lab. The logic for creating AKI alerts is:
           .block.mt-4 if patient age > 16 and current modality is not HD, PD or Death

@@ -21,9 +21,8 @@
           td
             ul.ml-0
               - group.users.each do |user|
-               li
-                 i.far.fa-user.text-gray-400.mr-2
-                 = user
+                li
+                  = text_with_icon_prefix(user.to_s, :user, size: :md)
           td.bg-green-50.text-center
             ul.ml-0
               li

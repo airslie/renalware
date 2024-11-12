@@ -115,9 +115,7 @@ module Renalware::Pathology
               ]
             )
           )
-          # rubocop:disable RSpec/VerifiedDoubleReference
-          logger = instance_double("Rails.logger").as_null_object
-          # rubocop:enable RSpec/VerifiedDoubleReference
+          logger = double(Rails.logger).as_null_object
           allow(logger).to receive(:debug)
 
           parser = described_class.new(hl7_message, logger)
@@ -184,7 +182,7 @@ module Renalware::Pathology
           create(:pathology_observation_description, code: "GRP")
           create(:pathology_observation_description, code: "WSUM")
           create(:patient, local_patient_id: "V1111111", born_on: "2001-01-01")
-          logger = instance_spy("Rails.logger") # rubocop:disable RSpec/VerifiedDoubleReference
+          logger = double(Rails.logger)
 
           message = Renalware::Feeds::MessageParser.parse(raw_message)
           parser = described_class.new(message, logger)

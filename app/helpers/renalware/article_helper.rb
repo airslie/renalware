@@ -14,7 +14,7 @@ module Renalware
       if title.present?
         output.safe_concat(
           tag.header do
-            tag.h1(title)
+            tag.h2(title)
           end
         )
       end
