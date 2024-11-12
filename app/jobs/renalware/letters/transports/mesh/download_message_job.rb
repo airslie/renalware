@@ -40,16 +40,6 @@ module Renalware
             end
           end
 
-          # Update the transmission with any error, unless status is already error
-          # rubocop:disable Layout/IndentationWidth
-          if send_message_operation &&
-             !download_operation.success? &&
-             send_message_operation.transmission.status != "failure"
-
-             send_message_operation.transmission.update!(status: :failure)
-            # TODO: !
-          end
-          # rubocop:enable Layout/IndentationWidth
           [download_operation, send_message_operation]
         end
         # rubocop:enable Metrics/MethodLength

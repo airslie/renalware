@@ -30,7 +30,8 @@ module Renalware
           itk3_operation_outcome_type: issue_code,
           itk3_operation_outcome_severity: issue_severity,
           itk3_operation_outcome_code: detail_code,
-          itk3_operation_outcome_description: detail_description
+          itk3_operation_outcome_description: detail_description,
+          itk3_error: response_code != "ok"
         }
       end
 
