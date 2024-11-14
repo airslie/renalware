@@ -26,7 +26,7 @@ module Renalware
                  class_name: "Renalware::Pathology::Patient",
                  inverse_of: :current_observation_set
       validates :patient, presence: true
-      serialize :values, ObservationsJsonbSerializer
+      serialize :values, coder: ObservationsJsonbSerializer
 
       def self.null_values_hash
         ActiveSupport::HashWithIndifferentAccess.new.extend(ObservationSetMethods)

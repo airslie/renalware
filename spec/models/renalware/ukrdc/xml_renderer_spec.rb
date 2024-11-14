@@ -6,7 +6,10 @@ module Renalware
       it "returns the XML as string" do
         practice = build_stubbed(:practice, code: "A12345")
         gp = build_stubbed(:primary_care_physician, code: "G1111111")
-        patient = build_stubbed(:patient, practice: practice, primary_care_physician: gp)
+        patient = build_stubbed(:patient,
+                                practice: practice,
+                                primary_care_physician: gp,
+                                renal_registry_id: "123")
         patient_presenter = UKRDC::PatientPresenter.new(patient)
         renderer = described_class.new(
           schema: UKRDC::XsdSchema.new,
@@ -26,7 +29,10 @@ module Renalware
       it "raise an exception with the errors" do
         practice = build_stubbed(:practice, code: "invalid_practice_code")
         gp = build_stubbed(:primary_care_physician, code: "invalid_gp_code")
-        patient = build_stubbed(:patient, practice: practice, primary_care_physician: gp)
+        patient = build_stubbed(:patient,
+                                practice: practice,
+                                primary_care_physician: gp,
+                                renal_registry_id: "123")
         patient_presenter = UKRDC::PatientPresenter.new(patient)
         renderer = described_class.new(
           schema: UKRDC::XsdSchema.new,

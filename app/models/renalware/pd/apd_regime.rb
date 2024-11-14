@@ -15,9 +15,8 @@ module Renalware
         disconnect
         connect_and_disconnect
       )
-      alias_attribute :tidal?, :tidal_indicator?
+
       alias_attribute :cycles, :no_cycles_per_apd
-      alias_attribute :drain_every_three_cycles?, :tidal_full_drain_every_three_cycles?
 
       VALID_RANGES = OpenStruct.new(
         therapy_times: (120..900).step(30).to_a,
@@ -29,6 +28,9 @@ module Renalware
         dwell_times: 10..240,
         tidal_percentages: (60..100).step(5).to_a
       ).freeze
+
+      def drain_every_three_cycles? = tidal_full_drain_every_three_cycles?
+      def tidal? = tidal_indicator?
 
       validates :fill_volume,
                 allow_nil: true,

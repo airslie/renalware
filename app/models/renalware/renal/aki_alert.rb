@@ -14,7 +14,7 @@ module Renalware
       belongs_to :hospital_centre, class_name: "Hospitals::Centre"
       validates :patient, presence: true
       validates :max_aki, inclusion: 1..3, allow_nil: true
-      alias_attribute :decided_by, :updated_by
+      alias :decided_by :updated_by
 
       scope :today, -> { where(created_at: Time.zone.today.all_day) }
       scope :hotlist, -> { where(hotlist: true) }

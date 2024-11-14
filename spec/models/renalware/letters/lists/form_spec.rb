@@ -28,7 +28,7 @@ module Renalware
             {
               enclosures_present: true,
               notes_present: true,
-              state_eq: 1,
+              state_eq: "approved",
               author_id_eq: 2,
               created_by_id_eq: 3,
               letterhead_id_eq: 4,
@@ -36,7 +36,7 @@ module Renalware
             }
           end
 
-          it "maps the supplied parms hash to Virtus attributes" do
+          it "maps the supplied params hash to Virtus attributes" do
             expect(form).to have_attributes(params)
           end
         end

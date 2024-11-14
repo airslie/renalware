@@ -30,7 +30,7 @@ module Renalware
           attribute :s, :string # sort order, not really part of the form
           attribute :enclosures_present, :boolean
           attribute :notes_present, :boolean
-          attribute :state_eq, :integer
+          attribute :state_eq, :string
           attribute :gp_send_status_in, array: true, default: -> { [] }
           attribute :author_id_eq, :integer
           attribute :created_by_id_eq, :integer
@@ -51,17 +51,12 @@ module Renalware
               .map { |key, val| [I18n.t(val, scope: "letters.gp_send_status"), key] }
           end
 
-          def author_options
-            @author_options ||= User.author.picklist
-          end
-
-          def typist_options
-            @typist_options ||= User.picklist
-          end
-
-          def letterhead_options
-            @letterhead_options ||= Letters::Letterhead.ordered
-          end
+          def author_options      = @author_options ||= User.author.picklist
+          def typist_options      = @typist_options ||= User.picklist
+          def letterhead_options  = @letterhead_options ||= Letters::Letterhead.ordered
+          def disabled_inputs     = []
+          def allow_blank_inputs  = %i(state_eq gp_send_status_in page_count_in_array)
+          def include_deleted     = false
 
           def clinic_visit_clinic_options
             @clinic_visit_clinic_options ||= Clinics::Clinic.order(:name).map { |cl|
@@ -72,10 +67,6 @@ module Renalware
           def page_count_options
             [["1 or 2", "[1,2]"], ["3 or 4", "[3,4]"], ["5 or 6", "[5,6]"]]
           end
-
-          def disabled_inputs = []
-          def allow_blank_inputs = %i(state_eq gp_send_status_in page_count_in_array)
-          def include_deleted = false
         end
 
         class BatchPrintableLetters < AllLetters
@@ -88,6 +79,8 @@ module Renalware
           attribute :gp_send_status_in,
                     array: true,
                     default: -> { pre_selected_gp_send_status_options }
+
+          attribute :state_eq, :string, default: -> { :approved }
 
           # For Batch printing, hide letters where gp send_status is pending
           def self.pre_selected_gp_send_status_options

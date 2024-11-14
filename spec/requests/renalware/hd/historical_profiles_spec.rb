@@ -28,9 +28,9 @@ describe "Viewing historical HD Profiles" do
         patient = create(:hd_patient)
         profile = create(:hd_profile, patient: patient)
 
-        expect {
-          get patient_hd_historical_profile_path(profile.patient, profile)
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        get patient_hd_historical_profile_path(profile.patient, profile)
+
+        expect(response).to be_not_found
       end
     end
   end

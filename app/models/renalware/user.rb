@@ -100,8 +100,7 @@ module Renalware
     # stored git for uat and production environments.
     def auth_token
       digest = OpenSSL::Digest.new("sha256")
-      key = Rails.application.secrets.secret_key_base
-      OpenSSL::HMAC.hexdigest(digest, key, id.to_s)
+      OpenSSL::HMAC.hexdigest(digest, Rails.application.secret_key_base, id.to_s)
     end
 
     # We can enable experiment features for particular users using the bitmask user#feature_flags

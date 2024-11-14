@@ -5,13 +5,6 @@ module Renalware
     class Unit < ApplicationRecord
       extend Enumerize
 
-      UNIT_TYPE_RR8_MAP = {
-        hospital: "INCENTRE",
-        satellite: "INCENTRE",
-        home: "HOME",
-        assisted: "ASSISTED"
-      }.freeze
-
       belongs_to :hospital_centre,
                  class_name: "Hospitals::Centre",
                  touch: true,
@@ -37,11 +30,6 @@ module Renalware
 
       def to_s
         "#{name} (#{unit_code})"
-      end
-
-      # Map unit_type to its equivalent Renal Registry RR8 code.
-      def unit_type_rr8
-        UNIT_TYPE_RR8_MAP[unit_type.to_sym]
       end
     end
   end
