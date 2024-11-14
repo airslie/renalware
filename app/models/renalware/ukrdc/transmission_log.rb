@@ -7,7 +7,7 @@ module Renalware
 
       validates :status, presence: true
       belongs_to :patient, class_name: "Renalware::Patient"
-      enum status: {
+      enum :status, {
         undefined: 0,
         error: 1,
         skippped_no_change_since_last_send: 2,
@@ -15,7 +15,7 @@ module Renalware
         imported: 4,
         sftped: 99
       }
-      enum direction: { out: 0, in: 1 }
+      enum :direction, { out: 0, in: 1 }
       scope :ordered, -> { order(created_at: :asc) }
       belongs_to :batch
 

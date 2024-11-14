@@ -7,7 +7,7 @@ module Renalware
       belongs_to :patient, class_name: "Renalware::Accesses::Patient"
       validates :difficulty, presence: true
       validates :patient, presence: true
-      enum difficulty: { easy: "easy", moderate: "moderate", hard: "hard" }
+      enum :difficulty, { easy: "easy", moderate: "moderate", hard: "hard" }
 
       # access_needling_assessment_difficulties
 

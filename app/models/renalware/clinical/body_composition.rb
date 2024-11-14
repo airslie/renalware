@@ -7,7 +7,7 @@ module Renalware
       include Accountable
 
       # This maps to a PG enum
-      enum pre_post_hd: {
+      enum :pre_post_hd, {
         pre: "pre",
         post: "post"
       }

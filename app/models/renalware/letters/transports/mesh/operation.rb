@@ -13,7 +13,7 @@ module Renalware
       belongs_to :transmission
       # validates :transmission, presence: true
 
-      enum action: {
+      enum :action, {
         endpointlookup: "endpointlookup",
         handshake: "handshake",
         check_inbox: "check_inbox",
@@ -34,7 +34,7 @@ module Renalware
           .where(itk3_operation_outcome_code: "20013")
       }
 
-      enum direction: { outbound: "outbound", inbound: "inbound" }
+      enum :direction, { outbound: "outbound", inbound: "inbound" }
 
       ransacker :created_at, type: :date do
         Arel.sql("date(created_at)")

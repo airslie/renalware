@@ -28,8 +28,8 @@ module Renalware
       validates :chart, store_model: true
 
       # This maps to a PG enum
-      enum display_type: { tabular: "tabular" }
-      enum category: { mdm: "mdm", report: "report" }
+      enum :display_type, { tabular: "tabular" }
+      enum :category, { mdm: "mdm", report: "report" }
 
       scope :refreshable_materialised_views, lambda {
         where(materialized: true).where.not(refresh_schedule: [nil, ""])

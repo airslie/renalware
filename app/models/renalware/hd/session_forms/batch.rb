@@ -6,7 +6,7 @@ module Renalware
       class Batch < ApplicationRecord
         include Accountable
 
-        enum status: { queued: 0, processing: 10, awaiting_printing: 15, failure: 20, success: 30 }
+        enum :status, { queued: 0, processing: 10, awaiting_printing: 15, failure: 20, success: 30 }
 
         has_many(
           :items,

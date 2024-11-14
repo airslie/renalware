@@ -26,7 +26,7 @@ module Renalware
     }
 
     # This maps to a PG enum
-    enum nursing_experience_level: {
+    enum :nursing_experience_level, {
       very_low: "very_low",
       low: "low",
       medium: "medium",

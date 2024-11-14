@@ -7,12 +7,12 @@ module Renalware
 
       validates :severity, presence: true
       validates :group, presence: true
-      enum severity: {
+      enum :severity, {
         info: "info",
         warning: "warning",
         error: "error"
       }
-      enum group: {
+      enum :group, {
         users: "users",
         admin: "admin",
         superadmin: "superadmin",

@@ -86,12 +86,12 @@ module Renalware
         NilClass => Event::Unknown
       }.freeze
 
-      enum gp_send_status: {
+      enum :gp_send_status, {
         not_applicable: "not_applicable",
         pending: "pending",
         success: "success",
         failure: "failure"
-      }, _prefix: true
+      }, prefix: true
 
       def self.policy_class     = LetterPolicy
       def self.for_event(event) = where(event: event).first

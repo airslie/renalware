@@ -21,7 +21,7 @@ module Renalware
       }
       scope :allocated, -> { where.not(allocated: nil) }
 
-      enum urgency: {
+      enum :urgency, {
         routine: "routine",
         urgent: "urgent",
         highly_urgent: "highly_urgent",

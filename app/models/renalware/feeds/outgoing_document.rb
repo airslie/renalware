@@ -8,7 +8,7 @@ module Renalware
 
       belongs_to :renderable, polymorphic: true
       validates :state, presence: true
-      enum state: {
+      enum :state, {
         queued: "queued",
         errored: "errored",
         processed: "processed"

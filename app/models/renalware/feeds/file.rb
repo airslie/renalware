@@ -13,7 +13,7 @@ module Renalware
 
       belongs_to :file_type
 
-      enum status: { waiting: 0, processing: 1, success: 2, failure: 3 }
+      enum :status, { waiting: 0, processing: 1, success: 2, failure: 3 }
 
       scope :ordered, -> { order(created_at: :desc) }
 

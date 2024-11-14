@@ -48,7 +48,7 @@ module Renalware
       validates :prescribed_on, presence: true
       validates :provider, presence: true
 
-      enum provider: Provider.codes
+      enum :provider, Provider.codes
 
       # deprecated, use `unit_of_measure` instead
       enumerize :dose_unit,
