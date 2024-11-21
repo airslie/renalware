@@ -4,16 +4,17 @@
 = within_patient_layout do
 
   .row
-    - unless dashboard.profile.new_record?
-      .medium-6.large-4.xlarge-3.columns
+    .medium-6.large-4.xlarge-3.columns
+      - unless dashboard.profile.new_record?
         = render "renalware/hd/current_profile/summary",
-                 patient: dashboard.patient,
-                 profile: dashboard.profile
-        - if dashboard.historical_profile_count > 0
-          = render "renalware/hd/historical_profiles/summary",
-                   patient: dashboard.patient,
-                   historical_profiles: dashboard.historical_profiles,
-                   historical_profile_count: dashboard.historical_profile_count
+                patient: dashboard.patient,
+                profile: dashboard.profile
+
+      - if dashboard.historical_profile_count > 0
+        = render "renalware/hd/historical_profiles/summary",
+                  patient: dashboard.patient,
+                  historical_profiles: dashboard.historical_profiles,
+                  historical_profile_count: dashboard.historical_profile_count
 
     .small-12.medium-12.large-6.xlarge-4.columns
       = render Renalware::Accesses::NeedlingAssessmentsComponent.new(patient: dashboard.patient, current_user: current_user)

@@ -3,7 +3,7 @@
 module Renalware
   module Accesses
     # This an experiment to replace DumbDelegator with delegate_missing_to reduce complexity
-    # and excessive inheritence tree insertion.
+    # and excessive inheritance tree insertion.
     # - not sure how successful as requires adding 2 lines plus a :to_param workaround
     class ProcedurePresenter
       pattr_initialize :procedure

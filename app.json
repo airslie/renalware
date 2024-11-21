@@ -15,8 +15,8 @@
   "env": {
     "DEMO": "1",
     "UKRDC_WORKING_PATH": "tmp/ukrdc",
-    "RACK_ENV": "uat",
-    "RAILS_ENV": "uat",
+    "RACK_ENV": "production",
+    "RAILS_ENV": "production",
     "DEFAULT_FROM_EMAIL_ADDRESS": "test1@example.com",
     "PHONE_NUMBER_ON_LETTERS": "020 000 0000",
     "RENAL_UNIT_ON_LETTERS": "Test Renal Unit",

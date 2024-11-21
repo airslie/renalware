@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ModuleLength
 module Renalware
   log "Adding Pathology Code Groups" do
-    user = User.first
-
     groups = {
       pd_mdm: {
         description: "Pathology relating to PD",
@@ -76,6 +75,12 @@ module Renalware
         subgroup_colours: nil,
         subgroup_titles: nil
       },
+      hep_b_antibody_statuses: {
+        description: "Latest Hep B Surface Antibody Titre",
+        context_specific: true,
+        subgroups: %w(BHBS),
+        subgroup_colours: []
+      },
       default: {
         description: "Default codes used for example in historical, recent and current pathology",
         title: "Default",
@@ -83,7 +88,7 @@ module Renalware
         subgroups: [
           %w(FOL ESR CRP FER HGB B12 MCV MCH HYPO WBC LYM NEUT PLT RETA),
           %w(URAT ALB TP GLO URE CRE EGFR KFRE2 KFRE5 Kt/V eKt/V spKt/V ceKt/V
-            NA POT BIC CCA PHOS PTHI ACR),
+             NA POT BIC CCA PHOS PTHI ACR),
           %w(BIL ALT AST ALP GGT BGLU HBA HBAI CHOL HDL LDL TRIG TSH CK URR CRCL UREP AL)
         ],
         subgroup_colours: %w(red green sky),
@@ -116,3 +121,4 @@ module Renalware
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength

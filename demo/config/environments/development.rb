@@ -37,7 +37,7 @@ Rails.application.configure do
       "Cache-Control" => "public, max-age=172800"
     }
     config.cache_store = :solid_cache_store
-    # config.cache_store = :memory_store, { size: 64.megabytes }
+    config.cache_store = :solid_cache_store
   else
     config.action_controller.perform_caching = false
     config.cache_store = :null_store

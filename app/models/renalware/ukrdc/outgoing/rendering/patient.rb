@@ -7,6 +7,22 @@ module Renalware
         class Patient < Rendering::Base
           pattr_initialize [:patient!]
 
+          # Renal Registry requires a 'IDN07' id:
+          #  "Unique identifier not attributable to patient, Site code plus internal record
+          #   number or similar eg. RAJ01-12345"
+          # Since we do not like to hand out primary keys for security reasons, and the uuids we
+          # already have on patient, which might otherwise satisfy this requirement, are rather long
+          # (the IDN07 identifier spec says max 20 chars) we generate a unique 10 char base 58
+          # string.
+          def self.generate_renal_registry_id
+            rr_id = nil
+            loop do
+              rr_id = SecureRandom.base58(10)
+              break unless Renalware::Patient.exists?(renal_registry_id: rr_id) # clash unlikely?
+            end
+            rr_id
+          end
+
           # rubocop:disable Metrics/AbcSize
           def xml
             ensure_patient_has_a_renal_registry_id
@@ -46,25 +62,9 @@ module Renalware
 
           def ensure_patient_has_a_renal_registry_id
             if patient.renal_registry_id.blank?
-              patient.update_column(:renal_registry_id, generate_renal_registry_id)
+              patient.update_column(:renal_registry_id, self.class.generate_renal_registry_id)
               patient.reload
             end
-          end
-
-          # Renal Registry requires a 'IDN07' id:
-          #  "Unique identifier not attributable to patient, Site code plus internal record
-          #   number or similar eg. RAJ01-12345"
-          # Since we do not like to hand out primary keys for security reasons, and the uuids we
-          # already have on patient, which might otherwise satisfy this requirement, are rather long
-          # (the IDN07 identifier spec says max 20 chars) we generate a unique 10 char base 58
-          # string.
-          def generate_renal_registry_id
-            rr_id = nil
-            loop do
-              rr_id = SecureRandom.base58(10)
-              break unless Renalware::Patient.exists?(renal_registry_id: rr_id) # clash unlikely?
-            end
-            rr_id
           end
 
           def opt_outs_element

@@ -76,7 +76,7 @@ group :test do
   gem "wisper-rspec", "~> 1.1.0"
 end
 
-group :uat, :pr do
+group :production do
   # For redirecting renalware-demo.herokuapp.com => demo.renalware.app
   gem "rack-host-redirect", github: "airslie/rack-host-redirect"
   gem "wkhtmltopdf-heroku", "3.0.0.pre.rc0"
@@ -87,7 +87,7 @@ group :development do
   # gem "traceroute" # for finding unused routes
   gem "awesome_print", require: false
   gem "binding_of_caller"
-  gem "bullet"
+  gem "bullet", "~> 7.2"
   gem "foreman", require: false
   gem "query_count"
   gem "rack-mini-profiler"

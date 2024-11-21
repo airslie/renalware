@@ -3,9 +3,52 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # For the demo app, eg on Heroku demo, we use async mode
-  # so we can avoid running another dyno (mode external)
   config.good_job.execution_mode = :async
+
+  # On production then this is the demo site e.g.
+  #   HEROKU_APP_URL=renalware-demo.herokuapp.com
+  #   HEROKU_CUSTOM_DOMAIN=demo.renalware.app
+  # so redirect requests on renalware-demo.herokuapp.com to demo.renalware.app
+  # because even though we have added a custom domain to Heroku, the original herokuapp
+  # url remains available and this can be confusing. Also, mailgun email will probably
+  # only work on the custom domain.
+  if ENV.fetch("HEROKU_APP_URL", nil) && ENV.fetch("HEROKU_CUSTOM_DOMAIN", nil)
+    config.middleware.use Rack::HostRedirect, {
+      ENV.fetch("HEROKU_APP_URL", nil) => ENV.fetch("HEROKU_CUSTOM_DOMAIN", nil)
+    }
+  end
+
+  # Compress JavaScripts and CSS.
+  config.assets.js_compressor = :terser
+  # Added this to prevent sassc-rails error in tailwindcss-generated css
+  # 'Error: Function rgb is missing argument $green'
+  # >>   border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  # The sassc-rails gem is automatically used for CSS compression if included in
+  # the Gemfile and no config.assets.css_compressor option is set.
+  config.assets.css_compressor = nil
+
+  # ActionMailer::Base.smtp_settings = {
+  #   address: "smtp.sendgrid.net",
+  #   port: "587",
+  #   authentication: :plain,
+  #   user_name: ENV["SENDGRID_USERNAME"],
+  #   password: ENV["SENDGRID_PASSWORD"],
+  #   domain: "heroku.com",
+  #   enable_starttls_auto: true
+  # }
+  ActionMailer::Base.smtp_settings = {
+    port: ENV.fetch("MAILGUN_SMTP_PORT", nil),
+    address: ENV.fetch("MAILGUN_SMTP_SERVER", nil),
+    user_name: ENV.fetch("MAILGUN_SMTP_LOGIN", nil),
+    password: ENV.fetch("MAILGUN_SMTP_PASSWORD", nil),
+    domain: ENV.fetch("HEROKU_CUSTOM_DOMAIN", nil),
+    authentication: :plain
+  }
+  ActionMailer::Base.delivery_method = :smtp
+
+  # .
+  # Important for Devise redirects to and from login page.
+  config.relative_url_root = ENV.fetch("RAILS_RELATIVE_URL_ROOT", "/")
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -16,6 +59,9 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
+  # Generate digests for assets URLs.
+  config.assets.digest = true
+
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
@@ -24,19 +70,11 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
-  # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :terser
-
-  # Added this to prevent sass error in tailwindcss-generated css
-  # 'Error: Function rgb is missing argument $green'
-  # >>   border-color: rgb(229 231 235 / var(--tw-border-opacity));
-  config.assets.css_compressor = nil
-
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
-  # `config.assets.precompile` and `config.assets.version`
-  # have moved to config/initializers/assets.rb
+  # `config.assets.precompile` and `config.assets.version` have
+  # moved to config/initializers/assets.rb
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -53,19 +91,22 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = ENV["HEROKU"].present?
 
+  # if defined?(PartyFoul)
+  #   config.middleware.use(PartyFoul::Middleware)
+  # end
+
   # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise. Normally use :info in a real production app.
+  # when problems arise.
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
   config.cache_store = :solid_cache_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
-  # config.active_job.queue_name_prefix = "demo_#{Rails.env}"
+  # config.active_job.queue_name_prefix = "renalware_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.

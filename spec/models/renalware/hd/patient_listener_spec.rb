@@ -6,7 +6,7 @@ module Renalware
       subject(:listener) { described_class.new }
 
       describe "#patient_modality_changed_to_death" do
-        it "supersedes HD Profile and nulls unit and schedule" do
+        it "deactivates the current HD Profile" do
           user = create(:user)
           unit = create(:hospital_unit)
           schedule_definition = create(:schedule_definition, :mon_wed_fri_am)
@@ -27,22 +27,10 @@ module Renalware
               actor: user
             )
 
-            # Existing profile is unchanged
-            expect(profile.reload).to have_attributes(
-              hospital_unit_id: unit.id,
-              schedule_definition_id: schedule_definition.id,
-              deactivated_at: Time.zone.now
-            )
+            expect(profile.reload).to be_deleted
 
-            new_profile = patient.reload.hd_profile
-            expect(new_profile).not_to eq(profile)
-
-            # New profile has nulled out unit and schedule
-            expect(new_profile.reload).to have_attributes(
-              hospital_unit_id: nil,
-              schedule_definition_id: nil,
-              deactivated_at: nil
-            )
+            # Patient now has no current HD Profile
+            expect(patient.reload.hd_profile).to be_nil
           end
         end
       end

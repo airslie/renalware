@@ -5,7 +5,7 @@ Rails.application.configure do
   # Good job recommends (and defaults to)
   #   development => :async => executes jobs in separate threads within the Rails web server process
   #   test => :inline => :inline executes jobs immediately in whatever process queued them
-  #   production/uat => :external = queue for processing by external process
+  #   production => :external = queue for processing by external process
   # Note the following env variables are available
   # (see https://github.com/bensheldon/good_job#execute-jobs-async--in-process)
   # GOOD_JOB_EXECUTION_MODE=async

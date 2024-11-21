@@ -31,7 +31,8 @@ module Renalware
             patient.updated_by_id = system_user.id
             patient.ukrdc_external_id = SecureRandom.uuid
             patient.secure_id = SecureRandom.uuid
-            patient.generate_renal_registry_id
+            patient.renal_registry_id =
+              UKRDC::Outgoing::Rendering::Patient.generate_renal_registry_id
             patient.hospital_centre_id = host_hospital_centre_id
           end
 

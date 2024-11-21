@@ -93,7 +93,6 @@ Rails/UnknownEnv:
     - production
     - development
     - test
-    - uat
 
 Style/AsciiComments:
   Enabled: true

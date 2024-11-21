@@ -52,10 +52,9 @@ Then("the session is removed") do
   expect_hd_session_to_not_exist(@session)
 end
 
-Then("the patient's HD profile site and schedule should be cleared") do
-  profile = Renalware::HD.cast_patient(@patty).hd_profile
-  expect(profile.schedule_definition).to be_nil
-  expect(profile.hospital_unit).to be_nil
+Then("the patient's HD profile should be deactivated") do
+  profile = Renalware::HD.cast_patient(@patty.reload).hd_profile
+  expect(profile).to be_nil
 end
 
 Given("Patty has a recorded dry weight entry") do
