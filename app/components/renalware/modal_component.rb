@@ -20,19 +20,21 @@ module Renalware
   #
   class ModalComponent < ApplicationComponent
     include Turbo::FramesHelper
-    attr_reader :remote, :title, :size_css_classes
+    include Renalware::IconHelper
+    attr_reader :remote, :title, :size_css_classes, :turbo_frame_id
 
-    DEFAULT_SIZE_CSS_CLASSES = "sm:w-full.sm:max-w-xl"
+    # if changing these, remember to test all instance of ModalComponent
+    DEFAULT_SIZE_CSS_CLASSES = "sm:w-full sm:max-w-xl"
 
     # renders_one :body
     # renders_one :trigger
     # renders_one :bottom_buttons_nav
 
-    def initialize(remote: false, title: nil, size_css_classes: nil)
+    def initialize(remote: false, title: nil, size_css_classes: nil, turbo_frame_id: nil)
       @remote = remote
       @title = title
       @size_css_classes = size_css_classes || DEFAULT_SIZE_CSS_CLASSES
-
+      @turbo_frame_id = turbo_frame_id || "modal"
       super
     end
 

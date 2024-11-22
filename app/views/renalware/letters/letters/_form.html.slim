@@ -56,7 +56,7 @@ ruby:
       h2 Message
 
     = f.input :salutation
-    = snippets_modal_and_link_to_open_it(target_input_for_selected_snippet: ".letter-body-editor")
+
 
     - if event&.respond_to?(:notes)
 
@@ -66,10 +66,20 @@ ruby:
                         notes: event.notes || "" },
                 class: "insert-data-notes button alternative right editor-toolbar-button"
 
-    = f.input :body,
-              as: :trix_editor,
-              wrapper: :zilch,
-              data: { "letters-form-target": "trix" }
+
+    div#snippets-controller(data-controller="snippets")
+      / clicking will launch insert snippet modal
+      / when the user clicks on the Insert button in the modal, the content is put into the target
+      / (eg trix editor)
+      = link_to t("snippets.insert"),
+                authoring.snippets_path,
+                class: "float-right insert-snippet-button button alternative",
+                data: { turbo: true, turbo_frame: "modal" }
+
+      = f.input :body,
+                as: :trix_editor,
+                wrapper: :zilch,
+                data: { "letters-form-target": "trix", "snippets-target": "destination" }
 
   - if Renalware.config.allow_qr_codes_in_letters
     article

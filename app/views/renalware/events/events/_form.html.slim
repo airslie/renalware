@@ -36,8 +36,21 @@ div(data-controller="conditional-display" data-conditional-display-attribute-to-
     #event-type-specific-inputs
       = render partial: event.to_input_partial_path, locals: { event: event, f: f }
     = f.label :notes
-    = snippets_modal_and_link_to_open_it(target_input_for_selected_snippet: ".event-notes")
-    = f.input :notes, as: :trix_editor, class: "event-notes", wrapper: :zilch
+
+    div#snippets-controller(data-controller="snippets")
+      / Clicking will launch the Insert Snippet modal dialog.
+      / When the user clicks on an Insert button in the modal, the snippet text is put into the
+      / snippets controller destination target which currently must be a Trix editor instance.
+      = link_to t("snippets.insert"),
+                authoring.snippets_path,
+                class: "float-right insert-snippet-button button alternative",
+                data: { turbo: true, turbo_frame: "modal" }
+      = f.input :notes,
+                as: :trix_editor,
+                class: "event-notes",
+                wrapper: :zilch,
+                data: { "snippets-target": "destination" }
+
     = f.error :notes
     br
 

@@ -1,0 +1,9 @@
+dl.sub-nav.no-js-selection
+  dd(class= "#{'active' if author == :me}")
+    = link_to authoring.snippets_path do
+        i.fas.fa-user
+        | Mine
+  dd(class= "#{'active' if author == :anyone}")
+    = link_to authoring.snippets_path(author: :anyone) do
+      i.fas.fa-users
+      | Everyone's

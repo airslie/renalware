@@ -1,0 +1,15 @@
+= simple_form_for [authoring, snippet],
+                  url: submit_to_url,
+                  as: :snippet,
+                  wrapper: :horizontal_form do |f|
+
+  = f.input :title, wrapper: :horizontal_medium
+  /= f.input :body, wrapper: :horizontal_large, as: :text, input_html: { rows: 10 }
+
+  .row.string.required.snippet_body
+    .small-12.medium-4.large-3.columns
+      = f.label :body
+    .small-12.medium-8.large-9.columns
+      = f.input :body, as: :trix_editor, wrapper: :zilch
+
+  .mt-4= save_or_cancel(form: f, back_path: authoring.snippets_path)

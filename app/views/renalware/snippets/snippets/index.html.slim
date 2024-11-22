@@ -1,5 +1,0 @@
-= content_for(:actions) do
-  = link_to "Create new", new_snippet_path, class: "button create-snippet right"
-
-= within_admin_layout(title: "Snippets") do
-  = render "list", snippets: snippets, search: search, author: author, remote: false, pagy: pagy

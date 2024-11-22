@@ -8,6 +8,7 @@ import DietaryProteinCalculatorController from "./clinics/dietary_protein_calcul
 import HDPrescriptionController from "./hd/prescription_administration_controller"
 import MedicationsHomeDeliveryModalController from "./medications/home_delivery_modal_controller"
 import SnippetsController from "./snippets_controller"
+import SnippetController from "./snippet_controller"
 import LettersFormController from "./letters/form_controller"
 import PrescriptionsController from "./medications/prescriptions_controller"
 import ChartsController from "./charts_controller"
@@ -46,6 +47,7 @@ import TurboModalController from "./turbo_modal_controller"
 import ChartsRawController from "./charts_raw_controller"
 import PopoverController from "./popover_controller"
 import LettersBatchCompileController from "./letters/batch_compile_controller"
+import ClipboardController from "./clipboard_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
@@ -54,6 +56,7 @@ application.register(
   MedicationsHomeDeliveryModalController
 )
 application.register("snippets", SnippetsController)
+application.register("snippet", SnippetController)
 application.register("letters-form", LettersFormController)
 application.register("prescriptions", PrescriptionsController)
 application.register("charts", ChartsController)
@@ -108,3 +111,5 @@ application.register("turbo-modal", TurboModalController)
 application.register("charts-raw", ChartsRawController)
 application.register("popover", PopoverController)
 application.register("letters-batch-compile", LettersBatchCompileController)
+application.register("clipboard", ClipboardController)
+

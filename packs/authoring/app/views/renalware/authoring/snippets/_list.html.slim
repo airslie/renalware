@@ -1,0 +1,5 @@
+- i18n_scope = in_dialog ? ".modal" : ""
+.snippets
+  = turbo_frame_tag "snippet-search" do
+    = render "table", snippets: snippets, author: author, search: search, in_dialog: in_dialog
+    == pagy_nav(pagy) if pagy.pages > 1

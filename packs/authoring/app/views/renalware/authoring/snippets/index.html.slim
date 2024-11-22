@@ -1,0 +1,18 @@
+= content_for(:actions) do
+  = link_to "Create new",
+            authoring.new_snippet_path,
+            class: "button create-snippet right"
+
+= content_for(:filters) do
+  .w-1/2= render "filters", search: search, author: author, remote: false, in_dialog: false
+
+= content_for(:tabs) do
+  = render "tabs", author: author
+
+= within_admin_layout(title: "Snippets") do
+  = render "list",
+           snippets: snippets,
+           search: search,
+           author: author,
+           in_dialog: false,
+           pagy: pagy

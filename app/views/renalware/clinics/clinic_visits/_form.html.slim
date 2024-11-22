@@ -68,9 +68,20 @@
       article
         header
           h2 Notes
-        - target = ".clinic-visit-notes-editor"
-        = snippets_modal_and_link_to_open_it(target_input_for_selected_snippet: target)
-        = f.input :notes, as: :trix_editor, class: "clinic-visit-notes-editor", wrapper: :zilch
+
+        div#snippets-controller(data-controller="snippets")
+          / clicking will launch insert snippet modal
+          / when the user clicks on the Insert button in the modal, the content is put into the target
+          / (eg trix editor)
+          = link_to t("snippets.insert"),
+                    authoring.snippets_path,
+                    class: "float-right insert-snippet-button button alternative",
+                    data: { turbo: true, turbo_frame: "modal" }
+          = f.label :notes
+          = f.input :notes,
+                    as: :trix_editor,
+                    wrapper: :zilch,
+                    data: { "snippets-target": "destination" }
 
       article
         header

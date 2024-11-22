@@ -44,6 +44,8 @@ en:
     cancel: Cancel
     change: Change
     clear: Clear
+    copy: Copy
+    copied: Copied!
     create: Create
     create_: Create...
     delete: Delete

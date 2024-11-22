@@ -1,0 +1,15 @@
+/ Dialog invoked when user elects to insert a snippet somewhere eg in a letter or event
+= render Renalware::ModalComponent.new(title: "Insert snippet",
+                                       size_css_classes: "sm:w-full lg:w-3/4") do
+  / Filters (search) should really go below tabs but this stops tabs working for some reason,
+  / So putting above tabs in the modal version
+  = render "filters", search: search, author: author, remote: false, in_dialog: true
+  .non-patient-page(style="padding-bottom: 0")
+    .non-patient-page-header.with-tabs
+      = render "tabs", author: author
+  = render "list",
+            snippets: snippets,
+            search: search,
+            author: author,
+            in_dialog: in_dialog,
+            pagy: pagy

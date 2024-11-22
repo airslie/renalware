@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module World
-  module Snippets
+  module Authoring
     def snippets_user(user)
-      Renalware::Snippets.cast_user(user)
+      Renalware::Authoring.cast_user(user)
     end
   end
 end

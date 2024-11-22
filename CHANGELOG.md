@@ -9,9 +9,21 @@ This project adheres to Semantic Versioning.
 ### Changed
 ### Fixed
 
+## 2.4.5.2
+### Added
+### Changed
+- Use a pathology code group to define hep_b_antibody_statuses OBX codes #5066
+  - Rather than the previous implementation which was an ENV variable which is harder to change and less in keeping with our approach elsewhere. Code group name is 'hep_b_antibody_statuses'.
+- On death modality deactivate HD profile if they have one #5065
+  Rather than superseding with a new amended one with hospital unit and schedule nulled-out.
+### Fixed
+
 ## 2.4.5.1
 ### Added
 ### Changed
+- Supersede (deactivate old and create new) HD profile on death modality rather than directly update HD Profile #5036
+  - Previously on death modality the patient's current hd_profile was updated to null-out hospital_unit and schedule_definition. This was the wrong approach and we should instead deactivate the current profile and create a new one with those nulled values. This way makes it easier to find what unit a patient was at before they died.
+- Add configuration so non-admins can update PKB/RR settings #5039
 - Mark letter and associated MESH transmission as failed on timeout #5033
   - If no bus or inf response received with the configured period, set transmission.status = failed and the letter.gp_sent_status = failed
 - Retry on SaveRTFLetterToFileJob on Errno::EPIPE (broken pipe) errors #5004
@@ -23,6 +35,9 @@ This project adheres to Semantic Versioning.
 - Add a from..to date for automatically including QR codes in letters #4974
   - If an OnlineReferenceLink (which becomes a QR code when inserted into a letter) has #include_in_letters_from and #include_in_letters_from dates that satisfy conditions, that QR code is automatically added to any new letters.
 ### Fixed
+- Mesh ITK error eg 30003 was not setting letter.gp_send_status=failure #5043
+- Mark letter and associated MESH transmission as failed on timeout #5033
+- Use sending facility name in IDN07 rather than site code #5040
 - Supersede rather than directly update HD Profile on death modality #5036
   - Previously on death modality the patient's current hd_profile was updated to null-out hospital_unit and schedule_definition. This was the wrong approach and we should instead deactivate the current profile and create a new one with those nulled values. This way makes it easier to find what unit a patient was at before they died.
 - Fix HD Diary slot creation issue #5014

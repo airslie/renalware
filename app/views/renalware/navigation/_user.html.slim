@@ -18,7 +18,7 @@ li.has-dropdown.menu-item.menu-item--home
     li= link_to t(".my_dashboard"), renalware.dashboard_path
     li= link_to "Update Profile", renalware.edit_user_registration_path
     li= link_to "View Letters", renalware.author_letters_path(current_user.id)
-    li= link_to "Manage Snippets", renalware.snippets_path
+    li= link_to "Manage Snippets", authoring.snippets_path
     li.relative= link_to renalware.messaging_internal_inbox_path do
       .flex
         span Messages

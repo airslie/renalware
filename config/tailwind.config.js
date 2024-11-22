@@ -27,7 +27,7 @@ module.exports = {
     relative: true,
     files: [
       "../**/app/helpers/**/*.rb",
-      `${process.cwd()}/app/helpers/**/*.rb`,
+      `${process.cwd()}../app/helpers/**/*.rb`,
       "../**/app/inputs/**/*.rb",
       `${process.cwd()}/app/inputs/**/*.rb`,
       "../**/app/views/**/*.{erb,haml,html,slim}",

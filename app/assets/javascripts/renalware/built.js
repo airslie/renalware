@@ -1377,7 +1377,7 @@ var addToUnscopables$3 = function (key) {
   ArrayPrototype$1[UNSCOPABLES][key] = true;
 };
 
-var $$y = _export;
+var $$x = _export;
 var $find = arrayIteration.find;
 var addToUnscopables$2 = addToUnscopables$3;
 
@@ -1390,7 +1390,7 @@ if (FIND in []) Array(1)[FIND](function () { SKIPS_HOLES$1 = false; });
 
 // `Array.prototype.find` method
 // https://tc39.es/ecma262/#sec-array.prototype.find
-$$y({ target: 'Array', proto: true, forced: SKIPS_HOLES$1 }, {
+$$x({ target: 'Array', proto: true, forced: SKIPS_HOLES$1 }, {
   find: function find(callbackfn /* , that = undefined */) {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
@@ -1410,7 +1410,7 @@ var entryUnbind$2 = entryUnbind$3;
 
 entryUnbind$2('Array', 'find');
 
-var $$x = _export;
+var $$w = _export;
 var $findIndex = arrayIteration.findIndex;
 var addToUnscopables$1 = addToUnscopables$3;
 
@@ -1423,7 +1423,7 @@ if (FIND_INDEX in []) Array(1)[FIND_INDEX](function () { SKIPS_HOLES = false; })
 
 // `Array.prototype.findIndex` method
 // https://tc39.es/ecma262/#sec-array.prototype.findindex
-$$x({ target: 'Array', proto: true, forced: SKIPS_HOLES }, {
+$$w({ target: 'Array', proto: true, forced: SKIPS_HOLES }, {
   findIndex: function findIndex(callbackfn /* , that = undefined */) {
     return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
@@ -1645,7 +1645,7 @@ var objectSetPrototypeOf = Object.setPrototypeOf || ('__proto__' in {} ? functio
   };
 }() : undefined);
 
-var $$w = _export;
+var $$v = _export;
 var call$d = functionCall;
 var FunctionName = functionName;
 var isCallable$7 = isCallable$m;
@@ -1733,7 +1733,7 @@ var iteratorDefine = function (Iterable, NAME, IteratorConstructor, next, DEFAUL
       if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY in IterablePrototype)) {
         defineBuiltIn$6(IterablePrototype, KEY, methods[KEY]);
       }
-    } else $$w({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+    } else $$v({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
   }
 
   // define iterator
@@ -1953,7 +1953,7 @@ var checkCorrectnessOfIteration$3 = function (exec, SKIP_CLOSING) {
   return ITERATION_SUPPORT;
 };
 
-var $$v = _export;
+var $$u = _export;
 var from = arrayFrom;
 var checkCorrectnessOfIteration$2 = checkCorrectnessOfIteration$3;
 
@@ -1964,7 +1964,7 @@ var INCORRECT_ITERATION = !checkCorrectnessOfIteration$2(function (iterable) {
 
 // `Array.from` method
 // https://tc39.es/ecma262/#sec-array.from
-$$v({ target: 'Array', stat: true, forced: INCORRECT_ITERATION }, {
+$$u({ target: 'Array', stat: true, forced: INCORRECT_ITERATION }, {
   from: from
 });
 
@@ -2104,7 +2104,7 @@ var freezing = !fails$7(function () {
   return Object.isExtensible(Object.preventExtensions({}));
 });
 
-var $$u = _export;
+var $$t = _export;
 var uncurryThis$8 = functionUncurryThis;
 var hiddenKeys = hiddenKeys$5;
 var isObject$6 = isObject$h;
@@ -2179,7 +2179,7 @@ var enable = function () {
       } return result;
     };
 
-    $$u({ target: 'Object', stat: true, forced: true }, {
+    $$t({ target: 'Object', stat: true, forced: true }, {
       getOwnPropertyNames: getOwnPropertyNamesExternalModule.f
     });
   }
@@ -2293,7 +2293,7 @@ var inheritIfRequired$1 = function ($this, dummy, Wrapper) {
   return $this;
 };
 
-var $$t = _export;
+var $$s = _export;
 var globalThis$8 = globalThis_1;
 var uncurryThis$7 = functionUncurryThis;
 var isForced$1 = isForced_1;
@@ -2390,7 +2390,7 @@ var collection$2 = function (CONSTRUCTOR_NAME, wrapper, common) {
   }
 
   exported[CONSTRUCTOR_NAME] = Constructor;
-  $$t({ global: true, constructor: true, forced: Constructor !== NativeConstructor }, exported);
+  $$s({ global: true, constructor: true, forced: Constructor !== NativeConstructor }, exported);
 
   setToStringTag$1(Constructor, CONSTRUCTOR_NAME);
 
@@ -2663,7 +2663,7 @@ var mapHelpers = {
   proto: MapPrototype
 };
 
-var $$s = _export;
+var $$r = _export;
 var uncurryThis$5 = functionUncurryThis;
 var aCallable$7 = aCallable$c;
 var requireObjectCoercible$1 = requireObjectCoercible$6;
@@ -2685,7 +2685,7 @@ var DOES_NOT_WORK_WITH_PRIMITIVES = fails$5(function () {
 
 // `Map.groupBy` method
 // https://github.com/tc39/proposal-array-grouping
-$$s({ target: 'Map', stat: true, forced: DOES_NOT_WORK_WITH_PRIMITIVES }, {
+$$r({ target: 'Map', stat: true, forced: DOES_NOT_WORK_WITH_PRIMITIVES }, {
   groupBy: function groupBy(items, callbackfn) {
     requireObjectCoercible$1(items);
     aCallable$7(callbackfn);
@@ -2780,13 +2780,13 @@ var objectAssign = !$assign || fails$4(function () {
   } return T;
 } : $assign;
 
-var $$r = _export;
+var $$q = _export;
 var assign = objectAssign;
 
 // `Object.assign` method
 // https://tc39.es/ecma262/#sec-object.assign
 // eslint-disable-next-line es/no-object-assign -- required for testing
-$$r({ target: 'Object', stat: true, arity: 2, forced: Object.assign !== assign }, {
+$$q({ target: 'Object', stat: true, arity: 2, forced: Object.assign !== assign }, {
   assign: assign
 });
 
@@ -2852,7 +2852,7 @@ var normalizeStringArgument$1 = function (argument, $default) {
   return argument === undefined ? arguments.length < 2 ? '' : $default : toString$1(argument);
 };
 
-var $$q = _export;
+var $$p = _export;
 var isPrototypeOf = objectIsPrototypeOf;
 var getPrototypeOf = objectGetPrototypeOf;
 var setPrototypeOf$1 = objectSetPrototypeOf;
@@ -2899,7 +2899,7 @@ var AggregateErrorPrototype = $AggregateError.prototype = create($Error.prototyp
 
 // `AggregateError` constructor
 // https://tc39.es/ecma262/#sec-aggregate-error-constructor
-$$q({ global: true, constructor: true, arity: 2 }, {
+$$p({ global: true, constructor: true, arity: 2 }, {
   AggregateError: $AggregateError
 });
 
@@ -3305,7 +3305,7 @@ newPromiseCapability$2.f = function (C) {
   return new PromiseCapability(C);
 };
 
-var $$p = _export;
+var $$o = _export;
 var IS_NODE = environmentIsNode;
 var globalThis$1 = globalThis_1;
 var call$6 = functionCall;
@@ -3585,7 +3585,7 @@ if (FORCED_PROMISE_CONSTRUCTOR$4) {
   }
 }
 
-$$p({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR$4 }, {
+$$o({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR$4 }, {
   Promise: PromiseConstructor
 });
 
@@ -3600,7 +3600,7 @@ var promiseStaticsIncorrectIteration = FORCED_PROMISE_CONSTRUCTOR$3 || !checkCor
   NativePromiseConstructor$2.all(iterable).then(undefined, function () { /* empty */ });
 });
 
-var $$o = _export;
+var $$n = _export;
 var call$5 = functionCall;
 var aCallable$4 = aCallable$c;
 var newPromiseCapabilityModule$5 = newPromiseCapability$2;
@@ -3610,7 +3610,7 @@ var PROMISE_STATICS_INCORRECT_ITERATION$3 = promiseStaticsIncorrectIteration;
 
 // `Promise.all` method
 // https://tc39.es/ecma262/#sec-promise.all
-$$o({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$3 }, {
+$$n({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$3 }, {
   all: function all(iterable) {
     var C = this;
     var capability = newPromiseCapabilityModule$5.f(C);
@@ -3639,7 +3639,7 @@ $$o({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION
   }
 });
 
-var $$n = _export;
+var $$m = _export;
 var FORCED_PROMISE_CONSTRUCTOR$2 = promiseConstructorDetection.CONSTRUCTOR;
 var NativePromiseConstructor$1 = promiseNativeConstructor;
 var getBuiltIn$4 = getBuiltIn$a;
@@ -3650,7 +3650,7 @@ var NativePromisePrototype$1 = NativePromiseConstructor$1 && NativePromiseConstr
 
 // `Promise.prototype.catch` method
 // https://tc39.es/ecma262/#sec-promise.prototype.catch
-$$n({ target: 'Promise', proto: true, forced: FORCED_PROMISE_CONSTRUCTOR$2, real: true }, {
+$$m({ target: 'Promise', proto: true, forced: FORCED_PROMISE_CONSTRUCTOR$2, real: true }, {
   'catch': function (onRejected) {
     return this.then(undefined, onRejected);
   }
@@ -3664,7 +3664,7 @@ if (isCallable$1(NativePromiseConstructor$1)) {
   }
 }
 
-var $$m = _export;
+var $$l = _export;
 var call$4 = functionCall;
 var aCallable$3 = aCallable$c;
 var newPromiseCapabilityModule$4 = newPromiseCapability$2;
@@ -3674,7 +3674,7 @@ var PROMISE_STATICS_INCORRECT_ITERATION$2 = promiseStaticsIncorrectIteration;
 
 // `Promise.race` method
 // https://tc39.es/ecma262/#sec-promise.race
-$$m({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$2 }, {
+$$l({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$2 }, {
   race: function race(iterable) {
     var C = this;
     var capability = newPromiseCapabilityModule$4.f(C);
@@ -3690,13 +3690,13 @@ $$m({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION
   }
 });
 
-var $$l = _export;
+var $$k = _export;
 var newPromiseCapabilityModule$3 = newPromiseCapability$2;
 var FORCED_PROMISE_CONSTRUCTOR$1 = promiseConstructorDetection.CONSTRUCTOR;
 
 // `Promise.reject` method
 // https://tc39.es/ecma262/#sec-promise.reject
-$$l({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR$1 }, {
+$$k({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR$1 }, {
   reject: function reject(r) {
     var capability = newPromiseCapabilityModule$3.f(this);
     var capabilityReject = capability.reject;
@@ -3718,7 +3718,7 @@ var promiseResolve$2 = function (C, x) {
   return promiseCapability.promise;
 };
 
-var $$k = _export;
+var $$j = _export;
 var getBuiltIn$3 = getBuiltIn$a;
 var FORCED_PROMISE_CONSTRUCTOR = promiseConstructorDetection.CONSTRUCTOR;
 var promiseResolve$1 = promiseResolve$2;
@@ -3727,13 +3727,13 @@ getBuiltIn$3('Promise');
 
 // `Promise.resolve` method
 // https://tc39.es/ecma262/#sec-promise.resolve
-$$k({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
+$$j({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
   resolve: function resolve(x) {
     return promiseResolve$1(this, x);
   }
 });
 
-var $$j = _export;
+var $$i = _export;
 var call$3 = functionCall;
 var aCallable$2 = aCallable$c;
 var newPromiseCapabilityModule$2 = newPromiseCapability$2;
@@ -3743,7 +3743,7 @@ var PROMISE_STATICS_INCORRECT_ITERATION$1 = promiseStaticsIncorrectIteration;
 
 // `Promise.allSettled` method
 // https://tc39.es/ecma262/#sec-promise.allsettled
-$$j({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$1 }, {
+$$i({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$1 }, {
   allSettled: function allSettled(iterable) {
     var C = this;
     var capability = newPromiseCapabilityModule$2.f(C);
@@ -3777,7 +3777,7 @@ $$j({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION
   }
 });
 
-var $$i = _export;
+var $$h = _export;
 var call$2 = functionCall;
 var aCallable$1 = aCallable$c;
 var getBuiltIn$2 = getBuiltIn$a;
@@ -3790,7 +3790,7 @@ var PROMISE_ANY_ERROR = 'No one promise resolved';
 
 // `Promise.any` method
 // https://tc39.es/ecma262/#sec-promise.any
-$$i({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION }, {
+$$h({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION }, {
   any: function any(iterable) {
     var C = this;
     var AggregateError = getBuiltIn$2('AggregateError');
@@ -3825,12 +3825,12 @@ $$i({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION
   }
 });
 
-var $$h = _export;
+var $$g = _export;
 var newPromiseCapabilityModule = newPromiseCapability$2;
 
 // `Promise.withResolvers` method
 // https://github.com/tc39/proposal-promise-with-resolvers
-$$h({ target: 'Promise', stat: true }, {
+$$g({ target: 'Promise', stat: true }, {
   withResolvers: function withResolvers() {
     var promiseCapability = newPromiseCapabilityModule.f(this);
     return {
@@ -3841,7 +3841,7 @@ $$h({ target: 'Promise', stat: true }, {
   }
 });
 
-var $$g = _export;
+var $$f = _export;
 var NativePromiseConstructor = promiseNativeConstructor;
 var fails$1 = fails$l;
 var getBuiltIn$1 = getBuiltIn$a;
@@ -3860,7 +3860,7 @@ var NON_GENERIC = !!NativePromiseConstructor && fails$1(function () {
 
 // `Promise.prototype.finally` method
 // https://tc39.es/ecma262/#sec-promise.prototype.finally
-$$g({ target: 'Promise', proto: true, real: true, forced: NON_GENERIC }, {
+$$f({ target: 'Promise', proto: true, real: true, forced: NON_GENERIC }, {
   'finally': function (onFinally) {
     var C = speciesConstructor(this, getBuiltIn$1('Promise'));
     var isFunction = isCallable(onFinally);
@@ -4076,13 +4076,13 @@ var setMethodAcceptSetLike$7 = function (name) {
   }
 };
 
-var $$f = _export;
+var $$e = _export;
 var difference = setDifference;
 var setMethodAcceptSetLike$6 = setMethodAcceptSetLike$7;
 
 // `Set.prototype.difference` method
 // https://github.com/tc39/proposal-set-methods
-$$f({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$6('difference') }, {
+$$e({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$6('difference') }, {
   difference: difference
 });
 
@@ -4117,7 +4117,7 @@ var setIntersection = function intersection(other) {
   return result;
 };
 
-var $$e = _export;
+var $$d = _export;
 var fails = fails$l;
 var intersection = setIntersection;
 var setMethodAcceptSetLike$5 = setMethodAcceptSetLike$7;
@@ -4129,7 +4129,7 @@ var INCORRECT = !setMethodAcceptSetLike$5('intersection') || fails(function () {
 
 // `Set.prototype.intersection` method
 // https://github.com/tc39/proposal-set-methods
-$$e({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+$$d({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
   intersection: intersection
 });
 
@@ -4155,13 +4155,13 @@ var setIsDisjointFrom = function isDisjointFrom(other) {
   }) !== false;
 };
 
-var $$d = _export;
+var $$c = _export;
 var isDisjointFrom = setIsDisjointFrom;
 var setMethodAcceptSetLike$4 = setMethodAcceptSetLike$7;
 
 // `Set.prototype.isDisjointFrom` method
 // https://github.com/tc39/proposal-set-methods
-$$d({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$4('isDisjointFrom') }, {
+$$c({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$4('isDisjointFrom') }, {
   isDisjointFrom: isDisjointFrom
 });
 
@@ -4181,13 +4181,13 @@ var setIsSubsetOf = function isSubsetOf(other) {
   }, true) !== false;
 };
 
-var $$c = _export;
+var $$b = _export;
 var isSubsetOf = setIsSubsetOf;
 var setMethodAcceptSetLike$3 = setMethodAcceptSetLike$7;
 
 // `Set.prototype.isSubsetOf` method
 // https://github.com/tc39/proposal-set-methods
-$$c({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$3('isSubsetOf') }, {
+$$b({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$3('isSubsetOf') }, {
   isSubsetOf: isSubsetOf
 });
 
@@ -4210,13 +4210,13 @@ var setIsSupersetOf = function isSupersetOf(other) {
   }) !== false;
 };
 
-var $$b = _export;
+var $$a = _export;
 var isSupersetOf = setIsSupersetOf;
 var setMethodAcceptSetLike$2 = setMethodAcceptSetLike$7;
 
 // `Set.prototype.isSupersetOf` method
 // https://github.com/tc39/proposal-set-methods
-$$b({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$2('isSupersetOf') }, {
+$$a({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$2('isSupersetOf') }, {
   isSupersetOf: isSupersetOf
 });
 
@@ -4243,13 +4243,13 @@ var setSymmetricDifference = function symmetricDifference(other) {
   return result;
 };
 
-var $$a = _export;
+var $$9 = _export;
 var symmetricDifference = setSymmetricDifference;
 var setMethodAcceptSetLike$1 = setMethodAcceptSetLike$7;
 
 // `Set.prototype.symmetricDifference` method
 // https://github.com/tc39/proposal-set-methods
-$$a({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$1('symmetricDifference') }, {
+$$9({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike$1('symmetricDifference') }, {
   symmetricDifference: symmetricDifference
 });
 
@@ -4271,13 +4271,13 @@ var setUnion = function union(other) {
   return result;
 };
 
-var $$9 = _export;
+var $$8 = _export;
 var union = setUnion;
 var setMethodAcceptSetLike = setMethodAcceptSetLike$7;
 
 // `Set.prototype.union` method
 // https://github.com/tc39/proposal-set-methods
-$$9({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('union') }, {
+$$8({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('union') }, {
   union: union
 });
 
@@ -4324,7 +4324,7 @@ var correctIsRegexpLogic = function (METHOD_NAME) {
   } return false;
 };
 
-var $$8 = _export;
+var $$7 = _export;
 var uncurryThis = functionUncurryThisClause;
 var getOwnPropertyDescriptor = objectGetOwnPropertyDescriptor.f;
 var toLength = toLength$2;
@@ -4345,7 +4345,7 @@ var MDN_POLYFILL_BUG = !CORRECT_IS_REGEXP_LOGIC && !!function () {
 
 // `String.prototype.startsWith` method
 // https://tc39.es/ecma262/#sec-string.prototype.startswith
-$$8({ target: 'String', proto: true, forced: !MDN_POLYFILL_BUG && !CORRECT_IS_REGEXP_LOGIC }, {
+$$7({ target: 'String', proto: true, forced: !MDN_POLYFILL_BUG && !CORRECT_IS_REGEXP_LOGIC }, {
   startsWith: function startsWith(searchString /* , position = 0 */) {
     var that = toString(requireObjectCoercible(this));
     notARegExp(searchString);
@@ -8956,7 +8956,7 @@ class i extends Controller {
 }
 i.targets = ["menu"];
 
-const $$7 = window.$;
+const $$6 = window.$;
 
 // Used when a table has toggleable rows (initially hidden rows that can be toggled open
 // to see e.g. notes or extended details) and each master row and its toggleable sibling are
@@ -8972,7 +8972,7 @@ class ToggleController extends Controller {
     const tbody = event.target.closest("tbody");
     tbody.classList.toggle("toggleable--open");
     // Update masonry - TODO: move to a module
-    $$7(".mgrid > .row").masonry("layout");
+    $$6(".mgrid > .row").masonry("layout");
   }
 
   // Toggle the last tr in each tbody in the current table.
@@ -8988,7 +8988,7 @@ class ToggleController extends Controller {
     thead.classList.toggle("toggleable--open");
     tbodies.forEach(function(tbody) { tbody.classList.toggle("toggleable--open", !hide); });
     // Update masonry - TODO: move to a module
-    $$7(".mgrid > .row").masonry("layout");
+    $$6(".mgrid > .row").masonry("layout");
   }
 }
 
@@ -9110,7 +9110,7 @@ class DietaryProteinCalculatorController extends Controller {
   }
 }
 
-const $$6 = window.$;
+const $$5 = window.$;
 
 class HDPrescriptionController extends Controller {
   static targets = ["container", "radio"]
@@ -9121,13 +9121,13 @@ class HDPrescriptionController extends Controller {
     this.containerTarget.classList.toggle("not-administered", !checked);
     this.containerTarget.classList.remove("undecided");
     // The rest of this actions are using jQuery for now.
-    $$6(".authentication", this.containerTarget).toggle(checked);
-    $$6(".authentication", this.containerTarget).toggleClass(
+    $$5(".authentication", this.containerTarget).toggle(checked);
+    $$5(".authentication", this.containerTarget).toggleClass(
       "disabled-with-faded-overlay",
       !checked
     );
-    $$6(".reason-why-not-administered", this.containerTarget).toggle(!checked);
-    $$6("#btn_save_and_witness_later").toggle(checked);
+    $$5(".reason-why-not-administered", this.containerTarget).toggle(!checked);
+    $$5("#btn_save_and_witness_later").toggle(checked);
   }
 }
 
@@ -9155,16 +9155,37 @@ class MedicationsHomeDeliveryModalController extends Controller {
   }
 }
 
-const $$5 = window.$;
-
+// This is the Snippets (as opposed to Snippet) controller.
+// It is responsible for receiving an #insert message from a snippet_controller elsewhere in the
+// DOM - eg in a modal dialog listing a table of available snippets, where each row/tr is controlled
+// by a SnippetController. The link between the individual snippet controller and this this
+// snippets controller is via the stimulus outlets API.
+// See also snippet_controller.js
 class SnippetsController extends Controller {
+  static targets = ["destination"] // a Trix editor that supports .insertHTML()
+
+  insert(snippetText) {
+    this.destinationTarget.editor.insertHTML(snippetText);
+  }
+}
+
+// This is the Snippet (as opposed to Snippets) controller.
+// Each row (tr) in a table of snippets has a snippet controller.
+// When the Insert link in the row is clicked, the #insert() action is called.
+// This extracts the snippet text from the sourceTarget (eg a td in the tr), and then
+// delegates the the insert call to each (usually just one) snippets outlet; this outlet is a link
+// to a stimulus snippets elsewhere in the DOM, defined by CSS - see eg
+//   td(snippet-snippets-outlet="#snippets-controller")
+// The snippets controller knows about the destination for the snippet ie where it will be
+// inserted.
+class SnippetController extends Controller {
+  static targets = ["source"]
+  static outlets = ["snippets"]
+
   insert(event) {
-    // TODO: set up the trix editor in each page as data-target="snippets.trix"
-    let modal = $$5("#snippets-modal");
-    let snippetBody = $$5(event.target).parent().closest("tr").find(".body").html();
-    let trix = document.querySelector("trix-editor");
-    trix.editor.insertHTML(snippetBody);
-    $$5(modal).foundation("reveal", "close");
+    event.preventDefault();
+    const snippetText = this.sourceTarget.innerHTML;
+    this.snippetsOutlets.forEach(x => x.insert(snippetText));
   }
 }
 
@@ -23001,6 +23022,48 @@ class LettersBatchCompileController extends Controller {
   }
 }
 
+// From https://github.com/stimulus-components/stimulus-clipboard
+
+
+class Clipboard extends Controller {
+  static targets = ["button", "source"]
+  static values = {
+    successContent: String,
+    successDuration: {
+      type: Number,
+      default: 2000
+    }
+  }
+
+  connect() {
+    if (!this.hasButtonTarget) return
+
+    this.originalContent = this.buttonTarget.innerHTML;
+  }
+
+  copy(event) {
+    event.preventDefault();
+
+    const text = this.sourceTarget.innerHTML || this.sourceTarget.value;
+
+    navigator.clipboard.writeText(text).then(() => this.copied());
+  }
+
+  copied() {
+    if (!this.hasButtonTarget) return
+
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
+    this.buttonTarget.innerHTML = this.successContentValue;
+
+    this.timeout = setTimeout(() => {
+      this.buttonTarget.innerHTML = this.originalContent;
+    }, this.successDurationValue);
+  }
+}
+
 application.register("toggle", ToggleController);
 application.register("hd-prescription-administration", HDPrescriptionController);
 application.register(
@@ -23008,6 +23071,7 @@ application.register(
   MedicationsHomeDeliveryModalController
 );
 application.register("snippets", SnippetsController);
+application.register("snippet", SnippetController);
 application.register("letters-form", LettersFormController);
 application.register("prescriptions", PrescriptionsController);
 application.register("charts", ChartsController);
@@ -23062,6 +23126,7 @@ application.register("turbo-modal", TurboModalController);
 application.register("charts-raw", ChartsRawController);
 application.register("popover", Popover);
 application.register("letters-batch-compile", LettersBatchCompileController);
+application.register("clipboard", Clipboard);
 
 /*!
 Turbo 8.0.5

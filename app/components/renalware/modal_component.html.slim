@@ -1,11 +1,17 @@
 
-= turbo_frame_tag "modal" do
+= turbo_frame_tag turbo_frame_id do
   div(data-controller="turbo-modal")
     .relative.z-10[aria-labelledby="modal-title" role="dialog" aria-modal="true"]
       .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
       .fixed.inset-0.z-10.w-screen.overflow-y-auto
         .flex.min-h-full.items-end.justify-center.p-4.text-center.sm:items-center.sm:p-0
-          .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pb-4.pt-3.text-left.shadow-xl.transition-all.sm:mt-8.sm:mb-24.sm:w-full.sm:max-w-xl.sm:pt-0.sm:p-6
+          .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pb-4.pt-3.text-left.shadow-xl.transition-all.sm:pt-0.sm:p-6.sm:mt-8.sm:mb-24(class=size_css_classes)
+            .absolute.right-0.top-0.hidden.pr-4.pt-4.sm:block
+                button(data-action="click->turbo-modal#close")
+                  .rounded-md.bg-white.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-indigo-500.focus:ring-offset-2(type="button")
+                  span.sr-only Close
+                  = inline_icon(:cross, size: :xl)
+
             - if title.present?
               h2.text-1xl.mt-5.mb-4 = title
             = content

@@ -1,0 +1,57 @@
+- snippet_authored_by_me = snippet.author_id == current_user.id
+- row_selector = "tr[data-snippet-id='#{snippet.id}']"
+- col_count = 6 - (in_dialog ? 2 : 0) - (author == :me ? 1 : 0)
+tbody
+  tr(data={ "snippet-id" => snippet.id,
+            invocation_url: authoring.snippet_invocations_path(snippet),
+            controller: "clipboard snippet",
+            "snippet-snippets-outlet": "#snippets-controller",
+            "clipboard-success-content-value" => "<div class='flex items-center'>#{inline_icon('clipboard_tick', size: :md)}</div>"})
+    td= row_toggler
+    td
+      .flex.gap-4
+        = link_to("#",
+                  class: "button secondary compact",
+                  title: t("btn.copy"),
+                  data: { action: "clipboard#copy", "clipboard-target" => "button"}) do
+          .flex.items-center
+            = inline_icon "clipboard", size: :md
+
+        - if in_dialog
+          = link_to("#",
+                    class: "button secondary compact",
+                    data: { action: "click->snippet#insert click->turbo-modal#close" }) do
+            .flex.items-center
+              = inline_icon "insert", size: :md
+              .ml-2= t("btn.insert")
+
+    - unless author == :me
+      td.col-width-medium.author= snippet.author
+    td.css-toggle-container.title
+      = tooltip_with_block(label: snippet.title) do
+        = snippet.title
+    td.css-toggle-container.body
+      = tooltip_with_block(label: snippet.body) do
+        .body-content(data-clipboard-target="source" data-snippet-target="source")= snippet.body.html_safe
+    - unless in_dialog
+      td.last_used_on
+        = "#{snippet.last_used_on? ? l(snippet.last_used_on) : 'Never'} (#{snippet.times_used})"
+      td.updated_at= l(snippet.updated_at)
+      td.actions
+
+        - if snippet_authored_by_me
+          = link_to t(".edit"), authoring.edit_snippet_path(snippet)
+          = link_to t(".duplicate"),
+                    authoring.snippet_clones_path(snippet_id: snippet),
+                    method: :post
+          = link_to t(".delete"),
+                    authoring.snippet_path(snippet),
+                    method: :delete,
+                    data: { confirm: delete_confirmation_msg }
+        - else
+          = link_to t(".clone"),
+                    authoring.snippet_clones_path(snippet_id: snippet),
+                    method: :post
+  tr
+    td(colspan=col_count)
+      .bg-yellow-50.pb-4= snippet.body.html_safe

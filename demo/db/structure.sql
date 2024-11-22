@@ -2328,7 +2328,7 @@ BEGIN
   with candidates as(
     select
         p.id as patient_id,
-        convert_to_float(pcos.values -> 'EGFR' ->> 'result') as egfr,
+        convert_to_float(pcos.values -> 'EGFR' ->> 'result', null) as egfr,
         md.code as modality_code
     from
         renalware.patients p
@@ -8466,6 +8466,16 @@ CREATE SEQUENCE renalware.letter_mailshot_mailshots_id_seq
 --
 
 ALTER SEQUENCE renalware.letter_mailshot_mailshots_id_seq OWNED BY renalware.letter_mailshot_mailshots.id;
+
+
+--
+-- Name: letter_mailshot_patients_where_surname_starts_with_r; Type: VIEW; Schema: renalware; Owner: -
+--
+
+CREATE VIEW renalware.letter_mailshot_patients_where_surname_starts_with_r AS
+ SELECT id AS patient_id
+   FROM renalware.patients
+  WHERE ((family_name)::text ~~ 'R%'::text);
 
 
 --
@@ -29864,6 +29874,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20241122100703'),
 ('20240917092223'),
 ('20240909111139'),
 ('20240830091929'),

@@ -40,8 +40,20 @@
                     collection: Renalware::User.ordered,
                     wrapper: :horizontal_medium
     = f.input :summarised_on, as: :flatpickr, wrapper: :horizontal_datepicker
-    = snippets_modal_and_link_to_open_it(target_input_for_selected_snippet: ".discharge-summary")
-    = f.label :discharge_summary
-    = f.input :discharge_summary, as: :trix_editor, class: "discharge-summary", wrapper: :zilch
+
+    div#snippets-controller(data-controller="snippets")
+      / clicking will launch insert snippet modal
+      / when the user clicks on the Insert button in the modal, the content is put into the target
+      / (eg trix editor)
+      = link_to t("snippets.insert"),
+                authoring.snippets_path,
+                class: "float-right insert-snippet-button button alternative",
+                data: { turbo: true, turbo_frame: "modal" }
+      = f.label :discharge_summary
+      = f.input :discharge_summary,
+                as: :trix_editor,
+                wrapper: :zilch,
+                data: { "snippets-target": "destination" }
+
 
   = save_or_cancel(form: f, back_path: admissions_admissions_path)
