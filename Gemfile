@@ -39,6 +39,7 @@ gem "renalware-forms", ">=0.1", github: "airslie/renalware-forms", branch: "main
 gem "ruby-prof", require: false
 gem "solid_cache"
 gem "terser"
+gem "thruster"
 # Re wkhtmltopdf binary for letter generation
 # a host app could include the wkhtmltopdf-binary gem, or use the apt package.
 # Bear in mind the gem contains several platform-specific binaries so is pretty large,

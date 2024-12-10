@@ -1,0 +1,7 @@
+---
+en:
+  activemodel:
+    attributes:
+      renalware/remote_monitoring/registration/document:
+        frequency_iso8601: Monitoring frequency
+        frequency: Monitoring frequency

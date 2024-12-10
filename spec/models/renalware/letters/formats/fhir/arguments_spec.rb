@@ -126,7 +126,7 @@ module Renalware::Letters
           )
 
           expect(arguments.mex_subject).to eq(
-            "Clinic Letter for JONES, Jenny, NHS Number: 0123456789, " \
+            "Report of clinical encounter for JONES, Jenny, NHS Number: 0123456789, " \
             "seen at Some Hospital, ODS1, Version: 1"
           )
         end
@@ -134,7 +134,7 @@ module Renalware::Letters
 
       describe "document_title" do
         it "is an alias for letter.description" do
-          expect(arguments.document_title).to eq("Clinic Letter")
+          expect(arguments.document_title).to eq("Report of clinical encounter")
         end
       end
     end

@@ -14,8 +14,11 @@ module Renalware
           end
         end
       end
+
       validates :name, presence: true, uniqueness_including_deleted: true
       validates :code, presence: true, uniqueness_including_deleted: true
+
+      before_save :format_atc_codes
       before_create :underscore_code
 
       acts_as_paranoid
@@ -28,6 +31,12 @@ module Renalware
         return if code.blank?
 
         self.code = code.downcase.tr("  ", " ").tr(" ", "_")
+      end
+
+      def format_atc_codes
+        return if atc_codes.blank?
+
+        self.atc_codes = atc_codes.compact_blank.map(&:upcase)
       end
     end
   end

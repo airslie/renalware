@@ -59,7 +59,7 @@ module Renalware
       def type_params
         params
           .require("virology_vaccination_type")
-          .permit(:name, :code, :position)
+          .permit(:name, :code, :position, atc_codes: [])
       end
     end
   end

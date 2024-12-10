@@ -29,3 +29,7 @@ en:
       vaccinations:
         list:
           title: Vaccinations
+  activerecord:
+    attributes:
+      renalware/virology/vaccination_type:
+        atc_codes: ATC codes

@@ -37,8 +37,8 @@ module Renalware
                     url: "RecipientType",
                     valueCoding: {
                       system: "https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1",
-                      code: "FA", # Alternative is FI which might be more applicable fo CCs
-                      display: "For Action" # Alternative is For Information
+                      code: "FA",
+                      display: "For Action"
                     }
                   },
                   {
@@ -53,7 +53,7 @@ module Renalware
                   },
                   {
                     url: "LocalExtension",
-                    valueString: "NONE"
+                    valueString: "None"
                   }
                 ]
               },

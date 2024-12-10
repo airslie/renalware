@@ -26,7 +26,7 @@ module Renalware
 
             it "resolves the correct workflow id to use in HTTP headers etc" do
               allow(Renalware.config).to receive(:letters_mesh_workflow).and_return(:gp_connect)
-              expect(Renalware.config.mesh_workflow_id).to eq("GPFED_CONSULT_REPORT")
+              expect(Renalware.config.mesh_workflow_id).to eq("GPCONNECT_SEND_DOCUMENT")
             end
 
             describe "#resource" do
@@ -52,7 +52,7 @@ module Renalware
                   extension = resource.extension[0].extension[3]
                   expect(extension.url).to eq("MessageDefinition")
                   expect(extension.valueReference.reference).to eq(
-                    "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-GPConnectSendDocument-MessageDefinition-Instance-1"
+                    "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-GPConnectSendDocument-MessageDefinition-1"
                   )
                 end
 
@@ -68,7 +68,7 @@ module Renalware
                 it "LocalExtension is NONE" do
                   extension = resource.extension[0].extension[5]
                   expect(extension.url).to eq("LocalExtension")
-                  expect(extension.valueString).to eq("NONE")
+                  expect(extension.valueString).to eq("None")
                 end
               end
 

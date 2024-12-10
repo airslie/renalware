@@ -162,13 +162,12 @@ module Renalware
     }
     config_accessor(:mesh_workflow_id) {
       {
-        gp_connect: "GPFED_CONSULT_REPORT", # GPCONNECT_SEND_DOCUMENT", # GPFED_CONSULT_REPORT
+        gp_connect: "GPCONNECT_SEND_DOCUMENT",
         transfer_of_care: "TOC_FHIR_OP_ATTEN"
       }[letters_mesh_workflow]
     }
     config_accessor(:mesh_path_to_nhs_ca_file)    { ENV.fetch("MESH_PATH_TO_NHS_CA_FILE", "??") }
     config_accessor(:mesh_nhs_ca_cert)            { ENV.fetch("MESH_NHS_CA_CERT", "??") }
-    config_accessor(:mesh_client_key)             { ENV.fetch("MESH_CLIENT_KEY", "") }
     config_accessor(:mesh_path_to_client_cert)    { ENV.fetch("MESH_PATH_TO_CLIENT_CERT", "??") }
     config_accessor(:mesh_client_cert)            { ENV.fetch("MESH_CLIENT_CERT", "") }
     config_accessor(:mesh_path_to_client_key)     { ENV.fetch("MESH_PATH_TO_CLIENT_KEY", "??") }

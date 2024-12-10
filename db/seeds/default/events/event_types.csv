@@ -11,3 +11,4 @@
 "General","Medication Review","Renalware::Medications::Review","medication_reviews"
 "General","Iron Clinic",,"iron_clinic"
 "General","Transplant Review","Renalware::Transplants::Review","transplant_reviews"
+"General","Remote Monitoring Registration","Renalware::RemoteMonitoring::Registration","remote_monitoring_registrations"

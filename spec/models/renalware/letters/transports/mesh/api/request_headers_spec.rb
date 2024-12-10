@@ -29,7 +29,7 @@ module Renalware::Letters::Transports::Mesh
           "Mex-OSVersion" => "",
           "Mex-FileName" => "None",
           "Mex-MessageType" => "DATA",
-          "Mex-WorkflowID" => "GPFED_CONSULT_REPORT",
+          "Mex-WorkflowID" => "GPCONNECT_SEND_DOCUMENT",
           "Mex-From" => "SendingMailbox1", # GPCM-SD-062
           "Mex-To" => "NHSNumber_DOB_Surname",
           "Mex-LocalID" => "ODS123", # GPCM-SD-146

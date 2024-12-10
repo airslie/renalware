@@ -39,7 +39,9 @@ module Renalware
       end
 
       def edit
-        session[:events_edit_back_url] = request.referer
+        unless turbo_frame_request?
+          session[:events_edit_back_url] = request.referer
+        end
         render_edit(load_and_authorize_event_for_edit_or_update)
       end
 

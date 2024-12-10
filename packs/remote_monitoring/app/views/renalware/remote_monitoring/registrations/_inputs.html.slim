@@ -1,0 +1,13 @@
+- registration = Renalware::RemoteMonitoring::RegistrationPresenter.new(event)
+
+= f.simple_fields_for :document, registration.document do |fd|
+  = fd.input :referral_reason,
+             wrapper: :hz_md,
+             collection: registration.referral_reasons
+  = fd.input :frequency_iso8601,
+             wrapper: :horizontal_medium,
+             collection: registration.frequencies
+  = fd.input :baseline_creatinine,
+             wrapper: :horizontal_small,
+             label_html: { style: "text-align: left"}
+

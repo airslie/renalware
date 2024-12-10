@@ -12,8 +12,8 @@
   "private": true,
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "8.0.5",
-    "@rollup/plugin-commonjs": "^26.0",
+    "@hotwired/turbo-rails": "8.0.12",
+    "@rollup/plugin-commonjs": "^28.0",
     "@rollup/plugin-inject": "^5.0",
     "@rollup/plugin-node-resolve": "^15.2",
     "@stimulus/polyfills": "^2.0",

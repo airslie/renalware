@@ -1,6 +1,0 @@
-var tr = $("tr[data-snippet-id='<%= snippet.id %>']")
-if (tr) {
-  var tr = $(tr)
-  tr.find(".body").effect("highlight", {}, 1000);
-  tr.find(".last_used_on").text("<%= "#{l(snippet.last_used_on)} (#{snippet.times_used})" %>")
-}

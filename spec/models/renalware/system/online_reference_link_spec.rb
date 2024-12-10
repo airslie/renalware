@@ -19,11 +19,10 @@ describe Renalware::System::OnlineReferenceLink do
 
   describe "url format validation" do
     it :aggregate_failures do
-      is_expected.to allow_value("https://abc123.com").for(:url)
+      is_expected.to allow_value("https://abc123.com?1$=*7*&@£$%^&").for(:url)
       is_expected.to allow_value("http://abc123.com").for(:url)
       is_expected.not_to allow_value("xhttp://abc123.com").for(:url)
       is_expected.not_to allow_value("http:/abc123.com").for(:url)
-      is_expected.not_to allow_value("http://").for(:url)
     end
 
     it "message" do

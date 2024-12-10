@@ -20,25 +20,26 @@ module Renalware::Letters
                 meta: {
                   profile: PROFILE_URL
                 },
+                text: {
+                  status: "generated",
+                  div: "<div xmlns=\"http://www.w3.org/1999/xhtml\">#{arguments.document_type_snomed_title}</div>"
+                },
                 status: "final",
                 type: {
                   coding: [
                     snomed_coding_content(
-                      "371531000",
-                      "Report of clinical encounter (record artifact)"
-                    ),
-                    snomed_coding_content(
-                      "149701000000109",
-                      "Remote health correspondence (record artifact)"
+                      arguments.document_type_snomed_code,
+                      arguments.document_type_snomed_title
                     )
-                  ]
+                  ],
+                  text: arguments.document_type_snomed_title
                 },
                 subject: {
                   reference: arguments.patient_urn
                 },
-                date: letter.updated_at.to_datetime.to_s,
+                date: letter.updated_at.to_date.to_s,
                 author: {
-                  reference: arguments.organisation_urn
+                  reference: arguments.author_urn
                 },
                 custodian: {
                   reference: arguments.organisation_urn
@@ -46,8 +47,10 @@ module Renalware::Letters
                 title: arguments.document_title,
                 confidentiality: arguments.confidentiality,
                 section: {
-                  title: arguments.document_title,
                   entry: [
+                    { reference: arguments.organisation_urn },
+                    { reference: arguments.author_urn },
+                    { reference: arguments.patient_urn },
                     { reference: arguments.binary_urn }
                   ]
                 }

@@ -1,0 +1,9 @@
+- document = event.document
+
+dl.dl-horizontal.xlarge
+  dt= attr_name(document, :referral_reason, suffix: ":")
+  dd= document.referral_reason.presence || t("unspecified")
+  dt= attr_name(document, :frequency, suffix: ":")
+  dd= document.frequency.presence || t("unspecified")
+  dt= attr_name(event, :baseline_creatinine, suffix: ":")
+  dd= document.baseline_creatinine.presence || t("unspecified")

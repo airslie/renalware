@@ -23,7 +23,6 @@ module Renalware
                 unverified_nhs_number_identifier,
                 *hospital_number_identifiers
               ],
-              telecom: telecoms,
               name: name,
               gender: gender,
               birthDate: patient.born_on.to_date.to_s,
@@ -103,7 +102,7 @@ module Renalware
             "M" => "male",
             "F" => "female",
             "O" => "other"
-          }.fetch(patient.sex, "unknown")
+          }.fetch(patient.sex&.code, "unknown")
         end
 
         def telecoms

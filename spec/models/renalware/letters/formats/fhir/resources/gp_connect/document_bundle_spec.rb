@@ -54,8 +54,8 @@ module Renalware
             expect(entries).to eq(
               [
                 "FHIR::STU3::Composition",
-                "FHIR::STU3::Practitioner",
                 "FHIR::STU3::Organization",
+                "FHIR::STU3::Practitioner",
                 "FHIR::STU3::Patient",
                 "FHIR::STU3::Binary"
               ]

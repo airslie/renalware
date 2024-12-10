@@ -3,9 +3,9 @@
 - col_count = 6 - (in_dialog ? 2 : 0) - (author == :me ? 1 : 0)
 tbody
   tr(data={ "snippet-id" => snippet.id,
-            invocation_url: authoring.snippet_invocations_path(snippet),
             controller: "clipboard snippet",
             "snippet-snippets-outlet": "#snippets-controller",
+            "snippet-invocation-url-value": authoring.snippet_invocations_path(snippet),
             "clipboard-success-content-value" => "<div class='flex items-center'>#{inline_icon('clipboard_tick', size: :md)}</div>"})
     td= row_toggler
     td

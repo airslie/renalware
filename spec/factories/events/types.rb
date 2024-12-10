@@ -47,6 +47,12 @@ FactoryBot.define do
       event_class_name { "Renalware::Virology::Vaccination" }
     end
 
+    factory :remote_monitoring_registration do
+      name { "Remote Monitoring Registration" }
+      slug { "remote_monitoring_registration" }
+      event_class_name { "Renalware::RemoteMonitoring::Registration" }
+    end
+
     factory :advanced_care_plan_event_type do
       name { "AdvancedCarePlan" }
       slug { "advanced_care_plans" }

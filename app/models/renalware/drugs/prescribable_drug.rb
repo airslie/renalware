@@ -11,6 +11,10 @@ module Renalware
                through: :drug_type_classifications,
                foreign_key: :drug_id
 
+      def self.for(code)
+        joins(:drug_types).where(drug_types: { code: code.to_s })
+      end
+
       # Customise the json output suitable for our slimselect ajax/type-ahead approach
       def as_json(_options = {})
         {

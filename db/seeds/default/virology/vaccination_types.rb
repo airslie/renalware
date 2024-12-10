@@ -8,21 +8,25 @@ module Renalware
 
     log "Adding virology vaccination types" do
       {
-        hbv1: "HBV Vaccination 1",
-        hbv2: "HBV Vaccination 2",
-        hbv3: "HBV Vaccination 3",
-        hbv4: "HBV Vaccination 4",
-        hbv_booster: "HBV Booster",
-        influenza: "Influenza",
-        pneumococcus: "Pneumococcus",
-        covid19_1: "COVID-19 1",
-        covid19_2: "COVID-19 2",
-        patient_refused: "Patient Refused",
-        patient_refused_covid19: "Patient refused Covid-19 vaccine",
-        patient_refused_covid19_pfizer: "Patient refused Covid-19 vaccine Pfizer",
-        patient_refused_covid19_astrazenica: "Patient refused Covid-19 vaccine Astra Zeneca"
-      }.each do |code, name|
-        VaccinationType.find_or_create_by!(code: code, name: name)
+        hbv1: { name: "HBV Vaccination 1", atc_codes: ["J07BC%"] },
+        hbv2: { name: "HBV Vaccination 2", atc_codes: ["J07BC%"] },
+        hbv3: { name: "HBV Vaccination 3", atc_codes: ["J07BC%"] },
+        hbv4: { name: "HBV Vaccination 4", atc_codes: ["J07BC%"] },
+        hbv_booster: { name: "HBV Booster", atc_codes: ["J07BM%"] },
+        influenza: { name: "Influenza", atc_codes: ["J07BB%"] },
+        pneumococcus: { name: "Pneumococcus", atc_codes: ["J07AL%"] },
+        covid19_1: { name: "COVID-19 1", atc_codes: ["J07BN%"] },
+        covid19_2: { name: "COVID-19 2", atc_codes: ["J07BN%"] },
+        patient_refused: { name: "Patient Refused" },
+        patient_refused_covid19: { name: "Patient refused Covid-19 vaccine", atc_codes: ["J07BN%"] },
+        patient_refused_covid19_pfizer: { name: "Patient refused Covid-19 vaccine Pfizer", atc_codes: ["J07BN%"] },
+        patient_refused_covid19_astrazenica: { name: "Patient refused Covid-19 vaccine Astra Zeneca", atc_codes: ["J07BN%"] }
+      }.each do |code, hash|
+        VaccinationType.find_or_create_by!(
+          code: code,
+          name: hash[:name],
+          atc_codes: hash.fetch(:atc_codes, [])
+        )
       end
     end
   end

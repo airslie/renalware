@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-X = Renalware::Letters::Transports::Mesh::Transmission
-
 module Renalware
   module Letters
     module Formats::FHIR
@@ -32,12 +30,11 @@ module Renalware
         }
 
         before do
-          # allow(author).to receive(:uuid).and_return("abc")
           allow(letter).to receive_messages(uuid: "LET1", event: clinic_visit)
+          allow(author).to receive_messages(uuid: "abc")
           allow(letter_patient).to receive(:secure_id_dashed).and_return("PAT1")
           allow(clinic_visit).to receive(:uuid).and_return("CV_ENCOUNTER_1")
-          # allow(Renalware.config).to receive(:mesh_organisation_uuid).and_return("ORG1")
-          allow(arguments).to receive(:organisation_uuid).and_return("ORG1")
+          allow(Renalware.config).to receive(:mesh_organisation_uuid).and_return("ORG1")
         end
 
         describe "fullUrl" do
@@ -70,11 +67,11 @@ module Renalware
           end
 
           it "includes the letter updated_at" do
-            expect(resource.date).to eq("2022-01-01T01:01:01+00:00")
+            expect(resource.date).to eq("2022-01-01")
           end
 
           it "author element references the sending organisation" do
-            expect(resource.author.first.reference).to eq("urn:uuid:ORG1")
+            expect(resource.author.first.reference).to eq("urn:uuid:abc")
           end
 
           it "custodian element references the sending organisation" do
@@ -82,18 +79,16 @@ module Renalware
           end
 
           it "has the correct snomed code" do
-            p resource.type
             expect(resource.type.coding[0].code).to eq("371531000")
-            expect(resource.type.coding[0].display)
-              .to eq("Report of clinical encounter (record artifact)")
-            expect(resource.type.coding[1].code).to eq("149701000000109")
-            expect(resource.type.coding[1].display)
-              .to eq("Remote health correspondence (record artifact)")
+            expect(resource.type.coding[0].display).to eq("Report of clinical encounter")
           end
 
           it "has correct sections" do
             section = resource.section[0]
-            expect(section.entry[0].reference).to eq arguments.binary_urn
+            expect(section.entry[0].reference).to eq arguments.organisation_urn
+            expect(section.entry[1].reference).to eq arguments.author_urn
+            expect(section.entry[2].reference).to eq arguments.patient_urn
+            expect(section.entry[3].reference).to eq arguments.binary_urn
           end
         end
       end

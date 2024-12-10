@@ -1,31 +1,29 @@
 - # locals: (named_filter:, letters:, q: nil)
-= turbo_frame_tag("letter-lists-turbo-frame") do
-  = render Renalware::SpinnerComponent.new do |spinner|
-    = spinner.with_main_content do
-      .letters-table
-        table.report.letters.toggleable(data-controller="toggle")
-          thead
-            tr
-              th.togglers.noprint= rows_toggler
-              th.noprint.col-width-15
-              th.col-width-tiny= sort_link([:renalware, q], :notes, "Notes")
-              th= sort_link([:renalware, q], :enclosures, "Enc.")
-              th.col-width-small Type
-              th.col-width-small= sort_link([:renalware, q], :type, "State")
-              - if Renalware.config.send_gp_letters_over_mesh
-                th.col-width-small= sort_link([:renalware, q], :gp_sent_status, "GP Send")
-              th.col-width-medium= sort_link([:renalware, q], :patient_family_name, "Patient")
-              th.col-width-nhs-no= sort_link([:renalware, q], :patient_nhs_number, "NHS No")
-              th.col-width-date-time = sort_link([:renalware, q], :effective_date, "Date", default_order: :desc)
-              th= sort_link([:renalware, q], :author_family_name, "Author")
-              th= sort_link([:renalware, q], :created_by_family_name, "Typist")
-              th.col-width-tiny Pages
-              th.col-width-small Recipient
-              th= t("thead.description")
-              - if named_filter == :deleted
-                th Deleted at
-                th Deleted by
 
-          = render partial: "letter", collection: letters, locals: { named_filter: named_filter }
+.letters-table
+  table.report.letters.toggleable(data-controller="toggle")
+    thead
+      tr
+        th.togglers.noprint= rows_toggler
+        th.noprint.col-width-15
+        th.col-width-tiny= sort_link([:renalware, q], :notes, "Notes")
+        th= sort_link([:renalware, q], :enclosures, "Enc.")
+        th.col-width-small Type
+        th.col-width-small= sort_link([:renalware, q], :type, "State")
+        - if Renalware.config.send_gp_letters_over_mesh
+          th.col-width-small= sort_link([:renalware, q], :gp_sent_status, "GP Send")
+        th.col-width-medium= sort_link([:renalware, q], :patient_family_name, "Patient")
+        th.col-width-nhs-no= sort_link([:renalware, q], :patient_nhs_number, "NHS No")
+        th.col-width-date-time = sort_link([:renalware, q], :effective_date, "Date", default_order: :desc)
+        th= sort_link([:renalware, q], :author_family_name, "Author")
+        th= sort_link([:renalware, q], :created_by_family_name, "Typist")
+        th.col-width-tiny Pages
+        th.col-width-small Recipient
+        th= t("thead.description")
+        - if named_filter == :deleted
+          th Deleted at
+          th Deleted by
 
-        = paginate letters
+    = render partial: "letter", collection: letters, locals: { named_filter: named_filter }
+
+  = paginate letters

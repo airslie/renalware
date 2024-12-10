@@ -1,5 +1,26 @@
+- vaccination = Renalware::Virology::VaccinationPresenter.new(event)
+
 / See Vaccination.to_partial_path etc
 / Pulled into the New Event form via a js get to EventsController#new
-= f.simple_fields_for :document, event.document do |fd|
-  = fd.input :type, wrapper: :horizontal_medium, collection: Renalware::Virology::VaccinationType.ordered.pluck(:name, :code)
-  = fd.input :drug, wrapper: :horizontal_medium, collection: Renalware::Drugs::Drug.for(:vaccine).pluck(:name, :name)
+= f.simple_fields_for :document, vaccination.document do |fd|
+  / Step 1 add data url to options in the types collection
+  - types = vaccination.types_collection(request.url)
+  = fd.input :type,
+              wrapper: :horizontal_medium,
+              collection: types,
+              include_blank: false,
+              input_html: { data: { controller: "slim-select select-update-frame",
+                                    "select-update-frame-frame-id-value": "vaccination_drugs",
+                                    "action": "change->select-update-frame#change" }}
+  = turbo_frame_tag :vaccination_drugs do
+    - vaccination_type = Renalware::Virology::VaccinationType.find_by(id: params[:vaccination_type_id]) || Renalware::Virology::VaccinationType.find_by(code: vaccination.document.type) || Renalware::Virology::VaccinationType.find_by(code: types[0][1])
+    = fd.input :drug,
+               wrapper: :horizontal_medium,
+               collection: vaccination.drugs_collection(vaccination_type),
+               label_html: { style: "text-align: left" }
+    - if current_user_is_super_admin?
+      = help_panel do
+        - if vaccination_type&.atc_codes&.any?
+          = "Showing drugs with type 'vaccine' filtered by ATC codes: #{vaccination_type.atc_codes&.join(',')}"
+        - else
+          | Showing all drugs with type 'vaccine'

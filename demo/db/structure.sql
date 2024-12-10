@@ -8469,16 +8469,6 @@ ALTER SEQUENCE renalware.letter_mailshot_mailshots_id_seq OWNED BY renalware.let
 
 
 --
--- Name: letter_mailshot_patients_where_surname_starts_with_r; Type: VIEW; Schema: renalware; Owner: -
---
-
-CREATE VIEW renalware.letter_mailshot_patients_where_surname_starts_with_r AS
- SELECT id AS patient_id
-   FROM renalware.patients
-  WHERE ((family_name)::text ~~ 'R%'::text);
-
-
---
 -- Name: letter_mesh_operations; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -12473,6 +12463,72 @@ ALTER SEQUENCE renalware.problem_versions_id_seq OWNED BY renalware.problem_vers
 
 
 --
+-- Name: remote_monitoring_frequencies; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.remote_monitoring_frequencies (
+    id bigint NOT NULL,
+    period interval NOT NULL,
+    deleted_at timestamp(6) without time zone,
+    "position" integer DEFAULT 1 NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: remote_monitoring_frequencies_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.remote_monitoring_frequencies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: remote_monitoring_frequencies_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.remote_monitoring_frequencies_id_seq OWNED BY renalware.remote_monitoring_frequencies.id;
+
+
+--
+-- Name: remote_monitoring_referral_reasons; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.remote_monitoring_referral_reasons (
+    id bigint NOT NULL,
+    description text NOT NULL,
+    deleted_at timestamp(6) without time zone,
+    "position" integer DEFAULT 1 NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: remote_monitoring_referral_reasons_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.remote_monitoring_referral_reasons_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: remote_monitoring_referral_reasons_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.remote_monitoring_referral_reasons_id_seq OWNED BY renalware.remote_monitoring_referral_reasons.id;
+
+
+--
 -- Name: renal_aki_alert_actions; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -15575,7 +15631,8 @@ CREATE TABLE renalware.virology_vaccination_types (
     "position" integer DEFAULT 0 NOT NULL,
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    atc_codes character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -17103,6 +17160,20 @@ ALTER TABLE ONLY renalware.problem_radar_diagnoses ALTER COLUMN id SET DEFAULT n
 --
 
 ALTER TABLE ONLY renalware.problem_versions ALTER COLUMN id SET DEFAULT nextval('renalware.problem_versions_id_seq'::regclass);
+
+
+--
+-- Name: remote_monitoring_frequencies id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.remote_monitoring_frequencies ALTER COLUMN id SET DEFAULT nextval('renalware.remote_monitoring_frequencies_id_seq'::regclass);
+
+
+--
+-- Name: remote_monitoring_referral_reasons id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.remote_monitoring_referral_reasons ALTER COLUMN id SET DEFAULT nextval('renalware.remote_monitoring_referral_reasons_id_seq'::regclass);
 
 
 --
@@ -19269,6 +19340,22 @@ ALTER TABLE ONLY renalware.problem_radar_diagnoses
 
 ALTER TABLE ONLY renalware.problem_versions
     ADD CONSTRAINT problem_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: remote_monitoring_frequencies remote_monitoring_frequencies_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.remote_monitoring_frequencies
+    ADD CONSTRAINT remote_monitoring_frequencies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: remote_monitoring_referral_reasons remote_monitoring_referral_reasons_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.remote_monitoring_referral_reasons
+    ADD CONSTRAINT remote_monitoring_referral_reasons_pkey PRIMARY KEY (id);
 
 
 --
@@ -24665,6 +24752,48 @@ CREATE INDEX index_problem_versions_on_item_type_and_item_id ON renalware.proble
 
 
 --
+-- Name: index_remote_monitoring_frequencies_on_deleted_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_remote_monitoring_frequencies_on_deleted_at ON renalware.remote_monitoring_frequencies USING btree (deleted_at);
+
+
+--
+-- Name: index_remote_monitoring_frequencies_on_period; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_remote_monitoring_frequencies_on_period ON renalware.remote_monitoring_frequencies USING btree (period) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_remote_monitoring_frequencies_on_position; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_remote_monitoring_frequencies_on_position ON renalware.remote_monitoring_frequencies USING btree ("position");
+
+
+--
+-- Name: index_remote_monitoring_referral_reasons_on_deleted_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_remote_monitoring_referral_reasons_on_deleted_at ON renalware.remote_monitoring_referral_reasons USING btree (deleted_at);
+
+
+--
+-- Name: index_remote_monitoring_referral_reasons_on_description; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_remote_monitoring_referral_reasons_on_description ON renalware.remote_monitoring_referral_reasons USING btree (description) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_remote_monitoring_referral_reasons_on_position; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_remote_monitoring_referral_reasons_on_position ON renalware.remote_monitoring_referral_reasons USING btree ("position");
+
+
+--
 -- Name: index_renal_aki_alert_actions_on_name; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -29874,6 +30003,8 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20241127162800'),
+('20241126174455'),
 ('20241122100703'),
 ('20240917092223'),
 ('20240909111139'),

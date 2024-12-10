@@ -9,7 +9,22 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["destination"] // a Trix editor that supports .insertHTML()
 
-  insert(snippetText) {
-    this.destinationTarget.editor.insertHTML(snippetText)
+  // Called my subscribing snippet controllers (we are their outlet)
+  insert(invocationUrl, text) {
+    this.destinationTarget.editor.insertHTML(text)
+    this.createSnippetInvocation(invocationUrl)
+  }
+
+  // Note protect_from_forgery options in SnippetInvocationsController
+  createSnippetInvocation(invocationUrl) {
+    fetch(invocationUrl, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: new Headers({"content-type": "application/json"})
+    })
+    .then(response => response.json())
+    .then(json => {
+      // OK!
+    })
   }
 }

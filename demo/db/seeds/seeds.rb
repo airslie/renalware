@@ -26,6 +26,7 @@ require_relative "surveys/seeds"
 require_relative "low_clearance/seeds"
 require_relative "virology/seeds"
 require_relative "reporting/seeds"
+require_relative "remote_monitoring/seeds"
 
 # This seed file must be run last
 require_relative "housekeeping"

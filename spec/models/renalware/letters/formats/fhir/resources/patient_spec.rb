@@ -18,7 +18,7 @@ module Renalware::Letters
           given_name: "John",
           family_name: "Doe",
           title: "Mr",
-          sex: "M",
+          sex: Renalware::Gender.new("M"),
           born_on: Date.parse("2001-01-02"),
           current_address: nil,
           telephone1: nil,
@@ -88,10 +88,11 @@ module Renalware::Letters
             "NK" => "unknown",
             "U" => "unknown",
             "NS" => "unknown",
-            "BLABLA" => "unknown"
+            "BLABLA" => "unknown",
+            nil => "unknown"
           }.each do |rw_gender, fhir_gender|
             it "maps patient.sex '#{rw_gender}' to fhir '#{fhir_gender}'" do
-              allow(patient).to receive(:sex).and_return(rw_gender)
+              allow(patient.sex).to receive(:code).and_return(rw_gender)
               expect(resource.gender).to eq(fhir_gender)
             end
           end
@@ -101,33 +102,6 @@ module Renalware::Letters
           allow(patient).to receive(:born_on).and_return(Date.parse("2001-01-02"))
 
           expect(resource.birthDate).to eq("2001-01-02")
-        end
-
-        describe "#telecom" do
-          subject(:telecom) { resource.telecom }
-
-          it { is_expected.to be_a(Array) }
-
-          it "is an empty array when patient has neither telephone or email" do
-            allow(patient).to receive_messages(telephone1: "", email: nil)
-
-            expect(telecom).to eq([])
-          end
-
-          it "telephone" do
-            allow(patient).to receive(:telephone1).and_return("01234 567890")
-
-            expect(telecom[0].system).to eq("phone")
-            expect(telecom[0].value).to eq("01234 567890")
-            expect(telecom[0].use).to eq("home")
-          end
-
-          it "email" do
-            allow(patient).to receive(:email).and_return("john@doe.com")
-
-            expect(telecom[0].system).to eq("email")
-            expect(telecom[0].value).to eq("john@doe.com")
-          end
         end
 
         describe "#address" do

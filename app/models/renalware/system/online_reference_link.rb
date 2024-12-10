@@ -12,10 +12,16 @@ module Renalware
       include Accountable
       include RansackAll
 
-      validates :url,
-                presence: true,
-                uniqueness: true,
-                format: %r(\A(https?://)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*/?\z)
+      validates :url, presence: true, uniqueness: true
+      validate  :url_format_correct
+
+      def url_format_correct
+        return if url.blank?
+
+        unless url.downcase.start_with?("https://", "http://")
+          errors.add(:url, :invalid)
+        end
+      end
 
       validates :title, presence: true, uniqueness: true
       validate :validate_letter_inclusion_dates

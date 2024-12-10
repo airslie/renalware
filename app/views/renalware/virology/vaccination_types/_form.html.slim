@@ -9,4 +9,14 @@
       ' Code:
       code= type.code
 
+  = f.label :atc_codes
+  = help_panel do
+    ' ATC codes should be upper case and end in % because they are used in SQL LIKE statements
+  .w-1/2.md:w-1/4
+    - (0..6).each do |idx|
+
+      = f.input :atc_codes,
+                label: false,
+                input_html: { name: "virology_vaccination_type[atc_codes][]", value: type.atc_codes[idx] }
+
   = f.submit class: :button

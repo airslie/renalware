@@ -8,6 +8,7 @@ Renalware::Engine.routes.draw do
   mount Renalware::Reporting::Engine => "reporting", as: :reporting
   mount Renalware::Research::Engine => "research", as: :research
   mount Renalware::Authoring::Engine => "authoring", as: :authoring
+  mount Renalware::RemoteMonitoring::Engine => "remote_monitoring", as: :remote_monitoring
 
   draw :accesses
   draw :admin

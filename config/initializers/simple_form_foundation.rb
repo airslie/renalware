@@ -184,7 +184,7 @@ SimpleForm.setup do |config|
   config.button_class = "btn btn-primary"
 
   # Set this to div to make the checkbox and radio properly work
-  # otherwise simple_form adds a label tag instead of a div arround
+  # otherwise simple_form adds a label tag instead of a div around
   # the nested label
   config.item_wrapper_tag = :div
 

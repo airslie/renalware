@@ -1,0 +1,4 @@
+- frequency = event.document&.frequency
+- if frequency.present?
+  = "#{attr_name(event.document, :frequency, suffix: ":")} #{frequency}"
+

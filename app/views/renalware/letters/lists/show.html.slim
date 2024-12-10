@@ -2,8 +2,11 @@
 
 = content_for(:tabs)    { render "tabs" }
 = content_for(:title)   { "Letters" }
-= content_for(:filters) { render "filters", form: form, named_filter: named_filter, letters: letters }
-= render "table", letters: letters, q: q, named_filter: named_filter
+= turbo_frame_tag("letter-lists-turbo-frame") do
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      = render "filters", form: form, named_filter: named_filter, letters: letters
+      = render "table", letters: letters, q: q, named_filter: named_filter
 
 / The modal dialog container for the dialog which will ask the user
 / if they want to mark the letter as printed. We load this dialog via ajax.

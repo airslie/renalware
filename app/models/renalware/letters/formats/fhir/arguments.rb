@@ -26,7 +26,7 @@ module Renalware
             display: "ITK GP Connect Send Document"
           },
           message_definition: {
-            reference: "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-GPConnectSendDocument-MessageDefinition-Instance-1"
+            reference: "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-GPConnectSendDocument-MessageDefinition-1"
           }
         },
         transfer_of_care: {
@@ -72,9 +72,12 @@ module Renalware
       def message_definition_url  = WORKFLOWS[workflow].dig(:message_definition, :reference)
       def event_code              = WORKFLOWS[workflow].dig(:event, :code)
       def event_display           = WORKFLOWS[workflow].dig(:event, :display)
-      def document_title          = letter.description
+      def document_title          = document_type_snomed_title
       def document_version        = 1
       def confidentiality         = %w(N R).first
+
+      def document_type_snomed_code   = "371531000"
+      def document_type_snomed_title  = "Report of clinical encounter"
 
       def encounter_uuid
         @encounter_uuid ||= clinic_visit&.uuid || SecureRandom.uuid

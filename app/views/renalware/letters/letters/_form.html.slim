@@ -67,7 +67,8 @@ ruby:
                 class: "insert-data-notes button alternative right editor-toolbar-button"
 
 
-    div#snippets-controller(data-controller="snippets")
+    div#snippets-controller(data-controller="snippets"
+                            data-snippets-invocations-url-value=authoring.snippet_invocations_path(snippet_id: "REPLACEME"))
       / clicking will launch insert snippet modal
       / when the user clicks on the Insert button in the modal, the content is put into the target
       / (eg trix editor)
