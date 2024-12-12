@@ -11,7 +11,7 @@
 
 # Version 0.0.2 Updated Ruby 2.4.1 => 2.4.2
 # Version 0.0.3 Updated Postgres 9.6 => 10.1
-FROM ruby:3.3.5
+FROM ruby:3.3.6
 
 # Install apt based dependencies required to run Rails as
 # well as RubyGems. As the Ruby image itself is based on a

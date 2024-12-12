@@ -54,6 +54,7 @@ module Renalware
         authorize @drug
 
         if @drug.save
+          refresh_prescribable_drugs_materialised_view
           redirect_to drugs_drugs_path, notice: success_msg_for("drug")
         else
           flash.now[:error] = failed_msg_for("drug")
@@ -74,7 +75,7 @@ module Renalware
             @drug.trade_family_classifications.where(trade_family_id: enabled_trade_family_ids)
               .update_all(enabled: true)
           end
-
+          refresh_prescribable_drugs_materialised_view
           redirect_to drugs_drugs_path, notice: success_msg_for("drug")
         else
           flash.now[:error] = failed_msg_for("drug")
@@ -84,6 +85,7 @@ module Renalware
 
       def destroy
         authorize Drug.destroy(params[:id])
+        refresh_prescribable_drugs_materialised_view
         redirect_to drugs_drugs_path, notice: success_msg_for("drug")
       end
 
@@ -120,6 +122,14 @@ module Renalware
           search_params = params.fetch(:q, { inactive_eq: false })
           Drug.ransack(search_params).tap { |query| query.sorts = "name" }
         end
+      end
+
+      def refresh_prescribable_drugs_materialised_view
+        Scenic.database.refresh_materialized_view(
+          PrescribableDrug.table_name,
+          concurrently: true,
+          cascade: false
+        )
       end
     end
   end

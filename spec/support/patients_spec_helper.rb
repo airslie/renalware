@@ -7,7 +7,6 @@ module PatientsSpecHelper
                    modality_description:,
                    started_on: Time.zone.today,
                    by: Renalware::User.first)
-
     create(:modality_change_type, :default)
     # ChangePatientModality returns a Success or Failure object
     new_modality = Renalware::Modalities::ChangePatientModality

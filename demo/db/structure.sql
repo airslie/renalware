@@ -4179,7 +4179,8 @@ CREATE TABLE renalware.clinic_appointments (
     created_by_id bigint,
     visit_number text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    ends_at timestamp(6) without time zone
 );
 
 
@@ -8466,6 +8467,16 @@ CREATE SEQUENCE renalware.letter_mailshot_mailshots_id_seq
 --
 
 ALTER SEQUENCE renalware.letter_mailshot_mailshots_id_seq OWNED BY renalware.letter_mailshot_mailshots.id;
+
+
+--
+-- Name: letter_mailshot_patients_where_surname_starts_with_r; Type: VIEW; Schema: renalware; Owner: -
+--
+
+CREATE VIEW renalware.letter_mailshot_patients_where_surname_starts_with_r AS
+ SELECT id AS patient_id
+   FROM renalware.patients
+  WHERE ((family_name)::text ~~ 'R%'::text);
 
 
 --
@@ -14496,6 +14507,19 @@ ALTER SEQUENCE renalware.system_visits_id_seq OWNED BY renalware.system_visits.i
 
 
 --
+-- Name: tmp_ppe_consultants; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.tmp_ppe_consultants (
+    pv_id integer,
+    patient_id integer,
+    named_consultant_id text,
+    ends date,
+    starts date
+);
+
+
+--
 -- Name: transplant_donations; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -19922,6 +19946,13 @@ CREATE INDEX delayed_jobs_priority ON renalware.delayed_jobs USING btree (priori
 
 
 --
+-- Name: drug_prescribable_drugs_compound_id_idx; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX drug_prescribable_drugs_compound_id_idx ON renalware.drug_prescribable_drugs USING btree (compound_id);
+
+
+--
 -- Name: hd_diary_slots_unique_by_day_period_patient; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -20976,6 +21007,20 @@ CREATE INDEX index_drug_homecare_forms_on_supplier_id ON renalware.drug_homecare
 --
 
 CREATE UNIQUE INDEX index_drug_patient_group_directions_on_code ON renalware.drug_patient_group_directions USING btree (code) WHERE ((ends_on IS NULL) AND (deleted_at IS NULL));
+
+
+--
+-- Name: index_drug_prescribable_drugs_on_compound_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_drug_prescribable_drugs_on_compound_id ON renalware.drug_prescribable_drugs USING btree (compound_id);
+
+
+--
+-- Name: INDEX index_drug_prescribable_drugs_on_compound_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON INDEX renalware.index_drug_prescribable_drugs_on_compound_id IS 'Unique idx on this materialized view enables us to refresh concurrently';
 
 
 --
@@ -30003,6 +30048,8 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20241212115831'),
+('20241205164429'),
 ('20241127162800'),
 ('20241126174455'),
 ('20241122100703'),

@@ -41,7 +41,6 @@ module World
       def create_access_assessment(patient:,
                                    user:,
                                    access_type: Renalware::Accesses::Type.first)
-
         patient = accesses_patient(patient)
         patient.assessments.create(
           valid_access_assessment_attributes.merge(

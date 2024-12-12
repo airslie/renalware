@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe "Configuring Drugs" do
+  include DrugsSpecHelper
   let(:drug) { create(:drug) }
 
   describe "GET new" do
@@ -16,6 +17,9 @@ describe "Configuring Drugs" do
       it "creates a new record" do
         attributes = attributes_for(:drug)
 
+        refresh_prescribable_drugs_materialized_view
+        expect(Renalware::Drugs::PrescribableDrug.count).to eq(0)
+
         post drugs_drugs_path, params: { drugs_drug: attributes }
 
         expect(response).to have_http_status(:redirect)
@@ -24,6 +28,8 @@ describe "Configuring Drugs" do
         follow_redirect!
 
         expect(response).to be_successful
+
+        expect(Renalware::Drugs::PrescribableDrug.count).to eq(1)
       end
     end
 
@@ -87,6 +93,10 @@ describe "Configuring Drugs" do
       it "updates a record" do
         attributes = { name: "::drug_name::" }
 
+        drug
+        refresh_prescribable_drugs_materialized_view
+        expect(Renalware::Drugs::PrescribableDrug.count).to eq(1)
+
         patch drugs_drug_path(drug), params: { drugs_drug: attributes }
 
         expect(response).to have_http_status(:redirect)
@@ -95,6 +105,8 @@ describe "Configuring Drugs" do
         follow_redirect!
 
         expect(response).to be_successful
+
+        expect(Renalware::Drugs::PrescribableDrug.count).to eq(1)
       end
     end
 
@@ -123,6 +135,10 @@ describe "Configuring Drugs" do
 
       it "updates a record from non-enabled to enabled and vice-versa" do
         attributes = { enabled_trade_family_ids: [trade_family.id] }
+
+        refresh_prescribable_drugs_materialized_view
+        expect(Renalware::Drugs::PrescribableDrug.count).to eq(1)
+
         patch drugs_drug_path(drug), params: { drugs_drug: attributes }
 
         expect(drug.trade_families.count).to eq 1
@@ -130,6 +146,9 @@ describe "Configuring Drugs" do
 
         follow_redirect!
         expect(response).to be_successful
+
+        # Has added a drug/tf combination to PrescribableDrugs
+        expect(Renalware::Drugs::PrescribableDrug.count).to eq(2)
 
         # now try the reverse
         attributes = { enabled_trade_family_ids: [""] }
@@ -140,12 +159,19 @@ describe "Configuring Drugs" do
 
         follow_redirect!
         expect(response).to be_successful
+
+        # Has removed the drug/tf combination from PrescribableDrugs
+        expect(Renalware::Drugs::PrescribableDrug.count).to eq(1)
       end
     end
   end
 
   describe "DELETE destroy" do
     it "deletes the drug" do
+      drug
+      refresh_prescribable_drugs_materialized_view
+      expect(Renalware::Drugs::PrescribableDrug.count).to eq(1)
+
       delete drugs_drug_path(drug)
 
       expect(response).to have_http_status(:redirect)
@@ -154,6 +180,8 @@ describe "Configuring Drugs" do
       follow_redirect!
 
       expect(response).to be_successful
+
+      expect(Renalware::Drugs::PrescribableDrug.count).to eq(0)
     end
   end
 end

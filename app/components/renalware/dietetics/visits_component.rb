@@ -14,7 +14,6 @@ module Renalware
         dietetic_clinic_visits_loader: Queries::ClinicVisitsQuery.new,
         dietetic_clinic_visits_counter: Queries::ClinicVisitsCounter.new
       )
-
         @patient = Clinical.cast_patient(patient)
 
         @dietetic_clinic_visits = dietetic_clinic_visits_loader.call(
