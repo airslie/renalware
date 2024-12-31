@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::PD
   describe ExitSiteInfectionDrop, type: :model do
     subject(:drop) { described_class.new(esi) }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :patients_bookmark, class: "Renalware::Patients::Bookmark" do
     notes { Faker::Lorem.sentence }

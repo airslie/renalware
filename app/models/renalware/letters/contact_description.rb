@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     class ContactDescription < ApplicationRecord
@@ -10,7 +8,7 @@ module Renalware
       scope :ordered, -> { order(:position) }
       scope :specified, -> { where.not(system_code: UNSPECIFIED_SYSTEM_CODE) }
 
-      UNSPECIFIED_SYSTEM_CODE = "other"
+      UNSPECIFIED_SYSTEM_CODE = "other".freeze
 
       def self.[](system_code)
         find_by!(system_code: system_code.to_s)

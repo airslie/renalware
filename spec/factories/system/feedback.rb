@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :user_feedback, class: "Renalware::System::UserFeedback" do
     author factory: %i(user)

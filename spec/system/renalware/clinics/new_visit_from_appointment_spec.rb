@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "New Visit from existing Appointment" do
   describe "GET index" do
     context "with no appointment id" do

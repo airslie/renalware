@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::System::NagDefinition do
   it :aggregate_failures do
     is_expected.to validate_presence_of :description

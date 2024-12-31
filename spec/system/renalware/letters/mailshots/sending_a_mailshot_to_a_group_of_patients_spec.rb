@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Creating a mailshot", js: true do
+describe "Creating a mailshot", :js do
   include ActiveJob::TestHelper
 
   before do

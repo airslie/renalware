@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Languages" do
+  Rails.benchmark "Adding Languages" do
     file_path = File.join(File.dirname(__FILE__), "patients_languages.csv")
     languages = CSV.foreach(file_path, headers: true).map do |row|
       Patients::Language.new(code: row["code"], name: row["name"])

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DurationCalculator
   def self.in_minutes(start_time, end_time)
     return nil if start_time.nil? || end_time.nil?

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats::FHIR
@@ -7,7 +5,7 @@ module Renalware
         include Support::Construction
         include Support::Helpers
 
-        PROFILE_URL = "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Document-Bundle-1"
+        PROFILE_URL = "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Document-Bundle-1".freeze
 
         # Testing notes
         # - No CV?

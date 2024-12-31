@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :component do
   it "renders the button title" do
     patient = Renalware::Patient.new

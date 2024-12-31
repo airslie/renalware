@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::Requests::GlobalRule do
   subject(:global_rule) do
     build(

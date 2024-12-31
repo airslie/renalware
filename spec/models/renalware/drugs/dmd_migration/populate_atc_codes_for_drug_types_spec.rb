@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   describe DMDMigration::PopulateAtcCodesForDrugTypes do
     let(:existing_drug_type) {

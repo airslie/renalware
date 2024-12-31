@@ -5,6 +5,5 @@ class CreateAuditLetterAuthors < ActiveRecord::Migration[5.0]
               [:year, :month, :user_id],
               unique: true,
               name: "main_authors_audit_year_month_user_id"
-
   end
 end

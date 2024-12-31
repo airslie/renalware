@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Bringing in new pathology results into a letter while editing" do
     include LettersSpecHelper

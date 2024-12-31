@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Feeds
   describe HL7Message do
     # We are sort of testing the MessageParser here also which is not ideal, but its role in parsing

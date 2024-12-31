@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec::Matchers.define :validate_timeliness_of do |attribute|
   match do |model|
     model._validators[attribute.to_sym].detect do |validator|

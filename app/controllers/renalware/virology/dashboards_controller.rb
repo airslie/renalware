@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Virology
     class DashboardsController < BaseController
@@ -8,7 +6,7 @@ module Renalware
 
       def show
         virology_patient
-        authorize [:renalware, :virology, :dashboard], :show?
+        authorize %i(renalware virology dashboard), :show?
         render locals: { dashboard: DashboardPresenter.new(virology_patient) }
       end
     end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module DeviseHelper
     def custom_devise_error_messages!

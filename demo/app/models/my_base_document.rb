@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # We define an Document::Embedded subclass so we can re-include Virtus model
 # and ensure nullify_blank: true
 class MyBaseDocument < Document::Embedded

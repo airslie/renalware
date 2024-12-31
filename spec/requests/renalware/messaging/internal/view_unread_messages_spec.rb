@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "View internal messages sent by the current" do
   describe "GET index" do
     it "responds successfully" do

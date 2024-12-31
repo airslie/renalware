@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   namespace :low_clearance do
     resource :dashboard, only: :show
-    resource :profile, only: [:edit, :update]
+    resource :profile, only: %i(edit update)
     resource :mdm, only: :show, controller: "mdm"
   end
 end

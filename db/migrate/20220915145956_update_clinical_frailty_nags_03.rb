@@ -11,4 +11,3 @@ class UpdateClinicalFrailtyNags03 < ActiveRecord::Migration[6.0]
     end
   end
 end
-

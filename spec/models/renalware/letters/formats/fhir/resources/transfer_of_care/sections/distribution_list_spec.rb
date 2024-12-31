@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   module Formats::FHIR
     module Resources::TransferOfCare
@@ -9,10 +7,12 @@ module Renalware::Letters
         let(:transmission) { instance_double(Transports::Mesh::Transmission, letter: letter) }
         let(:arguments) { Arguments.new(transmission: transmission, transaction_uuid: "123") }
         let(:patient) { build_stubbed(:letter_patient, secure_id: "123") }
+        let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
         let(:letter) do
           build_stubbed(
             :letter,
             patient: patient,
+            topic: topic,
             archive: build_stubbed(:letter_archive)
           ).tap do |lett|
             lett.build_main_recipient(person_role: :primary_care_physician)

@@ -4,7 +4,7 @@ class CreateViewMetadata < ActiveRecord::Migration[5.2]
     within_renalware_schema do
       create_table(
         :system_view_metadata,
-        comment: "Holds descriptive and layout data to help us construct "\
+        comment: "Holds descriptive and layout data to help us construct " \
                  "data-driven parts of the Renalware UI e.g. MDMs"
       ) do |t|
         t.text :schema_name, null: false
@@ -22,7 +22,7 @@ class CreateViewMetadata < ActiveRecord::Migration[5.2]
         t.text :title, comment: "A label that may appear in the UI"
         t.jsonb(
           :columns,
-          comment: "Array of column_names. If empty, all cols displayed. "\
+          comment: "Array of column_names. If empty, all cols displayed. " \
                    "Array order is the display order",
           null: false,
           default: []

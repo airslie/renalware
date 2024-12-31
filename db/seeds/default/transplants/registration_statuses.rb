@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Transplant Registration Statuses" do
+  Rails.benchmark "Adding Transplant Registration Statuses" do
     # HC on #1664: The only difficulty is for patients who receive a pre-emptive transplant so
     # their ESRF date is the date of their transplant. The RR list does not
     # accommodate that but I would put them as On Transplant List (3)

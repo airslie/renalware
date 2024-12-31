@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::HD::Sessions::WashbackQualityDialogComponent, type: :component do
   before do
     yaml = <<-YAML

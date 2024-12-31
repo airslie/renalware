@@ -10,6 +10,6 @@ class CreateTransplantVersions < ActiveRecord::Migration[4.2]
       t.datetime :created_at
     end
     add_index :transplant_versions, [:item_type, :item_id],
-      name: "tx_versions_type_id"
+              name: "tx_versions_type_id"
   end
 end

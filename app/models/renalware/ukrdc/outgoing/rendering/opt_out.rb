@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module UKRDC
     module Outgoing
@@ -7,7 +5,7 @@ module Renalware
         class OptOut < Rendering::Base
           pattr_initialize [:patient!]
 
-          MISSING_DATE = "1900-01-01"
+          MISSING_DATE = "1900-01-01".freeze
 
           def xml = element
 

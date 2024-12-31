@@ -7,9 +7,12 @@
         .columns.small-12
           ul.page-heading
             li
-              h1
-                = breadcrumbs_and_title(breadcrumbs: local_assigns[:breadcrumbs],
+              .flex.items-center.gap-2
+                h1
+                  = breadcrumbs_and_title(breadcrumbs: local_assigns[:breadcrumbs],
                                         title: local_assigns[:title])
+                = yield(:links_to_other_apps) if content_for?(:links_to_other_apps)
+
             li.page-actions
               / Output any page-level actions
               = yield(:actions)

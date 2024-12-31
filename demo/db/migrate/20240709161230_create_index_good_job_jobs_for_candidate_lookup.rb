@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateIndexGoodJobJobsForCandidateLookup < ActiveRecord::Migration[7.1]
   disable_ddl_transaction!
 
@@ -13,7 +11,7 @@ class CreateIndexGoodJobJobsForCandidateLookup < ActiveRecord::Migration[7.1]
     end
 
     add_index :good_jobs, [:priority, :created_at], order: { priority: "ASC NULLS LAST", created_at: :asc },
-      where: "finished_at IS NULL", name: :index_good_job_jobs_for_candidate_lookup,
-      algorithm: :concurrently
+                                                    where: "finished_at IS NULL", name: :index_good_job_jobs_for_candidate_lookup,
+                                                    algorithm: :concurrently
   end
 end

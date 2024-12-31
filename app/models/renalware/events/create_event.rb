@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Events
     # A wrapper around the creation of an Event to allow is to broadcast a Wisper event to the

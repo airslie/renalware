@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "API request for a single UKRDC patient XML document" do
   include PatientsSpecHelper
   include LettersSpecHelper

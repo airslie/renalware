@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "month_period"
 
 # This job when executed will store a snapshot of last month's HD session statistics

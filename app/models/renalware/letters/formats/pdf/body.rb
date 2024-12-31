@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats
@@ -7,7 +5,7 @@ module Renalware
         class Body
           include Prawn::View
           pattr_initialize :document, :letter
-          UL_BULLET = "• "
+          UL_BULLET = "• ".freeze
 
           # 1. Pre-process string
           #    - replace &nbsp; with " "

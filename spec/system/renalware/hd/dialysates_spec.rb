@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing Dialysates" do
   describe "creating a new dialysate" do
     it do

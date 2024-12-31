@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Transplants
     #  a list of everyone whose Modality is Transplant and the sort should
@@ -7,7 +5,7 @@ module Renalware
     #  at the top) - the default sort order should be same for all of the
     #  different filter groups
     class MDMPatientsQuery
-      DEFAULT_SEARCH_PREDICATE = "cre_date DESC"
+      DEFAULT_SEARCH_PREDICATE = "cre_date DESC".freeze
       attr_reader :params, :relation, :named_filter
 
       def initialize(relation: Transplants::Patient.all, named_filter: nil, params: nil)
@@ -41,6 +39,7 @@ module Renalware
           self # NOOP
         end
 
+        # rubocop:disable Rails/WhereRange
         def patients_with_a_transplant_date_in_the_past_3_months
           joins(<<-SQL.squish)
             LEFT JOIN transplant_recipient_operations
@@ -48,13 +47,15 @@ module Renalware
           SQL
             .where("transplant_recipient_operations.performed_on >= ?", 3.months.ago)
         end
-        alias_method :recent, :patients_with_a_transplant_date_in_the_past_3_months
+        # rubocop:enable Rails/WhereRange
+        alias recent patients_with_a_transplant_date_in_the_past_3_months
 
         def patients_on_the_worry_board
           joins("RIGHT OUTER JOIN patient_worries ON patient_worries.patient_id = patients.id")
         end
-        alias_method :on_worryboard, :patients_on_the_worry_board
+        alias on_worryboard patients_on_the_worry_board
 
+        # rubocop:disable Rails/WhereRange
         def patients_with_a_transplant_operation_in_the_past_year
           joins(<<-SQL.squish)
             LEFT JOIN transplant_recipient_operations
@@ -62,7 +63,8 @@ module Renalware
           SQL
             .where("transplant_recipient_operations.performed_on >= ?", 1.year.ago)
         end
-        alias_method :past_year, :patients_with_a_transplant_operation_in_the_past_year
+        # rubocop:enable Rails/WhereRange
+        alias past_year patients_with_a_transplant_operation_in_the_past_year
       end
     end
   end

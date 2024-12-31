@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable RSpec/VerifiedDoubles
 module Renalware::Pathology
   describe ObservationRequestsAttributesBuilder do

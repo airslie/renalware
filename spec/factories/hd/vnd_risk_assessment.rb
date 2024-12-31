@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :hd_vnd_risk_assessment, class: "Renalware::HD::VNDRiskAssessment" do
     accountable

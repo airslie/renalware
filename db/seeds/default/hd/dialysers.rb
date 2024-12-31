@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding HD Dialysers" do
+  Rails.benchmark "Adding HD Dialysers" do
     file_path = File.join(File.dirname(__FILE__), "dialysers.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::Requests::GlobalRule::PrescriptionDrugCategory do
   describe "#drug_category_present" do
     include_context "with a global_rule_set"

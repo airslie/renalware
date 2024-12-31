@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # When a new patient is added to Renalware, its possible and likely we will have received

@@ -1,7 +1,10 @@
-# frozen_string_literal: true
-
 # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
 module LettersSpecHelper
+  def simple_stubbed_letter(patient)
+    topic = build(:letter_topic, snomed_document_type: build(:snomed_document_type))
+    instance_double(Renalware::Letters::Letter, patient: patient, topic: topic)
+  end
+
   def build_letter(to:, patient:, state: :draft, **args)
     args = args.compact # remove nil values eg if author is nil
     trait = :"#{state}_letter"

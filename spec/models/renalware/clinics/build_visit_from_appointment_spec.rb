@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinics::BuildVisitFromAppointment do
   describe "#call" do
     let(:clinic) { build_stubbed(:clinic) }

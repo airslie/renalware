@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Research Studies" do
+  Rails.benchmark "Adding Research Studies" do
     unless Renalware::Research::Study.exists?
       user = Renalware::User.last
       patient_id_groups = Renalware::Patient.limit(12).pluck(:id).in_groups_of(3)

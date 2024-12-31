@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("A person exists in the directory") do
   seed_person(user: Renalware::User.first)
 end

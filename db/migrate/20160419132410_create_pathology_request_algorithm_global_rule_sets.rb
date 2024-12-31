@@ -6,6 +6,6 @@ class CreatePathologyRequestAlgorithmGlobalRuleSets < ActiveRecord::Migration[4.
       t.string :frequency, null: false
     end
     add_foreign_key :pathology_request_algorithm_global_rule_sets,
-      :pathology_observation_descriptions, column: :observation_description_id
+                    :pathology_observation_descriptions, column: :observation_description_id
   end
 end

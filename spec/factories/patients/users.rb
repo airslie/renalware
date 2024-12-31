@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :patients_user, class: "Renalware::Patients::User", parent: :user
 end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Responsible for determining if a user can manage the provided record. It
   # provides the Base policy for Renalware.
@@ -44,7 +42,7 @@ module Renalware
       update?
     end
 
-    alias :move? :sort?
+    alias move? sort?
 
     def contact_added?
       update?

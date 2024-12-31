@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD
   describe DiurnalPeriodCode do
     it { is_expected.to validate_presence_of(:code) }

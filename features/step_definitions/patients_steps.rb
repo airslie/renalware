@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^Patty is a patient$/) do
   @patty = Renalware::Patient.create!(
     nhs_number: FactoryBot.generate(:nhs_number),

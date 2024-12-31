@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Clinics
   describe ClinicVisitPresenter do
     describe "#sanitized_notes" do

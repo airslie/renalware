@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # HL7 messages are first inserted raw into this table. They're picked up afterwards

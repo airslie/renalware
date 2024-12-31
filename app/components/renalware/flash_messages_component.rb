@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   #
   # Renders flash messages either as toasts with stimulus (the app default) or as inline html
@@ -9,7 +7,7 @@ module Renalware
     include IconHelper
 
     rattr_initialize [:flash_messages, toast: true]
-    alias :toast? :toast
+    alias toast? toast
 
     def render? = flash_messages&.any?
 

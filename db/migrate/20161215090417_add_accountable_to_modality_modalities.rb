@@ -6,8 +6,8 @@ class AddAccountableToModalityModalities < ActiveRecord::Migration[4.2]
     add_index :modality_modalities, :updated_by_id
 
     add_foreign_key "modality_modalities", "users", column: "created_by_id",
-      name: "modality_modalities_created_by_id_fk"
+                                                    name: "modality_modalities_created_by_id_fk"
     add_foreign_key "modality_modalities", "users", column: "updated_by_id",
-      name: "modality_modalities_updated_by_id_fk"
+                                                    name: "modality_modalities_updated_by_id_fk"
   end
 end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe MDMHelper do
     def patient_with_modality(modality_trait: :pd)

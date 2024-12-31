@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("Patty has the HD modality") do
   modality_description = Renalware::Modalities::Description.find_by(
     type: "Renalware::HD::ModalityDescription"

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Problems
     # Encapsulates a 'patient problems widget' comprising some heading 'chrome' and a compact table

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters::Transports::Mesh
   describe HandshakeJob do
     it "calls a handshake method on the API client" do

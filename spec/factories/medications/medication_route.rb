@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :medication_route, class: "Renalware::Medications::MedicationRoute" do
     initialize_with do

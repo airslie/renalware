@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UserPickerInput < SimpleForm::Inputs::CollectionSelectInput
   def input_type
     :user_picker

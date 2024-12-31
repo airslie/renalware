@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Feeds
   describe PersistMessage do
     subject(:service) { described_class.new }

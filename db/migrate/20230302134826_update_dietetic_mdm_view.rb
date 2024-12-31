@@ -6,7 +6,7 @@ class UpdateDieteticMDMView < ActiveRecord::Migration[6.0]
 
         reversible do |direction|
           direction.up do
-            execute <<-SQL
+            execute <<-SQL.squish
               update renalware.system_view_metadata
               set filters = '[
                 {"code": "on_worryboard", "type": 0},
@@ -20,7 +20,7 @@ class UpdateDieteticMDMView < ActiveRecord::Migration[6.0]
             SQL
           end
           direction.down do
-            execute <<-SQL
+            execute <<-SQL.squish
               update renalware.system_view_metadata
               set filters = '[
                 {"code": "on_worryboard", "type": 0},

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   RSpec.describe RemoteMonitoring::ReferralReason do
     it_behaves_like "a Paranoid model"

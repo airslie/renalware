@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # The description in data of a dashboard displayed in the UI, for example

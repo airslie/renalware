@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     module Requests
       class RequestsController < BaseController
         include Renalware::Concerns::Pageable
 
-        before_action :load_patients, only: [:new, :create]
+        before_action :load_patients, only: %i(new create)
 
         def index
           requests_query = RequestQuery.new(query_params)

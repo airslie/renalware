@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Cache PDF Letters so we are not constantly regenerating the same ones - wkhtml2pdf takes around
 # 2.5 seconds and a fair chunk of memory to convert html to pdf, so we want to cache generated PDFs
 # for a period of time.

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This class delegates method calls to the given object.
 # If the returned value is an instance of the original object,
 # the smart delegator will return a new instance of itself with

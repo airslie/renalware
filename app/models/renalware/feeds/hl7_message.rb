@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # Responsible for representing an HL7 message. Fields can be queried via
@@ -127,6 +125,7 @@ module Renalware
       def orc_filler_order_number = first_orc_segment.filler_order_number
       def pv1                     = Renalware::Feeds::HL7Segments::PV1.new(self[:PV1])
       def pv2                     = Renalware::Feeds::HL7Segments::PV2.new(self[:PV2])
+      def sch                     = Renalware::Feeds::HL7Segments::SCH.new(self[:SCH])
       def time                    = self[:MSH].time
       def type                    = self[:MSH].message_type
       def header_id               = self[:MSH].message_control_id
@@ -144,7 +143,7 @@ module Renalware
         parts.length == 2 && parts.last
       end
 
-      %i(ORU ADT).each do |msg_type|
+      %i(ORU ADT SIU).each do |msg_type|
         define_method(:"#{msg_type.to_s.downcase}?") do
           msg_type.to_s == message_type
         end

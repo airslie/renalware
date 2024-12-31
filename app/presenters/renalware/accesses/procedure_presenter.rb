@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Accesses
     # This an experiment to replace DumbDelegator with delegate_missing_to reduce complexity

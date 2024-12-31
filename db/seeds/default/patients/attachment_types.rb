@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Attachment Types" do
+  Rails.benchmark "Adding Attachment Types" do
     file_path = File.join(File.dirname(__FILE__), "attachment_types.csv")
 
     Patients::AttachmentType.transaction do

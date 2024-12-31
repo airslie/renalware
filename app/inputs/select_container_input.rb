@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class SelectContainerInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
     options_html = input_options.delete(:options_html)

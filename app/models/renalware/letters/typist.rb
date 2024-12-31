@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     # Represents the role of a system user who typed the letter. This role maybe

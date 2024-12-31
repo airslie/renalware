@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Medications::Delivery
   describe PrescriptionsDueForDeliveryQuery do
     subject(:query) { described_class.new.call }

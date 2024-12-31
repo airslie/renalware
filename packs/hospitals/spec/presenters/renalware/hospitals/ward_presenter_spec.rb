@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Hospitals::WardPresenter do
     subject(:presenter) { described_class.new(ward) }

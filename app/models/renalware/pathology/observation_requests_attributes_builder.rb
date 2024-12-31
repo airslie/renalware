@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # Responsible for transforming an HL7 message payload into a params hash
@@ -16,7 +14,7 @@ module Renalware
     # Note this class could be removed and a Builder class used to create the database models
     # directly - this would remove the extra level of indirection that this class introduces.
     class ObservationRequestsAttributesBuilder
-      DEFAULT_REQUESTOR_NAME = "UNKNOWN"
+      DEFAULT_REQUESTOR_NAME = "UNKNOWN".freeze
       delegate :patient_identification, :observation_requests, to: :hl7_message
       delegate :internal_id, to: :patient_identification
       alias_attribute :requests, :observation_requests

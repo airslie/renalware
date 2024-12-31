@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A ScheduleDefinition is a database-normalized way of expressing e.g. "Mon Wed Fri AM"
 # A ScheduleDefinition has a days array e.g. [1,3,5] in the above example, where Monday = 1 etc,
 # and a reference to a DiurnalPeriodCode e.g. "am".

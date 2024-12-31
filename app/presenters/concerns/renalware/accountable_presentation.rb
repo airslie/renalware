@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Helper methods to mix in to a Presenter class when displaying objects which include
   # the Accountable module - ie they have updated_by/at properties.

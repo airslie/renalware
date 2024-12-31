@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   resources :events, except: :show, controller: "events/events"
   constraints(format: /(pdf)/) do
@@ -7,12 +5,12 @@ resources :patients, only: [] do
   end
 
   resources :swabs,
-            only: [:new, :create, :edit, :update],
+            only: %i(new create edit update),
             controller: "events/swabs",
             defaults: { slug: :swabs }
 
   resources :investigations,
-            only: [:new, :create, :edit, :update, :destroy],
+            only: %i(new create edit update destroy),
             controller: "events/investigations",
             defaults: { slug: :investigations }
 

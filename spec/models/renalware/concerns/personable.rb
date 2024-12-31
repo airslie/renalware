@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 shared_examples_for "Personable" do
   describe "validations" do
     it :aggregate_failures do

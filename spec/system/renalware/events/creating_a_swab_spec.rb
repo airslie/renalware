@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Creating a swab", js: true do
+describe "Creating a swab", :js do
   it "allows creation of a new swab event" do
     user = login_as_clinical
     patient = create(:patient, by: user)

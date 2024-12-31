@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   def self.table_name_prefix = "letter_"
   def self.cast_author(user) = user.becomes(Author)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Renal
     class AKIAlertSearchForm
@@ -16,9 +14,9 @@ module Renalware
       attribute :max_aki, String
       attribute :date_range, String
 
-      DATE_RANGE_TODAY = "created_at_within_configured_today_period"
-      DATE_RANGE_ALL = "all"
-      DATE_RANGE_SPECIFIC_DATE = "specific_date"
+      DATE_RANGE_TODAY = "created_at_within_configured_today_period".freeze
+      DATE_RANGE_ALL = "all".freeze
+      DATE_RANGE_SPECIFIC_DATE = "specific_date".freeze
 
       def date_query
         self.date_range ||= DATE_RANGE_TODAY

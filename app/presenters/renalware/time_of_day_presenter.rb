@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class Renalware::TimeOfDayPresenter < SimpleDelegator
     def to_s

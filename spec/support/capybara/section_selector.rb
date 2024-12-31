@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Copied from
 # https://github.com/citizensadvice/capybara_accessible_selectors/blob/b2ee27d18a0c338cf46b2cb2f1917483595fb203/lib/capybara_accessible_selectors/selectors/section.rb
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinical::ProfilePresenter do
   subject { described_class.new(patient: patient, params: {}) }
 

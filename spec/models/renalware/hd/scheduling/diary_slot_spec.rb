@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD::Scheduling
   describe DiarySlot do
     it_behaves_like "an Accountable model"

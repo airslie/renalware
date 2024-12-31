@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   module Formats::FHIR
     module Resources
@@ -9,7 +7,7 @@ module Renalware::Letters
           include Support::Construction
           include Support::Helpers
 
-          PROFILE_URL = "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Composition-1"
+          PROFILE_URL = "https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Composition-1".freeze
 
           def call
             {

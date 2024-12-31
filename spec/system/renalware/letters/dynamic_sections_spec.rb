@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe "Manage dynamic sections - HDSection,..", js: true do
+  describe "Manage dynamic sections - HDSection,..", :js do
     include LettersSpecHelper
 
     let(:user) { create(:user, :clinical) }

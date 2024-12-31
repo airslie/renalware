@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Outgoing Documents API" do
   let(:api_user) do
     create(

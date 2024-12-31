@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe UKRDC::TransplantOperationPresenter do
     let(:presenter) { described_class.new(operation) }

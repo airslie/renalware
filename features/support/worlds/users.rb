@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module World
   module Users
     def create_user(given_name:, family_name:)

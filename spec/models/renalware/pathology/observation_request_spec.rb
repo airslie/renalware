@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Pathology::ObservationRequest do
     include PathologySpecHelper

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Viewing a list of reports" do
   let(:user) { create(:user, :clinical) }
 

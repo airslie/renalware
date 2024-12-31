@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Transplant Rejection Treatments" do
+  Rails.benchmark "Adding Transplant Rejection Treatments" do
     names = [
       "None",
       "Methylprednisolone",

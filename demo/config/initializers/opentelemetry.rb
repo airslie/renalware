@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Set ENV var ENABLE_OPENTELEMETRY to "1" to enable opentelemetry.
 # Expects there to be bundler group called opentelemetry containing all opentelemetry gems
 # (opentelemetry-instrumentation-rails, opentelemetry-instrumentation-pg etc) that we need.

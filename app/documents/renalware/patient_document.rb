@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class PatientDocument < Document::Embedded
     attribute :interpreter_notes, String

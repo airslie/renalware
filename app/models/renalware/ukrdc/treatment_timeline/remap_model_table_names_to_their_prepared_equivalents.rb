@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # For use only in rake task! See comments below
 module Renalware
   module UKRDC
@@ -7,9 +5,9 @@ module Renalware
       # When generating the treatment timeline, sites may want to pre-prepare a massaged version
       # of say hd_profiles, in order to correct any anomalies. This service object
       # will remap the table_name of the supplied (or default models) to the
-      # 'ukrdc_prepared_*' version if it exists. Otrherwise it will not change the table name.
+      # 'ukrdc_prepared_*' version if it exists. Otherwise it will not change the table name.
       # Note that this can only be done when executing as a rake task (which has its own process)
-      # as I beleive changing the table_name will affect all threads in the same process - so doing
+      # as I believe changing the table_name will affect all threads in the same process - so doing
       # this in a puma process would mean users start to see only the contents of the
       # ukrdc_prepared_tables. Not good :0.
       class RemapModelTableNamesToTheirPreparedEquivalents
@@ -20,8 +18,8 @@ module Renalware
         class ExecutionNotAllowedError < StandardError; end
 
         # Saves the original table names for the array of models classes
-        # remaps to its ukrdc_prepared_* varaient if it exists, yields to allow
-        # the claling process to do its thing, then importantly winds back to
+        # remaps to its ukrdc_prepared_* variant if it exists, yields to allow
+        # the calling process to do its thing, then importantly winds back to
         # the original table names.
         def call(models = MODELS)
           fail_unless_running_in_rake_or_rspec

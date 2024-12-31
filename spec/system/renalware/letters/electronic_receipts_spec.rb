@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "View a user's read/unread electronic ccs" do
   include LettersSpecHelper
   let(:patient_family_name) { "GRAVES" }

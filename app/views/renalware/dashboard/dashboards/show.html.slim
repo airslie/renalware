@@ -1,3 +1,8 @@
+= content_for(:actions) do
+  .ml-2.flex.gap-2
+    - Renalware.config.external_links.each do |title, url|
+      = external_link_to(title, url, gap: 2, class: "btn btn-tertiary btn-compact")
+
 = within_admin_layout(title: composed_dashboard_title(current_user.full_name), page_title: t(".title")) do
   = render Renalware::Users::LastSigninComponent.new(current_user: current_user)
   = render "content", dashboard: dashboard

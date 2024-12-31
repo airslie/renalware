@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module XHRHelper
     def refresh(el, partial:, locals:)

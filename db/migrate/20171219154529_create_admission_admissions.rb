@@ -8,8 +8,8 @@ class CreateAdmissionAdmissions < ActiveRecord::Migration[5.1]
         t.string :admission_type, null: false
         t.string :consultant
         t.references :modality_at_admission,
-                    foreign_key: { to_table: :modality_modalities },
-                    index: true
+                     foreign_key: { to_table: :modality_modalities },
+                     index: true
         t.text :reason_for_admission, null: false
         t.text :notes
         t.date :transferred_on

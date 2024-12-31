@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 When("Clyde records an exit site infection for Patty") do
   record_exit_site_infection_for(
     patient: @patty,

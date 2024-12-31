@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CapybaraHelper
   def select_nth_option_from(selector, number = 1)
     all("#{selector} option")[number - 1].select_option

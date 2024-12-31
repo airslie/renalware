@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Remove Admission Request", js: true do
+describe "Remove Admission Request", :js do
   include AjaxHelpers
 
   it "Clicking remove soft delete the request and removes it from the list" do

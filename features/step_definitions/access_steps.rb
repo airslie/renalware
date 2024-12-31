@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("Patty has a recorded access profile") do
   seed_access_profile_for(@patty, user: Renalware::User.first)
 end

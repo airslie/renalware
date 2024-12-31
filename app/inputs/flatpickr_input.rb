@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class FlatpickrInput < SimpleForm::Inputs::StringInput
   def input(_wrapper_options)
     template.tag.div(class: "relative rounded-md w-60") do

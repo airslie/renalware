@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Consultant management" do
   let(:user) { create(:user) }
 

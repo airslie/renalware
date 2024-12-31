@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing Users" do
   let(:user) { create(:user, :unapproved, :clinical, prescriber: false) }
 

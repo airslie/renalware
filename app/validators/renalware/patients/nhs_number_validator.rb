@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Patients
     # Validates an NHS number which should be 10 characters long and confirm to the modulo 11

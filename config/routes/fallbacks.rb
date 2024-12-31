@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Azure health-check sends requests like '/robots3455.txt'. Render 404 to signal we are running OK
 get "/robots:id.txt", to: "system/errors#not_found_for_healthcheck", constraints: { id: /\d+/ }
 

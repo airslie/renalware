@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # TODO: Remove this disable
 
 module Renalware

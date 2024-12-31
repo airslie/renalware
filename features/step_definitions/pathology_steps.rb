@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 observation_required_regex =
   /^request description ([\d\w]+) requires observation description ([\d\w]+)$/
 Given(observation_required_regex) do |request_code, description_code|

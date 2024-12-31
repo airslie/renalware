@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rubygems"
 require "dotenv-rails"
 require "view_component"
@@ -46,7 +44,6 @@ require "prawn"
 require "puma"
 require "pundit"
 require "turbo-rails"
-require "tailwindcss-rails"
 require "ransack"
 require "renalware/forms"
 require "pandoc-ruby"

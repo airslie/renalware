@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # A view model representing the aggregation of observations by date.

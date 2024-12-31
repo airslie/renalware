@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Accesses
     class Plan < ApplicationRecord
@@ -19,7 +17,7 @@ module Renalware
       def self.policy_class = BasePolicy
 
       def self.attributes_to_ignore_when_comparing
-        [:id, :created_at, :updated_at, :created_by_id, :updated_by_id]
+        %i(id created_at updated_at created_by_id updated_by_id)
       end
 
       def identical_to?(other)

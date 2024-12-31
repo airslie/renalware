@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :problem, class: "Renalware::Problems::Problem" do
     accountable

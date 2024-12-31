@@ -5,20 +5,20 @@ class AddDisplayGroupToObservationDesriptions < ActiveRecord::Migration[5.1]
       remove_column :pathology_observation_descriptions, :display_order_letters, :integer
 
       add_column :pathology_observation_descriptions,
-                :display_group,
-                :integer
+                 :display_group,
+                 :integer
 
       add_column :pathology_observation_descriptions,
-                :display_order,
-                :integer
+                 :display_order,
+                 :integer
 
       add_column :pathology_observation_descriptions,
-                :letter_group,
-                :integer
+                 :letter_group,
+                 :integer
 
       add_column :pathology_observation_descriptions,
-                :letter_order,
-                :integer
+                 :letter_order,
+                 :integer
 
       # Only allow an obs desc to be in a group exactly once
       add_index :pathology_observation_descriptions,

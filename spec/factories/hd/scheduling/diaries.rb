@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :hd_weekly_diary, class: "Renalware::HD::Scheduling::WeeklyDiary" do
     accountable

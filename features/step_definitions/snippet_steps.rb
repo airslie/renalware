@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 When(/^Clyde records a new snippet$/) do |table|
   hash = table.hashes.first.symbolize_keys
   create_snippet_for(@clyde, hash.symbolize_keys)

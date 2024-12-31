@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     def self.table_name_prefix = "hd_"

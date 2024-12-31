@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::Requests::GlobalRule::ObservationResult do
   let(:klass) { described_class }
 

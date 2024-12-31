@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Feeds
   describe PatientLocatorStrategies::DobAndAnyNHSOrAssigningAuthNumber do
     describe "#call" do

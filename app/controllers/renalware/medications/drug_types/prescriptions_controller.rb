@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # E.g. medications/esa_prescriptions
 # See routes.rb for how drug type name is set.

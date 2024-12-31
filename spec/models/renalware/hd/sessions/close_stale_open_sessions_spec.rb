@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     describe Sessions::CloseStaleOpenSessions do

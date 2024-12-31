@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Assign a person as a main recipient" do
   include AjaxHelpers
 
@@ -14,7 +12,7 @@ describe "Assign a person as a main recipient" do
   let(:user) { create(:user) }
   let!(:contact_description) { create(:letter_contact_description) }
 
-  describe "assigning a new person as a main recipient", js: true do
+  describe "assigning a new person as a main recipient", :js do
     before do
       create(:letter_letterhead)
       create(:letter_contact, patient: patient, person: create(:directory_person, by: user))

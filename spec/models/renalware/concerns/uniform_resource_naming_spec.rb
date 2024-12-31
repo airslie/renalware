@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe UniformResourceNaming do # rubocop:disable RSpec/SpecFilePathFormat
     let(:test_class) { Class.new { include Renalware::UniformResourceNaming } }

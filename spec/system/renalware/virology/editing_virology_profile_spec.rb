@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Editing the virology profile" do
   let(:patient) { create(:virology_patient) }
 

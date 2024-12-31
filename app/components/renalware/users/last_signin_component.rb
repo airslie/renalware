@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Users
     # Renders a section on the dashboard that displays the last date and time the

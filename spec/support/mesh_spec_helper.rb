@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module MeshSpecHelper
   # rubocop:disable Metrics/MethodLength
   def create_mesh_letter(patient:, user:, to: :primary_care_physician)
@@ -44,6 +42,7 @@ module MeshSpecHelper
       patient: patient,
       author: user,
       approved_by: user,
+      topic: create(:letter_topic, snomed_document_type: create(:snomed_document_type)),
       by: user
     ).reload.tap do |letter|
       letter.archive = create(:letter_archive, letter: letter, by: user)

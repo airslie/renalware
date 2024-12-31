@@ -28,7 +28,7 @@ In a *full* PET the process is for example
 
 In a *fast* PET, patients may put in the 2.27% bag at home and come to clinic at the correct time
 for a 4hr drain to be done, allowing `volume out` and the `4hr sample` concentration to be measured;
-0h, 2h and overnight samples are not neccessarily collected.
+0h, 2h and overnight samples are not necessarily collected.
 
 At Barts the fast test is more usual.
 

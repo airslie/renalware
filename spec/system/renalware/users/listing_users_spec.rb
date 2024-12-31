@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "A user views a list of users" do
   it "lists all users in the system" do
     login_as_clinical

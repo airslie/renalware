@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     class PatientPresenter < SimpleDelegator
@@ -12,7 +10,7 @@ module Renalware
       delegate :unit_code, to: :hospital_unit, allow_nil: true, prefix: true
       delegate :transport, to: :document
       delegate :type, to: :transport, prefix: true
-      alias_method :dialysing_at_unit, :hospital_unit_unit_code
+      alias dialysing_at_unit hospital_unit_unit_code
 
       def initialize(patient)
         # If patient is already a presenter then use __getobj__ to access the model

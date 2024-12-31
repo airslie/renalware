@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "fileutils"
 
 # Note you can print out the help for this task and others with `rake -D`

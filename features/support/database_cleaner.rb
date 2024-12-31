@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 begin
   require "database_cleaner"
   require "database_cleaner/cucumber"

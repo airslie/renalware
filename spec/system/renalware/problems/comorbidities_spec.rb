@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Managing a patient's comorbidities", js: true do
+describe "Managing a patient's comorbidities", :js do
   include ActionView::RecordIdentifier
 
   describe "viewing comorbidities" do

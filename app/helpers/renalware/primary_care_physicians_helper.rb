@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PrimaryCarePhysiciansHelper
     def practices_options_for_select(primary_care_physician)

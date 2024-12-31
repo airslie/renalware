@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe System::APILog do
     it :aggregate_failures do

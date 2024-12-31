@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     module Requests
@@ -8,26 +6,12 @@ module Renalware
           requests.map { |request| new request }
         end
 
-        def patient_name
-          patient.full_name.upcase
-        end
-
-        def date
-          I18n.l Date.current
-        end
-
-        def date_of_birth
-          I18n.l patient.born_on
-        end
-
-        def consultant
-          request_form.consultant&.name
-        end
-
-        def clinical_detail
-          clinic.name
-        end
-        alias_method :contact, :clinical_detail
+        def patient_name      = patient.full_name.upcase
+        def date              = I18n.l Date.current
+        def date_of_birth     = I18n.l patient.born_on
+        def consultant        = request_form.consultant&.name
+        def clinical_detail   = clinic.name
+        alias contact clinical_detail
 
         def requested_by
           return "" if created_by.nil?

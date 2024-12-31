@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Bookmarks" do
+  Rails.benchmark "Adding Bookmarks" do
     return if Patients::Bookmark.any?
 
     roger_rabbit = Patient.find_by(family_name: "RABBIT", given_name: "Roger")

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable RSpec/LetSetup
 shared_context "with a global_rule_set" do
   let!(:clinic) { create(:clinic) }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module FlashHelper
     def css_class_for_flash(flash_key)

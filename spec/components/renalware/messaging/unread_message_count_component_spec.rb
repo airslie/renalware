@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Messaging::UnreadMessageCountComponent, type: :component do
   let(:internal_author) { create(:internal_author) }
   let(:messaging_patient) { create(:messaging_patient) }

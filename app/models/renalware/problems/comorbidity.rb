@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Problems
     # An instance of a single patient comorbidity problem eg 'Dementia' (defined by the
@@ -27,7 +25,10 @@ module Renalware
         includes(:description)
           .order("#{Comorbidities::Description.table_name}.position")
       }
+
+      # rubocop:disable Rails/WhereRange
       scope :at_date, ->(date) { where("recognised_at <= ?", date) }
+      # rubocop:enable Rails/WhereRange
 
       def self.policy_class = BasePolicy
     end

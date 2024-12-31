@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding PD Bag Types" do
+  Rails.benchmark "Adding PD Bag Types" do
     file_path = File.join(File.dirname(__FILE__), "bag_types.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

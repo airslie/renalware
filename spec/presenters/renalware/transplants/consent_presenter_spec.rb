@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Transplants::ConsentPresenter do
   let(:example_consent_class) { Renalware::Transplants::RecipientWorkupDocument::MarginalConsent }
 

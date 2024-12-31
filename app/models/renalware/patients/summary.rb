@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 ##
 # Backed by a SQL view, the patient summary is principally a set of counts for various entities
 # which hang off a patient, for example prescriptions_count, problems_count etc.

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :dry_weight, class: "Renalware::Clinical::DryWeight" do
     accountable

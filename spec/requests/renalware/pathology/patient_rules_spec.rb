@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "patient_rules Requests" do
   let(:patient) { create(:pathology_patient) }
   let(:lab) { create(:pathology_lab) }

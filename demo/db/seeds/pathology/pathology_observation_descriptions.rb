@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Pathology Observation Descriptions" do
+  Rails.benchmark "Adding Pathology Observation Descriptions" do
     file_path = File.join(File.dirname(__FILE__), "pathology_observation_descriptions.csv")
     units_of_measurement_map = Renalware::Pathology::MeasurementUnit.select(:id, :name)
       .each_with_object({}) { |uom, hash| hash[uom.name] = uom.id }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "HTTP Caching" do
   let(:patient) { create(:patient) }
 

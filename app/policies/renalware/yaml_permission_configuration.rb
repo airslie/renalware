@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Responsible for determining if a user has access to a model based on a
   # configuration file.

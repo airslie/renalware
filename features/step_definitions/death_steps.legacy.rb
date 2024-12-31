@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("the patient is cc'ed on letters") do
   (@patty || @patient_1).update_columns(cc_on_all_letters: true, cc_decision_on: "01-01-2013")
 end

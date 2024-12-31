@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Capybara.register_driver(:rw_headless_chrome) do |app|
   options = Selenium::WebDriver::Chrome::Options.new
   options.add_argument("window-size=1366,1768")

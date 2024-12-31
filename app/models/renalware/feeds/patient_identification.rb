@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # Note in the PID segment internal_id == NHS number
@@ -114,7 +112,7 @@ module Renalware
       # equivalent, then overwrite the existing #admin_sex method so the HL7::Message version
       # cannot be called. If we can't map it we just return whatever is in there and its up to
       # calling code to handle any coercion issues. The hl7_pid_sex_map hash can be configured
-      # by the host app to support whatever sex values it uses intenrally.
+      # by the host app to support whatever sex values it uses internally.
       # I think some work needs to be done on Renalware sex and gender (which are slightly
       # conflated in Renalware). For example:
       # - the LOINC names for administrative sex: Male Female Unknown (https://loinc.org/72143-1/)

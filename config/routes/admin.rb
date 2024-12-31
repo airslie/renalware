@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :admin do
   resources :users
   resource :dashboard, only: :show
@@ -9,8 +7,8 @@ namespace :admin do
     end
   end
   namespace :feeds do
-    resources :files, only: [:index, :show, :new, :create]
+    resources :files, only: %i(index show new create)
   end
-  resource :cache, only: [:show, :destroy]
-  resource :config, only: [:show, :destroy], controller: "config"
+  resource :cache, only: %i(show destroy)
+  resource :config, only: %i(show destroy), controller: "config"
 end

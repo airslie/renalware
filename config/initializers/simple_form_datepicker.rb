@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 SimpleForm.setup do |config|
   config.wrappers :horizontal_datepicker,
                   tag: :div,

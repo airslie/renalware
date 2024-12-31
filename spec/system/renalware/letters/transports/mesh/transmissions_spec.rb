@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # describe "ToC queued letter management" do
 #   include LettersSpecHelper
 #   let(:user) { create(:user) }

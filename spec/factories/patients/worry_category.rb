@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   sequence :worry_category_name do |idx|
     "Category#{idx}"

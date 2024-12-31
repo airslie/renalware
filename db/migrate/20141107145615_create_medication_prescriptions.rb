@@ -8,10 +8,10 @@ class CreateMedicationPrescriptions < ActiveRecord::Migration[4.2]
       t.string :dose_unit,             null: false
       t.references :medication_route,  null: false, foreign_key: true
       t.string :route_description
-      t.string :frequency,             null: false
+      t.string :frequency, null: false
       t.text :notes
-      t.date :prescribed_on,              null: false
-      t.integer :provider,             null: false
+      t.date :prescribed_on, null: false
+      t.integer :provider, null: false
       t.timestamps null: false
     end
 

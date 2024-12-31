@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # Backed by Jsonb, stored in view_metadata.columns, a model to allow
@@ -15,17 +13,17 @@ module Renalware
       # if tiny is chosen, then class applied to the th will be col-width-tiny
       enum(
         :width,
-        %i(
-          tiny
-          small
-          medium
-          large
-          date
-          datetime
-          nhs_number
-          hospital_numbers
-          patient_name
-        )
+        {
+          tiny: 0,
+          small: 1,
+          medium: 2,
+          large: 3,
+          date: 4,
+          datetime: 5,
+          nhs_number: 6,
+          hospital_numbers: 7,
+          patient_name: 8
+        }
       )
       # If truncate_with_ellipsis is true we add a class to the td so that it
       # will truncate the text and add .. onm the end

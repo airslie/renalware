@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Broadcasting
     include Wisper::Publisher
@@ -7,7 +5,7 @@ module Renalware
 
     class Subscriber
       attr_reader :klass_name, :async
-      alias_method :async?, :async
+      alias async? async
 
       def initialize(klass_name, async: false)
         @klass_name = klass_name

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
 
@@ -90,7 +88,7 @@ RSpec.configure do |config|
     )
   end
 
-  config.before(:each, js: true, type: :system) do
+  config.before(:each, :js, type: :system) do
     driven_by :rw_headless_chrome
   end
 
@@ -171,7 +169,7 @@ RSpec.configure do |config|
   #   end
   # See https://github.com/airblade/paper_trail#7b-rspec for more information.
 
-  config.after(:each, js: true, type: :system) do
+  config.after(:each, :js, type: :system) do
     # TODO: reinstate once we work out why Selenium on GH actions gives
 
     # errors = page.driver.browser.logs.get(:browser)

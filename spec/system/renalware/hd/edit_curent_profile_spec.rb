@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Editing a patient's current HD profile", js: false do
   include PatientsSpecHelper
 

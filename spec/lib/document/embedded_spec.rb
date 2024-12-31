@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Document
   describe Embedded, type: :lib do
     include TranslationsHelper

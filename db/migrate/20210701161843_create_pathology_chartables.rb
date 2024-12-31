@@ -9,7 +9,7 @@ class CreatePathologyChartables < ActiveRecord::Migration[5.2]
         t.boolean :chart_logarithmic, default: false, null: false
         t.string(
           :chart_sql_function_name,
-          comment: "A custom json-returning SQL function returning a calculated/derived series. "\
+          comment: "A custom json-returning SQL function returning a calculated/derived series. " \
                    "Must accept an integer (patient id) and date (start date to search from)"
         )
       end

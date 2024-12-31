@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     module Sessions
@@ -11,7 +9,7 @@ module Renalware
       class WashbackQualityDialogComponent < ApplicationComponent
         attr_reader :html_id
 
-        I18N_KEY = "enumerize.renalware/hd/session_document/dialysis"
+        I18N_KEY = "enumerize.renalware/hd/session_document/dialysis".freeze
 
         def initialize(html_id: "washback-dialog")
           @html_id = html_id

@@ -1,12 +1,8 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
   module UKRDC
-    extend SeedsHelper
-
-    log "Adding UKRDC measurement units" do
+    Rails.benchmark "Adding UKRDC measurement units" do
       file_path = File.join(File.dirname(__FILE__), "measurement_units.csv")
 
       CSV.foreach(file_path, headers: true) do |row|

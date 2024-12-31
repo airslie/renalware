@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module AjaxHelpers
   def wait_for_ajax(timeout = Capybara.default_max_wait_time)
     Timeout.timeout(timeout) do

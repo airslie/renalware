@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Letterheads" do
+  Rails.benchmark "Adding Letterheads" do
     file_path = File.join(File.dirname(__FILE__), "letterheads.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

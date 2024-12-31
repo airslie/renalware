@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Housekeeping tasks for removing stale logs and archived files.
 #

@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 # A decorator for handling a collection of hashes with similar keys.
 #
 class HashCollection < SimpleDelegator
-  alias_method :collection, :__getobj__
+  alias collection __getobj__
 
   # Example:
   #

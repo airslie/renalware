@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "inline_image"
 require "git_commit_sha"
 require "breadcrumb"

@@ -1,9 +1,8 @@
-# frozen_string_literal: true
-
 # This is testing that the Clinical Frailty Score nag - a combination of a sql function and an entry
 # in the nag_definitions table - works as expected. We are testing both the functionality specific
 # to this nag as well as general conformance to the nag 'protocol'.
-describe "Clinical Frailty Score nag", caching: true, type: :component do
+# rubocop:disable RSpec/DescribeClass
+describe "Clinical Frailty Score nag", :caching, type: :component do
   include PatientsSpecHelper
   include NagHelpers
 
@@ -20,13 +19,13 @@ describe "Clinical Frailty Score nag", caching: true, type: :component do
   context "when the patient has a Clinical Frailty Score event" do
     {
       high: [
-        { modality: [:pd, :hd, :transplant], age: [281] }
+        { modality: %i(pd hd transplant), age: [281] }
       ],
       medium: [
-        { modality: [:pd, :hd, :transplant], age: [91, 180] }
+        { modality: %i(pd hd transplant), age: [91, 180] }
       ],
       none: [
-        { modality: [:pd, :hd, :transplant], age: [89] },
+        { modality: %i(pd hd transplant), age: [89] },
         { modality: [:low_clearance], age: [8, 81, 91, 181] }
       ]
     }.each do |severity, groups|
@@ -116,3 +115,4 @@ describe "Clinical Frailty Score nag", caching: true, type: :component do
     end
   end
 end
+# rubocop:enable RSpec/DescribeClass

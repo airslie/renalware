@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Patients
   describe BookmarkPolicy, type: :policy do
     include PolicySpecHelper

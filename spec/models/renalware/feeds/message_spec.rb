@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Feeds::Message do
     it :aggregate_failures do
@@ -10,7 +8,7 @@ module Renalware
       is_expected.to respond_to(:body_hash)
       is_expected.to have_db_index(:body_hash).unique(true)
       # Removing this test as we no longer rely on this index being there as
-      is_expected.to have_db_index([:message_type, :event_type])
+      is_expected.to have_db_index(%i(message_type event_type))
     end
   end
 end

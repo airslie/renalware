@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # Responsible for finding the most recent observations results with in

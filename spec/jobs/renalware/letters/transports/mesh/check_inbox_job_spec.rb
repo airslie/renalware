@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters::Transports::Mesh
   describe CheckInboxJob do
     include FaradayHelper

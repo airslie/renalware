@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Managing online reference links" do
     let(:user) { create(:user) }

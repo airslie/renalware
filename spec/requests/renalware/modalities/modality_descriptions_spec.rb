@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Configuring Modality Descriptions" do
   let(:modality_description) { create(:modality_description) }
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Configuring PD Bag Types" do
   let(:bag_type) { create(:bag_type) }
 

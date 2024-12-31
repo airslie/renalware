@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Dietetics::VisitsComponent, type: :component do
     let(:patient) { Patient.new(id: 12) }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe UKRDC::PatientPresenter do
     def rr_smoker(status)

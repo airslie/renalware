@@ -1,7 +1,7 @@
 = content_for(:actions) do
   = render "actions", options: options
 
-/ Do not re-render filters unneccessarily if we are refreshing the page due to a filter change
+/ Do not re-render filters unnecessarily if we are refreshing the page due to a filter change
 - unless turbo_frame_request
   = content_for(:filters) do
     = render "filters", options: options

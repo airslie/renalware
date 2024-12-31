@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # Backed by JSONB, stored in view_metadata.filters, a model to allow
@@ -10,10 +8,10 @@ module Renalware
       # The type enum determines how the filter is constructed eg as a list of distinct values
       enum(
         :type,
-        %i(
-          list
-          search
-        )
+        {
+          list: 0,
+          search: 1
+        }
       )
       validates :code, presence: true
       validates :type, presence: true

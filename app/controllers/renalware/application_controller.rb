@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Note that we inherit from ::ApplicationController which is defined in the host application.
   # This allows application to

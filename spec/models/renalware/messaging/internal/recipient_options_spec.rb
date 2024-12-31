@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Messaging::Internal
   describe RecipientOptions do
     let(:author) { create(:internal_author) }

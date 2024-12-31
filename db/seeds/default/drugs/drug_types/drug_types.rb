@@ -1,12 +1,8 @@
-# frozen_string_literal: true
-
 require_relative "../../../seeds_helper"
 
 # rubocop:disable Style/WordArray
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Drug Types" do
+  Rails.benchmark "Adding Drug Types" do
     drug_types = [
       {
         name: "Antibiotics",

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # Periodically (probably overnight) this job runs to find any HD::PrescriptionAdministrations

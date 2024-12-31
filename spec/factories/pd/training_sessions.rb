@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :pd_training_session, class: "Renalware::PD::TrainingSession" do
     accountable

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats
@@ -7,9 +5,10 @@ module Renalware
         describe Resources::MessageHeader do
           subject(:message_header) { described_class.call(arguments) }
 
-          let(:transmission)  { instance_double(Transports::Mesh::Transmission, letter: letter) }
-          let(:patient)       { Renalware::Patient.new(secure_id: "456") }
-          let(:letter)        { instance_double(Letter, patient: patient, uuid: "789") }
+          let(:transmission) { instance_double(Transports::Mesh::Transmission, letter: letter) }
+          let(:patient) { Renalware::Patient.new(secure_id: "456") }
+          let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
+          let(:letter) { instance_double(Letter, patient: patient, uuid: "789", topic: topic) }
           let(:arguments) do
             Arguments.new(
               transmission: transmission,

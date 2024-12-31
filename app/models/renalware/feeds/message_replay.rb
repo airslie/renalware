@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # Captures when a feed message has been replayed. See ReplayRequest.

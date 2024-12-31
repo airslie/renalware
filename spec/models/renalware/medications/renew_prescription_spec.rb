@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Medications
   describe RenewPrescription do
     let(:patient) { create(:patient) }

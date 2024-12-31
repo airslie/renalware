@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Creating an Access Plan" do
   include DateHelpers
 

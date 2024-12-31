@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "csv"
 require Renalware::Engine.root.join("db", "seeds", "seeds_helper")
 
@@ -7,9 +5,8 @@ require Renalware::Engine.root.join("db", "seeds", "seeds_helper")
 include SeedsHelper # rubocop:disable Style/MixinUsage
 
 module Renalware
-  log "Seeding Database"
-
-  ms = Benchmark.ms do
+  Rails.logger = Logger.new($stdout)
+  Rails.benchmark "Seeding Database" do
     # Load default Renalware Seeds
     Renalware::Engine.load_seed
 
@@ -17,5 +14,5 @@ module Renalware
     require_relative "seeds/seeds"
   end
 
-  log "Database seeding completed in #{ms / 1000}s"
+  # log "Database seeding completed in #{ms / 1000}s"
 end

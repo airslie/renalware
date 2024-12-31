@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Admin
     # rubocop:disable RSpec/RepeatedExample

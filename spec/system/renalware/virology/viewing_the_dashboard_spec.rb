@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Viewing the dashboard" do
   include PathologySpecHelper
 

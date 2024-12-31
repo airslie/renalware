@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable Layout/EmptyLineBetweenDefs, Style/SingleLineMethods
 # #
 module Renalware

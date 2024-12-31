@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class RolesUser < ApplicationRecord
     belongs_to :role

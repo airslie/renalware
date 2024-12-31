@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Events::ClinicalFrailtyScore do # an event
   describe "#document" do
     subject { described_class.new.document }

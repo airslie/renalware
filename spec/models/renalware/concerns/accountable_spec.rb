@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe Accountable do
+  describe Accountable do # rubocop:disable RSpec/SpecFilePathFormat
     def test_class
       Class.new(ApplicationRecord) do
         include Accountable

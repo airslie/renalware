@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing clinical study participation" do
   let(:user) { @current_user }
 

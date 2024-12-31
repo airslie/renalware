@@ -27,9 +27,9 @@ class AddLandingAreaToSystemViewMetadata < ActiveRecord::Migration[7.0]
         :system_view_metadata,
         :patient_landing_page,
         :enum_patient_landing_page,
-        comment: "If present, any patient links generated the report associated with this "\
-                 "row will take the user indicated landing area eg patients/123/hd, where these "\
-                 "landing areas are routes defined by each RW module and often redirect, e.g. to "\
+        comment: "If present, any patient links generated the report associated with this " \
+                 "row will take the user indicated landing area eg patients/123/hd, where these " \
+                 "landing areas are routes defined by each RW module and often redirect, e.g. to " \
                  "a dashboard or profile page"
       )
     end

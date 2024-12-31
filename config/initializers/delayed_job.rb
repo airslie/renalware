@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Delayed::Worker.logger = Logger.new(Rails.root.join("log/delayed_job.log"))
 Delayed::Worker.destroy_failed_jobs = false
 Delayed::Worker.max_attempts = 10 # overridden e.g. in FeedJob

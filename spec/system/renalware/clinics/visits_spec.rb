@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Global Clinic Visits list" do
   describe "GET index" do
     it "responds successfully" do

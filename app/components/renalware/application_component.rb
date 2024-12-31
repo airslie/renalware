@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class ApplicationComponent < ViewComponent::Base
     include Renalware::Engine.routes.url_helpers

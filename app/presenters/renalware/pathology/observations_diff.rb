@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 # Compares two hashes of pathology observations (OBXs).
 # Used for example in a Letter, where a snapshot of pathology is stored on the letter,
 # but when the letter we compare the snapshot to the latest hash in the jsonb column
-# CurrentObserverationSet#values to see if there are newer results that the user might want
+# CurrentObservationSet#values to see if there are newer results that the user might want
 # to bring into the letter.
 #
 # NB: uses Rails 5 `render anywhere` feature.

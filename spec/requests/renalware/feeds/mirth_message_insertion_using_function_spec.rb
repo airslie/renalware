@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Simulation of Mirth inserting an HL7 message using our helper function" do
   include DatabaseFunctionsSpecHelper
 

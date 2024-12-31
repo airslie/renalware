@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "gpg_encrypt_folder"
 
 module Renalware

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # Represents a URL to an online reference that a patient can view to get more information

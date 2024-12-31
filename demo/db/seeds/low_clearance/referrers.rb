@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding AKCC Referrers" do
+  Rails.benchmark "Adding AKCC Referrers" do
     file_path = File.join(File.dirname(__FILE__), "referrers.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

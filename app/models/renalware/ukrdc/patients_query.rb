@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module UKRDC
     # If the optional :changed_since argument is passed we select all PKB
@@ -19,7 +17,7 @@ module Renalware
       def call(changed_since: nil, changed_since_last_send: true)
         if changed_since.present?
           # patients who changed since a specific date (inclusive)
-          sendable_patients.where("updated_at >= ?", changed_since)
+          sendable_patients.where(updated_at: changed_since..)
         elsif changed_since_last_send
           # patients who have never been sent, or have changed since the last time they were sent
           sendable_patients.where("(sent_to_ukrdc_at is null) or (updated_at > sent_to_ukrdc_at)")

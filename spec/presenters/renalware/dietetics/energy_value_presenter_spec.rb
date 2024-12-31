@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Dietetics
   describe EnergyValuePresenter do
     describe "#to_s" do

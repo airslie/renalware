@@ -9,7 +9,7 @@ class CreateTriggerToUpdateCurrentObservationSets < ActiveRecord::Migration[5.1]
   def down
     within_renalware_schema do
       connection.execute(
-        "DROP TRIGGER IF EXISTS update_current_observation_set_trigger ON pathology_observations; "\
+        "DROP TRIGGER IF EXISTS update_current_observation_set_trigger ON pathology_observations; " \
         "DROP FUNCTION IF EXISTS update_current_observation_set_from_trigger();"
       )
     end

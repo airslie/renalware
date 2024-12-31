@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe System::RefreshMaterializedViewWithMetadataJob do
     let(:view_metadata) do

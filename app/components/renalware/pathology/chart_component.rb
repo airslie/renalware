@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # Can render a predefined Chart or an individual Observation Description

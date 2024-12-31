@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "../../app/models/concerns/renalware/callable"
 
 namespace :feeds do
@@ -58,7 +56,7 @@ module Renalware
         }
       end
       ids = Patient.upsert_all(patients, unique_by: :secure_id)
-      #ids.map { |x| x["id"] }
+      # ids.map { |x| x["id"] }
       patients
     end
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Patient's Protocol PDF" do
   include PathologySpecHelper
   let(:password) { "(&*G986111" }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # A list of SQL functions within renalware* schemas, backed by SQL View 'system_sql_functions'.

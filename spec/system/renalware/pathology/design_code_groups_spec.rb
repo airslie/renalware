@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Pathology
   describe "Design pathology code groups" do
     describe "listing code groups" do

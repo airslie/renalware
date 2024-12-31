@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing PD PET Results" do
   let(:patient) { create(:pd_patient, by: user) }
   let(:user) { create(:user) }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # Tracks the import of incoming HD Session data from an integrated dialysis provider

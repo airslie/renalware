@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A global trait for setting created_by and updated_by.
 #
 # When a model includes the Accountable concern, it adds a #by attributes and this

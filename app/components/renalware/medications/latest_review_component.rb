@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     # Displays details about the last medication review the patient had.

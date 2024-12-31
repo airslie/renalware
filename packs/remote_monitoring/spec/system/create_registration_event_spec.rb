@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Create remote monitoring registration event", js: true do
+describe "Create remote monitoring registration event", :js do
   it "creates successfully" do
     user = login_as_clinical
     patient = create(:patient, family_name: "XXX", given_name: "Jon", by: user)

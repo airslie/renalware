@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :pathology_requests_patient_rule,
           class: "Renalware::Pathology::Requests::PatientRule" do

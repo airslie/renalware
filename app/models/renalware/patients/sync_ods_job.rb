@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 require "nhs_api_client"
 
 module Renalware
   module Patients
     #
     # A background job to fetch practice and GP updates from the NHS Organisation Data Service (ODS)
-    # The order in which we fetch data is neccessarily strict in order to build the relationships:
+    # The order in which we fetch data is necessarily strict in order to build the relationships:
     # 1. Practices
     # 2. GPS
     # 3. Practice memberships

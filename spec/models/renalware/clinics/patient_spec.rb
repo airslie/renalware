@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinics::Patient do
   describe ".most_recent_clinic_visit scope" do
     it "returns nil when the patient has no clinic visits" do

@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe "PD Training Session management", js: true do
+  describe "PD Training Session management", :js do
     let(:patient) { create(:pd_patient) }
 
     it "Add a PD Training Session" do

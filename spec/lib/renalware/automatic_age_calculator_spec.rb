@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe AutomaticAgeCalculator, type: :model do
     subject(:calculator) do

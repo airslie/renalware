@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Example pathology listener.
 #
 # This listener had been wired to receive broadcast events in the

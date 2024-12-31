@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A Diary is the schedule of HD Station/Patients assignments for one week for a particular unit.
 # A Diary is split into Periods (eg. am pm eve), and each Period has a matrix of slots
 # Imagine Days eg 1 to 6 on the X axis and Stations on the Y axis, and into each 'slot' we

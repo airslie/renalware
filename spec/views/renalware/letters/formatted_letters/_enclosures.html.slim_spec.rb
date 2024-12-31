@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "renalware/letters/formatted_letters/_enclosures" do
     let(:partial) { "renalware/letters/formatted_letters/enclosures" }

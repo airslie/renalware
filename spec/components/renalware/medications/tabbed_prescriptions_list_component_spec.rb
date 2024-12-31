@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Medications::TabbedPrescriptionsListComponent, type: :component do
   it "generates a tab for each title in prescription group" do
     groups = [

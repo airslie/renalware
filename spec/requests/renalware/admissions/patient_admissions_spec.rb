@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Listing admissions for the current patient" do
     let(:user) { create(:user) }

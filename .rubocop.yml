@@ -32,19 +32,14 @@ AllCops:
   NewCops: enable
   UseCache: true
   SuggestExtensions: true
-  TargetRubyVersion: 3.3.6
+  TargetRubyVersion: 3.4.1
   # Defining the Exclude or Include keys here overwrites the settings in styleguide/rubocop.yml
   # so we have to redefine the entire set.
   Exclude:
     - "*.gemspec"
     - "vendor/**/*"
     - "bin/**/*"
-    - "lib/tasks/**/*"
-    - "db/**/*"
     - "demo/bin/**/*"
-    - "demo/lib/tasks/**/*"
-    - "demo/db/**/*"
-    - "demo/db/migrate/*"
     - "tmp/**/*"
     - "demo/tmp/**/*"
     - "vendor/bundle/**/*"
@@ -56,10 +51,10 @@ Style/SafeNavigationChainLength:
   Max: 3
 
 Rails/EnumHash:
-  Enabled: false
+  Enabled: true
 
 Rails/EnumSyntax:
-  Enabled: false
+  Enabled: true
 
 Style/CommentAnnotation:
   Enabled: false
@@ -70,7 +65,7 @@ RSpec/VerifiedDoubleReference:
     - "spec/models/renalware/pathology/observation_requests_attributes_builder_spec.rb"
 
 Rails/WhereRange:
-  Enabled: false
+  Enabled: true
 
 Naming/PredicateName:
   Enabled: false
@@ -111,7 +106,7 @@ RSpec/ReceiveMessages:
   Enabled: true
 
 RSpec/MetadataStyle:
-  Enabled: false
+  Enabled: true
 
 Capybara/ClickLinkOrButtonStyle:
   Enabled: false
@@ -125,7 +120,7 @@ Metrics/MethodLength:
     - app/models/renalware/letters/formats/fhir/**/resources/**/*
 
 Layout/MultilineMethodCallIndentation:
-  Enabled: false
+  Enabled: true
 Metrics/ClassLength:
   Enabled: true
   Exclude:
@@ -138,9 +133,8 @@ Layout/LineLength:
     - "app/inputs/**.*"
     - "demo/db/**/*"
 Style/FrozenStringLiteralComment:
-  Exclude:
-    - "demo/db/migrate/**/*"
-    - "db/migrate/**/*"
+  Enabled: false
+
 Metrics/AbcSize:
   Exclude:
     - "spec/acceptance/renalware/steps/**/*"
@@ -159,21 +153,21 @@ RSpec/MultipleExpectations:
   Exclude:
     - "spec/system/**/*"
 Lint/RedundantSafeNavigation:
-  Enabled: false
+  Enabled: true
 RSpec/DescribeClass:
-  Enabled: false
+  Enabled: true
 RSpec/ImplicitSubject:
   Enabled: false
 RSpec/DescribedClass:
-  Enabled: false
+  Enabled: true
 Performance/RedundantBlockCall:
-  Enabled: false
+  Enabled: true
 Style/NumericPredicate:
   Enabled: false
 RSpec/InstanceVariable:
   Enabled: false
 Gemspec/RequiredRubyVersion:
-  Enabled: false
+  Enabled: true
 Style/MultilineBlockChain:
   Enabled: false
 Style/RedundantBegin:
@@ -183,7 +177,7 @@ Rails/RakeEnvironment:
 Rails/RedundantPresenceValidationOnBelongsTo:
   Enabled: false
 Rails/DurationArithmetic:
-  Enabled: false
+  Enabled: true
 Style/OpenStructUse:
   Enabled: false
 RSpec/IndexedLet:
@@ -204,3 +198,10 @@ Lint/MissingSuper:
   Enabled: true
   Exclude:
     - "**/*_drop.rb"
+
+Rails/UniqBeforePluck:
+  Enabled: true
+
+Style/Alias:
+  Enabled: true
+  EnforcedStyle: prefer_alias

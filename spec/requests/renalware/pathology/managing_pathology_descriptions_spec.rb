@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Pathology
   describe "Managing pathology observation descriptions (OBX)" do
     # Index HTML GET

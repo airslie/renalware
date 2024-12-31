@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CoreExtensions
   describe Ox::ElementAdditions do
     describe "<<()" do

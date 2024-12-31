@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Advanced Kidney Care MDM" do
   it "view an MDM" do
     patient = create(:patient, family_name: "Rabbit", local_patient_id: "KCH12345")

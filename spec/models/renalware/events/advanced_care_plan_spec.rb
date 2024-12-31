@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Events::AdvancedCarePlan do
   describe "#document" do
     subject { described_class.new.document }

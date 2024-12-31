@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Admissions::AdmissionQuery do
     it "returns all admissions if no options passed" do

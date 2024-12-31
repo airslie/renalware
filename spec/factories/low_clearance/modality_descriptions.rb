@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :low_clearance_modality_description,
           class: "Renalware::LowClearance::ModalityDescription" do

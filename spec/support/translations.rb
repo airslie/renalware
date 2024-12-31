@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module TranslationsHelper
   def with_translations(locale, translations)
     original_backend = I18n.backend

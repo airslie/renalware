@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 describe "Sending a private message" do
   include AjaxHelpers
 
-  it "A clinician sends a private message about a patient", js: true do
+  it "A clinician sends a private message about a patient", :js do
     user = login_as_clinical
     patient = create(:messaging_patient, by: user)
     create(:internal_recipient, family_name: "X", given_name: "Y")
@@ -27,7 +25,7 @@ describe "Sending a private message" do
     expect(message.public).to be(true)
   end
 
-  it "A clinician replies to a message", js: true do
+  it "A clinician replies to a message", :js do
     user = login_as_clinical
     author = user.becomes(Renalware::Messaging::Internal::Author)
     patient = create(

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Admissions::AdmissionSearchForm do
     it "extracts inputs and invokes the query object with them" do

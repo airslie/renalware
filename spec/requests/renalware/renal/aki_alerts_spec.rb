@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "AKI alert management" do
   let(:user) { @current_user }
   let(:hospital_ward) { create(:hospital_ward) }

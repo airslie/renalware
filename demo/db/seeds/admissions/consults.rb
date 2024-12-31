@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Creating Admission::Consults" do
+  Rails.benchmark "Creating Admission::Consults" do
     patient_ids = Patient.order("RANDOM()").limit(40).pluck(:id).uniq
     hospital_ward_ids = Hospitals::Ward.pluck(:id)
     consult_site_ids = Renalware::Admissions::ConsultSite.pluck(:id)

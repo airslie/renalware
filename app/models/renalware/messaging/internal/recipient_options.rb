@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Builds grouped drop down options for potential private message recipients.
 # The groups are:
 # - users who have recently received a message about the current patient

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module IconHelper
     INLINE_SVG_ICON_SIZE = {

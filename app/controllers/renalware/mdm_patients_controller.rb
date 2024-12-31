@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Note we rely on template inheritance with this MDM Base class i.e. subclasses (e.g.
 # HD::MDMPatientsController) can override templates and partials (e.g. add a _filters partial
 # or override the _patient partial to replace what is displayed in the table).

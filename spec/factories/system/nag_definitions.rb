@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :system_nag_definition, class: "Renalware::System::NagDefinition" do
     description { Faker::Lorem.sentence }

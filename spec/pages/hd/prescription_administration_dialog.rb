@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "../page_object"
 require "capybara-select-2"
 
@@ -10,7 +8,7 @@ module Pages
       include SlimSelectHelper
 
       pattr_initialize [:prescription!]
-      MODAL_CONTAINER_ID = "#hd-prescription-administration-modal"
+      MODAL_CONTAINER_ID = "#hd-prescription-administration-modal".freeze
 
       def container_css
         MODAL_CONTAINER_ID

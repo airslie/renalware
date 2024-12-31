@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Vaccination events for Roger RABBIT" do
+  Rails.benchmark "Adding Vaccination events for Roger RABBIT" do
     class CreateVaccination
       def initialize
         @rabbit = Patient.find_by(family_name: "RABBIT", given_name: "Roger")

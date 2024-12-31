@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("the following appointments:") do |table|
   table.hashes.each do |row|
     create_appointment(row)

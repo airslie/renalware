@@ -17,6 +17,6 @@ class CreateTransplantDonorFollowups < ActiveRecord::Migration[4.2]
     add_index :transplant_donor_followups, :operation_id
 
     add_foreign_key :transplant_donor_followups, :transplant_donor_operations,
-      column: :operation_id
+                    column: :operation_id
   end
 end

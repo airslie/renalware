@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing an HD DNA Session" do
   describe "GET show" do
     it "renders successfully" do

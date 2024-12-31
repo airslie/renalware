@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :internal_receipt, class: "Renalware::Messaging::Internal::Receipt" do
     recipient factory: %i(internal_recipient)

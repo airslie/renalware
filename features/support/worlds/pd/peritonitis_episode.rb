@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "capybara_select2/selectors"
 
 module World

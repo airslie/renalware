@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD
   describe Dialyser do
     it :aggregate_failures do

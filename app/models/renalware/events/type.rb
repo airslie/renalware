@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Events
     class Type < ApplicationRecord
@@ -30,7 +28,7 @@ module Renalware
       )
       belongs_to :category, class_name: "Events::Category"
 
-      DEFAULT_EVENT_CLASS_NAME = "Renalware::Events::Simple"
+      DEFAULT_EVENT_CLASS_NAME = "Renalware::Events::Simple".freeze
 
       acts_as_paranoid
 

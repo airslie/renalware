@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Events
     # Query object that returns, for a patient, the most recent matching event (if any) for each

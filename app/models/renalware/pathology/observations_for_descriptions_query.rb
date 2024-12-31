@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Responsible for finding Observations for the specified descriptions.
 module Renalware
   module Pathology

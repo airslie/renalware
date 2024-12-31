@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "View global letters list", js: false do
   include LettersSpecHelper
 

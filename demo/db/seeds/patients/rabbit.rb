@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 module Renalware
   user = User.find_by!(username: "kchdoc")
   rabbit = Patient.find_by!(family_name: "RABBIT", given_name: "Roger")
 
-  log "Adding Demographics for Roger RABBIT" do
+  Rails.benchmark "Adding Demographics for Roger RABBIT" do
     rabbit.title = "Mr"
     rabbit.suffix = "OBE"
     rabbit.marital_status = "divorced"
@@ -30,7 +28,7 @@ module Renalware
 
   system_user = SystemUser.find
 
-  log "Adding Primary Care Physician for Roger RABBIT" do
+  Rails.benchmark "Adding Primary Care Physician for Roger RABBIT" do
     practice = Patients::Practice.first!
 
     pcp = Patients::PrimaryCarePhysician.find_or_create_by!(code: "G1234567") do |doc|
@@ -45,7 +43,7 @@ module Renalware
     rabbit.save!
   end
 
-  log "Adding Address for Roger RABBIT" do
+  Rails.benchmark "Adding Address for Roger RABBIT" do
     address = rabbit.current_address || rabbit.build_current_address
     # NO! address.name = "M. Roger Rabbit"
     address.street_1 = "123 South Street"

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class DatedBooleanDiagnosis < NestedAttribute
     attribute :diagnosis, Boolean

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module DashboardsHelper
     def composed_dashboard_title(user_name)

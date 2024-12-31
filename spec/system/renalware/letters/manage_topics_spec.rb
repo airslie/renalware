@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Manage letter topics" do
   it "enables a superadmin to list letter topics" do
     login_as_super_admin

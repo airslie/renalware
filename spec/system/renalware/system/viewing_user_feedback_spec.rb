@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing user feedback" do
   it "adding notes and acknowledgement to feedback" do
     user = login_as_super_admin

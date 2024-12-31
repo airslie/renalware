@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # To avoid a dependency on as many aspects of Renalware as possible, in case one of those

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Not using refinements here as we cannot define constants using refinements.
 # We include this module in config/initializers/core_extensions.rb
 module CoreExtensions

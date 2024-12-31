@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddPatientIdentifierToFeedMessages < ActiveRecord::Migration[5.1]
   def change
     within_renalware_schema do

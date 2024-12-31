@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Document
   # This concern wraps the logic for embedding document in an active record object.
   # The document fields are stored in a jsonb column. The database migration

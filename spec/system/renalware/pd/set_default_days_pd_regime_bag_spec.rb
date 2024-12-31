@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "pd regime bag's days assigned are by default set all to true" do
-    it "days can be deleselected when creating a new pd regime", js: true do
+    it "days can be deleselected when creating a new pd regime", :js do
       create(:bag_type, manufacturer: "CompanyA", description: "BagDescription")
       patient = create(:patient)
       login_as_clinical

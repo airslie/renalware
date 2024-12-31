@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Events
   describe Event do
     subject(:event) { described_class.new }

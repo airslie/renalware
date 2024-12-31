@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :clinic_visit_location, class: "Renalware::Clinics::VisitLocation" do
     name { "In clinic" }

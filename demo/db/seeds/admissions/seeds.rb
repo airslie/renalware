@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "specialties"
 require_relative "request_reasons"
 require_relative "consult_sites"

@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Session timeout", js: true do
+describe "Session timeout", :js do
   around do |example|
     original_session_timeout = Devise.timeout_in
     # see sessions_controller.js - we set the session timeout to be almost in the past

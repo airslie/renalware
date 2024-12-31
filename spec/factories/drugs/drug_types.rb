@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :drug_type, class: "Renalware::Drugs::Type" do
     initialize_with do

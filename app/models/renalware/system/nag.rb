@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # Stores the data returned from calling a NagDefinition.sql_function_name

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     # Accepts a group of prescriptions -  see example usage - and renders a tabs for each of the

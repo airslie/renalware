@@ -1,7 +1,4 @@
-# frozen_string_literal: true
-
-describe "Add person to directory and assign as a contact for a patient",
-         js: true do
+describe "Add person to directory and assign as a contact for a patient", :js do
   include AjaxHelpers
 
   describe "creating a person and assign as a contact" do

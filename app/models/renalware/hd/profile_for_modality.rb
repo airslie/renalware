@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # Backed by a (scenic) view this model is used to resolve the HD Profile in use or created

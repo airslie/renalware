@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # This controller handles copying snippets (when I am the owner) and cloning them (when I am not).
 # The ownership drives what suffix is appended to the snippet title to keep it unique.
@@ -7,8 +5,8 @@
 module Renalware
   module Authoring
     class SnippetClonesController < BaseController
-      COPY_SUFFIX = "[COPY]"
-      CLONE_SUFFIX = "[CLONE]"
+      COPY_SUFFIX = "[COPY]".freeze
+      CLONE_SUFFIX = "[CLONE]".freeze
 
       def create
         snippet = duplicate_current_snippet

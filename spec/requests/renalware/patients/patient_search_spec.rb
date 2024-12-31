@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Searching patients" do
   describe "GET index" do
     context "with a hospital code filter" do

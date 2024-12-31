@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Accesses
     class ProceduresController < BaseController
@@ -62,13 +60,13 @@ module Renalware
       end
 
       def attributes
-        [
-          :performed_on, :first_used_on, :failed_on,
-          :side, :type_id,
-          :catheter_make, :catheter_lot_no,
-          :performed_by, :notes, :outcome,
-          :pd_catheter_insertion_technique_id
-        ]
+        %i(
+          performed_on first_used_on failed_on
+          side type_id
+          catheter_make catheter_lot_no
+          performed_by notes outcome
+          pd_catheter_insertion_technique_id
+        )
       end
     end
   end

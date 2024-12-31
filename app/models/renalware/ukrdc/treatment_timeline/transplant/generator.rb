@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # QBL   TXT   Description
 # "20"  "20"  "Transplant ; Cadaver donor"
 # "21"  "21"  "Transplant ; Live related - sibling"
@@ -91,11 +89,7 @@ module Renalware
           def first_operation_within_start_and_end_dates_of_modality
             Renalware::Transplants::RecipientOperation
               .for_patient(patient)
-              .where(
-                "performed_on >= ? and performed_on <= ?",
-                modality.started_on,
-                modality.ended_on || Time.zone.today
-              )
+              .where(performed_on: modality.started_on..(modality.ended_on || Time.zone.today))
               .order(performed_on: :desc)
               .first
           end

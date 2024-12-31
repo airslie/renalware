@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class PathologySeeder
     def file_path_for(patient:, file_name:)
@@ -9,7 +7,7 @@ module Renalware
 
     def seed_pathology_requests_for(patient:)
       Pathology::ObservationRequest.transaction do
-        log "Adding Pathology Requests (OBR) for #{patient}" do
+        Rails.benchmark "Adding Pathology Requests (OBR) for #{patient}" do
           file_path = file_path_for(patient: patient, file_name: "pathology_obr.csv")
           CSV.foreach(file_path, headers: true) do |row|
             request_desc = Pathology::RequestDescription.find_by!(code: row["description"])
@@ -24,9 +22,8 @@ module Renalware
       end
     end
 
-    # rubocop:disable Metrics/MethodLength
     def seed_pathology_observations_for(patient:)
-      log "Adding Pathology Observations (OBX) for #{patient}" do
+      Rails.benchmark "Adding Pathology Observations (OBX) for #{patient}" do
         file_path = file_path_for(patient: patient, file_name: "pathology_obx.csv")
 
         observations = CSV.foreach(file_path, headers: true).map do |row|
@@ -44,7 +41,6 @@ module Renalware
         Pathology::Observation.insert_all(observations)
       end
     end
-    # rubocop:enable Metrics/MethodLength
 
     def seed_pathology_for(local_patient_id:)
       patient = Patient.find_by(local_patient_id: local_patient_id)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :hd_slot_request, class: "Renalware::HD::SlotRequest" do
     accountable

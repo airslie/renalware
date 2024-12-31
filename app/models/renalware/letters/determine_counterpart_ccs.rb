@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A method object initialized with an instance of Letter responsible
 # for determining the "counterpart CC's". A counterpart CC can be a patient,
 # primary care physician or both.

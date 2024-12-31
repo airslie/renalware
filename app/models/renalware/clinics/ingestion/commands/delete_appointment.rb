@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Clinics
     module Ingestion
@@ -8,14 +6,16 @@ module Renalware
           include Callable
 
           pattr_initialize :message
-          delegate :patient_identification, :pv1, to: :message
-          delegate :clinic, :visit_number, to: :pv1
+          delegate :patient_identification, :pv1, :sch, to: :message
+          delegate :clinic, to: :pv1
 
           def call
             return unless patient && appointment
 
             appointment.destroy
           end
+
+          private
 
           def patient
             @patient ||= Feeds::PatientLocator.call(
@@ -26,6 +26,10 @@ module Renalware
 
           def appointment
             @appointment ||= Appointment.find_by(patient: patient, visit_number: visit_number)
+          end
+
+          def visit_number
+            message.siu? ? sch.visit_number : pv1.visit_number
           end
         end
       end

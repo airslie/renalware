@@ -6,8 +6,8 @@ class CreatePathologyRequestDescriptionsRequestsRequests < ActiveRecord::Migrati
     end
 
     add_foreign_key :pathology_request_descriptions_requests_requests, :pathology_requests_requests,
-      column: :request_id
+                    column: :request_id
     add_foreign_key :pathology_request_descriptions_requests_requests, :pathology_request_descriptions,
-      column: :request_description_id
+                    column: :request_description_id
   end
 end

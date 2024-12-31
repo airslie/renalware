@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # When subscribed to HL7 `oru_message_arrived` messages, gets notified of incoming HL7 messages.
 # Here we are interested only in AKI path results
@@ -12,7 +10,7 @@ module Renalware
           pattr_initialize :hl7_message
           delegate_missing_to :hl7_message
 
-          AKI_CODE = "AKI"
+          AKI_CODE = "AKI".freeze
 
           # Return the first AKI score found in any OBR in the message
           def score
@@ -96,8 +94,8 @@ module Renalware
         def any_recent_score_for?(patient)
           Renal::AKIAlert
             .where(patient_id: patient.id)
-            .where("created_at >= ?", 14.days.ago)
-            .where("max_aki >= ?", 1)
+            .where(created_at: 14.days.ago..)
+            .where(max_aki: 1..)
             .order(created_at: :desc)
             .exists?
         end
@@ -105,7 +103,7 @@ module Renalware
         def recent_score_is_2_or_3?(patient)
           Renal::AKIAlert
             .where(patient_id: patient.id)
-            .where("created_at >= ?", 14.days.ago)
+            .where(created_at: 14.days.ago..)
             .group(:patient_id)
             .having("max(max_aki) >= ?", 2)
             .exists?

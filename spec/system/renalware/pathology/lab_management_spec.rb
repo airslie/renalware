@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Manage pathology labs" do
   it "enables listing labs for a superadmin" do
     login_as_super_admin

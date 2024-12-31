@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 json.id patient.id
 json.secure_id patient.secure_id
 json.nhs_number patient.nhs_number

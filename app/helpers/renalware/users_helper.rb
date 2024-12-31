@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module UsersHelper
     def current_user_is_developer?

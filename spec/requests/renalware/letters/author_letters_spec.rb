@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "An author viewing their letters" do
   include LettersSpecHelper
 

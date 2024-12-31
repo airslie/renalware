@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :reporting do
   desc "Send a daily system report email to configured recpients"
   task send_daily_summary_email: :environment do

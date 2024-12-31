@@ -1,11 +1,9 @@
-# frozen_string_literal: true
-
 require "collection_presenter"
 
 module Renalware
   module Letters
     class LetterPresenter < DumbDelegator
-      ADHOC_PRINTING_CSS = <<-STYLE
+      ADHOC_PRINTING_CSS = <<-STYLE.freeze
         <style>
           .footer .ccs h3 { margin-bottom: 4rem !important; }
           .footer .ccs .address { margin-bottom: 6rem !important; }
@@ -42,7 +40,7 @@ module Renalware
       # Unused, can be removed
       # def electronic_cc_receipts
       #   @electronic_cc_receipts ||=
-      #     CollectionPresenter.new(super, Letters::ElectonicReceiptPresenter)
+      #     CollectionPresenter.new(super, Letters::ElectronicReceiptPresenter)
       # end
 
       def description = "(#{letterhead.site_code}) #{super}"

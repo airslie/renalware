@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Dietetics::RecentHandgripsComponent, type: :component do
     let(:patient) { Patient.new }

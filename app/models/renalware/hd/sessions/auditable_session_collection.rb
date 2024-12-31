@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Decorates an array of session objects, adding methods that provide e.g. a mean measured value
 # across all HD sessions for a patient. See also AuditableSession.

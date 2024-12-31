@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Users
     def self.table_name_prefix = "user_"

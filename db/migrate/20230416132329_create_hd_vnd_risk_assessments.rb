@@ -22,14 +22,14 @@ class CreateHDVNDRiskAssessments < ActiveRecord::Migration[7.0]
           :risk1,
           enum_type: :hd_vnd_risk_level_itemised,
           null: false,
-          comment: "What is the likelihood that the staff (or carer) will fail to observe an "\
-          "actual or potential VND for this patient?"
+          comment: "What is the likelihood that the staff (or carer) will fail to observe an " \
+                   "actual or potential VND for this patient?"
         )
         t.enum(
           :risk2,
           enum_type: :hd_vnd_risk_level_itemised,
           null: false,
-          comment: "What is the likelihood that the patient will fail to raise the alarm if they "\
+          comment: "What is the likelihood that the patient will fail to raise the alarm if they " \
                    "experience VND?"
         )
         t.enum(

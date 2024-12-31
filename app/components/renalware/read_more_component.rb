@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # See https://www.stimulus-components.com/docs/stimulus-read-more/ for a better description.
 #
 # Works with the read-more the controller.

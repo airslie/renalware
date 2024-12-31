@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module ResearchHelper
     # Given an STI class name like "Renalware::Heroic::Research::Study" we extract the

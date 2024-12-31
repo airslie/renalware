@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Pathology::Charts
   describe PeriodMap do
     describe "[]" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   module Formats::FHIR::Resources::TransferOfCare
     class Sections::AttendanceDetails < Sections::Base

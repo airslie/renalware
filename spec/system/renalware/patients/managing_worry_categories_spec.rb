@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Worry Category Management" do
   it "displays a list of worry categories" do
     user = login_as_super_admin

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "AKI Alert printing" do
     let(:hospital_unit) { create(:hospital_unit, unit_code: "HospUnit1") }

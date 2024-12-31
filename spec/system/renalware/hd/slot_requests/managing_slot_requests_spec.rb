@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing a list of HD Slot Requests" do
   include PatientsSpecHelper
 
@@ -35,7 +33,7 @@ describe "Managing a list of HD Slot Requests" do
     end
   end
 
-  it "adding a slot request from the HD Slots Requests page", js: true do
+  it "adding a slot request from the HD Slots Requests page", :js do
     travel_to("01-Oct-2023 03:03") do
       user = login_as_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
@@ -86,7 +84,7 @@ describe "Managing a list of HD Slot Requests" do
     end
   end
 
-  it "adding a slot request via patient's page", js: true do
+  it "adding a slot request via patient's page", :js do
     travel_to("01-Oct-2023 03:03") do
       user = login_as_super_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
@@ -124,7 +122,7 @@ describe "Managing a list of HD Slot Requests" do
     end
   end
 
-  it "marking a slot as allocated", js: true do
+  it "marking a slot as allocated", :js do
     travel_to("01-Oct-2023 03:03") do
       user = login_as_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
@@ -162,7 +160,7 @@ describe "Managing a list of HD Slot Requests" do
     end
   end
 
-  it "marking a slot as deleted for some reason", js: true do
+  it "marking a slot as deleted for some reason", :js do
     travel_to("01-Oct-2023 03:03") do
       user = login_as_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
@@ -203,7 +201,7 @@ describe "Managing a list of HD Slot Requests" do
     end
   end
 
-  describe "editing a patient", js: true do
+  describe "editing a patient", :js do
     context "when setting MFFD to true" do
       it "stores the user and time when MFFD was checked" do
         freeze_time do
@@ -245,7 +243,7 @@ describe "Managing a list of HD Slot Requests" do
       end
 
       context "when setting MFFD to false" do
-        it "clears the user and time when MFFD was checked", js: true do
+        it "clears the user and time when MFFD was checked", :js do
           freeze_time do
             user = login_as_admin
             patient = create(:hd_patient, by: user, local_patient_id: "MRN1")

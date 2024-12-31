@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # :nocov
   def self.use_relative_model_naming?

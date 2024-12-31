@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   namespace :accesses do
     resource :dashboard, only: :show
-    resources :assessments, except: [:index, :destroy]
-    resources :procedures, except: [:index, :destroy]
-    resources :profiles, except: [:index, :destroy]
-    resources :plans, except: [:index, :destroy]
-    resources :needling_assessments, except: [:index, :update, :show]
+    resources :assessments, except: %i(index destroy)
+    resources :procedures, except: %i(index destroy)
+    resources :profiles, except: %i(index destroy)
+    resources :plans, except: %i(index destroy)
+    resources :needling_assessments, except: %i(index update show)
   end
 end

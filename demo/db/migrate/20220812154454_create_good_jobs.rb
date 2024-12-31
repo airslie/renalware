@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CreateGoodJobs < ActiveRecord::Migration[6.0]
   def change
     within_renalware_schema do

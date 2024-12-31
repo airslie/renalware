@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable Metrics/AbcSize
 module Renalware
   module UKRDC

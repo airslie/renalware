@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FormHelpers
   # Submit forms that use the default structure eg they call save_or_cancel
   # to add a Create/Save button to the form

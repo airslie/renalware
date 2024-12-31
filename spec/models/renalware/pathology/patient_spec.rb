@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Pathology
   describe Patient do
     it { is_expected.to have_one(:current_observation_set) }

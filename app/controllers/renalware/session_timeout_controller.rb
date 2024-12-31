@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This controller exposes a check_session_expired action which is invoked via Ajax on a JavaScript
 # timer and will cause the user to be redirected to the login page if their session has expired
 # due to a period of activity. The redirect happens because of a generic Ajax error handling

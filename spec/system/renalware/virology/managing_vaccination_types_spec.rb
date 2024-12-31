@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing vaccination types" do
   it "displays a list of vaccination types" do
     create(:vaccination_type, code: "aaa", name: "Bbb")

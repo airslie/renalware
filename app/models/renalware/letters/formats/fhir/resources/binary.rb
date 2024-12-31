@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats::FHIR
@@ -10,7 +8,7 @@ module Renalware
         include Support::Construction
         include Support::Helpers
 
-        PROFILE = "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Attachment-Binary-1"
+        PROFILE = "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Attachment-Binary-1".freeze
 
         def call
           {

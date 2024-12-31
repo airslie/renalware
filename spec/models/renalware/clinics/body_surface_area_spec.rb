@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinics::BodySurfaceArea do
   describe "#calculate" do
     context "when no weight supplied" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Dietetics::Queries::ClinicVisitsCounter, type: :component do
     describe "#call" do

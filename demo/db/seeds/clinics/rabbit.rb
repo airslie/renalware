@@ -1,7 +1,7 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Clinic Visits for Roger RABBIT" do
+  extend SeedsHelper
+
+  Rails.benchmark "Adding Clinic Visits for Roger RABBIT" do
     rabbit = Patient.find_by(family_name: "RABBIT", given_name: "Roger")
 
     without_papertrail_versioning_for(Clinics::ClinicVisit) do

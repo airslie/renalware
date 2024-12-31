@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::HD::Sessions::DurationForm do
   it { is_expected.to validate_presence_of(:start_date) }
   it { is_expected.to validate_timeliness_of(:start_date) }

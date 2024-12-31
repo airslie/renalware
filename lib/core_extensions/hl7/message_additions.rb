@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "ruby-hl7"
 
 module CoreExtensions

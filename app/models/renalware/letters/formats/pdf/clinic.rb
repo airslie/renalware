@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats
@@ -7,7 +5,7 @@ module Renalware
         class Clinic
           include Prawn::View
           pattr_initialize :document, :letter
-          PRIVATE_AND_CONFIDENTIAL = "PRIVATE AND CONFIDENTIAL"
+          PRIVATE_AND_CONFIDENTIAL = "PRIVATE AND CONFIDENTIAL".freeze
           delegate :letterhead, to: :letter
 
           def build

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^Patty has the Transplant modality$/) do
   modality_description = Renalware::Modalities::Description.find_by(
     type: "Renalware::Transplants::RecipientModalityDescription"

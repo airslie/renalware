@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe PDRegimesHelper do
     describe "default_daily_glucose_average" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Some steps might be just a FactoryBot.create eg Given Patty is a patient
 # Other wil drop into Domain or Web worlds depending
 module Renalware

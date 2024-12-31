@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class WeekPeriod
   attr_reader :year,
               :week_number,

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD
   describe Scheduling::FindOrCreateDiaryByWeekQuery do
     let(:week_period) { WeekPeriod.from_date(Time.zone.today) }

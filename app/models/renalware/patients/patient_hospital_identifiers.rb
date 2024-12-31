@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A patient can have may 'local hospital identifiers' for example they may have come
 # initially into hospital id where they were assigned the id e.g. KCH123. Subsequently
 # they might move to or be treated in another hospital and may be assigned a different number.
@@ -19,7 +17,7 @@ module Renalware
       delegate :present?, to: :name
       delegate :name, :id, to: :first
       delegate :to_s, to: :first
-      alias_method :to_sym, :name
+      alias to_sym name
 
       Identifier = Struct.new(:name, :id) do
         def to_s

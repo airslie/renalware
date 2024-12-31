@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "User registration" do
     it "A user registers giving incomplete information" do

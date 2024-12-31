@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Body Composition Measurements for Roger RABBIT" do
+  Rails.benchmark "Adding Body Composition Measurements for Roger RABBIT" do
     class CreateBodyComposition
       def initialize
         @rabbit = Patient.find_by(family_name: "RABBIT", given_name: "Roger")

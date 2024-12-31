@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Problems::Comorbidities::SummaryComponent, type: :component do
   subject(:component) do
     described_class.new(

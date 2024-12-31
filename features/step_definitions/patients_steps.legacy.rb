@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^I am on the patients list$/) do
   visit patients_path
 end

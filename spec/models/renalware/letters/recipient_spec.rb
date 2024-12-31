@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     describe Recipient do
@@ -34,7 +32,7 @@ module Renalware
 
             expect(
               described_class.printable_recipients_for(letter).map(&:person_role)
-            ).to eq([:patient, :primary_care_physician])
+            ).to eq(%i(patient primary_care_physician))
           end
         end
       end

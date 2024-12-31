@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class SmokingStatus < NestedAttribute
     SMOKING_SNOMED_MAP = {

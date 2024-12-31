@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable RSpec/ExampleLength, Layout/LineLength, Style/WordArray
 module Renalware
   module UKRDC

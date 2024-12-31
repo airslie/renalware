@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Department Management" do
   it "displays a list of hospital departments" do
     login_as_clinical

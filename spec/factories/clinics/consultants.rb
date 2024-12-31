@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :consultant, class: "Renalware::Clinics::Consultant" do
     initialize_with { Renalware::Clinics::Consultant.find_or_create_by(name: name) }

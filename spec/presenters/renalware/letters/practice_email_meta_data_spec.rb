@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Letters::PracticeEmailMetaData do
     include LettersSpecHelper

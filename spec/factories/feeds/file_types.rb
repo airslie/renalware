@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :feed_file_type, class: "Renalware::Feeds::FileType" do
     name { "PrimaryCarePhysicians" }

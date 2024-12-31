@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 module Renalware
   module Drugs::DMD
     module Repositories
       class ActualMedicalProductRepository
         attr_reader :client
 
-        AMP = "AMP"
+        AMP = "AMP".freeze
 
         Entry = Struct.new(:name, :code,
                            :virtual_medical_product_code,

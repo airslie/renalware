@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :pd_pet_result, class: "Renalware::PD::PETResult" do
     accountable

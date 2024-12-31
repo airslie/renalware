@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "View transmission logs" do
   describe "GET index" do
     it "displays a paginated list of transmission logs, most recent first" do

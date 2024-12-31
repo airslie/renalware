@@ -2,10 +2,10 @@ class AddDocumentToVirologyProfiles < ActiveRecord::Migration[5.1]
   def change
     within_renalware_schema do
       add_column :virology_profiles,
-                :document,
-                :jsonb,
-                default: {},
-                null: false
+                 :document,
+                 :jsonb,
+                 default: {},
+                 null: false
 
       add_reference :virology_profiles,
                     :updated_by,

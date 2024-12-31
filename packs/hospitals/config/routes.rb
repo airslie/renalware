@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Renalware::Hospitals::Engine.routes.draw do
   resources :centres, only: :index do
     resources :departments

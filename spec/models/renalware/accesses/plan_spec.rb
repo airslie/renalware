@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Accesses
   describe Plan do
     it_behaves_like "an Accountable model"

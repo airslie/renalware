@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^Patty is being treated for a peritonitis episode$/) do
   record_peritonitis_episode_for(
     patient: @patty,

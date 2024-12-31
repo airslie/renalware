@@ -1,5 +1,5 @@
 class CreateImportFeedGps < ActiveRecord::Migration[5.2]
- def up
+  def up
     within_renalware_schema do
       load_function("import_feed_gps_v01.sql")
     end

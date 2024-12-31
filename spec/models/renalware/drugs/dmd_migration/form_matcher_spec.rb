@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   describe DMDMigration::FormMatcher do
     let(:form) { create(:drug_form, code: "A", name: "Capsule") }

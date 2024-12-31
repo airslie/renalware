@@ -1,5 +1,4 @@
 class AddCreatedByIdAndUpdatedByIdToProblems < ActiveRecord::Migration[4.2]
-
   def up
     add_reference :problem_problems, :created_by, references: :users, index: true, null: true
     add_foreign_key :problem_problems, :users, column: :created_by_id
@@ -36,6 +35,7 @@ class AddCreatedByIdAndUpdatedByIdToProblems < ActiveRecord::Migration[4.2]
       system_user_id = User.system_user.id
       Problem.all.each do |problem|
         next if problem.send(column_name).present?
+
         problem.update_attributes(column_name => system_user_id)
       end
     end

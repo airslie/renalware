@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # An ObservationDescription can be a member of many groups (a set of descriptions used for

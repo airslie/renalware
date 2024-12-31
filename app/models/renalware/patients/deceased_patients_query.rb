@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Patients
     # Finds patients with a death modality or who have a died_on date

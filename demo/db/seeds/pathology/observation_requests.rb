@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 def create_observation(patient, request_description)
   pathology_patient = Renalware::Pathology.cast_patient(patient)
 
-  msg = "Adding observations for #{patient.full_name} "\
+  msg = "Adding observations for #{patient.full_name} " \
         "with request description code: #{request_description.code}"
 
-  log msg do
+  Rails.benchmark msg do
     request = pathology_patient.observation_requests.create!(
       description: request_description,
       requestor_order_number: rand(100000),
@@ -29,7 +27,7 @@ module Renalware
     Pathology::Requests::GlobalRuleSet.distinct.pluck(:request_description_id)
   request_descriptions =
     Pathology::RequestDescription.where(id: request_description_ids)
-    .shuffle
+      .shuffle
 
   patients.each_with_index do |patient, i|
     request_description = request_descriptions[i % request_descriptions.length - 1]

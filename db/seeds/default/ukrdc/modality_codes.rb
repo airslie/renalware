@@ -1,12 +1,8 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
   module UKRDC
-    extend SeedsHelper
-
-    log "Adding UKRDC modality codes" do
+    Rails.benchmark "Adding UKRDC modality codes" do
       file_path = File.join(File.dirname(__FILE__), "modality_codes.csv")
 
       CSV.foreach(file_path, headers: true) do |row|

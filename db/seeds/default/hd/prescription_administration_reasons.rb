@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding HD Prescription Administration Reasons" do
+  Rails.benchmark "Adding HD Prescription Administration Reasons" do
     [
       "No supply available",
       "Target HB exceeded",

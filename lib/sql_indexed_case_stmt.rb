@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Example:
 #
 #     indexed_case_stmt(:code, "DT", "AC", "XY")

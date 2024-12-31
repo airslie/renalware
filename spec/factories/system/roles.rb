@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :role, class: "Renalware::Role" do
     initialize_with { Renalware::Role.find_or_create_by(name: name) }

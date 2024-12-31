@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Preview all emails at http://localhost:3000/rails/mailers
   class Admin::UserMailerPreview < ActionMailer::Preview

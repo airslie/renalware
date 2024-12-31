@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("Patty has these allergies") do |table|
   seed_allergies_for(patient: @patty, user: @clyde || @doug, allergies: table.hashes)
 end

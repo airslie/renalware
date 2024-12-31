@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::HD::PrescriptionLastAdministrationComponent, type: :component do
   it "renders the last time the prescription was administered" do
     user = build_stubbed(:user)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Transplants MDM Patients" do
   include PatientsSpecHelper
   let(:user) { create(:user) }

@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Primary Renal Diagnosis (PRD) Codes" do
+  Rails.benchmark "Adding Primary Renal Diagnosis (PRD) Codes" do
     file_path = File.join(File.dirname(__FILE__), "prd_descriptions.csv")
     descriptions = CSV.foreach(file_path, headers: true).map do |row|
       {

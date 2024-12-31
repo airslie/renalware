@@ -11,6 +11,6 @@
   ],
   "dependencies": {},
   "scripts": {
-    "build:css": "tailwindcss -c `bundle show renalware-core`/config/tailwind.config.js -i `bundle show renalware-core`/app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css"
+    "build:css": "bundle exec tailwindcss -c `bundle show renalware-core`/config/tailwind.config.js -i `bundle show renalware-core`/app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css"
   }
 }

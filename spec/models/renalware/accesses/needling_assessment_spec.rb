@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 module Renalware
   module Accesses
     describe NeedlingAssessment do
       it_behaves_like "an Accountable model"
-      it { is_expected.to have_db_index([:patient_id, :created_at]) }
+      it { is_expected.to have_db_index(%i(patient_id created_at)) }
       it { is_expected.to belong_to(:patient) }
       it { is_expected.to validate_presence_of(:difficulty) }
       it { is_expected.to validate_presence_of(:patient) }

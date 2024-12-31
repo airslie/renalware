@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Recursively covert a nested hash into nested OpenStructs
 # See https://coderwall.com/p/74rajw/convert-a-complex-nested-hash-to-an-object
 module CoreExtensions

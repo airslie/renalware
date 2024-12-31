@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     module Delivery
       class PurchaseOrderNumber
-        SEQ_NAME = "renalware.medication_delivery_purchase_order_number_seq"
+        SEQ_NAME = "renalware.medication_delivery_purchase_order_number_seq".freeze
 
         class << self
           def next_number

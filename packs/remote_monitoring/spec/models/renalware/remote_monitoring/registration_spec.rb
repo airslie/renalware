@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   RSpec.describe RemoteMonitoring::Registration do
     it { is_expected.to be_a(Events::Event) }

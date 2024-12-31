@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   module Formats::FHIR
     describe Resources::Practitioner do
@@ -34,7 +32,8 @@ module Renalware::Letters
           email: nil
         )
       }
-      let(:letter) { instance_double(Letter, patient: patient, author: author) }
+      let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
+      let(:letter) { instance_double(Letter, patient: patient, author: author, topic: topic) }
       let(:arguments) do
         Arguments.new(
           transmission: instance_double(Transports::Mesh::Transmission, letter: letter),

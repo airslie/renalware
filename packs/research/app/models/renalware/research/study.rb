@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Research
     # Represents a clinical study, e.g. HEROIC.

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # TODO: mixing query and presenter here..
 module Renalware
   module HD

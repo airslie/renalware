@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This HDF validator is used somewhat unconventionally from the parent object (e.g. a
 # the HD::SessionDocument to allow us to conditionally validate the presence of the HDF fields
 # only if a condition external to the HDF class is met.

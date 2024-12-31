@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     module HL7Segments
@@ -10,17 +8,9 @@ module Renalware
             @fields = field.split("^")
           end
 
-          def code
-            fields.first
-          end
-
-          def name
-            fields[1]
-          end
-
-          def description
-            fields[2]
-          end
+          def code          = fields.first
+          def name          = fields[1]
+          def description   = fields[2]
 
           private
 
@@ -32,46 +22,22 @@ module Renalware
             @fields = field.split("^")
           end
 
-          def code
-            fields.first
-          end
-
-          def name
-            [title, given_name, family_name].compact_blank.join(" ")
-          end
-
-          def family_name
-            fields[1]
-          end
-
-          def given_name
-            fields[2]
-          end
-
-          def title
-            fields[5]
-          end
-
-          def type
-            fields[12]
-          end
+          def code        = fields.first
+          def name        = [title, given_name, family_name].compact_blank.join(" ")
+          def family_name = fields[1]
+          def given_name  = fields[2]
+          def title       = fields[5]
+          def type        = fields[12]
 
           private
 
           attr_reader :fields
         end
 
-        def clinic
-          Clinic.new(assigned_location)
-        end
-
-        def referring_doctor
-          Consultant.new(super)
-        end
-
-        def consulting_doctor
-          Consultant.new(super)
-        end
+        def clinic            = Clinic.new(assigned_location)
+        def referring_doctor  = Consultant.new(super)
+        def attending_doctor  = Consultant.new(super)
+        def consulting_doctor = Consultant.new(super)
       end
     end
   end

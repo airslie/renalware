@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe MicrosoftGraph::Client do
   subject(:client) do
     described_class.new(

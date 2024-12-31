@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe System::Message do
     it { is_expected.to validate_presence_of(:body) }

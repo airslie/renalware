@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module LoginMacros
   def login_as_super_admin
     login_user(:super_admin)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Copying a snippet" do
   let(:user) { Renalware::Authoring.cast_user(@current_user) }
 

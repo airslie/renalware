@@ -10,6 +10,6 @@ class CreateHDVersions < ActiveRecord::Migration[4.2]
       t.datetime :created_at
     end
     add_index :hd_versions, [:item_type, :item_id],
-      name: "hd_versions_type_id"
+              name: "hd_versions_type_id"
   end
 end

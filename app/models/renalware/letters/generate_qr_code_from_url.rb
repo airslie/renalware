@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     # Given a hyperlink to say an article, guide or app to download, render the url to a QR Code

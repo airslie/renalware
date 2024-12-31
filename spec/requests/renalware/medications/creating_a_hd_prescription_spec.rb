@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Create an HD prescription" do
   let(:patient) { create(:hd_patient, family_name: "Rabbit", local_patient_id: "KCH12345") }
   let(:prescribed_on) { "2024-11-01" }

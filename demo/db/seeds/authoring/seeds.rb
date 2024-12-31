@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Sample Snippets" do
+  Rails.benchmark "Adding Sample Snippets" do
     x = User.count
     # For DNA snippets -- so not every user has one
     y = x / 2

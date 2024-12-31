@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     class ViewMetadataController < BaseController
@@ -55,7 +53,7 @@ module Renalware
       def view_metadata_params
         params
           .require(:view_metadata)
-          .permit(filters: {}, columns: [[:code, :name, :width, :truncate, :hidden]])
+          .permit(filters: {}, columns: [%i(code name width truncate hidden)])
       end
     end
   end

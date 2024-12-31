@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Renal Registry Preflight checks" do
   describe "GET patients" do
     it "renders a list of patients with incomplete data" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Refresh a materialized view asynchronously via activejob.
 # If no view_name supplied, refresh all materialized views

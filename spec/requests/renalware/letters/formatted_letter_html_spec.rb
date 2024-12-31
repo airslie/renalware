@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Get formatted letter HTML content" do
   include LettersSpecHelper
 

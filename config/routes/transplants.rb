@@ -1,33 +1,31 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   namespace :transplants do
     resource :mdm, only: :show, controller: "mdm"
 
     scope "/donor" do
       resource :donor_dashboard, only: :show, path: "/dashboard"
-      resource :donor_workup, only: [:show, :edit, :update], path: "/workup"
-      resources :donor_operations, except: [:index, :destroy], path: "/operations" do
+      resource :donor_workup, only: %i(show edit update), path: "/workup"
+      resources :donor_operations, except: %i(index destroy), path: "/operations" do
         resource :followup,
                  except: :destroy,
                  controller: "donor_followups",
                  path: "/follow_up"
       end
-      resources :donations, except: [:index, :destroy]
-      resource :donor_stage, only: [:new, :create], path: "/stage"
+      resources :donations, except: %i(index destroy)
+      resource :donor_stage, only: %i(new create), path: "/stage"
     end
 
     scope "/recipient" do
       resource :recipient_dashboard, only: :show, path: "/dashboard"
-      resource :recipient_workup, only: [:show, :edit, :update], path: "/workup"
-      resources :recipient_operations, except: [:index, :destroy], path: "/operations" do
+      resource :recipient_workup, only: %i(show edit update), path: "/workup"
+      resources :recipient_operations, except: %i(index destroy), path: "/operations" do
         resource :followup,
                  except: :destroy,
                  controller: "recipient_followups",
                  path: "/follow_up"
       end
-      resource :registration, only: [:show, :edit, :update] do
-        resources :statuses, except: [:index, :show], controller: "registration_statuses"
+      resource :registration, only: %i(show edit update) do
+        resources :statuses, except: %i(index show), controller: "registration_statuses"
       end
     end
   end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Internal sent messages for a user" do
   describe "GET sent" do
     it "responds successfully" do

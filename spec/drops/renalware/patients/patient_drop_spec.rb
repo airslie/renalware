@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Patients
   describe PatientDrop, type: :model do
     subject(:drop) { described_class.new(patient) }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "collection_presenter"
 
 module Renalware
@@ -92,7 +90,7 @@ module Renalware
       end
 
       def authorize_action
-        authorize [:renalware, :renal, :registry_preflight_check], :"#{action_name}?"
+        authorize %i(renalware renal registry_preflight_check), :"#{action_name}?"
       end
 
       def query_params

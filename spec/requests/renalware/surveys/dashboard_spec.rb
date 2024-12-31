@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Displaying the survey dashboard" do
   describe "GET show" do
     it "responds with the dashboard" do

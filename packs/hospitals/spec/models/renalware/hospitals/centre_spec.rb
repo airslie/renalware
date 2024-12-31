@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Hospitals
   describe Centre do
     it :aggregate_failures do

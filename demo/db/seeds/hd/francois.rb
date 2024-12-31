@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable Metrics/MethodLength
 module Renalware
   patient = HD::Patient.find_by(local_patient_id: "Z100003")
@@ -8,7 +6,7 @@ module Renalware
   kent_doc = User.find_by!(username: "kentdoc")
   schedule_definition = HD::ScheduleDefinition.first
 
-  log "Assign HD modality to Francois RABBIT" do
+  Rails.benchmark "Assign HD modality to Francois RABBIT" do
     Modalities::ChangePatientModality
       .new(patient: patient, user: kent_doc)
       .call(
@@ -17,7 +15,7 @@ module Renalware
       )
   end
 
-  log "Assign some HD preferences to Francois RABBIT" do
+  Rails.benchmark "Assign some HD preferences to Francois RABBIT" do
     preference_set = HD::PreferenceSet.find_or_initialize_by(patient: patient)
     preference_set.attributes = {
       schedule_definition: schedule_definition,
@@ -29,7 +27,7 @@ module Renalware
   end
 
   profile = nil
-  log "Assign an HD profile to Francois RABBIT" do
+  Rails.benchmark "Assign an HD profile to Francois RABBIT" do
     profile = HD::Profile.find_or_initialize_by(patient: patient)
     profile.dialysate = HD::Dialysate.first
     profile.attributes = {
@@ -84,7 +82,7 @@ module Renalware
 
   dry_weight = nil
 
-  log "Create dry weight to Francois RABBIT" do
+  Rails.benchmark "Create dry weight to Francois RABBIT" do
     dry_weight = Clinical::DryWeight.find_or_create_by(
       patient: Renalware::Clinical.cast_patient(patient),
       weight: 98.6,
@@ -94,7 +92,7 @@ module Renalware
     )
   end
 
-  log "Assign HD sessions to Francois RABBIT" do
+  Rails.benchmark "Assign HD sessions to Francois RABBIT" do
     units = Hospitals::Unit.hd_sites.limit(3).to_a
     users = User.limit(3).to_a
     # start_times = ["13:00", "13:15", "13:30"]
@@ -207,7 +205,7 @@ module Renalware
     end
   end
 
-  log "Generate HD statistics for the last 6 months of HD Sessions" do
+  Rails.benchmark "Generate HD statistics for the last 6 months of HD Sessions" do
     # Generate HD statistics for the last 6 months of HD Sessions, starting with last month - we
     # don't do monthly stats for the current month
     (1..6).each do |month|

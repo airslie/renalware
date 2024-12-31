@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::System::SqlFunctionJob do
   it "raises an error if the sql fn does not exist" do
     expect {

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Messaging::Internal
   describe MessageForm do
     it :aggregate_failures do

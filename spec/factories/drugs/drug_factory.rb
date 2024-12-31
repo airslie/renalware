@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :drug, class: "Renalware::Drugs::Drug" do
     name { "Blue Pill" }

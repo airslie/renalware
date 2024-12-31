@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # When included, a class (or instance of a class) that has a #call method can be composed
   # with other simlar classes or with procs using the Proc compose operators << >>

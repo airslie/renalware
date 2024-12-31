@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Be sure to restart your server when you modify this file.
 
 # Add new inflection rules using the following format. Inflections
@@ -23,8 +21,8 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   # end
 
   inflect.acronym "ACR"
-  inflect.acronym "AKI"
   inflect.acronym "AKCC"
+  inflect.acronym "AKI"
   inflect.acronym "APD"
   inflect.acronym "API"
   inflect.acronym "BLT"
@@ -33,10 +31,13 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "CC"
   inflect.acronym "CCs"
   inflect.acronym "CM"
-  inflect.acronym "CSV"
   inflect.acronym "CRF"
+  inflect.acronym "CSV"
+  inflect.acronym "DMD"
   inflect.acronym "DNA"
   inflect.acronym "EDTA"
+  inflect.acronym "EQ5D"
+  inflect.acronym "EQ5D5L"
   inflect.acronym "ESRF"
   inflect.acronym "FHIR"
   inflect.acronym "GMC"
@@ -45,36 +46,39 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "HDF"
   inflect.acronym "HIV"
   inflect.acronym "HL7"
-  inflect.acronym "ITK3"
+  inflect.acronym "IMD"
   inflect.acronym "ITK"
+  inflect.acronym "ITK3"
+  inflect.acronym "KFRE"
+  inflect.acronym "LAD"
+  inflect.acronym "LSOA"
   inflect.acronym "MDM"
   inflect.acronym "MDMs"
   inflect.acronym "MS"
+  inflect.acronym "MSOA"
   inflect.acronym "NHS"
   inflect.acronym "NHS"
-  inflect.acronym "ODS"
+  inflect.acronym "NHS"
   inflect.acronym "OBX"
+  inflect.acronym "ODS"
   inflect.acronym "PD"
   inflect.acronym "PET"
   inflect.acronym "PRD"
   inflect.acronym "PV1"
   inflect.acronym "PV2"
+  inflect.acronym "QR"
   inflect.acronym "RaDaR"
   inflect.acronym "RTF"
+  inflect.acronym "SCH"
   inflect.acronym "SFTP"
   inflect.acronym "TRUD"
   inflect.acronym "UKRDC"
-  inflect.acronym "XHR"
-  inflect.acronym "EQ5D"
-  inflect.acronym "EQ5D5L"
-  # inflect.acronym "POS" # DO NOT USE: breaks Devise/Responders which will translate POST to POS_T!
-  inflect.acronym "YAML"
-  inflect.acronym "KFRE"
-  inflect.irregular "feedback", "feedback"
-  inflect.acronym "NHS"
-  inflect.acronym "DMD"
   inflect.acronym "VMP"
-  inflect.acronym "QR"
   inflect.acronym "VND"
+  inflect.acronym "XHR"
+  inflect.acronym "YAML"
+
   inflect.uncountable %w(cache)
+  inflect.irregular "feedback", "feedback"
+  # inflect.acronym "POS" # DO NOT USE: breaks Devise/Responders which will translate POST to POS_T!
 end

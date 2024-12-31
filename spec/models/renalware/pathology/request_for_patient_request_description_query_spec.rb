@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::RequestForPatientRequestDescriptionQuery do
   let(:clinic) { create(:clinic) }
   let(:patient) { create(:pathology_patient) }

@@ -18,6 +18,7 @@ class AddDeletedAtToPatientBookmarks < ActiveRecord::Migration[4.2]
       (patient_id, user_id, COALESCE(deleted_at, '1970-01-01'));"
     )
   end
+
   def down
     remove_index(:patient_bookmarks, name: :patient_bookmarks_uniqueness)
     remove_column :patient_bookmarks, :deleted_at, :datetime

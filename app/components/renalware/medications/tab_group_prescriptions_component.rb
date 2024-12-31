@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     # Renders tabs with tab (a tabbed prescriptions list component) for each of the supplied

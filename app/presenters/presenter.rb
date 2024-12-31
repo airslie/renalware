@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Presenter
   def self.for(value)
     klass = "#{value.class.name}Presenter".constantize

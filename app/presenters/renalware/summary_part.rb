@@ -1,11 +1,9 @@
-# frozen_string_literal: true
-
 module Renalware
   # A base class for Summary presenters in other name-spaces. SummaryParts can be composed into
   # reporting dashboards or summary pages. The Clinical Summary for instance comprises an array
   # of various SummaryParts
   class SummaryPart
-    DATE_FORMAT = "%Y%m%d%H%M%S%L"
+    DATE_FORMAT = "%Y%m%d%H%M%S%L".freeze
     rattr_initialize :patient, :current_user
     attr_implement :to_partial_path
 

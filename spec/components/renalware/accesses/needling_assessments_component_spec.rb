@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Accesses::NeedlingAssessmentsComponent, type: :component do
   let(:user) { create(:user) }
   let(:patient) { create(:accesses_patient, by: user) }

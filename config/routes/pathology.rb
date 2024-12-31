@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   namespace :pathology do
     resources :observation_descriptions, only: :show # for charts
     namespace :charts do
-      resources :charts, only: [:show, :index] do
+      resources :charts, only: %i(show index) do
         resources :series, only: :show
       end
     end
@@ -23,7 +21,7 @@ resources :patients, only: [] do
           to: "nearest_observation_results#index",
           as: "nearest_observations"
     end
-    resources :observation_requests, only: [:index, :show]
+    resources :observation_requests, only: %i(index show)
     resources :patient_rules
     get "descriptions/:description_id/observations",
         to: "observations#index",
@@ -39,7 +37,7 @@ namespace :pathology do
   namespace :requests do
     # NOTE: This needs to be POST since the params may exceed url char limit in GET
     post "requests/new", to: "requests#new", as: "new_request"
-    resources :requests, only: [:create, :index, :show]
+    resources :requests, only: %i(create index show)
     resources :rules, only: :index
   end
 end

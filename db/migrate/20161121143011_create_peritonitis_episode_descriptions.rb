@@ -16,8 +16,8 @@ class CreatePeritonitisEpisodeDescriptions < ActiveRecord::Migration[4.2]
                     column: :peritonitis_episode_type_description_id
 
     add_index :pd_peritonitis_episode_types,
-                [:peritonitis_episode_id, :peritonitis_episode_type_description_id],
-                name: :pd_peritonitis_episode_types_unique_id,
-                unique: true
+              [:peritonitis_episode_id, :peritonitis_episode_type_description_id],
+              name: :pd_peritonitis_episode_types_unique_id,
+              unique: true
   end
 end

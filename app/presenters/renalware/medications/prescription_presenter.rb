@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     class PrescriptionPresenter < DumbDelegator
@@ -72,7 +70,7 @@ module Renalware
       def last_given_or_due_date_with_indicator
         return "#{::I18n.l(prescribed_on)} (D)" if administer_on_hd? && stat
 
-        if last_administration_on_hd&.recorded_on&.present?
+        if last_administration_on_hd&.recorded_on.present?
           "#{::I18n.l(last_administration_on_hd.recorded_on)} (L)"
         end
       end

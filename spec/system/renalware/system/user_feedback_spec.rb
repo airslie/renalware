@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Beta banner and capturing user feedback" do
   let(:user) { create(:user, :unapproved, :clinician) }
 

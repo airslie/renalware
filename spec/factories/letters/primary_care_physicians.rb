@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :letter_primary_care_physician,
           class: "Renalware::Letters::PrimaryCarePhysician",

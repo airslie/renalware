@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::Requests::GlobalRule::PrescriptionDrugType do
   let(:drug_type) { create(:drug_type) }
 

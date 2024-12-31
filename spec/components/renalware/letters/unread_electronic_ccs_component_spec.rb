@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Letters::UnreadElectronicCCsComponent, type: :component do
   include LettersSpecHelper
 

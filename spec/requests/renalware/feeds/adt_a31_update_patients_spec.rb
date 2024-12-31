@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Importing an ADT A31 'Update patient information' HL7 message" do
   before do
     allow(Renalware.config.hl7_patient_locator_strategy)

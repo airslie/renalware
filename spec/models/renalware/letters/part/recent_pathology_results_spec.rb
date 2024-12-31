@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   describe Part::RecentPathologyResults do
     subject(:part) { described_class.new(letter: letter, event: event) }

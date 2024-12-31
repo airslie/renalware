@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "benchmark"
 
 module Renalware
@@ -7,9 +5,9 @@ module Renalware
     class APILog < ApplicationRecord
       validates :identifier, presence: true
       validates :status, presence: true
-      STATUS_WORKING = "working"
-      STATUS_DONE = "done"
-      STATUS_ERROR = "error"
+      STATUS_WORKING = "working".freeze
+      STATUS_DONE = "done".freeze
+      STATUS_ERROR = "error".freeze
 
       def self.with_log(identifier, **)
         log = create!(identifier: identifier, status: STATUS_WORKING, **)

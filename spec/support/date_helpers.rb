@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module DateHelpers
   def todays_date
     l(Time.zone.today)

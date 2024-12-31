@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module ToggleHelper
     def css_toggle_link_to(row_selector:, link_title: "Toggle")

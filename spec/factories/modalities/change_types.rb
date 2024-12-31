@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :modality_change_type, class: "Renalware::Modalities::ChangeType" do
     initialize_with { Renalware::Modalities::ChangeType.find_or_create_by(code: code) }

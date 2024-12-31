@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "active_record/connection_adapters/postgresql_adapter"
 
 # NOTE: Patch for https://devcenter.heroku.com/changelog-items/2446

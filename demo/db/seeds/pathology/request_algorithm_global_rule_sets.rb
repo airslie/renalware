@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Pathology Request Algorithm Global Rule Sets" do
+  Rails.benchmark "Adding Pathology Request Algorithm Global Rule Sets" do
     file_path = File.join(File.dirname(__FILE__), "request_algorithm_global_rule_sets.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The host app can supply a handler for logging errors in background jobs, like so
 #  Renalware::Engine.exception_notifier = MyExceptionNotifier.new
 # where the supplied instance must respond to .notify(exception, **params).

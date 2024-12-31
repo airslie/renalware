@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe WeekPeriod do
   describe "#new" do
     it "raises an error if the week/year combination is not valid" do

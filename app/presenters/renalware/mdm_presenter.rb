@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class MDMPresenter
     NullAccess = Naught.build do |config|
@@ -116,7 +114,7 @@ module Renalware
       CollectionPresenter.new(events_, Renalware::Events::EventPresenter)
     end
     # rubocop:enable Lint/UnusedMethodArgument
-    alias_method :events, :events_of_type
+    alias events events_of_type
 
     def letters
       patient_ = Renalware::Letters.cast_patient(patient)

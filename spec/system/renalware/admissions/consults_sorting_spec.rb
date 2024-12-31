@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Filtering sorting" do
     context "when sorting by modality" do

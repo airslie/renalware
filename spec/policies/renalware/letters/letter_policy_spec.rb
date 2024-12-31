@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   # rubocop:disable RSpec/RepeatedExample
   describe LetterPolicy, type: :policy do

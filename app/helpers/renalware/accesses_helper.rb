@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module AccessesHelper
     def access_summary_breadcrumb(patient)

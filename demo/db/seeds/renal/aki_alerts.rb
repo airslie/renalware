@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding demo AKI Alerts" do
+  Rails.benchmark "Adding demo AKI Alerts" do
     action_ids = Renal::AKIAlertAction.pluck(:id)
     patient_ids = Patient.pluck(:id)
     hospital_ward_ids = Hospitals::Ward.pluck(:id)

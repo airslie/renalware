@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module UKRDC
     # Assumes the thing being passed to the ctor is of type Pathology::ObservationPresenter hence
@@ -11,7 +9,7 @@ module Renalware
         "positive" => "POS",
         "negative" => "NEG"
       }.freeze
-      DEFAULT_INTERPRETATION_CODE = "UNK"
+      DEFAULT_INTERPRETATION_CODE = "UNK".freeze
 
       # The PrePost element in ResultItem
       # For HD patients, all bloods are PRE except the post dialysis urea,

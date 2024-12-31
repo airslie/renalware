@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Medications
   describe PrescriptionsByDrugTypeQuery do
     subject(:esa_presciption) { described_class.new(drug_type_name: "ESA") }

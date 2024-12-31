@@ -5,13 +5,13 @@ class CreateSystemOnlineReferenceLinks < ActiveRecord::Migration[6.0]
         t.string(
           :title,
           null: false,
-          index: { unique: true},
+          index: { unique: true },
           comment: "The name of this resource, for display in the UI only"
         )
         t.string(
           :url,
           null: false,
-          index: { unique: true},
+          index: { unique: true },
           comment: "A URL linking to a helpful online reference for patients. May be rendered as a QR code."
         )
         t.text :description, comment: "Text displayed alongside the link or QR code"

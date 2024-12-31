@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinics::VisitLocation do
   it_behaves_like "an Accountable model"
   it_behaves_like "a Paranoid model"

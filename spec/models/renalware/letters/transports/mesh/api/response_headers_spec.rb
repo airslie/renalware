@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters::Transports::Mesh
   describe API::ResponseHeaders do
     subject(:response_headers) { described_class.new(http_headers) }

@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Searching HD Slot Requests", js: true do
+describe "Searching HD Slot Requests", :js do
   include PatientsSpecHelper
 
   let(:location) { create(:hd_slot_request_location, name: "ABC") }

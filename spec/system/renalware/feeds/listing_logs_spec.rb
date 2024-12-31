@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Feed Log messages" do
   it "lists them" do
     login_as_super_admin

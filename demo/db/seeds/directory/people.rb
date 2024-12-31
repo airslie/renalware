@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding People" do
+  Rails.benchmark "Adding People" do
     user = User.first
     uk = System::Country.find_by(alpha3: "GBR")
 

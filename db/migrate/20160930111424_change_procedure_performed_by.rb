@@ -1,5 +1,4 @@
 class ChangeProcedurePerformedBy < ActiveRecord::Migration[4.2]
-
   def up
     # Note have taken the decision not to move Users referenced by perform_by_id
     # into the new performed_by string column as it is unlikely there will be anyone affected

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "access_steps"
 # The first module the Domain-level steps as well as shared steps and functions
 # that will available in steps_for(:web) below when the @web tag is specified.

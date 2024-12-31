@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Tx Investigation Types" do
+  Rails.benchmark "Adding Tx Investigation Types" do
     file_path = File.join(File.dirname(__FILE__), "investigation_types.csv")
     rows = []
     CSV.foreach(file_path, headers: true) do |row|

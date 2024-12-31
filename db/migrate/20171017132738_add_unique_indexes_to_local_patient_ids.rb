@@ -8,8 +8,8 @@ class AddUniqueIndexesToLocalPatientIds < ActiveRecord::Migration[5.1]
         local_patient_id_4
         local_patient_id_5
       )
-      columns.each{ |column| remove_index(:patients, column) }
-      columns.each{ |column| add_index(:patients, column, unique: true) }
+      columns.each { |column| remove_index(:patients, column) }
+      columns.each { |column| add_index(:patients, column, unique: true) }
     end
   end
 end

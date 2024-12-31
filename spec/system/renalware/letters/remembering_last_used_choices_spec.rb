@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Remembering last used letter choices in the user's session", js: true do
+describe "Remembering last used letter choices in the user's session", :js do
   it "once a letter is created, subsequent new letters remember letterhead, author, " \
      "date and description" do
     patient = create(

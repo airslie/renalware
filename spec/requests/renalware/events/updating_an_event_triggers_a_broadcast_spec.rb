@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Updating a Event triggers an event_updated broadcast" do
   context "when updating a simple event" do
     class TestEventListener

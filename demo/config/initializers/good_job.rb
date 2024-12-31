@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Rails.application.configure do
   # NB: good_job.execution_mode is set differently in each environment so see those config files.
   # Good job recommends (and defaults to)

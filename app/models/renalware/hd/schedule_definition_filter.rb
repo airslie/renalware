@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # Backed by a Postgres view which defines all the possible permutations of

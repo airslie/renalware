@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     class NearestObservationsQuery
@@ -10,7 +8,7 @@ module Renalware
           .observations
           .joins(:description)
           .where(description_id: observation_description_ids)
-          .where("observed_at >= ?", (date - look_behind_days.days).beginning_of_day)
+          .where(observed_at: (date - look_behind_days.days).beginning_of_day..)
           .select(
             :observed_at,
             :result,

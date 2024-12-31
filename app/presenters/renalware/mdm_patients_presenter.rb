@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Presenter formatting a collection of patients for use behind any MDM Patients listing.
   class MDMPatientsPresenter

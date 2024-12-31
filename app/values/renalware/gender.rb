@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class Gender
     include ActiveModel::Model
@@ -24,6 +22,13 @@ module Renalware
       "M" => 1,
       "F" => 2,
       "NS" => 9
+    }.freeze
+
+    NHS_DICTIONARY_VALUES = {
+      "0" => "NK",
+      "1" => "M",
+      "2" => "F",
+      "9" => "NS"
     }.freeze
 
     def self.all

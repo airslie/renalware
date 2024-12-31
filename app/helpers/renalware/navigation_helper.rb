@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module NavigationHelper
     # Path here must be already resolved to a string using url_for

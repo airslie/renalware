@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :research_investigatorship, class: "Renalware::Research::Investigatorship" do
     study factory: %i(research_study)

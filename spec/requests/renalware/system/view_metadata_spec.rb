@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::System::ViewMetadata do
   describe "#edit HTML" do
     it "renders a form" do
@@ -14,7 +12,7 @@ describe Renalware::System::ViewMetadata do
 
   context "when params are valid" do
     describe "#update HTML" do
-      it "udpates view metadata columns" do
+      it "updates view metadata columns" do
         view = create(:view_metadata)
         attributes = attributes_for(:view_metadata)
         attributes[:columns] = [{ code: :sex, width: :small }]
@@ -28,7 +26,13 @@ describe Renalware::System::ViewMetadata do
         follow_redirect!
 
         expect(view.reload.columns.as_json).to eq(
-          [{ "code" => "sex", "name" => nil, "hidden" => false, "width" => 1, "truncate" => false }]
+          [{
+            "code" => "sex",
+            "name" => nil,
+            "hidden" => false,
+            "width" => "small",
+            "truncate" => false
+          }]
         )
       end
     end
@@ -45,7 +49,7 @@ describe Renalware::System::ViewMetadata do
         end
         view.update!(description: "123")
 
-        expect(view.versions.count).to eq(3) # create, udpate, update
+        expect(view.versions.count).to eq(3) # create, update, update
 
         # restore a version from 2012
         patch(restore_system_view_metadatum_path(view, version_at: dates.first.to_s))

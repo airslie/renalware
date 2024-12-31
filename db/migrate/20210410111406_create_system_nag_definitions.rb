@@ -6,7 +6,7 @@ class CreateSystemNagDefinitions < ActiveRecord::Migration[5.2]
 
       create_table(
         :system_nag_definitions,
-        comment: "Registers a 'missing data nag' sql function and the text to "\
+        comment: "Registers a 'missing data nag' sql function and the text to " \
                  "display if the function evaluates to true"
       ) do |t|
         t.enum :scope, enum_type: :system_nag_definition_scope, null: false
@@ -25,8 +25,8 @@ class CreateSystemNagDefinitions < ActiveRecord::Migration[5.2]
           :always_expire_cache_after_minutes,
           null: false,
           default: 60, # 1 hour by default
-          comment: "Number of minutes to cache this nag before the cache is automatically "\
-                   "invalidated. The cache may be invalidated earlier if the "\
+          comment: "Number of minutes to cache this nag before the cache is automatically " \
+                   "invalidated. The cache may be invalidated earlier if the " \
                    "nag_definition.updated_at or patient.updated_at timestamps change."
         )
         t.timestamps null: false

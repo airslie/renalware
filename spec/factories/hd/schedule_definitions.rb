@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :schedule_definition, class: "Renalware::HD::ScheduleDefinition" do
     initialize_with do

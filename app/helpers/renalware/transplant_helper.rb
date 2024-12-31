@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module TransplantHelper
     def donor_summary_breadcrumb(patient)

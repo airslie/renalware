@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # A spinner component that can be used with a turbo frame (for example) to show a spinner while
   # a turboframe is 'busy'.

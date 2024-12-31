@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Patients::NagsComponent, type: :component do
   let(:user) { create(:patients_user) }
   let(:patient) { create(:patient, by: user) }

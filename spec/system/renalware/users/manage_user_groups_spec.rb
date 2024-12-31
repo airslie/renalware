@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "A superadmin lists groups", js: true do
+describe "A superadmin lists groups", :js do
   it "lists all user groups in the system" do
     user = login_as_super_admin
     create(

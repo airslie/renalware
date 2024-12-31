@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :exit_site_infection, class: "Renalware::PD::ExitSiteInfection" do
     patient

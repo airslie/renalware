@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe "Bone Audit" do
+  describe "Bone Audit" do # rubocop:disable RSpec/DescribeClass
     include PatientsSpecHelper
     let(:uom) { create(:pathology_measurement_unit) }
     let(:user) { create(:user) }

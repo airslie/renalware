@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Simple events" do
   describe "PATCH update" do
     let(:event_type) { create(:event_type, name: "Simple") }

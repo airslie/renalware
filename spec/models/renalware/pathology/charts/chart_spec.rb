@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Pathology::Charts::Chart do
     it :aggregate_failures do

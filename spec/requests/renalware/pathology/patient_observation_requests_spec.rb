@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Patient's Observation Requests" do
   let(:patient) { create(:pathology_patient) }
 

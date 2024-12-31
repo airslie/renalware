@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Dietetics::SummaryComponent, type: :component do
     let(:patient) { Patient.new }

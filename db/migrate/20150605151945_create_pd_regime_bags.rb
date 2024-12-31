@@ -1,7 +1,7 @@
 class CreatePDRegimeBags < ActiveRecord::Migration[4.2]
   def change
     create_table :pd_regime_bags do |t|
-      t.references :regime,  null: false
+      t.references :regime, null: false
       t.references :bag_type,   null: false
       t.integer :volume,        null: false
       t.integer :per_week

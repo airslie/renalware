@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Manage a patient's attachments (linked files)" do
   # include PatientsSpecHelper
   let(:patient) { create(:patient) }

@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     class Lab < ApplicationRecord
-      UNKNOWN_LAB_NAME = "Lab: Unknown"
+      UNKNOWN_LAB_NAME = "Lab: Unknown".freeze
 
       has_many :request_descriptions, class_name: "RequestDescription"
 

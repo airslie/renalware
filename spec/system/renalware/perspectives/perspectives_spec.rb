@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 describe "Perspectives" do
   let(:patient) { create(:patient) }
 
-  describe "Viewing patient perspectives", system: true do
+  describe "Viewing patient perspectives", :system do
     it "Bone" do
       login_as_clinical
 

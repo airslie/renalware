@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters::Formats::FHIR
   module Resources::TransferOfCare
     describe Sections::GPPracticeComponent, type: :component do

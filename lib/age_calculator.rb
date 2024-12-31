@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Borrowed from https://gist.github.com/amydoesntlai/74eb9aef1ea4b535f8fe
 
 require "date"

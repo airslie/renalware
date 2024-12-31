@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Patient HD Search e.g. when adding patients to a slot" do
   include PatientsSpecHelper
 

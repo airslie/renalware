@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "nhs_api_client"
 
 namespace :ods do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     class Topic < ApplicationRecord
@@ -11,6 +9,16 @@ module Renalware
       validates :text, presence: true, uniqueness: true
 
       scope :ordered, -> { order(deleted_at: :desc, position: :asc, text: :asc) }
+
+      belongs_to :snomed_document_type
+
+      def snomed_document_type
+        super || default_snomed_document_type
+      end
+
+      def default_snomed_document_type
+        @default_snomed_document_type ||= SnomedDocumentType.find_by(default_type: true)
+      end
 
       concerning :Sections do
         included do

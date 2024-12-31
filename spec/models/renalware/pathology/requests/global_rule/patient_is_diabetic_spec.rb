@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::Requests::GlobalRule::PatientIsDiabetic do
   def rule_for(value, patient)
     described_class

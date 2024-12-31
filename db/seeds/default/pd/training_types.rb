@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding PD Training Types" do
+  Rails.benchmark "Adding PD Training Types" do
     file_path = File.join(File.dirname(__FILE__), "training_types.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

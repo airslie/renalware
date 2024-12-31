@@ -2,7 +2,7 @@
   br
 
   / Use a separate form for updating the route, unit of measure, etc.. after selecting a drug
-  = form_with url: search_url, id: "drug_search_form",
+  = form_with model: false, url: search_url, id: "drug_search_form",
     data: {  turbo: true, turbo_frame: "drug_search_form_frame" },
     input_html: { autocomplete: "off" },
     method: :get do |select_form|

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :letter, class: "Renalware::Letters::Letter" do
     accountable
@@ -10,7 +8,7 @@ FactoryBot.define do
     type { instance.class.sti_name }
 
     created_at { Time.zone.today }
-    description { "This is a custom description" }
+    topic factory: :letter_topic
 
     body { "I am pleased to report a marked improvement in her condition." }
 

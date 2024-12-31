@@ -10,8 +10,7 @@ class CreateTransplantFailureCauseDescriptions < ActiveRecord::Migration[4.2]
 
     add_index :transplant_failure_cause_descriptions, :code, unique: true
     add_foreign_key :transplant_failure_cause_descriptions,
-      :transplant_failure_cause_description_groups,
-      column: :group_id
-
+                    :transplant_failure_cause_description_groups,
+                    column: :group_id
   end
 end

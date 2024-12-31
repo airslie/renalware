@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Viewing letter batches" do
   include LettersSpecHelper
 

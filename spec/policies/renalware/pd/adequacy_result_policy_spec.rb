@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::PD
   describe AdequacyResultPolicy, type: :policy do
     include PolicySpecHelper

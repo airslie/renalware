@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :pathology_chart, class: "Renalware::Pathology::Charts::Chart" do
     sequence :title do |n|

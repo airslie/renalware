@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Transplant Donor Stage Positions" do
+  Rails.benchmark "Adding Transplant Donor Stage Positions" do
     names = [
       "Currently Active",
       "Active Workup but on Hold",
@@ -24,7 +20,7 @@ module Renalware
     end
   end
 
-  log "Adding Transplant Donor Stage Statuses" do
+  Rails.benchmark "Adding Transplant Donor Stage Statuses" do
     names = [
       "Initial Contact",
       "Initial Meeting / Tests",

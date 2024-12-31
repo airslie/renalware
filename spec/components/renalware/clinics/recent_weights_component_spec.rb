@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Clinics::RecentWeightsComponent, type: :component do
     let(:patient) { Clinics::Patient.new }

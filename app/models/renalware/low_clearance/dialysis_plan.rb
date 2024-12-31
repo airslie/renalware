@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # TODO: when updating the UI, remember to use the 'with_deleted' scope so that
 # if a plan is soft-deleted, it will still be displayed in low_clearance profiles that
 # reference it, even though the plan will not be available for selection prospectively.

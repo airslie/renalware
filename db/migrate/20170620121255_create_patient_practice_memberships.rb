@@ -1,9 +1,9 @@
 class CreatePatientPracticeMemberships < ActiveRecord::Migration[5.0]
   def change
-    #remove_index :patient_practices_primary_care_physicians, :practice_id
-    #remove_index :patient_practices_primary_care_physicians, :primary_care_physician_id
-    #remove_foreign_key :patient_practices_primary_care_physicians, :practice_id
-    #remove_foreign_key :patient_practices_primary_care_physicians, :primary_care_physician_id
+    # remove_index :patient_practices_primary_care_physicians, :practice_id
+    # remove_index :patient_practices_primary_care_physicians, :primary_care_physician_id
+    # remove_foreign_key :patient_practices_primary_care_physicians, :practice_id
+    # remove_foreign_key :patient_practices_primary_care_physicians, :primary_care_physician_id
 
     drop_table :patient_practices_primary_care_physicians
 
@@ -19,6 +19,5 @@ class CreatePatientPracticeMemberships < ActiveRecord::Migration[5.0]
     add_foreign_key :patient_practice_memberships,
                     :patient_primary_care_physicians,
                     column: :primary_care_physician_id
-
   end
 end

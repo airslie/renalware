@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Here is where we configure the settings for the Renalware::Core engine.
 Renalware.configure do |config|
   config.patient_hospital_identifiers = {

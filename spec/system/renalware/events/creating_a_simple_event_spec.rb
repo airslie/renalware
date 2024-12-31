@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Creating an event", js: true do
+describe "Creating an event", :js do
   it "successfully adds a simple event" do
     user = login_as_clinical
     patient = create(:patient, by: user)

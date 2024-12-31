@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module SlimSelectHelper
   # Capybara helper for selecting an option in a slim-select dropdown.
   # Assumption is that you have a label who's parent also contains the select list you

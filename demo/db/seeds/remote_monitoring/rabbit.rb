@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class CreateRemoteMonitoringRegistration
     def initialize
@@ -29,7 +27,7 @@ module Renalware
     end
   end
 
-  log "Adding Remote Monitoring Registration events for Roger Rabbit" do
+  Rails.benchmark "Adding Remote Monitoring Registration events for Roger Rabbit" do
     CreateRemoteMonitoringRegistration.new.call
   end
 end

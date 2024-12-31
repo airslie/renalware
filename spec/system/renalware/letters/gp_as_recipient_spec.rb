@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe("Persisting the correct recipients when a letter is saved", js: true) do
+describe("Persisting the correct recipients when a letter is saved", :js) do
   include AjaxHelpers
 
   let(:practice) { create(:practice) }
@@ -69,7 +67,7 @@ describe("Persisting the correct recipients when a letter is saved", js: true) d
     end
   end
 
-  context "when main recipient is a contact", js: true do
+  context "when main recipient is a contact", :js do
     it "create recipient rows main: contact cc: [patient primary_care_physician]" do
       user = login_as_clinical
       create(:letter_letterhead)

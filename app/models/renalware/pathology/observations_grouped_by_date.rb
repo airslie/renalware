@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Backed by a view - see
 module Renalware
   module Pathology

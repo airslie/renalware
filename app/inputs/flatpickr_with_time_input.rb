@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class FlatpickrWithTimeInput < FlatpickrInput
   def data_attributes
     {

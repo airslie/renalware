@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Transplants
     class WaitListsController < BaseController
@@ -33,7 +31,7 @@ module Renalware
       end
 
       def path_params
-        params.permit([:controller, :action, :named_filter])
+        params.permit(%i(controller action named_filter))
       end
 
       def form_params

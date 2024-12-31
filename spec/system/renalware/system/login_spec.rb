@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Authentication" do
     let(:user) { create(:user, :clinical) }

@@ -9,7 +9,6 @@ class CreatePDTrainingSites < ActiveRecord::Migration[5.0]
     end
 
     add_foreign_key "pd_training_sessions", "pd_training_sites",
-    column: "training_site_id", name: "pd_training_sessions_site_id_fk"
-
+                    column: "training_site_id", name: "pd_training_sessions_site_id_fk"
   end
 end

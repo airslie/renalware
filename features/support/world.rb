@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # We need to include the engine url_helpers early on as a helper introduced by another World
 # might override a url (eg patient_prescriptions_path in MedicationsHelper) in order to ammend it
 # so the order of inclusion is important

@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Demo Event Types" do
+  Rails.benchmark "Adding Demo Event Types" do
     file_path = File.join(File.dirname(__FILE__), "types.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

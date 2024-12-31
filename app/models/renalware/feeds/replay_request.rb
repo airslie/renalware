@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # This model captures the point when a request is made (eg programmatically when a patient is

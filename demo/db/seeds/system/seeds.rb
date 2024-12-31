@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "users"
 require_relative "user_groups"
 require_relative "templates"

@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Patient Group Directions (PGD)" do
+  Rails.benchmark "Adding Patient Group Directions (PGD)" do
     upserts = [
       {
         name: "Enoxaparin 20mg",

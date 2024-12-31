@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("the rule set contains these rules:") do |table|
   @rules = create_global_rules_from_table(table)
 end

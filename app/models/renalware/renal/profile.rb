@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Renal
     class Profile < ApplicationRecord
@@ -9,7 +7,7 @@ module Renalware
 
       has_paper_trail(
         versions: { class_name: "Renalware::Renal::Version" },
-        on: [:create, :update, :destroy]
+        on: %i(create update destroy)
       )
 
       belongs_to :patient, touch: true

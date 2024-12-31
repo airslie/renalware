@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe UKRDC::CreatePatientXmlFile do
     let(:user) { create(:user) }

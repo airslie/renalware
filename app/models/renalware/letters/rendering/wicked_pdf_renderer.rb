@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Render a Letter to PDF.
 #

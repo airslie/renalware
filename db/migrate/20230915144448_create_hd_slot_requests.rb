@@ -1,10 +1,12 @@
 class CreateHDSlotRequests < ActiveRecord::Migration[7.0]
   def change
     within_renalware_schema do
+      # rubocop:disable Rails/CreateTableWithTimestamps
       create_table :hd_slot_request_deletion_reasons do |t|
         t.string :reason, unique: true
         t.datetime :deleted_at, index: true
       end
+      # rubocop:enable Rails/CreateTableWithTimestamps
 
       create_enum :enum_hd_slot_request_urgency, %w(routine urgent highly_urgent)
 

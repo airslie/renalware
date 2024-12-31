@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     describe SlotRequest do
@@ -35,7 +33,7 @@ module Renalware
         it "is scoped so only 1 patient_id possible where deleted_at and allocated_at are null" do
           is_expected
             .to validate_uniqueness_of(:patient_id)
-            .scoped_to([:deleted_at, :allocated_at])
+            .scoped_to(%i(deleted_at allocated_at))
             .with_message("already has an active slot request")
         end
       end

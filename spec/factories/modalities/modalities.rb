@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :modality, class: "Renalware::Modalities::Modality" do
     accountable

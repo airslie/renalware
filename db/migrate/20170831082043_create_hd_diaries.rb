@@ -33,13 +33,13 @@ class CreateHDDiaries < ActiveRecord::Migration[5.1]
     # Add CHECK constraint to ensure week_number and year are in valid ranges
     reversible do |direction|
       direction.up do
-        execute <<-SQL
+        execute <<-SQL.squish
           ALTER TABLE hd_diaries ADD CONSTRAINT week_number_in_valid_range CHECK (week_number >= 1 AND week_number <= 53);
           ALTER TABLE hd_diaries ADD CONSTRAINT year_in_valid_range CHECK (year >= 2017 AND year <= 2050);
         SQL
       end
       direction.down do
-        execute <<-SQL
+        execute <<-SQL.squish
           ALTER TABLE hd_diaries DROP CONSTRAINT week_number_in_valid_range;
           ALTER TABLE hd_diaries DROP CONSTRAINT year_in_valid_range;
         SQL

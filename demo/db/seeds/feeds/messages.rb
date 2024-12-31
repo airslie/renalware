@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding demo feeds messages" do
+  Rails.benchmark "Adding demo feeds messages" do
     sql = <<-SQL.squish
       INSERT INTO "renalware"."feed_messages" ("message_type", "event_type", "header_id", "body", "created_at", "updated_at", "body_hash", "nhs_number")
       VALUES ('ORU', 'R01', '1258271', 'MSH|^~\&|HM|LBE|SCM||20190327094925||ORU^R01|1258271|P|2.3.1|||AL||||

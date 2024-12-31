@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^Clyde is logged in$/) do
   login_as @clyde
 end

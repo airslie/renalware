@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # Renders a link that will open up a modal dialog to view a 'chartable'

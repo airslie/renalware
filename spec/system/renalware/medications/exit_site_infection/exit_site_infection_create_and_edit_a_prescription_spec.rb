@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Prescriptions - from an exit site infection", js: true do
+describe "Prescriptions - from an exit site infection", :js do
   include DrugsSpecHelper
 
   let(:user) { create(:user, :clinical, additional_roles: :prescriber) }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Patients
     # Fetches practice changes and additions from the NHS ODS API.

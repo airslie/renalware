@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Editing a patient's demographics" do
     it "updates UKRDC settings" do

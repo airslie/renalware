@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :hd_profile, class: "Renalware::HD::Profile" do
     accountable

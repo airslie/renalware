@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Random Modalities for non-RABBIT Patients" do
+  Rails.benchmark "Adding Random Modalities for non-RABBIT Patients" do
     # Note the RABBIT family have special modalities assigned elsewhere, so skip them here
     patient_ids = Patient.where.not(family_name: "RABBIT").pluck(:id)
     user_id = User.first.id

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This demo letter listener had been wired to receive the letter* broadcast events in the
 # broadcast_subscription_map (see config/initializers/renalware.rb) and it illustrates some
 # actions that can be taken after the letter has been approved/deleted.

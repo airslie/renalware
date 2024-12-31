@@ -10,8 +10,8 @@
 
 db:
   image: postgres:16.4
-  # volumes:
-  #    - ./data/postgresql:/var/lib/postgresql/data
+  volumes:
+     - ./data/postgresql:./data/postgresql
 web:
   build: .
   command: ./demo/bin/rails s -p 3000 -b '0.0.0.0' # this is redundant as it the container's default command

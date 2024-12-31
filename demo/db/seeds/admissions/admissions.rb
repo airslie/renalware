@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Creating Admissions::Admission (inpatients)" do
+  Rails.benchmark "Creating Admissions::Admission (inpatients)" do
     patients = Renalware::Patient
       .order("RANDOM()")
       .select(:id)

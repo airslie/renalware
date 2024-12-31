@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :prescription_termination, class: "Renalware::Medications::PrescriptionTermination" do
     accountable

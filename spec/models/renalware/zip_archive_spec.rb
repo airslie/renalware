@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe ZipArchive do
     def path_to_zipfile(filename)

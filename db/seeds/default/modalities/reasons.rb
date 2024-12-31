@@ -1,12 +1,8 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
   module Modalities
-    extend SeedsHelper
-
-    log "Adding PD To Haemodialysis (Reasons for Change)" do
+    Rails.benchmark "Adding PD To Haemodialysis (Reasons for Change)" do
       PDToHaemodialysis.find_or_create_by!(rr_code: 201, description: "Patient/partner choice")
       PDToHaemodialysis.find_or_create_by!(rr_code: 202, description: "Loss of supporting partner")
       PDToHaemodialysis.find_or_create_by!(rr_code: 203, description: "Other change of personal circumstances")
@@ -20,7 +16,7 @@ module Renalware
       PDToHaemodialysis.find_or_create_by!(rr_code: 216, description: "Abdominal surgery or complications")
     end
 
-    log "Adding Haemodialysis To PD (Reasons for Change)" do
+    Rails.benchmark "Adding Haemodialysis To PD (Reasons for Change)" do
       HaemodialysisToPD.find_or_create_by!(rr_code: 221, description: "Patient/partner choice")
       HaemodialysisToPD.find_or_create_by!(rr_code: 222, description: "Loss of supporting partner")
       HaemodialysisToPD.find_or_create_by!(rr_code: 223, description: "Other change of personal circumstances")

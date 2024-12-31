@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module ModalityScopes
     extend ActiveSupport::Concern

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "sql_indexed_case_stmt"
 
 module Renalware

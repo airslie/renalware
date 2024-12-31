@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "after_commit_everywhere"
 
 module Renalware

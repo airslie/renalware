@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Clinic Visit Locations" do
+  Rails.benchmark "Adding Clinic Visit Locations" do
     user = Renalware::User.first
     Clinics::VisitLocation.create(name: "In clinic", default_location: true, by: user)
     Clinics::VisitLocation.create(name: "By telephone", by: user)

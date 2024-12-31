@@ -1,8 +1,5 @@
-# frozen_string_literal: true
-
-# rubocop:disable Metrics/ModuleLength
 module Renalware
-  log "Adding Pathology Code Groups" do
+  Rails.benchmark "Adding Pathology Code Groups" do
     groups = {
       pd_mdm: {
         description: "Pathology relating to PD",
@@ -121,4 +118,3 @@ module Renalware
     end
   end
 end
-# rubocop:enable Metrics/ModuleLength

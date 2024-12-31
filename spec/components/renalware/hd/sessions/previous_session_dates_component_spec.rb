@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::HD::Sessions::PreviousSessionDatesComponent, type: :component do
   let(:patient) { create(:hd_patient) }
   let(:instance) { described_class.new(patient: patient) }

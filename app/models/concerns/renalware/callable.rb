@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Callable
     # Adds a #call class method that will instantiate the class, passing any args to #initialize,

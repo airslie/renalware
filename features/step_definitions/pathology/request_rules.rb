@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 When("the request algorithm rules are viewed by Clyde") do
   @rules_table = view_request_algorithm_rules(@clyde)
 end

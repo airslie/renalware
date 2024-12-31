@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Surveys::EQ5DComponent, type: :component do
   let(:patient) { build_stubbed(:patient) }
 

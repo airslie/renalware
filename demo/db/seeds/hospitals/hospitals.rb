@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Hospitals" do
+  Rails.benchmark "Adding Hospitals" do
     file_path = File.join(File.dirname(__FILE__), "hospitals.csv")
 
     Hospitals::Centre.transaction do

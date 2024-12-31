@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # More liberal access is provided in the STI-specific policy e.g. ClosedSessionPolicy

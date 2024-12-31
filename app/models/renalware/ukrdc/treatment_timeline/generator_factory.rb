@@ -1,12 +1,8 @@
-# frozen_string_literal: true
-
-require "benchmark"
-
 module Renalware
   module UKRDC
     module TreatmentTimeline
       class GeneratorFactory
-        DEFAULT_TYPE = "Generic"
+        DEFAULT_TYPE = "Generic".freeze
 
         # Each modality_description has a :code field
         def self.call(modality)

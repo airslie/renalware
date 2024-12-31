@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinics::ClinicVisit do
   it_behaves_like "an Accountable model"
   it :aggregate_failures do

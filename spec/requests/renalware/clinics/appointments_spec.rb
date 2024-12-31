@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Appointments" do
   describe "GET index" do
     it "responds with a ist of appointments" do

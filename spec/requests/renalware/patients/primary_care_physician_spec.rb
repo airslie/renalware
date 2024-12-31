@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Changing a patient's GP (primary care physician)" do
   let(:patient) { create(:patient) }
   let(:primary_care_physician) { create(:primary_care_physician) }

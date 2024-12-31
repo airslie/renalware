@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # From https://github.com/rubysherpas/paranoia/wiki/Testing-with-rspec
 shared_examples_for "a not yet implemented ToC section" do
   it "is not yet implemented" do

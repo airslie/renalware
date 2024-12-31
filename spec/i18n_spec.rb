@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "i18n/tasks"
 
 RSpec.describe I18n do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe BasePolicy, type: :policy do
     include PolicySpecHelper

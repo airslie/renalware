@@ -41,8 +41,8 @@ class CreateLowClearanceProfiles < ActiveRecord::Migration[5.1]
           connection.execute(
             sql_for_modality_type.call("Renalware::Renal::LowClearance::ModalityDescription")
           )
-          raise "If you really want to roll-back this migration you need to implement the "\
-                "insertion into renal_profiles.document -> 'low_clearance' of the "\
+          raise "If you really want to roll-back this migration you need to implement the " \
+                "insertion into renal_profiles.document -> 'low_clearance' of the " \
                 "low_clearance_profiles.document jsonb"
         end
       end

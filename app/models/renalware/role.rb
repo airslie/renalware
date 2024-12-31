@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class Role < ApplicationRecord
     ROLES = %i(devops super_admin admin clinical read_only prescriber hd_prescriber).freeze
@@ -17,8 +15,8 @@ module Renalware
 
     def self.install!
       ROLES.each do |role|
-        hidden = [:super_admin, :devops].include?(role)
-        enforce = [:prescriber, :hd_prescriber].include?(role)
+        hidden = %i(super_admin devops).include?(role)
+        enforce = %i(prescriber hd_prescriber).include?(role)
         Role.find_or_create_by!(name: role, hidden: hidden, enforce: enforce)
       end
     end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe System::Country do
     it :aggregate_failures do

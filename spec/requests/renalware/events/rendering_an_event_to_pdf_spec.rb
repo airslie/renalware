@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Rendering an event to a PDF" do
   it "renders a PDF" do
     event = create(:simple_event)

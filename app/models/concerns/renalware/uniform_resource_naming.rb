@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "active_support/concern"
 
 module Renalware
@@ -24,7 +22,7 @@ module Renalware
       "urn:nhs-uk:addressing:ods:#{codes}"
     end
 
-    # Generates a urn for a particilar database record at particular hospital.
+    # Generates a urn for a particular database record at particular hospital.
     # Examples:
     #   For a prescriptions with id 123 at MSE (RAJ):
     #     "urn:renalware:RAJ:medication_prescriptions:123"
@@ -32,7 +30,7 @@ module Renalware
     def renalware_urn(model:)
       return if model.nil? || model.id.nil?
 
-      hospital_ods_code = Renalware.config.ukrdc_site_code&.downcase&.presence || "unk"
+      hospital_ods_code = Renalware.config.ukrdc_site_code&.downcase.presence || "unk"
       "urn:renalware:#{hospital_ods_code}:#{model.class.table_name.singularize}:#{model.id}"
     end
   end

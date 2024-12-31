@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   describe DrugTypeClassification do
     it :aggregate_failures do

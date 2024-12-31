@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PatientHelper
     # Note we use a stimulus controller to highlight the menu items in places where the wrapping

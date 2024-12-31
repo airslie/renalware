@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Viewing API logs" do
     let(:user) { create(:user) }

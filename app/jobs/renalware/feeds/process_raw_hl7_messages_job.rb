@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # Called at a regular intervals eg by good_job.cron to pick up records in the RawHL7Message

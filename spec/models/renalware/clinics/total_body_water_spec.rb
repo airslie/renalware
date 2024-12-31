@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinics::TotalBodyWater do
   describe "#calculate" do
     context "when no recent weight measurement found" do

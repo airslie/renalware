@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :pathology_request_description, class: "Renalware::Pathology::RequestDescription" do
     initialize_with {

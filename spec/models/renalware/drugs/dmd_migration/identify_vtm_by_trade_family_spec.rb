@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   describe DMDMigration::IdentifyVtmByTradeFamily do
     let(:dmd_drug) { create(:drug, name: "DMD Drug", code: "ABCD") }

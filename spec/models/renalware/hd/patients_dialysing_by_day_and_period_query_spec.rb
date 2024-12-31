@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD
   describe PatientsDialysingByDayAndPeriodQuery do
     subject(:query) { described_class.new(hospital_unit.id, day_of_week, diurnal_period_code) }

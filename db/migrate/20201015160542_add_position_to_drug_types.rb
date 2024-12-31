@@ -16,7 +16,7 @@ class AddPositionToDrugTypes < ActiveRecord::Migration[5.2]
         :integer,
         null: false,
         default: 0,
-        comment: "More important drug types have a higher value so their colour trumps other "\
+        comment: "More important drug types have a higher value so their colour trumps other " \
                  "types a drug might have."
       )
       add_column(

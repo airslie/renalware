@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     class CompleteLetter
@@ -7,7 +5,7 @@ module Renalware
       pattr_initialize :letter
 
       class << self
-        alias_method :build, :new
+        alias build new
       end
 
       def call(by:)

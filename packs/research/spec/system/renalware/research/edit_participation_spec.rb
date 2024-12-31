@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Edit a patient's participation in a study" do
   include AjaxHelpers
 

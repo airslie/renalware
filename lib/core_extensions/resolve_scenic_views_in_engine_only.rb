@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Override Scenic's definition#full_path so it will resolve db/views as whatever is in
 # config.paths["db/views"] if present, otherwise default to the original implementation.
 # Note his does not support having or merging views in both engine and the host app (as yet).

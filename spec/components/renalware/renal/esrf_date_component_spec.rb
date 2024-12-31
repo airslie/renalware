@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable RSpec/PredicateMatcher
 describe Renalware::Renal::ESRFDateComponent, type: :component do
   let(:esrf_on) { nil }

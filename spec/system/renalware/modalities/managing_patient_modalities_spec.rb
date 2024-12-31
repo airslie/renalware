@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing a patient's modalities", js: false do
   let(:patient) { create(:patient) }
   let(:tx_mod_desc) { create(:modality_description, :transplant) }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # A utility class used for example by the host app to provide a generic way of adjusting

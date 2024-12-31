@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Edit Advanced Kidney Care" do
   include PatientsSpecHelper
 

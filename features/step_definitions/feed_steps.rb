@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^the following HL7 message:$/) do |raw_message|
   @message = parse_message(raw_message)
 end

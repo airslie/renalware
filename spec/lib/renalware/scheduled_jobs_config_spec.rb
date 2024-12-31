@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Renalware::Engine.scheduled_jobs_config", type: :model do
     let(:jobs_config) do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe System::Download do
     it_behaves_like "a Paranoid model"

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable Rails/ContentTag
 # See https://github.com/kylefox/trix/blob/master/lib/trix/simple_form/trix_editor_input.rb
 class TrixEditorInput < SimpleForm::Inputs::Base

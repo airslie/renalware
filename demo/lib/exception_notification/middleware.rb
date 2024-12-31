@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Filters sensitive data from exception messages. In some exception messages, such
 # as routing errors, Rails will include the object it attempted to create a route with,
 # exposing records from the database. This middleware reporter using PartyFoul filters

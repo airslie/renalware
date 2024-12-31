@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe AddressValidator, type: :validator do
     describe "validate" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given("the following users:") do |table|
   table.raw.flatten.each do |users_name|
     given_name, family_name = users_name.split

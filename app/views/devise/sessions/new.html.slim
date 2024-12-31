@@ -31,6 +31,10 @@ div class="bg-gray-50 w-full overflow-y-auto"
       .actions.mt-6
         = f.submit "Log in", class: "btn btn-primary w-full"
 
-      .mt-8
+      .mt-8.flex.flex-col
+        - Renalware.config.external_links.each do |title, url|
+          .flex.items-center.justify-center.pb-1
+            = external_link_to(title, url, gap: 2, class: "font-bold")
+      .mt-6
         = render "signup_help"
         = render "devise/shared/links"

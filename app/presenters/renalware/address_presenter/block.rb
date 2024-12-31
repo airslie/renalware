@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class AddressPresenter::Block < AddressPresenter
     def to_html

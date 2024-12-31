@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Death locations" do
+  Rails.benchmark "Death locations" do
     [
       ["Home", 11, "Current Home"],
       ["Nursing Home", 12, "Nursing Home"],

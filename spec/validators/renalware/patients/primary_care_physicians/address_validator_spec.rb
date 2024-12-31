@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Patients::PrimaryCarePhysicians
   describe AddressValidator do
     describe "validate" do

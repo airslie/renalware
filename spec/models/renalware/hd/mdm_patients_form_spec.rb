@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD
   describe MDMPatientsForm do
     describe "#options" do

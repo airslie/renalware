@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Before do
   Renalware.config.nhs_client_id = "client_id"
   Renalware.config.nhs_client_secret = "client_secret"

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Patients
   describe PracticeMembership do
     it :aggregate_failures do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe System::Dashboard do
     it { is_expected.to belong_to(:user) }

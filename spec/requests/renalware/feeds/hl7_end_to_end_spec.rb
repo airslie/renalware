@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "HL7 message handling end to end" do
   before do
     allow(Renalware.config.hl7_patient_locator_strategy)

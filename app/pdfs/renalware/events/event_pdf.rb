@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Events
     # We have used wicked_pdf (which shells out to wkhtmltopdf) up to know, but using prawn here

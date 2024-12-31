@@ -22,10 +22,10 @@ class MoveObjectsToRenalwareSchema < ActiveRecord::Migration[5.1]
   ]
 
   def db_objects_of_type(type:, in_schema:)
-    results = execute "SELECT table_name FROM information_schema.tables "\
+    results = execute "SELECT table_name FROM information_schema.tables " \
                       "WHERE table_schema='#{in_schema}' AND table_type='#{type}' " \
                       "and table_name not in ('schema_migrations','ar_internal_metadata')"
-    results.map{ |obj| obj["table_name"] }
+    results.map { |obj| obj["table_name"] }
   end
 
   def views(in_schema:)
@@ -36,7 +36,7 @@ class MoveObjectsToRenalwareSchema < ActiveRecord::Migration[5.1]
     results = execute(
       "SELECT oid::regclass::text as table_name FROM pg_class WHERE  relkind = 'm';"
     )
-    results.map{ |obj| obj["table_name"] }
+    results.map { |obj| obj["table_name"] }
   end
 
   def tables(in_schema:)
@@ -46,20 +46,20 @@ class MoveObjectsToRenalwareSchema < ActiveRecord::Migration[5.1]
   def up
     execute "CREATE SCHEMA IF NOT EXISTS renalware"
 
-    tables(in_schema: "public").each{ |table| execute("ALTER TABLE #{table} SET SCHEMA renalware") }
+    tables(in_schema: "public").each { |table| execute("ALTER TABLE #{table} SET SCHEMA renalware") }
     # Removing views(in_schema.. call as it tried to move pg_stat_statements* views and this
     # causes an error on Heroku
     # views(in_schema: "public").each{ |view| execute("ALTER VIEW #{view} SET SCHEMA renalware") }
-    materialized_views(in_schema: "public").each{ |view| execute("ALTER MATERIALIZED VIEW #{view} SET SCHEMA renalware") }
-    FUNCTIONS.each{ |fn| execute "ALTER FUNCTION #{fn} SET SCHEMA renalware" }
+    materialized_views(in_schema: "public").each { |view| execute("ALTER MATERIALIZED VIEW #{view} SET SCHEMA renalware") }
+    FUNCTIONS.each { |fn| execute "ALTER FUNCTION #{fn} SET SCHEMA renalware" }
     # This causes an error on Heroku
     # execute "ALTER EXTENSION \"uuid-ossp\" SET SCHEMA public;"
   end
 
   def down
-    tables(in_schema: "renalware").each{ |table| execute("ALTER TABLE #{table} SET SCHEMA public") }
-    views(in_schema: "renalware").each{ |view| execute("ALTER VIEW #{view} SET SCHEMA public") }
-    materialized_views(in_schema: "renalware").each{ |view| execute("ALTER MATERIALIZED VIEW #{view} SET SCHEMA public") }
-    FUNCTIONS.each{ |fn| execute "ALTER FUNCTION #{fn} SET SCHEMA public" }
+    tables(in_schema: "renalware").each { |table| execute("ALTER TABLE #{table} SET SCHEMA public") }
+    views(in_schema: "renalware").each { |view| execute("ALTER VIEW #{view} SET SCHEMA public") }
+    materialized_views(in_schema: "renalware").each { |view| execute("ALTER MATERIALIZED VIEW #{view} SET SCHEMA public") }
+    FUNCTIONS.each { |fn| execute "ALTER FUNCTION #{fn} SET SCHEMA public" }
   end
 end

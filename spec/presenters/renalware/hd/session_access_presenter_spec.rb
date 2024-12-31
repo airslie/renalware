@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::HD::SessionAccessPresenter do
   subject(:presenter) { described_class }
 

@@ -6,7 +6,7 @@ class AddDaysTextToHDScheduleDefinitions < ActiveRecord::Migration[5.1]
 
       reversible do |direction|
         direction.up do
-          sql = <<-SQL
+          sql = <<-SQL.squish
           update hd_schedule_definitions set days_text = 'Mon Wed Fri' where days::text = '{1,3,5}';
           update hd_schedule_definitions set days_text = 'Tue Thu Sat' where days::text = '{2,4,6}';
           SQL
@@ -17,7 +17,7 @@ class AddDaysTextToHDScheduleDefinitions < ActiveRecord::Migration[5.1]
       add_column :hd_diurnal_period_codes, :sort_order, :integer, default: 0, null: false
       reversible do |direction|
         direction.up {
-          connection.execute(<<-SQL)
+          connection.execute(<<-SQL.squish)
             update hd_diurnal_period_codes set sort_order = 1 where code = 'am';
             update hd_diurnal_period_codes set sort_order = 2 where code = 'pm';
             update hd_diurnal_period_codes set sort_order = 3 where code = 'eve';

@@ -8,10 +8,9 @@ class CreatePDTrainingTypes < ActiveRecord::Migration[5.0]
     end
 
     add_reference :pd_training_sessions, :training_type,
-    references: :pd_training_types, null: false, index: true
+                  references: :pd_training_types, null: false, index: true
 
     add_foreign_key "pd_training_sessions", "pd_training_types",
-    column: "training_type_id", name: "pd_training_sessions_type_id_fk"
-
+                    column: "training_type_id", name: "pd_training_sessions_type_id_fk"
   end
 end

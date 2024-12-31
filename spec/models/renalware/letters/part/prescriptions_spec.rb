@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   describe Part::Prescriptions do
     let(:instance) { described_class.new(letter: Letter.new(patient: Patient.new)) }

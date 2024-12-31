@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   class TradeFamily < ApplicationRecord
     has_many :drug_classifications, class_name: "TradeFamilyClassification",

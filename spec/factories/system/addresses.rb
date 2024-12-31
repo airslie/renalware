@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :address, class: "Renalware::Address" do
     street_1 { "123 Legoland" }

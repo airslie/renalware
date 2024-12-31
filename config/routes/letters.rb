@@ -1,13 +1,11 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   namespace :letters do
-    resources :contacts, only: [:index, :new, :create, :edit, :update]
+    resources :contacts, only: %i(index new create edit update)
     resources :letters do
       resource :pending_review, controller: "pending_review_letters", only: :create
       resource :rejected, controller: "rejected_letters", only: :create
       resource :approved, controller: "approved_letters", only: :create
-      resource :completed, controller: "completed_letters", only: [:new, :create]
+      resource :completed, controller: "completed_letters", only: %i(new create)
       resource :formatted, controller: "formatted_letters", only: :show
       resource :printable,
                controller: "printable_letters",
@@ -25,14 +23,14 @@ namespace :letters do
   resources :topics do
     post :sort, on: :collection
   end
-  resources :mailshots, only: [:create, :new, :index], controller: "mailshots/mailshots"
+  resources :mailshots, only: %i(create new index), controller: "mailshots/mailshots"
   namespace :mailshots do
     resources :patient_previews, only: :index
   end
 
-  resources :batches, only: [:create, :index, :show] do
+  resources :batches, only: %i(create index show) do
     get :status, constraints: { format: :json }, defaults: { format: :json }
-    resources :completions, only: [:new, :create], controller: "completed_batches"
+    resources :completions, only: %i(new create), controller: "completed_batches"
   end
   resource :pdf_letter_cache, only: [:destroy], controller: "pdf_letter_cache"
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :cache do
   namespace :pdf do
     desc "Clean the PDF letter cache ie remove expired content." \

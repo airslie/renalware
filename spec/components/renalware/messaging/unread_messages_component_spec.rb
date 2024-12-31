@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Messaging::UnreadMessagesComponent, type: :component do
   def send_message_to(user)
     form = Renalware::Messaging::Internal::MessageForm.new(

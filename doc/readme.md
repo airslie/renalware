@@ -5,7 +5,6 @@
 - [Asset compilation](./asset_compilation.md)
 - [ODS](./ods.md)
 - [UKRDC](./ukrdc.md)
-- [Webpacker](./webpacker.md)
 
 ### Adding diagrams to documentation
 

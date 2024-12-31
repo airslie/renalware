@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     module Sessions
@@ -28,11 +26,7 @@ module Renalware
           end
 
           def within_period(starting_on, ending_on)
-            where(
-              "started_at >= ? and started_at <= ?",
-              starting_on.beginning_of_day,
-              ending_on.end_of_day
-            )
+            where(started_at: starting_on.beginning_of_day..ending_on.end_of_day)
           end
 
           def not_ongoing

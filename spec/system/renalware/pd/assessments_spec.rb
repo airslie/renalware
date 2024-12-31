@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe "PD Assessment management", js: true do
+  describe "PD Assessment management", :js do
     it "Add a PD Assessment" do
       patient = create(:pd_patient)
       login_as_clinical

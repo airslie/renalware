@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module LowClearance
     class ModalityDescription < Modalities::Description

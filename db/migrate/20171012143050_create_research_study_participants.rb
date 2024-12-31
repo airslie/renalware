@@ -3,13 +3,13 @@ class CreateResearchStudyParticipants < ActiveRecord::Migration[5.1]
     within_renalware_schema do
       create_table :research_study_participants do |t|
         t.references :participant,
-                    null: false,
-                    foreign_key: { to_table: :patients },
-                    index: true
+                     null: false,
+                     foreign_key: { to_table: :patients },
+                     index: true
         t.references :study,
-                    null: false,
-                    foreign_key: { to_table: :research_studies },
-                    index: true
+                     null: false,
+                     foreign_key: { to_table: :research_studies },
+                     index: true
         t.date :joined_on, null: false
         t.date :left_on
         t.datetime :deleted_at

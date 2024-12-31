@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "renalware/letters/parts/_clinical_observations" do
     helper(Renalware::LettersHelper)

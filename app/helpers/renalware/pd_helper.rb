@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PDHelper
     def pd_summary_breadcrumb(patient)

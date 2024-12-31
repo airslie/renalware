@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 module Renalware
   module Renal
     class AKIAlertQuery
-      DEFAULT_SORT = "aki_date desc"
+      DEFAULT_SORT = "aki_date desc".freeze
       attr_reader :query
 
       def self.call(query)

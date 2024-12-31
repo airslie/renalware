@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :internal_message, class: "Renalware::Messaging::Internal::Message" do
     body { "The body" }

@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe "PD Regime bag duplication", js: true do
+  describe "PD Regime bag duplication", :js do
     include PatientsSpecHelper
 
     it "duplicate an existing bag" do

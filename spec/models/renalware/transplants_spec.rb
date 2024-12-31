@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 module Renalware
   module Transplants
-    describe ".current_transplant_status_for_patient" do
+    describe ".current_transplant_status_for_patient" do # rubocop:disable RSpec/DescribeClass
       let(:transplant_registration) { nil }
       let(:patient) { instance_double(Patient) }
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # When this job executes it loops through all system_view_meta_data rows and

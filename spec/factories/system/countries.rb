@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :country, class: "Renalware::System::Country" do
     factory :united_kingdom do

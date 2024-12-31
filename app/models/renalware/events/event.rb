@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Events
     class Event < ApplicationRecord
@@ -52,7 +50,7 @@ module Renalware
       def to_partial_path
         partial_for "inputs"
       end
-      alias :to_input_partial_path :to_partial_path
+      alias to_input_partial_path to_partial_path
 
       def to_alert_partial_path
         partial_for "alert"

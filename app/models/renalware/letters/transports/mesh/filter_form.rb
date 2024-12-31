@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters::Transports::Mesh
     # Form object to help us build and parse the appropriate filters for the

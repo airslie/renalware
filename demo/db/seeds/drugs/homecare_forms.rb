@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Register homecare suppliers for delivery" do
+  Rails.benchmark "Register homecare suppliers for delivery" do
     Drugs::HomecareForm.create!(
       drug_type: Drugs::Type.find_by(code: "esa"),
       supplier: Drugs::Supplier.find_by(name: "Generic"),

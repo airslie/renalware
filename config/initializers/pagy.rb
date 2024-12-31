@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # See here for all options: https://github.com/ddnexus/pagy/blob/master/lib/config/pagy.rb
 #

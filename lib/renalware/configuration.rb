@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for configuring the Renalware::Core engine
 # http://stackoverflow.com/questions/24104246/how-to-use-activesupportconfigurable-with-rails-engine
 #
@@ -21,6 +19,18 @@ module Renalware
 
     # Force dotenv to load the .env file at this stage so we can read in the config defaults
     Dotenv::Rails.load
+
+    # Links to eg Power BI or Qlick Sense that you might like to display on the login page
+    # and on the user's Dashboard when you log in.
+    # Needs to be a 2d array [[title,url],[title,url]] loaded from an ENV var in the format
+    #  title^url|title^url
+    # Or the ENV var can be "" if there are no links to display
+    config_accessor(:external_links) do
+      links = ENV.fetch("EXTERNAL_LINKS", "")
+      pairs = links.split("|").map { |pair| pair.split("^") }
+      # Return [] unless its a 2d array each element has a size of 2 (title and url)
+      pairs.map(&:size).uniq == [2] ? pairs : []
+    end
 
     config_accessor(:disable_dmd_synchroniser_job) { ENV["DISABLE_DMD_SYNCHRONISER_JOB"].to_i > 0 }
 
@@ -289,6 +299,7 @@ module Renalware
     # Note that the standard HL7 PID admin sex values are not adhered to here. For reference
     # they are:
     # F Female, M Male, O Other, U Unknown, A Ambiguous, N Not applicable
+    # Some hospitals use the numeric NHS Person Gender code.
     # Note
     # - NS = Not Stated
     # - NK = Not Known
@@ -302,7 +313,11 @@ module Renalware
         "INDETERMINATE" => "NK",
         "AMBIGUOUS" => "NS",
         "NOT APPLICABLE" => "NS",
-        "BOTH" => "NS"
+        "BOTH" => "NS",
+        "0" => "NK",
+        "1" => "M",
+        "2" => "F",
+        "9" => "NS"
       }.freeze
     end
     config_accessor(:max_file_upload_size) { ENV.fetch("MAX_FILE_UPLOAD_SIZE", "10_000_000").to_i }
@@ -372,7 +387,7 @@ module Renalware
     config_accessor(:mail_oauth_email_address) { ENV.fetch("MAIL_OAUTH_EMAIL_ADDRESS", nil) }
 
     def restrict_patient_visibility_by_user_site?
-      [:by_site, :by_site_and_research_study].include?(patient_visibility_restrictions)
+      %i(by_site by_site_and_research_study).include?(patient_visibility_restrictions)
     end
 
     def restrict_patient_visibility_by_research_study?

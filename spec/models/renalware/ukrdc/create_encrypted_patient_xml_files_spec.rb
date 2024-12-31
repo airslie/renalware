@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # describe UKRDC::CreateEncryptedPatientXmlFiles do
   #   let(:patient) do

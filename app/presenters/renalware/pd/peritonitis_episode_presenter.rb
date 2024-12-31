@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PD
     # Can't really replace DumbDelegator here with delegate_missing_to because, since this

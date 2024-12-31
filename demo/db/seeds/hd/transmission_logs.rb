@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding HD Providers" do
+  Rails.benchmark "Adding HD Providers" do
     HD::TransmissionLog.create!(
       direction: :in,
       format: :xml,

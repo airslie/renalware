@@ -1,5 +1,4 @@
 # TODO
-# frozen_string_literal: true
 
 describe "Patient Group Directions (PGD)" do
   it "listing PGDs" do

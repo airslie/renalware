@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Viewing the system config" do
   it do
     login_as_super_admin

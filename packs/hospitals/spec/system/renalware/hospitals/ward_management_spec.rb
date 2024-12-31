@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Ward Management" do
   it "displays a list of wards for a hospital" do
     login_as_clinical

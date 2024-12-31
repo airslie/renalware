@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Transplants::DonorDashboardPresenter do
   subject { described_class.new(instance_double(Renalware::Patient)) }
 

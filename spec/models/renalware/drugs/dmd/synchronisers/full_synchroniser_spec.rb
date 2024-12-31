@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs::DMD
   describe Synchronisers::FullSynchroniser do
     describe "#call" do

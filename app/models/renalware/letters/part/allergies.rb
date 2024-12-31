@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Decorates an a Clinical::Patient so we can access patient.allergies in the view
 module Renalware
   module Letters

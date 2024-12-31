@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Renal Profile and Comorbidities for Roger RABBIT" do
+  Rails.benchmark "Adding Renal Profile and Comorbidities for Roger RABBIT" do
     Renal::Profile.create!(
       patient_id: 1,
       esrf_on: 17.weeks.ago,

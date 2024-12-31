@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :research_study, class: "Renalware::Research::Study" do
     code { SecureRandom.hex(8) }

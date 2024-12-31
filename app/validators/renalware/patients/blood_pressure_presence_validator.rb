@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This validator is used somewhat unconventionally from the parent object (e.g. a
 # the HD::SessionDocument::Dialysis class) to allow us to conditionally validate
 # the presence of the BloodPressure fields only if a condition external to the BloodPressure

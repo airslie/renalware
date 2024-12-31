@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   class Address < ApplicationRecord
     belongs_to :country, class_name: "System::Country", optional: true

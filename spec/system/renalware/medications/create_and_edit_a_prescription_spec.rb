@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Prescriptions - create / edit / terminate", js: true do
+describe "Prescriptions - create / edit / terminate", :js do
   include DrugsSpecHelper
 
   let(:user) { create(:user, :clinical, additional_roles: :hd_prescriber) }
@@ -278,7 +276,7 @@ describe "Prescriptions - create / edit / terminate", js: true do
   end
 
   context "when choosing 'Other' as frequency" do
-    it "allows to specify free text for Frequency", js: true do
+    it "allows to specify free text for Frequency", :js do
       visit new_patient_prescription_path(
         patient,
         treatable_type: patient.class.to_s,

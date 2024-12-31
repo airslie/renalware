@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 shared_examples_for "an Accountable model" do
   it { is_expected.to respond_to(:by=) }
   it { is_expected.to respond_to(:save_by!) }

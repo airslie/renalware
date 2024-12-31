@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Patient Transplant MDM" do
   let(:patient) { create(:transplant_patient, family_name: "Rabbit", local_patient_id: "KCH12345") }
 

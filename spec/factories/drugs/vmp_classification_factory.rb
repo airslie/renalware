@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :drug_vmp_classification,
           class: "Renalware::Drugs::VMPClassification" do

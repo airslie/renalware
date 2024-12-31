@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Assigning HD Profiles to Random Patients" do
+  Rails.benchmark "Assigning HD Profiles to Random Patients" do
     kch_doc = User.find_by!(username: "kchdoc")
     kent_doc = User.find_by!(username: "kentdoc")
     modal_weeks = (30..50).to_a

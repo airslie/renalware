@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Refreshing materialized view" do
   let(:user) { create(:user, :clinical) }
 

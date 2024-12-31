@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Letters::LetterParamsProcessor do
     describe "#assign_description_from_topic_if_empty" do

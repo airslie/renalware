@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats::FHIR
@@ -14,6 +12,7 @@ module Renalware
         let(:patient) { build_stubbed(:patient) }
         let(:letters_patient) { patient.becomes(Letters::Patient) }
         let(:author) { build_stubbed(:user, uuid: "abc") }
+        let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
         let(:letter) {
           build_stubbed(
             :approved_letter,
@@ -21,6 +20,7 @@ module Renalware
             patient: letters_patient,
             updated_at: Time.zone.parse("2022-01-01 01:01:01"),
             event_id: 99,
+            topic: topic,
             author: author,
             archive: build_stubbed(:letter_archive, uuid: binary_uuid, pdf_content: "123")
           ).tap do |let|

@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding HD Slot Request Locations" do
+  Rails.benchmark "Adding HD Slot Request Locations" do
     # These are based on what's in use at BLT
     HD::SlotRequests::Location.find_or_create_by!(name: "9E")
     HD::SlotRequests::Location.find_or_create_by!(name: "9F")

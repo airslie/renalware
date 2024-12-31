@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding System Nag Definitions" do
+  Rails.benchmark "Adding System Nag Definitions" do
     System::NagDefinition.create!(
       scope: :patient,
       description: "Nag if no clinical frailty score recorded in the last 1 year",

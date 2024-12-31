@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing Cannulation Types" do
   let(:cannulation_type) { create(:hd_cannulation_type) }
 

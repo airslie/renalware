@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   module DMD
     describe APISynchronisers::UnitOfMeasureSynchroniser do

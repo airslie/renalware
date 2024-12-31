@@ -1,16 +1,14 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     class HL7TestMessagesController < BaseController
       def new
-        authorize [:renalware, :admin, :devops], :show?
+        authorize %i(renalware admin devops), :show?
         test_messages = HL7TestMessage.all
         render locals: { form: HL7TestForm.new, test_messages: test_messages }
       end
 
       def create # rubocop:disable Metrics/MethodLength
-        authorize [:renalware, :admin, :devops], :create?
+        authorize %i(renalware admin devops), :create?
         body = replace_placeholders_in_hl7_message(form_params[:body])
         error = nil
 

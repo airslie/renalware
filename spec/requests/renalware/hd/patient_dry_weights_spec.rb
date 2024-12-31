@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Patient's Dry Weights" do
   let(:patient) { create(:hd_patient) }
 

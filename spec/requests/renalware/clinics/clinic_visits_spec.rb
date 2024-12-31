@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Clinic Visits Management" do
   let(:user) { @current_user }
   let(:clinic) { create(:clinic) }

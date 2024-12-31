@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # We mix this module into any database-returned jsonb hash of observations

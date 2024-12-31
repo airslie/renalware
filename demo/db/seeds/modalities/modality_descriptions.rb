@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Demo Modality Descriptions" do
+  Rails.benchmark "Adding Demo Modality Descriptions" do
     [
       %w(LOST lost),
       %w(Nephrology nephrology),

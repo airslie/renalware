@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Events
   describe Swab do
     describe "#document" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   describe DMDMigration::RouteMigrator do
     let(:previous_route) {

@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 
 describe "Managing PD PET Adequacy Results", type: :request do

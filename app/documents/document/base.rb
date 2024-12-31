@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Document
   module Base
     extend ActiveSupport::Concern

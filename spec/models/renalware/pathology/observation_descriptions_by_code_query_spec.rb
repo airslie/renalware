@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Pathology
   describe ObservationDescriptionsByCodeQuery do
     subject { described_class.new(relation: relation, codes: codes).call }

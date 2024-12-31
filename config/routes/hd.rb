@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   namespace :hd do
     resource :mdm, only: :show, controller: "mdm"
@@ -7,13 +5,13 @@ resources :patients, only: [] do
     resource :protocol,
              only: :show,
              defaults: { format: :pdf }
-    resource :preference_set, only: [:edit, :update]
+    resource :preference_set, only: %i(edit update)
     resource :current_profile,
-             only: [:show, :edit, :update],
+             only: %i(show edit update),
              path: "/profiles/current",
              controller: "current_profile"
     resources :historical_profiles,
-              only: [:index, :show],
+              only: %i(index show),
               path: "/profiles/historical"
     resources :sessions
     resources :prescription_administrations, only: :index
@@ -33,10 +31,10 @@ namespace :hd do
               controller: "prescription_administrations"
   end
   resources :prescription_administration, only: [] do
-    resource :witness, only: [:edit, :update]
+    resource :witness, only: %i(edit update)
   end
   resources :prescription_administration_authorisations, only: :create
-  resources :transmission_logs, only: [:show, :index]
+  resources :transmission_logs, only: %i(show index)
   resources :slot_requests do
     collection do
       get :historical
@@ -59,7 +57,7 @@ namespace :hd do
   end
   namespace :scheduling do
     resources :units, only: [] do
-      resources :diaries, only: [:index, :show]
+      resources :diaries, only: %i(index show)
       get "diaries/:year/:week_number/edit", to: "diaries#edit", as: :edit_diary
     end
     resources :diaries, only: [] do
@@ -70,7 +68,7 @@ namespace :hd do
     end
   end
   namespace :session_forms do
-    resources :batches, only: [:create, :show] do
+    resources :batches, only: %i(create show) do
       get :status, constraints: { format: :json }, defaults: { format: :json }
     end
   end

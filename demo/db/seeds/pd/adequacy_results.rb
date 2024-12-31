@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding PD Adequacy test results" do
+  Rails.benchmark "Adding PD Adequacy test results" do
     creator = User.last
     file_path = File.join(File.dirname(__FILE__), "adequacy_results.csv")
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A generic patient search that returns an AR relation that can used directly or merged into other
 # queries if required in order to use the extensive patient search criteria added by the
 # `identity_match` ransacker. See also a corresponding Patients::SearchForm form object and its

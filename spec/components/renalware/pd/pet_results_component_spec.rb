@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::PD::PETResultsComponent, type: :component do
   context "when there are no results" do
     it "renders nothing" do

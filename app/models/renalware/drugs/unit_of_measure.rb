@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   class UnitOfMeasure < ApplicationRecord
     has_many :vmp_classifications, class_name: "VMPClassification",

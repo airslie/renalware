@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe HD::ModalityDescription do
     it { is_expected.to respond_to(:to_sym) }

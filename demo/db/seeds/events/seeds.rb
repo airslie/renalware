@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "types"
 require_relative "subtypes"
 require_relative "rabbit_simple_events"

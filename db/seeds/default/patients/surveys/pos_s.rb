@@ -1,9 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  extend SeedsHelper
-
-  log "Adding POS-S Renal Survey" do
+  Rails.benchmark "Adding POS-S Renal Survey" do
     survey = Surveys::Survey.create(
       name: "PROM",
       code: "prom",

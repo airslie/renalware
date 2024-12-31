@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Problems
     class ProblemsController < BaseController
@@ -8,9 +6,9 @@ module Renalware
 
       skip_verify_policy_scoped only: :search
 
-      PRB_PARAMS_DAY = "date(3i)"
-      PRB_PARAMS_MONTH = "date(2i)"
-      PRB_PARAMS_YEAR = "date(1i)"
+      PRB_PARAMS_DAY = "date(3i)".freeze
+      PRB_PARAMS_MONTH = "date(2i)".freeze
+      PRB_PARAMS_YEAR = "date(1i)".freeze
 
       def index
         problems = patient.problems.with_notes

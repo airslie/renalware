@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Mix this module into a Patient Query object for example in order to include the patient's
 # current key pathology and enable sorting on pathology date and value fields using
 # ransack's sort_link helper in the view.

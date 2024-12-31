@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^Patty has the following prescriptions:$/) do |table|
   table.hashes.each_with_index do |row, index|
     dose_amount, unit_of_measure_name = row[:dose].split

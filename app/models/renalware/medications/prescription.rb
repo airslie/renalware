@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     class Prescription < ApplicationRecord
@@ -11,7 +9,7 @@ module Renalware
 
       has_paper_trail(
         versions: { class_name: "Renalware::Medications::PrescriptionVersion" },
-        on: [:create, :update]
+        on: %i(create update)
       )
 
       belongs_to :patient, touch: true
@@ -114,9 +112,11 @@ module Renalware
               "medication_prescriptions.prescribed_on <= ?", from, to)
       end
 
+      # rubocop:disable Rails/WhereRange
       def self.terminated_between(from:, to:)
         where("terminated_on >= ? and terminated_on <= ?", from, to)
       end
+      # rubocop:enable Rails/WhereRange
 
       # @section attributes
       #

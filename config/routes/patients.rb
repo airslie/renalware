@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :patients do
   get "mdms/:scope", to: "mdms#show", as: :mdms
   resources :primary_care_physicians
@@ -35,14 +33,14 @@ resources :patients, except: [:destroy], controller: "patients/patients" do
       as: :anaemia_perspective
 
   resource :clinical_summary, only: :show, controller: "patients/clinical_summaries"
-  resource :death, only: [:edit, :update], controller: "patients/deaths"
+  resource :death, only: %i(edit update), controller: "patients/deaths"
   resource :primary_care_physician,
            controller: "patients/primary_care_physician",
-           only: [:edit, :update, :destroy]
+           only: %i(edit update destroy)
 
   resources :bookmarks, only: :create, controller: "patients/bookmarks"
-  resources :alerts, only: [:new, :create, :destroy], controller: "patients/alerts"
-  resource :worry, only: [:edit, :update, :create, :destroy], controller: "patients/worries"
+  resources :alerts, only: %i(new create destroy), controller: "patients/alerts"
+  resource :worry, only: %i(edit update create destroy), controller: "patients/worries"
   resources :attachments, controller: "patients/attachments"
 
   namespace :surveys do

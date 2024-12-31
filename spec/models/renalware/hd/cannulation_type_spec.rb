@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD
   describe CannulationType do
     it_behaves_like "a Paranoid model"

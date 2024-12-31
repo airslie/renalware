@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Don't rely on auto-loading in an initializer
 require_relative "../../app/models/concerns/renalware/broadcasting"
 

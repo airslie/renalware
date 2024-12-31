@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # require "renalware/automatic_age_calculator"
 
 module Renalware

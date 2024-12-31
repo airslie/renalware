@@ -6,7 +6,7 @@ class AddMaxMinWeghtsToDryWeights < ActiveRecord::Migration[6.0]
         :minimum_weight,
         :float,
         null: true,
-        comment: "Set by the clinicial, if the patient's weight drops below this value then "\
+        comment: "Set by the clinicial, if the patient's weight drops below this value then " \
                  "the clinican may decide change drugs etc"
       )
       add_column(
@@ -14,7 +14,7 @@ class AddMaxMinWeghtsToDryWeights < ActiveRecord::Migration[6.0]
         :maximum_weight,
         :float,
         null: true,
-        comment: "Set by the clinicial, if the patient's weight rises above this value then "\
+        comment: "Set by the clinicial, if the patient's weight rises above this value then " \
                  "the clinican may decide change drugs etc"
       )
     end

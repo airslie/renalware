@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   procedure1 = procedure2 = nil
   users = User.limit(3).to_a
@@ -9,7 +7,7 @@ module Renalware
     sit amet, consectetur adipiscing elit."
   TEXT
 
-  log "Assign Access procedure to Francois RABBIT" do
+  Rails.benchmark "Assign Access procedure to Francois RABBIT" do
     patient.procedures.destroy_all
 
     procedure1 = patient.procedures.create!(
@@ -33,7 +31,7 @@ module Renalware
     )
   end
 
-  log "Assign Access profiles to Francois RABBIT" do
+  Rails.benchmark "Assign Access profiles to Francois RABBIT" do
     patient = Accesses::Patient.find_by(local_patient_id: "Z100003")
     patient.profiles.destroy_all
     users = User.limit(3).to_a
@@ -70,7 +68,7 @@ module Renalware
     )
   end
 
-  log "Assign Access assessments to Francois RABBIT" do
+  Rails.benchmark "Assign Access assessments to Francois RABBIT" do
     patient = Accesses::Patient.find_by(local_patient_id: "Z100003")
     patient.assessments.destroy_all
     patient.assessments.create!(

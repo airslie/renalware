@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # 'patient_added' event...
 #   -> Renalware::Feeds::PatientListener receives the event
 #     -> ReplayHistoricalHL7PathologyMessagesJob.perform_later(patient) # async

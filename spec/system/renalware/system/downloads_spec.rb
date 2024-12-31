@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing downloads - files uploaded by super admins which can be accessed by any user" do
   it "creating a new download" do
     login_as_super_admin

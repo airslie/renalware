@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # When executed this job updates rolling statistics for a patient's
 # last past 12 HD sessions.
 # Because this job will be triggered again the next time an HD Sessions is

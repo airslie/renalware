@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Renal
     # Encapsulates the UI display of a patient's ESRF date for example in the

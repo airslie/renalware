@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Clinics
   describe WeightValuePresenter do
     describe "#to_s" do

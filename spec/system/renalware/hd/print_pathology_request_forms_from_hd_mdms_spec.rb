@@ -1,7 +1,4 @@
-# frozen_string_literal: true
-
-describe "Batch printing Pathology request forms (for monthly bloods) from the HD MDM list",
-         js: true do
+describe "Batch printing Pathology request forms (for monthly bloods) from the HD MDM list", :js do
   include PatientsSpecHelper
 
   let(:patient) { create(:hd_patient) }

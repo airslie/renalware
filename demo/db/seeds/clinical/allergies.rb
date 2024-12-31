@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Allergies for Roger RABBIT" do
+  Rails.benchmark "Adding Allergies for Roger RABBIT" do
     patient = Patient.find_by(family_name: "RABBIT", given_name: "Roger")
     patient = Clinical.cast_patient(patient)
     user = Renalware::User.last

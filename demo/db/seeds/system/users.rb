@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Demo Site Users\n" do
+  Rails.benchmark "Adding Demo Site Users" do
     sites = %w(Barts KCH Kent Lister)
     host_hospital_centre_id = Hospitals::Centre.where(host_site: true).order(:name).pluck(:id).first
 
@@ -23,8 +21,6 @@ module Renalware
         u.hospital_centre_id = host_hospital_centre_id
       end
 
-      log "#{username} created", type: :sub
-
       # admin
       username = "#{site_code}admin"
       Renalware::User.find_or_create_by!(username: username) do |u|
@@ -41,8 +37,6 @@ module Renalware
         u.professional_position = Faker::Job.position
         u.hospital_centre_id = host_hospital_centre_id
       end
-
-      log "#{username} created", type: :sub
 
       # clinician
       username = "#{site_code}doc"
@@ -62,10 +56,9 @@ module Renalware
         u.hospital_centre_id = host_hospital_centre_id
       end
 
-      log "#{username} created", type: :sub
-
       # nurse NB same role as doc
       username = "#{site_code}nurse"
+
       Renalware::User.find_or_create_by!(username: username) do |u|
         u.given_name = site
         u.family_name = "Nurse"
@@ -77,8 +70,6 @@ module Renalware
         u.professional_position = Faker::Job.position
         u.hospital_centre_id = host_hospital_centre_id
       end
-
-      log "#{username} created", type: :sub
 
       # guest i.e. readonly
       username = "#{site_code}guest"
@@ -93,9 +84,8 @@ module Renalware
         u.professional_position = [Faker::Job.seniority, Faker::Job.position].compact.join(" ")
         u.hospital_centre_id = host_hospital_centre_id
       end
-
-      log "#{username} created", type: :sub
     end
+
     # add rwdev superadmin
     username = "rwdev"
     Renalware::User.find_or_create_by!(username: username) do |u|

@@ -1,9 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  extend SeedsHelper
-
-  log "Adding EQ5D survey responses" do
+  Rails.benchmark "Adding EQ5D survey responses" do
     patient = Patient.find_by!(family_name: "RABBIT", given_name: "Roger")
     survey = Surveys::Survey.find_by!(code: "eq5d")
     (1..4).each do |month|
@@ -17,7 +13,7 @@ module Renalware
     end
   end
 
-  log "Adding POS-S survey responses" do
+  Rails.benchmark "Adding POS-S survey responses" do
     patient = Patient.find_by!(family_name: "RABBIT", given_name: "Roger")
     survey = Surveys::Survey.find_by!(code: "prom")
     (1..4).each do |month|

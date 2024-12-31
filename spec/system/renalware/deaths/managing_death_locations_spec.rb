@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Death location management" do
   it "enables me to list locations" do
     login_as_super_admin

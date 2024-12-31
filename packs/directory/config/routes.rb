@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 Renalware::Directory::Engine.routes.draw do
-  resources :people, except: [:delete] do
+  resources :people, except: [:destroy] do
     collection do
       get :search
     end

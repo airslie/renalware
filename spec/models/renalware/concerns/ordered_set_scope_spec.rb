@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe "Ordered Set scope" do
+  describe "Ordered Set scope" do # rubocop:disable RSpec/DescribeClass
     before do
       @klass = Class.new(ApplicationRecord) do
         self.table_name = "quxes"

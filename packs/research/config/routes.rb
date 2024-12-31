@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Renalware::Research::Engine.routes.draw do
   resources :studies do
     resources :participations, controller: :participations

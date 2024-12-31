@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing the patient worryboard" do
   let(:user) { @current_user }
   let(:patient) { create(:patient, by: user) }

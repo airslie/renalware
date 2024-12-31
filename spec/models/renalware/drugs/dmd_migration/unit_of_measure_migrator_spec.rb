@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs::DMDMigration
   describe UnitOfMeasureMigrator do
     let(:unit_of_measure) { create(:drug_unit_of_measure, name: "capsule") }

@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding HD Stations" do
+  Rails.benchmark "Adding HD Stations" do
     class CreateStation
       attr_reader :units, :user
 

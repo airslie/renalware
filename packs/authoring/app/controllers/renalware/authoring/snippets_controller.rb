@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Authoring
     class SnippetsController < BaseController
@@ -75,7 +73,7 @@ module Renalware
       def author
         @author ||= begin
           author = params.fetch(:author, :me).to_sym
-          author = :me unless [:me, :anyone].include?(author)
+          author = :me unless %i(me anyone).include?(author)
           author
         end
       end
@@ -97,7 +95,7 @@ module Renalware
       end
 
       def snippet_params
-        params.require(:snippet).permit([:title, :body])
+        params.require(:snippet).permit(%i(title body))
       end
     end
   end

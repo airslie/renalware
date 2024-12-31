@@ -11,6 +11,5 @@ class CreatePDTrainingSessions < ActiveRecord::Migration[5.0]
 
     add_foreign_key :pd_training_sessions, :users, column: :created_by_id
     add_foreign_key :pd_training_sessions, :users, column: :updated_by_id
-
   end
 end

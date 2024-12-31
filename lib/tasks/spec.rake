@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # These tasks run the turnip (migrated from cucumber) features.
 #

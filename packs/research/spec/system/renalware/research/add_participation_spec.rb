@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 describe "Add a patient to a study (creating a participation)" do
   include AjaxHelpers
 
-  context "when the user is an investigator in the study", js: true do
+  context "when the user is an investigator in the study", :js do
     it "they can add patient to a research study" do
       user = login_as_clinical
       patient = create(:patient, family_name: "XXX", given_name: "Jon", by: user)

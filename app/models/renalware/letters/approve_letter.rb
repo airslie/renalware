@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "after_commit_everywhere"
 
 module Renalware
@@ -10,7 +8,7 @@ module Renalware
       pattr_initialize :letter
 
       class << self
-        alias_method :build, :new
+        alias build new
       end
 
       def call(by:)

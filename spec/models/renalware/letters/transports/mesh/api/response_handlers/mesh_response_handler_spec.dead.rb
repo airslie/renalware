@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "../../support/message_spec_helper"
 
 module Renalware::Letters::Transports::Mesh

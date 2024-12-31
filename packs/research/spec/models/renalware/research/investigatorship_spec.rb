@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   RSpec.describe Research::Investigatorship do
     it_behaves_like "an Accountable model"

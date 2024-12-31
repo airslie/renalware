@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Pages
   class PageObject
     include Capybara::DSL

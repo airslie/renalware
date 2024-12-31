@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module AdminHelper
     def admin_unapproved_users_path

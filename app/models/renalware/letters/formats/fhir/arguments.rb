@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters::Formats::FHIR
     # 'Parameter Object' Passed to any class rendering part of a FHIR document message.
@@ -14,10 +12,20 @@ module Renalware
 
       delegate :letter, to: :transmission
       delegate :uuid, to: :transmission, prefix: true
-      delegate :patient, :event, :archive, to: :letter
+      delegate :patient, :event, :archive, :topic, to: :letter
+      delegate :snomed_document_type, to: :topic, allow_nil: true
+      delegate :code, :title,
+               to: :snomed_document_type,
+               prefix: :document_type_snomed, allow_nil: true
       delegate :pdf_content, to: :archive
       delegate :uuid, to: :letter, prefix: true
-      alias :clinic_visit :event
+      alias clinic_visit event
+
+      class MissingSnomedDocumentTypeError < StandardError
+        def message
+          "No Letters::SnomedDocumentType record found having `default_type: true`"
+        end
+      end
 
       WORKFLOWS = {
         gp_connect: {
@@ -76,8 +84,11 @@ module Renalware
       def document_version        = 1
       def confidentiality         = %w(N R).first
 
-      def document_type_snomed_code   = "371531000"
-      def document_type_snomed_title  = "Report of clinical encounter"
+      # # E.g. "371531000"
+      # def _code = snomed_document_type_code
+
+      # # E.g. 'Report of clinical encounter'
+      # def document_type_snomed_title = snomed_document_type_description
 
       def encounter_uuid
         @encounter_uuid ||= clinic_visit&.uuid || SecureRandom.uuid
@@ -121,6 +132,10 @@ module Renalware
         # The try here is because we have a lot of tests that don't stub letter.archive
         if letter.try(:archive).present? && pdf_content.blank?
           raise Letters::MissingPdfContentError
+        end
+
+        if document_type_snomed_code.blank? || document_type_snomed_title.blank?
+          raise MissingSnomedDocumentTypeError
         end
       end
     end

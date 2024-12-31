@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :cause_of_death, class: "Renalware::Deaths::Cause" do
     initialize_with {

@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 module Renalware
   module Clinical
-    describe "Change a patient's named consultant", js: true do
+    describe "Change a patient's named consultant", :js do
       context "when the patient has not named consultant" do
         it "adds a named consultant" do
           clinical_patient = create(:clinical_patient)

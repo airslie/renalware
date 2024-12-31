@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Configuration do
   subject(:config) { Renalware.config }
 

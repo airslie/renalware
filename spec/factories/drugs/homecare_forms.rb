@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :homecare_form, class: "Renalware::Drugs::HomecareForm" do
     supplier factory: %i(drug_supplier)

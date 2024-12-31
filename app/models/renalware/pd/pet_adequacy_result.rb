@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Captures data used for PET (Peritoneal Equilibration Test) and Adequacy.
 #

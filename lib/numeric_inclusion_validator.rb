@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Note I did want to put this validator in lib but I could not get it to load
 # if put in app/validators. Probably something dumb I was doing, so it could be good
 # to move this file later if you can get to the bottom of the issue.

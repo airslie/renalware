@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     class Event < DumbDelegator
       attr_reader :clinical
-      alias_method :clinical?, :clinical
+      alias clinical? clinical
 
       def initialize(event = nil, clinical: false)
         @clinical = clinical

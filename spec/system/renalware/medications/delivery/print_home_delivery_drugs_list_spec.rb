@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Print a patient's ESA drug list", js: true do
+describe "Print a patient's ESA drug list", :js do
   include AjaxHelpers
   let(:esa_drug_type) { create(:drug_type, :esa) }
   let(:immuno_drug_type) { create(:drug_type, :immunosuppressant) }

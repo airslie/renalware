@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   describe Event::Unknown do
     context "with a clinical letter" do

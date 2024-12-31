@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import debounce from "debounce"
 import SlimSelect from "slim-select"
 
 export default class extends Controller {

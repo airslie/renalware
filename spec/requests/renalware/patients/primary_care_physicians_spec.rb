@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Configuring Primary Care Physicians" do
     let(:primary_care_physician) { create(:primary_care_physician) }

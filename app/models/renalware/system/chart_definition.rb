@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # Backed by JSONB, stored in view_metadata.filters, a model to allow

@@ -1,7 +1,3 @@
-# frozen_string_literal: true
-
-require "benchmark"
-
 namespace :pd do
   desc "Applies the PD Calculations that are normally done when a user saves a regime. " \
        "Useful post-migration to populate calculated fields. " \

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Medications
   describe TerminateAllPatientPrescriptions do
     it "terminates all patient prescriptions but leaves untouched previously terminated ones" do

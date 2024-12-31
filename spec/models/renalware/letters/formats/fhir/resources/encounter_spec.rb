@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats::FHIR
@@ -13,7 +11,14 @@ module Renalware
             uuid: "222",
             datetime: DateTime.parse("2022-01-01 11:00:00")
           )
-          letter = instance_double(Letter, patient: patient, event: visit, author: author)
+          topic = build(:letter_topic, snomed_document_type: build(:snomed_document_type))
+          letter = instance_double(
+            Letter,
+            patient: patient,
+            event: visit,
+            author: author,
+            topic: topic
+          )
           Arguments.new(
             transmission: instance_double(Transports::Mesh::Transmission, letter: letter),
             transaction_uuid: "123"

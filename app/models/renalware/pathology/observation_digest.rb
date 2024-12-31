@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # Backed by a view, returns pathology results grouped by the day the observation

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # Renders an individual VND Risk as a lozenge with the correct colour background according

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given(/^Clinics$/) do |clinics|
   clinics.hashes.each do |clinic_params|
     create_clinic(clinic_params)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # To create outside of Rails, insert a row with values for the following columns
 # into the `delayed_jobs` table:
 #

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "providers"
 require_relative "dialysates"
 require_relative "francois"

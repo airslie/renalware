@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe SqlIndexedCaseStmt do
   describe "#generate" do
     subject { described_class.new(:column, [:HGB, "PLT", "cre"]).generate }

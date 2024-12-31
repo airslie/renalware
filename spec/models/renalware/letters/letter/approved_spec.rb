@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   describe Letter::Approved do
     include LettersSpecHelper

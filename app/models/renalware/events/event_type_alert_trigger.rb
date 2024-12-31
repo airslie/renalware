@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Events
     # Used to defines conditions where, for a particular event type, if the there is e.g. a case-

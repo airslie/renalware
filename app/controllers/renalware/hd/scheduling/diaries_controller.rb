@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The route to the edit route for this controller takes /:year/:week_number segments
 # rather than an id. THat is because when we load the diary, and when we navigate back and forth
 # through diaries, we are concerned with the week more then an id. Its easier to navigate to the
@@ -51,8 +49,8 @@ module Renalware
           @weekly_diary ||= begin
             FindOrCreateDiaryByWeekQuery.new(
               relation: WeeklyDiary.eager_load(
-                slots: [:patient, :station, :diurnal_period_code],
-                master_diary: { slots: [:patient, :station, :diurnal_period_code] }
+                slots: %i(patient station diurnal_period_code),
+                master_diary: { slots: %i(patient station diurnal_period_code) }
               ),
               unit_id: unit_id,
               week_period: week_period,

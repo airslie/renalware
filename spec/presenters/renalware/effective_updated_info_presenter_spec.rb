@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe EffectiveUpdatedInfoPresenter do
     let(:subject) { described_class.new(Patient.new) }

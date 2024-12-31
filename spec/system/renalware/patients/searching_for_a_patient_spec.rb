@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This is a simple test to be sure the patient search in the menu bar is working
 describe "Searching for a patient from the menu bar search area" do
   it "finds target patients using a fuzzy search" do

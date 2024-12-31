@@ -12,8 +12,8 @@ class CreateTransplantRegistrationStatuses < ActiveRecord::Migration[4.2]
     end
 
     add_foreign_key :transplant_registration_statuses,
-      :transplant_registrations, column: :registration_id
+                    :transplant_registrations, column: :registration_id
     add_foreign_key :transplant_registration_statuses,
-      :transplant_registration_status_descriptions, column: :description_id
+                    :transplant_registration_status_descriptions, column: :description_id
   end
 end

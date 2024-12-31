@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Clinical
     def self.table_name_prefix = "clinical_"

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :system_download, class: "Renalware::System::Download" do
     accountable

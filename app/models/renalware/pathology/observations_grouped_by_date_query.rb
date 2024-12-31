@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # A custom relation-like object, implementing a kaminari-like pagination interface.

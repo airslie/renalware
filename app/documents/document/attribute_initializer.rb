@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Document
   module AttributeInitializer
     def self.determine_initializer(klass, name, type, options)

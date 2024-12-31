@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Responsible for assigning a system user to the record when it is created
   # and updated.

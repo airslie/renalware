@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   describe DMDMigration::TradeFamilyMigrator do
     let(:trade_family) { create(:drug_trade_family, name: "Adalat") }

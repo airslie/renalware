@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Soft-deleted letter administration" do
   include LettersSpecHelper
   let(:user) { create(:user, :clinical) }

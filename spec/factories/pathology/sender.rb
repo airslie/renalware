@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :pathology_sender, class: "Renalware::Pathology::Sender" do
     initialize_with do

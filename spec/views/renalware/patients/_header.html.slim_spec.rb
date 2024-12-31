@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "renalware/patients/_header" do
   helper(Renalware::ApplicationHelper, Renalware::PatientHelper)
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Renalware::Engine.routes.draw do
   root to: "dashboard/dashboards#show"
 

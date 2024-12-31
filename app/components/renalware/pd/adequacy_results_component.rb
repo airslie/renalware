@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PD
     class AdequacyResultsComponent < ApplicationComponent
@@ -10,7 +8,7 @@ module Renalware
       rattr_initialize [:patient!, :current_user!]
       attr_reader :pagination
 
-      TITLE = "Adequacy Results"
+      TITLE = "Adequacy Results".freeze
 
       def results
         @results ||= begin

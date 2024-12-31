@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module LinkHelper
     # A wrapper around link_to_if that will output greyed-out text to indicate the option is

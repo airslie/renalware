@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding AKI Alert actions" do
+  Rails.benchmark "Adding AKI Alert actions" do
     [
       "IP - Review",
       "IP - Telephone advice",

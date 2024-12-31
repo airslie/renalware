@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PolicyHelper
     def pundit_policy_for(klass)

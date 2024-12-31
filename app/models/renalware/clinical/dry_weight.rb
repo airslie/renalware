@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Clinical
     class DryWeight < ApplicationRecord
@@ -12,7 +10,7 @@ module Renalware
 
       has_paper_trail(
         versions: { class_name: "Renalware::Clinical::Version" },
-        on: [:create, :update, :destroy]
+        on: %i(create update destroy)
       )
 
       scope :ordered, -> { order(assessed_on: :desc, created_at: :desc) }

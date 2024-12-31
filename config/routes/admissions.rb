@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 resources :patients, only: [] do
   resources :admissions, only: [:index], controller: "admissions/patient_admissions"
 end

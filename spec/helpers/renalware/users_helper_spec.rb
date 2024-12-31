@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe UsersHelper do
     describe "current_user_is_super_admin?" do

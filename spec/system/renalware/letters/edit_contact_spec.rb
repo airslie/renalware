@@ -1,13 +1,11 @@
-# frozen_string_literal: true
-
-describe "Managing an existing letter contact", js: true do
+describe "Managing an existing letter contact", :js do
   include AjaxHelpers
 
   context "with valid parameters" do
     let(:user) { create(:user, :clinical) }
 
     it "A user changes an existing patient's contact to for example remove their default cc " \
-       "or change their description", js: true do
+       "or change their description", :js do
       patient = create(:letter_patient)
       description1 = create(:letter_contact_description, name: "Parent")
       description2 = create(:letter_contact_description, name: "Child")

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CoreExtensions
   module I18n
     module HandleBlankValue

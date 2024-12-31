@@ -1,70 +1,83 @@
-# https://dzone.com/articles/using-docker-for-rails-development
-# Developer docker image hosted on DockerHub.
+# syntax=docker/dockerfile:1
+# check=error=true
 
-# If you change this Dockerfile, then from the project root, bump the version e.g. 0.0.3
-# and build and push the image to DockerHub using user `woodpigeon` (password on request):
-#
-# $ docker build -t airslie/renalware-development:0.0.x .
-# $ docker login
-# $ docker push airslie/renalware-development:0.0.x
-#
+# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
+# docker build -t renalware .
+# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name renalware renalware
 
-# Version 0.0.2 Updated Ruby 2.4.1 => 2.4.2
-# Version 0.0.3 Updated Postgres 9.6 => 10.1
-FROM ruby:3.3.6
+# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
 
-# Install apt based dependencies required to run Rails as
-# well as RubyGems. As the Ruby image itself is based on a
-# Debian image, we use apt-get to install those.
-RUN apt-get update
-RUN apt-get install -y \
-  build-essential \
-  libpq-dev \
-  software-properties-common \
-  python-software-properties \
-  nodejs \
-  pandoc \
-  --fix-missing \
-  --no-install-recommends
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
+ARG RUBY_VERSION=3.4
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
 
-# Add a repo where we can get pg 10 client tools
-# RUN deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
-# RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
-# RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" >> /etc/apt/sources.list.d/postgresql.list'
-RUN apt-get update
-RUN apt-get install -y postgresql-client-10
+# Rails app lives here
+WORKDIR /rails
 
-RUN wget -O /tmp/phantomjs.tar.bz2 http://airslie-public.s3.amazonaws.com/phantomjs-2.1.1-linux-x86_64.tar.bz2
-RUN tar -xjf /tmp/phantomjs.tar.bz2 -C /tmp
-RUN mv /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+# Install base packages
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Configure the main working directory. This is the base
-# directory used in any further RUN, COPY, and ENTRYPOINT
-# commands.
-RUN mkdir -p /app
-WORKDIR /app
+# Set production environment
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development"
 
-# Copy the Gemfile as well as the Gemfile.lock and install
-# the RubyGems. This is a separate step so the dependencies
-# will be cached unless changes to one of those two files
-# are made.
-# NB This does not work as .gemspec requires lib/renalware/version.rb etc
-COPY Gemfile renalware-core.gemspec Gemfile.lock /app/
-RUN mkdir -p /app/lib/renalware
-COPY ./lib/renalware/version.rb /app/lib/renalware/number.rb
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+# Throw-away build stage to reduce size of final image
+FROM base AS build
 
-# Copy the main application.
-# COPY . ./
-# No we'll use a mount
+# Install packages needed to build gems and node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev node-gyp pkg-config python-is-python3 imagemagick libvips libvips-dev libvips-tools && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Expose port 3000 to the Docker host, so we can access it
-# from the outside.
+# Install JavaScript dependencies
+ARG NODE_VERSION=22.11.0
+ARG YARN_VERSION=1.22.22
+ENV PATH=/usr/local/node/bin:$PATH
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+    npm install -g yarn@$YARN_VERSION && \
+    rm -rf /tmp/node-build-master
+
+# Install application gems
+COPY lib/renalware/version.rb ./lib/renalware/version.rb
+COPY renalware-core.gemspec Gemfile Gemfile.lock ./.ruby-version .gemrc ./
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    bundle exec bootsnap precompile --gemfile
+
+# Install node modules
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+# Copy application code
+COPY . .
+
+# Precompile bootsnap code for faster boot times
+RUN bundle exec bootsnap precompile app/ lib/
+
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+
+# Final stage for app image
+FROM base
+
+# Copy built artifacts: gems, application
+COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
+COPY --from=build /rails /rails
+
+# Run and own only the runtime files as a non-root user for security
+RUN groupadd --system --gid 1000 rails && \
+    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
+    chown -R rails:rails demo/db demo/log demo/storage demo/tmp
+USER 1000:1000
+
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
+# Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-
-# The main command to run when the container starts. Also
-# tell the Rails dev server to bind to all interfaces by
-# default.
-CMD ["bundle", "exec", "bin/web"]
+CMD ["./bin/thrust", "./bin/rails", "server"]

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module RolesSpecHelper
   def define_roles
     Renalware::Role::ROLES.each do |name|

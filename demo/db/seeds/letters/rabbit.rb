@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Assign Letters to Roger RABBIT" do
+  Rails.benchmark "Assign Letters to Roger RABBIT" do
     patient = Letters::Patient.find_by(local_patient_id: "Z100001")
     patient.letters.each { |letter| letter.archive&.destroy! }
     patient.letters.destroy_all

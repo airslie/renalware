@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # Responsible for rendering an HD Session Form PDF (aka Protocol) which has the patients

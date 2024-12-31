@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Problems
   describe Comorbidity do
     let(:user) { create(:user) }
@@ -24,7 +22,7 @@ module Renalware::Problems
       is_expected.to validate_presence_of(:patient)
       is_expected.to validate_presence_of(:description)
       is_expected.to belong_to(:description)
-      is_expected.to have_db_index([:patient_id, :description_id]).unique
+      is_expected.to have_db_index(%i(patient_id description_id)).unique
       is_expected.to have_db_index(:patient_id)
       is_expected.to have_db_index(:description_id)
     end

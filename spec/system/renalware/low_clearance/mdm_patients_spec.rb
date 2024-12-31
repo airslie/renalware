@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Advanced Kidney Care Patients" do
   include PatientsSpecHelper
   let(:user) { create(:user) }

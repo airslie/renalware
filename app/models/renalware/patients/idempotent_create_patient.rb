@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # TODO: unused class
 module Renalware
   module Patients

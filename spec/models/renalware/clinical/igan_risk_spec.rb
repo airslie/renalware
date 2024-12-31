@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Clinical::IganRisk do
   it_behaves_like "an Accountable model"
   it { is_expected.to be_versioned }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Read internal messages for a user" do
   describe "GET read" do
     it "responds successfully" do

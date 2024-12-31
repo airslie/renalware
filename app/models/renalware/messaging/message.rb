@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Abstract Message base class.
 # Use Internal::Message etc. subclasses (stored via STI).

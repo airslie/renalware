@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module World
   module Global
     def find_link_in_row_with(text:, link_label:)

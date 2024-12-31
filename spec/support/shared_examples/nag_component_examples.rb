@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Shared examples common to all nags where a nag defined in data in the nag_definitions table
 # and displayed in the UI using the NagComponent.
 shared_examples_for "a nag" do

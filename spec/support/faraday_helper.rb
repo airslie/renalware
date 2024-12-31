@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module FaradayHelper
   def mock_faraday_response(
     status: 200,

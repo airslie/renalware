@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Configuring Drugs" do
   include DrugsSpecHelper
   let(:drug) { create(:drug) }

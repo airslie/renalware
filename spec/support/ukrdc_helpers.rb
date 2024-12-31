@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module UKRDCSpecHelper
   def remove_all_test_files
     FileUtils.rm_r Dir.glob(paths.incoming.join("*.xml"))

@@ -18,8 +18,8 @@ class CreateDrugHomecareSuppliers < ActiveRecord::Migration[5.2]
       # Has many through
       create_table(
         :drug_homecare_forms,
-        comment: "X-ref table that says which drug_type is supplied by which (homecare) supplier "\
-                 "and the data required (see form_name and form_version) to programmatically "\
+        comment: "X-ref table that says which drug_type is supplied by which (homecare) supplier " \
+                 "and the data required (see form_name and form_version) to programmatically " \
                  "select and create the right PDF Homecare Supply form for them (using the " \
                  "renalware-forms gem) so this can be printed out and signed."
       ) do |t|
@@ -42,11 +42,11 @@ class CreateDrugHomecareSuppliers < ActiveRecord::Migration[5.2]
           null: false,
           array: true,
           default: [],
-          comment: "An array of options where each integer is a number of units - these will be "\
-                  "displayed as dropdown options presented to the user, and checkboxes "\
-                  "on the homecare delivery form PDF. E.g [3,6] will "\
-                  "be displayed as options '3 months' and '6 months' (see also "\
-                  "prescription_duration_unit)"
+          comment: "An array of options where each integer is a number of units - these will be " \
+                   "displayed as dropdown options presented to the user, and checkboxes " \
+                   "on the homecare delivery form PDF. E.g [3,6] will " \
+                   "be displayed as options '3 months' and '6 months' (see also " \
+                   "prescription_duration_unit)"
         )
         t.integer(
           :prescription_duration_default,

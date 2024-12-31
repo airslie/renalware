@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # When subscribed to HL7 `adt_message_arrived` messages, gets notified of incoming HL7 messages
 #

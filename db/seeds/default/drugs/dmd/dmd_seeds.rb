@@ -1,12 +1,8 @@
-# frozen_string_literal: true
-
 require_relative "../../../seeds_helper"
 
 module Renalware
   module Drugs::DMD
-    extend SeedsHelper
-
-    log "DM+D -> Forms" do
+    Rails.benchmark "DM+D -> Forms" do
       file_path = File.join(File.dirname(__FILE__), "dmd_forms.csv")
 
       repository = lambda {
@@ -21,7 +17,7 @@ module Renalware
       APISynchronisers::FormSynchroniser.new(form_repository: repository).call
     end
 
-    log "DM+D -> Routes" do
+    Rails.benchmark "DM+D -> Routes" do
       file_path = File.join(File.dirname(__FILE__), "dmd_routes.csv")
 
       repository = lambda {
@@ -40,7 +36,7 @@ module Renalware
       Medications::MedicationRoute.where(name: "Subcutaneous").update!(weighting: 9)
     end
 
-    log "DM+D -> UnitOfMeasures" do
+    Rails.benchmark "DM+D -> UnitOfMeasures" do
       file_path = File.join(File.dirname(__FILE__), "dmd_unit_of_measures.csv")
 
       repository = lambda {
@@ -55,7 +51,7 @@ module Renalware
       APISynchronisers::UnitOfMeasureSynchroniser.new(unit_of_measure_repository: repository).call
     end
 
-    log "DM+D -> VirtualTherapeuticMoiety" do
+    Rails.benchmark "DM+D -> VirtualTherapeuticMoiety" do
       file_path = File.join(File.dirname(__FILE__),
                             "dmd_virtual_therapeutic_moieties.csv")
 
@@ -71,7 +67,7 @@ module Renalware
       APISynchronisers::VirtualTherapeuticMoietySynchroniser.new(vtm_repository: repository).call
     end
 
-    log "DM+D -> VirtualMedicalProduct" do
+    Rails.benchmark "DM+D -> VirtualMedicalProduct" do
       file_path = File.join(File.dirname(__FILE__), "dmd_virtual_medical_products.csv")
 
       upserts = CSV.foreach(file_path, headers: true).map do |row|
@@ -94,7 +90,7 @@ module Renalware
       VirtualMedicalProduct.upsert_all(upserts, unique_by: :code)
     end
 
-    log "DM+D -> ActualMedicalProduct" do
+    Rails.benchmark "DM+D -> ActualMedicalProduct" do
       file_path = File.join(File.dirname(__FILE__), "dmd_actual_medical_products.csv")
       upserts = CSV.foreach(file_path, headers: true).map do |row|
         {
@@ -107,7 +103,7 @@ module Renalware
       ActualMedicalProduct.upsert_all(upserts, unique_by: :code)
     end
 
-    log "DM+D -> TradeFamilies" do
+    Rails.benchmark "DM+D -> TradeFamilies" do
       file_path = File.join(File.dirname(__FILE__), "drug_trade_families.csv")
 
       upserts = CSV.foreach(file_path, headers: true).map do |row|
@@ -119,11 +115,11 @@ module Renalware
       Drugs::TradeFamily.upsert_all(upserts, unique_by: :code)
     end
 
-    log "DM+D -> ClassificationAndDrugsSynchroniser" do
+    Rails.benchmark "DM+D -> ClassificationAndDrugsSynchroniser" do
       Synchronisers::ClassificationAndDrugsSynchroniser.new.call
     end
 
-    log "DM+D -> enabling a handful of trade families" do
+    Rails.benchmark "DM+D -> enabling a handful of trade families" do
       file_path = File.join(File.dirname(__FILE__), "enabled_trade_families.csv")
 
       trade_family_name_to_id_mapping = Drugs::TradeFamily.pluck(:name, :id).to_h

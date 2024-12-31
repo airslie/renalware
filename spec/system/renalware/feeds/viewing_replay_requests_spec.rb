@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Viewing Feed Replay Requests" do
   it do
     login_as_super_admin

@@ -9,8 +9,8 @@ class AddUserGroupIdToLetterEccs < ActiveRecord::Migration[6.0]
         references: :user_groups,
         index: { algorithm: :concurrently },
         null: true,
-        comment: "If the user chose a user group as a the eCC recipient "\
-                 "(rather than a user) then we split up the group and store "\
+        comment: "If the user chose a user group as a the eCC recipient " \
+                 "(rather than a user) then we split up the group and store " \
                  "each member as a row, but assign the letter_group_id for reference"
       )
 

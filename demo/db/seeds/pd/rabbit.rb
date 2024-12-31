@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Exit Site Infection for Roger RABBIT" do
+  Rails.benchmark "Adding Exit Site Infection for Roger RABBIT" do
     PD::ExitSiteInfection.create!({
                                     patient_id: 1,
                                     diagnosis_date: "2015-06-09",
@@ -10,7 +8,7 @@ module Renalware
                                   })
   end
 
-  log "Adding Peritonitis Episode for Roger RABBIT" do
+  Rails.benchmark "Adding Peritonitis Episode for Roger RABBIT" do
     PD::PeritonitisEpisode.find_or_create_by!(patient_id: 1) do |episode|
       episode.patient_id = 1
       episode.diagnosis_date = "2015-09-14"

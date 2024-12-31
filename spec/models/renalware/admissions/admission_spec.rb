@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Admissions::Admission do
   include PatientsSpecHelper
   let(:patient) do

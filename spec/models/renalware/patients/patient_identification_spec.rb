@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe Patient do
+  describe Patient do # rubocop:disable RSpec/SpecFilePathFormat
     before do
       allow(Renalware.config).to receive(:patient_hospital_identifiers).and_return(
         HOSP1: :local_patient_id,

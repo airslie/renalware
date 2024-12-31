@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Assign a person as a CC recipient", js: true do
+describe "Assign a person as a CC recipient", :js do
   include AjaxHelpers
 
   before do

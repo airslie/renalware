@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PD
     class PETResultsComponent < ApplicationComponent
@@ -9,7 +7,7 @@ module Renalware
       include DropdownButtonHelper
       attr_reader :patient, :pagination, :current_user
 
-      TITLE = "PET Results"
+      TITLE = "PET Results".freeze
 
       def initialize(patient:, current_user:)
         @patient = PD.cast_patient(patient)

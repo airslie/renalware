@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.metadata["rubygems_mfa_required"] = "true"
   s.name        = "renalware-core"
   s.version     = Renalware::VERSION
+  s.required_ruby_version = ">= 3.3"
   s.authors     = ["Airslie"]
   s.email       = ["dev@airslie.com"]
   s.homepage    = "https://github.com/airslie/renalware-core"
@@ -52,7 +53,7 @@ Gem::Specification.new do |s|
   s.add_dependency "diff-lcs"
   s.add_dependency "diffy"
   s.add_dependency "dotenv-rails"
-  s.add_dependency "dumb_delegator", "~> 0.8.0"
+  s.add_dependency "dumb_delegator", "~> 1.1"
   s.add_dependency "ed25519"
   s.add_dependency "email_validator", "> 1.6.0"
   s.add_dependency "enumerize", "~> 2.5"
@@ -62,7 +63,7 @@ Gem::Specification.new do |s|
   s.add_dependency "font-awesome-sass", "~> 5.6" # See icons here: https://fortawesome.github.io/Font-Awesome/icons/
   s.add_dependency "friendly_id", "~> 5.3"
   s.add_dependency "fugit", ">= 1.1"
-  s.add_dependency "groupdate", ">= 4.2", "< 6"
+  s.add_dependency "groupdate", ">= 4.2", "< 7"
   s.add_dependency "hashdiff", "~> 1.0"
   s.add_dependency "httparty", "~> 0.16"
   s.add_dependency "i18n" # , "~> 1.8.9"
@@ -71,7 +72,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails", "~> 4.4"
   s.add_dependency "jquery-ui-rails", ">= 6.0.1", "< 7.1.0"
   s.add_dependency "kaminari", "~> 1.1"
-  s.add_dependency "liquid", "~> 4.0.0"
+  s.add_dependency "liquid", "~> 5.6"
   s.add_dependency "lograge", "~> 0.11"
   s.add_dependency "naught", "~> 1.1.0"
   s.add_dependency "nested_form", "~> 0.3.2"
@@ -100,14 +101,13 @@ Gem::Specification.new do |s|
   s.add_dependency "sinatra"
   s.add_dependency "slim-rails"
   s.add_dependency "sprockets-rails"
-  s.add_dependency "store_model", "< 3"
-  s.add_dependency "tailwindcss-rails", "~> 2.3"
+  s.add_dependency "store_model", "< 5"
   s.add_dependency "turbo-rails", "2.0.11" # matches "@hotwired/turbo-rails" => "8.0.12"
-  s.add_dependency "validates_timeliness", "~> 7.0.0.beta1"
+  s.add_dependency "validates_timeliness"
   s.add_dependency "view_component", "< 4.0"
   s.add_dependency "virtus", "~> 1.0.5"
   s.add_dependency "wicked_pdf", "~> 2.8.0"
-  s.add_dependency "wisper", "~> 2.0.1"
+  s.add_dependency "wisper", "~> 3.0.0"
   s.add_dependency "wisper-activejob", "~> 1.0.0"
   s.add_dependency "yard", ">= 0.9.35"
 end

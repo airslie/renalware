@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     # Renders a pathology sparkline - a small graph of patient results for a particular

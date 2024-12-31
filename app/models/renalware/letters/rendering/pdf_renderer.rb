@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Render a Letter to PDF using prawn - or return archived pdf_content data if exists.
 # Note that if prawn rendering is enabled then we save the pdf binary content to

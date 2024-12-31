@@ -16,7 +16,7 @@ class CreateComorbidities < ActiveRecord::Migration[5.2]
 
       create_table(
         :problem_comorbidities,
-        comment: "A single comobidity problem for a patient. "\
+        comment: "A single comobidity problem for a patient. " \
                  "A patient can only have one per description"
       ) do |t|
         t.references :patient, null: false, foreign_key: true, index: true

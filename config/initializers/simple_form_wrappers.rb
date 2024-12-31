@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 SimpleForm.setup do |config|
   def configure_label(b)
     b.wrapper :label_wrapper, tag: :div, class: "wrapper__label" do |ba|

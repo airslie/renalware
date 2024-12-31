@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Admission Request (TCI) management" do
   let(:reason) { create(:admissions_request_reason, description: "XYZ") }
   let(:user) { @current_user }

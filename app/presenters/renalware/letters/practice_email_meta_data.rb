@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     # Responsible for generating the IDENT metadata inserted at the top of emails to a practice

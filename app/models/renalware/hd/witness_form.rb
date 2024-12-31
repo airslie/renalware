@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module HD
     # Form object to help us update the PrescriptionAdministration#witnesses_by

@@ -4,7 +4,7 @@ class CreateSystemViewCalls < ActiveRecord::Migration[7.0]
       create_table :system_view_calls do |t|
         t.references :view_metadata, null: false, foreign_key: { to_table: :system_view_metadata }
         t.references :user, null: false, foreign_key: true
-        t.datetime :called_at, null: false, null: false
+        t.datetime :called_at, null: false
       end
       add_index(
         :system_view_calls,

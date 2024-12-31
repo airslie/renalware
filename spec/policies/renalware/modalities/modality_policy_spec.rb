@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Modalities
     describe ModalityPolicy, type: :policy do

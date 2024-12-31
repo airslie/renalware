@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Virology
     # If the vaccination type has any values in its atc_codes array, use those to

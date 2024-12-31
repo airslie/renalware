@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters::Transports::Mesh
   # Not too sure what we are testing here as we could end up testing the NHS MESH docker sandbox
   # rather than our app! Validating various VCR cassettes is useful however

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "shared_examples"
 
 module Renalware::Letters::Formats::FHIR

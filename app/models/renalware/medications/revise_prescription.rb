@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     # - If one of the attributes in NEW_PRESCRIPTION_ATTRS has changed then we terminate the old

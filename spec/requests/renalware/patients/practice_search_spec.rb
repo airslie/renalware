@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Changing a patient's GP (primary care physician)" do
   describe "GET show" do
     context "when there is a match" do

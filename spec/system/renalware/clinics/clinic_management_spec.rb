@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Clinic management" do
   it "enables me to list clinics" do
     login_as_super_admin

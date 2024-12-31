@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-describe "Creating an vaccination", js: true do
+describe "Creating an vaccination", :js do
   include AjaxHelpers
   include DrugsSpecHelper
 

@@ -1,13 +1,13 @@
-# frozen_string_literal: true
-
 $stdout.sync = true
 
 Rails.application.configure do
   config.after_initialize do
-    Bullet.enable = true
-    Bullet.bullet_logger = true
-    Bullet.console = false
-    Bullet.rails_logger = true
+    if defined?(Bullet)
+      Bullet.enable = true
+      Bullet.bullet_logger = true
+      Bullet.console = false
+      Bullet.rails_logger = true
+    end
   end
 
   # Execute jobs in separate thread in the web process. This makes debugging easier and we do not

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PD
     # PET and Adequacy are two distinct, discrete PD tests.

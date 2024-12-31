@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :renal_profile, class: "Renalware::Renal::Profile" do
     prd_description

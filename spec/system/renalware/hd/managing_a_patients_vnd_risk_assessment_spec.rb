@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing a patient's Venal Needle Dislodgment (VND) risk assessment" do
   include PatientsSpecHelper
 

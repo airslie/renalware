@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 namespace :messaging do
   namespace :internal do
-    resources :messages, only: [:new, :create, :index] do
+    resources :messages, only: %i(new create index) do
       resources :receipts, only: [] do
         patch :mark_as_read, on: :member
       end

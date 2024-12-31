@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "faraday"
 
 # Client for Microsoft Graph API.

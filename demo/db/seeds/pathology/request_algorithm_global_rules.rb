@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 def find_param_id(row)
   case row["type"].demodulize
   when "ObservationResult"
@@ -16,7 +14,7 @@ def find_param_id(row)
 end
 
 module Renalware
-  log "Adding Pathology Request Algorithm Global Rules" do
+  Rails.benchmark "Adding Pathology Request Algorithm Global Rules" do
     file_path = File.join(File.dirname(__FILE__), "request_algorithm_global_rules.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

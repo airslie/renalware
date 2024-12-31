@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding User Groups" do
+  Rails.benchmark "Adding User Groups" do
     user_ids = User.pluck(:id).sample(6).uniq
     p user_ids
     Users::Group.create!(

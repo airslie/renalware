@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 module Renalware
   module Drugs::DMD
     module Repositories
       class SnomedAmpsWithTradeFamilyRepository
         attr_reader :client
 
-        PARENT = "parent"
+        PARENT = "parent".freeze
 
         Entry = Struct.new(:name, :code, :parent_codes,
                            keyword_init: true)

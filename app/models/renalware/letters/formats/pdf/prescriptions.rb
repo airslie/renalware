@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats
@@ -10,7 +8,7 @@ module Renalware
           pattr_initialize :document, :letter, :x, :y, :width
           delegate :patient, to: :letter
           delegate :prescriptions, to: :patient
-          BULLET = "• "
+          BULLET = "• ".freeze
 
           def build
             bounding_box([x, y], width: width) do

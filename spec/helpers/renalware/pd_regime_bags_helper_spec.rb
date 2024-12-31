@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe PDRegimeBagsHelper do
     let(:bag_type) { build_stubbed(:bag_type) }

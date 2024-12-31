@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Events::SavePdfEventToFileJob do
   subject(:job) { described_class.new }
 

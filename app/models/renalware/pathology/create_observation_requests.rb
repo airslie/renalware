@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Create pathology observations requests and their child observations for an existing
 # patient from HL7 message content previously parsed into an array of hashes (there can be > 1 OBR

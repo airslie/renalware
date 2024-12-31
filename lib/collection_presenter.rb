@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CollectionPresenter
   # Initialises an enumerable collection of initialised presenters for the
   # corresponding original_collection of objects, for example a collection

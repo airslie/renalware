@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module RemoteMonitoring
     def self.table_name_prefix = "remote_monitoring_"

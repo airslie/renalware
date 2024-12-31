@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 module Renalware
   module Drugs
     class Frequency < ApplicationRecord
-      OTHER_NAME = "other"
-      OTHER_TITLE = "Other"
+      OTHER_NAME = "other".freeze
+      OTHER_TITLE = "Other".freeze
 
       validates :name, presence: true, uniqueness: true
       validates :title, presence: true

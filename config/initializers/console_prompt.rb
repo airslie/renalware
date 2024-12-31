@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # See https://pawelurbanek.com/rails-console-environment
 # Add eg 'Renalware (development) >' prompt in the rails console.
 # Use a red prompt in production.

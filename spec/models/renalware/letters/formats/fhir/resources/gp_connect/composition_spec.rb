@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats::FHIR
@@ -15,6 +13,7 @@ module Renalware
         let(:author) { build_stubbed(:user, uuid: "abc") }
         let(:clinic_visit) { build_stubbed(:clinic_visit, patient: Clinics.cast_patient(patient)) }
         let(:letter_patient) { patient.becomes(Letters::Patient) }
+        let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
         let(:letter) {
           build_stubbed(
             :approved_letter,
@@ -22,6 +21,7 @@ module Renalware
             patient: letter_patient,
             updated_at: Time.zone.parse("2022-01-01 01:01:01"),
             event: clinic_visit,
+            topic: topic,
             event_id: 99,
             author: author
           ).tap do |let|
@@ -79,8 +79,8 @@ module Renalware
           end
 
           it "has the correct snomed code" do
-            expect(resource.type.coding[0].code).to eq("371531000")
-            expect(resource.type.coding[0].display).to eq("Report of clinical encounter")
+            expect(resource.type.coding[0].code).to eq("823691000000103")
+            expect(resource.type.coding[0].display).to eq("Clinical letter (record artifact)")
           end
 
           it "has correct sections" do

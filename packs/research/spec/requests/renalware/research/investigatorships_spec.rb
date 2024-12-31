@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing clinical study investigatorships" do
   let(:user) { @current_user }
   let(:study) do

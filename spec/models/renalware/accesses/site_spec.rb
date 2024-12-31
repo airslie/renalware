@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Accesses
   describe Site do
     it :aggregate_failures do

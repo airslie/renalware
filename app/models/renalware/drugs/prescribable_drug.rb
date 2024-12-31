@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Drugs
     # Backed by a materialised SQL view (for speed) that returns all drugs and 'drug (trade family)'

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :event_subtype, class: "Renalware::Events::Subtype" do
     by factory: %i(user)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe PatientDocument, type: :model do
     it :aggregate_failures do

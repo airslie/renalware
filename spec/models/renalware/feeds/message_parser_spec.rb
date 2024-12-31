@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Feeds
   describe MessageParser do
     subject(:message) { message_parser.parse(raw_message) }

@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Pathology Measurement Units" do
+  Rails.benchmark "Adding Pathology Measurement Units" do
     file_path = File.join(File.dirname(__FILE__), "measurement_units.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

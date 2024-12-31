@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters::Transports::Mesh
   describe ReconcileOperationsJob do
     include LettersSpecHelper
@@ -29,11 +27,11 @@ module Renalware::Letters::Transports::Mesh
       end
 
       it "flags pending transmissions as failed if any download_message operation has an error" do
-        [
-          :http_error,
-          :mesh_error,
-          :itk3_error
-        ].each do |attr_name|
+        %i(
+          http_error
+          mesh_error
+          itk3_error
+        ).each do |attr_name|
           letter.update!(gp_send_status: :pending)
           transmission = Transmission.create!(letter: letter)
           transmission.operations.create!(action: "download_message", attr_name => true)
@@ -47,11 +45,11 @@ module Renalware::Letters::Transports::Mesh
       end
 
       it "flags pending transmissions as failed if any send_message operation has an error" do
-        [
-          :http_error,
-          :mesh_error,
-          :itk3_error
-        ].each do |attr_name|
+        %i(
+          http_error
+          mesh_error
+          itk3_error
+        ).each do |attr_name|
           transmission = Transmission.create!(letter: letter)
           transmission.operations.create!(action: "send_message", attr_name => true)
 
@@ -87,7 +85,7 @@ module Renalware::Letters::Transports::Mesh
         expect {
           described_class.perform_now
         }.to change { transmission.reload.status }.from("pending").to("success")
-        .and change { transmission.letter.gp_send_status }.from("pending").to("success")
+          .and change { transmission.letter.gp_send_status }.from("pending").to("success")
       end
 
       context "when GP was the only recipient (ie no patient or contact recipients)" do

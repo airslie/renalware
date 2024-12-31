@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   sequence(:requestor_order_number) { |n| "PlacerID-#{n}" }
 

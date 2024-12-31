@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding HD Cannulation Types" do
+  Rails.benchmark "Adding HD Cannulation Types" do
     file_path = File.join(File.dirname(__FILE__), "cannulation_types.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

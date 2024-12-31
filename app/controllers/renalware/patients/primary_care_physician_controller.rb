@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Note this singular resource is for updating the patient.primary_care_physician.
 # The plural resource in the same folder is for managing primary_care_physicians.
 module Renalware

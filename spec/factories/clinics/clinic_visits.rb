@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :clinic_visit, class: "Renalware::Clinics::ClinicVisit" do
     accountable

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "HD Prescription Administrations" do
   let(:user1) { create(:user) }
   let(:user2) { create(:user) }

@@ -7,15 +7,15 @@ class AddEditableWindowColumnsToEventTypes < ActiveRecord::Migration[5.2]
           :author_change_window_hours,
           default: 0,
           null: false,
-          comment: "Period post-creation within which an event of this type "\
+          comment: "Period post-creation within which an event of this type " \
                    "can be edited by the author"
         )
         t.integer(
           :admin_change_window_hours,
           default: 0,
           null: false,
-          comment: "Period post-creation within which an event of this type "\
-                   "can be edited by an admin (or superadmin if superadmin_can_always_change "\
+          comment: "Period post-creation within which an event of this type " \
+                   "can be edited by an admin (or superadmin if superadmin_can_always_change " \
                    "is false"
         )
       end

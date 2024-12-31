@@ -1631,11 +1631,11 @@ function requireClassof () {
 	return classof;
 }
 
-var isConstructor;
+var isConstructor$1;
 var hasRequiredIsConstructor;
 
 function requireIsConstructor () {
-	if (hasRequiredIsConstructor) return isConstructor;
+	if (hasRequiredIsConstructor) return isConstructor$1;
 	hasRequiredIsConstructor = 1;
 	var uncurryThis = requireFunctionUncurryThis();
 	var fails = requireFails();
@@ -1681,14 +1681,14 @@ function requireIsConstructor () {
 
 	// `IsConstructor` abstract operation
 	// https://tc39.es/ecma262/#sec-isconstructor
-	isConstructor = !construct || fails(function () {
+	isConstructor$1 = !construct || fails(function () {
 	  var called;
 	  return isConstructorModern(isConstructorModern.call)
 	    || !isConstructorModern(Object)
 	    || !isConstructorModern(function () { called = true; })
 	    || called;
 	}) ? isConstructorLegacy : isConstructorModern;
-	return isConstructor;
+	return isConstructor$1;
 }
 
 var arraySpeciesConstructor;
@@ -12360,7 +12360,7 @@ class PatientSearchController extends Controller {
 }
 
 /**!
- * Sortable 1.15.4
+ * Sortable 1.15.6
  * @author	RubaXa   <trash@rubaxa.org>
  * @author	owenm    <owen23355@gmail.com>
  * @license MIT
@@ -12464,7 +12464,7 @@ function _objectWithoutProperties(source, excluded) {
   return target;
 }
 
-var version = "1.15.4";
+var version = "1.15.6";
 
 function userAgent(pattern) {
   if (typeof window !== 'undefined' && window.navigator) {
@@ -13441,7 +13441,8 @@ function Sortable(el, options) {
       x: 0,
       y: 0
     },
-    supportPointer: Sortable.supportPointer !== false && 'PointerEvent' in window && !Safari,
+    // Disabled on Safari: #1571; Enabled on Safari IOS: #2244
+    supportPointer: Sortable.supportPointer !== false && 'PointerEvent' in window && (!Safari || IOS),
     emptyInsertThreshold: 5
   };
   PluginManager.initializePlugins(this, el, defaults);
@@ -13728,13 +13729,13 @@ Sortable.prototype = /** @lends Sortable.prototype */{
       on(rootEl, 'dragstart', this._onDragStart);
     }
     try {
-      _nextTick(function () {
-        if (document.selection) {
+      if (document.selection) {
+        _nextTick(function () {
           document.selection.empty();
-        } else {
-          window.getSelection().removeAllRanges();
-        }
-      });
+        });
+      } else {
+        window.getSelection().removeAllRanges();
+      }
     } catch (err) {}
   },
   _dragStarted: function _dragStarted(fallback, evt) {
@@ -13950,6 +13951,7 @@ Sortable.prototype = /** @lends Sortable.prototype */{
     _this._dragStartId = _nextTick(_this._dragStarted.bind(_this, fallback, evt));
     on(document, 'selectstart', _this);
     moved = true;
+    window.getSelection().removeAllRanges();
     if (Safari) {
       css(document.body, 'user-select', 'none');
     }
@@ -17069,87 +17071,6 @@ class SlimselectController extends Controller {
   }
 }
 
-/**
- * Returns a function, that, as long as it continues to be invoked, will not
- * be triggered. The function will be called after it stops being called for
- * N milliseconds. If `immediate` is passed, trigger the function on the
- * leading edge, instead of the trailing. The function also has a property 'clear' 
- * that is a function which will clear the timer to prevent previously scheduled executions. 
- *
- * @source underscore.js
- * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
- * @param {Function} function to wrap
- * @param {Number} timeout in ms (`100`)
- * @param {Boolean} whether to execute at the beginning (`false`)
- * @api public
- */
-
-var debounce_1;
-var hasRequiredDebounce;
-
-function requireDebounce () {
-	if (hasRequiredDebounce) return debounce_1;
-	hasRequiredDebounce = 1;
-	function debounce(func, wait, immediate){
-	  var timeout, args, context, timestamp, result;
-	  if (null == wait) wait = 100;
-
-	  function later() {
-	    var last = Date.now() - timestamp;
-
-	    if (last < wait && last >= 0) {
-	      timeout = setTimeout(later, wait - last);
-	    } else {
-	      timeout = null;
-	      if (!immediate) {
-	        result = func.apply(context, args);
-	        context = args = null;
-	      }
-	    }
-	  }
-	  var debounced = function(){
-	    context = this;
-	    args = arguments;
-	    timestamp = Date.now();
-	    var callNow = immediate && !timeout;
-	    if (!timeout) timeout = setTimeout(later, wait);
-	    if (callNow) {
-	      result = func.apply(context, args);
-	      context = args = null;
-	    }
-
-	    return result;
-	  };
-
-	  debounced.clear = function() {
-	    if (timeout) {
-	      clearTimeout(timeout);
-	      timeout = null;
-	    }
-	  };
-	  
-	  debounced.flush = function() {
-	    if (timeout) {
-	      result = func.apply(context, args);
-	      context = args = null;
-	      
-	      clearTimeout(timeout);
-	      timeout = null;
-	    }
-	  };
-
-	  return debounced;
-	}
-	// Adds compatibility for ES modules
-	debounce.debounce = debounce;
-
-	debounce_1 = debounce;
-	return debounce_1;
-}
-
-var debounceExports = requireDebounce();
-var debounce$2 = /*@__PURE__*/getDefaultExportFromCjs(debounceExports);
-
 class SlimselectAjaxController extends Controller {
   static values = { }
 
@@ -17393,6 +17314,122 @@ class ModalController extends Controller {
     document.documentElement.scrollTop = this.scrollPosition;
   }
 }
+
+var debounce$3 = {exports: {}};
+
+var hasRequiredDebounce;
+
+function requireDebounce () {
+	if (hasRequiredDebounce) return debounce$3.exports;
+	hasRequiredDebounce = 1;
+	function debounce(function_, wait = 100, options = {}) {
+		if (typeof function_ !== 'function') {
+			throw new TypeError(`Expected the first parameter to be a function, got \`${typeof function_}\`.`);
+		}
+
+		if (wait < 0) {
+			throw new RangeError('`wait` must not be negative.');
+		}
+
+		// TODO: Deprecate the boolean parameter at some point.
+		const {immediate} = typeof options === 'boolean' ? {immediate: options} : options;
+
+		let storedContext;
+		let storedArguments;
+		let timeoutId;
+		let timestamp;
+		let result;
+
+		function run() {
+			const callContext = storedContext;
+			const callArguments = storedArguments;
+			storedContext = undefined;
+			storedArguments = undefined;
+			result = function_.apply(callContext, callArguments);
+			return result;
+		}
+
+		function later() {
+			const last = Date.now() - timestamp;
+
+			if (last < wait && last >= 0) {
+				timeoutId = setTimeout(later, wait - last);
+			} else {
+				timeoutId = undefined;
+
+				if (!immediate) {
+					result = run();
+				}
+			}
+		}
+
+		const debounced = function (...arguments_) {
+			if (
+				storedContext
+				&& this !== storedContext
+				&& Object.getPrototypeOf(this) === Object.getPrototypeOf(storedContext)
+			) {
+				throw new Error('Debounced method called with different contexts of the same prototype.');
+			}
+
+			storedContext = this; // eslint-disable-line unicorn/no-this-assignment
+			storedArguments = arguments_;
+			timestamp = Date.now();
+
+			const callNow = immediate && !timeoutId;
+
+			if (!timeoutId) {
+				timeoutId = setTimeout(later, wait);
+			}
+
+			if (callNow) {
+				result = run();
+			}
+
+			return result;
+		};
+
+		Object.defineProperty(debounced, 'isPending', {
+			get() {
+				return timeoutId !== undefined;
+			},
+		});
+
+		debounced.clear = () => {
+			if (!timeoutId) {
+				return;
+			}
+
+			clearTimeout(timeoutId);
+			timeoutId = undefined;
+		};
+
+		debounced.flush = () => {
+			if (!timeoutId) {
+				return;
+			}
+
+			debounced.trigger();
+		};
+
+		debounced.trigger = () => {
+			result = run();
+
+			debounced.clear();
+		};
+
+		return debounced;
+	}
+
+	// Adds compatibility for ES modules
+	debounce$3.exports.debounce = debounce;
+
+	debounce$3.exports = debounce;
+	return debounce$3.exports;
+}
+
+var debounceExports = /*@__PURE__*/ requireDebounce();
+var debounce$2 = /*@__PURE__*/getDefaultExportFromCjs(debounceExports);
 
 /*  Adds auto-submit to a form using @hotwired turbo
     Submits the form associated with the input
@@ -20128,131 +20165,6 @@ function require_default () {
 var _defaultExports = require_default();
 
 /**
- * @name toDate
- * @category Common Helpers
- * @summary Convert the given argument to an instance of Date.
- *
- * @description
- * Convert the given argument to an instance of Date.
- *
- * If the argument is an instance of Date, the function returns its clone.
- *
- * If the argument is a number, it is treated as a timestamp.
- *
- * If the argument is none of the above, the function returns Invalid Date.
- *
- * **Note**: *all* Date arguments passed to any *date-fns* function is processed by `toDate`.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param argument - The value to convert
- *
- * @returns The parsed date in the local time zone
- *
- * @example
- * // Clone the date:
- * const result = toDate(new Date(2014, 1, 11, 11, 30, 30))
- * //=> Tue Feb 11 2014 11:30:30
- *
- * @example
- * // Convert the timestamp to date:
- * const result = toDate(1392098430000)
- * //=> Tue Feb 11 2014 11:30:30
- */
-function toDate(argument) {
-  const argStr = Object.prototype.toString.call(argument);
-
-  // Clone the date
-  if (
-    argument instanceof Date ||
-    (typeof argument === "object" && argStr === "[object Date]")
-  ) {
-    // Prevent the date to lose the milliseconds when passed to new Date() in IE10
-    return new argument.constructor(+argument);
-  } else if (
-    typeof argument === "number" ||
-    argStr === "[object Number]" ||
-    typeof argument === "string" ||
-    argStr === "[object String]"
-  ) {
-    // TODO: Can we get rid of as?
-    return new Date(argument);
-  } else {
-    // TODO: Can we get rid of as?
-    return new Date(NaN);
-  }
-}
-
-/**
- * @name constructFrom
- * @category Generic Helpers
- * @summary Constructs a date using the reference date and the value
- *
- * @description
- * The function constructs a new date using the constructor from the reference
- * date and the given value. It helps to build generic functions that accept
- * date extensions.
- *
- * It defaults to `Date` if the passed reference date is a number or a string.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The reference date to take constructor from
- * @param value - The value to create the date
- *
- * @returns Date initialized using the given date and value
- *
- * @example
- * import { constructFrom } from 'date-fns'
- *
- * // A function that clones a date preserving the original type
- * function cloneDate<DateType extends Date(date: DateType): DateType {
- *   return constructFrom(
- *     date, // Use contrustor from the given date
- *     date.getTime() // Use the date value to create a new date
- *   )
- * }
- */
-function constructFrom(date, value) {
-  if (date instanceof Date) {
-    return new date.constructor(value);
-  } else {
-    return new Date(value);
-  }
-}
-
-/**
- * @name addDays
- * @category Day Helpers
- * @summary Add the specified number of days to the given date.
- *
- * @description
- * Add the specified number of days to the given date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param date - The date to be changed
- * @param amount - The amount of days to be added.
- *
- * @returns The new date with the days added
- *
- * @example
- * // Add 10 days to 1 September 2014:
- * const result = addDays(new Date(2014, 8, 1), 10)
- * //=> Thu Sep 11 2014 00:00:00
- */
-function addDays(date, amount) {
-  const _date = toDate(date);
-  if (isNaN(amount)) return constructFrom(date, NaN);
-  if (!amount) {
-    // If 0 days, no-op to avoid changing times in the hour before end of DST
-    return _date;
-  }
-  _date.setDate(_date.getDate() + amount);
-  return _date;
-}
-
-/**
  * @module constants
  * @summary Useful constants
  * @description
@@ -20298,6 +20210,145 @@ const millisecondsInHour = 3600000;
  */
 const millisecondsInSecond = 1000;
 
+/**
+ * @constant
+ * @name constructFromSymbol
+ * @summary Symbol enabling Date extensions to inherit properties from the reference date.
+ *
+ * The symbol is used to enable the `constructFrom` function to construct a date
+ * using a reference date and a value. It allows to transfer extra properties
+ * from the reference date to the new date. It's useful for extensions like
+ * [`TZDate`](https://github.com/date-fns/tz) that accept a time zone as
+ * a constructor argument.
+ */
+const constructFromSymbol = Symbol.for("constructDateFrom");
+
+/**
+ * @name constructFrom
+ * @category Generic Helpers
+ * @summary Constructs a date using the reference date and the value
+ *
+ * @description
+ * The function constructs a new date using the constructor from the reference
+ * date and the given value. It helps to build generic functions that accept
+ * date extensions.
+ *
+ * It defaults to `Date` if the passed reference date is a number or a string.
+ *
+ * Starting from v3.7.0, it allows to construct a date using `[Symbol.for("constructDateFrom")]`
+ * enabling to transfer extra properties from the reference date to the new date.
+ * It's useful for extensions like [`TZDate`](https://github.com/date-fns/tz)
+ * that accept a time zone as a constructor argument.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The reference date to take constructor from
+ * @param value - The value to create the date
+ *
+ * @returns Date initialized using the given date and value
+ *
+ * @example
+ * import { constructFrom } from "./constructFrom/date-fns";
+ *
+ * // A function that clones a date preserving the original type
+ * function cloneDate<DateType extends Date>(date: DateType): DateType {
+ *   return constructFrom(
+ *     date, // Use constructor from the given date
+ *     date.getTime() // Use the date value to create a new date
+ *   );
+ * }
+ */
+function constructFrom(date, value) {
+  if (typeof date === "function") return date(value);
+
+  if (date && typeof date === "object" && constructFromSymbol in date)
+    return date[constructFromSymbol](value);
+
+  if (date instanceof Date) return new date.constructor(value);
+
+  return new Date(value);
+}
+
+/**
+ * @name toDate
+ * @category Common Helpers
+ * @summary Convert the given argument to an instance of Date.
+ *
+ * @description
+ * Convert the given argument to an instance of Date.
+ *
+ * If the argument is an instance of Date, the function returns its clone.
+ *
+ * If the argument is a number, it is treated as a timestamp.
+ *
+ * If the argument is none of the above, the function returns Invalid Date.
+ *
+ * Starting from v3.7.0, it clones a date using `[Symbol.for("constructDateFrom")]`
+ * enabling to transfer extra properties from the reference date to the new date.
+ * It's useful for extensions like [`TZDate`](https://github.com/date-fns/tz)
+ * that accept a time zone as a constructor argument.
+ *
+ * **Note**: *all* Date arguments passed to any *date-fns* function is processed by `toDate`.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param argument - The value to convert
+ *
+ * @returns The parsed date in the local time zone
+ *
+ * @example
+ * // Clone the date:
+ * const result = toDate(new Date(2014, 1, 11, 11, 30, 30))
+ * //=> Tue Feb 11 2014 11:30:30
+ *
+ * @example
+ * // Convert the timestamp to date:
+ * const result = toDate(1392098430000)
+ * //=> Tue Feb 11 2014 11:30:30
+ */
+function toDate(argument, context) {
+  // [TODO] Get rid of `toDate` or `constructFrom`?
+  return constructFrom(context || argument, argument);
+}
+
+/**
+ * The {@link addDays} function options.
+ */
+
+/**
+ * @name addDays
+ * @category Day Helpers
+ * @summary Add the specified number of days to the given date.
+ *
+ * @description
+ * Add the specified number of days to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of days to be added.
+ * @param options - An object with options
+ *
+ * @returns The new date with the days added
+ *
+ * @example
+ * // Add 10 days to 1 September 2014:
+ * const result = addDays(new Date(2014, 8, 1), 10)
+ * //=> Thu Sep 11 2014 00:00:00
+ */
+function addDays(date, amount, options) {
+  const _date = toDate(date, options?.in);
+  if (isNaN(amount)) return constructFrom(options?.in || date, NaN);
+
+  // If 0 days, no-op to avoid changing times in the hour before end of DST
+  if (!amount) return _date;
+
+  _date.setDate(_date.getDate() + amount);
+  return _date;
+}
+
 let defaultOptions$1 = {};
 
 function getDefaultOptions$1() {
@@ -20318,6 +20369,7 @@ function getDefaultOptions$1() {
  * The result will be in the local timezone.
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
  *
  * @param date - The original date
  * @param options - An object with options
@@ -20343,7 +20395,7 @@ function startOfWeek(date, options) {
     defaultOptions.locale?.options?.weekStartsOn ??
     0;
 
-  const _date = toDate(date);
+  const _date = toDate(date, options?.in);
   const day = _date.getDay();
   const diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
 
@@ -20351,6 +20403,10 @@ function startOfWeek(date, options) {
   _date.setHours(0, 0, 0, 0);
   return _date;
 }
+
+/**
+ * The {@link startOfISOWeek} function options.
+ */
 
 /**
  * @name startOfISOWeek
@@ -20364,8 +20420,10 @@ function startOfWeek(date, options) {
  * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
  *
  * @param date - The original date
+ * @param options - An object with options
  *
  * @returns The start of an ISO week
  *
@@ -20374,9 +20432,13 @@ function startOfWeek(date, options) {
  * const result = startOfISOWeek(new Date(2014, 8, 2, 11, 55, 0))
  * //=> Mon Sep 01 2014 00:00:00
  */
-function startOfISOWeek(date) {
-  return startOfWeek(date, { weekStartsOn: 1 });
+function startOfISOWeek(date, options) {
+  return startOfWeek(date, { ...options, weekStartsOn: 1 });
 }
+
+/**
+ * The {@link getISOWeekYear} function options.
+ */
 
 /**
  * @name getISOWeekYear
@@ -20389,8 +20451,6 @@ function startOfISOWeek(date) {
  *
  * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
  *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
  * @param date - The given date
  *
  * @returns The ISO week-numbering year
@@ -20400,16 +20460,16 @@ function startOfISOWeek(date) {
  * const result = getISOWeekYear(new Date(2005, 0, 2))
  * //=> 2004
  */
-function getISOWeekYear(date) {
-  const _date = toDate(date);
+function getISOWeekYear(date, options) {
+  const _date = toDate(date, options?.in);
   const year = _date.getFullYear();
 
-  const fourthOfJanuaryOfNextYear = constructFrom(date, 0);
+  const fourthOfJanuaryOfNextYear = constructFrom(_date, 0);
   fourthOfJanuaryOfNextYear.setFullYear(year + 1, 0, 4);
   fourthOfJanuaryOfNextYear.setHours(0, 0, 0, 0);
   const startOfNextYear = startOfISOWeek(fourthOfJanuaryOfNextYear);
 
-  const fourthOfJanuaryOfThisYear = constructFrom(date, 0);
+  const fourthOfJanuaryOfThisYear = constructFrom(_date, 0);
   fourthOfJanuaryOfThisYear.setFullYear(year, 0, 4);
   fourthOfJanuaryOfThisYear.setHours(0, 0, 0, 0);
   const startOfThisYear = startOfISOWeek(fourthOfJanuaryOfThisYear);
@@ -20452,6 +20512,10 @@ function getTimezoneOffsetInMilliseconds(date) {
 }
 
 /**
+ * The {@link startOfISOWeekYear} function options.
+ */
+
+/**
  * @name startOfISOWeekYear
  * @category ISO Week-Numbering Year Helpers
  * @summary Return the start of an ISO week-numbering year for the given date.
@@ -20464,8 +20528,10 @@ function getTimezoneOffsetInMilliseconds(date) {
  * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
  *
  * @param date - The original date
+ * @param options - An object with options
  *
  * @returns The start of an ISO week-numbering year
  *
@@ -20474,8 +20540,8 @@ function getTimezoneOffsetInMilliseconds(date) {
  * const result = startOfISOWeekYear(new Date(2005, 6, 2))
  * //=> Mon Jan 03 2005 00:00:00
  */
-function startOfISOWeekYear(date) {
-  const year = getISOWeekYear(date);
+function startOfISOWeekYear(date, options) {
+  const year = getISOWeekYear(date, options);
   const fourthOfJanuary = constructFrom(date, 0);
   fourthOfJanuary.setFullYear(year, 0, 4);
   fourthOfJanuary.setHours(0, 0, 0, 0);
@@ -20534,8 +20600,6 @@ function isDate(value) {
  *
  * Time value of Date: http://es5.github.io/#x15.9.1.1
  *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
  * @param date - The date to check
  *
  * @returns The date is valid
@@ -20546,7 +20610,7 @@ function isDate(value) {
  * //=> true
  *
  * @example
- * // For the value, convertable into a date:
+ * // For the value, convertible into a date:
  * const result = isValid(1393804800000)
  * //=> true
  *
@@ -20556,11 +20620,7 @@ function isDate(value) {
  * //=> false
  */
 function isValid(date) {
-  if (!isDate(date) && typeof date !== "number") {
-    return false;
-  }
-  const _date = toDate(date);
-  return !isNaN(Number(_date));
+  return !((!isDate(date) && typeof date !== "number") || isNaN(+toDate(date)));
 }
 
 const formatDistanceLocale = {
@@ -20723,8 +20783,6 @@ const formatRelativeLocale = {
 
 const formatRelative = (token, _date, _baseDate, _options) =>
   formatRelativeLocale[token];
-
-/* eslint-disable no-unused-vars */
 
 /**
  * The localize function argument callback which allows to convert raw value to
@@ -20995,14 +21053,14 @@ function buildMatchFn(args) {
 
     const key = Array.isArray(parsePatterns)
       ? findIndex(parsePatterns, (pattern) => pattern.test(matchedString))
-      : // eslint-disable-next-line @typescript-eslint/no-explicit-any -- I challange you to fix the type
+      : // [TODO] -- I challenge you to fix the type
         findKey(parsePatterns, (pattern) => pattern.test(matchedString));
 
     let value;
 
     value = args.valueCallback ? args.valueCallback(key) : key;
     value = options.valueCallback
-      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any -- I challange you to fix the type
+      ? // [TODO] -- I challenge you to fix the type
         options.valueCallback(value)
       : value;
 
@@ -21045,7 +21103,7 @@ function buildMatchPatternFn(args) {
       ? args.valueCallback(parseResult[0])
       : parseResult[0];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- I challange you to fix the type
+    // [TODO] I challenge you to fix the type
     value = options.valueCallback ? options.valueCallback(value) : value;
 
     const rest = string.slice(matchedString.length);
@@ -21206,6 +21264,10 @@ const enUS = {
 };
 
 /**
+ * The {@link getISOWeek} function options.
+ */
+
+/**
  * @name getISOWeek
  * @category ISO Week Helpers
  * @summary Get the ISO week of the given date.
@@ -21215,9 +21277,8 @@ const enUS = {
  *
  * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
  *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
  * @param date - The given date
+ * @param options - The options
  *
  * @returns The ISO week
  *
@@ -21226,8 +21287,8 @@ const enUS = {
  * const result = getISOWeek(new Date(2005, 0, 2))
  * //=> 53
  */
-function getISOWeek(date) {
-  const _date = toDate(date);
+function getISOWeek(date, options) {
+  const _date = toDate(date, options?.in);
   const diff = +startOfISOWeek(_date) - +startOfISOWeekYear(_date);
 
   // Round the number of weeks to the nearest integer because the number of
@@ -21254,8 +21315,6 @@ function getISOWeek(date) {
  *
  * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
  *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
  * @param date - The given date
  * @param options - An object with options.
  *
@@ -21277,7 +21336,7 @@ function getISOWeek(date) {
  * //=> 2004
  */
 function getWeekYear(date, options) {
-  const _date = toDate(date);
+  const _date = toDate(date, options?.in);
   const year = _date.getFullYear();
 
   const defaultOptions = getDefaultOptions$1();
@@ -21288,19 +21347,19 @@ function getWeekYear(date, options) {
     defaultOptions.locale?.options?.firstWeekContainsDate ??
     1;
 
-  const firstWeekOfNextYear = constructFrom(date, 0);
+  const firstWeekOfNextYear = constructFrom(options?.in || date, 0);
   firstWeekOfNextYear.setFullYear(year + 1, 0, firstWeekContainsDate);
   firstWeekOfNextYear.setHours(0, 0, 0, 0);
   const startOfNextYear = startOfWeek(firstWeekOfNextYear, options);
 
-  const firstWeekOfThisYear = constructFrom(date, 0);
+  const firstWeekOfThisYear = constructFrom(options?.in || date, 0);
   firstWeekOfThisYear.setFullYear(year, 0, firstWeekContainsDate);
   firstWeekOfThisYear.setHours(0, 0, 0, 0);
   const startOfThisYear = startOfWeek(firstWeekOfThisYear, options);
 
-  if (_date.getTime() >= startOfNextYear.getTime()) {
+  if (+_date >= +startOfNextYear) {
     return year + 1;
-  } else if (_date.getTime() >= startOfThisYear.getTime()) {
+  } else if (+_date >= +startOfThisYear) {
     return year;
   } else {
     return year - 1;
@@ -21326,6 +21385,7 @@ function getWeekYear(date, options) {
  * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type.
  *
  * @param date - The original date
  * @param options - An object with options
@@ -21357,7 +21417,7 @@ function startOfWeekYear(date, options) {
     1;
 
   const year = getWeekYear(date, options);
-  const firstWeek = constructFrom(date, 0);
+  const firstWeek = constructFrom(options?.in || date, 0);
   firstWeek.setFullYear(year, 0, firstWeekContainsDate);
   firstWeek.setHours(0, 0, 0, 0);
   const _date = startOfWeek(firstWeek, options);
@@ -21382,8 +21442,6 @@ function startOfWeekYear(date, options) {
  *
  * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
  *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
  * @param date - The given date
  * @param options - An object with options
  *
@@ -21404,9 +21462,8 @@ function startOfWeekYear(date, options) {
  * })
  * //=> 53
  */
-
 function getWeek(date, options) {
-  const _date = toDate(date);
+  const _date = toDate(date, options?.in);
   const diff = +startOfWeek(_date, options) - +startOfWeekYear(_date, options);
 
   // Round the number of weeks to the nearest integer because the number of
@@ -21533,6 +21590,10 @@ function getDefaultOptions() {
 }
 
 /**
+ * The {@link getISODay} function options.
+ */
+
+/**
  * @name getISODay
  * @category Weekday Helpers
  * @summary Get the day of the ISO week of the given date.
@@ -21543,9 +21604,8 @@ function getDefaultOptions() {
  *
  * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
  *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
  * @param date - The given date
+ * @param options - An object with options
  *
  * @returns The day of ISO week
  *
@@ -21554,15 +21614,9 @@ function getDefaultOptions() {
  * const result = getISODay(new Date(2012, 1, 26))
  * //=> 7
  */
-function getISODay(date) {
-  const _date = toDate(date);
-  let day = _date.getDay();
-
-  if (day === 0) {
-    day = 7;
-  }
-
-  return day;
+function getISODay(date, options) {
+  const day = toDate(date, options?.in).getDay();
+  return day === 0 ? 7 : day;
 }
 
 /**
@@ -21575,10 +21629,10 @@ function getISODay(date) {
  * to transpose the date in the system time zone to say `UTCDate` or any other
  * date extension.
  *
- * @typeParam DateInputType - The input `Date` type derived from the passed argument.
- * @typeParam DateOutputType - The output `Date` type derived from the passed constructor.
+ * @typeParam InputDate - The input `Date` type derived from the passed argument.
+ * @typeParam ResultDate - The result `Date` type derived from the passed constructor.
  *
- * @param fromDate - The date to use values from
+ * @param date - The date to use values from
  * @param constructor - The date constructor to use
  *
  * @returns Date transposed to the given constructor
@@ -21593,23 +21647,25 @@ function getISODay(date) {
  * transpose(date, UTCDate)
  * //=> 'Sun Jul 10 2022 00:00:00 GMT+0000 (Coordinated Universal Time)'
  */
-function transpose(fromDate, constructor) {
-  const date =
-    constructor instanceof Date
-      ? constructFrom(constructor, 0)
-      : new constructor(0);
-  date.setFullYear(
-    fromDate.getFullYear(),
-    fromDate.getMonth(),
-    fromDate.getDate(),
+function transpose(date, constructor) {
+  const date_ = isConstructor(constructor)
+    ? new constructor(0)
+    : constructFrom(constructor, 0);
+  date_.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+  date_.setHours(
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+    date.getMilliseconds(),
   );
-  date.setHours(
-    fromDate.getHours(),
-    fromDate.getMinutes(),
-    fromDate.getSeconds(),
-    fromDate.getMilliseconds(),
+  return date_;
+}
+
+function isConstructor(constructor) {
+  return (
+    typeof constructor === "function" &&
+    constructor.prototype?.constructor === constructor
   );
-  return date;
 }
 
 const TIMEZONE_UNIT_PRIORITY = 10;
@@ -21652,12 +21708,18 @@ class ValueSetter extends Setter {
   }
 }
 
-class DateToSystemTimezoneSetter extends Setter {
+class DateTimezoneSetter extends Setter {
   priority = TIMEZONE_UNIT_PRIORITY;
   subPriority = -1;
+
+  constructor(context, reference) {
+    super();
+    this.context = context || ((date) => constructFrom(reference, date));
+  }
+
   set(date, flags) {
     if (flags.timestampIsSet) return date;
-    return constructFrom(date, transpose(date, Date));
+    return constructFrom(date, transpose(date, this.context));
   }
 }
 
@@ -22411,6 +22473,7 @@ class StandAloneMonthParser extends Parser {
  * Week numbering: https://en.wikipedia.org/wiki/Week#The_ISO_week_date_system
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
  *
  * @param date - The date to be changed
  * @param week - The week of the new date
@@ -22434,10 +22497,10 @@ class StandAloneMonthParser extends Parser {
  * //=> Sun Jan 4 2004 00:00:00
  */
 function setWeek(date, week, options) {
-  const _date = toDate(date);
-  const diff = getWeek(_date, options) - week;
-  _date.setDate(_date.getDate() - diff * 7);
-  return _date;
+  const date_ = toDate(date, options?.in);
+  const diff = getWeek(date_, options) - week;
+  date_.setDate(date_.getDate() - diff * 7);
+  return toDate(date_, options?.in);
 }
 
 // Local week of year
@@ -22481,6 +22544,10 @@ class LocalWeekParser extends Parser {
 }
 
 /**
+ * The {@link setISOWeek} function options.
+ */
+
+/**
  * @name setISOWeek
  * @category ISO Week Helpers
  * @summary Set the ISO week to the given date.
@@ -22491,9 +22558,11 @@ class LocalWeekParser extends Parser {
  * ISO week-numbering year: http://en.wikipedia.org/wiki/ISO_week_date
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The `Date` type of the context function.
  *
  * @param date - The date to be changed
  * @param week - The ISO week of the new date
+ * @param options - An object with options
  *
  * @returns The new date with the ISO week set
  *
@@ -22502,9 +22571,9 @@ class LocalWeekParser extends Parser {
  * const result = setISOWeek(new Date(2004, 7, 7), 53)
  * //=> Sat Jan 01 2005 00:00:00
  */
-function setISOWeek(date, week) {
-  const _date = toDate(date);
-  const diff = getISOWeek(_date) - week;
+function setISOWeek(date, week, options) {
+  const _date = toDate(date, options?.in);
+  const diff = getISOWeek(_date, options) - week;
   _date.setDate(_date.getDate() - diff * 7);
   return _date;
 }
@@ -22669,6 +22738,7 @@ class DayOfYearParser extends Parser {
  * Set the day of the week to the given date.
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
  *
  * @param date - The date to be changed
  * @param day - The day of the week of the new date
@@ -22695,8 +22765,8 @@ function setDay(date, day, options) {
     defaultOptions.locale?.options?.weekStartsOn ??
     0;
 
-  const _date = toDate(date);
-  const currentDay = _date.getDay();
+  const date_ = toDate(date, options?.in);
+  const currentDay = date_.getDay();
 
   const remainder = day % 7;
   const dayIndex = (remainder + 7) % 7;
@@ -22706,7 +22776,7 @@ function setDay(date, day, options) {
     day < 0 || day > 6
       ? day - ((currentDay + delta) % 7)
       : ((dayIndex + delta) % 7) - ((currentDay + delta) % 7);
-  return addDays(_date, diff);
+  return addDays(date_, diff, options);
 }
 
 // Day of week
@@ -22953,6 +23023,10 @@ class StandAloneLocalDayParser extends Parser {
 }
 
 /**
+ * The {@link setISODay} function options.
+ */
+
+/**
  * @name setISODay
  * @category Weekday Helpers
  * @summary Set the day of the ISO week to the given date.
@@ -22960,12 +23034,14 @@ class StandAloneLocalDayParser extends Parser {
  * @description
  * Set the day of the ISO week to the given date.
  * ISO week starts with Monday.
- * 7 is the index of Sunday, 1 is the index of Monday etc.
+ * 7 is the index of Sunday, 1 is the index of Monday, etc.
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
  *
  * @param date - The date to be changed
  * @param day - The day of the ISO week of the new date
+ * @param options - An object with options
  *
  * @returns The new date with the day of the ISO week set
  *
@@ -22974,11 +23050,11 @@ class StandAloneLocalDayParser extends Parser {
  * const result = setISODay(new Date(2014, 8, 1), 7)
  * //=> Sun Sep 07 2014 00:00:00
  */
-function setISODay(date, day) {
-  const _date = toDate(date);
-  const currentDay = getISODay(_date);
+function setISODay(date, day, options) {
+  const date_ = toDate(date, options?.in);
+  const currentDay = getISODay(date_, options);
   const diff = day - currentDay;
-  return addDays(_date, diff);
+  return addDays(date_, diff, options);
 }
 
 // ISO day of week
@@ -23585,7 +23661,6 @@ class TimestampMillisecondsParser extends Parser {
  *   `Y` is supposed to be used in conjunction with `w` and `e`
  *   for week-numbering date specific to the locale.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- It's ok, we want any here
 const parsers = {
   G: new EraParser(),
   y: new YearParser(),
@@ -23833,7 +23908,7 @@ const unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  *
  *    `format(new Date(2017, 10, 6), 'do MMMM', {locale: cs}) //=> '6. listopadu'`
  *
- *    `parse` will try to match both formatting and stand-alone units interchangably.
+ *    `parse` will try to match both formatting and stand-alone units interchangeably.
  *
  * 2. Any sequence of the identical letters is a pattern, unless it is escaped by
  *    the single quote characters (see below).
@@ -23882,7 +23957,7 @@ const unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * 6. `YY` and `YYYY` tokens represent week-numbering years but they are often confused with years.
  *    You should enable `options.useAdditionalWeekYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  *
- * 7. `D` and `DD` tokens represent days of the year but they are ofthen confused with days of the month.
+ * 7. `D` and `DD` tokens represent days of the year but they are often confused with days of the month.
  *    You should enable `options.useAdditionalDayOfYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  *
  * 8. `P+` tokens do not have a defined priority since they are merely aliases to other tokens based
@@ -23915,6 +23990,7 @@ const unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * Time value of Date: http://es5.github.io/#x15.9.1.1
  *
  * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ * @typeParam ResultDate - The result `Date` type, it is the type returned from the context function if it is passed, or inferred from the arguments.
  *
  * @param dateStr - The string to parse
  * @param formatStr - The string of tokens
@@ -23946,6 +24022,7 @@ const unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * //=> Sun Feb 28 2010 00:00:00
  */
 function parse(dateStr, formatStr, referenceDate, options) {
+  const invalidDate = () => constructFrom(referenceDate, NaN);
   const defaultOptions = getDefaultOptions();
   const locale = defaultOptions.locale ?? enUS;
 
@@ -23959,13 +24036,8 @@ function parse(dateStr, formatStr, referenceDate, options) {
     defaultOptions.locale?.options?.weekStartsOn ??
     0;
 
-  if (formatStr === "") {
-    if (dateStr === "") {
-      return toDate(referenceDate);
-    } else {
-      return constructFrom(referenceDate, NaN);
-    }
-  }
+  if (!formatStr)
+    return dateStr ? invalidDate() : toDate(referenceDate, options?.in);
 
   const subFnOptions = {
     firstWeekContainsDate,
@@ -23973,8 +24045,9 @@ function parse(dateStr, formatStr, referenceDate, options) {
     locale,
   };
 
-  // If timezone isn't specified, it will be set to the system timezone
-  const setters = [new DateToSystemTimezoneSetter()];
+  // If timezone isn't specified, it will try to use the context or
+  // the reference date and fallback to the system time zone.
+  const setters = [new DateTimezoneSetter(options?.in, referenceDate)];
 
   const tokens = formatStr
     .match(longFormattingTokensRegExp)
@@ -24034,7 +24107,7 @@ function parse(dateStr, formatStr, referenceDate, options) {
       );
 
       if (!parseResult) {
-        return constructFrom(referenceDate, NaN);
+        return invalidDate();
       }
 
       setters.push(parseResult.setter);
@@ -24060,14 +24133,14 @@ function parse(dateStr, formatStr, referenceDate, options) {
       if (dateStr.indexOf(token) === 0) {
         dateStr = dateStr.slice(token.length);
       } else {
-        return constructFrom(referenceDate, NaN);
+        return invalidDate();
       }
     }
   }
 
   // Check if the remaining input contains something other than whitespace
   if (dateStr.length > 0 && notWhitespaceRegExp.test(dateStr)) {
-    return constructFrom(referenceDate, NaN);
+    return invalidDate();
   }
 
   const uniquePrioritySetters = setters
@@ -24081,16 +24154,14 @@ function parse(dateStr, formatStr, referenceDate, options) {
     )
     .map((setterArray) => setterArray[0]);
 
-  let date = toDate(referenceDate);
+  let date = toDate(referenceDate, options?.in);
 
-  if (isNaN(date.getTime())) {
-    return constructFrom(referenceDate, NaN);
-  }
+  if (isNaN(+date)) return invalidDate();
 
   const flags = {};
   for (const setter of uniquePrioritySetters) {
     if (!setter.validate(date, subFnOptions)) {
-      return constructFrom(referenceDate, NaN);
+      return invalidDate();
     }
 
     const result = setter.set(date, flags, subFnOptions);
@@ -24104,7 +24175,7 @@ function parse(dateStr, formatStr, referenceDate, options) {
     }
   }
 
-  return constructFrom(referenceDate, date);
+  return date;
 }
 
 function cleanEscapedString(input) {
@@ -24301,7 +24372,7 @@ function cleanEscapedString(input) {
  *
  *    `format(new Date(2017, 10, 6), 'do MMMM', {locale: cs}) //=> '6. listopadu'`
  *
- *    `isMatch` will try to match both formatting and stand-alone units interchangably.
+ *    `isMatch` will try to match both formatting and stand-alone units interchangeably.
  *
  * 2. Any sequence of the identical letters is a pattern, unless it is escaped by
  *    the single quote characters (see below).
@@ -24350,7 +24421,7 @@ function cleanEscapedString(input) {
  * 6. `YY` and `YYYY` tokens represent week-numbering years but they are often confused with years.
  *    You should enable `options.useAdditionalWeekYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  *
- * 7. `D` and `DD` tokens represent days of the year but they are ofthen confused with days of the month.
+ * 7. `D` and `DD` tokens represent days of the year but they are often confused with days of the month.
  *    You should enable `options.useAdditionalDayOfYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  *
  * 8. `P+` tokens do not have a defined priority since they are merely aliases to other tokens based
@@ -24370,8 +24441,6 @@ function cleanEscapedString(input) {
  * The result may vary by locale.
  *
  * If `formatString` matches with `dateString` but does not provides tokens, `referenceDate` will be returned.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
  *
  * @param dateStr - The date string to verify
  * @param format - The string of tokens
@@ -24402,7 +24471,7 @@ function cleanEscapedString(input) {
  * //=> true
  */
 function isMatch(dateStr, formatStr, options) {
-  return isValid(parse(dateStr, formatStr, new Date()));
+  return isValid(parse(dateStr, formatStr, new Date(), options));
 }
 
 // Inspired by stimulus-flatpickr

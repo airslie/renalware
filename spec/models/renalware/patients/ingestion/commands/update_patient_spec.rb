@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Patients::Ingestion
   describe Commands::UpdatePatient do
     include HL7Helpers

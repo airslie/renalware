@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Medications
   describe PrescriptionFormPresenter do
     let(:prescription) { Prescription.new }

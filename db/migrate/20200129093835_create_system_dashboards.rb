@@ -12,7 +12,7 @@ class CreateSystemDashboards < ActiveRecord::Migration[5.2]
           :user,
           index: false,
           null: true,
-          comment: "If present, this dashboard belongs to a user e.g. they have customised a "\
+          comment: "If present, this dashboard belongs to a user e.g. they have customised a " \
                    "named dashboard to make it their own"
         )
         t.references(
@@ -27,7 +27,8 @@ class CreateSystemDashboards < ActiveRecord::Migration[5.2]
 
       create_table(
         :system_components,
-        comment: "Available ruby display widgets for use e.g. in dashboards") do |t|
+        comment: "Available ruby display widgets for use e.g. in dashboards"
+      ) do |t|
         t.string :class_name, null: false, index: true, comment: "Component class eg Renalware::.."
         t.string(
           :name,

@@ -1,9 +1,6 @@
-# frozen_string_literal: true
-
 module Renalware
   module Patients
-    extend SeedsHelper
-    log "Adding ITK3 test patients 2" do
+    Rails.benchmark "Adding ITK3 test patients 2" do
       file_path = File.join(File.dirname(__FILE__), "patients2.csv")
       sex_map = { "Male" => "M", "Female" => "F", "Indeterminate" => "U" }
       idx = 0

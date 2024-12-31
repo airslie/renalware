@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Managing nag definitions" do
     describe "Displaying a list of nag definitions" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This Closed (state) Session adds validation to the standard HD::Session in order
 # to enforce the presence of most fields.
 module Renalware

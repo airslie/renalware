@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding Failure Causes" do
+  Rails.benchmark "Adding Failure Causes" do
     file_path = File.join(File.dirname(__FILE__), "failure_cause_descriptions.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

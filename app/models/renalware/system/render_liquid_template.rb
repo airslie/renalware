@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "liquid" # See https://github.com/Shopify/liquid
 
 module Renalware

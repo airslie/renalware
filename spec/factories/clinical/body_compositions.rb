@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :body_composition, class: "Renalware::Clinical::BodyComposition" do
     accountable

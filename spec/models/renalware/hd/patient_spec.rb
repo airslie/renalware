@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe HD::Patient do
     it { is_expected.to have_many(:prescription_administrations) }

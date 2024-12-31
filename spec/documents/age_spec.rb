@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe Age, type: :model do
+  describe Age, type: :model do # rubocop:disable RSpec/SpecFilePathFormat
     describe "#valid?" do
       context "when born in the last 3 years" do
         subject { described_class.new(amount: 2, unit: :years) }

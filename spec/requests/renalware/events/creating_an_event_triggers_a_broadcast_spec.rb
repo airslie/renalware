@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Creating a Event triggers an event_created broadcast" do
   context "when creating a simple event" do
     it "broadcasts a Wisper 'event_created' message" do

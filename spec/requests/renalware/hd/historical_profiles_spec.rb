@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Viewing historical HD Profiles" do
   describe "GET index" do
     it "renders successfully" do

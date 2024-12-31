@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Clinics
     module Ingestion
@@ -8,9 +6,8 @@ module Renalware
           include Callable
 
           pattr_initialize :message
-          delegate :patient_identification, :pv1, :pv2, to: :message
-          delegate :clinic, :visit_number, :consulting_doctor, to: :pv1
-          delegate :expected_admit_date, to: :pv2
+          delegate :patient_identification, :pv1, :pv2, :sch, to: :message
+          delegate :clinic, :consulting_doctor, :attending_doctor, to: :pv1
 
           # If we match incoming clinic code then we create an appointment. This might mean
           # creating the patient and consultant JIT if they do not yet exist in Renalware.
@@ -18,24 +15,58 @@ module Renalware
             return if rwclinic.blank?
 
             patient = find_or_create_patient
+            existing_appointment = patient.appointments.where(visit_number: visit_number)
 
+            if existing_appointment.present?
+              update_existing_appointment(existing_appointment)
+            else
+              create_new_appointment(patient)
+            end
+          end
+
+          private
+
+          def update_existing_appointment(existing_appointment)
+            existing_appointment.update!(
+              starts_at: appointment_starts_at,
+              ends_at: appointment_ends_at,
+              consultant: rwconsultant,
+              clinic: rwclinic
+            )
+          end
+
+          def create_new_appointment(patient)
             Appointment.create!(
-              patient: Clinics.cast_patient(patient),
-              starts_at: expected_admit_date,
+              patient: patient,
+              starts_at: appointment_starts_at,
+              ends_at: appointment_ends_at,
               clinic: rwclinic,
               consultant: rwconsultant,
               visit_number: visit_number
             )
           end
 
+          def appointment_starts_at
+            message.siu? ? sch.starts_at : pv2.expected_admit_date
+          end
+
+          def appointment_ends_at
+            message.siu? ? sch.ends_at : nil
+          end
+
+          def visit_number
+            message.siu? ? sch.visit_number : pv1.visit_number
+          end
+
           def find_or_create_patient
             # This is the standard A28/31 add/update command which will find or add the patient
             # using the contents of the PID segment
             reason = "Clinic appt"
-            Patients::Ingestion::Commands::AddPatient.call(message, reason).tap do |patient|
+            pat = Patients::Ingestion::Commands::AddPatient.call(message, reason).tap do |patient|
               assign_the_clinic_default_modality_to_new_patients(patient)
               update_patient_demographics(patient)
             end
+            Clinics.cast_patient(pat)
           end
 
           def update_patient_demographics(patient)
@@ -65,9 +96,15 @@ module Renalware
           end
 
           def rwconsultant
-            @rwconsultant ||= Consultant.find_or_create_by!(code: consulting_doctor.code) do |cons|
-              cons.name = consulting_doctor.name
+            @rwconsultant ||= Consultant.find_or_create_by!(code: consultant.code) do |cons|
+              cons.name = consultant.name
             end
+          end
+
+          # MSE use PV1.9 consulting_doctor
+          # BLT use PV1.7 attending_doctor and consulting_doctor is blank
+          def consultant
+            consulting_doctor.code.present? ? consulting_doctor : attending_doctor
           end
         end
       end

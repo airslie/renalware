@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Letters::PathologyLayout do
     subject(:layout) { described_class.new }

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Patients
     module Ingestion
@@ -24,7 +22,7 @@ module Renalware
           attr_reader :mapper_factory
 
           def add_patient_if_not_exists
-            patient = find_patient
+            patient = find_patient # in super
             return patient if patient.present?
             return patient if ENV.key?("ADT_SKIP_UPDATE_PATIENT")
 

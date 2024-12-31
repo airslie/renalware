@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module System
     # Executes the given SQL function and logs the returned OUT params to an APILog event.

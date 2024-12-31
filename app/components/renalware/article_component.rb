@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Renders article markup with optional title and action links/buttons.
   # We use <article> extensively so this is a useful component that lets us

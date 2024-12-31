@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Modalities
     # A change type must be chosen when adding a new modality. It specifies the type of modality

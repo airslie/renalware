@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding HD Dialysates" do
+  Rails.benchmark "Adding HD Dialysates" do
     file_path = File.join(File.dirname(__FILE__), "dialysates.csv")
 
     CSV.foreach(file_path, headers: true) do |row|

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable RSpec/AnyInstance
 module Renalware::Feeds
   describe MessageProcessor do

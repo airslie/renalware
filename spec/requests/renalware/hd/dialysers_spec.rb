@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing Dialysers" do
   let(:dialyser) { create(:hd_dialyser) }
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "access_sites"
 require_relative "access_types"
 require_relative "access_plan_types"

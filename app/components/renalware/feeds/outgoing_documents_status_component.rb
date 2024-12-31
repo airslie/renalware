@@ -1,13 +1,11 @@
-# frozen_string_literal: true
-
 module Renalware
   module Feeds
     # A superadmin dashboard component displaying the status of outgoing documents in the last
     # 30 days, with some logic to colour-code values of note, eg if the number of documents waiting
     # in the queue is >= 50
     class OutgoingDocumentsStatusComponent < ApplicationComponent
-      DEFAULT_TEXT_CSS_CLASS = "text-indigo-600"
-      WARNING_TEXT_CSS_CLASS = "text-red-600"
+      DEFAULT_TEXT_CSS_CLASS = "text-indigo-600".freeze
+      WARNING_TEXT_CSS_CLASS = "text-red-600".freeze
 
       attr_reader :current_user, :period_in_days, :include_chrome
 

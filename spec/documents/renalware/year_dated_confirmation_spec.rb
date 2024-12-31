@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe YearDatedConfirmation, type: :model do
     let(:year_dated_confirmation) {

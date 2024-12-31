@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Various rake tasks for importing flat file feeds
 begin
   namespace :feeds do

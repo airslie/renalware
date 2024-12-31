@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 begin
   namespace :audit do
     desc <<-DESC

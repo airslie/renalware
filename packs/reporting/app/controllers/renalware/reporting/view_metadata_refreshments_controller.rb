@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Reporting
     # Asynchronously refresh the materialized view associated with the ViewMetadata

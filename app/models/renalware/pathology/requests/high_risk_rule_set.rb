@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This class used to include https://github.com/softace/activerecord-tableless but that does not
 # support Rails 5. The alternative I have used here is to massage this class to get the specs to
 # pass by stubbing out various methods.

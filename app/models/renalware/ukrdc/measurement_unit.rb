@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module UKRDC
     # Represents a valid UKRDC pathology test result measurement unit e.g. "mg".

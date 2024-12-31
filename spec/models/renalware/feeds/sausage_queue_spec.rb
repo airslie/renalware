@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe Feeds::SausageQueue do
     it :aggregate_failures do

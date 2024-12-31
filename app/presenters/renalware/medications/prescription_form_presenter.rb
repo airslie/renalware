@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Medications
     class PrescriptionFormPresenter
@@ -7,7 +5,7 @@ module Renalware
 
       delegate_missing_to :prescription
 
-      SEPARATOR = ":"
+      SEPARATOR = ":".freeze
 
       OTHER_FREQUENCY = OpenStruct.new(name: Drugs::Frequency::OTHER_NAME,
                                        title: Drugs::Frequency::OTHER_TITLE)

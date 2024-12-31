@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Events::EventPdfPresenter do
   subject(:presenter) { described_class.new(event) }
 

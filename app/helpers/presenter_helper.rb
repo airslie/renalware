@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module PresenterHelper
   def present(object, presenter_class = nil, &)
     if object.respond_to?(:each)

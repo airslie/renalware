@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs::DMD::Synchronisers
   describe ClassificationAndDrugsSynchroniser do
     describe "#call" do

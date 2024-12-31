@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 module Renalware
   module PD
     class MDMPatientsQuery
-      DEFAULT_SEARCH_PREDICATE = "hgb_date desc"
+      DEFAULT_SEARCH_PREDICATE = "hgb_date desc".freeze
       attr_reader :params, :relation, :named_filter
 
       def initialize(params:, relation: PD::Patient.all, named_filter: nil)
@@ -42,7 +40,7 @@ module Renalware
       def patients_on_the_worry_board
         joins("RIGHT OUTER JOIN patient_worries ON patient_worries.patient_id = patients.id")
       end
-      alias_method :on_worryboard, :patients_on_the_worry_board
+      alias on_worryboard patients_on_the_worry_board
     end
   end
 end

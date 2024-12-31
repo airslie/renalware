@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   describe ElectronicReceiptPolicy, type: :policy do
     subject(:policy) { described_class }

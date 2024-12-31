@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Drugs
   describe Drug do
     subject(:drug) { build(:drug) }

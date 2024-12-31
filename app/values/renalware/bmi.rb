@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Value object representing Body Mass Index. Accepts only meters and kg
   #

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::Requests::RequestQuery do
   let(:params) { {} }
   let(:request_query) { described_class.new(params) }

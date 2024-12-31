@@ -26,7 +26,7 @@ class CreateUserGroups < ActiveRecord::Migration[6.0]
           :letter_electronic_ccs,
           null: false,
           default: false,
-          comment: "If true, the group can be chosen from the electronic CCs recipients "\
+          comment: "If true, the group can be chosen from the electronic CCs recipients " \
                    "dropdown in letters"
         )
         t.references :created_by, index: true, null: false, foreign_key: { to_table: :users }

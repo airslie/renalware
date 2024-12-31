@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Transplants
     # Presenter formatting a single patient for use behind any MDM Patients listing.

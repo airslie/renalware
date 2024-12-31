@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "List internal messages for a patient" do
   describe "GET index" do
     it "responds successfully" do

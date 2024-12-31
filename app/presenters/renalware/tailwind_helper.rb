@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # The role of this module is currently just to list all variations of css colour classes that
   # might be needed as a result of the postgres enum_colour_name (green rose etc) which can be

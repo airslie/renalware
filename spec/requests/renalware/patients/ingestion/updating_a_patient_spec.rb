@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "HL7 ADT~A31 message handling: 'Update person information'" do
   let(:local_patient_id) { "P123" }
   let(:family_name) { "SMITH" }

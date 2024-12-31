@@ -1,7 +1,4 @@
-# frozen_string_literal: true
-
-describe "Printing a letter",
-         js: true do
+describe "Printing a letter", :js do
   include LettersSpecHelper
   include AjaxHelpers
 

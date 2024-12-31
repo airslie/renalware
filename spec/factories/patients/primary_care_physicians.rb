@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   sequence :gp_code do |n|
     "G#{n.to_s.rjust(7, '0')}"

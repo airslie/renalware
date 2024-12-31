@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  # log "Adding HD Diaries" do
+  # Rails.benchmark "Adding HD Diaries" do
   class CreateDiary
     attr_reader :unit, :user
 

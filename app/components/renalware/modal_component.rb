@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Usage
   #
@@ -24,7 +22,7 @@ module Renalware
     attr_reader :remote, :title, :size_css_classes, :turbo_frame_id
 
     # if changing these, remember to test all instance of ModalComponent
-    DEFAULT_SIZE_CSS_CLASSES = "sm:w-full sm:max-w-xl"
+    DEFAULT_SIZE_CSS_CLASSES = "sm:w-full sm:max-w-xl".freeze
 
     # renders_one :body
     # renders_one :trigger

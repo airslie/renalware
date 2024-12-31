@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Feeds::HL7Segments
   describe PV1 do
     subject(:pv1) { Renalware::Feeds::MessageParser.parse(raw_message).pv1 }

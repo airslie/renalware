@@ -8,7 +8,7 @@ class CreateLetterMailshots < ActiveRecord::Migration[5.2]
         t.string(
           :description,
           null: false,
-          comment: "Some text to identify the mailshot purpose. "\
+          comment: "Some text to identify the mailshot purpose. " \
                    "Will be written to letter_letters.description column when letter created"
         )
         t.string(

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   module Transports::Mesh
     describe SendMessageJob do
@@ -9,6 +7,7 @@ module Renalware::Letters
 
       let(:transmission) { Transmission.create!(letter: letter) }
       let(:user) { create(:user) }
+      let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
       let(:letter) do
         create_mesh_letter_to_gp(
           create_mesh_patient(user: user),

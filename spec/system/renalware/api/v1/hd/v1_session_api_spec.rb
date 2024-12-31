@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # What does the api look like?
 # We need to
 # - test if a session exists (? or do we upsert)

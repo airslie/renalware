@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Patients
     # Queries for and stores in a class variable the list of MDM 'scopes' to use when building

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Matches PDF::Reader::Page text
 RSpec::Matchers.define :have_pdf_page_text do |expected|
   match do |actual|

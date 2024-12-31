@@ -7,7 +7,7 @@ class AddNresultToPathologyObservations < ActiveRecord::Migration[5.2]
         :float,
         index: false,
         null: true,
-        comment: "The result column cast to a float, for ease of using graphing and claculations."\
+        comment: "The result column cast to a float, for ease of using graphing and claculations." \
                  "Will be null if the result has a text value that cannot be coreced into a number"
       )
 
@@ -18,8 +18,8 @@ class AddNresultToPathologyObservations < ActiveRecord::Migration[5.2]
         end
         direction.down do
           connection.execute(
-            "DROP TRIGGER IF EXISTS update_pathology_observations_nresult_trigger "\
-            "ON pathology_observations; "\
+            "DROP TRIGGER IF EXISTS update_pathology_observations_nresult_trigger " \
+            "ON pathology_observations; " \
             "DROP FUNCTION IF EXISTS update_pathology_observations_nresult_from_trigger();"
           )
         end

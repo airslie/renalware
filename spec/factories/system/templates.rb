@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :esi_printable_form_template, class: "Renalware::System::Template" do
     name { "esi_printable_form" }

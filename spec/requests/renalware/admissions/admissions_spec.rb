@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe "Admission management" do
     include PatientsSpecHelper

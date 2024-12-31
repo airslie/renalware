@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :abridged_patient, class: "Renalware::Patients::Abridgement" do
     hospital_number { "KCH99999" }

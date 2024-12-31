@@ -17,8 +17,8 @@ class AddBMIToClinicVisits < ActiveRecord::Migration[5.2]
           # non-sense value in case height or weight were entered incorrectly.
           # NB: height is in metres and weight in kg
           connection.execute(
-            "update renalware.clinic_visits "\
-            "set bmi = round(((weight / height)::decimal / height::decimal), 1) "\
+            "update renalware.clinic_visits " \
+            "set bmi = round(((weight / height)::decimal / height::decimal), 1) " \
             "where height > 0 and height < 3 and weight > 0 and weight < 500;"
           )
         end

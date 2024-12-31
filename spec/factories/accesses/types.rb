@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :access_type, class: "Renalware::Accesses::Type" do
     name { "Tunnelled subclav" }

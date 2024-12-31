@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Viewing Message Replays" do
   let(:patient) { create(:patient) }
 

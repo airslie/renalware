@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Azure healthcheck robotsXXX.txt request" do
   it "returns a 404 status code with some simple text context" do
     get "/robots456.txt"

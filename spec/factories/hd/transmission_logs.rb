@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :hd_transmission_log, class: "Renalware::HD::TransmissionLog" do
     trait :outgoing_hl7 do

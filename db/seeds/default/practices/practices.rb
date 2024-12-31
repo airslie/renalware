@@ -1,11 +1,7 @@
-# frozen_string_literal: true
-
 require_relative "../../seeds_helper"
 
 module Renalware
-  extend SeedsHelper
-
-  log "Adding NHS Practices\n" do
+  Rails.benchmark "Adding NHS Practices" do
     sample_status = "SAMPLE ONLY"
     Patients::Practice.transaction do
       # NOTE: use '_sample' file for demo/devel
@@ -26,6 +22,6 @@ module Renalware
     end
 
     log_count = Patients::Practice.count
-    log "#{log_count} practices imported #{sample_status}", type: :sub
+    Rails.logger.info "#{log_count} practices imported #{sample_status}"
   end
 end

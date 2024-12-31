@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     # This class is responsible for collating the complete set of default electronic ccs for a new

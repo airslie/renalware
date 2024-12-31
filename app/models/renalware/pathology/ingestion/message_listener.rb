@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # When subscribed to HL7 `oru_message_arrived` messages, gets notified of incoming HL7 messages
 # and creates the observations contained therein provided the patient exists.

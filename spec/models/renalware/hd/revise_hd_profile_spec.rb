@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD
   describe ReviseHDProfile do
     let(:patient) { create(:hd_patient) }

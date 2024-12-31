@@ -2,7 +2,7 @@ class AddUuidToClinicVisits < ActiveRecord::Migration[6.0]
   def up
     within_renalware_schema do
       add_column :clinic_visits, :uuid, :uuid
-      change_column_default :clinic_visits, :uuid, 'uuid_generate_v4()'
+      change_column_default :clinic_visits, :uuid, "uuid_generate_v4()"
     end
   end
 

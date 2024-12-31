@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module UKRDC
     class PathologyObservationRequestsQuery
@@ -11,6 +9,7 @@ module Renalware
 
       private
 
+      # rubocop:disable Rails/WhereRange
       def observation_requests
         Pathology::ObservationRequest
           .where(id: Pathology::ObservationRequest.distinct_for_patient_id(patient_id))
@@ -22,6 +21,7 @@ module Renalware
           )
           .order(observed_at: :asc)
       end
+      # rubocop:enable Rails/WhereRange
 
       # If there is a pathology_start_date configured in an ENV var, use this
       # for fetching pathology. This allows us to send a one-off batch of patients

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ExceptionNotification
   class Notifier::PartyFoulAdapter < Notifier
     def notify(exception)

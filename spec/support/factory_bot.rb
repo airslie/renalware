@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.configure do |config|
   FactoryBot.use_parent_strategy = false
   FactoryBot.definition_file_paths = Array(Renalware::Engine.root.join("spec", "factories"))

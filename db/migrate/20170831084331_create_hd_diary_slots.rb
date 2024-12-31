@@ -15,13 +15,13 @@ class CreateHDDiarySlots < ActiveRecord::Migration[5.1]
     # Add CHECK constraint to ensure week and year are in valid ranges
     reversible do |direction|
       direction.up do
-        execute <<-SQL
+        execute <<-SQL.squish
           ALTER TABLE hd_diary_slots
             ADD CONSTRAINT day_of_week_in_valid_range CHECK (day_of_week >= 1 AND day_of_week <= 7);
         SQL
       end
       direction.down do
-        execute <<-SQL
+        execute <<-SQL.squish
           ALTER TABLE hd_diary_slots DROP CONSTRAINT day_of_week_in_valid_range;
         SQL
       end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PD
     # Backed by a (scenic) view this model is used to resolve the PD Regime in use or created

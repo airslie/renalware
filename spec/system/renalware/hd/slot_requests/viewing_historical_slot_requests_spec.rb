@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing a list of HD Slot Requests" do
   include PatientsSpecHelper
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats::FHIR
@@ -10,7 +8,7 @@ module Renalware
         include Support::Construction
         include Support::Helpers
 
-        ENCOUNTER_IDENTIFIER = "13c73015-d8fa-4844-8d68-4f856883eca8"
+        ENCOUNTER_IDENTIFIER = "13c73015-d8fa-4844-8d68-4f856883eca8".freeze
 
         def call
           {

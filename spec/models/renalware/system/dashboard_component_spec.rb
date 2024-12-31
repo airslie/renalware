@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe System::DashboardComponent do
     it { is_expected.to belong_to(:dashboard) }

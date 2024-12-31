@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   # Enables Explicit State Models with ActiveRecord in contrast to the State pattern or
   # Finite State Machines (FSM). For more information:

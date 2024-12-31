@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  describe "Validate for at least one bag per PD regime", js: true do
+  describe "Validate for at least one bag per PD regime", :js do
     include PatientsSpecHelper
 
     it "creating a CAPD regime without a bag should fail validation" do

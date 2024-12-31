@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::HD::Scheduling
   describe MasterDiary do
     it { is_expected.to have_many(:weekly_diaries) }

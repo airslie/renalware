@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class MonthPeriod
   attr_reader :month, :year, :start, :finish
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :practice_membership, class: "Renalware::Patients::PracticeMembership" do
     practice

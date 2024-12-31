@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Pathology::Requests::PatientRule do
   subject(:patient_rule) do
     create(

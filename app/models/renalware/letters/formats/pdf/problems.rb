@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     module Formats
@@ -7,7 +5,7 @@ module Renalware
         class Problems
           include Prawn::View
           pattr_initialize :document, :letter, :x, :y, :width
-          BULLET = "• "
+          BULLET = "• ".freeze
           delegate :patient, to: :letter
 
           def build

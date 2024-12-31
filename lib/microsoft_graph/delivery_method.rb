@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "microsoft_graph/client"
 
 module MicrosoftGraph

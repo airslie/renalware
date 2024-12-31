@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # From https://gist.github.com/nikhgupta/4107b8609d8786cd8839d7aa3455454c
 #
 class ApplicationPresenter

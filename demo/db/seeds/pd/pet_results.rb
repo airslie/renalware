@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding PD PET test results" do
+  Rails.benchmark "Adding PD PET test results" do
     creator = User.last
     file_path = File.join(File.dirname(__FILE__), "pet_results.csv")
 

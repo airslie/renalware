@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Adds draw method into Rails routing.
 # It allows us to keep routes split into files, one per module.
 class ActionDispatch::Routing::Mapper

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Letters
   describe Part::ClinicalObservations do
     subject(:part) { described_class.new(letter: Letter.new, event: visit) }

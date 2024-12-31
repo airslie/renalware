@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A form object for use behind a form (see to_partial_path) which can add a patient filter
 # to a page. See Letters/ElectronicReceiptsController for an example.
 # Works in concert with Patients::SearchQuery.

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module SelectDateSpecHelper
   def select_date(date, options = {})
     field = options[:from]

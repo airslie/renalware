@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Invoking a snippet (indicating it has been used)" do
   describe "Record snippet usage via an AJAX POST" do
     it "increments the usage counter for the snippet" do

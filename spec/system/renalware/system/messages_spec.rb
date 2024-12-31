@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Managing system messages that are displayed on the login page" do
   it "listing system message via the menu" do
     message = create(
@@ -26,7 +24,7 @@ describe "Managing system messages that are displayed on the login page" do
     end
   end
 
-  it "creating a new message", js: true do
+  it "creating a new message", :js do
     login_as_super_admin
     visit system_messages_path
 
@@ -52,7 +50,7 @@ describe "Managing system messages that are displayed on the login page" do
     end
   end
 
-  it "editing an existing message", js: true do
+  it "editing an existing message", :js do
     create(:system_message)
     login_as_super_admin
     visit system_messages_path

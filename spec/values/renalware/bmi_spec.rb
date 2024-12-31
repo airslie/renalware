@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   describe BMI do
     let(:height) { 1.80 }

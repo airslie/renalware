@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ToggleInput < SimpleForm::Inputs::BooleanInput
   def input(_wrapper_options)
     html_options = input_html_options

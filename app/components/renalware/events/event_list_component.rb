@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Events
     # A generic view component for displaying a summarised list of events of a certain

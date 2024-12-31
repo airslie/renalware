@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module MessageSpecHelper
   # rubocop:disable Metrics/MethodLength
   def create_mesh_letter(patient:, user:, to: :primary_care_physician)

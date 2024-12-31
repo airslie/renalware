@@ -20,8 +20,8 @@
     "@ungap/url-search-params": "^0.2.2",
     "balloon-css": "^1.0.3",
     "classlist.js": "^1.1.20150312",
-    "date-fns": "^3.6.0",
-    "debounce": "^1.2.1",
+    "date-fns": "^4.1.0",
+    "debounce": "^2.2.0",
     "eslint": "^9.9",
     "eslint-plugin-import": "^2.7.0",
     "flatpickr": "^4.6.13",
@@ -48,6 +48,6 @@
     "build:css": "./demo/bin/yarn build:css"
   },
   "devDependencies": {
-    "prettier": "3.3.3"
+    "prettier": "^3.4"
   }
 }

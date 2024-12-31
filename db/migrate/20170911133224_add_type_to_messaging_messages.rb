@@ -1,5 +1,4 @@
 class AddTypeToMessagingMessages < ActiveRecord::Migration[5.1]
-
   def up
     add_column :messaging_messages, :type, :string, null: true
     add_index :messaging_messages, :type

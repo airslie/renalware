@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "Patient Dietetics MDM" do
   include PatientsSpecHelper
   include PathologySpecHelper

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "/medications/esa_prescriptions" do
   let(:user) { create(:user, :clinical) }
   let(:patient) { create(:pd_patient, by: user) }

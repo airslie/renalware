@@ -8,7 +8,7 @@ class UpdateHDOverallAuditToVersion6 < ActiveRecord::Migration[5.1]
 
       reversible do |direction|
         direction.up do
-          connection.execute <<-SQL
+          connection.execute <<-SQL.squish
             update reporting_audits set display_configuration = '
             {
               "columnDefs": [

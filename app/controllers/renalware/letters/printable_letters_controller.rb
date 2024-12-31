@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Letters
     # Responsible for allowing a user to view/download a printable PDF that can be sent to an

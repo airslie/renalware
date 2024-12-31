@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :transplant_donor_modality_description,
           class: "Renalware::Transplants::DonorModalityDescription" do

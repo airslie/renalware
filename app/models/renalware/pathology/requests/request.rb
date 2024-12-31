@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module Pathology
     module Requests
@@ -44,7 +42,7 @@ module Renalware
         def requested_on
           created_at.to_date
         end
-        alias_method :printed_on, :requested_on
+        alias printed_on requested_on
       end
     end
   end

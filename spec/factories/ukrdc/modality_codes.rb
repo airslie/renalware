@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :ukrdc_modality_code, class: "Renalware::UKRDC::ModalityCode" do
     trait :hd do

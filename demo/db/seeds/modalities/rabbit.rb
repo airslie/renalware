@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 module Renalware
-  log "Adding Modalities for Roger RABBIT" do
+  Rails.benchmark "Adding Modalities for Roger RABBIT" do
     rabbit = Patient.find_by(family_name: "RABBIT", given_name: "Roger")
     file_path = File.join(File.dirname(__FILE__), "rabbit_modalities.csv")
     user = Renalware::User.first

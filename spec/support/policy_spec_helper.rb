@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module PolicySpecHelper
   def user_double_with_role(roles)
     roles = Array(roles)

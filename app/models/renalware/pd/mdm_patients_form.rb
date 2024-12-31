@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware
   module PD
     # Form object to help us map chosen input values in the MDM patient list filters form

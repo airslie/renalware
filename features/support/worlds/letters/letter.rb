@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module World
   module Letters::Letter
     module Domain

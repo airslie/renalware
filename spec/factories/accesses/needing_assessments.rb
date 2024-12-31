@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :access_needling_assessment, class: "Renalware::Accesses::NeedlingAssessment" do
     accountable

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Problems::SummaryComponent, type: :component do
   let(:user) { create(:user) }
   let(:patient) { create(:patient, by: user) }

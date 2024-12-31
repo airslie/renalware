@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe "HD Summary (Dashboard)" do
   describe "GET" do
     it "renders the patient's HD Summary" do

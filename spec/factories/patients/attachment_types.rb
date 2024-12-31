@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :patient_attachment_type, class: "Renalware::Patients::AttachmentType" do
     name { "FileType #{SecureRandom.hex(8)}" }

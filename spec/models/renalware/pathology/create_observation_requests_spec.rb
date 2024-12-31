@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Renalware::Pathology
   describe CreateObservationRequests do
     subject(:service) { described_class.new }

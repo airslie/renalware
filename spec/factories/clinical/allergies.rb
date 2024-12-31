@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :allergy, class: "Renalware::Clinical::Allergy" do
     patient

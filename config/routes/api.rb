@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :api do
   # The UKRDC XML API
   namespace :ukrdc, defaults: { format: :xml } do
@@ -21,7 +19,7 @@ namespace :api do
         }
       )
     end
-    resources :patients, only: [:show, :index], controller: "patients/patients" do
+    resources :patients, only: %i(show index), controller: "patients/patients" do
       resources :prescriptions, controller: "medications/prescriptions", only: [:index]
       namespace :hd do
         resource :current_profile,

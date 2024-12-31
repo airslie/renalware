@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 describe Renalware::Patients::NamedPatientsComponent, type: :component do
   subject(:component) { described_class.new(current_user: user) }
 
