@@ -153,6 +153,8 @@ PATH
       slim-rails
       sprockets-rails
       store_model (< 5)
+      tailwindcss-rails
+      tailwindcss-ruby
       turbo-rails (= 2.0.11)
       validates_timeliness
       view_component (< 4.0)

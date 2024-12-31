@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.metadata["rubygems_mfa_required"] = "true"
   s.name        = "renalware-core"
   s.version     = Renalware::VERSION
-  s.required_ruby_version = ">= 3.3"
+  s.required_ruby_version = ">= 3.4"
   s.authors     = ["Airslie"]
   s.email       = ["dev@airslie.com"]
   s.homepage    = "https://github.com/airslie/renalware-core"
@@ -102,6 +102,8 @@ Gem::Specification.new do |s|
   s.add_dependency "slim-rails"
   s.add_dependency "sprockets-rails"
   s.add_dependency "store_model", "< 5"
+  s.add_dependency "tailwindcss-rails"
+  s.add_dependency "tailwindcss-ruby"
   s.add_dependency "turbo-rails", "2.0.11" # matches "@hotwired/turbo-rails" => "8.0.12"
   s.add_dependency "validates_timeliness"
   s.add_dependency "view_component", "< 4.0"

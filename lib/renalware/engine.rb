@@ -54,6 +54,7 @@ require "sassc-rails"
 require "scenic"
 require "slim-rails"
 require "store_model"
+require "tailwindcss-rails" if Rails.env.local?
 require "validates_timeliness"
 require "virtus"
 require "wicked_pdf"
