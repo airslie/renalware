@@ -1,4 +1,4 @@
-class AddAtcCodesToVaccinationTypes < ActiveRecord::Migration[7.2]
+class AddAtcCodesToVaccinationTypes < ActiveRecord::Migration[7.1]
   def change
     within_renalware_schema do
       add_column :virology_vaccination_types,

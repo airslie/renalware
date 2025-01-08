@@ -1,4 +1,4 @@
-class CreateRemoteMonitoringTables < ActiveRecord::Migration[7.2]
+class CreateRemoteMonitoringTables < ActiveRecord::Migration[7.1]
   def change
     within_renalware_schema do
       create_table :remote_monitoring_frequencies do |t|

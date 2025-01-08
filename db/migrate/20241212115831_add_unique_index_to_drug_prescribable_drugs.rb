@@ -1,4 +1,4 @@
-class AddUniqueIndexToDrugPrescribableDrugs < ActiveRecord::Migration[7.2]
+class AddUniqueIndexToDrugPrescribableDrugs < ActiveRecord::Migration[7.1]
   def change
     within_renalware_schema do
       safety_assured do

@@ -1,4 +1,4 @@
-class CreateLetterSnomedDocumentTypes < ActiveRecord::Migration[8.0]
+class CreateLetterSnomedDocumentTypes < ActiveRecord::Migration[7.1]
   def change
     within_renalware_schema do
       comment = <<-COMMENT.squish

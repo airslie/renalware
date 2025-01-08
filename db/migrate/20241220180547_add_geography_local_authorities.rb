@@ -1,4 +1,4 @@
-class AddGeographyLocalAuthorities < ActiveRecord::Migration[7.2]
+class AddGeographyLocalAuthorities < ActiveRecord::Migration[7.1]
   # rubocop:disable Rails/CreateTableWithTimestamps
   def change
     within_renalware_schema do
