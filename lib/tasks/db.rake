@@ -1,4 +1,17 @@
 namespace :db do
+  namespace :schema do
+    # Overriding db:structure:dump to remove the COMMENT ON EXTENSION ... statements which
+    # cause an error if commenting on an Heroku-installed extension that we do not have permission
+    # on,
+    task dump: [:environment, :load_config] do
+      db_dir = ActiveRecord::Tasks::DatabaseTasks.db_dir
+      filename = ENV["SCHEMA"] || File.join(db_dir, "structure.sql")
+      sql = File.read(filename).each_line.grep_v(/\ACOMMENT ON EXTENSION.+/).join
+
+      File.write(filename, sql)
+    end
+  end
+
   desc "Check that we are not about to drop an anonymised database"
   task drop_check: :environment do
     db_name = "rw_anon"

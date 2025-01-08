@@ -1,0 +1,8 @@
+/ See DukeActivityStatusIndex.to_partial_path etc
+/ Pulled into the New Event form via a js get to EventsController#new
+= f.simple_fields_for :document, event.document do |fd|
+  = fd.input :score, wrapper: :horizontal_small, hint: "Between 0 and 60"
+
+.pb-3.pt-1
+  - if Renalware.config.clinical_duke_activity_status_index_url.present?
+    = external_link_to("Duke Activity Status Index (DASI) (mdcalc.com)", Renalware.config.clinical_duke_activity_status_index_url)

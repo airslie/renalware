@@ -6,6 +6,9 @@
 = content_for(:filters) do
   = render "filters", query: query, patient: patient, clinic_visits: clinic_visits
 
+= content_for(:tabs) do
+  = render "renalware/clinics/shared/outpatient_tabs", patient: patient
+
 = within_patient_layout(title: "Clinic Visits") do
   = render "table",
            clinic_visits: clinic_visits,

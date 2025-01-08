@@ -13,3 +13,5 @@ ul.f-dropdown#new-event-shorcuts(data-dropdown-content aria-hidden="true")
   = dropdown_btn_item title: t(".igan_risk"),
                       url: edit_patient_clinical_igan_risk_path(patient),
                       enabled: !patient.igan_risk.present?
+  = dropdown_btn_item title: t(".duke_activity_status_index"),
+                      url: patient_new_specific_event_path(patient, 'duke_activity_status_indices')

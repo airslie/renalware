@@ -89,6 +89,10 @@
         = render Renalware::Events::EventListComponent.new(\
             patient: patient,
             event_class: Renalware::Events::AdvancedCarePlan)
+      .columns.small-12.large-6
+        = render Renalware::Events::EventListComponent.new(\
+            patient: patient,
+            event_class: Renalware::Clinical::DukeActivityStatusIndex)
 
 
       .columns

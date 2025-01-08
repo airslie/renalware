@@ -1,7 +1,6 @@
 module Renalware
   module Transplants
     describe RecipientFollowup do
-
       it :aggregate_failures do
         is_expected.to belong_to(:operation).touch(true)
         is_expected.to have_many(:rejection_episodes)

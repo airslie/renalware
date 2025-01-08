@@ -1,0 +1,5 @@
+---
+en:
+  renalware/clinical/duke_activity_status_index:
+    description_column_title: State
+    title: DASI Scores

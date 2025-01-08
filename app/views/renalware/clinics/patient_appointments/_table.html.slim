@@ -5,32 +5,15 @@
         thead
           tr
             th.togglers.noprint= rows_toggler
-            th.col-width-small.text-center
-              | Generate request form?
-              br
-              |
-              = link_to "(Uncheck all)", "#", id: "uncheck_all_appointments_link"
             th.col-width-small.text-center Clinic Visit
             th.col-width-date-time
               = sort_link([:renalware, search],
                           :starts_at,
                           [:starts_at],
-                          "Date and Time",
+                          "Starts at",
                           default_order: :asc)
-            th.col-width-large
-              = sort_link([:renalware, search],
-                          :patient_family_name,
-                          [:patient_family_name, "starts_at asc"],
-                          "Patient",
-                          default_order: :asc)
-            th.col-width-tiny.show-for-large-up Sex
-            th.col-width-tiny.show-for-large-up Age
-            th.col-width-medium.show-for-large-up
-              = sort_link([:renalware, search],
-                          :patient_current_modality_description_name,
-                          [:patient_current_modality_description_name, "starts_at asc"],
-                          "Modality",
-                          default_order: :asc)
+            th.col-width-date-time Ends at
+            th.col-width-small Duration
             th.col-width-medium
               = sort_link([:renalware, search],
                           :clinic_name,
@@ -44,15 +27,13 @@
                           "Consultant",
                           default_order: :asc)
             th.col-width-medium Visit Number
-            th.show-for-xlarge-up.col-width-date-time Created
-            th.show-for-xlarge-up Outcome notes
-            th.show-for-xlarge-up DNA notes
+            th.col-width-date-time Created
+            th
 
         - appointments.each do |appointment|
           tbody(class=("bg-green-100" if appointment.becomes_visit_id.present?))
             tr
               td= row_toggler
-              td.text-center= check_box_tag nil, appointment.patient.id, true, class: "patient_checkbox"
               td.nowrap.text-center
                 - if appointment.becomes_visit_id.present?
                   = link_to "View",
@@ -66,18 +47,15 @@
                             class: "btn btn-secondary btn-compact py-0 font-normal"
 
               td= I18n.l appointment.starts_at
-              td= default_patient_link(appointment.patient)
-              td.show-for-large-up= appointment.patient.sex.code
-              td.show-for-large-up= appointment.patient.age
-              td.show-for-large-up= appointment.patient.current_modality
+              td= I18n.l appointment.ends_at
+              td
               td= appointment.clinic.name
               td= appointment.consultant&.name
               td= appointment.visit_number
-              td.show-for-xlarge-up= l(appointment.created_at)
-              td.show-for-xlarge-up.col-width-medium-with-ellipsis= appointment.outcome_notes
-              td.show-for-xlarge-up.col-width-medium-with-ellipsis= appointment.dna_notes
+              td= l(appointment.created_at)
+              td
             tr
-              td(colspan=13)
+              td(colspan=9)
                 .quick-preview
                   = definition_list_for(appointment, size: :large) do |list|
                     = list.definition(:outcome_notes){ |value| simple_format(value) }

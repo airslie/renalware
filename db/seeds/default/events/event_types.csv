@@ -12,3 +12,4 @@
 "General","Iron Clinic",,"iron_clinic"
 "General","Transplant Review","Renalware::Transplants::Review","transplant_reviews"
 "General","Remote Monitoring Registration","Renalware::RemoteMonitoring::Registration","remote_monitoring_registrations"
+"General","DASI Score","Renalware::Clinical::DukeActivityStatusIndex","duke_activity_status_indices"

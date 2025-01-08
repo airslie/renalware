@@ -1,0 +1,12 @@
+= content_for(:filters) do
+  = render "renalware/clinics/shared/appointment_filters",
+           url: renalware.patient_appointments_path,
+           **local_assigns
+
+= content_for(:tabs) do
+  = render "renalware/clinics/shared/outpatient_tabs", patient: patient
+  = help_panel do
+    | Appointments are created automatically via HL7 data feed.
+
+= within_patient_layout(title: "Appointments") do
+  = render "table", local_assigns

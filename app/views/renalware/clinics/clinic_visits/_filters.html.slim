@@ -5,8 +5,12 @@
   = simple_form_for query,
       as: :q,
       url: patient_clinic_visits_path(patient),
-      data: { controller: "form" },
-      method: :get do |f|
+      method: :get,
+      data: { turbo_frame: "clinic-visits-turbo-frame",
+              turbo: true,
+              turbo_advance: true,
+              controller: "form",
+              action: "input->form#submit" } do |f|
 
       .flex.items-center.sm:w-full.md:w-2/3.lg:w-1/2.h-10
         = f.label :clinic_id_eq, "Clinic", class: "mr-4"
@@ -14,4 +18,3 @@
                         clinics_for_filtering,
                         { include_blank: "All" },
                         data: { controller: "slimselect", action: "change->form#submit" }
-                        

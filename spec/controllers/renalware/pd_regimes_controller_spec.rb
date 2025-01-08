@@ -1,13 +1,13 @@
 require "rails-controller-testing"
 
 module Renalware
-  describe PD::RegimesController, type: :controller do
+  describe PD::RegimesController do
     routes { Engine.routes }
     let(:user) { @current_user }
     let(:patient) { create(:patient, by: user) }
     let(:bag_type) { create(:bag_type) }
 
-    def create_capd_regime
+    def create_capd_regime # rubocop:disable Metrics/MethodLength
       create(
         :capd_regime,
         bags_attributes: [

@@ -1,7 +1,7 @@
 require "rails-controller-testing"
 
 module Renalware::Events
-  describe EventsController, type: :controller do
+  describe EventsController do
     routes { Renalware::Engine.routes }
     let(:user) { @current_user }
     let(:patient) { create(:patient, by: user) }

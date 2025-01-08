@@ -1,0 +1,49 @@
+- # locals: (url:, form:, appointments:, search:, clinics:, **)
+
+.search-form.filters.pb-6
+  = simple_form_for form,
+      as: :q,
+      url: url,
+      remote: true,
+      html: { autocomplete: "off" },
+      method: :get,
+      data: { turbo_frame: "appointments-turbo-frame",
+              turbo: true,
+              turbo_advance: true,
+              controller: "form",
+              action: "input->form#submit" } do |f|
+
+    .flex.flex-row
+      .space-y-1
+        - if form.respond_to?(:from_date)
+          = f.input :from_date,
+                    as: :flatpickr,
+                    label: "From date"
+          = f.input :from_date_only,
+                    as: :boolean,
+                    wrapper: :tw_bool,
+                    boolean_style: :inline,
+                    include_hidden: false,
+                    label: "This day only"
+
+      div.w-1/4.pl-2
+        = f.input :clinic_id,
+                  collection: clinics,
+                  label: "Clinic",
+                  include_blank: "Any",
+                  input_html: { data: { controller: "slimselect select", action: "change->form#submit" } }
+
+      div.w-1/4.pl-2
+        = f.input :consultant_id,
+                  collection: Renalware::Clinics::Consultant.pluck(:name, :id),
+                  label: "Consultant",
+                  input_html: { data: { controller: "slimselect select", action: "change->form#submit" } },
+                  include_blank: "Any"
+
+      div.w-1/4.pt-6.pl-2
+        = link_to(url, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+          .flex.items-center
+            .mr-1= inline_icon(:cross, size: :md)
+            | Reset
+        noscript
+          = filter_or_reset(form: f, reset_path: url)

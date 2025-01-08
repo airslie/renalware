@@ -4,18 +4,34 @@
         as: :q,
         url: clinic_visits_path,
         html: { autocomplete: "off" },
-        method: :get do |f|
+        method: :get,
+        data: { turbo_frame: "clinic-visits-turbo-frame",
+                turbo: true,
+                turbo_advance: true,
+                controller: "form",
+                action: "input->form#submit" } do |f|
 
-        .small-6.medium-2.large-2.columns
+      .flex.flex-row.gap-2
+        div
           = f.input :date_gteq, as: :flatpickr, label: "From"
-        .small-6.medium-2.large-2.columns
+        div
           = f.input :date_lteq, as: :flatpickr, label: "To"
-        .medium-3.large-2.columns
+        div.w-1/4
           = f.input :clinic_id_eq, collection: clinics, label: "Clinic"
-        .medium-3.large-2.columns
-          = f.input :created_by_id_eq, as: :user_picker, collection: users, label: "Clinician"
-        .medium-2.large-3.columns.actions.end
-          .pt-1= filter_or_reset(form: f, reset_path: renalware.clinic_visits_path)
+        div.w-1/4
+          = f.input :created_by_id_eq,
+                    as: :user_picker,
+                    collection: users,
+                    label: "Clinician",
+                    input_html: { data: { action: "change->form#submit" }}
+
+        div.w-1/4.pt-6
+          = link_to(clinic_visits_path, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+            .flex.items-center
+              .mr-1= inline_icon(:cross, size: :md)
+              | Reset
+          noscript
+            .pt-1= filter_or_reset(form: f, reset_path: renalware.clinic_visits_path)
 
   .filters__output
 

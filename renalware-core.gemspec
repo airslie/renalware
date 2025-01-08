@@ -102,7 +102,7 @@ Gem::Specification.new do |s|
   s.add_dependency "slim-rails"
   s.add_dependency "sprockets-rails"
   s.add_dependency "store_model", "< 5"
-  s.add_dependency "tailwindcss-rails"
+  s.add_dependency "tailwindcss-rails", "~> 3.0"
   s.add_dependency "tailwindcss-ruby"
   s.add_dependency "turbo-rails", "2.0.11" # matches "@hotwired/turbo-rails" => "8.0.12"
   s.add_dependency "validates_timeliness"

@@ -1,0 +1,8 @@
+/ See DukeActivityStatusIndex.to_partial_path etc
+- document = event.document
+
+dl.dl-horizontal
+  dt= attr_name(document, :score, suffix: ":")
+  dd= document.score
+  dt= attr_name(event, :notes, suffix: ":")
+  dd= event.notes&.html_safe || t("unspecified")

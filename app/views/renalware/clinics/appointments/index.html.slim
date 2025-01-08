@@ -1,5 +1,12 @@
-= content_for(:filters) { render "filters", local_assigns }
+= content_for(:filters) do
+  = help_panel do
+    | Appointments are created automatically via HL7 data feed.
+  = render "renalware/clinics/shared/appointment_filters",
+         url: renalware.appointments_path,
+         **local_assigns
+
 = content_for(:actions) { render "page_actions", local_assigns }
 = content_for(:title)   { "Upcoming Clinic Visit Appointments" }
+
 
 = render "table", local_assigns

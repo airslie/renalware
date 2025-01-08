@@ -1,5 +1,6 @@
 module Renalware
   module Clinics
+    # Global appointments
     class AppointmentsController < BaseController
       include Pagy::Backend
       use_layout :simple

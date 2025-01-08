@@ -1,24 +1,27 @@
-table.global-clinic-visits
-  thead
-    tr
-      th.togglers= table_toggler
-      th.col-width-actions-dropdown.no-print
-      th.col-width-date Date
-      th.col-width-tiny DNA
-      th.col-width-large= t("thead.patient")
-      th.col-width-nhs-no NHS Number
-      th.col-width-tiny Sex
-      th.col-width-tiny Age
-      th Modality
-      th Clinic Type
-      th.col-width-tiny BMI
-      th.col-width-tiny BP
-      th.col-width-small.no-print
-      th Created by
-  tbody
-    / Note we can't use cached: true yet when rendering the events collection, as each row is
-    / used in a different context and displays there slightly differently, for example showing
-    / an Edit link or Type column in certain circumstances.
-    = render partial: "table_row",
-             collection: clinic_visits,
-             as: :clinic_visit
+= turbo_frame_tag("clinic-visits-turbo-frame", "data-turbo-action" => "advance") do
+  = render Renalware::SpinnerComponent.new do |spinner|
+    = spinner.with_main_content do
+      table.global-clinic-visits
+        thead
+          tr
+            th.togglers= table_toggler
+            th.col-width-actions-dropdown.no-print
+            th.col-width-date Date
+            th.col-width-tiny DNA
+            th.col-width-large= t("thead.patient")
+            th.col-width-nhs-no NHS Number
+            th.col-width-tiny Sex
+            th.col-width-tiny Age
+            th Modality
+            th Clinic Type
+            th.col-width-tiny BMI
+            th.col-width-tiny BP
+            th.col-width-small.no-print
+            th Created by
+        tbody
+          / Note we can't use cached: true yet when rendering the events collection, as each row is
+          / used in a different context and displays there slightly differently, for example showing
+          / an Edit link or Type column in certain circumstances.
+          = render partial: "table_row",
+                  collection: clinic_visits,
+                  as: :clinic_visit

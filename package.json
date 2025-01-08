@@ -15,7 +15,7 @@
     "@hotwired/turbo-rails": "8.0.12",
     "@rollup/plugin-commonjs": "^28.0",
     "@rollup/plugin-inject": "^5.0",
-    "@rollup/plugin-node-resolve": "^15.2",
+    "@rollup/plugin-node-resolve": "^16.0",
     "@stimulus/polyfills": "^2.0",
     "@ungap/url-search-params": "^0.2.2",
     "balloon-css": "^1.0.3",
