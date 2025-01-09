@@ -26,7 +26,7 @@ if Rake::Task.task_defined?("assets:precompile") && Rails.root.join("bin/yarn").
   Rake::Task["assets:precompile"].enhance ["yarn:install"]
 end
 
-Rake::Task["tailwindcss:build"].clear
+Rake::Task["tailwindcss:build"].clear if Rake::Task.task_defined?("tailwindcss:build")
 
 # Based on the original at tailwindcss-rails/lib/tasks/build.rake
 # but using `Renalware::Engine.root` instead of `Rails.root`
