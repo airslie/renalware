@@ -27,3 +27,5 @@ table(style="border-spacing: 5px;")
     tr
       td Mirth Java version
       td= ENV.fetch("MIRTH_JAVA_VERSION", "-")
+
+= render Renalware::Monitoring::Mirth::StatsComponent.new(current_user: nil)

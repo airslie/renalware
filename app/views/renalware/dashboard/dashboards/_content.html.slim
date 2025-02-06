@@ -11,6 +11,7 @@
         = render Renalware::Letters::Transports::Mesh::WarningsComponent.new(current_user: current_user)
         = render Renalware::Letters::Transports::Mesh::ActivityComponent.new(current_user: current_user)
       = render Renalware::UKRDC::ActivityComponent.new(current_user: current_user)
+      = render Renalware::Monitoring::Mirth::StatsComponent.new(current_user: current_user)
       = render Renalware::System::UsersAwaitingApprovalComponent.new(current_user: current_user)
       = render Renalware::System::APILogActivityComponent.new(current_user: current_user)
       = render Renalware::Feeds::OutgoingDocumentsStatusComponent.new(current_user: current_user)

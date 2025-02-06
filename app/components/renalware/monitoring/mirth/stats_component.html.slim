@@ -1,0 +1,22 @@
+.columns.medium-6
+  article
+    header
+      h2= t(".title")
+
+    table
+      thead
+        th.col-width-date-time Date
+        th.col-width-tiny Channel
+        th.col-width-tiny Received
+        th.col-width-tiny.bg-red-100 Error
+        th.col-width-tiny Queued
+        th
+      tbody
+        - channel_stats.each do |stats|
+          tr
+            td= l(stats.created_at)
+            td= stats.name
+            td= stats.received
+            td.bg-red-100= stats.error
+            td= stats.queued
+            td

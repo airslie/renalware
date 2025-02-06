@@ -389,6 +389,23 @@ module Renalware
     config_accessor(:mail_oauth_tenant_id) { ENV.fetch("MAIL_OAUTH_TENANT_ID", nil) }
     config_accessor(:mail_oauth_email_address) { ENV.fetch("MAIL_OAUTH_EMAIL_ADDRESS", nil) }
 
+    #
+    # Monitoring::Mirth
+    # Default to out-of-the-box development settings
+    #
+    config_accessor(:monitoring_mirth_enabled) { # but see good_job schedule also
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("MONITORING_MIRTH_ENABLED", "true"))
+    }
+    config_accessor(:monitoring_mirth_api_base_url) {
+      ENV.fetch("MONITORING_MIRTH_API_BASE_URL", "https://localhost:8443/api")
+    }
+    config_accessor(:monitoring_mirth_api_username) {
+      ENV.fetch("MONITORING_MIRTH_API_USERNAME", "admin")
+    }
+    config_accessor(:monitoring_mirth_api_password) {
+      ENV.fetch("MONITORING_MIRTH_API_PASSWORD", "admin")
+    }
+
     def restrict_patient_visibility_by_user_site?
       %i(by_site by_site_and_research_study).include?(patient_visibility_restrictions)
     end

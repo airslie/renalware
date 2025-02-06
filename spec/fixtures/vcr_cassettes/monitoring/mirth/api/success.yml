@@ -1,0 +1,141 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://localhost:8443/api/channels/statistics
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Cache-Control:
+      - no-cache
+      Accept:
+      - application/xml
+      X-Requested-With:
+      - OpenAPI
+      User-Agent:
+      - Faraday v2.12.2
+      Authorization:
+      - Basic YWRtaW46TTFzc01hcmJsZXMh
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 06 Feb 2025 17:56:25 GMT
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'false'
+      Access-Control-Allow-Methods:
+      - GET, POST, DELETE, PUT
+      Access-Control-Allow-Headers:
+      - Content-Type
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Set-Cookie:
+      - JSESSIONID=node01akcl9ima58n312c9gzfekghm60.node0; Path=/api; Secure
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Content-Type:
+      - application/xml
+      Content-Length:
+      - '590'
+    body:
+      encoding: UTF-8
+      string: |-
+        <list>
+          <channelStatistics>
+            <serverId>e64f0bc9-9b8a-4618-ab2f-da497b53a7fe</serverId>
+            <channelId>a7f684ca-a58a-4e7e-b4a9-8f13a7977cf9</channelId>
+            <received>1</received>
+            <sent>1</sent>
+            <error>0</error>
+            <filtered>0</filtered>
+            <queued>0</queued>
+          </channelStatistics>
+          <channelStatistics>
+            <serverId>e64f0bc9-9b8a-4618-ab2f-da497b53a7fe</serverId>
+            <channelId>0a5c30cc-b3ac-4981-a64b-d608a1dadaf9</channelId>
+            <received>1</received>
+            <sent>1</sent>
+            <error>0</error>
+            <filtered>0</filtered>
+            <queued>0</queued>
+          </channelStatistics>
+        </list>
+  recorded_at: Thu, 06 Feb 2025 17:56:26 GMT
+- request:
+    method: get
+    uri: https://localhost:8443/api/channels/idsAndNames
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Cache-Control:
+      - no-cache
+      Accept:
+      - application/xml
+      X-Requested-With:
+      - OpenAPI
+      User-Agent:
+      - Faraday v2.12.2
+      Authorization:
+      - Basic YWRtaW46TTFzc01hcmJsZXMh
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 06 Feb 2025 17:56:26 GMT
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'false'
+      Access-Control-Allow-Methods:
+      - GET, POST, DELETE, PUT
+      Access-Control-Allow-Headers:
+      - Content-Type
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Set-Cookie:
+      - JSESSIONID=node01v20bys6q9y5211c4uxrj5bg9u1.node0; Path=/api; Secure
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Content-Type:
+      - application/xml
+      Content-Length:
+      - '234'
+    body:
+      encoding: UTF-8
+      string: |-
+        <map>
+          <entry>
+            <string>a7f684ca-a58a-4e7e-b4a9-8f13a7977cf9</string>
+            <string>MyChannel2</string>
+          </entry>
+          <entry>
+            <string>0a5c30cc-b3ac-4981-a64b-d608a1dadaf9</string>
+            <string>MyChannel1</string>
+          </entry>
+        </map>
+  recorded_at: Thu, 06 Feb 2025 17:56:26 GMT
+recorded_with: VCR 6.3.1

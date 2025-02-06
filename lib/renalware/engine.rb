@@ -164,6 +164,7 @@ module Renalware
             description: ""
           }
         }.merge(good_job_config_to_enable_feed_import_via_raw_hl7_messages_table)
+          .merge(good_job_config_to_enable_mirth_monitoring)
       end
       # rubocop:enable Metrics/MethodLength
     end
@@ -176,6 +177,18 @@ module Renalware
           cron: "every 2 minutes",
           class: "Renalware::Feeds::ProcessRawHL7MessagesJob",
           description: "Process Mirth messages"
+        }
+      }
+    end
+
+    def good_job_config_to_enable_mirth_monitoring
+      return {} unless Renalware.config.monitoring_mirth_enabled
+
+      {
+        mirth_monitoring: {
+          cron: "every 20 minutes",
+          class: "Renalware::Monitoring::Mirth::FetchChannelStatsJob",
+          description: "Poll for Mirth channel statistics"
         }
       }
     end

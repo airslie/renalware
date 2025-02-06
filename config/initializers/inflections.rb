@@ -78,7 +78,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "XHR"
   inflect.acronym "YAML"
 
-  inflect.uncountable %w(cache)
+  inflect.uncountable %w(cache stats)
   inflect.irregular "feedback", "feedback"
   # inflect.acronym "POS" # DO NOT USE: breaks Devise/Responders which will translate POST to POS_T!
 end
