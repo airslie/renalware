@@ -1,16 +1,32 @@
 .filters
   .filters__form
-    = search_form_for user_search, url: admin_users_path, html: { class: "fn-form" } do |f|
-      .row
-        .small-9.large-4.columns
+    = search_form_for user_search,
+      url: admin_users_path,
+      html: { class: "fn-form" },
+      method: :get,
+      data: { turbo_frame: "admin-users-turbo-frame",
+              turbo: true,
+              turbo_advance: true,
+              controller: "form",
+              action: "input->form#submit" } do |f|
+      .flex.gap-2
+        .basis-1/4
           = f.label "Name or username contains"
           = f.search_field :family_name_or_given_name_or_username_or_email_cont
-        .small-5.large-4.columns
+        .basis-1/4
           = f.label "Site"
           = f.select(:hospital_centre_id_eq,
                      options_from_collection_for_select(\
                      Renalware::Hospitals::Centre.all, "id", "name", user_search.hospital_centre_id_eq),
                      { include_blank: "Any" },
-                     { class: "searchable_select" })
-        .small-3.large-4.columns.actions.end
-          = filter_or_reset(form: f, reset_path: admin_users_path)
+                     data: { controller: "slimselect", action: "change->form#submit" })
+
+        /.small-3.large-4.columns.actions.end
+        /= filter_or_reset(form: f, reset_path: admin_users_path)
+        .w-1/4.pt-6
+          = link_to(admin_users_path, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+            .flex.items-center
+              .mr-1= inline_icon(:cross, size: :md)
+              | Reset
+          noscript
+            .pt-1= filter_or_reset(form: f, reset_path: admin_users_path)

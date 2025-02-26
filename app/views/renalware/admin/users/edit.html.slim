@@ -10,7 +10,6 @@
     = simple_form_for user,
                       html: { autocomplete: "off" },
                       url: admin_user_path(user) do |f|
-      = f.input :approved, as: :hidden, input_html: { value: true }
 
       - if user.errors.any?
         ul.error-messages
@@ -98,5 +97,15 @@
                       include_blank: "None",
                       input_html: { class: "searchable_select" }
 
-      - msg = user.approved? ? "Update" : "Approve"
-      = save_or_cancel(form: f, submit_title: msg, back_path: admin_users_path)
+      .flex.flex-row-reverse.gap-2.mt-4
+
+        - if user.approved? && !user.approved_changed?
+          = link_to(t("btn.cancel"), admin_users_path, class: "btn btn-secondary")
+          = f.submit(t("btn.update"), class: "btn btn-primary")
+        - else
+          /= f.input :approved, as: :boolean, input_html: { value: true }
+          = link_to(t("btn.cancel"), admin_users_path, class: "btn btn-secondary")
+          = f.submit("Save (approve later)", class: "btn btn-tertiary")
+          = f.submit("Approve", class: "btn btn-primary", name: "approve", data: { confirm: "Approve this user?" })
+
+

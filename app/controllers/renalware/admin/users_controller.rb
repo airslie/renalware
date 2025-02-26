@@ -37,7 +37,11 @@ module Renalware
 
     def update_params
       roles = Array(Role.fetch(role_ids))
-      user_params.merge(roles: roles)
+      user_params
+        .merge(
+          roles: roles,
+          approved: ("true" if params[:approve].present?)
+        )
     end
 
     def user_params

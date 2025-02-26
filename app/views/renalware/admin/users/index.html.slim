@@ -2,54 +2,58 @@
 = content_for(:tabs)    { render "tabs", user_search: user_search }
 
 = within_new_admin_layout(title: "Users") do
-  table.admin-users
-    thead
-      th.col-width-tiny
-      th.col-width-tiny ID
-      th.col-width-large= sort_link(user_search,
-                                     :family_name,
-                                     [:family_name, :given_name],
-                                     "User")
-      th.col-width-small= sort_link(user_search, :username, "Login")
-      th= sort_link(user_search, :email, "Email")
-      th.col-width-small Requested write access
-      th.col-width-medium Roles
-      th.col-width-tiny= sort_link(user_search, :approved, "Approved")
-      th.col-width-tiny= sort_link(user_search, :hidden, "Hidden")
-      th.col-width-tiny= sort_link(user_search, :banned, "Banned")
-      th.col-width-tiny= sort_link(user_search, :consultant, "Consultant")
-      th.col-width-small= sort_link(user_search, :nursing_experience_level)
-      th.col-width-date= sort_link(user_search, :expired_at, "Expired On")
-      th.col-width-date-time.show-for-large-up= sort_link(user_search, :current_sign_in_at, "Current sign in")
-      th.col-width-date-time.show-for-large-up= sort_link(user_search, :last_sign_in_at, "Last sign in")
-      th.col-width-date-time.show-for-large-up= sort_link(user_search, :last_activity_at, "Last activity")
-      th.col-width-medium.show-for-xlarge-up Telephone #
-      th.col-width-date-time.show-for-xlarge-up= sort_link(user_search, :created_at, "Added")
-      th.col-width-date-time= sort_link(user_search, :locked_at)
+  = turbo_frame_tag("admin-users-turbo-frame") do
+    = render Renalware::SpinnerComponent.new do |spinner|
+      = spinner.with_main_content do
+        table.admin-users
+          thead
+            th.col-width-tiny
+            th.col-width-tiny ID
+            th.col-width-large= sort_link(user_search,
+                                          :family_name,
+                                          [:family_name, :given_name],
+                                          "User")
+            th.col-width-small= sort_link(user_search, :username, "Login")
+            th= sort_link(user_search, :email, "Email")
+            th.col-width-small Requested write access
+            th.col-width-medium Roles
+            th.col-width-tiny= sort_link(user_search, :approved, "Approved")
+            th.col-width-tiny= sort_link(user_search, :hidden, "Hidden")
+            th.col-width-tiny= sort_link(user_search, :banned, "Banned")
+            th.col-width-tiny= sort_link(user_search, :consultant, "Consultant")
+            th.col-width-small= sort_link(user_search, :nursing_experience_level)
+            th.col-width-date= sort_link(user_search, :expired_at, "Expired On")
+            th.col-width-date-time.show-for-large-up= sort_link(user_search, :current_sign_in_at, "Current sign in")
+            th.col-width-date-time.show-for-large-up= sort_link(user_search, :last_sign_in_at, "Last sign in")
+            th.col-width-date-time.show-for-large-up= sort_link(user_search, :last_activity_at, "Last activity")
+            th.col-width-medium.show-for-xlarge-up Telephone #
+            th.col-width-date-time.show-for-xlarge-up= sort_link(user_search, :created_at, "Added")
+            th.col-width-date-time= sort_link(user_search, :locked_at)
 
-    tbody
-      - users.each do |user|
-        tr.user(id=dom_id(user))
-          td= link_to t("btn.edit"), edit_admin_user_path(user) if policy(user).update?
-          td= user.id
-          td= user.to_s
-          td= user.username
-          td= user.email
-          td= inline_check_icon(user.asked_for_write_access?)
-          td
-            - user.roles.each do |role|
-              span.tag(class=role.name)= role.name.humanize
-          td.text-center= inline_check_icon(user.approved?)
-          td.text-center= inline_check_icon(user.hidden?)
-          td.text-center= inline_check_icon(user.banned?)
-          td.text-center= inline_check_icon(user.consultant?)
-          td= user.nursing_experience_level&.titleize
-          td.expired= l(user.expired_at&.to_date)
-          td.show-for-large-up= l(user.current_sign_in_at)
-          td.show-for-large-up= l(user.last_sign_in_at)
-          td.show-for-large-up= l(user.last_activity_at)
-          td.show-for-xlarge-up= user.telephone
-          td.show-for-xlarge-up= l(user.created_at)
-          td= l(user.locked_at)
+          tbody
+            - users.each do |user|
+              tr.user(id=dom_id(user))
+                td= link_to t("btn.edit"), edit_admin_user_path(user) if policy(user).update?
+                td= user.id
+                td= user.to_s
+                td= user.username
+                td= user.email
+                td= inline_check_icon(user.asked_for_write_access?)
+                td
+                  - user.roles.each do |role|
+                    span.tag(class=role.name)= role.name.humanize
+                td.text-center= inline_check_icon(user.approved?)
+                td.text-center= inline_check_icon(user.hidden?)
+                td.text-center= inline_check_icon(user.banned?)
+                td.text-center= inline_check_icon(user.consultant?)
+                td= user.nursing_experience_level&.titleize
+                td.expired= l(user.expired_at&.to_date)
+                td.show-for-large-up= l(user.current_sign_in_at)
+                td.show-for-large-up= l(user.last_sign_in_at)
+                td.show-for-large-up= l(user.last_activity_at)
+                td.show-for-xlarge-up= user.telephone
+                td.show-for-xlarge-up= l(user.created_at)
+                td= l(user.locked_at)
 
-  == pagy_nav(pagy) if pagy.pages > 1
+        == pagy_nav(pagy) if pagy.pages > 1
+
