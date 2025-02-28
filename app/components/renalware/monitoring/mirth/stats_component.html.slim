@@ -5,18 +5,33 @@
 
     table
       thead
-        th.col-width-date-time Date
-        th.col-width-tiny Channel
-        th.col-width-tiny Received
-        th.col-width-tiny.bg-red-100 Error
-        th.col-width-tiny Queued
-        th
+        tr
+          td
+          td
+          td.text-center(colspan="2") 20 min
+          td.text-center(colspan="2") 24 hrs
+          td.text-center(colspan="2") Total
+
+        tr
+          th.col-width-date-time Date
+          th Channel
+          th.text-center.col-width-tiny Recvd
+          th.text-center.col-width-tiny.bg-red-100 Err
+          th.text-center.col-width-tiny Recvd
+          th.text-center.col-width-tiny.bg-red-100 Err
+          th.text-center.col-width-tiny Recvd
+          th.text-center.col-width-tiny.bg-red-100 Err
+
       tbody
         - channel_stats.each do |stats|
           tr
             td= l(stats.created_at)
-            td= stats.name
+            td.col-width-medium-with-ellipsis= stats.name
+            td na
+            td.bg-red-100 na
+
+            td na
+            td.bg-red-100 na
+
             td= stats.received
             td.bg-red-100= stats.error
-            td= stats.queued
-            td

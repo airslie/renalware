@@ -14,7 +14,7 @@ module Renalware
                     "monitoring_mirth_channel_stats.channel_id")
             .select(:created_at, :received, :sent, :queued, :error, :filtered)
             .select(channel: [:name])
-            .order(:channel_id, channel: { created_at: :desc })
+            .order(:channel_id, created_at: :desc)
         end
       end
     end
