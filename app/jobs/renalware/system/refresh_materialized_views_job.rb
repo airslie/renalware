@@ -59,7 +59,7 @@ module Renalware
       def enqueue_job_to_refresh_materialized_view(view_metadata, refresh_at)
         # Note we need to convert the EtOrbi::EoTime into seconds when using wait_until
         RefreshMaterializedViewWithMetadataJob
-          .set(wait_until: refresh_at.to_i) # populates good_jobs.scheduled_at column
+          .set(wait_until: refresh_at) # populates good_jobs.scheduled_at column
           .perform_later(
             view_metadata,
             view_name: view_metadata.fully_qualified_view_name
