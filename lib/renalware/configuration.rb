@@ -406,6 +406,12 @@ module Renalware
       ENV.fetch("MONITORING_MIRTH_API_PASSWORD", "admin")
     }
 
+    config_accessor(:messaging_recipient_warn_if_not_signed_in_for_days) {
+      ActiveModel::Type::Integer.new.cast(
+        ENV.fetch("MESSAGING_RECIPIENT_WARN_IF_NOT_SIGNED_IN_FOR_DAYS", 5)
+      )
+    }
+
     def restrict_patient_visibility_by_user_site?
       %i(by_site by_site_and_research_study).include?(patient_visibility_restrictions)
     end
