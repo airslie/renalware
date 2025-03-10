@@ -104,6 +104,12 @@ module Renalware
                          "practices and GPs"
           },
 
+          expire_inactive_users: {
+            cron: "every day at 2am",
+            class: "Renalware::ExpireInactiveUsersJob",
+            description: "Expire users who have not been active for a certain number of days"
+          },
+
           audit_patient_hd_statistics: {
             cron: "0 3 1 * *", # On the first of each month at 3am
             class: "Renalware::HD::GenerateMonthlyStatisticsAndRefreshMaterializedViewJob",
