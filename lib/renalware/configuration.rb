@@ -272,6 +272,9 @@ module Renalware
     end
 
     config_accessor(:user_dashboard_display_named_patients) { true }
+    config_accessor(:users_expire_after) {
+      ActiveModel::Type::Integer.new.cast(ENV.fetch("USERS_EXPIRE_AFTER", 90))
+    }
     config_accessor(:medication_review_max_age_in_months) { 24 }
 
     config_accessor(:aki_alerts_daily_period_start_time) {
