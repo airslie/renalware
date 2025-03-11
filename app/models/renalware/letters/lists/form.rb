@@ -76,17 +76,9 @@ module Renalware
           # excludes 'pending'
           attribute :gp_send_status_in,
                     array: true,
-                    default: -> { pre_selected_gp_send_status_options }
+                    default: -> { Letter.printable_gp_send_statues }
 
           attribute :state_eq, :string, default: -> { :approved }
-
-          # For Batch printing, hide letters where gp send_status is pending
-          def self.pre_selected_gp_send_status_options
-            return [] unless Renalware.config.send_gp_letters_over_mesh
-
-            Letter.gp_send_statuses.fetch("pending") # Fail if 'pending' enum value goes missing ;)
-            Letter.gp_send_statuses.reject { |key| key == "pending" }.keys
-          end
 
           def initialize(params)
             super

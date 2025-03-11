@@ -35,6 +35,13 @@ module Renalware
         end
       end
 
+      describe ".printable_gp_send_statues" do
+        it "returns the statuses that are printable, ie excluding pending" do
+          expect(described_class.printable_gp_send_statues)
+            .to eq(%w(not_applicable success failure))
+        end
+      end
+
       describe "#include_pathology_in_letter_body?" do
         subject { described_class.new(letterhead: letterhead).include_pathology_in_letter_body? }
 

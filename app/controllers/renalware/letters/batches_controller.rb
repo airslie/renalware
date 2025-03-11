@@ -76,7 +76,7 @@ module Renalware
       end
 
       def ids_of_letters_to_batch_print
-        LetterQuery
+        BatchPrintableLetterQuery
           .new(q: batch_params)
           .call
           .select(:id, :event_type, :event_id)

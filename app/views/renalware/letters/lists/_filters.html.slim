@@ -100,7 +100,7 @@ ruby:
   / This form will all hidden fields and one button is otherwise a mirror of the above filter form.
   / It POSTs the form to create a batch and its items (which really just help us to keep track)
   / or what was printed and the user does not need to know about it) and once created
-  / it pops up a dialog with a spinner and an asycn_render partial that, once the PDFs are compiled
+  / it pops up a dialog with a spinner and an async_render partial that, once the PDFs are compiled
   / will return with a partial containing a link to the PDF. The user clicks on this to open it in a
   / new window. At the same time on the original page we close the modal and display another one
   / which asks the user if the print batch was successful - if so we send a patch to update
@@ -115,7 +115,7 @@ ruby:
     = f.input :enclosures_present, as: :hidden
     = f.input :notes_present, as: :hidden
     = f.input :state_eq, as: :hidden
-    = f.input :gp_send_status_in, as: :hidden
+    / = f.input :gp_send_status_in, as: :hidden / controller knows which gp_send_status_in apply
     = f.input :author_id_eq, as: :hidden
     = f.input :created_by_id_eq, as: :hidden
     = f.input :letterhead_id_eq, as: :hidden

@@ -54,6 +54,26 @@ module Renalware
             )
           end
         end
+
+        describe "#gp_send_status_in" do
+          subject { form.gp_send_status_in }
+
+          context "when GP letters sent over MESH" do
+            before do
+              allow(Renalware.config).to receive(:send_gp_letters_over_mesh).and_return(true)
+            end
+
+            it { is_expected.to eq(%w(not_applicable success failure)) }
+          end
+
+          context "when GP letters are not sent over MESH" do
+            before do
+              allow(Renalware.config).to receive(:send_gp_letters_over_mesh).and_return(false)
+            end
+
+            it { is_expected.to eq([]) }
+          end
+        end
       end
     end
   end
