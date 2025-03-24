@@ -5,7 +5,4 @@
 // and makes an AJAX get to that URL. This is the template for that AJX get call.
 // We close the print confirmation dialog and and refresh the letter table content.
 $(".reveal-modal").foundation('reveal', 'close');
-$(".letters-table").replaceWith("<%= escape_javascript(
-  render "table", letters: letters, q: q, named_filter: params[:named_filter]&.to_sym || :all) %>");
-// We add this next class for testing so we know the table as refreshed
-$(".letters-table").addClass("ajax-refreshed");
+document.getElementById('letter-lists-turbo-frame').src = document.getElementById('letter-lists-turbo-frame').src || window.location.href;

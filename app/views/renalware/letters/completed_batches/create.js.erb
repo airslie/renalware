@@ -4,6 +4,5 @@
 // were the letter is listed or displayed. So look for a URL stored
 // somewhere on the page in a data attribute and if found make an AJAX call
 // which will probably reload e.g. a letters table or something like that.
-<%# url = $(".reveal-modal").data("refresh-url");
-if(url) { $.getScript(url); } %>
-location.reload(true);
+$(".reveal-modal").foundation('reveal', 'close');
+document.getElementById('letter-lists-turbo-frame').src = document.getElementById('letter-lists-turbo-frame').src || window.location.href;
