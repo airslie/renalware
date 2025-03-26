@@ -2,34 +2,31 @@
 
 - sortable = query.present? && sortable_columns
 
-= turbo_frame_tag("clinic-visits-turbo-frame", "data-turbo-action" => "advance") do
-  = render Renalware::SpinnerComponent.new do |spinner|
-    = spinner.with_main_content do
-      table.clinics.auto-layout
-        thead
-          tr
-            th.noprint.togglers= table_toggler
-            th.actions.noprint.col-width-medium
-            th.col-width-date= sort_link_if(sortable, query, :date, "Date")
-            th.col-width-tiny DNA
-            th.col-width-large= sort_link_if(sortable, query, :clinic_name, "Clinic")
-            th.col-width-tiny= sort_link_if(sortable, query, :height, "Height")
-            th.col-width-tiny= sort_link_if(sortable, query, :weight, "Weight")
-            th.col-width-tiny BMI
-            th.col-width-tinyish BP
-            th.col-width-tinyish Standing BP
-            th.col-width-tiny= sort_link_if(sortable, query, :pulse, "Pulse")
-            th.col-width-tiny= sort_link_if(sortable, query, :temperature, "Temp")
-            th.col-width-tiny Urine blood
-            th.col-width-tiny Urine protein
-            th.col-width-tiny Urine glucose
-            th.col-width-tiny(title="Body surface area") BSA
-            th.col-width-tiny(title="Total Body Water") TBW
-            th.col-width-medium.show-for-large-up Created by
-            th.col-width-date.show-for-xlarge-up Last edited
-            th.col-width-medium.show-for-xlarge-up Last edited by
-        tbody
-          = render partial: "renalware/clinics/clinic_visits/table_row",
-                  collection: clinic_visits,
-                  as: :clinic_visit,
-                  locals: { patient: patient }
+table.clinics.auto-layout.toggleable data-controller="toggle"
+  thead
+    tr
+      th.togglers.noprint= rows_toggler
+      th.actions.noprint.col-width-medium
+      th.col-width-date= sort_link_if(sortable, query, :date, "Date")
+      th.col-width-tiny DNA
+      th.col-width-large= sort_link_if(sortable, query, :clinic_name, "Clinic")
+      th.col-width-tiny= sort_link_if(sortable, query, :height, "Height")
+      th.col-width-tiny= sort_link_if(sortable, query, :weight, "Weight")
+      th.col-width-tiny BMI
+      th.col-width-tinyish BP
+      th.col-width-tinyish Standing BP
+      th.col-width-tiny= sort_link_if(sortable, query, :pulse, "Pulse")
+      th.col-width-tiny= sort_link_if(sortable, query, :temperature, "Temp")
+      th.col-width-tiny Urine blood
+      th.col-width-tiny Urine protein
+      th.col-width-tiny Urine glucose
+      th.col-width-tiny(title="Body surface area") BSA
+      th.col-width-tiny(title="Total Body Water") TBW
+      th.col-width-medium.show-for-large-up Created by
+      th.col-width-date.show-for-xlarge-up Last edited
+      th.col-width-medium.show-for-xlarge-up Last edited by
+
+  = render partial: "renalware/clinics/clinic_visits/table_row",
+          collection: clinic_visits,
+          as: :clinic_visit,
+          locals: { patient: patient }

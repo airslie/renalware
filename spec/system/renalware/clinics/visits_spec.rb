@@ -8,7 +8,7 @@ describe "Global Clinic Visits list" do
       visit clinic_visits_path
 
       expect(page.status_code).to eq(200)
-      expect(page).to have_content("2717073604")
+      expect(page).to have_content("271 707 3604")
     end
   end
 end

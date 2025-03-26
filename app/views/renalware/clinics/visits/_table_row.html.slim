@@ -1,49 +1,53 @@
-- patient = clinic_visit.patient
-tr(class="#{'dna' if clinic_visit.did_not_attend?}")
-  td= toggler("#clinic_visit-quick-preview-#{clinic_visit.id}")
-  td.actions.no-print
-    / - uid = "visit-#{clinic_visit.id}-options"
-    / a.button.actions.dropdown.with-icon(href="#"
-    /                             data-dropdown=uid
-    /                             aria-controls=uid
-    /                             aria-expanded="false")
+tbody
+  - patient = clinic_visit.patient
+  tr(class="#{'dna' if clinic_visit.did_not_attend?}")
+    td.noprint= row_toggler
+    td.actions.no-print
+      / - uid = "visit-#{clinic_visit.id}-options"
+      / a.button.actions.dropdown.with-icon(href="#"
+      /                             data-dropdown=uid
+      /                             aria-controls=uid
+      /                             aria-expanded="false")
 
-    / ul.actions-dropdown.f-dropdown.f-dropdown-no-arrow(id="#{uid}" data-dropdown-content aria-hidden="true")
-    /   li= link_to_if_allowed policy(clinic_visit).edit?,
-    /               "Edit",
-    /               edit_patient_clinic_visit_path(patient, clinic_visit)
-    /   li= link_to_if_allowed policy(clinic_visit).destroy?,
-    /             "Delete",
-    /             patient_clinic_visit_path(patient, clinic_visit),
-    /             method: :delete,
-    /             data: { confirm: I18n.t("prompts.confirm_delete") }
-    /   li.separator
-    /   li= link_to_clinic_visit_letter(patient, clinic_visit)
+      / ul.actions-dropdown.f-dropdown.f-dropdown-no-arrow(id="#{uid}" data-dropdown-content aria-hidden="true")
+      /   li= link_to_if_allowed policy(clinic_visit).edit?,
+      /               "Edit",
+      /               edit_patient_clinic_visit_path(patient, clinic_visit)
+      /   li= link_to_if_allowed policy(clinic_visit).destroy?,
+      /             "Delete",
+      /             patient_clinic_visit_path(patient, clinic_visit),
+      /             method: :delete,
+      /             data: { confirm: I18n.t("prompts.confirm_delete") }
+      /   li.separator
+      /   li= link_to_clinic_visit_letter(patient, clinic_visit)
 
-    = link_to_if_allowed policy(clinic_visit).edit?,
-      "Edit", edit_patient_clinic_visit_path(patient, clinic_visit)
-    = link_to_if_allowed policy(clinic_visit).destroy?,
-      "Delete",
-      patient_clinic_visit_path(patient, clinic_visit),
-      method: :delete,
-      data: { confirm: I18n.t("prompts.confirm_delete") }
-    = link_to_clinic_visit_letter(patient, clinic_visit)
-  td.date-time= l clinic_visit.date
-  td= yes_no(clinic_visit.did_not_attend)
-  td= default_patient_link(clinic_visit.patient)
-  td= clinic_visit.patient.nhs_number
-  td= clinic_visit.patient.sex
-  td= clinic_visit.patient.age
-  td.at-least.col-width-medium-with-ellipsis= clinic_visit.patient.current_modality&.description&.name
-  td.at-least.col-width-medium-with-ellipsis.clinic-type= clinic_visit.clinic
-  td.bmi= clinic_visit.bmi
-  td.bp= clinic_visit.bp
-  td.no-print= link_to_mdm(clinic_visit.patient)
-  td.col-width-medium-with-ellipsis.created-by= clinic_visit.created_by
+      = link_to_if_allowed policy(clinic_visit).edit?,
+                          "Edit",
+                          edit_patient_clinic_visit_path(patient, clinic_visit),
+                          target: "_top"
+      = link_to_if_allowed policy(clinic_visit).destroy?,
+        "Delete",
+        patient_clinic_visit_path(patient, clinic_visit),
+        method: :delete,
+        target: "_top",
+        data: { confirm: I18n.t("prompts.confirm_delete") }
+      = link_to_clinic_visit_letter(patient, clinic_visit)
+    td.date-time= l clinic_visit.date
+    td= yes_no(clinic_visit.did_not_attend)
+    td= default_patient_link(clinic_visit.patient)
+    td= clinic_visit.patient.nhs_number_formatted
+    td= clinic_visit.patient.sex
+    td= clinic_visit.patient.age
+    td.at-least.col-width-medium-with-ellipsis= clinic_visit.patient.current_modality&.description&.name
+    td.at-least.col-width-medium-with-ellipsis.clinic-type= clinic_visit.clinic
+    td.bmi= clinic_visit.bmi
+    td.bp= clinic_visit.bp
+    td.no-print= link_to_mdm(clinic_visit.patient)
+    td.col-width-medium-with-ellipsis.created-by= clinic_visit.created_by
 
-= content_tag(:tr, id: "clinic_visit-quick-preview-#{clinic_visit.id}", style: "display: none")
-  td(colspan=14)
-    .quick-preview
-      = definition_list_for(clinic_visit, size: :large) do |list|
-        = list.definition(:notes){ |value| simple_format(value) }
-        = list.definition(:admin_notes){ |value| simple_format(value) }
+  tr
+    td(colspan=14)
+      .quick-preview
+        = definition_list_for(clinic_visit, size: :large) do |list|
+          = list.definition(:notes){ |value| simple_format(value) }
+          = list.definition(:admin_notes){ |value| simple_format(value) }

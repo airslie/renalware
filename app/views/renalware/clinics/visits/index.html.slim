@@ -2,5 +2,8 @@
   = render "filters", query: query, clinics: clinics, users: users
 
 = within_admin_layout(title: "Clinic Visits") do
-  = render "table", clinic_visits: visits
-  == pagy_nav(pagy) if pagy.pages > 1
+  = turbo_frame_tag("clinic-visits-turbo-frame", "data-turbo-action" => "advance") do
+    = render Renalware::SpinnerComponent.new do |spinner|
+      = spinner.with_main_content do
+        = render "table", clinic_visits: visits
+        == pagy_nav(pagy) if pagy.pages > 1

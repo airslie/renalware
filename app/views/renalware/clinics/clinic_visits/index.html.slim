@@ -10,9 +10,12 @@
   = render "renalware/clinics/shared/outpatient_tabs", patient: patient
 
 = within_patient_layout(title: "Clinic Visits") do
-  = render "table",
-           clinic_visits: clinic_visits,
-           patient: patient,
-           query: query,
-           sortable_columns: true
-  == pagy_nav(pagy) if pagy.pages > 1
+  = turbo_frame_tag("clinic-visits-turbo-frame", "data-turbo-action" => "advance") do
+    = render Renalware::SpinnerComponent.new do |spinner|
+      = spinner.with_main_content do
+        = render "table",
+                clinic_visits: clinic_visits,
+                patient: patient,
+                query: query,
+                sortable_columns: true
+        == pagy_nav(pagy) if pagy.pages > 1

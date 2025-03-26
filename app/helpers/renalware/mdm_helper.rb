@@ -29,7 +29,7 @@ module Renalware
       end
 
       def to_html
-        link_to(mdm_name, path) if path
+        link_to(mdm_name, path, target: "_top") if path
       end
 
       private

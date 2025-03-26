@@ -1,54 +1,55 @@
-tr(class="#{'dna' if clinic_visit.did_not_attend?}")
-  td.noprint= toggler("#clinic_visit-quick-preview-#{clinic_visit.id}")
-  td.noprint.actions
-    / - uid = "visit-#{clinic_visit.id}-options"
-    / a.button.actions.dropdown.with-icon(href="#"
-    /                             data-dropdown=uid
-    /                             aria-controls=uid
-    /                             aria-expanded="false")
+tbody
+  tr(class="#{'dna' if clinic_visit.did_not_attend?}")
+    td.noprint= row_toggler
+    td.noprint.actions
+      / - uid = "visit-#{clinic_visit.id}-options"
+      / a.button.actions.dropdown.with-icon(href="#"
+      /                             data-dropdown=uid
+      /                             aria-controls=uid
+      /                             aria-expanded="false")
 
-    / ul.actions-dropdown.f-dropdown.f-dropdown-no-arrow(id="#{uid}" data-dropdown-content aria-hidden="true")
-    /   li= link_to_if_allowed policy(clinic_visit).edit?,
-    /                t("btn.edit"),
-    /               edit_patient_clinic_visit_path(patient, clinic_visit)
-    /   li= link_to_if_allowed policy(clinic_visit).destroy?,
-    /             t("btn.delete"),
-    /             patient_clinic_visit_path(patient, clinic_visit),
-    /             method: :delete,
-    /             data: { confirm: I18n.t("prompts.confirm_delete") }
+      / ul.actions-dropdown.f-dropdown.f-dropdown-no-arrow(id="#{uid}" data-dropdown-content aria-hidden="true")
+      /   li= link_to_if_allowed policy(clinic_visit).edit?,
+      /                t("btn.edit"),
+      /               edit_patient_clinic_visit_path(patient, clinic_visit)
+      /   li= link_to_if_allowed policy(clinic_visit).destroy?,
+      /             t("btn.delete"),
+      /             patient_clinic_visit_path(patient, clinic_visit),
+      /             method: :delete,
+      /             data: { confirm: I18n.t("prompts.confirm_delete") }
 
-    - if policy(clinic_visit).edit?
-      = link_to t("btn.edit"),
-                edit_patient_clinic_visit_path(patient, clinic_visit)
-    - if policy(clinic_visit).destroy?
-      = link_to t("btn.delete"),
-                patient_clinic_visit_path(patient, clinic_visit),
-                method: :delete,
-                data: { confirm: I18n.t("prompts.confirm_delete") }
+      - if policy(clinic_visit).edit?
+        = link_to t("btn.edit"),
+                  edit_patient_clinic_visit_path(patient, clinic_visit)
+      - if policy(clinic_visit).destroy?
+        = link_to t("btn.delete"),
+                  patient_clinic_visit_path(patient, clinic_visit),
+                  method: :delete,
+                  data: { confirm: I18n.t("prompts.confirm_delete") }
 
-    = link_to_clinic_visit_letter(patient, clinic_visit)
-  td.date-time= l(clinic_visit.date)
-  td= yes_no(clinic_visit.did_not_attend)
-  td.clinic-type= clinic_visit.clinic&.description
-  td.bmi= clinic_visit.height
-  td.bmi= clinic_visit.weight
-  td.bmi= clinic_visit.bmi
-  td.bp= clinic_visit.bp
-  td.bp= clinic_visit.standing_bp
-  td.bp= clinic_visit.pulse
-  td.bp= clinic_visit.temperature
-  td= clinic_visit.urine_blood&.text
-  td= clinic_visit.urine_protein&.text
-  td= clinic_visit.urine_glucose&.text
-  td= clinic_visit.body_surface_area
-  td= clinic_visit.total_body_water
-  td.show-for-large-up.created-by= clinic_visit.created_by
+      = link_to_clinic_visit_letter(patient, clinic_visit)
+    td.date-time= l(clinic_visit.date)
+    td= yes_no(clinic_visit.did_not_attend)
+    td.clinic-type= clinic_visit.clinic&.description
+    td.bmi= clinic_visit.height
+    td.bmi= clinic_visit.weight
+    td.bmi= clinic_visit.bmi
+    td.bp= clinic_visit.bp
+    td.bp= clinic_visit.standing_bp
+    td.bp= clinic_visit.pulse
+    td.bp= clinic_visit.temperature
+    td= clinic_visit.urine_blood&.text
+    td= clinic_visit.urine_protein&.text
+    td= clinic_visit.urine_glucose&.text
+    td= clinic_visit.body_surface_area
+    td= clinic_visit.total_body_water
+    td.show-for-large-up.created-by= clinic_visit.created_by
 
-  - effective_presenter = Renalware::EffectiveUpdatedInfoPresenter.new(clinic_visit)
-  td.show-for-xlarge-up= l(effective_presenter.effective_updated_at_date)
-  td.show-for-xlarge-up= effective_presenter.effective_updated_by
+    - effective_presenter = Renalware::EffectiveUpdatedInfoPresenter.new(clinic_visit)
+    td.show-for-xlarge-up= l(effective_presenter.effective_updated_at_date)
+    td.show-for-xlarge-up= effective_presenter.effective_updated_by
 
-= content_tag(:tr, id: "clinic_visit-quick-preview-#{clinic_visit.id}", style: "display: none")
-  td(colspan=19)
-    .quick-preview
-      = render(partial: clinic_visit.to_toggled_row_partial_path, locals: { clinic_visit: clinic_visit })
+  tr
+    td(colspan=19)
+      .quick-preview
+        = render(partial: clinic_visit.to_toggled_row_partial_path, locals: { clinic_visit: clinic_visit })
