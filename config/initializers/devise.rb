@@ -2,16 +2,44 @@
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
   # ==> LDAP Configuration
-  # config.ldap_logger = true
-  # config.ldap_create_user = false
-  # config.ldap_update_password = true
-  # config.ldap_config = "#{Rails.root}/config/ldap.yml"
-  # config.ldap_check_group_membership = false
-  # config.ldap_check_group_membership_without_admin = false
-  # config.ldap_check_attributes = false
-  # config.ldap_check_attributes_presence = false
-  # config.ldap_use_admin_to_bind = false
-  # config.ldap_ad_group_check = false
+
+  # If set to true, will log LDAP queries to the Rails logger.
+  config.ldap_logger = true
+
+  config.ldap_config = Rails.root.join("config/ldap.yml")
+
+  # If set to true, all valid LDAP users will be allowed to login and an appropriate user record
+  # will be created. If set to false, you will have to create the user record before they will be
+  # allowed to login.
+  config.ldap_create_user = true
+
+  # When doing password resets, if true will update the LDAP server. Requires admin password in
+  # the ldap.yml
+  config.ldap_update_password = true
+
+  # When set to true, the user trying to login will be checked to make sure they are in all of
+  # groups specified in the ldap.yml file.
+  config.ldap_check_group_membership = false
+
+  # When set to true, the group membership check is done with the user's own credentials rather than
+  # with admin credentials. Since these credentials are only available to the Devise user model
+  # during the login flow, the group check function will not work if a group check is performed when
+  # this option is true outside of the login flow (e.g., before particular actions).
+  config.ldap_check_group_membership_without_admin = false
+
+  # When set to true, the user trying to login will be checked to make sure their attributes match
+  # those specified in the ldap.yml file.
+  config.ldap_check_attributes = false
+
+  # When set to true, the user trying to login will be checked against all
+  # require_attribute_presence attributes in the ldap.yml file, either present (attr: true), or not
+  # present (attr: false).
+  config.ldap_check_attributes_presence = false
+
+  # When set to true, the admin user will be used to bind to the LDAP server during authentication
+  config.ldap_use_admin_to_bind = false
+
+  config.ldap_ad_group_check = false
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing

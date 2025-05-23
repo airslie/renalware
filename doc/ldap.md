@@ -1,35 +1,39 @@
 ## LDAP configuration
 
-If using LDAP, when a user triesd to log in to Renalware, the devise gem will make a call to the
+> See ldap.yml for how the app is configured.
+
+If using LDAP, when a user tries to log in to Renalware, the devise gem will make a call to the
 configured LDAP service (eg ActiveDirectory on Windows, or slapd/OpenLDAP on Linux) to determine if
-- the user exists in the directory
+- the user exists in the directory in the requested group eg 'renalware'
 - their hashed password matches
-If both are true then the user has access to Renalware _in theory_, though in fact they need to have
-a Renalwere::User record in the users table in order to _actually_ login.
-If they are in the directory but do not yet exists in Renalware, they will get the error messages
-dinfined in devise.en.yml under the key `not_found_in_database`
+If both are true, then the user has access to Renalware.
+If they do not exist in Renalware
+- the devise_ldap_authenticatable gem will we create a User record for them
+- we give them the clinical role (TBC).
+- we query LDAP for their email and name.
+If they already exist as a user in Renalware, we log them in.
 
-> Sorry, you are not yet configured as a user. Please contact the Renalware administrator
-to request access.
+### Logging
 
-In development you examine the logs during login:
+In development you can examine the logs during login by running this e.g. in another terminal
+```
+tail -f demo/log/development.log | grep LDAP
+```
+and see e.g.
 ```
 LDAP search for login: cn=tc
 LDAP: LDAP search yielded 1 matches
 ```
 but in production it is less obvious what is happening.
 
-It possible to ask devise to only authenticate the user if they are a member of a group, e.g.
-a Renalware group in Directory. See ldap_check_group_membership and the ldap.yml for options.
-
 ### Enabling
 
 To enable LDAP to allow authentication against ActiveDirectory or OpenLDAP, in the host app:
 
-- set `Renalware.config.ldap_authentication = true` in e.g. in the appropriate environment file
+- set `config.ldap_authentication = true` in the appropriate environment file
   e.g. `config/environment/production.rb`
 - create a `config/ldap.yml` (using the example at renalware-core/spec/dummy/config/ldap.yml) and
-  edit to set the appropriate attributes. They are case sentive so eg People != people.
+  edit to set the appropriate attributes. They are case sensitive so eg People != people.
 - Add the following environment variables in your .env file
   - LDAP_HOST - the name or IP address of the directory server. Use localhost if testing agains OpenLDAP
   - LDAP_PORT - 389 for OpenLDAP and unsecured AD, 636 for SSL connections
@@ -40,20 +44,64 @@ To enable LDAP to allow authentication against ActiveDirectory or OpenLDAP, in t
   - LDAP_USERNAME_ATTRIBUTE eg "uid" or "cn" - that attribute that identifies the user's username
                 inside the entry specified by LDAP_BASE
 
-### Testing usingh OpenLDAP/slapd
+### Testing using OpenLDAP
+
+Spin up OpenLDAP in a docker container saving this to a docker-compose.yml file and running
+`docker compose up` in that folder
+
+```
+version: '3.9'
+
+services:
+  openldap:
+    # Apple M1 Chip
+    # platform: linux/amd64
+    image: bitnami/openldap:latest
+    container_name: openldap
+    restart: always
+    env_file:
+      - .env
+    environment:
+      LDAP_ROOT: dc=woodpigeon,dc=com
+      LDAP_ADMIN_USERNAME: admin
+      LDAP_ADMIN_PASSWORD: $DB_PASSWORD
+      LDAP_USERS: user01,user02
+      LDAP_PASSWORDS: password1,password2
+    ports:
+      - 389:1389
+      - 636:1636
+    volumes:
+      - openldap_datadir:/bitnami/openldap/
+    networks:
+      - openldap-network
+
+networks:
+  openldap-network:
+    driver: bridge
+
+volumes:
+  openldap_datadir:
+```
 
 ### Set up OpenLDAP/slapd
+
 See https://www.linux.com/news/how-install-ldap-account-manager-ubuntu-server-1804/
 
-#### Run LAM (LDAP Account Manager) as a docker image
+### A GUI to manage LDAP
 
-Once you have OpenLDAP running you use a web UI to make managing users easier, which
-is useful for testing:
+A couple of options
+
+#### Apache Directory Studio
+
+You may need to run using JDK 11 under Rosetta on a mac. Ask ChatGPT.
+
+#### LDAPAccountManager
 
 - create a .env file eg ~/.lamenv and past in content from [here](https://github.com/LDAPAccountManager/lam/blob/develop/lam-packaging/docker/.env)
   then edit as appropriate
 - sudo docker run -p 8080:80 --env-file ~/.lamenv -d -it ldapaccountmanager/lam:stable
 
+(or add to )
 
 ### TODO
 

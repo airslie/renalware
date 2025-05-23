@@ -119,6 +119,13 @@ module Renalware
       flag.allbits?(feature_flags)
     end
 
+    def ldap_before_save
+      self.email = ::Devise::LDAP::Adapter.get_ldap_param(username, "mail").first
+      self.given_name = ::Devise::LDAP::Adapter.get_ldap_param(username, "givenName").first
+      self.family_name = ::Devise::LDAP::Adapter.get_ldap_param(username, "sn").first
+      self.approved = true
+    end
+
     private
 
     def build_authentication_token
