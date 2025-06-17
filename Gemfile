@@ -7,6 +7,8 @@ ruby ">= 3.1"
 
 gemspec
 
+gem "nokogiri", "~>1.18"
+
 gem "activesupport_cache_database", github: "airslie/activesupport-cache-database"
 
 # These are visible to dummy app only
@@ -95,8 +97,6 @@ group :development, :test do
   gem "debug", ">= 1.0.0", platforms: %i(mri mingw x64_mingw)
   gem "factory_bot_rails", "~> 6.1"
   gem "launchy", require: false
-  gem "pry-byebug"
-  gem "pry-rails"
   gem "rspec-rails"
   gem "rubocop", require: false
 end

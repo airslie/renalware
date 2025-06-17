@@ -16,7 +16,7 @@ development:
   <<: *default_credentials
 
   # To use another database, pass MYDB=xxx as an argument, e.g. MYDB=xxx bin/web
-  database: <%= ENV.fetch("MYDB", "renalware_development") %>
+  database: <%= ENV.fetch("MYDB", "renalware_development_dvh_branch") %>
 
   # Minimum log levels, in increasing order:
   #   debug5, debug4, debug3, debug2, debug1,
@@ -27,7 +27,7 @@ development:
 test:
   <<: *default
   <<: *default_credentials
-  database: renalware_test
+  database: renalware_test_dvh_branch
   pool: 100
 
 uat:

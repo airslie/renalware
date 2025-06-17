@@ -4785,10 +4785,10 @@ CREATE VIEW renalware.hd_profile_for_modalities AS
            FROM renalware.hd_profiles
           ORDER BY hd_profiles.patient_id, ((hd_profiles.created_at)::date), hd_profiles.created_at DESC
         )
- SELECT m.patient_id,
-    m.modality_id,
-    m.started_on,
-    m.ended_on,
+ SELECT patient_id,
+    modality_id,
+    started_on,
+    ended_on,
     ( SELECT hp.hd_profile_id
            FROM distinct_hd_profiles hp
           WHERE ((hp.patient_id = m.patient_id) AND ((hp.deactivated_at IS NULL) OR (hp.deactivated_at > m.started_on)))
@@ -4886,8 +4886,8 @@ ALTER SEQUENCE renalware.hd_providers_id_seq OWNED BY renalware.hd_providers.id;
 --
 
 CREATE VIEW renalware.hd_schedule_definition_filters AS
- SELECT filter.ids,
-    ((filter.days_text || ' '::text) || upper((filter.dirunal_code)::text)) AS days
+ SELECT ids,
+    ((days_text || ' '::text) || upper((dirunal_code)::text)) AS days
    FROM ( SELECT array_agg(s1.id) AS ids,
             0 AS dirunal_order,
             s1.days_text,
@@ -4901,7 +4901,7 @@ CREATE VIEW renalware.hd_schedule_definition_filters AS
             hdpc.code
            FROM (renalware.hd_schedule_definitions s2
              JOIN renalware.hd_diurnal_period_codes hdpc ON ((s2.diurnal_period_id = hdpc.id)))) filter
-  ORDER BY filter.days_text, filter.dirunal_order;
+  ORDER BY days_text, dirunal_order;
 
 
 --
@@ -7892,7 +7892,7 @@ CREATE TABLE renalware.problem_problems (
 --
 
 CREATE VIEW renalware.patient_summaries AS
- SELECT patients.id AS patient_id,
+ SELECT id AS patient_id,
     ( SELECT count(*) AS count
            FROM renalware.events
           WHERE ((events.patient_id = patients.id) AND (events.deleted_at IS NULL))) AS events_count,
@@ -8788,17 +8788,17 @@ CREATE VIEW renalware.pd_regime_for_modalities AS
            FROM renalware.pd_regimes
           ORDER BY pd_regimes.patient_id, pd_regimes.start_date, pd_regimes.created_at DESC
         )
- SELECT m.patient_id,
-    m.modality_id,
-    m.started_on,
-    m.ended_on,
+ SELECT patient_id,
+    modality_id,
+    started_on,
+    ended_on,
     ( SELECT pdr.pd_regime_id
            FROM distinct_pd_regimes pdr
           WHERE ((pdr.patient_id = m.patient_id) AND ((pdr.end_date IS NULL) OR (pdr.end_date > m.started_on)))
           ORDER BY pdr.created_at
          LIMIT 1) AS pd_regime_id
    FROM pd_modalities m
-  ORDER BY m.patient_id;
+  ORDER BY patient_id;
 
 
 --
@@ -11860,26 +11860,26 @@ CREATE TABLE renalware.ukrdc_transmission_logs (
 --
 
 CREATE VIEW renalware.ukrdc_daily_summaries AS
- SELECT (utl.created_at)::date AS date,
+ SELECT (created_at)::date AS date,
     count(*) AS total,
     count(
         CASE
-            WHEN (utl.status = 3) THEN 1
+            WHEN (status = 3) THEN 1
             ELSE NULL::integer
         END) AS sent,
     count(
         CASE
-            WHEN (utl.status = 2) THEN 1
+            WHEN (status = 2) THEN 1
             ELSE NULL::integer
         END) AS unsent_no_change,
     count(
         CASE
-            WHEN (utl.status = 1) THEN 1
+            WHEN (status = 1) THEN 1
             ELSE NULL::integer
         END) AS error
    FROM renalware.ukrdc_transmission_logs utl
-  GROUP BY ((utl.created_at)::date)
-  ORDER BY ((utl.created_at)::date);
+  GROUP BY ((created_at)::date)
+  ORDER BY ((created_at)::date);
 
 
 --

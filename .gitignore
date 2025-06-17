@@ -4,6 +4,14 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+.unused-env
+app/assets/javascripts/renalware/built.js.map
+config/certificates/
+demo/
+documentation/
+vendor/xsd/ukrdc3/
+vendor/xsd/ukrdc4/
+
 /pkg
 .DS_Store
 .floo
