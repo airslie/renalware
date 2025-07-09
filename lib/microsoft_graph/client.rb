@@ -23,16 +23,22 @@ require "faraday"
 #     body: "text",
 #     to: ["tim@example.com"]
 #   )
+# rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
 module MicrosoftGraph
   class Client
     pattr_initialize [:tenant_id!, :client_id!, :client_secret!]
 
     class RequestFailed < StandardError; end
 
-    def send_mail(from:, to:, subject:, body:, html: false)
-      to = Array(to)
+    def send_mail(from:, to:, subject:, body:, html: false, attachments: [])
       access_token = fetch_access_token
-      payload = build_email_payload(to: to, subject: subject, body: body, html: html)
+      payload = build_email_payload(
+        to: Array(to),
+        subject: subject,
+        body: body,
+        html: html,
+        attachments: Array(attachments)
+      )
       url = "https://graph.microsoft.com/v1.0/users/#{from}/sendMail"
 
       response = Faraday.post(
@@ -67,23 +73,44 @@ module MicrosoftGraph
 
     private
 
-    def build_email_payload(to:, subject:, body:, html: false)
-      {
+    # Builds the payload to be sent to the Graph API to send an email.
+    def build_email_payload(to:, subject:, body:, html:, attachments:)
+      opts = {
         message: {
           subject: subject,
           body: {
             contentType: html ? "HTML" : "Text",
             content: body
           },
-          toRecipients: to.map do |recip|
+          toRecipients: to.map do |recipient|
             {
               emailAddress: {
-                address: recip
+                address: recipient
               }
             }
           end
         }
-      }.to_json
+      }
+      opts = add_attachments(opts, attachments)
+      opts.to_json
+    end
+
+    # If any attachments where added to the ActionMailer mail object then we add them to the
+    # message payload to be sent to the Graph API.
+    def add_attachments(msg, attachments)
+      if attachments.present?
+        msg[:message][:attachments] = attachments.map do |attachment|
+          {
+            "@odata.type" => "#microsoft.graph.fileAttachment",
+            name: attachment.filename,
+            contentType: attachment.mime_type,
+            contentBytes: Base64.encode64(attachment.body.to_s)
+          }
+        rescue StandardError => e
+          raise ArgumentError, "Invalid attachment format: #{e.message}"
+        end
+      end
+      msg
     end
 
     def error_description(response)
@@ -95,3 +122,4 @@ module MicrosoftGraph
     end
   end
 end
+# rubocop:enable Metrics/MethodLength, Metrics/ParameterLists
