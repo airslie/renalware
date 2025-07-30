@@ -21,6 +21,16 @@ module Renalware
                :deleted_at,
                to: :renderable
 
+      # Returns the PDF content for a 'blank' PDF that indicates it has been deleted.
+      # This is used when the letter has been deleted and we want to send a PDF
+      # to the HL7 feed to indicate that the document has been deleted.
+      def self.blank_pdf_to_send_when_document_has_been_deleted
+        file_path = Renalware::Engine.root.join("app/assets/pdf/deleted_document.pdf")
+        raise "Missing file #{file_path}" unless ::File.exist?(file_path)
+
+        ::File.binread(file_path)
+      end
+
       def initialize(renderable:, message_id:)
         @renderable = renderable
         @message_id = message_id
@@ -150,12 +160,14 @@ module Renalware
       end
 
       def base64_encoded_content
-        if renderable_type.letter?
-          renderer = Letters::RendererFactory.renderer_for(renderable, file_format)
-          Base64.strict_encode64(renderer.call)
-        elsif renderable_type.event?
-          Base64.strict_encode64(Renalware::Events::EventPdf.call(renderable))
-        end
+        content = if deleted?
+                    self.class.blank_pdf_to_send_when_document_has_been_deleted
+                  elsif renderable_type.letter?
+                    Letters::RendererFactory.renderer_for(renderable, file_format).call
+                  elsif renderable_type.event?
+                    Renalware::Events::EventPdf.call(renderable)
+                  end
+        Base64.strict_encode64(content)
       end
 
       # :pdf or :rtf
@@ -164,14 +176,6 @@ module Renalware
       def file_format
         renderable_type.letter? ? Renalware.config.feeds_outgoing_documents_letter_format : :pdf
       end
-
-      # def pdf_renderer_class
-      #   if renderable_type.letter?
-      #     Renalware::Letters::RendererFactory.renderer_for(lett) ::Rendering::PdfRenderer
-      #   elsif renderable_type.event?
-      #     Renalware::Events::EventPdf
-      #   end
-      # end
 
       def renderable_type
         @renderable_type ||= begin

@@ -280,11 +280,19 @@ module Renalware
             letter.update_column(:deleted_at, Time.zone.now)
             letter.reload
 
+            allow(described_class)
+              .to receive(:blank_pdf_to_send_when_document_has_been_deleted)
+              .and_return("A") # base64 encoded 'A' will end up as QQ==
+
             msg = described_class.call(renderable: letter, message_id: 123)
 
             txa = msg[:TXA]
             expect(txa.document_completion_status).to eq("CA") # deleted
             expect(txa.unique_document_number).to eq(letter.id.to_s)
+
+            expect(msg[:OBX].to_s).to eq(
+              "OBX|1|ED|||^TEXT^PDF^Base64^QQ=="
+            )
           end
         end
       end
