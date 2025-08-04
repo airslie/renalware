@@ -101,38 +101,6 @@ module Renalware
           end
         end
       end
-
-      describe described_class::LCSDiffLeftCallbacks do
-        it "creates a diff" do
-          data_old = "foo bar"
-          data_new = "boo far and more"
-
-          output = []
-
-          callback_obj = described_class.new(output)
-          Diff::LCS.traverse_sequences(data_old, data_new, callback_obj)
-
-          expect(output.join.chomp).to include "oo"
-          expect(output.join.chomp).to include "ar"
-          expect(output.join.chomp).not_to include "more"
-        end
-      end
-
-      describe described_class::LCSDiffRightCallbacks do
-        it "creates a diff" do
-          data_old = "foo bar"
-          data_new = "boo far and more"
-
-          output = []
-
-          callback_obj = described_class.new(output)
-          Diff::LCS.traverse_sequences(data_old, data_new, callback_obj)
-
-          expect(output.join.chomp).to include "oo"
-          expect(output.join.chomp).to include "ar"
-          expect(output.join.chomp).to include "and more"
-        end
-      end
     end
   end
 end

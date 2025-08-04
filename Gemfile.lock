@@ -92,7 +92,6 @@ PATH
       delayed_job_active_record (~> 4.1.2)
       devise (~> 4.8)
       devise-security
-      diff-lcs
       diffy
       dotenv-rails
       dumb_delegator (~> 1.1)

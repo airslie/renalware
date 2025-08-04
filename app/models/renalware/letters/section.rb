@@ -19,24 +19,6 @@ module Renalware
           (preview_topic_id.blank? || preview_topic_id == letter.topic_id.to_s)
       end
 
-      def lcs_diff_left
-        output = []
-        Diff::LCS.traverse_balanced(
-          snapshotted, build_snapshot,
-          Renalware::Letters::SectionManager::LCSDiffLeftCallbacks.new(output)
-        )
-        output.join.html_safe
-      end
-
-      def lcs_diff_right
-        output = []
-        Diff::LCS.traverse_balanced(
-          snapshotted, build_snapshot,
-          Renalware::Letters::SectionManager::LCSDiffRightCallbacks.new(output)
-        )
-        output.join.html_safe
-      end
-
       def to_edit_partial_path
         "#{to_partial_path}_edit"
       end
