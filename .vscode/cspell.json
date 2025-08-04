@@ -43,6 +43,7 @@
     "Benchmarkable",
     "BGLU",
     "BHBS",
+    "binread",
     "binwrite",
     "bitmask",
     "BLABLA",
