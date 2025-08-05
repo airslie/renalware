@@ -3,6 +3,7 @@ module Renalware
     class TemperatureValidator < ActiveModel::EachValidator
       include NumericRangeValidations
       include NumericScaleValidations
+
       MIN_VALUE = 28.0
       MAX_VALUE = 45.0
       MAX_DECIMAL_PLACES = 1

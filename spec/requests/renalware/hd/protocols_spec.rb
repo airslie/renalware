@@ -1,5 +1,6 @@
 describe "Patient's Protocol PDF" do
   include PathologySpecHelper
+
   let(:password) { "(&*G986111" }
   let(:user) { create(:user, password: password) }
   let(:patient) do

@@ -3,6 +3,7 @@ module Renalware
     class Consultant < ApplicationRecord
       include Accountable
       include RansackAll
+
       acts_as_paranoid
 
       has_many :appointments, dependent: :restrict_with_exception

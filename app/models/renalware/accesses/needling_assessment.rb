@@ -2,6 +2,7 @@ module Renalware
   module Accesses
     class NeedlingAssessment < ApplicationRecord
       include Accountable
+
       belongs_to :patient, class_name: "Renalware::Accesses::Patient"
       validates :difficulty, presence: true
       validates :patient, presence: true

@@ -4,6 +4,7 @@ require "prawn/table"
 
 class Forms::Base
   include Prawn::View
+
   EMPTY_CHECKBOX = "o     " #  in ZapfDingbats
   CHECKBOX = "n    "        #  in ZapfDingbats
   TABLE_WIDTH = 555

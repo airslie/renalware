@@ -9,6 +9,7 @@ module Renalware
         Class.new do
           include ActiveModel::Validations
           include Virtus::Model
+
           attribute :systolic, Integer
           attribute :diastolic, Integer
           validates_with BloodPressureValidator

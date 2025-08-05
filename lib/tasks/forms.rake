@@ -3,6 +3,7 @@ namespace :forms do
     desc "Generate test Homecare Supply PDF"
     task :build, [:provider] => :environment do |_t, args|
       include Forms::Helpers
+
       provider = args[:provider]
 
       if provider.nil?

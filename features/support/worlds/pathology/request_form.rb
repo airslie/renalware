@@ -237,6 +237,7 @@ module World
 
       module Web
         include Domain
+
         # @section commands
         #
         def generate_request_forms_for_single_patient(clinician, params)

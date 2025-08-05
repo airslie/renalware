@@ -4,6 +4,7 @@ module Renalware
     # user signed in. This is a National Cyber Security Centre recommendation.
     class LastSigninComponent < ApplicationComponent
       include Renalware::UsersHelper
+
       pattr_initialize [:current_user!]
       delegate :last_sign_in_at,
                :current_sign_in_at,

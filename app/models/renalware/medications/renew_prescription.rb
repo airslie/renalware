@@ -2,6 +2,7 @@ module Renalware
   module Medications
     class RenewPrescription
       include Callable
+
       pattr_initialize [:prescription!, :auto_terminate_after!, :by!]
 
       def call

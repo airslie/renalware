@@ -1,6 +1,7 @@
 module Renalware
   describe UserPolicy, type: :policy do
     include PolicySpecHelper
+
     subject(:policy) { described_class }
 
     let(:admin) { user_double_with_role(:admin) }

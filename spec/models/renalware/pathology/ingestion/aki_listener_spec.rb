@@ -3,6 +3,7 @@ module Renalware
   module Pathology
     describe Ingestion::AKIListener do
       include ConfigHelper
+
       subject(:listener) { described_class.new }
 
       let(:score) { 2 }

@@ -2,6 +2,7 @@ module Renalware
   module Research
     class StudyEvent < Events::Event
       include Document::Base
+
       validates :subtype_id, presence: true
 
       class Document < Document::Embedded

@@ -5,6 +5,7 @@ module Renalware
         class ImportJob < ApplicationJob
           include StringLogging
           include Feeds::Job
+
           FILE_TO_EXTRACT_FROM_ARCHIVE = /epracmem.csv/
 
           # TODO: refactor

@@ -39,7 +39,7 @@ module Renalware
           "serialized_params -> 'arguments' -> 1 ->> 'view_name' = ? and scheduled_at = ?",
           view_metadata.fully_qualified_view_name,
           scheduled_at.utc
-        ).count > 0
+        ).any?
       end
 
       # The view_name kw arg we pass to perform_later is stored in good_jobs.serialized_params

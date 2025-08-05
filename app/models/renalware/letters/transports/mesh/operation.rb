@@ -2,6 +2,7 @@ module Renalware
   module Letters::Transports::Mesh
     class Operation < ApplicationRecord
       include RansackAll
+
       ACCEPTABLE_CONTENT_TYPES = %w(application/octet-stream application/xml).freeze
 
       validates :action, presence: true

@@ -2,6 +2,7 @@ module Renalware
   module Patients
     describe WorryCategoryPolicy, type: :policy do
       include PolicySpecHelper
+
       subject { described_class }
 
       let(:clinician)   { user_double_with_role(:clinical) }

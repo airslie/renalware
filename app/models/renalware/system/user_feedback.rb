@@ -3,6 +3,7 @@ module Renalware
     class UserFeedback < ApplicationRecord
       include RansackAll
       extend Enumerize
+
       validates :author, presence: true
       validates :category, presence: true
       validates :comment, presence: true

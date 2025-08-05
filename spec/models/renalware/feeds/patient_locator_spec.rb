@@ -1,6 +1,5 @@
 module Renalware
   describe Feeds::PatientLocator::StrategyClassFactory do
-    # rubocop:disable Layout/LineLength
     it "can resolve all strategy classes" do
       {
         simple: Feeds::PatientLocatorStrategies::Simple,
@@ -15,7 +14,6 @@ module Renalware
         expect(described_class.new(:oru).call).to eq(klass)
       end
     end
-    # rubocop:enable Layout/LineLength
 
     it "raises an error if the configured strategy does not translate to a class" do
       allow(Renalware.config.hl7_patient_locator_strategy)

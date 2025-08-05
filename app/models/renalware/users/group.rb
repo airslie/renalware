@@ -2,6 +2,7 @@ module Renalware
   module Users
     class Group < ApplicationRecord
       include Accountable
+
       validates :name, presence: true, uniqueness: true
 
       has_many(

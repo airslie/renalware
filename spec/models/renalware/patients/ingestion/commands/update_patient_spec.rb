@@ -2,6 +2,7 @@ module Renalware::Patients::Ingestion
   describe Commands::UpdatePatient do
     include HL7Helpers
     include PatientsSpecHelper
+
     subject(:service) { described_class }
 
     let(:system_user) { create(:user, username: Renalware::SystemUser.username) }

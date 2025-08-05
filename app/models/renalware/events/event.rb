@@ -5,6 +5,7 @@ module Renalware
       include Accountable
       include PatientScope
       include OrderedScope
+
       acts_as_paranoid
 
       ORDER_FIELDS = [:date_time].freeze

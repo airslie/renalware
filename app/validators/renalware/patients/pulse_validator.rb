@@ -2,6 +2,7 @@ module Renalware
   module Patients
     class PulseValidator < ActiveModel::EachValidator
       include NumericRangeValidations
+
       MIN_VALUE = 20
       MAX_VALUE = 200
 

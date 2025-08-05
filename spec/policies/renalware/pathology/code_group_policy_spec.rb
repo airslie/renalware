@@ -3,6 +3,7 @@ module Renalware
     describe CodeGroupPolicy, type: :policy do
       include PatientsSpecHelper
       include PolicySpecHelper
+
       subject { described_class }
 
       let(:code_group) do

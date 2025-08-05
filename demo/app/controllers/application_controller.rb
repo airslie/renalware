@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Renalware::Concerns::CacheBusting
+
   protect_from_forgery with: :reset_session
   helper Renalware::Engine.helpers
   layout -> { turbo_frame_request? ? "turbo_rails/frame" : "renalware" }

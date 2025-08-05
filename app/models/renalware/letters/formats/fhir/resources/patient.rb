@@ -4,6 +4,7 @@ module Renalware
       class Resources::Patient
         include Support::Construction
         include Support::Helpers
+
         delegate :patient, to: :arguments
         delegate :current_address, to: :patient, allow_nil: true
 

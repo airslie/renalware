@@ -3,6 +3,7 @@ module Renalware
     class ListsController < BaseController
       include Pagy::Backend
       include Renalware::Concerns::Pageable
+
       use_layout :simple
 
       def show

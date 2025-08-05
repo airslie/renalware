@@ -6,6 +6,7 @@ module Renalware
     # quicker and less resource intensive to create the PDFs.
     class EventPdf
       include Prawn::View
+
       attr_reader :event
 
       delegate :patient, :event_type, to: :event

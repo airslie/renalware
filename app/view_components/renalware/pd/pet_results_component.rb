@@ -5,6 +5,7 @@ module Renalware
       include Pagy::Frontend
       include ToggleHelper
       include DropdownButtonHelper
+
       attr_reader :patient, :pagination, :current_user
 
       TITLE = "PET Results".freeze

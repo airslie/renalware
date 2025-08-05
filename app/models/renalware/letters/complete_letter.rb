@@ -2,6 +2,7 @@ module Renalware
   module Letters
     class CompleteLetter
       include Broadcasting
+
       pattr_initialize :letter
 
       class << self

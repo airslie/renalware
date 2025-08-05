@@ -19,6 +19,7 @@ module Renalware
       # Returns a KFREResult object containing 5 and 5 year re
       class CalculateKFRE
         include Callable
+
         attr_reader :sex, :age, :acr, :egfr
 
         UK_ADJUSTMENT_5_YR = 0.9570

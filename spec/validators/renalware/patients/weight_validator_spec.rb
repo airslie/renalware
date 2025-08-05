@@ -9,6 +9,7 @@ module Renalware
         Class.new do
           include ActiveModel::Validations
           include Virtus::Model
+
           attribute :weight, Float
           validates :weight, "renalware/patients/weight" => true
 

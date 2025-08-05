@@ -5,6 +5,7 @@ module Renalware
         Class.new do
           include ActiveModel::Validations
           include Virtus::Model
+
           attribute :content, String
           validates :content, "renalware/pdf_friendly": true
 

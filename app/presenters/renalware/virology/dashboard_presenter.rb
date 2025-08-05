@@ -2,6 +2,7 @@ module Renalware
   module Virology
     class DashboardPresenter
       include PresenterHelper
+
       DEFAULT_OBX_CODE = "BHBS".freeze
       CODE_GROUP_NAME = "hep_b_antibody_statuses".freeze
 

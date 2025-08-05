@@ -8,6 +8,7 @@ module Renalware
       class SimpleRecipient
         include ActiveModel::Model
         include ActiveModel::Attributes
+
         attribute :name, :string
         attribute :role, :string
         attribute :organisation, :string

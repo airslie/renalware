@@ -1,6 +1,7 @@
 module Renalware::Patients
   describe BookmarkPolicy, type: :policy do
     include PolicySpecHelper
+
     subject(:policy) { described_class }
 
     permissions :create? do

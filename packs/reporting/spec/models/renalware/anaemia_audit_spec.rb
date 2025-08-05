@@ -8,6 +8,7 @@
 module Renalware
   describe "Anaemia Audit" do
     include PatientsSpecHelper
+
     let(:uom) { create(:pathology_measurement_unit) }
     let(:user) { create(:user) }
     let(:audit_view_name) { "reporting_anaemia_audit" }

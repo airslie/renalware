@@ -1,5 +1,6 @@
 describe "Soft-deleted letter administration" do
   include LettersSpecHelper
+
   let(:user) { create(:user, :clinical) }
   let(:superadmin) { create(:user, :super_admin) }
   let(:patient1) { create(:letter_patient, by: user, family_name: "PATIENT1") }

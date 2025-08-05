@@ -2,6 +2,7 @@ module Renalware
   module Transplants
     class RejectionEpisode < ApplicationRecord
       include Accountable
+
       has_paper_trail(
         versions: { class_name: "Renalware::Transplants::Version" },
         on: [:create, :update, :destroy]

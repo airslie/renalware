@@ -6,6 +6,7 @@ module Renalware
         #   12-Jan-2090: HGB 123, WBC n/a; 23-Jan-2090: PHOS 45, POT 23
         class Investigations
           include Prawn::View
+
           # :results is in the format
           # { date_string: { code_1: value_1, code_2: value_2 }, .. }
           pattr_initialize :document, [:results!]

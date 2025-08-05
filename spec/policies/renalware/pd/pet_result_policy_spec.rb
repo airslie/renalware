@@ -1,6 +1,7 @@
 module Renalware::PD
   describe PETResultPolicy, type: :policy do
     include PolicySpecHelper
+
     subject(:policy) { described_class }
 
     %i(edit?).each do |permission|

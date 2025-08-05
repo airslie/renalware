@@ -9,6 +9,7 @@ module Renalware
         Class.new do
           include ActiveModel::Validations
           include Virtus::Model
+
           attribute :pulse, Integer
           validates :pulse, "renalware/patients/pulse" => true
 

@@ -5,6 +5,7 @@ module Renalware
     # where the change type is unknown or does not match any of the other options.
     class ChangeType < ApplicationRecord
       include Accountable
+
       acts_as_paranoid
 
       validates :name, presence: true, uniqueness: true

@@ -2,6 +2,7 @@ module Renalware
   module Letters
     RSpec.describe ReviseLetter do
       include LettersSpecHelper
+
       subject(:service) { described_class.new }
 
       let(:user) { create(:user) }

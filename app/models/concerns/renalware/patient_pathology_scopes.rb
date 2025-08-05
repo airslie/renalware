@@ -5,6 +5,7 @@
 module Renalware
   module PatientPathologyScopes
     extend ActiveSupport::Concern
+
     RANSACKABLE_OBX_CODES = %i(hgb ure cre urr phos pthi pot).freeze
 
     # Define some ransackers to make it easier to sort the table (using sort_link)

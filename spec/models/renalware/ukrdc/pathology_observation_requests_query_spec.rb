@@ -1,6 +1,7 @@
 module Renalware
   describe UKRDC::PathologyObservationRequestsQuery do
     include PathologySpecHelper
+
     let(:patient) { create(:pathology_patient) }
 
     describe "#call" do

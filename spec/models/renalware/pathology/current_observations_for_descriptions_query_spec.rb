@@ -2,6 +2,7 @@ module Renalware
   module Pathology
     describe CurrentObservationsForDescriptionsQuery do
       include PathologySpecHelper
+
       describe "#call" do
         let(:patient) { create_patient }
 

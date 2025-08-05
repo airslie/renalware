@@ -3,6 +3,7 @@ module Renalware
     module Delivery
       describe HomecareFormsAdapter do
         include PatientsSpecHelper
+
         let(:user) { create(:user) }
 
         let(:patient) {

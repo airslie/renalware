@@ -10,6 +10,7 @@ module Renalware
   module Feeds
     class ReplayHistoricalHL7PathologyMessages
       include Broadcasting
+
       pattr_initialize [
         :patient!, reason: "", from: nil, to: nil, orc_filler_order_numbers: []
       ]

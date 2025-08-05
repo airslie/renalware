@@ -5,6 +5,7 @@ module Renalware
     # chart when given an AR relation.
     class ChartDefinition
       include StoreModel::Model
+
       attribute :x_axis_column, :string
       attribute :series_columns, array: true, default: []
 

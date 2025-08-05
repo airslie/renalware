@@ -2,6 +2,7 @@ module Renalware
   module Problems
     class Note < ApplicationRecord
       include Accountable
+
       acts_as_paranoid
       alias archived? deleted?
 

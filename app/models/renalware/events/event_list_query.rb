@@ -26,6 +26,7 @@ module Renalware
       # start of date and end of day times.
       module Ransackers
         extend ActiveSupport::Concern
+
         included do
           ransacker :created_at, type: :date do
             Arel.sql("DATE(events.created_at)")

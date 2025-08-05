@@ -48,7 +48,7 @@ module Renalware
 
       # Note sex can be nil but here that would evaluate to :""
       def sex_sym
-        sex.to_s&.to_sym
+        sex.to_s.to_sym
       end
 
       def height_cm

@@ -2,6 +2,7 @@ module Renalware
   module Patients
     class RespiratoryRateValidator < ActiveModel::EachValidator
       include NumericRangeValidations
+
       MIN_VALUE = 4
       MAX_VALUE = 40
 

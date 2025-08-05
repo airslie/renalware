@@ -10,6 +10,7 @@ module Renalware
     module Rendering
       class PdfRenderer
         include Callable
+
         pattr_initialize :letter
 
         # If the letter is archived we just return the pdf_content binary data if present

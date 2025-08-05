@@ -6,6 +6,7 @@ module Renalware
         # of each copy of the letter. Page 2 is always blank because we as are duplex printing.
         class RecipientAddressPagePdf
           include Prawn::View
+
           attr_reader :recipient
 
           def initialize(recipient, parent_document = nil)

@@ -1,6 +1,7 @@
 module Renalware
   describe Patients::MDMPatientsQuery do
     include PatientsSpecHelper
+
     subject(:query) { described_class }
 
     let(:user) { create(:user) }

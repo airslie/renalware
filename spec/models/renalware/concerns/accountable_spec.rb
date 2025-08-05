@@ -3,6 +3,7 @@ module Renalware
     def test_class
       Class.new(ApplicationRecord) do
         include Accountable
+
         self.table_name = "examples"
 
         def self.name

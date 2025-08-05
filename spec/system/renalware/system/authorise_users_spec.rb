@@ -3,6 +3,7 @@ require "action_view/record_identifier"
 module Renalware
   describe "Authorising, approving and reactivating users" do
     include ActionView::RecordIdentifier
+
     let(:approved)        { create(:user, :clinical, approved: true) }
     let(:unapproved)      { create(:user, :unapproved) }
     let(:expired)         { create(:user, :expired, :clinical) }

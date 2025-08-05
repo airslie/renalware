@@ -2,6 +2,7 @@ module Renalware
   # Presenter formatting a collection of patients for use behind any MDM Patients listing.
   class MDMPatientsPresenter
     include PresenterHelper
+
     attr_reader :patients, :view_proc, :page_title, :q, :pagy
 
     def initialize(patients:,

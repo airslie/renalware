@@ -7,6 +7,7 @@ module Renalware
       # b) as the 'thing' to save when the form is submitted.
       class Form
         include ActiveModel::Model
+
         rattr_initialize [:patient!, :by, params: {}]
         delegate :comorbidities, to: :patient, prefix: true
 

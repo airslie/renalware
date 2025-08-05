@@ -3,6 +3,7 @@ module Renalware
     class Station < ApplicationRecord
       include Accountable
       include Sortable
+
       belongs_to :location, class_name: "HD::StationLocation"
       validates :hospital_unit_id, presence: true
       validates :name, uniqueness: { scope: :hospital_unit_id }, presence: true

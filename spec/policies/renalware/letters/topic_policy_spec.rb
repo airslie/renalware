@@ -2,6 +2,7 @@ module Renalware
   module Letters
     describe TopicPolicy, type: :policy do
       include PolicySpecHelper
+
       subject { described_class }
 
       let(:clinician)     { user_double_with_role(:clinical) }

@@ -4,6 +4,7 @@ module Renalware
       module Mesh
         class ActivityComponent < ApplicationComponent
           include IconHelper
+
           pattr_initialize [:current_user!]
 
           COLOURS = {

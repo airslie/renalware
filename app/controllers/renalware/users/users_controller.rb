@@ -2,6 +2,7 @@ module Renalware
   module Users
     class UsersController < BaseController
       include Pagy::Backend
+
       use_layout :simple
 
       def index

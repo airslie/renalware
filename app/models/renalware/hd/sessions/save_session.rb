@@ -4,6 +4,7 @@ module Renalware
       # A generic service object which saves a (new or existing) HD::Session of any (STI) type.
       class SaveSession
         include Wisper::Publisher
+
         attr_reader :patient, :params, :current_user, :session_type
 
         def initialize(patient:, current_user:)

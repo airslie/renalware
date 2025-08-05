@@ -15,6 +15,7 @@ module Renalware
       class BatchCompilePdfs
         include Callable
         include PdfCombining
+
         PAGE_COUNTS = %w(2 3 4 5 6 7 8 9 10).freeze
 
         def initialize(batch, user)

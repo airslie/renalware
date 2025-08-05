@@ -2,6 +2,7 @@ module Renalware
   module Virology
     describe VaccinationPolicy, type: :policy do
       include PolicySpecHelper
+
       subject(:policy) { described_class }
 
       let(:admin) { user_double_with_role(:admin) }

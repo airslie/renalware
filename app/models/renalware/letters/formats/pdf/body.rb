@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Body
           include Prawn::View
+
           pattr_initialize :document, :letter
           UL_BULLET = "• ".freeze
 

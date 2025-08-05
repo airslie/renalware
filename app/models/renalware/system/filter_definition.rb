@@ -4,6 +4,7 @@ module Renalware
     # us to specify how filters for a SQL view are displayed in HTML
     class FilterDefinition
       include StoreModel::Model
+
       attribute :code, :string
       # The type enum determines how the filter is constructed eg as a list of distinct values
       enum(

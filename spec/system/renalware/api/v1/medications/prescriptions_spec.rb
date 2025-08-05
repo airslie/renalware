@@ -2,6 +2,7 @@ require "devise"
 
 describe "API request for a patient's prescriptions as JSON" do
   include PatientsSpecHelper
+
   let(:patient) { create(:patient) }
   let(:drug) { create(:drug, name: "Drug1") }
   let(:json) { JSON.parse(page.body) }

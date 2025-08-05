@@ -9,7 +9,7 @@ module Renalware
       pattr_initialize [:current_user!]
 
       def render?
-        Renalware.config.user_dashboard_display_named_patients && patients.count > 0
+        Renalware.config.user_dashboard_display_named_patients && patients.any?
       end
 
       def pagination

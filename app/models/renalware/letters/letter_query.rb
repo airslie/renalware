@@ -2,6 +2,7 @@ module Renalware
   module Letters
     module QueryableLetter
       extend ActiveSupport::Concern
+
       included do
         def self.ransackable_attributes(*)
           super + %w(effective_date)

@@ -5,6 +5,7 @@ module Renalware
     # clinical summary or other patient dashboard.
     class SummaryComponent < ApplicationComponent
       include ToggleHelper
+
       rattr_initialize [:patient!, :current_user!]
 
       def problems

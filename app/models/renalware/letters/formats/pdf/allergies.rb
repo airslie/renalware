@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Allergies
           include Prawn::View
+
           pattr_initialize :document
 
           def build

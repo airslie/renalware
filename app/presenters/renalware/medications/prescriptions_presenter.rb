@@ -2,6 +2,7 @@ module Renalware
   module Medications
     class PrescriptionsPresenter
       include PresenterHelper
+
       pattr_initialize :patient
 
       def prescriptions

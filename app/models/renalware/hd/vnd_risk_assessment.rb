@@ -2,6 +2,7 @@ module Renalware
   module HD
     class VNDRiskAssessment < ApplicationRecord
       include Accountable
+
       acts_as_paranoid
       belongs_to :patient, touch: true
       validates :patient, presence: true

@@ -10,6 +10,7 @@ module Renalware
     # If this behaviour is not required, return nil in the setting.
     class AssignFuturePrescriptionTermination
       include Callable
+
       pattr_initialize [:prescription!, :by!]
 
       def call

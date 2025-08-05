@@ -3,6 +3,7 @@ module Renalware
     class WeightValidator < ActiveModel::EachValidator
       include NumericRangeValidations
       include NumericScaleValidations
+
       MIN_VALUE = 5.0
       MAX_VALUE = 300.0
       MAX_DECIMAL_PLACES = 2

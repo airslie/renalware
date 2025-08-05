@@ -41,7 +41,7 @@ module Renalware
 
       def new_prescription_required?
         attr_intersection = prescription.changed_attributes.keys & NEW_PRESCRIPTION_ATTRS
-        attr_intersection.count > 0
+        attr_intersection.any?
       end
     end
 

@@ -14,6 +14,7 @@ module Renalware
         underlying_view_name = view_name
         Class.new(ApplicationRecord) do
           include RansackAll
+
           self.table_name = underlying_view_name
           define_method(:to_s, ->(_x) { patient_name })
           define_method(:to_param, -> { secure_id })

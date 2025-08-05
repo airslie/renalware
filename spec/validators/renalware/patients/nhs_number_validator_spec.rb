@@ -7,6 +7,7 @@ module Renalware
         Class.new do
           include ActiveModel::Validations
           include Virtus::Model
+
           attribute :nhs_number, String
           validates :nhs_number, "renalware/patients/nhs_number" => true
 

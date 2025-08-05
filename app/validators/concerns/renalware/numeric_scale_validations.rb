@@ -1,6 +1,7 @@
 module Renalware
   module NumericScaleValidations
     extend ActiveSupport::Concern
+
     def validate_numeric_scale(record, attribute, value, scale)
       if number_exceeds_scale?(value, scale)
         record.errors.add(attribute, :invalid_number)

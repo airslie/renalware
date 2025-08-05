@@ -3,6 +3,7 @@ module Renalware
     class Problem < ApplicationRecord
       include PatientScope
       include Accountable
+
       acts_as_paranoid
       acts_as_list scope: :patient_id
 

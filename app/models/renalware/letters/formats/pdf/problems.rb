@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Problems
           include Prawn::View
+
           pattr_initialize :document, :letter, :x, :y, :width
           BULLET = "• ".freeze
           delegate :patient, to: :letter

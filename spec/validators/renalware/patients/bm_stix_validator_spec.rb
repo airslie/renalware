@@ -9,6 +9,7 @@ module Renalware
         Class.new do
           include ActiveModel::Validations
           include Virtus::Model
+
           attribute :bm_stix, Float
           validates :bm_stix, "renalware/patients/bm_stix" => true
 

@@ -5,6 +5,7 @@ module Pages
   module Medications
     class HomeDeliveryDialog < PageObject
       include CapybaraSelect2
+
       pattr_initialize [:patient!]
 
       def path

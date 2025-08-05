@@ -37,6 +37,7 @@ module Renalware
       # Module to allow us to mixin ransackers
       module QueryablePatient
         extend ActiveSupport::Concern
+
         included do
           # Using a custom ransacker to be able to order by access plan create_at
           # because I believe using an implicit :access_plan_create_at in the sort_link

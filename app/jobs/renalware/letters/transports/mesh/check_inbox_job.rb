@@ -2,6 +2,7 @@ module Renalware
   module Letters::Transports::Mesh
     class CheckInboxJob < ApplicationJob
       include GoodJob::ActiveJobExtensions::Batches
+
       queue_as :mesh
       queue_with_priority 10
 
