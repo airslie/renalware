@@ -31,19 +31,15 @@ ruby:
   table
     thead
       tr
-        th
-        th
-        th
-        th
-        th
+        th(colspan=6)
         th.text-center.bg-pink-100(colspan=3) Renderable
-
       tr
         th.col-width-tiny= sort_link(query, :id, "Id")
         th.col-width-small State
         th.col-width-date-time= sort_link(query, :created_at, "Created")
         th.col-width-date-time= sort_link(query, :updated_at, "Updated")
         th Creator
+        th Comment
         th.bg-pink-100.text-center.col-width-small Type
         th.bg-pink-100.text-center.col-width-tiny Id
         th.bg-pink-100.text-center.col-width-tiny
@@ -56,6 +52,7 @@ ruby:
           td= l(doc.created_at)
           td= l(doc.updated_at)
           td= doc.created_by
+          td= doc.comments
           td.bg-pink-50= doc.renderable_type
           td.bg-pink-50= doc.renderable_id
           td.bg-pink-50
