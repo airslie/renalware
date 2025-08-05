@@ -69,21 +69,16 @@ class LetterListener
   # Letter deletion callbacks
   ###########################
 
-  # Inside a txn
-  def before_letter_deleted(_letter)
-    if Renalware.config.send_gp_letters_over_mesh
-      Rails.logger.warn("not implemented yet: Transmission.cancel_pending(letter: letter)")
-      # mesh::Transmission.cancel_pending(letter: letter)
-    end
-  end
-
-  # Outside txn, after letter deleted
+  # Inside txn, after letter deleted
   def letter_deleted(letter)
     Renalware::Feeds::MarkOutgoingDocumentAsDeletedAndRequeue.call(
       renderable: letter,
       by: letter.deleted_by
     )
   end
+
+  # Outside txn, after letter deleted
+  def after_letter_deleted(letter); end
 
   def rollback_letter_deleted; end
 

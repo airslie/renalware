@@ -51,7 +51,7 @@ module Renalware
         it "broadcasts before_and after_letter_deleted events" do
           expect {
             service.call
-          }.to broadcast(:before_letter_deleted, letter.becomes(Letters::Letter))
+          }.to broadcast(:letter_deleted, letter.becomes(Letters::Letter))
             .and broadcast(:after_letter_deleted, letter.becomes(Letters::Letter))
         end
       end

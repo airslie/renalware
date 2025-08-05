@@ -27,7 +27,7 @@ module Renalware
           letter.patient.touch
           letter.update!(deleted_by: by, by: by)
           letter.destroy!
-          broadcast(:before_letter_deleted, base_letter)
+          broadcast(:letter_deleted, base_letter)
           after_commit { broadcast(:after_letter_deleted, base_letter) }
           after_rollback { broadcast(:rollback_letter_deleted, base_letter) }
         end

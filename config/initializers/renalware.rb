@@ -40,6 +40,7 @@ Renalware.configure do |config|
         "Renalware::Letters::CalculatePageCountJob", async: true
       )
     ],
+    "Renalware::Letters::DeleteLetter" => [],
     "Renalware::Letters::ResolveDefaultElectronicCCs" => [
       "Renalware::HD::PatientListener"
     ],
