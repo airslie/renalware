@@ -4,6 +4,7 @@ module Renalware
       describe MailshotPolicy, type: :policy do
         include PolicySpecHelper
         include PatientsSpecHelper
+
         subject { described_class }
 
         let(:clinician)   { user_double_with_role(:clinical) }

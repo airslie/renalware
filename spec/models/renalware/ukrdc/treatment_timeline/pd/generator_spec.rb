@@ -2,6 +2,7 @@ module Renalware
   module UKRDC
     describe TreatmentTimeline::PD::Generator do
       include PatientsSpecHelper
+
       subject(:generator) { described_class.new(modality) }
 
       let(:user) { create(:user) }

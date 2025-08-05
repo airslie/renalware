@@ -2,6 +2,7 @@ require "pdf/reader"
 
 describe "Rendering a letter for printing in an envelope stuffer" do
   include LettersSpecHelper
+
   let(:user) { create(:user) }
 
   describe "GET show" do

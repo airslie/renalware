@@ -3,6 +3,7 @@ module Renalware
     include Pundit::Authorization
 
     include Renalware::Engine.routes.url_helpers
+
     delegate :current_user, to: :helpers
 
     # Not sure why include Renalware::Engine.routes.url_helpers does not make the

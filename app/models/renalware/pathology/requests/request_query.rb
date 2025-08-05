@@ -19,6 +19,7 @@ module Renalware
 
         module QueryableRequest
           extend ActiveSupport::Concern
+
           included do
             ransacker :created_on, type: :date do
               Arel.sql("DATE(created_at)")

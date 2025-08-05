@@ -5,6 +5,7 @@ module Renalware
       include Pagy::Backend
       include Pagy::Frontend
       include ToggleHelper
+
       rattr_initialize [:patient!, :current_user!]
       attr_reader :pagination
 

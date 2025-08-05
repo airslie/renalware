@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Signature
           include Prawn::View
+
           pattr_initialize :document, [:signature!, :position]
 
           def build

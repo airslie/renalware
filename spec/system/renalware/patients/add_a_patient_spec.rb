@@ -4,6 +4,7 @@
 describe "A user adds a patient" do
   describe "add patient flow" do
     include ConfigHelper
+
     before { configure_patient_hospital_identifiers }
 
     it "adds a patient successfully" do

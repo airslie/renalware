@@ -3,6 +3,7 @@
 describe "HL7 ADT^A08 message handling: 'Patient Update Info (for current episode)'" do
   include HL7Helpers
   include PatientsSpecHelper
+
   # This trigger event is used when any patient information has changed but when no other trigger
   # event has occurred. For example, an A08 event can be used to notify the receiving systems of a
   # change of address or a name change. The A08 event can include information specific to an episode

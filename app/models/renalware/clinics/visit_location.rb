@@ -2,6 +2,7 @@ module Renalware
   module Clinics
     class VisitLocation < ApplicationRecord
       include Accountable
+
       acts_as_paranoid
 
       has_paper_trail(

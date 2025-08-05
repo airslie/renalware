@@ -4,6 +4,7 @@ module Renalware
       # rubocop:disable Rails/OutputSafety
       class ScheduleComponent < ViewComponent::Base
         include ActionView::Helpers
+
         pattr_initialize [:patient!]
 
         def call

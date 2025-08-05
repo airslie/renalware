@@ -2,6 +2,7 @@ module Renalware
   module Problems
     class ProblemsController < BaseController
       include Renalware::Concerns::PatientVisibility
+
       after_action :track_action, except: [:search]
 
       skip_verify_policy_scoped only: :search

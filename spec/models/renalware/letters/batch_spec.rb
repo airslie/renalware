@@ -2,6 +2,7 @@ module Renalware
   module Letters
     describe Batch do
       include LettersSpecHelper
+
       it_behaves_like "an Accountable model"
       it :aggregate_failures do
         is_expected.to have_many :items

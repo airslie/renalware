@@ -4,6 +4,7 @@ module Renalware
       self.table_name = "event_subtypes"
       include Accountable
       include Supersedeable
+
       validates :name, presence: true, uniqueness: { scope: :event_type_id }
       validates :definition, presence: true
       validates :event_type_id, presence: true

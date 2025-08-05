@@ -3,6 +3,7 @@ module Renalware
     class Profile < ApplicationRecord
       include Accountable
       include Document::Base
+
       validates :patient, presence: true
       belongs_to :patient, touch: true
       belongs_to :referrer

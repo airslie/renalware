@@ -2,6 +2,7 @@ module Renalware
   module Clinical
     class IganRisk < ApplicationRecord
       include Accountable
+
       belongs_to :patient, touch: true
       validates :patient, presence: true
       validates :risk,

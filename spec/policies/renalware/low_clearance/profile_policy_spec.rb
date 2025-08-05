@@ -3,6 +3,7 @@ module Renalware
     describe ProfilePolicy, type: :policy do
       include PatientsSpecHelper
       include PolicySpecHelper
+
       subject { described_class }
 
       let(:clinician) { user_double_with_role(:clinical) }

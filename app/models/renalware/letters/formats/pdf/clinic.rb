@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Clinic
           include Prawn::View
+
           pattr_initialize :document, :letter
           PRIVATE_AND_CONFIDENTIAL = "PRIVATE AND CONFIDENTIAL".freeze
           delegate :letterhead, to: :letter

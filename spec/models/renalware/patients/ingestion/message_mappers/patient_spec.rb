@@ -3,6 +3,7 @@ module Renalware
     module Ingestion
       describe MessageMappers::Patient do
         include HL7Helpers
+
         subject { described_class.new(message) }
 
         before do

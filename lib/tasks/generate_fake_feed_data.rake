@@ -13,6 +13,7 @@ end
 module Renalware
   class GenerateTestFeedMessages
     include Callable
+
     pattr_initialize [patient_count: 100, feed_message_count: 100]
 
     def call

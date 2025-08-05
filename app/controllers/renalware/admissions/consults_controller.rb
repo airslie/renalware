@@ -5,6 +5,7 @@ module Renalware
     class ConsultsController < BaseController
       include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
+
       helper Hospitals::HospitalsHelper
 
       # rubocop:disable Metrics/AbcSize

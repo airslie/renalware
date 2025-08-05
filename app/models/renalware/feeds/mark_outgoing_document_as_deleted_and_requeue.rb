@@ -18,6 +18,7 @@ module Renalware
     #   end
     class MarkOutgoingDocumentAsDeletedAndRequeue
       include Callable
+
       pattr_initialize [:renderable!, :by!]
 
       def call

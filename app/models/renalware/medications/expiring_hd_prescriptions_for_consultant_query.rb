@@ -6,6 +6,7 @@ module Renalware
     # is the current user.
     class ExpiringHDPrescriptionsForConsultantQuery
       include Callable
+
       pattr_initialize [:user!]
 
       def call # rubocop:disable Metrics/MethodLength

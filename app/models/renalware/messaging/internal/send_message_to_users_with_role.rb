@@ -3,6 +3,7 @@ module Renalware
     module Internal
       class SendMessageToUsersWithRole
         include Callable
+
         pattr_initialize [:author!, :patient!, :role_name!, :subject!, :body!]
 
         def call # rubocop:disable Metrics/MethodLength

@@ -5,6 +5,7 @@ module Renalware
       self.table_name = "letter_descriptions"
 
       include Sortable
+
       acts_as_paranoid
       validates :text, presence: true, uniqueness: true
 

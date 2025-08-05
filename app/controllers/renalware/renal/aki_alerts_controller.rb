@@ -3,6 +3,7 @@ module Renalware
     class AKIAlertsController < BaseController
       include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
+
       helper Hospitals::HospitalsHelper
 
       def index

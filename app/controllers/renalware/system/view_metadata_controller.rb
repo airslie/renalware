@@ -37,6 +37,7 @@ module Renalware
       def klass_for_view(view_name)
         Class.new(ApplicationRecord) do
           extend RansackAll
+
           self.table_name = view_name
           define_method(:to_s, ->(_x) { patient_name })
           define_method(:to_param, -> { secure_id })

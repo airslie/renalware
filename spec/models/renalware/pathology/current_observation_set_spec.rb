@@ -2,6 +2,7 @@ module Renalware
   module Pathology
     describe CurrentObservationSet do
       include PathologySpecHelper
+
       it :aggregate_failures do
         is_expected.to belong_to(:patient)
         is_expected.to validate_presence_of(:patient)

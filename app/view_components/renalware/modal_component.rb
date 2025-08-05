@@ -19,6 +19,7 @@ module Renalware
   class ModalComponent < ApplicationComponent
     include Turbo::FramesHelper
     include Renalware::IconHelper
+
     attr_reader :remote, :title, :size_css_classes, :turbo_frame_id
 
     # if changing these, remember to test all instance of ModalComponent

@@ -2,6 +2,7 @@ module Renalware
   module Letters::Transports::Mesh
     class Transmission < ApplicationRecord
       include RansackAll
+
       belongs_to :letter, class_name: "Letters::Letter"
       has_many :operations, -> { order(created_at: :asc) }, dependent: :destroy
       has_many :download_message_operations,

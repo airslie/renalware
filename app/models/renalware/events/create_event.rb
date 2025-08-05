@@ -4,6 +4,7 @@ module Renalware
     # 'world' (or rather just whoever has been configured in the broadcast subscription map).
     class CreateEvent
       include Broadcasting
+
       pattr_initialize [:event!, :by!]
 
       # Returns the boolean result of event.save_by

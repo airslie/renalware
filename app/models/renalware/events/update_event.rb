@@ -4,6 +4,7 @@ module Renalware
     # configure to listen in the broadcast subscription map.
     class UpdateEvent
       include Broadcasting
+
       pattr_initialize [:event!, :params!, :by!]
 
       # Returns the boolean result of event.update_by

@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Document
           include Prawn::View
+
           pattr_initialize(:letter, :document)
 
           def self.build_document

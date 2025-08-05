@@ -5,6 +5,7 @@ module Renalware
 
       class Group
         include Virtus.model
+
         attribute :name, String
         attribute :users, Array, default: []
       end

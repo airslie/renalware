@@ -1,5 +1,6 @@
 describe "HD MDM Patients" do
   include PatientsSpecHelper
+
   let(:user) { create(:user) }
   let(:hospital) { create(:hospital_centre) }
   let(:unit1) { create(:hd_hospital_unit, name: "Unit1", hospital_centre: hospital) }

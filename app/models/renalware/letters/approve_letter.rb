@@ -5,6 +5,7 @@ module Renalware
     class ApproveLetter
       include Broadcasting
       include AfterCommitEverywhere
+
       pattr_initialize :letter
       delegate :patient, to: :letter
 

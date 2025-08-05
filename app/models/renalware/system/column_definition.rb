@@ -5,6 +5,7 @@ module Renalware
     # UI.
     class ColumnDefinition
       include StoreModel::Model
+
       attribute :code, :string
       # An optional title for the column. Code will be used if title is missing
       attribute :name, :string

@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class ClinicalObservations
           include Prawn::View
+
           pattr_initialize :document
 
           def build

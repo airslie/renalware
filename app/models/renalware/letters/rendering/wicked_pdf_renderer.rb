@@ -6,6 +6,7 @@ module Renalware
     module Rendering
       class WickedPdfRenderer
         include Callable
+
         attr_reader :letter, :options
 
         WICKED_OPTIONS = {

@@ -11,6 +11,7 @@ end
 module Renalware
   class GenerateTestLetters
     include Renalware::Broadcasting
+
     attr_reader :pages
 
     def initialize(pages = 1)

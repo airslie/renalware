@@ -2,6 +2,7 @@ module Renalware
   module Surveys
     class Question < ApplicationRecord
       include PatientScope
+
       acts_as_paranoid
       belongs_to :survey
       has_many(

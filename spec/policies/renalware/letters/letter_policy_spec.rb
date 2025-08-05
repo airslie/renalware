@@ -2,6 +2,7 @@ module Renalware::Letters
   # rubocop:disable RSpec/RepeatedExample
   describe LetterPolicy, type: :policy do
     include PolicySpecHelper
+
     subject(:policy) { described_class }
 
     let(:super_admin_user) { user_double_with_role(:super_admin) }

@@ -2,6 +2,7 @@ module Renalware
   module Patients
     class BloodPressureValidator < ActiveModel::Validator
       include NumericRangeValidations
+
       MIN_VALUE = 20
       MAX_VALUE = 300
 

@@ -2,6 +2,7 @@ module Renalware
   module LowClearance
     describe DashboardPresenter do
       include PatientsSpecHelper
+
       let(:user) { create(:user) }
 
       describe "policy methods" do

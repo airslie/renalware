@@ -4,6 +4,7 @@ module Renalware
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::TextHelper
       include ActionView::Context
+
       pattr_initialize :model
       delegate_missing_to :model
 

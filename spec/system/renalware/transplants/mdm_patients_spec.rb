@@ -1,5 +1,6 @@
 describe "Transplants MDM Patients" do
   include PatientsSpecHelper
+
   let(:user) { create(:user) }
 
   describe "GET index" do

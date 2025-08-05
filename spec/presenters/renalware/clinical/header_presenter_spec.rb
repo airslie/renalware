@@ -1,5 +1,6 @@
 describe Renalware::Clinical::HeaderPresenter do
   include PathologySpecHelper
+
   subject(:presenter) { described_class.new(patient) }
 
   let(:clinic) { create(:clinic) }

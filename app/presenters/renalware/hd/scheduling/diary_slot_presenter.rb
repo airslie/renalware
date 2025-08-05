@@ -4,6 +4,7 @@ module Renalware
     module Scheduling
       class DiarySlotPresenter < SimpleDelegator
         include Renalware::Engine.routes.url_helpers
+
         delegate :master?, to: :diary, allow_nil: true
 
         # Patients who prefer to dialyse on this day e.g. Mon and in this period e.g. AM.

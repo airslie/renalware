@@ -6,6 +6,7 @@ module Renalware
       # another or absolute path
       class HtmlRenderer
         include Callable
+
         pattr_initialize :letter
 
         def call

@@ -2,6 +2,7 @@ module Renalware
   module Messaging
     class UnreadMessageCountComponent < ApplicationComponent
       include Renalware::UsersHelper
+
       pattr_initialize [:current_user!]
 
       def number_of_unread_messages

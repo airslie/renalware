@@ -3,6 +3,7 @@ module Renalware
     class HeightValidator < ActiveModel::EachValidator
       include NumericRangeValidations
       include NumericScaleValidations
+
       MIN_VALUE = 0.20
       MAX_VALUE = 2.50
       MAX_DECIMAL_PLACES = 2

@@ -1,6 +1,7 @@
 module Renalware::Patients
   describe PatientHospitalIdentifiers do
     include ConfigHelper
+
     before { configure_patient_hospital_identifiers }
 
     describe "#all" do

@@ -2,6 +2,7 @@ module Renalware
   module Letters
     class Part::ClinicalObservations < Section
       include Renalware::AttributeNameHelper
+
       OBSERVATION_ATTRS = %i(bp weight height bmi urine_blood urine_protein urine_glucose).freeze
       OBSERVATION_UNITS = { weight: :kg, height: :m }.freeze
       delegate(*OBSERVATION_ATTRS, to: :event)

@@ -63,7 +63,10 @@ Style/CommentAnnotation:
 Rails/WhereRange:
   Enabled: true
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
+  Enabled: false
+
+Naming/PredicateMethod:
   Enabled: false
 
 Style/Lambda:

@@ -23,6 +23,7 @@ module Renalware
     #
     class ResolveDefaultElectronicCCs
       include Broadcasting
+
       pattr_initialize :patient
 
       def self.for(patient)

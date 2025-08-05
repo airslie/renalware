@@ -2,6 +2,7 @@ module Renalware
   module Medications
     class RenewableHDPrescriptionsQuery
       include Callable
+
       pattr_initialize [:patient!]
 
       def call

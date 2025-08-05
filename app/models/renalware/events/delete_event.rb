@@ -7,6 +7,7 @@ module Renalware
     # flagged as deleted.
     class DeleteEvent
       include Broadcasting
+
       pattr_initialize [:event!]
 
       def self.call(**)

@@ -1,6 +1,7 @@
 module Renalware
   class Gender
     include ActiveModel::Model
+
     attr_reader :code
 
     DATA = {

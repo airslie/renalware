@@ -2,6 +2,7 @@ module Renalware
   module HD
     class VNDRiskAssessmentPresenter
       include ActionView::Helpers
+
       pattr_initialize :assessment
       delegate :to_param, to: :assessment
 

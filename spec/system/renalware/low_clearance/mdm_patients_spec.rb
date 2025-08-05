@@ -1,5 +1,6 @@
 describe "Advanced Kidney Care Patients" do
   include PatientsSpecHelper
+
   let(:user) { create(:user) }
 
   describe "GET index" do

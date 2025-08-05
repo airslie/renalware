@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class PageNumbering
           include Prawn::View
+
           pattr_initialize :document
 
           def build(start_count_at: 1)

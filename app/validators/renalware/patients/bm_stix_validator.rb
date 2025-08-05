@@ -3,6 +3,7 @@ module Renalware
     class BmStixValidator < ActiveModel::EachValidator
       include NumericRangeValidations
       include NumericScaleValidations
+
       MIN_VALUE = 0.5
       MAX_VALUE = 50
       MAX_DECIMAL_PLACES = 1

@@ -16,6 +16,7 @@ module Renalware
 
       module QueryablePerson
         extend ActiveSupport::Concern
+
         included do
           ransack_alias :name, :family_name_or_given_name
         end

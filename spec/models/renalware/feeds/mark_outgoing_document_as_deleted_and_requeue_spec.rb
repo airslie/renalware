@@ -1,6 +1,7 @@
 module Renalware
   describe Feeds::MarkOutgoingDocumentAsDeletedAndRequeue do
     include LettersSpecHelper
+
     let(:patient) { create(:letter_patient) }
     let(:user) { create(:user) }
 

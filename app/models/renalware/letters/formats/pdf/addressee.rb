@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Addressee
           include Prawn::View
+
           pattr_initialize :document, :letter
           delegate :patient, to: :letter
 

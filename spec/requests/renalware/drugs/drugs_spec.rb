@@ -1,5 +1,6 @@
 describe "Configuring Drugs" do
   include DrugsSpecHelper
+
   let(:drug) { create(:drug) }
 
   describe "GET new" do

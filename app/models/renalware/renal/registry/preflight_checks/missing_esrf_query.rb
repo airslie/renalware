@@ -42,6 +42,7 @@ module Renalware
 
           module QueryablePatient
             extend ActiveSupport::Concern
+
             included do
               ransacker :hd_profile_unit_name, type: :string do
                 Arel.sql("hospital_units.name")

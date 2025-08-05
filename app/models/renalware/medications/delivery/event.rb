@@ -4,6 +4,7 @@ module Renalware
       # For example a home delivery form was printed.
       class Event < ApplicationRecord
         include Accountable
+
         acts_as_paranoid
 
         belongs_to :patient, class_name: "Renalware::Patient"

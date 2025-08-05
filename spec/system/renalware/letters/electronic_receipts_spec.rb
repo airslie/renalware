@@ -1,5 +1,6 @@
 describe "View a user's read/unread electronic ccs" do
   include LettersSpecHelper
+
   let(:patient_family_name) { "GRAVES" }
   let(:primary_care_physician) { create(:letter_primary_care_physician) }
   let(:user_who_is_not_me) { create(:user) }

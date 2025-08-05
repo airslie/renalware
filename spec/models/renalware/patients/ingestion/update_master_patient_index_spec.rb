@@ -1,6 +1,7 @@
 module Renalware::Patients
   describe Ingestion::UpdateMasterPatientIndex do
     include HL7Helpers
+
     subject(:service) { described_class }
 
     before { create(:user, username: Renalware::SystemUser.username) }

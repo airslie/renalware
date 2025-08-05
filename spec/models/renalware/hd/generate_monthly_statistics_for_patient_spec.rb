@@ -2,6 +2,7 @@ module Renalware
   module HD
     describe GenerateMonthlyStatisticsForPatient do
       include PathologySpecHelper
+
       subject(:command) { described_class.new(patient: patient, period: period) }
 
       let(:patient) { create(:hd_patient) }

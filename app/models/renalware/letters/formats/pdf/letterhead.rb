@@ -4,6 +4,7 @@ module Renalware
       module Pdf
         class Letterhead
           include Prawn::View
+
           pattr_initialize :document
 
           def build # rubocop:disable Metrics/MethodLength

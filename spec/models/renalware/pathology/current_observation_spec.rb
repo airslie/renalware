@@ -2,6 +2,7 @@ module Renalware
   module Pathology
     describe CurrentObservation do
       include PathologySpecHelper
+
       it { is_expected.to belong_to(:patient) }
 
       describe "#all" do

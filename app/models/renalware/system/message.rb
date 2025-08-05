@@ -2,6 +2,7 @@ module Renalware
   module System
     class Message < ApplicationRecord
       extend Enumerize
+
       validates :body, presence: true
       validates :display_from, timeliness: { type: :datetime }, presence: true
       validates :display_until,

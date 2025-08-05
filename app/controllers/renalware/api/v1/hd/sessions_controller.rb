@@ -102,6 +102,7 @@ module Renalware
           class Form
             include ActiveModel::Model
             include ActiveModel::Attributes
+
             MAX_SESSION_LENGTH = 10.hours
 
             # These are the attributes we can accept in the ctor/params

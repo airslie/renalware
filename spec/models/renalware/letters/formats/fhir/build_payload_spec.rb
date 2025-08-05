@@ -2,6 +2,7 @@ module Renalware::Letters
   module Formats::FHIR
     describe BuildPayload do
       include LettersSpecHelper
+
       let(:user) { create(:user) }
       let(:practice) { create(:practice) }
 

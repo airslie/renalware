@@ -5,6 +5,7 @@ module Renalware
         class Prescriptions
           include PresenterHelper
           include Prawn::View
+
           pattr_initialize :document, :letter, :x, :y, :width
           delegate :patient, to: :letter
           delegate :prescriptions, to: :patient

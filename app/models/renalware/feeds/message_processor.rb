@@ -5,6 +5,7 @@ module Renalware
     #
     class MessageProcessor
       include Broadcasting
+
       attr_reader :raw_message, :hl7_message, :feed_message
 
       # We want to wrap message processing in a transaction because if message processing

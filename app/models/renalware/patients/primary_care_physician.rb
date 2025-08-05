@@ -6,6 +6,7 @@ module Renalware
     #
     class PrimaryCarePhysician < ApplicationRecord
       include ActiveModel::Validations
+
       # include Personable
       acts_as_paranoid
 

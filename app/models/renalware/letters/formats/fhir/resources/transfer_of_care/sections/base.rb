@@ -4,6 +4,7 @@ module Renalware
       module Resources::TransferOfCare
         class Sections::Base
           include Support::Helpers
+
           delegate :letter, to: :arguments, allow_nil: true
           delegate :render?, to: :view_component
           attr_reader :arguments, :options

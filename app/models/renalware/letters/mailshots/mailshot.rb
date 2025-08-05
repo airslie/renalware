@@ -3,6 +3,7 @@ module Renalware
     module Mailshots
       class Mailshot < ApplicationRecord
         include Accountable
+
         # This maps to a PG enum called background_job_status
         enum :status, {
           queued: "queued",
