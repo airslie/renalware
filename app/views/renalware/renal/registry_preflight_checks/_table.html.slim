@@ -23,6 +23,8 @@
               = sort_link([:renalware, query],
                           :profile_esrf_on,
                           "ESRF date")
+            td.col-width-date
+              = sort_link([:renalware, query], :died_on)
             td Missing data
         tbody
           - patients.each do |patient|
@@ -34,6 +36,7 @@
               - unless death_configuration
                 td= patient.hd_unit
               td= l(patient.renal_profile&.esrf_on)
+              td= l(patient.died_on)
               td.missing-data
                 - patient.missing_data.map do |data_item|
                   span(class=data_item)= t(".#{data_item}")

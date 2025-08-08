@@ -14,15 +14,19 @@ module Renalware
 
         def create_hd_patient
           patient = create_patient_with_modality(create(:hd_modality_description))
-          assign_ersf_on_date_to(patient, nil)
+          assign_esrf_on_date_to(patient, nil)
         end
 
-        def create_death_patient
+        def create_death_patient(esrf_on: nil, died_on: nil, first_cause: nil)
+          esrf_on ||= Time.zone.today
+          died_on ||= 1.year.ago.to_date
           patient = create_patient_with_modality(create(:death_modality_description))
-          assign_ersf_on_date_to(patient, Time.zone.today)
+          patient.update_column(:died_on, died_on)
+          patient.update_column(:first_cause_id, first_cause) if first_cause
+          assign_esrf_on_date_to(patient, esrf_on)
         end
 
-        def assign_ersf_on_date_to(patient, esrf_on)
+        def assign_esrf_on_date_to(patient, esrf_on)
           Renal.cast_patient(patient).create_profile(esrf_on: esrf_on)
           patient
         end
@@ -64,6 +68,53 @@ module Renalware
             patients = described_class.new.call
 
             expect(patients).to eq([patient_with_no_cod])
+          end
+
+          context "when filtering" do
+            it "finds only patients with esrf_on date after specified date" do
+              # Create a patient with an esrf_on date before the filter date
+              _patient_w_early_esrf = create_death_patient(esrf_on: 1.year.ago, first_cause: nil)
+
+              # Create a patient with an esrf_on date after the filter date
+              patient_w_late_esrf = create_death_patient(esrf_on: 1.year.from_now, first_cause: nil)
+
+              query_params = { profile_esrf_on_gteq: Time.zone.today.to_s }
+              patients = described_class.new(query_params: query_params).call
+
+              expect(patients).to eq([patient_w_late_esrf])
+            end
+          end
+
+          context "when sorting" do
+            it "sorts by esrf_on date" do
+              patient_w_early_esrf = create_death_patient(esrf_on: 1.year.ago, first_cause: nil)
+              patient_w_late_esrf = create_death_patient(esrf_on: 1.year.from_now, first_cause: nil)
+
+              query_params = { s: "profile_esrf_on asc" }
+              patients = described_class.new(query_params: query_params).call
+
+              expect(patients).to eq([patient_w_early_esrf, patient_w_late_esrf])
+
+              query_params = { s: "profile_esrf_on desc" }
+              patients = described_class.new(query_params: query_params).call
+
+              expect(patients).to eq([patient_w_late_esrf, patient_w_early_esrf])
+            end
+
+            it "sorts by died_on date" do
+              patient_w_early_died = create_death_patient(died_on: 1.year.ago, first_cause: nil)
+              patient_w_late_died = create_death_patient(died_on: 1.year.from_now, first_cause: nil)
+
+              query_params = { s: "died_on asc" }
+              patients = described_class.new(query_params: query_params).call
+
+              expect(patients).to eq([patient_w_early_died, patient_w_late_died])
+
+              query_params = { s: "died_on desc" }
+              patients = described_class.new(query_params: query_params).call
+
+              expect(patients).to eq([patient_w_late_died, patient_w_early_died])
+            end
           end
         end
       end

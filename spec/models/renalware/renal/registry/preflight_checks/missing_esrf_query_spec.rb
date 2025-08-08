@@ -15,7 +15,7 @@ module Renalware
           expect(result).to be_success
         end
 
-        def assign_ersf_on_date_to(patient, esrf_on)
+        def assign_esrf_on_date_to(patient, esrf_on)
           Renal.cast_patient(patient).create_profile(esrf_on: esrf_on)
           patient
         end
@@ -31,7 +31,7 @@ module Renalware
 
         def create_patient(modality, esrf_on:)
           create_patient_with_modality(modality).tap do |pat|
-            assign_ersf_on_date_to(pat, esrf_on)
+            assign_esrf_on_date_to(pat, esrf_on)
           end
         end
 
