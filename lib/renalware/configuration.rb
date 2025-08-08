@@ -34,6 +34,10 @@ module Renalware
 
     config_accessor(:disable_dmd_synchroniser_job) { ENV["DISABLE_DMD_SYNCHRONISER_JOB"].to_i > 0 }
 
+    # URL of an externally-hosted HTML or PDF Renalware user guide.
+    config_accessor(:help_user_guide_link) {
+      ENV.fetch("HELP_USER_GUIDE_LINK", "https://airslie.com/rw_user_guide/")
+    }
     config_accessor(:help_tours_page_cache_expiry_seconds) {
       ENV.fetch("HELP_TOURS_PAGE_CACHE_EXPIRY_SECONDS", "3600").to_i
     }
