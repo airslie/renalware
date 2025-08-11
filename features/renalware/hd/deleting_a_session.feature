@@ -13,7 +13,7 @@ Feature: Deleting an HD session
     Given Patty has a recorded HD session with has not yet been signed off
     When Nathalie deletes the session
     Then the session is removed
-    And the rolling session statitics for the patient are regenerated
+    And the rolling session statistics for the patient are regenerated
 
   @web
   Scenario: A nurse deleted a DNA session
@@ -21,4 +21,4 @@ Feature: Deleting an HD session
     And the session was created less than 6 hours ago
     When Nathalie deletes the session
     Then the session is removed
-    And the rolling session statitics for the patient are regenerated
+    And the rolling session statistics for the patient are regenerated

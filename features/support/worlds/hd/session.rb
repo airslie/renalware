@@ -25,7 +25,7 @@ module World
         }
       end
 
-      def assert_rolling_session_statitics_job_enqueued
+      def assert_rolling_session_statistics_job_enqueued
         # not applicable in domain test atm
       end
 
@@ -399,7 +399,7 @@ module World
         end
       end
 
-      def assert_rolling_session_statitics_job_enqueued
+      def assert_rolling_session_statistics_job_enqueued
         include ActiveJob::TestHelper
 
         expect(enqueued_jobs.size).to eq(1)
