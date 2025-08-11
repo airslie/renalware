@@ -70,19 +70,6 @@ CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
 
 
 --
--- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA renalware;
-
-
---
--- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: -
---
-
-
-
---
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -383,18 +370,6 @@ CREATE TYPE renalware.feed_outgoing_document_state AS ENUM (
     'queued',
     'errored',
     'processed'
-);
-
-
---
--- Name: hd_acuity_assessment_ratios; Type: TYPE; Schema: renalware; Owner: -
---
-
-CREATE TYPE renalware.hd_acuity_assessment_ratios AS ENUM (
-    '1:4',
-    '1:3',
-    '1:2',
-    '1:1'
 );
 
 
@@ -31429,7 +31404,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware,renalware_demo,public,heroku_ext;
+SET search_path TO renalware, renalware_demo, public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250611141102'),

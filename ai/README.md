@@ -3,8 +3,8 @@
 **Goal:** Give you just enough context to read/modify this code safely.
 
 ## Stack
-- Renalware-core is a Rails engine. A dummy app live in ./demo.
-- Ruby 3.x, Rails 8, Postgres 17, slim templates, Phlex, ViewComponent, ES6, Stimulus, Turbo
+- Renalware-core is a Rails engine. A dummy app lives in ./demo.
+- Ruby 3.x, Rails 8, Postgres 16, slim templates, Phlex, ViewComponent, Stimulus, Turbo
 - Tests are written in RSpec and use FactoryBot
 - There are some cucumber features but we no longer add to these, and are migrating them to
   RSpec slowly
@@ -25,14 +25,14 @@ Some non-standard folders:
 - app/policies - Pundit policies
 - app/values - Value objects
 
-There are number of namespaces used in the app eg Transplants. These correspond to a either a
+There are number of namespaces used in the app eg Transplants. These correspond to a
 clinical concept (eg Admissions), a modality of treatment (eg Transplants),
 or a discrete functional area of the app (eg Reporting).
 
 A few of the namespaces have been moved into a `packs` folder as unbuilt engines.
-The is an ongoing experiment to see if this will
+This is an ongoing experiment to see if this will:
 - simplify navigating the project
-- allow use to use packwerk to track cross-domain calls (packwerk is not fully integrated and
+- allow us to use packwerk to track cross-domain calls (packwerk is not fully integrated and
 working, possibly because our project is itself and engine and the tooling expects it to be an app.)
 
 ## Conventions
@@ -40,8 +40,8 @@ working, possibly because our project is itself and engine and the tooling expec
 - Query objects (in `app/models`)
 - Form objects for backing complex HTML forms (in `app/models`)
 - Use Phlex for low level components, and slim for high level views
-- Prefer Plex over ViewComponent for new components
-- Prefer Stimulus and Turbo or javascript functionality
+- Prefer Phlex over ViewComponent for new components
+- Prefer Stimulus and Turbo when adding functionality using JavaScript
 - Keep Turbo Drive disabled for now
 - Run rubocop before pushing a commit
 - Avoid ActiveRecord callbacks for business logic
@@ -56,7 +56,7 @@ working, possibly because our project is itself and engine and the tooling expec
 -->
 
 ## Guardrails
-- Try not to make call across boundaries (eg referencing a class in the PD namespace from the HD
+- Try not to make calls across boundaries (eg referencing a class in the PD namespace from the HD
   namespace)
 - Migrations must be reversible; use `strong_migrations` safe patterns.
 
