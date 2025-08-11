@@ -31,10 +31,11 @@
         br
         span= "Recorded #{l(administration.recorded_on)} by #{administration.administered_by}"
 
-      = f.input :user_id,
-                as: :user_picker,
-                collection: Renalware::User.active,
-                wrapper: :hz_sm
+      .pb-2
+        = f.input :user_id,
+                  as: :user_picker,
+                  collection: Renalware::User.active,
+                  wrapper: :hz_sm
       = f.input :password,
                 as: :password,
                 wrapper: :hz_sm
