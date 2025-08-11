@@ -21,11 +21,13 @@ module Renalware
                :deleted_at,
                to: :renderable
 
-      # Returns the PDF content for a 'blank' PDF that indicates it has been deleted.
-      # This is used when the letter has been deleted and we want to send a PDF
-      # to the HL7 feed to indicate that the document has been deleted.
-      def self.blank_pdf_to_send_when_document_has_been_deleted
-        file_path = Renalware::Engine.root.join("app/assets/pdf/deleted_document.pdf")
+      # Returns the content of a 'blank' deleted_document.(pdf|rtf) document in app/assets.
+      # This is used when the letter has been deleted, and we want to send a 'blank' PDF/RTF file
+      # (actually it just contains the words 'Document deleted') in the HL7 message to help indicate
+      # that the document has been deleted.
+      def self.blank_file_to_send_when_document_has_been_deleted
+        format = Renalware.config.feeds_outgoing_documents_letter_format # :pdf or :rtf
+        file_path = Renalware::Engine.root.join("app/assets/#{format}/deleted_document.#{format}")
         raise "Missing file #{file_path}" unless ::File.exist?(file_path)
 
         ::File.binread(file_path)
@@ -161,7 +163,7 @@ module Renalware
 
       def base64_encoded_content
         content = if deleted?
-                    self.class.blank_pdf_to_send_when_document_has_been_deleted
+                    self.class.blank_file_to_send_when_document_has_been_deleted
                   elsif renderable_type.letter?
                     Letters::RendererFactory.renderer_for(renderable, file_format).call
                   elsif renderable_type.event?

@@ -270,29 +270,40 @@ module Renalware
         end
 
         context "when the outgoing_document is marked as deleted" do
-          it "Sets TXA.19 = 'CA' (deleted)" do
-            stub_rendering(:pdf, "A")
-            letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-              patient: patient,
-              clinical: true,
-              author: user
-            )
-            letter.update_column(:deleted_at, Time.zone.now)
-            letter.reload
+          %i(pdf rtf).each do |format|
+            context "when the letter format is #{format.upcase}" do
+              before do
+                allow(Renalware.config)
+                  .to receive(:feeds_outgoing_documents_letter_format)
+                  .and_return(format)
+              end
 
-            allow(described_class)
-              .to receive(:blank_pdf_to_send_when_document_has_been_deleted)
-              .and_return("A") # base64 encoded 'A' will end up as QQ==
+              it "Sets TXA.19 = 'CA' (deleted) and adds a blank #{format.upcase} document" do
+                stub_rendering(format, "A") # stub letter rendering as its expensive
+                letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
+                  patient: patient,
+                  clinical: true,
+                  author: user
+                )
+                # Simulate letter deletion
+                letter.update_column(:deleted_at, Time.zone.now)
+                letter.reload
 
-            msg = described_class.call(renderable: letter, message_id: 123)
+                msg = described_class.call(renderable: letter, message_id: 123)
 
-            txa = msg[:TXA]
-            expect(txa.document_completion_status).to eq("CA") # deleted
-            expect(txa.unique_document_number).to eq(letter.id.to_s)
+                txa = msg[:TXA]
+                expect(txa.document_completion_status).to eq("CA") # deleted
+                expect(txa.unique_document_number).to eq(letter.id.to_s)
 
-            expect(msg[:OBX].to_s).to eq(
-              "OBX|1|ED|||^TEXT^PDF^Base64^QQ=="
-            )
+                # This tests to see if the base64-encoded binary content of the
+                # app/assets/pdf/deleted_document.(pdf|rtf) file has been added to the message
+                file_path = Renalware::Engine.root
+                  .join("app/assets/#{format}/deleted_document.#{format}")
+                content = Base64.strict_encode64(::File.binread(file_path))
+
+                expect(msg[:OBX].to_s).to eq("OBX|1|ED|||^TEXT^#{format.upcase}^Base64^#{content}")
+              end
+            end
           end
         end
       end
