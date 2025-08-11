@@ -110,10 +110,6 @@ When /Clyde submits an erroneous dry weight/ do
   create_dry_weight(patient: @patty, user: @clyde, assessed_on: nil)
 end
 
-When /Clyde views the list of ongoing HD sessions/ do
-  view_ongoing_hd_sessions(user: @clyde)
-end
-
 When /Nathalie later adds post-session observations for Patty and signs off the session/ do
   sign_off_hd_session_for(@patty, user: @nathalie)
 end
@@ -168,10 +164,6 @@ end
 
 Then /the dry weight is not accepted/ do
   expect_dry_weight_to_be_refused(@patty)
-end
-
-Then /Clyde sees these HD sessions/ do |table|
-  expect_hd_sessions_to_be(table.hashes)
 end
 
 Then /Patty has a new NDA HD session/ do

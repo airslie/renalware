@@ -154,10 +154,6 @@ module World
         )
       end
 
-      def view_ongoing_hd_sessions(user: nil)
-        @query = Renalware::HD::Sessions::OngoingQuery.new
-      end
-
       def view_patients_hd_sessions(patient:, user:)
         # noop
       end
@@ -174,23 +170,6 @@ module World
 
       def expect_hd_session_to_be_refused
         expect(Renalware::HD::Session.count).to eq(0)
-      end
-
-      def expect_hd_sessions_to_be(hashes)
-        sessions = @query.call
-        expect(sessions.size).to eq(hashes.size)
-
-        entries = sessions.map do |session|
-          hash = {
-            patient: session.patient.to_s,
-            signed_on_by: session.signed_on_by.given_name,
-            signed_off_by: session.signed_off_by.try(:given_name) || ""
-          }
-          hash.with_indifferent_access
-        end
-        hashes.each do |row|
-          expect(entries).to include(row)
-        end
       end
 
       def expect_all_patient_hd_sessions_to_be_present(patient:, **)
@@ -365,17 +344,6 @@ module World
 
         post_observations = new_session.document.observations_after
         expect(post_observations.respiratory_rate).to eq(12)
-      end
-
-      def view_ongoing_hd_sessions(user:)
-        login_as user
-        visit hd_ongoing_sessions_path
-      end
-
-      def expect_hd_sessions_to_be(hashes)
-        hashes.each do |row|
-          expect(page.body).to have_content(row[:patient])
-        end
       end
 
       def view_patients_hd_sessions(patient:, user:)

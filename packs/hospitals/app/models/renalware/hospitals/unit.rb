@@ -1,6 +1,7 @@
 module Renalware
   module Hospitals
     class Unit < ApplicationRecord
+      include RansackAll
       extend Enumerize
 
       belongs_to :hospital_centre,

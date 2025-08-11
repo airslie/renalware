@@ -3,7 +3,8 @@ module Renalware
     module Sessions
       class OngoingQuery
         def initialize(q: nil)
-          @q = q || { s: "started_at desc" }
+          @q = q || {}
+          @q[:s] = "started_at desc" if @q[:s].blank?
         end
 
         def call

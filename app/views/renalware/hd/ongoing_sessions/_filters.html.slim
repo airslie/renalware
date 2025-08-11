@@ -1,22 +1,36 @@
-.search-form.filters
-  = simple_form_for query,
-                    as: :q,
-                    url: hd_ongoing_sessions_path,
-                    html: { autocomplete: "off" },
-                    method: :get do |f|
-    .row
-      .small-4.medium-3.large-2.columns
-        = f.label "Unit"
-        = f.grouped_collection_select :hospital_unit_id_eq,
-            Renalware::Hospitals::Centre.with_hd_sites.ordered,
-            :hd_sites, :to_s, :id, :to_s,
-            include_blank: true
-      .small-4.medium-3.large-2.columns
-        = f.label "Named nurse"
-        = f.collection_select :patient_named_nurse_id_eq,
-            Renalware::User.active,
-            :id,
-            :to_s,
-            include_blank: true
-      .small-4.medium-4.large-3.columns.actions.end
-        .mt-px= filter_or_reset(form: f, reset_path: renalware.hd_ongoing_sessions_path)
+.filters
+  .filters__form
+    = search_form_for query,
+      url: hd_ongoing_sessions_path,
+      as: :q,
+      html: { class: "fn-form", autocomplete: "off" },
+      method: :get,
+      data: { turbo_frame: "hd-ongoing-sessions-turbo-frame",
+              turbo: true,
+              turbo_advance: true,
+              controller: "form",
+              action: "input->form#submit" } do |f|
+
+      .flex.gap-2
+        .basis-1/4
+          = f.label "Unit", for: :q_hospital_unit_id_eq
+          = f.grouped_collection_select :hospital_unit_id_eq,
+              Renalware::Hospitals::Centre.with_hd_sites.ordered,
+              :hd_sites, :to_s, :id, :to_s,
+              include_blank: true
+
+        .basis-1/4
+          = f.label "Named nurse", for: :q_patient_named_nurse_id_eq
+          = f.collection_select :patient_named_nurse_id_eq,
+              Renalware::User.active,
+              :id,
+              :to_s,
+              include_blank: true
+
+        .w-1/4.pt-6
+          = link_to(renalware.hd_ongoing_sessions_path, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+            .flex.items-center
+              .mr-1= inline_icon(:cross, size: :md)
+              | Reset
+          noscript
+            .pt-1= filter_or_reset(form: f, reset_path: renalware.hd_ongoing_sessions_path)
