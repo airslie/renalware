@@ -17,11 +17,11 @@ module Renalware
       @assessments = assessments
       @pagy = pagy
       @current_user = current_user
-      super()
+      super(class: "hd-acuity-assessments")
     end
 
     def view_template
-      super(class: "hd-acuity-assessments") do
+      super do
         table_header
         TableBody do
           assessments.each { row(it) }

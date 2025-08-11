@@ -11,5 +11,9 @@ RSpec.describe "A user views the timeline", :js do
     click_on "Timeline"
 
     expect(page).to have_content "Admission\tUnknown\t#{created_by}"
+
+    click_on "Toggle"
+
+    expect(page).to have_content "Ward A"
   end
 end

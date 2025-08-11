@@ -26,9 +26,9 @@
       "version": "latest",
       "outputs": ["fonts", "out"],
     },
-    "playwright-driver.browsers": "",
     "pandoc":                     "latest",
     "ruby":                       "3.4.3",
+    "playwright-driver.browsers": "",
   },
   "env": {
     "SETUP_COMPLETE":           "$DEVBOX_PROJECT_ROOT/.devbox/.setup-complete",
