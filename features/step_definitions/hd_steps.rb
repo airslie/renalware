@@ -110,10 +110,6 @@ When /Clyde submits an erroneous dry weight/ do
   create_dry_weight(patient: @patty, user: @clyde, assessed_on: nil)
 end
 
-When /Clyde views the list of ongoing HD sessions/ do
-  view_ongoing_hd_sessions(user: @clyde)
-end
-
 When /Nathalie later adds post-session observations for Patty and signs off the session/ do
   sign_off_hd_session_for(@patty, user: @nathalie)
 end
@@ -170,10 +166,6 @@ Then /the dry weight is not accepted/ do
   expect_dry_weight_to_be_refused(@patty)
 end
 
-Then /Clyde sees these HD sessions/ do |table|
-  expect_hd_sessions_to_be(table.hashes)
-end
-
 Then /Patty has a new NDA HD session/ do
   expect_dna_session_to_exist(patient: @patty)
 end
@@ -191,6 +183,6 @@ Then /^the protocol contains$/ do |table|
   expect_protocol_to_be(table.hashes)
 end
 
-Then /the rolling session statitics for the patient are regenerated/ do
-  assert_rolling_session_statitics_job_enqueued
+Then /the rolling session statistics for the patient are regenerated/ do
+  assert_rolling_session_statistics_job_enqueued
 end

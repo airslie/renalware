@@ -1,20 +1,23 @@
-table.report
-  thead
-    tr
-      th.noprint.col-width-13
-      th.col-width-medium= sort_link([:renalware, query], :patient_family_name, "Patient")
-      th.col-width-reference-no Hosp No
-      th= sort_link([:renalware, query], :patient_born_on, "Age")
-      th= sort_link([:renalware, query], :patient_sex, "Sex")
-      th.col-width-tiny Modality
-      th= sort_link([:renalware, query], :hospital_unit_name, "Unit")
-      th.col-width-date-time= sort_link([:renalware, query], :started_at, "Date")
-      th.col-width-date-time= sort_link([:renalware, query], :started_at, "Start")
-      th.col-width-time= sort_link([:renalware, query], :ended_at, "End")
-      th= sort_link([:renalware, query], :signed_on_by_family_name, "Put On By")
-      th= sort_link([:renalware, query], :signed_off_by_family_name, "Taken Off By")
+= turbo_frame_tag("hd-ongoing-sessions-turbo-frame") do
+    = render Renalware::SpinnerComponent.new do |spinner|
+      = spinner.with_main_content do
+        table#hd_ongoing_sessions.report
+          thead
+            tr
+              th.noprint.col-width-13
+              th.col-width-medium= sort_link([:renalware, query], :patient_family_name, "Patient")
+              th.col-width-reference-no Hosp No
+              th= sort_link([:renalware, query], :patient_born_on, "Age")
+              th= sort_link([:renalware, query], :patient_sex, "Sex")
+              th.col-width-tiny Modality
+              th= sort_link([:renalware, query], :hospital_unit_name, "Unit")
+              th.col-width-date-time= sort_link([:renalware, query], :started_at, "Date")
+              th.col-width-date-time Start
+              th.col-width-time End
+              th= sort_link([:renalware, query], :signed_on_by_family_name, "Put On By")
+              th= sort_link([:renalware, query], :signed_off_by_family_name, "Taken Off By")
 
-  tbody
-    = render partial: "session", collection: sessions
+          tbody
+            = render partial: "session", collection: sessions
 
-== pagy_nav(pagy) if pagy.pages > 1
+        == pagy_nav(pagy) if pagy.pages > 1
