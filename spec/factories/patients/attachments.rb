@@ -6,15 +6,10 @@ FactoryBot.define do
     name { Faker::File.file_name }
     description { Faker::Lorem.sentence }
     document_date { Faker::Date.between(from: 1.year.ago, to: Time.zone.today) }
-
-    trait :with_file do
-      after(:build) do |attachment|
-        attachment.file.attach(
-          io: File.open(Renalware::Engine.root.join("spec", "fixtures", "files", "cat.png")),
-          filename: "cat2.png",
-          content_type: "image/png"
-        )
-      end
+    file do
+      Rack::Test::UploadedFile.new(
+        Renalware::Engine.root.join("spec/fixtures/files/cat.png")
+      )
     end
   end
 end

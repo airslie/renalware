@@ -14,7 +14,7 @@ module Renalware
             postcode: "P",
             county: "C"
           )
-          country = build(:country, alpha3: "ABC", name: "123")
+          country = build(:united_kingdom)
           allow(address).to receive(:country).and_return(country)
           expected_xml = <<~XML.squish.gsub("> <", "><")
             <Address use="H">
@@ -24,8 +24,8 @@ module Renalware
               <Postcode>P</Postcode>
               <Country>
                 <CodingStandard>ISO3166-1</CodingStandard>
-                <Code>ABC</Code>
-                <Description>123</Description>
+                <Code>GBR</Code>
+                <Description>United Kingdom</Description>
               </Country>
             </Address>
           XML

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :pd_training_session, class: "Renalware::PD::TrainingSession" do
     accountable
-    patient
+    patient factory: :pd_patient
     training_site factory: %i(pd_training_site)
     training_type factory: %i(pd_training_type)
     document {

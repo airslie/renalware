@@ -9,11 +9,10 @@ FactoryBot.define do
     code { generate(:gp_code) }
     practitioner_type { "GP" }
 
-    # ensures addressable_type and addressable_id work is assigned, using
-    # FactoryBot's simple assoc method does not work
-    #
-    before(:create) do |primary_care_physician|
-      primary_care_physician.build_address(attributes_for(:address))
+    after(:build) do |record|
+      if record.address.nil?
+        record.address = build(:address, addressable: record)
+      end
     end
   end
 end

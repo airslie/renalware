@@ -5,7 +5,7 @@ describe "Manage a patient's attachments (linked files)" do
   describe "viewing a patients attachments" do
     it "displays a paginated table" do
       user = login_as_clinical
-      attachment = create(:patient_attachment, :with_file, patient: patient, by: user)
+      attachment = create(:patient_attachment, patient: patient, by: user)
 
       visit patient_path(patient)
 
@@ -26,7 +26,7 @@ describe "Manage a patient's attachments (linked files)" do
     it "clicking on the attachment name views the attachment in a new window using " \
        "ActiveStorage::BlobsController#show" do
       user = login_as_clinical
-      attachment = create(:patient_attachment, :with_file, patient: patient, by: user)
+      attachment = create(:patient_attachment, patient: patient, by: user)
 
       visit patient_attachments_path(patient)
 

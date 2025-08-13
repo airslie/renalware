@@ -42,11 +42,17 @@ FactoryBot.define do
     first_cause_id { nil }
     hospital_centre
 
-    # ensures addressable_type and addressable_id work is assigned, using
-    # FactoryBot's simple assoc method does not work
-    #
-    before(:create) do |patient|
-      patient.build_current_address(attributes_for(:address))
+    transient do
+      current_address { nil }
+    end
+
+    after(:build) do |patient, evaluator|
+      if evaluator.current_address.nil? && patient.current_address.nil?
+        patient.current_address = build(:address, addressable: patient)
+      elsif evaluator.current_address
+        evaluator.current_address.addressable = patient
+        patient.current_address = evaluator.current_address
+      end
     end
 
     trait :with_ethnicity do

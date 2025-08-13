@@ -7,6 +7,10 @@ FactoryBot.define do
     description { "Needs blood sample taken." }
     notes { "Would like son to accompany them on clinic visit." }
 
+    after(:build) do |event|
+      event.type ||= "Renalware::Events::AccessClinic"
+    end
+
     factory :simple_event, class: "Renalware::Events::Simple" do
       event_type factory: :simple_event_type
     end

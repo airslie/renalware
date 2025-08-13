@@ -3,6 +3,7 @@ FactoryBot.define do
     prd_description
     first_seen_on { "01-01-2017" }
     comorbidities_updated_on { "01-01-2017" }
+    patient factory: :renal_patient
 
     document {
       {

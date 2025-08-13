@@ -2,6 +2,9 @@ FactoryBot.define do
   factory :pd_regime_bag, class: "Renalware::PD::RegimeBag" do
     bag_type
     volume { 200 }
+    role { :ordinary }
+    regime { association :pd_regime }
+
     monday { true }
     tuesday { false }
     wednesday { true }
@@ -9,7 +12,6 @@ FactoryBot.define do
     friday { true }
     saturday { false }
     sunday { false }
-    role { :ordinary }
 
     trait :weekdays_only do
       monday { true }

@@ -6,7 +6,6 @@ FactoryBot.define do
 
     trait :primary_care_physicians do
       name { "GPs" }
-      description { "Import GPs" }
     end
   end
 end

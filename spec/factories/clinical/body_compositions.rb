@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :body_composition, class: "Renalware::Clinical::BodyComposition" do
     accountable
-    patient
+    patient factory: :clinical_patient
     assessed_on { 1.week.ago }
     overhydration { "19.1" }
     volume_of_distribution { "52.1" }

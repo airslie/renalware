@@ -9,5 +9,13 @@ FactoryBot.define do
     lab factory: %i(pathology_lab)
     code { "FBC" }
     name { "FBC" }
+
+    trait :serum do
+      bottle_type { "serum" }
+    end
+
+    trait :with_required_observation_description do
+      required_observation_description factory: :pathology_observation_description
+    end
   end
 end

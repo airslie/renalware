@@ -2,6 +2,12 @@ require_relative "../../support/patients_spec_helper"
 
 FactoryBot.define do
   factory :hd_patient, class: "Renalware::HD::Patient", parent: :patient do
+    trait :hd_profile do
+      after(:create) do |instance|
+        create(:hd_profile, patient: instance)
+      end
+    end
+
     trait :with_hd_modality do
       after(:create) do |instance|
         # This a rather clumsy approach to trying to re-use the set_modality helper

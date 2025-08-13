@@ -7,6 +7,7 @@ FactoryBot.define do
     name { "Trumpton Medical Centre" }
     email { "admin@trumptonmedicalcentre-nhs.net" }
     code { generate(:practice_code) }
+    address
 
     # ensures addressable_type and addressable_id work is assigned, using
     # FactoryBot's simple assoc method does not work

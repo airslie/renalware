@@ -5,6 +5,7 @@ module Renalware
       include Sortable
 
       belongs_to :location, class_name: "HD::StationLocation"
+      belongs_to :hospital_unit, class_name: "Hospitals::Unit"
       validates :hospital_unit_id, presence: true
       validates :name, uniqueness: { scope: :hospital_unit_id }, presence: true
 

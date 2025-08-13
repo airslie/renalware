@@ -3,5 +3,6 @@ FactoryBot.define do
     type { "ObservationResult" }
     param_comparison_operator { "<" }
     param_comparison_value { "100" }
+    rule_set factory: :pathology_requests_global_rule_set
   end
 end

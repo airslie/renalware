@@ -1,13 +1,18 @@
 FactoryBot.define do
   factory :pd_regime, class: "Renalware::PD::Regime" do
     patient
-  end
-
-  factory :capd_regime, class: "Renalware::PD::CAPDRegime" do
-    patient
     start_date { "01/02/2015" }
     end_date { "01/02/2020" }
-    treatment { "CAPD 3 exchanges per day" }
+    treatment { "PD treatment" }
+
+    after(:build) do |regime|
+      if regime.bags.empty?
+        regime.bags << build(:pd_regime_bag, regime:)
+      end
+    end
+  end
+
+  factory :capd_regime, class: "Renalware::PD::CAPDRegime", parent: :pd_regime do
     amino_acid_volume { 40 }
     icodextrin_volume { 50 }
     add_hd { false }
@@ -17,8 +22,7 @@ FactoryBot.define do
     end
   end
 
-  factory :apd_regime, class: "Renalware::PD::APDRegime" do
-    patient
+  factory :apd_regime, class: "Renalware::PD::APDRegime", parent: :pd_regime do
     start_date { "01/03/2015" }
     end_date { "02/04/2020" }
     treatment { "APD Wet day with additional exchange" }

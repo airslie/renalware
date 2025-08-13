@@ -18,7 +18,7 @@ describe "Managing downloads - files uploaded by super admins which can be acces
 
   it "editing a download" do
     login_as_super_admin
-    create(:system_download, :with_file, name: "Name1", description: "Description1")
+    create(:system_download, name: "Name1", description: "Description1")
     visit system_downloads_path
     within(".download") { click_on t("btn.edit") }
 
@@ -32,7 +32,7 @@ describe "Managing downloads - files uploaded by super admins which can be acces
 
   it "deleting a download" do
     login_as_super_admin
-    create(:system_download, :with_file, name: "Name1", description: "Description1")
+    create(:system_download, name: "Name1", description: "Description1")
     visit system_downloads_path
     within(".download") { click_on t("btn.delete") }
 
@@ -41,7 +41,7 @@ describe "Managing downloads - files uploaded by super admins which can be acces
 
   it "listing items" do
     login_as_super_admin
-    create(:system_download, :with_file, name: "Name1", description: "Description1")
+    create(:system_download, name: "Name1", description: "Description1")
     visit system_downloads_path
 
     expect(page).to have_content("Name1")
@@ -51,8 +51,8 @@ describe "Managing downloads - files uploaded by super admins which can be acces
 
   it "filtering items" do
     login_as_super_admin
-    create(:system_download, :with_file, name: "Name1", description: "Description1")
-    create(:system_download, :with_file, name: "Name2", description: "Description2")
+    create(:system_download, name: "Name1", description: "Description1")
+    create(:system_download, name: "Name2", description: "Description2")
     visit system_downloads_path
 
     expect(page).to have_css(".download", count: 2)
@@ -69,7 +69,7 @@ describe "Managing downloads - files uploaded by super admins which can be acces
   describe "viewing an attachment" do
     it "clicking on the name opens the attachment in a new window using & increments view_count" do
       login_as_super_admin
-      item = create(:system_download, :with_file, name: "Name1", description: "Description1")
+      item = create(:system_download, name: "Name1", description: "Description1")
       visit system_downloads_path
 
       within(".download") do

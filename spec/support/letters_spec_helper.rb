@@ -14,6 +14,7 @@ module LettersSpecHelper
     letter.patient.primary_care_physician ||= build(:letter_primary_care_physician)
 
     attributes = build_main_recipient_attributes(to)
+    attributes[:letter] = nil
     letter.main_recipient = build(:letter_recipient, :main, attributes)
 
     # We shouldn't have to do this but for some reason in RSpec tests if the second test in a suite
