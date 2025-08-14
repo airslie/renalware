@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :pd_assessment, class: "Renalware::PD::Assessment" do
     accountable
-    patient
+    patient factory: :pd_patient
     document {
       {
         assessed_on: Time.zone.today,

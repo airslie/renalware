@@ -3,12 +3,11 @@ describe Renalware::Users::NameAndRolesComponent, type: :component do
     it "returns the user's roles as a comma-separated string" do
       user = create(:user)
       user.roles << create(:role, :super_admin)
-      user.roles << create(:role, :clinical)
       user.roles << create(:role, :prescriber)
 
       component = described_class.new(current_user: user)
 
-      expect(component.role_names).to eq("Super Admin, Clinical, Prescriber")
+      expect(component.role_names).to eq("Clinical, Super Admin, Prescriber")
     end
   end
 

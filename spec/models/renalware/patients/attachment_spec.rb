@@ -10,7 +10,7 @@ module Renalware
       it { is_expected.to belong_to(:attachment_type) }
 
       describe "#file via ActiveStorage" do
-        subject(:attachment) { create(:patient_attachment, :with_file) }
+        subject(:attachment) { create(:patient_attachment) }
         let(:user) { attachment.updated_by }
 
         it "can accept an uploaded file" do

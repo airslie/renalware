@@ -123,7 +123,7 @@ describe "Managing files attached to a patient" do
 
   describe "GET edit" do
     it "display a form to edit an attachment" do
-      attachment = create(:patient_attachment, :with_file, by: user, patient: patient)
+      attachment = create(:patient_attachment, by: user, patient: patient)
 
       get edit_patient_attachment_path(patient, attachment)
 
@@ -135,7 +135,7 @@ describe "Managing files attached to a patient" do
   describe "PATCH update" do
     context "when there are no validation errors" do
       it "updates an attachment" do
-        attachment = create(:patient_attachment, :with_file, by: user, patient: patient)
+        attachment = create(:patient_attachment, by: user, patient: patient)
         params = {
           patients_attachment: {
             attachment_type_id: attachment_type.id,
@@ -156,7 +156,7 @@ describe "Managing files attached to a patient" do
 
     context "when there are validation errors" do
       it "re-renders the edit form" do
-        attachment = create(:patient_attachment, :with_file, by: user, patient: patient)
+        attachment = create(:patient_attachment, by: user, patient: patient)
         params = {
           patients_attachment: {
             attachment_type_id: nil
@@ -174,7 +174,7 @@ describe "Managing files attached to a patient" do
   describe "GET show" do
     it "displays an attachment by redirecting to ActiveStorage::BlobsController#show and thence " \
        "to another ActiveStorage url, rending the file directly in the browser" do
-      attachment = create(:patient_attachment, :with_file, by: user, patient: patient)
+      attachment = create(:patient_attachment, by: user, patient: patient)
 
       get patient_attachment_path(patient, attachment)
 
@@ -188,7 +188,7 @@ describe "Managing files attached to a patient" do
 
   describe "DELETE destroy" do
     it "soft deletes the alert" do
-      attachment = create(:patient_attachment, :with_file, patient: patient, by: user)
+      attachment = create(:patient_attachment, patient: patient, by: user)
 
       delete patient_attachment_path(patient, attachment)
 

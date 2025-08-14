@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :clinic_visit_location, class: "Renalware::Clinics::VisitLocation" do
+    accountable
     name { "In clinic" }
     default_location { false }
 

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :access_profile, class: "Renalware::Accesses::Profile" do
     accountable
-    patient
+    patient factory: :accesses_patient
     type { association(:access_type) }
     side { :right }
     formed_on { Time.zone.today }

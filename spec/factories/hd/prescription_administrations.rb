@@ -2,10 +2,10 @@ FactoryBot.define do
   factory :hd_prescription_administration, class: "Renalware::HD::PrescriptionAdministration" do
     accountable
     prescription
-    administered_by factory: %i(user)
-    administrator_authorised { true }
-    witnessed_by factory: %i(user)
-    witness_authorised { true }
+    administered_by factory: :user
+    skip_administrator_validation { true }
+    witnessed_by factory: :user
+    skip_witness_validation { true }
     administered { true }
     notes { "some notes" }
     deleted_at { nil }

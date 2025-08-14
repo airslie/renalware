@@ -2,6 +2,7 @@ FactoryBot.define do
   sequence(:requestor_order_number) { "PlacerID-#{it}" }
 
   factory :pathology_observation_request, class: "Renalware::Pathology::ObservationRequest" do
+    patient factory: :pathology_patient
     description factory: %i(pathology_request_description)
     requestor_order_number
     requestor_name { "Jane Doe" }

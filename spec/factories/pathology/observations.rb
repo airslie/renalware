@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :pathology_observation, class: "Renalware::Pathology::Observation" do
+    request { association :pathology_observation_request }
     description factory: %i(pathology_observation_description)
     result { "6.0" }
     comment { "My Comment" }

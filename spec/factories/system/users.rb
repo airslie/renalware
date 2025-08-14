@@ -20,10 +20,8 @@ FactoryBot.define do
     hospital_centre
     last_activity_at { 1.minute.ago }
 
-    # By default a user has no roles.
-    # If you want a use with a role, use a trait, e.g. create(:user, :clinical)
     transient do
-      role { nil }
+      role { :clinical }
     end
 
     # If you want a user to have > 1 role then you can specify e.g.
@@ -55,6 +53,10 @@ FactoryBot.define do
 
     trait :unapproved do
       approved { false }
+
+      transient do
+        role { nil }
+      end
     end
 
     trait :author do

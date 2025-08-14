@@ -22,14 +22,14 @@ module Renalware
       end
 
       def create_regime(start_date:, end_date: nil, type: :apd_regime)
-        regime = build(type,
-                       add_hd: false,
-                       patient: patient,
-                       start_date: start_date,
-                       end_date: end_date)
-        regime.bags << build(:pd_regime_bag, :everyday)
-        regime.save!
-        regime
+        create(
+          type,
+          add_hd: false,
+          patient: patient,
+          start_date: start_date,
+          end_date: end_date,
+          bags: [build(:pd_regime_bag, :everyday)]
+        )
       end
 
       before do

@@ -11,6 +11,6 @@ FactoryBot.define do
     provider { 0 }
     prescribed_on { 2.weeks.ago }
 
-    before(:create) { |prescription| prescription.treatable ||= prescription.patient }
+    after(:build) { |prescription| prescription.treatable ||= prescription.patient }
   end
 end

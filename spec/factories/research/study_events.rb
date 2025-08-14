@@ -5,5 +5,6 @@ FactoryBot.define do
     event_type factory: :research_study_event_type
     date_time { Time.current }
     notes { "Some notes" }
+    subtype factory: :event_subtype
   end
 end

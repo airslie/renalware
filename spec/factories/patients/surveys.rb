@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :survey, class: "Renalware::Surveys::Survey" do
-    name { "name" }
+    name { Faker::Lorem.word }
+    code { Faker::Lorem.word }
     description { "description" }
 
     factory :eq5d_survey do
@@ -17,6 +18,8 @@ FactoryBot.define do
   end
 
   factory :survey_question, class: "Renalware::Surveys::Question" do
+    survey
     label { "label" }
+    code { Faker::Lorem.word }
   end
 end

@@ -2,13 +2,16 @@ module Renalware
   module PD
     module APD
       describe AvailableOvernightVolume do
-        let(:patient) { build(:pd_patient) }
-        let(:bag_type) { build(:bag_type, glucose_strength: :medium) }
         let(:regime) do
-          reg = build(:apd_regime, no_cycles_per_apd: 7, fill_volume: 1500)
-          reg.bags << build(:pd_regime_bag, :weekdays_only, role: :ordinary, volume: 1000)
-          reg.bags << build(:pd_regime_bag, :weekdays_only, role: :ordinary, volume: 2000)
-          reg
+          build(
+            :apd_regime,
+            no_cycles_per_apd: 7,
+            fill_volume: 1500,
+            bags: [
+              build(:pd_regime_bag, :weekdays_only, volume: 1000),
+              build(:pd_regime_bag, :weekdays_only, volume: 2000)
+            ]
+          )
         end
 
         describe "#value" do
@@ -22,7 +25,7 @@ module Renalware
             it "raises an error" do
               # Add a bag which is on weekends only, so now we have 3000 litres Mon to Fri
               # and 2000 litres on Sat and Sun
-              regime.bags << build(:pd_regime_bag, :weekend_only, role: :ordinary, volume: 2000)
+              regime.bags << build(:pd_regime_bag, :weekend_only, volume: 2000)
 
               expect { described_class.new(regime: regime).value }
                 .to raise_error(Renalware::PD::APD::NonUniqueOvernightVolumeError)

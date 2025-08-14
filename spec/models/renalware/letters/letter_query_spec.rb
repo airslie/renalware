@@ -6,7 +6,7 @@ module Renalware
       subject(:query) { described_class.new }
 
       let(:primary_care_physician) { create(:letter_primary_care_physician) }
-      let(:patient) { create(:letter_patient, primary_care_physician: primary_care_physician) }
+      let(:patient) { create(:letter_patient, primary_care_physician:) }
 
       describe "#call" do
         before do
@@ -34,7 +34,7 @@ module Renalware
       private
 
       def create_letter_in_state(state)
-        create_letter(state: state, to: :patient, patient: patient, created_at: DateTime.now)
+        create_letter(state: state, to: :patient, patient:, created_at: DateTime.now)
       end
     end
   end

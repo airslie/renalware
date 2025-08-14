@@ -8,14 +8,14 @@ module Renalware
       let(:to) { Time.zone.now }
 
       def create_regime(start_date:, end_date: nil)
-        regime = build(:apd_regime,
-                       add_hd: false,
-                       patient: patient,
-                       start_date: start_date,
-                       end_date: end_date)
-        regime.bags << build(:pd_regime_bag, :everyday)
-        regime.save!
-        regime
+        create(
+          :apd_regime,
+          add_hd: false,
+          patient: patient,
+          start_date: start_date,
+          end_date: end_date,
+          bags: [build(:pd_regime_bag, :everyday)]
+        )
       end
 
       context "when a PD patient has no regimes" do

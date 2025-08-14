@@ -53,7 +53,7 @@ module Renalware
         end
 
         context "when params are invalid e.g. there are no bags" do
-          let(:params) { attributes_for(:apd_regime) } # no bags
+          let(:params) { attributes_for(:apd_regime, bags: []) }
 
           it "returns failure with the unsaved regime" do
             expect(service).to be_failure

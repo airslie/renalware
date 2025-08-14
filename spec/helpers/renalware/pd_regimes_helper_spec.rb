@@ -58,12 +58,14 @@ module Renalware
           saturday: true
         )
 
-        build(:capd_regime).tap do |regime|
-          regime.bags << pd_regime_bag_13_6_1
-          regime.bags << pd_regime_bag_13_6_2
-          regime.bags << pd_regime_bag_22_7
-          regime.save
-        end
+        create(
+          :capd_regime,
+          bags: [
+            pd_regime_bag_13_6_1,
+            pd_regime_bag_13_6_2,
+            pd_regime_bag_22_7
+          ]
+        )
       end
 
       context "when there is glucose content" do

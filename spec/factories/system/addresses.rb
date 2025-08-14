@@ -8,6 +8,14 @@ FactoryBot.define do
     country { Renalware::System::Country.find_by(alpha2: "GB") }
     postcode { "NW1 6BB" }
 
+    after(:build) do |record|
+      if record.addressable.nil?
+        # Uses a Renalware::Patients::Patient as the default addressable
+        # to make the factory valid.
+        record.addressable = build(:patient, current_address: record)
+      end
+    end
+
     trait :in_uk do
       country factory: %i(united_kingdom)
     end

@@ -3,5 +3,6 @@ FactoryBot.define do
     accountable
     recorded_on { "2019-01-01" }
     notes { "xyz" }
+    followup factory: :transplant_recipient_followup
   end
 end

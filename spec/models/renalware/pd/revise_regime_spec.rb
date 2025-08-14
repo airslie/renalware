@@ -5,14 +5,15 @@ module Renalware
       let(:other_user) { create(:user) }
       let(:patient) { create(:patient, by: user) }
       let!(:regime) do
-        regime = build(:apd_regime,
-                       add_hd: false,
-                       patient: patient,
-                       end_date: nil,
-                       start_date: "01-01-2012")
-        regime.bags << build(:pd_regime_bag, :everyday)
-        regime.save_by!(other_user)
-        regime
+        create(
+          :apd_regime,
+          add_hd: false,
+          patient: patient,
+          end_date: nil,
+          start_date: "01-01-2012",
+          bags: [build(:pd_regime_bag, :everyday)],
+          by: other_user
+        )
       end
 
       describe "#call" do
@@ -59,14 +60,14 @@ module Renalware
           end
 
           it "terminates the old regime" do
-            expect(Regime.count).to eq(1)
             expect(RegimeTermination.count).to eq(0)
 
-            result = described_class.new(regime).call(by: user, params: params)
+            command = described_class.new(regime)
+            result = nil
+            expect { result = command.call(by: user, params: params) }
+              .to change(RegimeTermination, :count).by(1)
 
-            expect(Regime.count).to eq(2)
-            expect(RegimeTermination.count).to eq(1)
-            expect(RegimeTermination.first.regime).to eq(regime)
+            expect(RegimeTermination.last.regime).to eq(regime)
             expect(regime.end_date).to eq(result.object.start_date)
           end
 

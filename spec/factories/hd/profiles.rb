@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :hd_profile, class: "Renalware::HD::Profile" do
     accountable
-    patient
+    patient factory: :hd_patient
     active { true }
     hospital_unit
     dialysate factory: %i(hd_dialysate)

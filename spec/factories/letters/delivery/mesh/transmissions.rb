@@ -3,6 +3,6 @@ FactoryBot.define do
     :letter_mesh_transmission,
     class: "Renalware::Letters::Transports::Mesh::Transmission"
   ) do
-    # TODO: ?
+    letter
   end
 end

@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :pd_adequacy_result, class: "Renalware::PD::AdequacyResult" do
+    patient factory: :pd_patient
     accountable
     performed_on { I18n.l(Time.zone.today) }
     urine_urea { 10 }
