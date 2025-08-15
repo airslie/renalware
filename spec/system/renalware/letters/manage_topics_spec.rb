@@ -19,9 +19,12 @@ describe "Manage letter topics" do
     end
 
     fill_in "Text", with: "LD123"
+    choose "Haemodialysis"
     click_on "Create"
 
-    expect(Renalware::Letters::Topic.first).to have_attributes(text: "LD123")
+    expect(page).to have_content("LD123")
+    expect(page).to have_content("HD")
+    expect(page).to have_content I18n.l(Renalware::Letters::Topic.last.created_at)
   end
 
   it "enables a superadmin to edit a letter topic" do
@@ -35,12 +38,12 @@ describe "Manage letter topics" do
     end
 
     fill_in "Text", with: "LD2"
-    check "HD Section"
+    choose "Acute Kidney Care Clinic"
     click_on "Save"
 
-    topic = Renalware::Letters::Topic.first
-    expect(topic).to have_attributes(text: "LD2")
-    expect(topic.section_identifiers).to eq ["hd_section"]
+    expect(page).to have_content("LD2")
+    expect(page).to have_content("AKCC")
+    expect(topic.reload).to have_attributes(text: "LD2", section_identifier: "akcc")
   end
 
   it "enables a superadmin to soft-delete a letter topic" do

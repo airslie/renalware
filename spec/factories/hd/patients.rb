@@ -2,7 +2,7 @@ require_relative "../../support/patients_spec_helper"
 
 FactoryBot.define do
   factory :hd_patient, class: "Renalware::HD::Patient", parent: :patient do
-    trait :hd_profile do
+    trait :with_hd_profile do
       after(:create) do |instance|
         create(:hd_profile, patient: instance)
       end

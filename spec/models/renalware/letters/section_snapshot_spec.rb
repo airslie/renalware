@@ -1,72 +1,59 @@
 module Renalware
   RSpec.describe Letters::SectionSnapshot do
     let(:user) { create(:user) }
+    let(:patient) { build(:letter_patient) }
     let(:letter) {
       create(:draft_letter,
              topic: topic,
-             patient: build(:letter_patient),
+             patient: patient,
              main_recipient: build(:letter_recipient, :main),
              by: user)
     }
 
-    let(:topic) { create(:letter_topic, section_identifiers: [:hd_section]) }
-
-    describe ".create_all" do
-      context "when a snapshot doesn't exists" do
-        it "creates it" do
-          described_class.create_all(letter)
-
-          expect(letter.section_snapshots.count).to eq 1
-
-          snapshot = letter.section_snapshots.first
-          expect(snapshot.section_identifier).to eq "hd_section"
-          expect(snapshot.content).to include "<dl></dl>"
-        end
-      end
-
-      context "when a snapshot already exists" do
-        it "skips over it" do
-          create(:section_snapshot, letter: letter, content: "xy", section_identifier: "hd_section")
-
-          expect(letter.section_snapshots.count).to eq 1
-
-          described_class.create_all(letter)
-
-          expect(letter.section_snapshots.count).to eq 1
-
-          snapshot = letter.section_snapshots.first
-          expect(snapshot.section_identifier).to eq "hd_section"
-          expect(snapshot.content).to eq "xy"
-        end
-      end
+    let(:topic) { build(:letter_topic, section_identifier: :hd) }
+    let(:hd_patient) { patient.becomes(Renalware::HD::Patient) }
+    let(:snapshot_html) do
+      '<dl class="flex"><dt>HD Unit</dt><dd>UJZ</dd><dt>Time</dt><dd>3:30</dd></dl>'
     end
 
-    describe ".update_or_create_one" do
+    before { create(:hd_profile, patient: hd_patient, prescribed_time: 210) }
+
+    describe ".create_or_update" do
       context "when a snapshot doesn't exists" do
         it "creates it" do
-          described_class.update_or_create_one(letter, "hd_section")
+          described_class.create_or_update(letter, :hd)
 
           expect(letter.section_snapshots.count).to eq 1
 
           snapshot = letter.section_snapshots.first
-          expect(snapshot.section_identifier).to eq "hd_section"
-          expect(snapshot.content).to include "<dl></dl>"
+          expect(snapshot.section_identifier).to eq "hd"
+          expect(snapshot.content).to include snapshot_html
         end
       end
 
       context "when a snapshot already exists" do
+        let(:snapshot) do
+          create(:section_snapshot, letter: letter, content: "xy", section_identifier: :hd)
+        end
+
+        before { snapshot }
+
         it "updates it" do
-          create(:section_snapshot, letter: letter, content: "xy", section_identifier: "hd_section")
-
           expect(letter.section_snapshots.count).to eq 1
 
-          described_class.update_or_create_one(letter, "hd_section")
+          described_class.create_or_update(letter, :hd)
 
-          expect(letter.section_snapshots.count).to eq 1
+          expect(snapshot.reload.section_identifier).to eq "hd"
+          expect(snapshot.content).to include snapshot_html
+        end
 
-          snapshot = letter.section_snapshots.first
-          expect(snapshot.section_identifier).to eq "hd_section"
-          expect(snapshot.content).to include("<dl></dl>")
+        context "when not supplied a section_identifier" do
+          it "uses the topic section_identifier" do
+            described_class.create_or_update(letter)
+
+            expect(letter.section_snapshots.first.section_identifier).to eq "hd"
+            expect(snapshot.reload.content).to include snapshot_html
+          end
         end
       end
     end

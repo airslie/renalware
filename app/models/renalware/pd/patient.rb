@@ -4,6 +4,7 @@ module Renalware
       has_many :pet_adequacy_results, dependent: :restrict_with_exception
       has_many :pet_results, dependent: :restrict_with_exception
       has_many :adequacy_results, dependent: :restrict_with_exception
+      has_many :regimes, dependent: :restrict_with_exception
 
       def self.model_name = ActiveModel::Name.new(self, nil, "Patient")
 

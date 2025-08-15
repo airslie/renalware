@@ -1,12 +1,12 @@
 module Renalware
   module Letters
     class Section
-      attr_reader :patient, :letter, :event
+      attr_reader :patient, :letter
 
-      def initialize(letter:, event: Event::Unknown.new)
+      def initialize(letter:, section_identifier: nil)
         @patient = letter.patient
         @letter = letter
-        @event = event
+        @section_identifier = section_identifier
       end
 
       def content_with_diffs
@@ -19,15 +19,12 @@ module Renalware
           (preview_topic_id.blank? || preview_topic_id == letter.topic_id.to_s)
       end
 
-      def to_edit_partial_path
-        "#{to_partial_path}_edit"
-      end
-
       def build_snapshot
         @snapshot ||= ApplicationController.renderer.render(
-          partial: "#{to_partial_path}_snapshot",
+          partial: "renalware/letters/sections/snapshot",
           locals: {
-            letter: letter
+            letter: letter,
+            section_identifier: @section_identifier
           }
         )
       end
@@ -48,16 +45,11 @@ module Renalware
           name.demodulize.underscore.to_sym
         end
 
-        def position
-          10
-        end
-
         def content_from_snapshot(letter:)
-          snapshot = Letters::SectionSnapshot.find_by(
-            section_identifier: identifier,
-            letter: letter
-          )
-          snapshot&.content
+          section_identifier = letter.topic&.section_identifier
+          return unless section_identifier
+
+          Letters::SectionSnapshot.find_by(section_identifier:, letter:)&.content
         end
       end
     end

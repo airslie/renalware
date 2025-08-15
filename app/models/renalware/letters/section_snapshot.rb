@@ -3,27 +3,12 @@ module Renalware
     class SectionSnapshot < ApplicationRecord
       belongs_to :letter
 
-      def self.create_all(letter)
-        letter.sections.each do |section_class|
-          snapshot = letter.section_snapshots
-            .where(section_identifier: section_class.identifier)
-            .first_or_initialize
+      def self.create_or_update(letter, section_identifier = nil, only_create: false)
+        section_identifier ||= letter.topic&.section_identifier
+        snapshot = find_or_initialize_by(letter:, section_identifier:)
+        return if snapshot.persisted? && only_create
 
-          next if snapshot.persisted?
-
-          snapshot.content = section_class.new(letter: letter).build_snapshot
-          snapshot.save!
-        end
-      end
-
-      def self.update_or_create_one(letter, section_identifier)
-        snapshot = letter.section_snapshots
-          .where(section_identifier: section_identifier)
-          .first_or_initialize
-
-        section_class = Letters::Topic.sections_by_identifier[section_identifier.to_sym]
-        snapshot.content = section_class.new(letter: letter).build_snapshot
-        snapshot.save!
+        snapshot.update!(content: Section.new(letter:, section_identifier:).build_snapshot)
       end
     end
   end

@@ -1,0 +1,11 @@
+---
+en:
+  renalware:
+    letters:
+      topics:
+        sections:
+          none: None
+          hd: Haemodialysis
+          pd: Peritoneal Dialysis
+          transplants: Transplants
+          akcc: Acute Kidney Care Clinic

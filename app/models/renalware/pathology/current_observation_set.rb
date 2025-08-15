@@ -26,6 +26,10 @@ module Renalware
       validates :patient, presence: true
       serialize :values, coder: ObservationsJsonbSerializer
 
+      SPECIAL_GROUP_HANDLERS = {
+        immunosuppressive: Handlers::Immunosuppressive
+      }.freeze
+
       def self.null_values_hash
         ActiveSupport::HashWithIndifferentAccess.new.extend(ObservationSetMethods)
       end
@@ -43,6 +47,22 @@ module Renalware
           hash[code] = values[code] || CurrentObservationSet.null_values_hash
         end
         hash.extend(ObservationSetMethods)
+      end
+
+      def from_group(group)
+        codes = CodeGroup.descriptions_for_group(group).pluck("code")
+        values_for_codes(codes)
+      end
+
+      def method_missing(method_name, *args)
+        handler = SPECIAL_GROUP_HANDLERS[method_name]
+        return super unless handler
+
+        handler.new(from_group(method_name))
+      end
+
+      def respond_to_missing?(method_name, include_private = false)
+        SPECIAL_GROUP_HANDLERS.key?(method_name) || super
       end
     end
   end

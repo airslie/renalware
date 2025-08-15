@@ -20,5 +20,15 @@ FactoryBot.define do
         name { code.to_s.upcase }
       end
     end
+
+    trait :ltax do
+      code { "LTAX" }
+      name { "Tacrolimus" }
+    end
+
+    trait :cya do
+      code { "CYA" }
+      name { "Cyclosporin" }
+    end
   end
 end

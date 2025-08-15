@@ -5,10 +5,10 @@ FactoryBot.define do
     month { 1 }
     year { 2018 }
     # rolling false
-    pre_mean_systolic_blood_pressure { 0 }
-    pre_mean_diastolic_blood_pressure { 0 }
-    post_mean_systolic_blood_pressure { 0 }
-    post_mean_diastolic_blood_pressure { 0 }
+    pre_mean_systolic_blood_pressure { 120 }
+    pre_mean_diastolic_blood_pressure { 80 }
+    post_mean_systolic_blood_pressure { 121 }
+    post_mean_diastolic_blood_pressure { 82 }
     lowest_systolic_blood_pressure { 0 }
     highest_systolic_blood_pressure { 0 }
     mean_fluid_removal { 0 }

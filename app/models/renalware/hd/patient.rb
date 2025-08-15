@@ -7,7 +7,7 @@ module Renalware
       has_one :hd_preference_set, class_name: "PreferenceSet"
       has_many :hd_sessions, class_name: "Session"
       has_many :prescription_administrations
-      has_many :patient_statistics
+      has_many :patient_statistics, class_name: "Renalware::HD::PatientStatistics"
       has_one :rolling_patient_statistics, lambda {
                                              merge(PatientStatistics.rolling)
                                            }, class_name: "PatientStatistics"

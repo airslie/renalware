@@ -899,6 +899,18 @@ CREATE TYPE renalware.hl7_message_type AS ENUM (
 
 
 --
+-- Name: letter_sections; Type: TYPE; Schema: renalware; Owner: -
+--
+
+CREATE TYPE renalware.letter_sections AS ENUM (
+    'hd',
+    'pd',
+    'transplants',
+    'akcc'
+);
+
+
+--
 -- Name: nursing_experience_level_enum; Type: TYPE; Schema: renalware; Owner: -
 --
 
@@ -8763,7 +8775,8 @@ CREATE TABLE renalware.letter_descriptions (
     "position" integer DEFAULT 0 NOT NULL,
     deleted_at timestamp without time zone,
     section_identifiers character varying[] DEFAULT '{}'::character varying[],
-    snomed_document_type_id bigint
+    snomed_document_type_id bigint,
+    section_identifier renalware.letter_sections
 );
 
 
@@ -27272,6 +27285,13 @@ CREATE INDEX index_ukrdc_treatments_on_pd_regime_id ON renalware.ukrdc_treatment
 
 
 --
+-- Name: index_unique_on_letter_id_and_section_identifier; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_unique_on_letter_id_and_section_identifier ON renalware.letter_section_snapshots USING btree (letter_id, section_identifier);
+
+
+--
 -- Name: index_user_group_memberships_on_user_group_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -31426,6 +31446,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250830140916'),
 ('20250830140451'),
 ('20250830135458'),
+('20250822155745'),
+('20250822071112'),
 ('20250611141102'),
 ('20250604125449'),
 ('20250601111621'),

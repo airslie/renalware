@@ -45,7 +45,7 @@ module Renalware
 
       def description = "(#{letterhead.site_code}) #{super}"
       def view_label = "Preview"
-      def sections = SectionManager.new(__getobj__).sections
+      def parts = SectionManager.new(__getobj__).parts
 
       def to_html(adhoc_printing: false)
         html = content

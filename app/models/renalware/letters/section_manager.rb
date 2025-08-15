@@ -9,24 +9,17 @@ module Renalware
 
       delegate :patient, :letter_event, :letterhead, to: :letter
 
-      # A letter has many sections, which could dynamically be set from:
-      # 1. A Letter Event
-      # 2. A Letter Topic
-      def sections
-        sections = (letter_event.part_classes + (letter.sections || [])).sort_by(&:position)
+      # Temporary code that just renders parts for all topics until
+      # we refactor it.
+      def parts
+        parts = letter_event.part_classes
         filtered_classes = SectionClassFilter.new(
-          sections: sections,
+          parts:,
           include_pathology_in_letter_body: letterhead.include_pathology_in_letter_body?
         )
         filtered_classes.filter.map do |klass|
-          klass.new(letter: letter, event: letter_event)
+          klass.new(letter: letter)
         end
-      end
-
-      def edit_sections_for_topic(topic: letter.topic)
-        return [] if topic.nil?
-
-        topic.sections.map { |section_class| section_class.new(letter: letter) }
       end
 
       # Given a hash of letter section classes (i.e. the class names for each Part that should be
@@ -35,10 +28,10 @@ module Renalware
       # for example if a site does not want pathology, the recent_pathology_results key is
       # removed from the hash.
       class SectionClassFilter
-        pattr_initialize [:sections!, :include_pathology_in_letter_body!]
+        pattr_initialize [:parts!, :include_pathology_in_letter_body!]
 
         def filter
-          remove_recent_observations_section_if_no_pathology_required_in_body(sections)
+          remove_recent_observations_section_if_no_pathology_required_in_body(parts)
         end
 
         private
@@ -47,13 +40,13 @@ module Renalware
         # #include_pathology_in_letter_body flag on the letterhead, which is site-specific.
         # TODO: It might be better to link the letterhead to the Hospitals::Site and
         # put the site-specific configuration in say a jsonb field on the Site.
-        def remove_recent_observations_section_if_no_pathology_required_in_body(section_klasses)
+        def remove_recent_observations_section_if_no_pathology_required_in_body(part_classes)
           unless include_pathology_in_letter_body
-            section_klasses = section_klasses.reject { |klass|
+            part_classes = part_classes.reject { |klass|
               klass.identifier == :recent_pathology_results
             }
           end
-          section_klasses
+          part_classes
         end
       end
     end

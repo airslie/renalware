@@ -6,9 +6,8 @@ module Renalware
     subject { render partial: partial, locals: { clinical_observations: part } }
 
     let(:partial) { "renalware/letters/parts/clinical_observations" }
-    let(:part) {
-      Letters::Part::ClinicalObservations.new(letter: Letters::Letter.new, event: clinic_visit)
-    }
+    let(:letter) { Letters::Letter.new event: clinic_visit }
+    let(:part) { Letters::Part::ClinicalObservations.new(letter:) }
     let(:clinic_visit) {
       Clinics::ClinicVisit.new(
         height: 1.8,

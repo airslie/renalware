@@ -189,7 +189,6 @@ module Renalware
         it "calculates overnight volume before_save" do
           regime = build(:apd_regime)
           regime.bags << build(:pd_regime_bag, role: :ordinary)
-          expect_any_instance_of(APD::CalculateVolumes).to receive(:call)
 
           regime.save!
 

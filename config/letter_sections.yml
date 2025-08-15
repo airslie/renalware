@@ -1,0 +1,123 @@
+default:
+  hd:
+    -
+      - label: HD Unit
+        path: hd_patient.hd_profile.hospital_unit.unit_code
+      - label: Schedule
+        path: hd_patient.hd_profile.current_schedule
+      - label: Time
+        path: hd_patient.hd_profile.prescribed_time:duration
+
+    -
+      - label: HD Access
+        path:
+          - accesses_patient.current_profile.type
+          - accesses_patient.current_profile.side
+        separator: " "
+      - label: Plan
+        path:
+          - accesses_patient.current_plan.plan_type
+          - accesses_patient.current_plan.created_at:date
+        separator: " "
+
+    -
+      - label: Mean pre HD BP
+        path:
+          - hd_patient.rolling_patient_statistics.pre_mean_systolic_blood_pressure:integer
+          - hd_patient.rolling_patient_statistics.pre_mean_diastolic_blood_pressure:integer
+        separator: " / "
+      - label: Mean post HD BP
+        path:
+          - hd_patient.rolling_patient_statistics.post_mean_systolic_blood_pressure:integer
+          - hd_patient.rolling_patient_statistics.post_mean_diastolic_blood_pressure:integer
+        separator: " / "
+
+    -
+      - label: Dry Weight
+        path: clinical_patient.latest_dry_weight.weight
+      - label: Min Dry Weight
+        path: clinical_patient.latest_dry_weight.minimum_weight
+      - label: Max Dry Weight
+        path: clinical_patient.latest_dry_weight.maximum_weight
+      - label: BMI
+        path: clinics_patient.current_bmi.measurement
+
+    -
+      - label: UKT Transplant Status
+        path: transplants_patient.current_registration.document.uk_transplant_centre.status
+      - label: Date
+        path: transplants_patient.current_registration.document.uk_transplant_centre.status_updated_on:date
+
+  transplants:
+    -
+      - label: Transplant Date
+        path: transplants_patient.last_operation.performed_on
+      - label: Organ Type
+        path: transplants_patient.last_operation.operation_type.text
+      - label: Donor Type
+        path: transplants_patient.last_operation.document.donor.type.text
+    -
+      - label: Donor CMV
+        path: transplants_patient.last_operation.document.donor.cmv_status.text
+      - label: Recip CMV
+        path: transplants_patient.last_operation.document.recipient.cmv_status.text
+    -
+      - label: pathology_patient.current_observation_set.immunosuppressive.type
+        path: pathology_patient.current_observation_set.immunosuppressive.level
+      - label: Date
+        path: pathology_patient.current_observation_set.immunosuppressive.date
+
+  pd:
+    -
+      - label: Treatment
+        path: pd_patient.regimes.current.treatment
+      - label: Assistance
+        path: pd_patient.regimes.current.assistance_type.text
+      - label: Exchanges Done By
+        path: pd_patient.regimes.current.exchanges_done_by.text
+    -
+      - label: Dry Weight
+        path: clinical_patient.latest_dry_weight.weight
+      - label: Min Dry Weight
+        path: clinical_patient.latest_dry_weight.minimum_weight
+      - label: Max Dry Weight
+        path: clinical_patient.latest_dry_weight.maximum_weight
+      - label: BMI
+        path: clinics_patient.current_bmi.measurement
+    -
+      - label: UKT Transplant Status
+        path: transplants_patient.current_registration.document.uk_transplant_centre.status
+      - label: Date
+        path: transplants_patient.current_registration.document.uk_transplant_centre.status_updated_on:date
+    - # APD Only
+      - label: Overnight Volume
+        path: pd_patient.regimes.current.overnight_volume:ml
+      - label: Daily Volume
+        path: pd_patient.regimes.current.daily_volume:ml
+      - label: Therapy Time
+        path: pd_patient.regimes.current.therapy_time:duration
+      - label: Cycles
+        path: pd_patient.regimes.current.cycles
+    - # APD Only
+      - label: Tidal
+        path: pd_patient.regimes.current.tidal_indicator
+      - label: Percentage
+        path: pd_patient.regimes.current.tidal_percentage:percentage
+    - # APD Only
+      - label: Fill Volume
+        path: pd_patient.regimes.current.fill_volume:ml
+      - label: Last Fill Volume
+        path: pd_patient.regimes.current.last_fill_volume:ml
+
+  akcc:
+    -
+      - label: Dialysis Plan
+        path: akcc_patient.profile.document.dialysis_plan.text
+      - label: Date First Seen
+        path: akcc_patient.profile.document.first_seen_on
+    -
+      - label: UKT Transplant Status
+        path: transplants_patient.current_registration.document.uk_transplant_centre.status
+      - label: Date
+        path: transplants_patient.current_registration.document.uk_transplant_centre.status_updated_on:date
+
