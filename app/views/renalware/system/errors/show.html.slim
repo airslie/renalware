@@ -4,7 +4,7 @@ h1.heading= details[:name]
 p.subheading= details[:message]
 p.support-info= t(".support_info")
 
-- if current_user_is_super_admin?
+- if current_user && current_user_is_super_admin?
   .error-details
     hr
     .error-details-name= details[:detail_name]
