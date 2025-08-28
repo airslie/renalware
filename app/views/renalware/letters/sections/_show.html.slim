@@ -1,5 +1,5 @@
 - section_identifier = letter.topic&.section_identifier
-- if section_identifier&.present?
+- if section_identifier.present?
   section.clear-both
     h3= t("renalware.letters.sections.#{section_identifier}")
 

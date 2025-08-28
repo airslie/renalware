@@ -18,15 +18,7 @@ class Renalware::Letters::Sections
   end
 
   # Creates a hash of labels and values as described in the config/letter_sections.yml
-  # file. This config file
-  # the config file.
-  #
-  # The values are converted to the correct type as specified in the config file.
-  # For example, a duration is converted to a string with the duration in minutes.
-  #
-  # The values are joined together with the separator specified in the config file.
-  # For example, the HD patient has a list of observations for each code. The
-  # observations are joined together with a newline.
+  # file. See doc/letter_sections.md for more information.
   def all
     @section.map do |row|
       row.filter_map do |field|
@@ -43,16 +35,23 @@ class Renalware::Letters::Sections
 
   private
 
+  # If label is a path, it's looked up the same way as the `path` and allows
+  # dynamic labels. This is currently used for Immunosuppressive.
   def label_for(label)
     return label unless path?(label)
 
     method_dig(label)
   end
 
+  # Returns true if the label is actually a path. It does this by checking if
+  # the first part of the label matches a key in PATIENT_CLASSES.
   def path?(label)
     PATIENT_CLASSES.key?(label.split(".").first.to_sym)
   end
 
+  # Looks up the value for the given path starting with the patient class. It's
+  # like dig but with a chain of methods calls. It also handles the optional
+  # type suffix. See doc/letter_sections.md for more information.
   def method_dig(path)
     path, type = path.split(":")
     path = path.split(".")
