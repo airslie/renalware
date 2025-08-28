@@ -1,13 +1,21 @@
 - section_identifier = topic&.section_identifier
 - if section_identifier&.present?
   - section = Renalware::Letters::Section.new(letter:, section_identifier:)
-  article
-    header.flex.items-center.mt-2.justify-between
-      h2.mb-0.float-none.mb-2.mr-8= t("renalware.letters.topics.sections.#{section_identifier}")
+  article.mb-6
+    header
+      h2= t("renalware.letters.topics.sections.#{section_identifier}")
 
-      - if section.show_use_updates_toggle?(params[:preview_topic_id])
-        = form.simple_fields_for :update_sections do |fields|
-          = fields.input_field section_identifier, as: :toggle, label: "Use updates below"
-
-    .w-full.mt-4.letter-section.clear-both
-      = section.content_with_diffs
+    - if section.show_use_updates_toggle?(params[:preview_topic_id])
+      - options = section.content_with_diffs.zip(["", section_identifier])
+      = form.simple_fields_for :update_sections do |fields|
+        .letter-section.diff
+          ul.ml-0.flex.gap-3.w-fit.box-border
+            = fields.collection_radio_buttons section_identifier,
+              options, :second, :first,
+              include_hidden: false,
+              item_wrapper_tag: false do |b|
+              li.min-w-0.box-border
+                = b.radio_button class: "hidden"
+                = b.label
+    - else
+      = section.build_snapshot

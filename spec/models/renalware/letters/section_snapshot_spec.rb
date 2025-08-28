@@ -13,7 +13,7 @@ module Renalware
     let(:topic) { build(:letter_topic, section_identifier: :hd) }
     let(:hd_patient) { patient.becomes(Renalware::HD::Patient) }
     let(:snapshot_html) do
-      '<dl class="flex"><dt>HD Unit</dt><dd>UJZ</dd><dt>Time</dt><dd>3:30</dd></dl>'
+      "<dl><dt>HD Unit</dt><dd>UJZ</dd><dt>Time</dt><dd>3:30</dd></dl>"
     end
 
     before { create(:hd_profile, patient: hd_patient, prescribed_time: 210) }

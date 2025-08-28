@@ -22,14 +22,14 @@ module Renalware
           end
         end
 
-        # rubocop:disable Layout/LineLength
         context "when there are differences between snapshotted and current" do
           it "returns a diff in an HTML escaped form, and html safed" do
-            expect(instance.content_with_diffs).to eq \
-              %Q(<div class="diff">\n  <ul>\n    <li class="del"><del>snapshot<strong>ted</strong></del></li>\n    <li class="ins"><ins><strong><b>new</b> </strong>snapshot</ins></li>\n  </ul>\n</div>\n)
+            expect(instance.content_with_diffs).to eq [
+              "<div><del>snapshot<strong>ted</strong></del></div>",
+              "<div><ins><strong><b>new</b> </strong>snapshot</ins></div>"
+            ]
           end
         end
-        # rubocop:enable Layout/LineLength
       end
 
       describe "#show_use_updates_toggle?" do

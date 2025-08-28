@@ -22,8 +22,10 @@ processes:
     command: yarn build:css --watch
 
   # Precompile assets in test for nicer Capybara page snapshots
-  assets:
-    command: RAILS_ENV=test bin/rails assets:precompile
+  # TODO: Move this to test helper and make sure they are deleted afterwards
+  # otherwise Sprockets will use them and not recompile anything when in dev.
+  #assets:
+  #  command: RAILS_ENV=test bin/rails assets:precompile
 
   # Make this a service you can start manually
   #docs: cd documentation && yarn run start -p 3001

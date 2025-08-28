@@ -12,8 +12,7 @@ class Renalware::Letters::Sections
   }.freeze
 
   def initialize(patient, section)
-    @yaml = Renalware::EngineConfig.config_for(:letter_sections)
-    @section = @yaml[section.to_sym] if section
+    @section = LETTER_SECTIONS_YAML[section.to_sym] if section
     @patient = patient
     @as = {}
   end
