@@ -22,14 +22,16 @@ describe "Manage letter topics" do
     choose "Haemodialysis"
     click_on "Create"
 
-    expect(page).to have_content("LD123")
-    expect(page).to have_content("HD")
-    expect(page).to have_content I18n.l(Renalware::Letters::Topic.last.created_at)
+    within "table" do
+      expect(page).to have_content("LD123")
+      expect(page).to have_content("HD")
+      expect(page).to have_content I18n.l(Renalware::Letters::Topic.last.created_at)
+    end
   end
 
   it "enables a superadmin to edit a letter topic" do
-    login_as_super_admin
     topic = create(:letter_topic, text: "LD1")
+    login_as_super_admin
 
     visit letters_topics_path
 
@@ -41,8 +43,11 @@ describe "Manage letter topics" do
     choose "Acute Kidney Care Clinic"
     click_on "Save"
 
-    expect(page).to have_content("LD2")
-    expect(page).to have_content("AKCC")
+    within "table" do
+      expect(page).to have_content("LD2")
+      expect(page).to have_content("AKCC")
+    end
+
     expect(topic.reload).to have_attributes(text: "LD2", section_identifier: "akcc")
   end
 

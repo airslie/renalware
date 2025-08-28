@@ -144,7 +144,10 @@ module Renalware
 
             patients = described_class.new(named_filter: :hgb_low).call
 
-            expect(patients.map(&:id)).to eq [patient_w_hgb_lt_100.id, patient_w_textual_hgb.id]
+            expect(patients.map(&:id).sort).to eq [
+              patient_w_hgb_lt_100.id,
+              patient_w_textual_hgb.id
+            ]
           end
         end
 

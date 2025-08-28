@@ -3,7 +3,7 @@
   - section = Renalware::Letters::Section.new(letter:, section_identifier:)
   article.mb-6
     header
-      h2= t("renalware.letters.topics.sections.#{section_identifier}")
+      h2= t("renalware.letters.sections.#{section_identifier}")
 
     - if section.show_use_updates_toggle?(params[:preview_topic_id])
       - options = section.content_with_diffs.zip(["", section_identifier])
