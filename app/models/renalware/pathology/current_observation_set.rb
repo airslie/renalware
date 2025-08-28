@@ -54,6 +54,10 @@ module Renalware
         values_for_codes(codes)
       end
 
+      # This delegates calls to a named handler that will do some additional
+      # formatting on the observation set data.
+      # It's currently used by the Immunosuppressive handler to format the
+      # results for letter sections.
       def method_missing(method_name, *args)
         handler = SPECIAL_GROUP_HANDLERS[method_name]
         return super unless handler

@@ -1,19 +1,13 @@
 module Renalware
   module Letters
     class Topic < ApplicationRecord
-      # TODO: Rename table to `letter_topics`
-      self.table_name = "letter_descriptions"
-
+      include Letters::SectionIdentifier
       include Sortable
 
-      self.ignored_columns += [:section_identifiers]
+      # DATABASE: Rename table to `letter_topics`
+      self.table_name = "letter_descriptions"
 
-      enum :section_identifier, {
-        hd: "hd",
-        pd: "pd",
-        transplants: "transplants",
-        akcc: "akcc"
-      }
+      self.ignored_columns += [:section_identifiers]
 
       acts_as_paranoid
       validates :text, presence: true, uniqueness: true

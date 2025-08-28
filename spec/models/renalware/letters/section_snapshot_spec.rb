@@ -18,6 +18,11 @@ module Renalware
 
     before { create(:hd_profile, patient: hd_patient, prescribed_time: 210) }
 
+    it do
+      is_expected.to validate_inclusion_of(:section_identifier)
+        .in_array(LETTER_SECTION_IDENTIFIERS)
+    end
+
     describe ".create_or_update" do
       context "when a snapshot doesn't exists" do
         it "creates it" do

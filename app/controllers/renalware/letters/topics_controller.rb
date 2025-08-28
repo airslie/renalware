@@ -61,9 +61,10 @@ module Renalware
       end
 
       def topic_params
-        p = params.require(:topic).permit(:text, :position, :section_identifier)
-        p[:section_identifier] = nil if p[:section_identifier] == "none"
-        p
+        params
+          .require(:topic)
+          .permit(:text, :position, :section_identifier)
+          .tap { it[:section_identifier] = nil if it[:section_identifier] == "none" }
       end
 
       def find_and_authorise_topic

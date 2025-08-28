@@ -15,23 +15,21 @@ module Renalware
     end
 
     def level
-      result&.dig(:result)
+      result[:result]
     end
 
     def date
-      result&.dig(:observed_at)&.to_date
+      result[:observed_at]&.to_date
     end
 
     def type
-      code = @values.first
-      title = Pathology::ObservationDescription.find_by(code:)&.name
+      title = Pathology::ObservationDescription.where(code:).pick(:name)
       "#{title} Level"
     end
 
     private
 
-    def result
-      @values&.second
-    end
+    def code = @values.first
+    def result = @values.second
   end
 end

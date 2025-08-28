@@ -1,6 +1,8 @@
 module Renalware
   module Letters
     class SectionSnapshot < ApplicationRecord
+      include Letters::SectionIdentifier
+
       belongs_to :letter
 
       def self.create_or_update(letter, section_identifier = nil, only_create: false)

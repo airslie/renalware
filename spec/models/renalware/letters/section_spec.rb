@@ -23,11 +23,10 @@ module Renalware
         end
 
         context "when there are differences between snapshotted and current" do
-          it "returns a diff in an HTML escaped form, and html safed" do
-            expect(instance.content_with_diffs).to eq [
-              "<div><del>snapshot<strong>ted</strong></del></div>",
-              "<div><ins><strong><b>new</b> </strong>snapshot</ins></div>"
-            ]
+          it "returns a left and right HTML diff" do
+            left, right = instance.content_with_diffs
+            expect(left).to end_with "<div><del>snapshot<strong>ted</strong></del></div>"
+            expect(right).to end_with "<div><ins><strong><b>new</b> </strong>snapshot</ins></div>"
           end
         end
       end

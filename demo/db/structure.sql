@@ -899,18 +899,6 @@ CREATE TYPE renalware.hl7_message_type AS ENUM (
 
 
 --
--- Name: letter_sections; Type: TYPE; Schema: renalware; Owner: -
---
-
-CREATE TYPE renalware.letter_sections AS ENUM (
-    'hd',
-    'pd',
-    'transplants',
-    'akcc'
-);
-
-
---
 -- Name: nursing_experience_level_enum; Type: TYPE; Schema: renalware; Owner: -
 --
 
@@ -8776,7 +8764,7 @@ CREATE TABLE renalware.letter_descriptions (
     deleted_at timestamp without time zone,
     section_identifiers character varying[] DEFAULT '{}'::character varying[],
     snomed_document_type_id bigint,
-    section_identifier renalware.letter_sections
+    section_identifier character varying
 );
 
 

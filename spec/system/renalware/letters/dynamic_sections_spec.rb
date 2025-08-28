@@ -63,8 +63,8 @@ module Renalware
         page.refresh
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
-          expect(page).to have_content "HD Unit\nAnother Code\nTime\n1:39"
+          expect(page).to have_content "HD Unit U_CODE Time 5:00"
+          expect(page).to have_content "HD Unit Another Code Time 1:39"
         end
 
         # Save, and check that the data hasn't changed
@@ -73,13 +73,13 @@ module Renalware
         click_link "Edit"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
-          expect(page).to have_content "HD Unit\nAnother Code\nTime\n1:39"
+          expect(page).to have_content "HD Unit U_CODE Time 5:00"
+          expect(page).to have_content "HD Unit Another Code Time 1:39"
         end
 
         # Now use the toggle to apply updates
         within "article", text: "Haemodialysis" do
-          find("label", text: "Use updates below").click
+          find("label", text: "Use the updates below").click
         end
 
         submit_form
@@ -93,7 +93,7 @@ module Renalware
 
         # Change to a topic which doesn't have a section
         slim_select "Topic without section", from: "Topic"
-        expect(page).to have_no_content "HD Unit\nU_CODE\nTime\n1:39"
+        expect(page).to have_no_content "HD Unit\nU_CODE\nTime\n5:00"
       end
     end
   end
