@@ -5,6 +5,6 @@ module Renalware
       Letters::Topic.find_or_create_by(text: row["text"])
     end
 
-    Letters::Topic.where(text: "Transplant Clinic").update_all(section_identifiers: ["hd_section"])
+    Letters::Topic.where(text: "Transplant Clinic").update_all(section_identifier: :hd)
   end
 end
