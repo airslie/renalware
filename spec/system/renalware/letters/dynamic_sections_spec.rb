@@ -38,7 +38,7 @@ module Renalware
         slim_select "Main Topic", from: "Topic"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
+          expect(page).to have_content "HD UnitU_CODETime5:00"
         end
 
         submit_form
@@ -53,7 +53,7 @@ module Renalware
         click_link "Edit"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
+          expect(page).to have_content "HD UnitU_CODETime5:00"
         end
 
         # Let's change some of the data to check the diff
@@ -87,8 +87,8 @@ module Renalware
         click_link "Edit"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_no_content "HD Unit\nU_CODE\nTime\n5:00"
-          expect(page).to have_content "HD Unit\nAnother Code\nTime\n1:39"
+          expect(page).to have_no_content "HD UnitU_CODETime5:00"
+          expect(page).to have_content "HD UnitAnother CodeTime1:39"
         end
 
         # Change to a topic which doesn't have a section

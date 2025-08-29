@@ -1,18 +1,18 @@
-text
-Access Clinic
-Anaemia Clinic
-Assessment Clinic
-CAPD Nurse Clinic
-Combined Psychiatric/Renal Clinic
-Combined Dermatology/Renal Clinic
-Combined Diabetes/Renal Clinic
-Dietetic Outpatient Clinic
-DNA Notification
-General Nephrology Clinic
-Haemodialysis Clinic
-Live Donor Assessment Clinic
-Advanced Kidney Care Clinic
-Renal Palliative Clinic
-PD Clinic
-Transplant Clinic
-Weight Management Clinic
+text,section_identifier
+Access Clinic,
+Anaemia Clinic,
+Assessment Clinic,
+CAPD Nurse Clinic,
+Combined Psychiatric/Renal Clinic,
+Combined Dermatology/Renal Clinic,
+Combined Diabetes/Renal Clinic,
+Dietetic Outpatient Clinic,
+DNA Notification,
+General Nephrology Clinic,
+Haemodialysis Clinic,hd
+Live Donor Assessment Clinic,
+Advanced Kidney Care Clinic,akcc
+Renal Palliative Clinic,
+PD Clinic,pd
+Transplant Clinic,transplants
+Weight Management Clinic,
