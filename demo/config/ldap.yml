@@ -4,15 +4,15 @@
 # environment if you need something different per environment.
 authorizations: &authorizations
   allow_unauthenticated_bind: false
-  group_base: ou=groups,dc=renalware,dc=com
+  group_base: ou=groups,dc=renalware,dc=app
   # Requires config.ldap_check_group_membership in devise.rb be true
   # Can have multiple values, must match all to be authorized
   required_groups:
     # If only a group name is given, membership will be checked against "uniqueMember"
-    - cn=admins,ou=groups,dc=renalware,dc=com
-    - cn=users,ou=groups,dc=renalware,dc=com
+    #- cn=admins,ou=groups,dc=renalware,dc=app
+    - cn=renalware,ou=groups,dc=renalware,dc=app
     # If an array is given, the first element will be the attribute to check against, the second the group name
-    - ["moreMembers", "cn=users,ou=groups,dc=renalware,dc=com"]
+    #- ["moreMembers", "cn=renalware,ou=groups,dc=renalware,dc=app"]
   # Requires config.ldap_check_attributes in devise.rb to be true
   # Can have multiple attributes and values, must match all to be authorized
   require_attribute:
@@ -30,12 +30,11 @@ authorizations: &authorizations
 shared: &shared
   host: <%= ENV["LDAP_HOST"] %>
   port: <%= ENV.fetch("LDAP_PORT", 389) %>
-  #admin_password: <%= ENV.fetch("LDAP_ADMIN_PASSWORD") %>
-  admin_password: Password1234
-  admin_user: admin
-  # admin_user: <%= ENV.fetch("LDAP_ADMIN_USER", "cn=admin,dc=renalware,dc=com") %>
-  base: <%= ENV.fetch("LDAP_BASE", "ou=users,dc=renalware,dc=com") %>
-  attribute: <%= ENV.fetch("LDAP_USERNAME_ATTRIBUTE", "cn") %> # "cn" or "email" more likely?
+  # Admin user to bind as, to perform searches
+  admin_password: <%= ENV.fetch("LDAP_ADMIN_PASSWORD") %>
+  admin_user: <%= ENV.fetch("LDAP_ADMIN_USER", "cn=admin,dc=renalware,dc=app") %>
+  base: <%= ENV.fetch("LDAP_BASE", "dc=renalware,dc=app") %>
+  attribute: <%= ENV.fetch("LDAP_USERNAME_ATTRIBUTE", "uid") %> # eg "smithj"
 
 development:
   ssl: false

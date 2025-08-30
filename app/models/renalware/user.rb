@@ -58,6 +58,8 @@ module Renalware
 
     store_accessor :preferences, :experimental_features
 
+    after_create :assign_default_role_if_needed
+
     # Non-persistent attribute to signify we want to use extended validation.
     # We need to refactor this by using a form object for updating a user.
     attr_accessor :with_extended_validation
@@ -70,6 +72,16 @@ module Renalware
     # So we can uses these scopes as Ransack predicates eg. { expired: true }
     def self.ransackable_scopes(_auth_object = nil)
       %i(unapproved inactive expired)
+    end
+
+    # If we are using LDAP, then delegate this method to the LDAP adapter equivalent method
+    # to check the password against the LDAP server.
+    def valid_password?(password)
+      if User.devise_modules.include?(:ldap_authenticatable)
+        valid_ldap_authentication?(password)
+      else
+        super
+      end
     end
 
     # Send devise emails using activejob
@@ -139,6 +151,12 @@ module Renalware
       if approved? && roles.empty?
         errors.add(:approved, "approved users must have a role")
       end
+    end
+
+    def assign_default_role_if_needed
+      return if roles.exists?
+
+      roles << Role.find_by!(name: :clinical)
     end
   end
 end

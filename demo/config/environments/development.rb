@@ -5,7 +5,7 @@ Rails.application.configure do
   # config.session_timeout_polling_frequency = 1.hour
   config.ldap_authentication = true
   # #ldap_auth_username_builder = Proc.new() do |attribute, login, ldap|
-  # #  "#{attribute}=#{login},ou=others,dc=renalware,dc=com"
+  # #  "#{attribute}=#{login},ou=others,dc=renalware,dc=app"
   # #end
   config.after_initialize do
     if defined?(Bullet)
