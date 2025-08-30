@@ -33,9 +33,9 @@ module Renalware
         ::File.binread(file_path)
       end
 
-      def initialize(renderable:, message_id:)
+      def initialize(renderable:, document:)
         @renderable = renderable
-        @message_id = message_id
+        @document = document
       end
 
       def call
@@ -51,7 +51,7 @@ module Renalware
 
       private
 
-      attr_reader :renderable, :message_id, :msg
+      attr_reader :renderable, :document, :msg
 
       def deleted? = deleted_at.present?
 
@@ -111,6 +111,7 @@ module Renalware
       # TXA|1|CL^Clinic Letter|ED^Electronic Document|201508010900| \
       #  ^Foster^John^Harry^^Dr||201508010920|201508010930||||123|||| \
       #  RAJ01_12345_JONES_202109020_123.pdf|AU
+      # rubocop:disable Metrics/MethodLength
       def txa
         approved_at = renderable.approved_at.strftime("%Y%m%d%H%M")
         seg = HL7::Message::Segment::TXA.new
@@ -125,11 +126,16 @@ module Renalware
         # TXA.6 Origination timestamp - the date the letter was Approved ie became effectively
         # 'sent' and therefore immutable
         seg.origination_date_time = approved_at
-        seg.unique_document_number = renderable.id
+        seg.unique_document_number = if Renalware.config.feeds_outgoing_documents_use_guids
+                                       renderable.uuid
+                                     else
+                                       renderable.id
+                                     end
         seg.unique_document_file_name = filename
         seg.document_completion_status = deleted? ? "CA" : "AU"
         seg
       end
+      # rubocop:enable Metrics/MethodLength
 
       # eg "HOSP1_111_HOSP2_222_HOSP3_333_surname_dob_letter_id.pdf"
       def filename
@@ -155,10 +161,16 @@ module Renalware
         seg
       end
 
+      # Could be a uuid (outgoing_document.external_id) or an integer id (outgoing_document.id).
+      # If it is an integer we convert to our usual external_id format "RW0000000123"
+      # However we are migrating to uuids so we should be able to remove the integer handling
+      # eventually.
       def external_id
-        return if message_id.blank?
-
-        ["RW", message_id.to_s.rjust(10, "0")].join
+        if Renalware.config.feeds_outgoing_documents_use_guids
+          document.external_uuid
+        else
+          document.id && ["RW", document.id.to_s.rjust(10, "0")].join
+        end
       end
 
       def base64_encoded_content
