@@ -5951,8 +5951,16 @@ CREATE TABLE renalware.events (
     type character varying NOT NULL,
     document jsonb,
     deleted_at timestamp without time zone,
-    subtype_id bigint
+    subtype_id bigint,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL
 );
+
+
+--
+-- Name: COLUMN events.uuid; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.events.uuid IS 'A unique identifier for this event, used for external references eg HL7';
 
 
 --
@@ -6338,7 +6346,7 @@ CREATE TABLE renalware.feed_outgoing_documents (
     renderable_id bigint NOT NULL,
     state renalware.feed_outgoing_document_state DEFAULT 'queued'::renalware.feed_outgoing_document_state NOT NULL,
     printing_options json DEFAULT '{}'::json,
-    external_uuid uuid,
+    external_uuid uuid DEFAULT gen_random_uuid(),
     error text,
     created_by_id bigint NOT NULL,
     updated_by_id bigint NOT NULL,
@@ -22378,6 +22386,13 @@ CREATE INDEX index_events_on_updated_by_id ON renalware.events USING btree (upda
 
 
 --
+-- Name: index_events_on_uuid; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_events_on_uuid ON renalware.events USING btree (uuid);
+
+
+--
 -- Name: index_feed_file_types_on_name; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -31404,9 +31419,13 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware, renalware_demo, public, heroku_ext;
+SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250830141119'),
+('20250830140916'),
+('20250830140451'),
+('20250830135458'),
 ('20250611141102'),
 ('20250604125449'),
 ('20250601111621'),

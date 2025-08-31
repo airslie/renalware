@@ -238,6 +238,11 @@ module Renalware
       ENV.fetch("PROCESS_HL7_VIA_RAW_MESSAGES_TABLE", "false") == "true"
     }
 
+    config_accessor(:feeds_outgoing_documents_use_guids) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_USE_GUIDS", "false")
+      )
+    }
     config_accessor(:feeds_outgoing_documents_letter_format) {
       fmt = ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_LETTER_FORMAT", "pdf").to_sym
       [:pdf, :rtf].find { |x| x == fmt } || :pdf

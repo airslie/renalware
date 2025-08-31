@@ -70,12 +70,13 @@ module Renalware
                   author: user
                 )
 
-                msg = described_class.call(renderable: letter, message_id: 123)
-
+                document = OutgoingDocument.create!(renderable: letter, by: user)
+                msg = described_class.call(renderable: letter, document:)
                 expected_filename = "HOSP1_111_HOSP2_222_HOSP3_333_JONES_19700101_CL_#{letter.id}"
+                msh_identifier = ["RW", document.id.to_s.rjust(10, "0")].join
 
                 expect(msg[:MSH].to_s).to eq(
-                  "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|RW0000000123|RW0000000123|U|9.9.9"
+                  "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|#{msh_identifier}|#{msh_identifier}|U|9.9.9"
                 )
                 expect(msg[:PID].to_s).to eq(
                   "PID||9999999999^^^NHS|111^^^CODE1~222^^^CODE2~333^^^CODE3||Jones^^Patricia^^Ms||19700101"
@@ -90,6 +91,35 @@ module Renalware
                 expect(msg[:OBX].to_s).to eq(
                   "OBX|1|ED|||^TEXT^PDF^Base64^QQ=="
                 )
+              end
+            end
+
+            context "when the using uuids for document and renderable references" do
+              before do
+                allow(Renalware.config).to receive_messages(
+                  feeds_outgoing_documents_use_guids: true
+                )
+              end
+
+              it "uses the uuid for MSH.10/11 and TXA.11" do
+                stub_const("Renalware::VERSION", "9.9.9")
+
+                stub_rendering(:pdf, "A")
+
+                letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
+                  patient: patient,
+                  clinical: true,
+                  author: user
+                )
+                document = OutgoingDocument.create!(renderable: letter, by: user)
+
+                msg = described_class.call(renderable: letter, document:)
+
+                expect(document.external_uuid).to be_present
+                expect(letter.uuid).to be_present
+                expect(msg[:MSH][9]).to eq(document.external_uuid)
+                expect(msg[:MSH][10]).to eq(document.external_uuid)
+                expect(msg[:TXA][12]).to eq(letter.uuid)
               end
             end
           end
@@ -111,8 +141,9 @@ module Renalware
               rtf_content = "ABC"
               stub_rendering(:rtf, rtf_content)
               base64_encoded_rtf = Base64.strict_encode64(rtf_content)
+              document = OutgoingDocument.create!(renderable: letter, by: user)
 
-              msg = described_class.call(renderable: letter, message_id: 123)
+              msg = described_class.call(renderable: letter, document:)
               expect(msg[:OBX].to_s).to include("^TEXT^RTF^Base64^#{base64_encoded_rtf}")
             end
           end
@@ -124,6 +155,7 @@ module Renalware
                 clinical: true,
                 author: user
               )
+              document = OutgoingDocument.create!(renderable: letter, by: user)
 
               stub_const(
                 "::Renalware::Feeds::LetterFilename",
@@ -133,14 +165,19 @@ module Renalware
                 end
               )
 
-              msg = described_class.call(renderable: letter, message_id: 123)
+              msg = described_class.call(renderable: letter, document:)
 
               expect(msg[:TXA].to_s).to include("some_custom_filename")
             end
           end
 
           context "when PDFs rendered using prawn (letter_archive.pdf_content populated at save)" do
-            before { Renalware.config.letters_render_pdfs_with_prawn = true }
+            before do
+              allow(Renalware.config).to receive_messages(
+                feeds_outgoing_documents_use_guids: true,
+                letters_render_pdfs_with_prawn: true
+              )
+            end
 
             it do
               stub_const("Renalware::VERSION", "9.9.9")
@@ -159,16 +196,17 @@ module Renalware
                   author: user
                 )
                 expect(letter.archive.pdf_content).to be_present
+                document = OutgoingDocument.create!(renderable: letter, by: user)
 
                 # User a known value for pdf_content - normally its '%PDF..' etc) but we will return
                 # 'A' because we know it is 'QQ==' in base64
                 allow(letter.archive).to receive(:pdf_content).and_return("A")
 
-                msg = described_class.call(renderable: letter, message_id: 123)
+                msg = described_class.call(renderable: letter, document:)
                 expected_filename = "HOSP1_111_HOSP2_222_HOSP3_333_JONES_19700101_CL_#{letter.id}"
 
                 expect(msg[:MSH].to_s).to eq(
-                  "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|RW0000000123|RW0000000123|U|9.9.9"
+                  "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|#{document.external_uuid}|#{document.external_uuid}|U|9.9.9"
                 )
                 expect(msg[:EVN].to_s).to eq(
                   "EVN|T02|20211117152417"
@@ -181,7 +219,7 @@ module Renalware
                 expect(msg[:TXA].to_s).to eq(
                   "TXA||CL^Clinic Letter|ED^Electronic Document|" \
                   "#{letter.approved_at.strftime('%Y%m%d%H%M')}|MyGmcCode^Smith^Jo|" \
-                  "#{letter.approved_at.strftime('%Y%m%d%H%M')}||||||#{letter.id}||||#{expected_filename}|AU"
+                  "#{letter.approved_at.strftime('%Y%m%d%H%M')}||||||#{letter.uuid}||||#{expected_filename}|AU"
                 )
                 expect(msg[:OBX].to_s).to eq(
                   "OBX|1|ED|||^TEXT^PDF^Base64^QQ=="
@@ -218,8 +256,9 @@ module Renalware
               )
               letter.event = cv
               letter.save_by!(user)
+              document = Feeds::OutgoingDocument.create!(renderable: letter, by: user)
 
-              msg = described_class.call(renderable: letter, message_id: 123)
+              msg = described_class.call(renderable: letter, document:)
 
               expect(msg[:PV1].to_s).to eq("PV1|||C1||||||||||||||||V1")
             end
@@ -227,6 +266,13 @@ module Renalware
         end
 
         context "when rendering an event" do
+          before do
+            allow(Renalware.config).to receive_messages(
+              feeds_outgoing_documents_use_guids: true,
+              ukrdc_site_code: "RJZ"
+            )
+          end
+
           it do
             travel_to Time.zone.parse("20211117152417") do
               stub_const("Renalware::VERSION", "9.9.9")
@@ -244,15 +290,15 @@ module Renalware
                   by: user
                 )
               )
-              Renalware.config.ukrdc_site_code = "RJZ"
-              create(:hospital_centre, code: "RJZ")
 
-              msg = described_class.call(renderable: event, message_id: 123)
+              document = Feeds::OutgoingDocument.create!(renderable: event.__getobj__, by: user)
+              create(:hospital_centre, code: "RJZ")
+              msg = described_class.call(renderable: event, document:)
 
               expected_filename = "HOSP1_111_HOSP2_222_HOSP3_333_JONES_19700101_XX_#{event.id}"
 
               expect(msg[:MSH].to_s).to eq(
-                "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|RW0000000123|RW0000000123|U|9.9.9"
+                "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|#{document.external_uuid}|#{document.external_uuid}|U|9.9.9"
               )
               expect(msg[:PID].to_s).to eq(
                 "PID||9999999999^^^NHS|111^^^CODE1~222^^^CODE2~333^^^CODE3||Jones^^Patricia^^Ms||19700101"
@@ -260,7 +306,7 @@ module Renalware
               expect(msg[:TXA].to_s).to eq(
                 "TXA||XX^YY|ED^Electronic Document|" \
                 "#{event.approved_at.strftime('%Y%m%d%H%M')}|MyGmcCode^Smith^Jo|" \
-                "#{event.approved_at.strftime('%Y%m%d%H%M')}||||||#{event.id}||||#{expected_filename}|AU"
+                "#{event.approved_at.strftime('%Y%m%d%H%M')}||||||#{event.uuid}||||#{expected_filename}|AU"
               )
               expect(msg[:OBX].to_s).to eq(
                 "OBX|1|ED|||^TEXT^PDF^Base64^QQ=="
@@ -288,8 +334,9 @@ module Renalware
                 # Simulate letter deletion
                 letter.update_column(:deleted_at, Time.zone.now)
                 letter.reload
+                document = Feeds::OutgoingDocument.create!(renderable: letter, by: user)
 
-                msg = described_class.call(renderable: letter, message_id: 123)
+                msg = described_class.call(renderable: letter, document:)
 
                 txa = msg[:TXA]
                 expect(txa.document_completion_status).to eq("CA") # deleted
