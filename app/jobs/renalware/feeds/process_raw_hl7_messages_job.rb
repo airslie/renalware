@@ -8,6 +8,9 @@ module Renalware
         RawHL7Message
           .order(sent_at: :asc, created_at: :asc)
           .find_each(batch_size: 100) do |raw_message|
+          # Will keep doing same ones over and over if there's a problem processing one
+          # Not sure how to fix this?
+          # How to move the one failure on and process the rest?
           ProcessRawHL7MessageJob.perform_now(message: raw_message.body.tr("\r", "\n"))
           raw_message.destroy
         end
