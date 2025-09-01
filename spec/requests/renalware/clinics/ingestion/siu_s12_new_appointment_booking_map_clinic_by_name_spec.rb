@@ -23,6 +23,15 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
   include HL7Helpers
   include PatientsSpecHelper
 
+  let(:default_clinic) { create(:clinic, code: "DefaultClinicCode", name: "Default Clinic") }
+  let(:default_clinic_mapping) {
+    create(
+      :clinics_mapping,
+      name_in_feed: "Any Other Clinic",
+      clinic: default_clinic,
+      default_clinic: true
+    )
+  }
   let(:clinic_code) { "Clinic1Code" }
   let(:clinic_name) { "Clinic1Name" }
   let(:raw_hl7) do
@@ -43,7 +52,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
     create(:user, :system)
     create(:modality_change_type, :default)
     allow(Renalware.config).to receive_messages(
-      feeds_outpatient_clinic_resolution_strategy: :by_code
+      feeds_outpatient_clinic_resolution_strategy: :by_name_mapping
     )
   end
 
@@ -63,11 +72,13 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
   def create_clinic     = create(:clinic, code: clinic_code, name: clinic_name)
 
   context "when patient is not found" do
-    context "when the consultant exists" do
+    context "when the clinic and consultant exists" do
       it "creates the patient and schedules the appointment" do
         msg = hl7_message_from_raw_string(raw_hl7)
         clinic = create_clinic
         consultant = create_consultant
+        # Map clinic_name to clinic
+        create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
 
         expect {
           Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
@@ -93,6 +104,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
         it "creates the patient and consultant and schedules the appointment" do
           msg = hl7_message_from_raw_string(raw_hl7)
           clinic = create_clinic
+          create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
 
           expect {
             Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
@@ -116,12 +128,46 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
       end
 
       context "when the clinic in PV1.3 does not exist in RW" do
-        it "does nothing" do
-          msg = hl7_message_from_raw_string(raw_hl7)
+        context "when there is no default clinic set in the mappings table" do
+          it "creates the patient but does not schedule the appointment" do
+            msg = hl7_message_from_raw_string(raw_hl7)
 
-          expect {
-            Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
-          }.not_to change(Renalware::Clinics::Appointment, :count)
+            expect {
+              Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
+            }.not_to change(Renalware::Clinics::Appointment, :count)
+
+            expect(Renalware::Clinics::Mapping.count).to eq(1)
+            expect(Renalware::Clinics::Mapping.last).to have_attributes(
+              name_in_feed: clinic_name,
+              clinic_id: nil,
+              default_clinic: false
+            )
+          end
+        end
+
+        context "when there is a default clinic set in the mappings table" do
+          it "creates the patient and schedules the appointment under the default clinic" do
+            default_clinic = create(:clinic, code: "DefaultClinicCode", name: "Default Clinic")
+            create(
+              :clinics_mapping,
+              name_in_feed: "Any Other Clinic",
+              clinic: default_clinic, default_clinic: true
+            )
+            msg = hl7_message_from_raw_string(raw_hl7)
+
+            # Creates a mapping for the new clinic_name to default_clinic
+            # Creates the appointment under default_clinic
+            expect {
+              Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
+            }.to change(Renalware::Clinics::Appointment, :count).by(1)
+              .and change(Renalware::Clinics::Mapping, :count).by(1)
+
+            expect(Renalware::Clinics::Mapping.last).to have_attributes(
+              name_in_feed: clinic_name,
+              clinic: default_clinic,
+              default_clinic: false
+            )
+          end
         end
       end
     end
@@ -143,6 +189,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
     it "schedules the appointment against the existing patient" do
       msg = hl7_message_from_raw_string(raw_hl7)
       clinic = create_clinic
+      create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
       consultant = create_consultant
       patient = create_patient
 
@@ -161,6 +208,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
       it "creates the consultant using PV1.7 Attending Consultant" do
         msg = hl7_message_from_raw_string(raw_hl7)
         clinic = create_clinic
+        create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
         patient = create_patient
 
         expect {

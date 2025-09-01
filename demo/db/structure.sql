@@ -4426,6 +4426,39 @@ ALTER SEQUENCE renalware.clinic_consultants_id_seq OWNED BY renalware.clinic_con
 
 
 --
+-- Name: clinic_mappings; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.clinic_mappings (
+    id bigint NOT NULL,
+    name_in_feed character varying NOT NULL,
+    clinic_id bigint,
+    default_clinic boolean DEFAULT false NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: clinic_mappings_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.clinic_mappings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: clinic_mappings_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.clinic_mappings_id_seq OWNED BY renalware.clinic_mappings.id;
+
+
+--
 -- Name: clinic_versions; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -13505,7 +13538,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -13585,7 +13618,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -16671,6 +16704,13 @@ ALTER TABLE ONLY renalware.clinic_consultants ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- Name: clinic_mappings id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_mappings ALTER COLUMN id SET DEFAULT nextval('renalware.clinic_mappings_id_seq'::regclass);
+
+
+--
 -- Name: clinic_versions id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -18740,6 +18780,14 @@ ALTER TABLE ONLY renalware.clinic_clinics
 
 ALTER TABLE ONLY renalware.clinic_consultants
     ADD CONSTRAINT clinic_consultants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: clinic_mappings clinic_mappings_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_mappings
+    ADD CONSTRAINT clinic_mappings_pkey PRIMARY KEY (id);
 
 
 --
@@ -21719,6 +21767,41 @@ CREATE UNIQUE INDEX index_clinic_consultants_on_name ON renalware.clinic_consult
 --
 
 CREATE INDEX index_clinic_consultants_on_updated_by_id ON renalware.clinic_consultants USING btree (updated_by_id);
+
+
+--
+-- Name: index_clinic_mappings_lower_name_in_feed; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_clinic_mappings_lower_name_in_feed ON renalware.clinic_mappings USING btree (lower((name_in_feed)::text));
+
+
+--
+-- Name: INDEX index_clinic_mappings_lower_name_in_feed; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON INDEX renalware.index_clinic_mappings_lower_name_in_feed IS 'Case insensitive index on HL7 clinic name';
+
+
+--
+-- Name: index_clinic_mappings_on_clinic_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_clinic_mappings_on_clinic_id ON renalware.clinic_mappings USING btree (clinic_id);
+
+
+--
+-- Name: index_clinic_mappings_on_default_true; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_clinic_mappings_on_default_true ON renalware.clinic_mappings USING btree (default_clinic) WHERE (default_clinic = true);
+
+
+--
+-- Name: INDEX index_clinic_mappings_on_default_true; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON INDEX renalware.index_clinic_mappings_on_default_true IS 'Enforces that there can only be one default clinic';
 
 
 --
@@ -28048,6 +28131,14 @@ ALTER TABLE ONLY renalware.medication_delivery_events
 
 
 --
+-- Name: clinic_mappings fk_rails_0ffb18aec5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_mappings
+    ADD CONSTRAINT fk_rails_0ffb18aec5 FOREIGN KEY (clinic_id) REFERENCES renalware.clinic_clinics(id);
+
+
+--
 -- Name: access_procedures fk_rails_11c7f6fec3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -31430,6 +31521,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250830204357'),
 ('20250830141119'),
 ('20250830140916'),
 ('20250830140451'),

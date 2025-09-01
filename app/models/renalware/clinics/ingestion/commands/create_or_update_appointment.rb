@@ -83,23 +83,16 @@ module Renalware
             raise(ActiveModel::ValidationError, result.object) if result.failure?
           end
 
-          # A host application can override the strategy for finding/creating (JIT) the clinic
-          # referenced in an appointment message, by defining a config setting which returns a
-          # lambda that takes a PV1::Clinic object and returns a found (or possibly JIT-created
-          # Clinics::Clinic object.
-          # The configured strategy might for example always guarantee an AR Clinic is returned.
-          # BLT do this as we only receive Renal SIU outpatient messages, so if the clinic does not
-          # exist we need to create it.
+          # A host application can choose the strategy for finding/creating (JIT) the clinic
+          # referenced in an HL7 appointment message. At some sites the HL7 feed might contain
+          # clinic codes that match Renalware clinic codes. At other sites the HL7 feed might
+          # contain clinic names that need to be mapped to Renalware clinics using the
+          # Renalware::Clinics::Map model.
           def rwclinic
-            @rwclinic ||= clinic_resolution_strategy.call(clinic)
-          end
-
-          def clinic_resolution_strategy
-            strategy = Renalware.config.strategy_resolve_outpatients_clinic
-            return strategy if strategy.is_a?(Proc)
-
-            # Default strategy is just to try and find the clinic using the clinic code in PV1
-            ->(pv1_clinic) { Clinic.find_by(code: pv1_clinic.code) }
+            @rwclinic ||= ResolveClinic.call(
+              name_in_feed: pv1.clinic&.name,
+              code_in_feed: pv1.clinic&.code
+            )
           end
 
           def rwconsultant

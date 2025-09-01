@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+
+WATCHED_DIR="app"
+EXCLUDE_REGEX="built.js"
+DEBOUNCE_TIME=2   # seconds to wait for event quiet period
+COMMAND=$1
+
+last_event_time=0
+handler_running=0
+
+trigger_handler() {
+    if (( handler_running == 1 )); then
+        return
+    fi
+    handler_running=1
+    # Run your command here
+    $COMMAND
+    handler_running=0
+}
+
+inotifywait -m -r -e modify,create,delete,move "$WATCHED_DIR" --exclude $EXCLUDE_REGEX | while read path action file; do
+    echo "INOTIFY: Detected $action on $file in $path"
+    now=$(date +%s)
+
+    # If debounce timer expired or doesn't exist, run handler
+    if (( now - last_event_time > DEBOUNCE_TIME )); then
+        # Run handler in background to keep reading events
+        trigger_handler &
+    fi
+
+    last_event_time=$now
+done

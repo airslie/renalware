@@ -19,7 +19,8 @@ processes:
 
   css:
     is_tty: true
-    command: yarn build:css --watch
+    command: bin/watcher "yarn build:css"
+    restart: on-failure
 
   # Precompile assets in test for nicer Capybara page snapshots
   # TODO: Move this to test helper and make sure they are deleted afterwards
