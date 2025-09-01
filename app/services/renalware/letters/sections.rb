@@ -1,14 +1,6 @@
 class Renalware::Letters::Sections
-  PATIENT_CLASSES = {
-    patient: Renalware::Patient,
-    accesses_patient: Renalware::Accesses::Patient,
-    akcc_patient: Renalware::LowClearance::Patient,
-    clinical_patient: Renalware::Clinical::Patient,
-    clinics_patient: Renalware::Clinics::Patient,
-    hd_patient: Renalware::HD::Patient,
-    pathology_patient: Renalware::Pathology::Patient,
-    pd_patient: Renalware::PD::Patient,
-    transplants_patient: Renalware::Transplants::Patient
+  ADDITIONAL_MAPPINGS = {
+    "akcc" => "low_clearance"
   }.freeze
 
   def initialize(patient, section)
@@ -43,10 +35,12 @@ class Renalware::Letters::Sections
     method_dig(label)
   end
 
-  # Returns true if the label is actually a path. It does this by checking if
-  # the first part of the label matches a key in PATIENT_CLASSES.
+  # Returns true if the label is actually a path, mainly determined by
+  # ending with "_patient".
   def path?(label)
-    PATIENT_CLASSES.key?(label.split(".").first.to_sym)
+    return false if label.include?(" ")
+
+    label.split(".").first.end_with?("_patient")
   end
 
   # Looks up the value for the given path starting with the patient class. It's
@@ -55,7 +49,7 @@ class Renalware::Letters::Sections
   def method_dig(path)
     path, type = path.split(":")
     path = path.split(".")
-    patient = as path.shift.to_sym
+    patient = as path.shift
 
     value = path.reduce(patient) { |o, k| o&.public_send(k) if o.respond_to?(k) }
     return unless value
@@ -80,9 +74,19 @@ class Renalware::Letters::Sections
     "#{value} #{type}"
   end
 
-  def as(patient_class)
-    raise "Unknown patient class #{patient_class}" unless PATIENT_CLASSES.key?(patient_class)
+  # Accepts a namespace e.g. "hd_patient" and returns the correct class
+  # e.g. Renalware::HD::Patient
+  # Special case for "akcc_patient" which is Renalware::LowClearance::Patient
+  def as(namespace)
+    raise "Unknown patient class #{namespace}" unless namespace.end_with?("_patient")
 
-    @as[patient_class] ||= @patient.becomes(PATIENT_CLASSES[patient_class])
+    patient_namespace = namespace.split("_").first
+    if ADDITIONAL_MAPPINGS.key?(patient_namespace)
+      patient_namespace = ADDITIONAL_MAPPINGS[patient_namespace]
+    end
+
+    patient_class = Renalware.const_get("#{patient_namespace.camelize}::Patient")
+
+    @as[namespace] ||= @patient.becomes(patient_class)
   end
 end
