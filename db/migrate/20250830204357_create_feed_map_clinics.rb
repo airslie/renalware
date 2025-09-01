@@ -1,4 +1,4 @@
-class CreateFeedMapClinics < ActiveRecord::Migration[8.0]
+class CreateFeedMapClinics < ActiveRecord::Migration[7.0]
   def change
     within_renalware_schema do
       create_table :clinic_mappings do |t|
