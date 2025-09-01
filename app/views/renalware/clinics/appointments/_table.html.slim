@@ -82,5 +82,6 @@
                   = definition_list_for(appointment, size: :large) do |list|
                     = list.definition(:outcome_notes) { |value| simple_format(value) }
                     = list.definition(:dna_notes) { |value| simple_format(value) }
+                    = list.definition(:source_clinic_name) { |value| simple_format(value) }
 
       == pagy_nav(pagy) if pagy.pages > 1

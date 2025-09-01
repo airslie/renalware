@@ -31,7 +31,8 @@ module Renalware
               starts_at: appointment_starts_at,
               ends_at: appointment_ends_at,
               consultant: rwconsultant,
-              clinic: rwclinic
+              clinic: rwclinic,
+              source_clinic_name: pv1.clinic&.name
             )
           end
 
@@ -42,7 +43,8 @@ module Renalware
               ends_at: appointment_ends_at,
               clinic: rwclinic,
               consultant: rwconsultant,
-              visit_number: visit_number
+              visit_number: visit_number,
+              source_clinic_name: pv1.clinic&.name
             )
           end
 
@@ -87,7 +89,7 @@ module Renalware
           # referenced in an HL7 appointment message. At some sites the HL7 feed might contain
           # clinic codes that match Renalware clinic codes. At other sites the HL7 feed might
           # contain clinic names that need to be mapped to Renalware clinics using the
-          # Renalware::Clinics::Map model.
+          # Renalware::Clinics::Mapping model.
           def rwclinic
             @rwclinic ||= ResolveClinic.call(
               name_in_feed: pv1.clinic&.name,

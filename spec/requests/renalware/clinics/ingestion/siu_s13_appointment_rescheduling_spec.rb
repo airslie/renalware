@@ -114,7 +114,8 @@ describe "HL7 SIU^S13 - Notification of Appointment Rescheduling" do
         starts_at: Time.zone.parse(starts_at),
         ends_at: Time.zone.parse(ends_at),
         clinic: new_clinic,
-        consultant: new_consultant
+        consultant: new_consultant,
+        source_clinic_name: clinic_name
       )
     end
   end

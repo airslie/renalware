@@ -58,7 +58,8 @@ describe "HL7 SIU^S14 - Notification of Appointment Modification" do
       ends_at: ends_at,
       patient: patient,
       consultant: consultant,
-      clinic: clinic
+      clinic: clinic,
+      source_clinic_name: clinic_name
     )
   end
 

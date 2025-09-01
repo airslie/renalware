@@ -85,7 +85,8 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
           consultant_id: consultant.id,
           clinic_id: clinic.id,
           starts_at: Time.zone.parse("20241106120000"),
-          ends_at: Time.zone.parse("20241106123000")
+          ends_at: Time.zone.parse("20241106123000"),
+          source_clinic_name: clinic_name
         )
       end
 
