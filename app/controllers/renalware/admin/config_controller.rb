@@ -12,6 +12,8 @@ module Renalware
         (Renalware.config.methods - Object.methods)
           .flatten
           .reject { |name| name.to_s.include?("=") }
+          .reject { |name| name.to_s.include?("strategy") }
+          .reject { |name| name.to_s.include?("key") }
           .reject { |name| name == :config }
           .sort
       end
