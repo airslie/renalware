@@ -5,7 +5,7 @@ module Renalware
     private
 
     def type = TableCell { "Admission" }
-    def description = TableCell { @record.admission_type.text }
+    def description = TableCell { @record.admission_type&.text }
     def detail = TableDetailRow(COLUMNS) { @record.hospital_ward.name }
   end
 end
