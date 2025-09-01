@@ -7,6 +7,7 @@ module Renalware
       let(:another_patient) { create(:pathology_patient) }
       let(:observation_descriptions) { [] }
       let(:code_group) { create(:pathology_code_group, name: "xx") }
+      let(:hgb) { create(:pathology_observation_description, :hgb) }
 
       context "when the patient has had path results on several dates in the past" do
         it "creates a paginated table object and the current page only has <per_page> records" do
@@ -89,39 +90,38 @@ module Renalware
         end
       end
 
-      context "when the patient has >1 of the same observation on the same but with different " \
-              "observed_on date times" do
-        it "groups observations by date but takes the most recently observed result" do
+      context "when the patient has >1 of the same observation on the same date but with " \
+              "different result_statuses" do
+        it "groups observations by date but the result that floats to the top is the " \
+           "the one with the lowest results_status value (an enum where the the lowest value is " \
+           "the most complete) or the most recently updated if same status" do
           date = Time.zone.parse("2019-01-01 12:00:00")
 
-          # Note the OBR requested_at should not bmake a difference so we have set in the far past
-          request = create(
-            :pathology_observation_request,
-            patient: patient,
-            requested_at: 100.years.ago,
-            filler_order_number: "A"
-          )
-          hgb = create(:pathology_observation_description, :hgb)
           create(
             :pathology_code_group_membership,
             code_group: code_group,
             observation_description: hgb
           )
+          request = create(
+            :pathology_observation_request,
+            patient: patient,
+            requested_at: 10.years.ago,
+            filler_order_number: "A"
+          )
 
-          # Create three observations to simulate them arriving at different times (e.g. via HL7)
-          # but there observed_on datetime (which is the significant attribute for sorting) is
-          # not in order.
-          dates = [date, date + 1.minute, date - 1.minute]
-          observations = dates.each_with_index.map do |observed_at, value|
+          # Create three observations with the same observed_at but with different statuses
+          # C = complete, F = final, P = preliminary
+          observations = %w(F C P).each_with_index.map do |result_status, index|
             create(
               :pathology_observation,
               request: request,
               description: hgb,
-              observed_at: observed_at,
-              result: value
+              observed_at: date,
+              result_status: result_status,
+              result: index + 1
             )
           end
-          expected_observation = observations[1] # the one with the most recent observed_at
+          expected_observation = observations[1] # the one status of C which is lowest enum value
 
           # There should be a certain number of observations over our chosen dates
           expect(patient.reload.observations.count).to eq(3)
@@ -138,7 +138,7 @@ module Renalware
 
           expect(table.rows.count).to eq(1)
           row = table.rows.first
-          expect(row.observed_at).to eq(Time.zone.parse("2019-01-01"))
+          expect(row.observed_at).to eq(date.to_date)
           expect(row.result_for("HGB")).to eq(expected_observation.result)
         end
       end
