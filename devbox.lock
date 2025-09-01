@@ -389,6 +389,12 @@
         }
       }
     },
+    "inotifytools@latest": {
+      "last_modified": "2023-02-24T09:01:09Z",
+      "resolved": "github:NixOS/nixpkgs/7d0ed7f2e5aea07ab22ccb338d27fbe347ed2f11#inotifyTools",
+      "source": "devbox-search",
+      "version": "3.22.6.0"
+    },
     "libpq@latest": {
       "last_modified": "2025-08-08T11:17:04Z",
       "resolved": "github:NixOS/nixpkgs/b069b7c1e2fe1a3a24221428558bf44128d3d5c8#libpq",
