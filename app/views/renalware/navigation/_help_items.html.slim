@@ -4,6 +4,7 @@ li.has-dropdown
     li= link_to "Downloads", renalware.system_downloads_path
     / Using sanitize to ensure the url (configured by ENV var) is relatively safe by e.g. stripping out javascript: links
     li= sanitize(link_to("User Guide", Renalware.config.help_user_guide_link, rel: "external", target: "_blank"), attributes: %w(href rel target))
+    li= sanitize(link_to("Training Videos", Renalware.config.help_training_videos_link, rel: "external", target: "_blank"), attributes: %w(href rel target))
     = render "renalware/navigation/more_help_items"
     li.info.nowrap
       | Version #{semantic_app_version}
