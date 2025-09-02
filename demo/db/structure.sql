@@ -6475,6 +6475,40 @@ ALTER SEQUENCE renalware.feed_practice_gps_id_seq OWNED BY renalware.feed_practi
 
 
 --
+-- Name: feed_raw_hl7_message_errors; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_raw_hl7_message_errors (
+    id bigint NOT NULL,
+    body text NOT NULL,
+    error_message text,
+    error_message_backtrace text,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    sent_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: feed_raw_hl7_message_errors_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_raw_hl7_message_errors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_raw_hl7_message_errors_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_raw_hl7_message_errors_id_seq OWNED BY renalware.feed_raw_hl7_message_errors.id;
+
+
+--
 -- Name: feed_raw_hl7_messages; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -17040,6 +17074,13 @@ ALTER TABLE ONLY renalware.feed_practice_gps ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: feed_raw_hl7_message_errors id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_raw_hl7_message_errors ALTER COLUMN id SET DEFAULT nextval('renalware.feed_raw_hl7_message_errors_id_seq'::regclass);
+
+
+--
 -- Name: feed_raw_hl7_messages id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -19171,6 +19212,14 @@ ALTER TABLE ONLY renalware.feed_outgoing_documents
 
 ALTER TABLE ONLY renalware.feed_practice_gps
     ADD CONSTRAINT feed_practice_gps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_raw_hl7_message_errors feed_raw_hl7_message_errors_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_raw_hl7_message_errors
+    ADD CONSTRAINT feed_raw_hl7_message_errors_pkey PRIMARY KEY (id);
 
 
 --
@@ -22719,6 +22768,13 @@ CREATE INDEX index_feed_outgoing_documents_on_renderable ON renalware.feed_outgo
 --
 
 CREATE INDEX index_feed_outgoing_documents_on_updated_by_id ON renalware.feed_outgoing_documents USING btree (updated_by_id);
+
+
+--
+-- Name: index_feed_raw_hl7_message_errors_on_sent_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_raw_hl7_message_errors_on_sent_at ON renalware.feed_raw_hl7_message_errors USING btree (sent_at);
 
 
 --
@@ -31521,6 +31577,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250902071000'),
 ('20250901181111'),
 ('20250830204357'),
 ('20250830141119'),
