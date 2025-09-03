@@ -31,11 +31,12 @@
         - Renalware::Role.all.order(id: :asc).each_with_index do |role, index|
           - element_id = "user_role_ids_#{index}"
           - policy = Pundit.policy(current_user, user)
-          .block.my-1
+          - disabled = !policy.assign_role?(role)
+          .block.my-1 class=(disabled ? "opacity-50" : "")
             = check_box_tag "user[role_ids][]",
                             role.id,
                             user.has_role?(role.name),
-                            disabled: !(policy.assign_role?(role)),
+                            disabled:,
                             id: element_id,
                             class: "!m-0 !p-0"
             = label_tag element_id, role.name.humanize, class: "p-0 ml-2 mr-4"
