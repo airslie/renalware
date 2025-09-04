@@ -1,4 +1,4 @@
-class AddColsToClinicAppointments < ActiveRecord::Migration[8.0]
+class AddColsToClinicAppointments < ActiveRecord::Migration[7.0]
   def change
     within_renalware_schema do
       safety_assured do

@@ -1,4 +1,4 @@
-class CreateHL7RawMessageErrors < ActiveRecord::Migration[8.0]
+class CreateHL7RawMessageErrors < ActiveRecord::Migration[7.0]
   def change
     within_renalware_schema do
       create_table :feed_raw_hl7_message_errors do |t|
