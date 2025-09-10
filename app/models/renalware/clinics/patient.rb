@@ -14,7 +14,13 @@ module Renalware
                class_name: "Clinics::Appointment",
                dependent: :restrict_with_exception
 
+      delegate :height, :weight, :blood_pressure, :bmi, to: :current_observations, prefix: :current
+
       def self.model_name = ActiveModel::Name.new(self, nil, "Patient")
+
+      def current_observations
+        @current_observations ||= Clinics::CurrentObservations.new(self)
+      end
     end
   end
 end

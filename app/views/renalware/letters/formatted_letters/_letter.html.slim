@@ -365,7 +365,8 @@ scss:
     .patient-status
       p= render "patient_summary", patient: letter.patient
 
-    = render letter.sections, letter: letter
+    = render letter.parts, letter: letter
+    = render "renalware/letters/sections/show", letter:
 
     / empty small here is for RTF spacing
     small &nbsp;

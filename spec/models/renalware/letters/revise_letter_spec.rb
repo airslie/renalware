@@ -17,6 +17,12 @@ module Renalware
                main_recipient: build(:letter_recipient, :main),
                by: user)
       }
+      let(:hd_patient) { patient.becomes(Renalware::HD::Patient) }
+      let(:snapshot_html) do
+        "<dl><dt>HD Unit</dt><dd>UJZ</dd><dt>Time</dt><dd>3:30</dd></dl>"
+      end
+
+      before { create(:hd_profile, patient: hd_patient, prescribed_time: 210) }
 
       describe ".call" do
         context "when all is good" do
@@ -32,7 +38,7 @@ module Renalware
           end
 
           context "when topic hasn't changed" do
-            let(:topic) { create(:letter_topic, section_identifiers: [:hd_section]) }
+            let(:topic) { create(:letter_topic, section_identifier: :hd) }
 
             it "doesn't generate snapshots" do
               expect(letter.section_snapshots.count).to eq 0
@@ -44,8 +50,8 @@ module Renalware
           end
 
           context "when topic has changed" do
-            let(:topic) { create(:letter_topic, section_identifiers: [:hd_section]) }
-            let(:new_topic) { create(:letter_topic, section_identifiers: [:hd_section]) }
+            let(:topic) { create(:letter_topic, section_identifier: :hd) }
+            let(:new_topic) { create(:letter_topic, section_identifier: :hd) }
 
             context "when also new topic has sections associated with it" do
               it "generates snapshots for those letter sections" do
@@ -56,29 +62,30 @@ module Renalware
                 expect(letter.section_snapshots.count).to eq 1
 
                 snapshot = letter.section_snapshots.first
-                expect(snapshot.section_identifier).to eq "hd_section"
-                expect(snapshot.content).to include "<dl></dl>"
+                expect(snapshot.section_identifier).to eq "hd"
+                expect(snapshot.content).to include snapshot_html
               end
             end
 
             context "when an existing snapshot was already there for this section" do
-              it "keeps it as it is" do
+              let(:snapshot) do
                 create(
                   :section_snapshot,
                   letter: letter,
                   content: "test",
-                  section_identifier: "hd_section"
+                  section_identifier: :hd
                 )
+              end
 
-                expect(letter.section_snapshots.first.content).to eq "test"
+              before { snapshot }
 
+              it "keeps it as it is" do
                 service.call(patient, letter.id, by: user, topic_id: new_topic.id)
 
                 expect(letter.section_snapshots.count).to eq 1
 
-                snapshot = letter.section_snapshots.first
-                expect(snapshot.section_identifier).to eq "hd_section"
-                expect(snapshot.content).to include "test"
+                expect(snapshot.reload.section_identifier).to eq "hd"
+                expect(snapshot.content).to eq "test"
               end
             end
           end
@@ -86,19 +93,19 @@ module Renalware
           context 'when "update_sections" is passed as parameter' do
             context "when section snapshots have been previously created" do
               let!(:section_snapshot) {
-                create(:section_snapshot, letter: letter, section_identifier: "hd_section",
+                create(:section_snapshot, letter: letter, section_identifier: "hd",
                                           content: "old content")
               }
 
               context "when also a true value has been passed in" do
                 it "updates the snapshot content" do
-                  service.call(patient, letter.id, by: user, update_sections: { hd_section: "1" })
-                  expect(section_snapshot.reload.content).to include "<dl></dl>"
+                  service.call(patient, letter.id, by: user, update_sections: { hd: "1" })
+                  expect(section_snapshot.reload.content).to include snapshot_html
                 end
 
                 context "when also a false value has been passed in" do
                   it "doesn't update" do
-                    service.call(patient, letter.id, by: user, update_sections: { hd_section: "0" })
+                    service.call(patient, letter.id, by: user, update_sections: { hd: "0" })
                     expect(section_snapshot.reload.content).to eq "old content"
                   end
                 end
@@ -108,13 +115,13 @@ module Renalware
             context "when section snapshots have not existed for this letter" do
               context "when also a true value has been passed in" do
                 it "creates the snapshot content" do
-                  service.call(patient, letter.id, by: user, update_sections: { hd_section: "1" })
+                  service.call(patient, letter.id, by: user, update_sections: { hd: "1" })
 
                   expect(letter.section_snapshots.count).to eq 1
 
                   snapshot = letter.section_snapshots.first
-                  expect(snapshot.section_identifier).to eq "hd_section"
-                  expect(snapshot.content).to include "<dl></dl>"
+                  expect(snapshot.section_identifier).to eq "hd"
+                  expect(snapshot.content).to include snapshot_html
                 end
               end
             end

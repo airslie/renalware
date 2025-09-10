@@ -5,11 +5,12 @@ module Renalware
 
       describe "#sections" do
         let(:letter) {
-          Letter.new \
+          Letter.new(
             patient: Patient.new,
             topic: topic,
             letterhead: Letterhead.new,
             clinical: clinical
+          )
         }
         let(:topic) { nil }
         let(:clinical) { false }
@@ -19,59 +20,19 @@ module Renalware
           let(:clinical) { true }
 
           it "returns clinical event sections" do
-            expect(instance.sections.size).to eq 4
-            expect(instance.sections[0]).to be_a Part::Problems
-            expect(instance.sections[1]).to be_a Part::Prescriptions
-            expect(instance.sections[2]).to be_a Part::RecentPathologyResults
-            expect(instance.sections[3]).to be_a Part::Allergies
+            expect(instance.parts.size).to eq 4
+            expect(instance.parts[0]).to be_a Part::Problems
+            expect(instance.parts[1]).to be_a Part::Prescriptions
+            expect(instance.parts[2]).to be_a Part::RecentPathologyResults
+            expect(instance.parts[3]).to be_a Part::Allergies
           end
         end
 
         context "with an non-clinical letter event" do
           context "when topic is not present" do
             it "returns no sections" do
-              expect(instance.sections.size).to eq 0
+              expect(instance.parts.size).to eq 0
             end
-          end
-
-          context "when topic is present" do
-            let(:topic) { Topic.new(section_identifiers: sections) }
-
-            context "when sections are present" do
-              let(:sections) { [:hd_section] }
-
-              it "returns a list of sections sorted by position" do
-                expect(instance.sections.size).to eq 1
-                expect(instance.sections[0]).to be_a HD::LetterExtensions::HDSection
-              end
-            end
-
-            context "when sections are not present" do
-              it "returns no sections" do
-                expect(instance.sections.size).to eq 0
-              end
-            end
-          end
-        end
-      end
-
-      describe "#edit_sections_for_topic" do
-        let(:letter) { Letter.new(topic: topic) }
-        let(:topic) { nil }
-
-        context "when topic is present" do
-          let(:topic) { Topic.new(section_identifiers: ["hd_section"]) }
-
-          it "returns a list of section classes" do
-            edit_topics = instance.edit_sections_for_topic(topic: topic)
-            expect(edit_topics.size).to eq 1
-            expect(edit_topics.first).to be_a Renalware::HD::LetterExtensions::HDSection
-          end
-        end
-
-        context "when topic is not present" do
-          it "returns an empty array" do
-            expect(instance.edit_sections_for_topic).to eq []
           end
         end
       end
@@ -80,18 +41,18 @@ module Renalware
         describe "#to_h" do
           subject(:filter) { instance.filter }
 
-          let(:sections) { [Part::RecentPathologyResults, Part::Problems] }
+          let(:parts) { [Part::RecentPathologyResults, Part::Problems] }
           let(:instance) do
             described_class.new(
-              sections: sections,
-              include_pathology_in_letter_body: include_pathology_in_letter_body
+              parts:,
+              include_pathology_in_letter_body:
             )
           end
 
           context "when include_pathology_in_letter_body is true" do
             let(:include_pathology_in_letter_body) { true }
 
-            it { is_expected.to eq([Part::RecentPathologyResults, Part::Problems]) }
+            it { is_expected.to eq parts }
           end
 
           context "when include_pathology_in_letter_body is false" do

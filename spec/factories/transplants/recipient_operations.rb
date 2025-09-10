@@ -11,5 +11,20 @@ FactoryBot.define do
     warm_ischaemic_time               { "00:12" }
 
     hospital_centre
+
+    trait :with_document do
+      document do
+        {
+          donor: {
+            type: "live_related",
+            cmv_status: "positive",
+            relationship: "mother"
+          },
+          recipient: {
+            cmv_status: "negative"
+          }
+        }
+      end
+    end
   end
 end

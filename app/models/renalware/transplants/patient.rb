@@ -1,6 +1,9 @@
 module Renalware
   module Transplants
     class Patient < Renalware::Patient
+      has_many :registrations,
+               dependent: :restrict_with_exception
+
       has_one :current_donor_stage,
               -> { current },
               class_name: "DonorStage",
@@ -34,6 +37,17 @@ module Renalware
           recipient_modality = "Renalware::Transplants::RecipientModalityDescription"
           modality_descriptions.exists?(type: recipient_modality)
         end
+      end
+
+      def last_operation
+        Transplants::RecipientOperation
+          .for_patient(self)
+          .order(performed_on: :desc)
+          .first
+      end
+
+      def current_registration
+        registrations.first
       end
     end
   end

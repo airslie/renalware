@@ -16,6 +16,9 @@ module Renalware
           created_by: user
         }
       end
+      let(:hd_patient) { patient.becomes(Renalware::HD::Patient) }
+
+      before { create(:hd_profile, patient: hd_patient, prescribed_time: 210) }
 
       describe "#call" do
         context "when description is present instead of topic" do
@@ -30,7 +33,7 @@ module Renalware
         context "when a valid topic is passed in" do
           describe "#create_snapshots_for_letter_sections" do
             context "when topic has sections associated with it" do
-              let(:topic) { create(:letter_topic, section_identifiers: [:hd_section]) }
+              let(:topic) { create(:letter_topic, section_identifier: :hd) }
 
               it "creates a snapshot" do
                 letter = instance.call(patient, params)
@@ -39,7 +42,7 @@ module Renalware
                 snapshot = letter.section_snapshots.first
 
                 expect(snapshot.content).to be_present
-                expect(snapshot.section_identifier).to eq "hd_section"
+                expect(snapshot.section_identifier).to eq "hd"
               end
             end
           end

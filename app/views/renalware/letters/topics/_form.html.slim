@@ -2,8 +2,14 @@
   = f.input :text
 
   .mb-4
-    h6 Optional sections
+    h6 Optional section
 
-    = f.collection_check_boxes :section_identifiers, Renalware::Letters::Topic.sections_by_identifier.keys.map { |r| [r.to_s.titleize, r.to_s] }, :last, :first
+    - section_options = (["none"] + LETTER_SECTION_IDENTIFIERS) \
+      .map { [t("renalware.letters.sections.#{it}"), it] }
+    = f.collection_radio_buttons :section_identifier,
+      section_options,
+      :last, :first,
+      item_wrapper_class: "flex items-center gap-2",
+      checked: topic.section_identifier || "none"
 
   = f.submit class: :button

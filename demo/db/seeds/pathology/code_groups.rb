@@ -78,6 +78,14 @@ module Renalware
         subgroups: %w(BHBS),
         subgroup_colours: []
       },
+      immunosuppressive: {
+        description: "Immunosuppressive Levels",
+        title: "Immunosuppressive Levels",
+        context_specific: true,
+        subgroups: [%w(LTAX), %w(CYA)],
+        subgroup_colours: nil,
+        subgroup_titles: %w(Tacrolimus Cyclosporin)
+      },
       default: {
         description: "Default codes used for example in historical, recent and current pathology",
         title: "Default",

@@ -1,10 +1,9 @@
 module Renalware::Letters
   describe Part::RecentPathologyResults do
-    subject(:part) { described_class.new(letter: letter, event: event) }
+    subject(:part) { described_class.new(letter: letter) }
 
     let(:user) { create(:user) }
     let(:patient) { create(:letter_patient, by: user) }
-    let(:event) { nil }
     let(:letter) { Letter.new(patient: patient) }
 
     it { is_expected.to respond_to(:results) }

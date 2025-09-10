@@ -1,40 +1,63 @@
-.diff ul {
-  margin-left: 0;
-  display: flex;
-  gap: 1rem;
-  width: 100%;
-}
+/*
+  Tailwind CSS is used to style the outer elements in sections/_edit.slim
+  and below is the styling for the inner elements to keep the HTML content
+  clean. Ideally, we would use JSON to store the data and then style it
+  completely using Tailwind but we'll save that for when we want to expand
+  the letter sections further.
+*/
 
 .diff del,
 .diff ins {
-  display: block;
   text-decoration: none;
 }
 
-.diff li {
-  padding: 0;
-  margin: 0;
-}
-
 .diff del strong {
+  font-weight: normal;
   background: #fcc;
 }
 
 .diff ins strong {
+  font-weight: normal;
   background: #9f9;
 }
 
 .letter-section {
   dl {
-    display: flex;
-    margin: 0 0 0.25rem 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #eee;
+
+    dt, dd {
+      display: inline-block;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    dt {
+      margin-right: 0.3em;
+      font-weight: 700;
+      color: black;
+    }
+    dd {
+      margin-right: 1em;
+    }
   }
-  dt {
-    margin: 0 0.4rem 0 0;
-    color: inherit;
-  }
-  dd {
-    margin: 0 1.75rem 0 0;
-    font-weight: 700;
+
+  li {
+    border: 1px solid #ddd;
+    border-radius: 0.3rem;
+    padding: 8px;
+    box-sizing: border-box;
+    svg {
+      display: none;
+    }
+
+    &:has(input[type="radio"]:checked) {
+      border: 2px solid #1d4ed8;
+      padding: 7px;
+      svg {
+        display: inline-block;
+        fill: var(--nhs-blue);
+      }
+    }
   }
 }

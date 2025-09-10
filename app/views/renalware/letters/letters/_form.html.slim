@@ -39,8 +39,7 @@ ruby:
   = turbo_frame_tag "letter_sections" do
     - topic = params[:preview_topic_id].present? ? Renalware::Letters::Topic.find(params[:preview_topic_id]) : letter.topic
     - if topic
-      - Renalware::Letters::SectionManager.new(letter.__getobj__).edit_sections_for_topic(topic: topic).each do |section|
-        = render section.to_edit_partial_path, section: section, form: f
+      = render "renalware/letters/sections/edit", letter: letter.__getobj__, topic:, form: f
 
   = render "problems_prescriptions", letter: letter
   = render "main_recipient", f: f, contacts: contacts, patient: patient, letter: letter

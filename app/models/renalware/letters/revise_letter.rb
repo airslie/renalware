@@ -19,7 +19,7 @@ module Renalware
           end
           letter.save!
 
-          create_snapshots_for_letter_sections_if_topic_has_changed(letter, params)
+          create_snapshots_for_letter_sections_if_topic_has_changed(letter)
           update_section_snapshots(letter, params)
         end
         broadcast(:revise_letter_successful, letter)
@@ -29,11 +29,11 @@ module Renalware
 
       private
 
-      def create_snapshots_for_letter_sections_if_topic_has_changed(letter, _params)
+      def create_snapshots_for_letter_sections_if_topic_has_changed(letter)
         return unless letter.topic
         return unless letter.topic_id_previously_changed?
 
-        Letters::SectionSnapshot.create_all(letter)
+        Letters::SectionSnapshot.create_or_update(letter, only_create: true)
       end
 
       def update_section_snapshots(letter, params)
@@ -42,7 +42,7 @@ module Renalware
         params[:update_sections].select { |_section, should_update|
           ActiveModel::Type::Boolean.new.cast(should_update)
         }.each_key do |section_identifier|
-          Letters::SectionSnapshot.update_or_create_one(letter, section_identifier)
+          Letters::SectionSnapshot.create_or_update(letter, section_identifier)
         end
       end
     end

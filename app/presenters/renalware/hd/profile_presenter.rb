@@ -62,12 +62,6 @@ module Renalware
         "Preference: #{@preference_set.preferred_schedule}"
       end
 
-      def current_schedule
-        return other_schedule if other_schedule.present?
-
-        schedule_definition
-      end
-
       def schedule_definitions
         ScheduleDefinition
           .includes(:diurnal_period)

@@ -25,7 +25,7 @@ module Renalware
       def create_snapshots_for_letter_sections(letter)
         return unless letter.topic
 
-        Letters::SectionSnapshot.create_all(letter)
+        Letters::SectionSnapshot.create_or_update(letter)
       end
     end
   end

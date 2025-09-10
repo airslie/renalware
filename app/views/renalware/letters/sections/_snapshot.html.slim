@@ -1,0 +1,3 @@
+- if section_identifier.present?
+  - section_service = Renalware::Letters::Sections.new(letter.patient, section_identifier)
+  = render Renalware::Letters::SectionList.new(section_service.all)

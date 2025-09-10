@@ -22,12 +22,14 @@ class Shared::Base < Phlex::HTML
   attr_reader :attrs
 
   def initialize(**user_attrs)
+    @debug = user_attrs.delete(:debug)
+    @debug = Rails.env.development? if @debug.nil?
     @attrs = mix(default_attrs, user_attrs)
     @attrs[:class] = TAILWIND_MERGER.merge(@attrs[:class]) if @attrs[:class]
     super()
   end
 
-  if Rails.env.development?
+  if @debug
     def before_template
       comment { "Before #{self.class.name}" }
       super

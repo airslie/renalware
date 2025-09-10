@@ -1,0 +1,21 @@
+- section_identifier = topic&.section_identifier
+- if section_identifier&.present?
+  - section = Renalware::Letters::Section.new(letter:, section_identifier:)
+  article.mb-6
+    header
+      h2= t("renalware.letters.sections.#{section_identifier}")
+
+    .letter-section
+      - if section.show_use_updates_toggle?(params[:preview_topic_id])
+        - options = section.content_with_diffs.zip(["", section_identifier])
+        = form.simple_fields_for :update_sections do |fields|
+          ul.ml-0.flex.gap-3.w-fit.box-border.diff
+            = fields.collection_radio_buttons section_identifier,
+              options, :second, :first,
+              include_hidden: false,
+              item_wrapper_tag: false do |b|
+              li.min-w-0.box-border
+                = b.radio_button class: "hidden"
+                = b.label
+      - else
+        = section.build_snapshot

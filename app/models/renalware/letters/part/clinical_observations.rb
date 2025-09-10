@@ -5,7 +5,8 @@ module Renalware
 
       OBSERVATION_ATTRS = %i(bp weight height bmi urine_blood urine_protein urine_glucose).freeze
       OBSERVATION_UNITS = { weight: :kg, height: :m }.freeze
-      delegate(*OBSERVATION_ATTRS, to: :event)
+      delegate :letter_event, to: :letter
+      delegate(*OBSERVATION_ATTRS, to: :letter_event)
       delegate :any?, to: :observations
 
       def each_observation

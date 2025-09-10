@@ -3,6 +3,17 @@ FactoryBot.define do
     # patient { build(:transplant_patient) }
     patient factory: %i(transplant_patient)
 
+    trait :with_ukt_status do
+      document do
+        {
+          uk_transplant_centre: {
+            status: "Positive",
+            status_updated_on: Date.current
+          }
+        }
+      end
+    end
+
     trait :with_statuses do
       after(:create) do |registration|
         10.downto(8).each do |day|

@@ -37,6 +37,12 @@ module Renalware
       scope :dialysing_at_unit, ->(unit_id) { where(hospital_unit_id: unit_id) }
 
       def self.policy_class = BasePolicy
+
+      def current_schedule
+        return other_schedule if other_schedule.present?
+
+        schedule_definition
+      end
     end
   end
 end
