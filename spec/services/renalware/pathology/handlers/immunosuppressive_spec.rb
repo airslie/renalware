@@ -20,6 +20,14 @@ module Renalware
         expect(handler.level).to eq(123)
       end
 
+      context "when no results" do
+        let(:values) { {} }
+
+        it "returns nil" do
+          expect(handler.level).to be_nil
+        end
+      end
+
       context "when only one result" do
         let(:values) do
           {

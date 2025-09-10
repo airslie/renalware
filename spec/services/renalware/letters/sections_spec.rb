@@ -126,10 +126,14 @@ RSpec.describe Renalware::Letters::Sections do
       create(:transplant_recipient_operation, :with_document, patient: transplant_patient)
     end
 
+    let(:current_observation_set) do
+      create(:current_observation_set, patient: pathology_patient)
+    end
+
     before do
       create(:pathology_code_group, :immunosuppressive)
-      create(:current_observation_set, patient: pathology_patient)
 
+      current_observation_set
       last_operation
     end
 
@@ -153,6 +157,16 @@ RSpec.describe Renalware::Letters::Sections do
         { label: "Tacrolimus Level", value: "123" },
         { label: "Date", value: "12-Dec-2018" }
       ]
+    end
+
+    context "when no immunosuppressive data" do
+      let(:current_observation_set) do
+        create(:current_observation_set, patient: pathology_patient, values: {})
+      end
+
+      it "does not include immunosuppressive pathology row" do
+        expect(rows.third).to be_nil
+      end
     end
   end
 

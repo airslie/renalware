@@ -30,6 +30,6 @@ module Renalware
     private
 
     def code = @values.first
-    def result = @values.second
+    def result = @values&.second || {}
   end
 end
