@@ -43,6 +43,7 @@ AllCops:
     - "vendor/bundle/**/*"
     - "config/initializers/devise.rb"
     - "features/support/env.xaction_view.rb"
+    - "demo/db/schema.rb"
 
 Style/SafeNavigationChainLength:
   Enabled: true
