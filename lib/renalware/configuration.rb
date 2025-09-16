@@ -240,7 +240,9 @@ module Renalware
     config_accessor(:process_hl7_via_raw_messages_table) {
       ENV.fetch("PROCESS_HL7_VIA_RAW_MESSAGES_TABLE", "false") == "true"
     }
-    config_accessor(:feeds_outpatient_clinic_resolution_strategy) { # or :by_name_mapping
+
+    # See ResolveClinic for details of the strategies
+    config_accessor(:feeds_outpatient_clinic_resolution_strategy) {
       ENV.fetch("FEEDS_OUTPATIENT_CLINIC_RESOLUTION_STRATEGY", "by_code").to_sym
     }
     config_accessor(:feeds_outgoing_documents_use_guids) {

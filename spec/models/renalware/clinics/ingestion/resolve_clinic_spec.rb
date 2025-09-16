@@ -1,6 +1,40 @@
-module Renalware::Clinics::Ingestion
-  describe ResolveClinic do
+module Renalware::Clinics
+  describe Ingestion::ResolveClinic do
     describe "#call" do
+      context "when feeds_outpatient_clinic_resolution_strategy is by_name_with_jit_creation" do
+        before do
+          allow(Renalware.config).to receive_messages(
+            feeds_outpatient_clinic_resolution_strategy: :by_name_with_jit_creation
+          )
+        end
+
+        context "when name is supplied" do
+          it "finds or creates a clinic by name" do
+            expect(Clinic.count).to eq(0)
+
+            result = described_class.call(name_in_feed: "New Clinic", code_in_feed: "unused")
+
+            expect(result).to be_persisted
+            expect(result.name).to eq("New Clinic")
+            expect(result.code).to be_nil
+            expect(Clinic.count).to eq(1)
+
+            # Calling again with the same code should find the existing clinic
+            result2 = described_class.call(name_in_feed: "New Clinic", code_in_feed: nil)
+            expect(result2).to eq(result)
+            expect(Clinic.count).to eq(1)
+          end
+        end
+
+        context "when when name is missing" do
+          it "raises an error" do
+            expect {
+              described_class.call(name_in_feed: nil, code_in_feed: "CODE123")
+            }.to raise_error(ArgumentError, "clinic name is required")
+          end
+        end
+      end
+
       context "when feeds_outpatient_clinic_resolution_strategy is by_code" do
         before do
           allow(Renalware.config).to receive_messages(
