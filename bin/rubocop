@@ -1,4 +1,2 @@
-#!/bin/bash
-# Run rubocop over the files that have been changed in this branch.
-
-bundle exec rubocop `git diff master --name-only | grep '.rb' | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g'`
+#!/bin/sh
+bundle exec rubocop "$@"

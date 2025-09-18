@@ -1,34 +1,5 @@
-#
-# These tasks run the turnip (migrated from cucumber) features.
-#
-namespace :spec do
-  namespace :acceptance do
-    if defined?(RSpec)
-      ENV["RACK_ENV"] = ENV["RAILS_ENV"] = "test"
-      require "rspec/core/rake_task"
-
-      pattern = "./spec/acceptance/renalware/features/**/*.feature"
-
-      # domain features are those that do not exercise the UI
-      # Usage:
-      #   bundle exec rake spec:acceptance:domain
-      RSpec::Core::RakeTask.new(:domain) do |t|
-        t.pattern = pattern
-      end
-
-      # web features exercise the UI and may use a webdriver is tagged with @javascript
-      # Usage:
-      #   bundle exec rake spec:acceptance:web
-      RSpec::Core::RakeTask.new(:web) do |t|
-        t.pattern = "./spec/acceptance/renalware/features/**/*.feature"
-        t.rspec_opts = "--tag web --require spec/spec_helper" # targets features the @web tag only
-        ENV["TURNIP_WEB"] = "1" # triggers inclusion of web_steps
-      end
-
-      # Run both domain and web acceptance specs.
-      # Usage:
-      #   bundle exec rake spec:acceptance:all
-      task all: [:domain, :web]
-    end
-  end
-end
+# Turnip tests have been migrated to RSpec system and model specs.
+# See:
+# - spec/system/renalware/clinical/managing_allergies_spec.rb
+# - spec/system/renalware/accesses/recording_an_access_*_spec.rb
+# - Updated model specs for domain logic testing

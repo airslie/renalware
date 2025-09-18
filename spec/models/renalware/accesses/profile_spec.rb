@@ -12,6 +12,27 @@ module Renalware
         is_expected.to belong_to(:patient).touch(true)
         is_expected.to be_versioned
       end
+
+      describe "patient association" do
+        let(:clinician) { create(:user, :clinical) }
+        let(:patient) { create(:patient) }
+        let(:accesses_patient) { Renalware::Accesses.cast_patient(patient) }
+
+        it "can be created through patient association" do
+          access_type = create(:access_type)
+
+          profile = accesses_patient.profiles.create!(
+            type: access_type,
+            side: :left,
+            formed_on: Time.zone.today,
+            started_on: Time.zone.today,
+            by: clinician
+          )
+
+          expect(accesses_patient.profiles.count).to eq(1)
+          expect(profile.patient).to eq(accesses_patient)
+        end
+      end
     end
   end
 end

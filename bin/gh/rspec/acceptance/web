@@ -1,2 +1,0 @@
-#!/bin/sh
-TURNIP_WEB=1 bin/rspec --tag web --pattern "{spec,packs/**/spec}/acceptance/**/*.feature" --format progress

@@ -82,8 +82,8 @@ jobs:
         command:
           - bin/gh/rspec/unit
           - bin/gh/rspec/integration
-          - bin/gh/cucumber/domain && bin/gh/rspec/acceptance/domain
-          - bin/gh/cucumber/web && bin/gh/rspec/acceptance/web
+          - bin/gh/cucumber/domain
+          - bin/gh/cucumber/web
 
     name: ${{ matrix.command }}
 
