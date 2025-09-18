@@ -5,6 +5,7 @@ module Renalware
     include Deviseable
     include Personable
     include RansackAll
+    include LdapAuthenticatable
 
     has_many :roles_users, dependent: :destroy
     has_many :roles, through: :roles_users
@@ -74,16 +75,6 @@ module Renalware
       %i(unapproved inactive expired)
     end
 
-    # If we are using LDAP, then delegate this method to the LDAP adapter equivalent method
-    # to check the password against the LDAP server.
-    def valid_password?(password)
-      if User.devise_modules.include?(:ldap_authenticatable)
-        valid_ldap_authentication?(password)
-      else
-        super
-      end
-    end
-
     # Send devise emails using activejob
     def send_devise_notification(notification, *)
       devise_mailer.send(notification, self, *).deliver_later
@@ -131,13 +122,6 @@ module Renalware
       flag.allbits?(feature_flags)
     end
 
-    def ldap_before_save
-      self.email = ::Devise::LDAP::Adapter.get_ldap_param(username, "mail").first
-      self.given_name = ::Devise::LDAP::Adapter.get_ldap_param(username, "givenName").first
-      self.family_name = ::Devise::LDAP::Adapter.get_ldap_param(username, "sn").first
-      self.approved = true
-    end
-
     private
 
     def build_authentication_token
@@ -156,7 +140,11 @@ module Renalware
     def assign_default_role_if_needed
       return if roles.exists?
 
-      roles << Role.find_by!(name: :clinical)
+      if ldap_enabled?
+        assign_ldap_role
+      else
+        roles << Role.find_by!(name: :clinical)
+      end
     end
   end
 end

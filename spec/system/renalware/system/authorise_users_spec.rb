@@ -31,20 +31,22 @@ module Renalware
       expect(unapproved.roles).to contain_exactly(clinician_role)
     end
 
-    it "An admin tries to approve a user without assigning a role" do
-      unapproved
+    it "An admin approves a user (role automatically assigned)" do
+      # Since roles are now automatically assigned, this test verifies successful approval
+      unapproved_user = create(:user, :unapproved)
+
       visit admin_users_path
       click_on "Unapproved"
 
       click_link "Edit"
-      expect(page).to have_current_path(edit_admin_user_path(unapproved))
+      expect(page).to have_current_path(edit_admin_user_path(unapproved_user))
 
       click_on "Approve"
 
-      expect(page).to have_current_path(admin_user_path(unapproved))
-      expect(unapproved.reload).not_to be_approved
-      expect(page).to have_content("User could not be updated")
-      expect(page).to have_content(/approved users must have a role/)
+      expect(page).to have_current_path(admin_users_path)
+      expect(unapproved_user.reload).to be_approved
+      expect(page).to have_content("User updated")
+      expect(unapproved_user.roles).not_to be_empty
     end
 
     it "An admin saves an unapproved, they want to approve them later (just adding notes now)" do

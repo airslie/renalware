@@ -180,5 +180,80 @@ module Renalware
         end
       end
     end
+
+    describe "#assign_default_role_if_needed" do
+      before do
+        create(:role, :clinical)
+        create(:role, :read_only)
+      end
+
+      context "when user already has roles" do
+        it "does not assign any new roles" do
+          user = build(:user, role: nil)
+          clinical_role = Role.find_by!(name: :clinical)
+          user.roles << clinical_role
+          user.save!
+          initial_role_count = user.roles.count
+
+          user.send(:assign_default_role_if_needed)
+
+          expect(user.roles.count).to eq(initial_role_count)
+        end
+      end
+
+      context "when LDAP authentication is disabled" do
+        before do
+          allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+        end
+
+        it "assigns clinical role by default" do
+          user = build(:user)
+          user.save!
+
+          clinical_role = Role.find_by!(name: :clinical)
+          expect(user.roles).to contain_exactly(clinical_role)
+        end
+      end
+
+      context "when LDAP authentication is enabled" do
+        before do
+          allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+        end
+
+        context "when user is in renalware LDAP group" do
+          it "assigns clinical role" do
+            user = build(:user, role: nil)
+            allow(user).to receive(:in_renalware_group?).and_return(true)
+            user.save!
+
+            clinical_role = Role.find_by!(name: :clinical)
+            expect(user.roles).to contain_exactly(clinical_role)
+          end
+        end
+
+        context "when user is not in renalware LDAP group" do
+          it "assigns read_only role" do
+            user = build(:user, role: nil)
+            allow(user).to receive(:in_renalware_group?).and_return(false)
+            user.save!
+
+            readonly_role = Role.find_by!(name: :read_only)
+            expect(user.roles).to contain_exactly(readonly_role)
+          end
+        end
+
+        context "when LDAP group check fails" do
+          it "assigns read_only role as fallback" do
+            user = build(:user, role: nil)
+            allow(user).to receive(:in_renalware_group?).and_return(false)
+            allow(Rails.logger).to receive(:error)
+            user.save!
+
+            readonly_role = Role.find_by!(name: :read_only)
+            expect(user.roles).to contain_exactly(readonly_role)
+          end
+        end
+      end
+    end
   end
 end

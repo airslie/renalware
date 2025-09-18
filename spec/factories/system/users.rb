@@ -31,9 +31,15 @@ FactoryBot.define do
       additional_roles { nil }
     end
 
-    after(:create) do |user, obj|
-      user.roles << create(:role, obj.role) if obj.role.present?
-      Array(obj.additional_roles).each { |role| user.roles << create(:role, role) }
+    after(:build) do |user, evaluator|
+      if evaluator.role.present?
+        role_record = create(:role, evaluator.role)
+        user.roles << role_record
+      end
+      Array(evaluator.additional_roles).each do |role|
+        role_record = create(:role, role)
+        user.roles << role_record
+      end
     end
 
     trait :previously_signed_in do

@@ -1,9 +1,10 @@
 module Renalware
   describe "Authentication", :js do
     let(:last_sign_in_at) { nil }
-
     let(:user) { create(:user, :clinical) }
     let(:unapproved_user) { create(:user, :unapproved) }
+
+    before { create(:role, :clinical) }
 
     context "when previously signed in" do
       let(:user) { create(:user, :clinical, :previously_signed_in) }
@@ -143,6 +144,34 @@ module Renalware
         click_on "Log in"
 
         expect(page).to have_current_path root_path
+      end
+    end
+
+    context "when LDAP authentication is enabled" do
+      before do
+        allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+      end
+
+      it "hides signup and forgot password links" do
+        visit new_user_session_path
+
+        expect(page).to have_content("Sign in") # Wait for page to load
+        expect(page).to have_no_link("Sign up")
+        expect(page).to have_no_link("Forgotten your password?")
+      end
+    end
+
+    context "when LDAP authentication is disabled" do
+      before do
+        allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+      end
+
+      it "shows signup link" do
+        visit new_user_session_path
+
+        expect(page).to have_link("Sign up")
+        # Note: forgot password link may not appear if recoverable module isn't loaded
+        # This depends on how devise modules are configured at boot time
       end
     end
   end

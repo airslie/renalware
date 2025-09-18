@@ -1,6 +1,6 @@
 describe "Managing Users" do
   let(:user) { create(:user, :unapproved, :clinical, prescriber: false) }
-  let(:clinical_role) { create(:role, :clinical) }
+  let!(:clinical_role) { create(:role, :clinical) }
 
   describe "GET index" do
     it "responds with a list" do

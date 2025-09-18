@@ -5,6 +5,7 @@ module Renalware::System
       let(:adapter) { ActiveJob::Base.queue_adapter }
 
       before do
+        create(:role, :clinical)
         ActiveJob::Base.queue_adapter = :test
         ActiveJob::Base.queue_adapter.enqueued_jobs.clear
       end

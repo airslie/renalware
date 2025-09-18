@@ -35,5 +35,5 @@ Renalware.configure do |config|
   config.mesh_organisation_uuid = "36944886-8c9b-4ada-b15d-500bff58e018"
   config.mesh_itk_organisation_uuid = "36944886-8c9b-4ada-b15d-500bff58e018"
 
-  config.ldap_authentication = true
+  config.ldap_authentication = !Rails.env.test?
 end
