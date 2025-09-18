@@ -180,6 +180,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "virology",
   ], force: :cascade
 
+  create_enum :feed_merge_event_sources, [
+    "HL7",
+    "manual",
+  ], force: :cascade
+
+  create_enum :feed_merge_event_statuses, [
+    "in_progress",
+    "completed",
+    "failed",
+  ], force: :cascade
+
+  create_enum :feed_merge_event_types, [
+    "A34",
+    "A40",
+    "manual",
+  ], force: :cascade
+
   create_enum :feed_outgoing_document_state, [
     "queued",
     "errored",
@@ -912,6 +929,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "transplants_donor",
     "transplants_recipient",
     "virology",
+  ], force: :cascade
+
+  create_enum :feed_merge_event_sources, [
+    "HL7",
+    "manual",
+  ], force: :cascade
+
+  create_enum :feed_merge_event_statuses, [
+    "in_progress",
+    "completed",
+    "failed",
+  ], force: :cascade
+
+  create_enum :feed_merge_event_types, [
+    "A34",
+    "A40",
+    "manual",
   ], force: :cascade
 
   create_enum :feed_outgoing_document_state, [
@@ -2472,6 +2506,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["log_type"], name: "index_feed_logs_on_log_type"
     t.index ["message_id"], name: "index_feed_logs_on_message_id"
     t.index ["patient_id"], name: "index_feed_logs_on_patient_id"
+  end
+
+  create_table "feed_merge_events", comment: "Record and status of patient merge events from external systems, such as HL7 A34 or A40 messages. See A34 or A40 HL7 online spec for an understanding of major and minor patients. Supports one merge pair at a time (a major patient and a minor patient) as per spec. If the upstream EPR requires multiple minors then they will send multiple messages. Note that we only create a row in this table if, on receipt of an A34 or A40 message, we were able to find both the major and minor patients in our system.", force: :cascade do |t|
+    t.bigint "major_patient_id", null: false, comment: "The patient that the minor patient was merged into"
+    t.bigint "minor_patient_id", null: false, comment: "The patient that was merged into the major patient"
+    t.enum "source", null: false, comment: "The source system of the merge event, e.g., 'HL7'", enum_type: "feed_merge_event_sources"
+    t.enum "event_type", null: false, comment: "The type of merge event, e.g., 'A34' or 'A40'", enum_type: "feed_merge_event_types"
+    t.enum "status", default: "in_progress", null: false, comment: "The status of the merge, e.g., 'in_progress'", enum_type: "feed_merge_event_statuses"
+    t.text "details", comment: "Additional details about the merge event"
+    t.bigint "feed_message_id", comment: "The feed message that triggered this merge event"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feed_message_id"], name: "index_feed_merge_events_on_feed_message_id"
+    t.index ["major_patient_id"], name: "index_feed_merge_events_on_major_patient_id"
+    t.index ["minor_patient_id"], name: "index_feed_merge_events_on_minor_patient_id"
   end
 
   create_table "feed_message_replays", force: :cascade do |t|
@@ -4521,6 +4570,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.bigint "marital_status_id"
     t.enum "confidentiality", default: "normal", null: false, comment: "Correspondence will not be sent via GP Connect if set to restricted", enum_type: "enum_confidentiality"
     t.string "ehr_person_identifier", comment: "For use with an EHR eg Millennium. This is a unique identifier for the patient in the EHR system, and maybe be populated during the HL7 ingestion that creates the patient. SHould not be searchable from, or displayed in, the UI."
+    t.bigint "merged_into_patient_id", comment: "After an HL7 A34 or A40 merge, points to the major patient\nthat this minor patient was merged into\n"
     t.text "next_of_kin", comment: "Next of kin details from HL7 NK1 segments"
     t.index "lower((family_name)::text), given_name", name: "idx_patients_on_lower_family_name"
     t.index ["actual_death_location_id"], name: "index_patients_on_actual_death_location_id"
@@ -4540,6 +4590,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["local_patient_id_4"], name: "index_patients_on_local_patient_id_4", unique: true
     t.index ["local_patient_id_5"], name: "index_patients_on_local_patient_id_5", unique: true
     t.index ["marital_status_id"], name: "index_patients_on_marital_status_id"
+    t.index ["merged_into_patient_id"], name: "index_patients_on_merged_into_patient_id"
     t.index ["named_consultant_id"], name: "index_patients_on_named_consultant_id"
     t.index ["named_nurse_id"], name: "index_patients_on_named_nurse_id"
     t.index ["practice_id"], name: "index_patients_on_practice_id"
@@ -6100,6 +6151,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   add_foreign_key "feed_files", "feed_file_types", column: "file_type_id"
   add_foreign_key "feed_logs", "feed_messages", column: "message_id"
   add_foreign_key "feed_logs", "patients"
+  add_foreign_key "feed_merge_events", "feed_messages"
+  add_foreign_key "feed_merge_events", "patients", column: "major_patient_id"
+  add_foreign_key "feed_merge_events", "patients", column: "minor_patient_id"
   add_foreign_key "feed_message_replays", "feed_messages", column: "message_id"
   add_foreign_key "feed_message_replays", "feed_replay_requests", column: "replay_request_id"
   add_foreign_key "feed_outgoing_documents", "users", column: "created_by_id"
@@ -6333,6 +6387,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   add_foreign_key "patients", "patient_practices", column: "practice_id", name: "patients_practice_id_fk"
   add_foreign_key "patients", "patient_primary_care_physicians", column: "primary_care_physician_id"
   add_foreign_key "patients", "patient_religions", column: "religion_id"
+  add_foreign_key "patients", "patients", column: "merged_into_patient_id"
   add_foreign_key "patients", "system_countries", column: "country_of_birth_id"
   add_foreign_key "patients", "users", column: "created_by_id", name: "patients_created_by_id_fk"
   add_foreign_key "patients", "users", column: "named_consultant_id"

@@ -363,6 +363,38 @@ CREATE TYPE renalware.enum_patient_landing_page AS ENUM (
 
 
 --
+-- Name: feed_merge_event_sources; Type: TYPE; Schema: renalware; Owner: -
+--
+
+CREATE TYPE renalware.feed_merge_event_sources AS ENUM (
+    'HL7',
+    'manual'
+);
+
+
+--
+-- Name: feed_merge_event_statuses; Type: TYPE; Schema: renalware; Owner: -
+--
+
+CREATE TYPE renalware.feed_merge_event_statuses AS ENUM (
+    'in_progress',
+    'completed',
+    'failed'
+);
+
+
+--
+-- Name: feed_merge_event_types; Type: TYPE; Schema: renalware; Owner: -
+--
+
+CREATE TYPE renalware.feed_merge_event_types AS ENUM (
+    'A34',
+    'A40',
+    'manual'
+);
+
+
+--
 -- Name: feed_outgoing_document_state; Type: TYPE; Schema: renalware; Owner: -
 --
 
@@ -2907,6 +2939,7 @@ CREATE TABLE renalware.patients (
     marital_status_id bigint,
     confidentiality renalware.enum_confidentiality DEFAULT 'normal'::renalware.enum_confidentiality NOT NULL,
     ehr_person_identifier character varying,
+    merged_into_patient_id bigint,
     next_of_kin text
 );
 
@@ -2930,6 +2963,15 @@ COMMENT ON COLUMN renalware.patients.confidentiality IS 'Correspondence will not
 --
 
 COMMENT ON COLUMN renalware.patients.ehr_person_identifier IS 'For use with an EHR eg Millennium. This is a unique identifier for the patient in the EHR system, and maybe be populated during the HL7 ingestion that creates the patient. SHould not be searchable from, or displayed in, the UI.';
+
+
+--
+-- Name: COLUMN patients.merged_into_patient_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.patients.merged_into_patient_id IS 'After an HL7 A34 or A40 merge, points to the major patient
+that this minor patient was merged into
+';
 
 
 --
@@ -6231,6 +6273,99 @@ CREATE SEQUENCE renalware.feed_logs_id_seq
 --
 
 ALTER SEQUENCE renalware.feed_logs_id_seq OWNED BY renalware.feed_logs.id;
+
+
+--
+-- Name: feed_merge_events; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_merge_events (
+    id bigint NOT NULL,
+    major_patient_id bigint NOT NULL,
+    minor_patient_id bigint NOT NULL,
+    source renalware.feed_merge_event_sources NOT NULL,
+    event_type renalware.feed_merge_event_types NOT NULL,
+    status renalware.feed_merge_event_statuses DEFAULT 'in_progress'::renalware.feed_merge_event_statuses NOT NULL,
+    details text,
+    feed_message_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE feed_merge_events; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON TABLE renalware.feed_merge_events IS 'Record and status of patient merge events from external systems, such as HL7 A34 or A40 messages. See A34 or A40 HL7 online spec for an understanding of major and minor patients. Supports one merge pair at a time (a major patient and a minor patient) as per spec. If the upstream EPR requires multiple minors then they will send multiple messages. Note that we only create a row in this table if, on receipt of an A34 or A40 message, we were able to find both the major and minor patients in our system.';
+
+
+--
+-- Name: COLUMN feed_merge_events.major_patient_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_merge_events.major_patient_id IS 'The patient that the minor patient was merged into';
+
+
+--
+-- Name: COLUMN feed_merge_events.minor_patient_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_merge_events.minor_patient_id IS 'The patient that was merged into the major patient';
+
+
+--
+-- Name: COLUMN feed_merge_events.source; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_merge_events.source IS 'The source system of the merge event, e.g., ''HL7''';
+
+
+--
+-- Name: COLUMN feed_merge_events.event_type; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_merge_events.event_type IS 'The type of merge event, e.g., ''A34'' or ''A40''';
+
+
+--
+-- Name: COLUMN feed_merge_events.status; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_merge_events.status IS 'The status of the merge, e.g., ''in_progress''';
+
+
+--
+-- Name: COLUMN feed_merge_events.details; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_merge_events.details IS 'Additional details about the merge event';
+
+
+--
+-- Name: COLUMN feed_merge_events.feed_message_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_merge_events.feed_message_id IS 'The feed message that triggered this merge event';
+
+
+--
+-- Name: feed_merge_events_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_merge_events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_merge_events_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_merge_events_id_seq OWNED BY renalware.feed_merge_events.id;
 
 
 --
@@ -17058,6 +17193,13 @@ ALTER TABLE ONLY renalware.feed_logs ALTER COLUMN id SET DEFAULT nextval('renalw
 
 
 --
+-- Name: feed_merge_events id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_merge_events ALTER COLUMN id SET DEFAULT nextval('renalware.feed_merge_events_id_seq'::regclass);
+
+
+--
 -- Name: feed_message_replays id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -19190,6 +19332,14 @@ ALTER TABLE ONLY renalware.feed_hl7_test_messages
 
 ALTER TABLE ONLY renalware.feed_logs
     ADD CONSTRAINT feed_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_merge_events feed_merge_events_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_merge_events
+    ADD CONSTRAINT feed_merge_events_pkey PRIMARY KEY (id);
 
 
 --
@@ -22629,6 +22779,27 @@ CREATE INDEX index_feed_logs_on_patient_id ON renalware.feed_logs USING btree (p
 
 
 --
+-- Name: index_feed_merge_events_on_feed_message_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_merge_events_on_feed_message_id ON renalware.feed_merge_events USING btree (feed_message_id);
+
+
+--
+-- Name: index_feed_merge_events_on_major_patient_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_merge_events_on_major_patient_id ON renalware.feed_merge_events USING btree (major_patient_id);
+
+
+--
+-- Name: index_feed_merge_events_on_minor_patient_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_merge_events_on_minor_patient_id ON renalware.feed_merge_events USING btree (minor_patient_id);
+
+
+--
 -- Name: index_feed_message_replays_on_message_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -25681,6 +25852,13 @@ CREATE INDEX index_patients_on_marital_status_id ON renalware.patients USING btr
 
 
 --
+-- Name: index_patients_on_merged_into_patient_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_patients_on_merged_into_patient_id ON renalware.patients USING btree (merged_into_patient_id);
+
+
+--
 -- Name: index_patients_on_named_consultant_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -28668,6 +28846,14 @@ ALTER TABLE ONLY renalware.research_studies
 
 
 --
+-- Name: feed_merge_events fk_rails_362e78af81; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_merge_events
+    ADD CONSTRAINT fk_rails_362e78af81 FOREIGN KEY (minor_patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: hd_diary_slots fk_rails_36ae60c09d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -30084,6 +30270,14 @@ ALTER TABLE ONLY renalware.hd_patient_statistics
 
 
 --
+-- Name: feed_merge_events fk_rails_a6dfc753a1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_merge_events
+    ADD CONSTRAINT fk_rails_a6dfc753a1 FOREIGN KEY (feed_message_id) REFERENCES renalware.feed_messages(id);
+
+
+--
 -- Name: modality_descriptions fk_rails_a6efc804a5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -30121,6 +30315,14 @@ ALTER TABLE ONLY renalware.transplant_donor_stages
 
 ALTER TABLE ONLY renalware.hd_stations
     ADD CONSTRAINT fk_rails_a7fedf6e91 FOREIGN KEY (location_id) REFERENCES renalware.hd_station_locations(id);
+
+
+--
+-- Name: patients fk_rails_a83dcaf11e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_a83dcaf11e FOREIGN KEY (merged_into_patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -30737,6 +30939,14 @@ ALTER TABLE ONLY renalware.hd_profiles
 
 ALTER TABLE ONLY renalware.access_plans
     ADD CONSTRAINT fk_rails_d944a58ba2 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: feed_merge_events fk_rails_da30724e09; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_merge_events
+    ADD CONSTRAINT fk_rails_da30724e09 FOREIGN KEY (major_patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -31615,6 +31825,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250928122632'),
 ('20250928102047'),
 ('20250926083859'),
+('20250918033131'),
+('20250918032232'),
 ('20250902071000'),
 ('20250901181111'),
 ('20250830204357'),
