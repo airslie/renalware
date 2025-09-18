@@ -197,6 +197,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "manual",
   ], force: :cascade
 
+  create_enum :feed_merge_rule_action, [
+    "merge",
+    "merge_and_warn",
+    "warn_only",
+    "skip",
+  ], force: :cascade
+
   create_enum :feed_outgoing_document_state, [
     "queued",
     "errored",
@@ -946,6 +953,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "A34",
     "A40",
     "manual",
+  ], force: :cascade
+
+  create_enum :feed_merge_rule_action, [
+    "merge",
+    "merge_and_warn",
+    "warn_only",
+    "skip",
   ], force: :cascade
 
   create_enum :feed_outgoing_document_state, [
@@ -2521,6 +2535,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["feed_message_id"], name: "index_feed_merge_events_on_feed_message_id"
     t.index ["major_patient_id"], name: "index_feed_merge_events_on_major_patient_id"
     t.index ["minor_patient_id"], name: "index_feed_merge_events_on_minor_patient_id"
+  end
+
+  create_table "feed_merge_rules", comment: "Specifies actions to take for a specific schema.table when doing a patient merge (eg HL7 A34). A * in the table_name indicates all tables in the schema that have a patient_id column and are not otherwise specified. Possible values are might be to always merge, merge but warn the user that some interaction may be required, skip this table etc. See model for details.", force: :cascade do |t|
+    t.string "schema_name", null: false
+    t.string "table_name", null: false
+    t.enum "action", default: "merge", null: false, enum_type: "feed_merge_rule_action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["schema_name", "table_name"], name: "index_feed_merge_rules_on_schema_name_and_table_name", unique: true
   end
 
   create_table "feed_message_replays", force: :cascade do |t|

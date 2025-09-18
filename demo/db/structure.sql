@@ -395,6 +395,18 @@ CREATE TYPE renalware.feed_merge_event_types AS ENUM (
 
 
 --
+-- Name: feed_merge_rule_action; Type: TYPE; Schema: renalware; Owner: -
+--
+
+CREATE TYPE renalware.feed_merge_rule_action AS ENUM (
+    'merge',
+    'merge_and_warn',
+    'warn_only',
+    'skip'
+);
+
+
+--
 -- Name: feed_outgoing_document_state; Type: TYPE; Schema: renalware; Owner: -
 --
 
@@ -6366,6 +6378,46 @@ CREATE SEQUENCE renalware.feed_merge_events_id_seq
 --
 
 ALTER SEQUENCE renalware.feed_merge_events_id_seq OWNED BY renalware.feed_merge_events.id;
+
+
+--
+-- Name: feed_merge_rules; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_merge_rules (
+    id bigint NOT NULL,
+    schema_name character varying NOT NULL,
+    table_name character varying NOT NULL,
+    action renalware.feed_merge_rule_action DEFAULT 'merge'::renalware.feed_merge_rule_action NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE feed_merge_rules; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON TABLE renalware.feed_merge_rules IS 'Specifies actions to take for a specific schema.table when doing a patient merge (eg HL7 A34). A * in the table_name indicates all tables in the schema that have a patient_id column and are not otherwise specified. Possible values are might be to always merge, merge but warn the user that some interaction may be required, skip this table etc. See model for details.';
+
+
+--
+-- Name: feed_merge_rules_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_merge_rules_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_merge_rules_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_merge_rules_id_seq OWNED BY renalware.feed_merge_rules.id;
 
 
 --
@@ -17200,6 +17252,13 @@ ALTER TABLE ONLY renalware.feed_merge_events ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: feed_merge_rules id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_merge_rules ALTER COLUMN id SET DEFAULT nextval('renalware.feed_merge_rules_id_seq'::regclass);
+
+
+--
 -- Name: feed_message_replays id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -19340,6 +19399,14 @@ ALTER TABLE ONLY renalware.feed_logs
 
 ALTER TABLE ONLY renalware.feed_merge_events
     ADD CONSTRAINT feed_merge_events_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_merge_rules feed_merge_rules_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_merge_rules
+    ADD CONSTRAINT feed_merge_rules_pkey PRIMARY KEY (id);
 
 
 --
@@ -22797,6 +22864,13 @@ CREATE INDEX index_feed_merge_events_on_major_patient_id ON renalware.feed_merge
 --
 
 CREATE INDEX index_feed_merge_events_on_minor_patient_id ON renalware.feed_merge_events USING btree (minor_patient_id);
+
+
+--
+-- Name: index_feed_merge_rules_on_schema_name_and_table_name; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_feed_merge_rules_on_schema_name_and_table_name ON renalware.feed_merge_rules USING btree (schema_name, table_name);
 
 
 --
@@ -31825,6 +31899,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250928122632'),
 ('20250928102047'),
 ('20250926083859'),
+('20250918043403'),
 ('20250918033131'),
 ('20250918032232'),
 ('20250902071000'),
