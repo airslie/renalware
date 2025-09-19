@@ -159,6 +159,51 @@ module Renalware
         expect(page).to have_no_link("Sign up")
         expect(page).to have_no_link("Forgotten your password?")
       end
+
+      it "authenticates user with valid LDAP credentials" do
+        allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+          .with(user.username, "ldap_password")
+          .and_return(true)
+
+        visit new_user_session_path
+
+        fill_in "Username", with: user.username
+        fill_in "Password", with: "ldap_password"
+        click_on "Log in"
+
+        expect(page).to have_current_path(root_path)
+        expect(page).to have_content("Signed in successfully")
+      end
+
+      it "rejects user with invalid LDAP credentials" do
+        allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+          .with(user.username, "wrong_password")
+          .and_return(false)
+
+        visit new_user_session_path
+
+        fill_in "Username", with: user.username
+        fill_in "Password", with: "wrong_password"
+        click_on "Log in"
+
+        expect(page).to have_current_path(new_user_session_path)
+        expect(page).to have_text("Invalid Username or password")
+      end
+
+      it "handles LDAP server connection errors gracefully" do
+        allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+          .with(user.username, "any_password")
+          .and_raise(StandardError.new("LDAP server unreachable"))
+
+        visit new_user_session_path
+
+        fill_in "Username", with: user.username
+        fill_in "Password", with: "any_password"
+        click_on "Log in"
+
+        expect(page).to have_current_path(new_user_session_path)
+        expect(page).to have_text("Invalid Username or password")
+      end
     end
 
     context "when LDAP authentication is disabled" do
@@ -172,6 +217,28 @@ module Renalware
         expect(page).to have_link("Sign up")
         # Note: forgot password link may not appear if recoverable module isn't loaded
         # This depends on how devise modules are configured at boot time
+      end
+
+      it "authenticates user with valid local credentials" do
+        visit new_user_session_path
+
+        fill_in "Username", with: user.username
+        fill_in "Password", with: user.password
+        click_on "Log in"
+
+        expect(page).to have_current_path(root_path)
+        expect(page).to have_content("Signed in successfully")
+      end
+
+      it "rejects user with invalid local credentials" do
+        visit new_user_session_path
+
+        fill_in "Username", with: user.username
+        fill_in "Password", with: "wrong_password"
+        click_on "Log in"
+
+        expect(page).to have_current_path(new_user_session_path)
+        expect(page).to have_text("Invalid Username or password")
       end
     end
   end

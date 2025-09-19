@@ -31,6 +31,13 @@ module Renalware
 
     private
 
+    def valid_ldap_authentication?(password)
+      ::Devise::LDAP::Adapter.valid_credentials?(username, password)
+    rescue StandardError => e
+      Rails.logger.error "LDAP authentication failed for user #{username}: #{e.message}"
+      false
+    end
+
     def ldap_enabled?
       Renalware.config.ldap_authentication
     end
