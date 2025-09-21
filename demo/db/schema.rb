@@ -180,30 +180,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "virology",
   ], force: :cascade
 
-  create_enum :feed_merge_event_sources, [
-    "HL7",
-    "manual",
-  ], force: :cascade
-
-  create_enum :feed_merge_event_statuses, [
-    "in_progress",
-    "completed",
-    "failed",
-  ], force: :cascade
-
-  create_enum :feed_merge_event_types, [
-    "A34",
-    "A40",
-    "manual",
-  ], force: :cascade
-
-  create_enum :feed_merge_rule_action, [
-    "merge",
-    "merge_and_warn",
-    "warn_only",
-    "skip",
-  ], force: :cascade
-
   create_enum :feed_outgoing_document_state, [
     "queued",
     "errored",
@@ -728,6 +704,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   create_enum :pathology_chart_axis, [
     "y1",
     "y2",
+  ], force: :cascade
+
+  create_enum :patient_merge_message_types, [
+    "A34",
+    "A40",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_sources, [
+    "HL7",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_statuses, [
+    "in_progress",
+    "completed",
+    "failed",
   ], force: :cascade
 
   create_enum :pd_pet_type, [
@@ -938,30 +931,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "virology",
   ], force: :cascade
 
-  create_enum :feed_merge_event_sources, [
-    "HL7",
-    "manual",
-  ], force: :cascade
-
-  create_enum :feed_merge_event_statuses, [
-    "in_progress",
-    "completed",
-    "failed",
-  ], force: :cascade
-
-  create_enum :feed_merge_event_types, [
-    "A34",
-    "A40",
-    "manual",
-  ], force: :cascade
-
-  create_enum :feed_merge_rule_action, [
-    "merge",
-    "merge_and_warn",
-    "warn_only",
-    "skip",
-  ], force: :cascade
-
   create_enum :feed_outgoing_document_state, [
     "queued",
     "errored",
@@ -1486,6 +1455,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   create_enum :pathology_chart_axis, [
     "y1",
     "y2",
+  ], force: :cascade
+
+  create_enum :patient_merge_message_types, [
+    "A34",
+    "A40",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_sources, [
+    "HL7",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_statuses, [
+    "in_progress",
+    "completed",
+    "failed",
   ], force: :cascade
 
   create_enum :pd_pet_type, [
@@ -2520,30 +2506,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["log_type"], name: "index_feed_logs_on_log_type"
     t.index ["message_id"], name: "index_feed_logs_on_message_id"
     t.index ["patient_id"], name: "index_feed_logs_on_patient_id"
-  end
-
-  create_table "feed_merge_events", comment: "Record and status of patient merge events from external systems, such as HL7 A34 or A40 messages. See A34 or A40 HL7 online spec for an understanding of major and minor patients. Supports one merge pair at a time (a major patient and a minor patient) as per spec. If the upstream EPR requires multiple minors then they will send multiple messages. Note that we only create a row in this table if, on receipt of an A34 or A40 message, we were able to find both the major and minor patients in our system.", force: :cascade do |t|
-    t.bigint "major_patient_id", null: false, comment: "The patient that the minor patient was merged into"
-    t.bigint "minor_patient_id", null: false, comment: "The patient that was merged into the major patient"
-    t.enum "source", null: false, comment: "The source system of the merge event, e.g., 'HL7'", enum_type: "feed_merge_event_sources"
-    t.enum "event_type", null: false, comment: "The type of merge event, e.g., 'A34' or 'A40'", enum_type: "feed_merge_event_types"
-    t.enum "status", default: "in_progress", null: false, comment: "The status of the merge, e.g., 'in_progress'", enum_type: "feed_merge_event_statuses"
-    t.text "details", comment: "Additional details about the merge event"
-    t.bigint "feed_message_id", comment: "The feed message that triggered this merge event"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["feed_message_id"], name: "index_feed_merge_events_on_feed_message_id"
-    t.index ["major_patient_id"], name: "index_feed_merge_events_on_major_patient_id"
-    t.index ["minor_patient_id"], name: "index_feed_merge_events_on_minor_patient_id"
-  end
-
-  create_table "feed_merge_rules", comment: "Specifies actions to take for a specific schema.table when doing a patient merge (eg HL7 A34). A * in the table_name indicates all tables in the schema that have a patient_id column and are not otherwise specified. Possible values are might be to always merge, merge but warn the user that some interaction may be required, skip this table etc. See model for details.", force: :cascade do |t|
-    t.string "schema_name", null: false
-    t.string "table_name", null: false
-    t.enum "action", default: "merge", null: false, enum_type: "feed_merge_rule_action"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["schema_name", "table_name"], name: "index_feed_merge_rules_on_schema_name_and_table_name", unique: true
   end
 
   create_table "feed_message_replays", force: :cascade do |t|
@@ -4436,6 +4398,45 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["patient_id"], name: "index_patient_master_index_deprecated_on_patient_id"
   end
 
+  create_table "patient_merge_merges", comment: "Record and status of patient merges from external systems, such as HL7 A34 or A40 messages. See A34 or A40 HL7 online spec for an understanding of major and minor patients. Supports one merge pair at a time (a major patient and a minor patient) as per spec. If the upstream EPR requires multiple minors then they will send multiple messages. Note that we only create a row in this table if, on receipt of an A34 or A40 message, we were able to find both the major and minor patients in our system.", force: :cascade do |t|
+    t.bigint "major_patient_id", null: false, comment: "The patient that the minor patient was merged into"
+    t.bigint "minor_patient_id", null: false, comment: "The patient that was merged into the major patient"
+    t.enum "source", null: false, comment: "The source system of the merge, e.g., 'HL7'", enum_type: "patient_merge_sources"
+    t.enum "message_type", null: false, comment: "The type of merge message, e.g., 'A34' or 'A40'", enum_type: "patient_merge_message_types"
+    t.enum "status", default: "in_progress", null: false, comment: "The status of the merge, e.g., 'in_progress'", enum_type: "patient_merge_statuses"
+    t.text "failure_message", comment: "Populated when status is 'failed'"
+    t.bigint "feed_message_id", comment: "The feed message that triggered this merge"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feed_message_id"], name: "index_patient_merge_merges_on_feed_message_id"
+    t.index ["major_patient_id"], name: "index_patient_merge_merges_on_major_patient_id"
+    t.index ["minor_patient_id"], name: "index_patient_merge_merges_on_minor_patient_id"
+  end
+
+  create_table "patient_merge_operations", force: :cascade do |t|
+    t.bigint "merge_id", null: false
+    t.string "schema_name", null: false
+    t.string "table_name", null: false
+    t.boolean "merged", null: false
+    t.integer "updated_count", default: 0, null: false
+    t.text "warning"
+    t.boolean "require_intervention", default: false, null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["merge_id", "schema_name", "table_name"], name: "index_patient_merge_operations_on_event_and_table", unique: true
+    t.index ["merge_id"], name: "index_patient_merge_operations_on_merge_id"
+  end
+
+  create_table "patient_merge_rules", comment: "Specifies actions to take for a specific schema.table when doing a patient merge (eg HL7 A34). A * in the table_name indicates all tables in the schema that have a patient_id column and are not otherwise specified. Possible values are eg to merge silently, merge but warn the user that some interaction may be required, skip this table etc. See model for details.", force: :cascade do |t|
+    t.string "schema_name", null: false
+    t.string "table_name", null: false
+    t.boolean "merge", default: true, null: false
+    t.text "warning_message", comment: "Displayed to the user if present after a merge"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["schema_name", "table_name"], name: "index_patient_merge_rules_on_schema_name_and_table_name", unique: true
+  end
+
   create_table "patient_practice_memberships", id: :serial, force: :cascade do |t|
     t.integer "practice_id", null: false
     t.integer "primary_care_physician_id", null: false
@@ -6174,9 +6175,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   add_foreign_key "feed_files", "feed_file_types", column: "file_type_id"
   add_foreign_key "feed_logs", "feed_messages", column: "message_id"
   add_foreign_key "feed_logs", "patients"
-  add_foreign_key "feed_merge_events", "feed_messages"
-  add_foreign_key "feed_merge_events", "patients", column: "major_patient_id"
-  add_foreign_key "feed_merge_events", "patients", column: "minor_patient_id"
   add_foreign_key "feed_message_replays", "feed_messages", column: "message_id"
   add_foreign_key "feed_message_replays", "feed_replay_requests", column: "replay_request_id"
   add_foreign_key "feed_outgoing_documents", "users", column: "created_by_id"
@@ -6391,6 +6389,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   add_foreign_key "patient_bookmarks", "patients"
   add_foreign_key "patient_bookmarks", "users"
   add_foreign_key "patient_master_index_deprecated", "patients"
+  add_foreign_key "patient_merge_merges", "feed_messages"
+  add_foreign_key "patient_merge_merges", "patients", column: "major_patient_id"
+  add_foreign_key "patient_merge_merges", "patients", column: "minor_patient_id"
+  add_foreign_key "patient_merge_operations", "patient_merge_merges", column: "merge_id"
   add_foreign_key "patient_practice_memberships", "patient_practices", column: "practice_id"
   add_foreign_key "patient_practice_memberships", "patient_primary_care_physicians", column: "primary_care_physician_id"
   add_foreign_key "patient_worries", "patient_worry_categories", column: "worry_category_id"
