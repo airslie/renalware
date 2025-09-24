@@ -1,8 +1,9 @@
 module Renalware::Patients::Merges
   class Merge < ApplicationRecord
-    belongs_to :major_patient, class_name: "Renalware::Patient"
-    belongs_to :minor_patient, class_name: "Renalware::Patient"
+    belongs_to :major_patient, class_name: "Renalware::Patient", touch: true
+    belongs_to :minor_patient, class_name: "Renalware::Patient", touch: true
     belongs_to :feed_message, class_name: "Renalware::Feeds::Message", optional: true
+    has_many :operations, class_name: "Operation", dependent: :destroy
 
     enum :message_type, {
       A34: "A34",
@@ -31,7 +32,6 @@ module Renalware::Patients::Merges
       )
     end
 
-    def in_progress! = update!(status: :in_progress)
     def completed! = update!(status: :completed)
 
     private

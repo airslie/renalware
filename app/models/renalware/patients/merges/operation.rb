@@ -5,7 +5,8 @@ module Renalware::Patients::Merges
     validates :merge,
               :schema_name,
               :table_name,
+              :column_name,
               presence: true
-    validates :table_name, uniqueness: { scope: [:schema_name, :merge_id] }
+    validates :column_name, uniqueness: { scope: [:merge_id, :schema_name, :table_name] }
   end
 end

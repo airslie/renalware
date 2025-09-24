@@ -1,6 +1,6 @@
 module Renalware
   module Patients::Merges
-    # Given a MergeEvent object that has two patients (a major and a minor), merge the minor into
+    # Given a Merge object that has two patients (a major and a minor), merge the minor into
     # the major. This involves updating all tables with a patient_id foreign key to point to
     # the major patient instead of the minor patient, and then flagging the minor as
     # merged.
@@ -10,15 +10,13 @@ module Renalware
       include Broadcasting
 
       pattr_initialize [:merge!]
-      delegate :major_patient, :minor_patient, to: :merge
+      delegate :major_patient, :major_patient_id, :minor_patient, :minor_patient_id, to: :merge
 
-      # rubocop:disable Metrics/MethodLength
       def call
         begin
           validate_arguments
           validate_rules_exist_for_all_tables
           ActiveRecord::Base.transaction do
-            merge.in_progress!
             merge_minor_patient_into_major_patient_in_tables_with_a_patients_fk
             mark_minor_patient_as_merged
             merge.completed!
@@ -29,14 +27,13 @@ module Renalware
           raise e
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
       private
 
       def validate_arguments
         raise ArgumentError, "merge event must be saved first" unless merge.persisted?
 
-        # This is paranoia as the MergeEvent should have been validated before being created
+        # This is paranoia as the Merge should have been validated before being created
         # But worth being careful as consequences of a duff merge are serious.
         if major_patient.nil? || minor_patient.nil?
           raise ArgumentError, "merge event must have both major and minor patients"
@@ -61,21 +58,22 @@ module Renalware
       end
 
       def merge_minor_patient_into_major_patient_in_tables_with_a_patients_fk
-        MergeableTablesQuery.new.call do |schema, table, column|
-          rule = rule_for(schema:, table:)
-          allow_pubsub_listeners_to_veto_merge_or_update_warning
+        MergeableTablesQuery.new.call do |schema_name, table_name, column_name|
+          rule = rule_for(schema_name:, table_name:)
+          allow_pubsub_listeners_to_veto_merge_or_update_warning(rule)
           merge.operations.create!(
-            schema:,
-            table:,
+            schema_name:,
+            table_name:,
+            column_name:,
             merged: rule.merge?,
-            updated_count: rule.merge? && merge_records(schema:, table:, column:),
-            warning: rule.warning
+            updated_count: rule.merge? && merge_records(schema_name:, table_name:, column_name:),
+            warning: rule.warning_message
           )
         end
       end
 
       def mark_minor_patient_as_merged
-        minor_patient.update!(merged_into_patient: major_patient)
+        minor_patient.update_column(:merged_into_patient_id, major_patient.id)
       end
 
       # PubSub listeners may veto the merge in this table by setting rule.merge = false
@@ -87,28 +85,25 @@ module Renalware
       end
 
       # Find the merge rule for schema+table or schema.*
-      def rule_for(schema:, table:)
-        rules["#{schema}.#{table}"] || rules["#{schema}.*"]
+      def rule_for(schema_name:, table_name:)
+        rules["#{schema_name}.#{table_name}"] || rules["#{schema_name}.*"]
       end
 
       # Memoize a hash of rules keyed by schema.table
       def rules
-        @rules ||= MergeRule.all.index_by { "#{it.schema_name}.#{it.table_name}" }
+        @rules ||= Rule.all.index_by { "#{it.schema_name}.#{it.table_name}" }
       end
 
       # Update all records that reference the minor patient to point to the major patient,
       # and return the number of updated rows
-      def merge_records(schema:, table:, column:)
-        result = connection.execute(<<-SQL.squish)
-          UPDATE
-            #{schema}.#{table}
-          SET
-            #{column} = #{major_patient.id}
-          WHERE
-            #{column} = #{minor_patient.id}
-          RETURNING id
-        SQL
-        result.ntuples
+      def merge_records(schema_name:, table_name:, column_name:)
+        UpdatePatientFkQuery.new(
+          schema_name:,
+          table_name:,
+          column_name:,
+          major_patient_id:,
+          minor_patient_id:
+        ).call
       end
 
       def connection = ActiveRecord::Base.connection

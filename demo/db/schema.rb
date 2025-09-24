@@ -4417,13 +4417,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.bigint "merge_id", null: false
     t.string "schema_name", null: false
     t.string "table_name", null: false
+    t.string "column_name", null: false
     t.boolean "merged", null: false
     t.integer "updated_count", default: 0, null: false
     t.text "warning"
     t.boolean "require_intervention", default: false, null: false
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.index ["merge_id", "schema_name", "table_name"], name: "index_patient_merge_operations_on_event_and_table", unique: true
+    t.index ["merge_id", "schema_name", "table_name", "column_name"], name: "index_patient_merge_operations_on_merge_and_schema_and_table", unique: true
     t.index ["merge_id"], name: "index_patient_merge_operations_on_merge_id"
   end
 
@@ -6931,7 +6932,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
             WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
        LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
             WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.reporting_bone_audit", sql_definition: <<-SQL
@@ -6967,7 +6968,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
             WHERE (e2.pth > (300)::numeric)) e7 ON (true))
        LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
             WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.supportive_care_mdm_patients", sql_definition: <<-SQL

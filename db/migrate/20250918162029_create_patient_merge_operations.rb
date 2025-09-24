@@ -9,14 +9,15 @@ class CreatePatientMergeOperations < ActiveRecord::Migration[7.0]
                      index: true
         t.string :schema_name, null: false
         t.string :table_name, null: false
+        t.string :column_name, null: false
         t.boolean :merged, null: false
         t.integer :updated_count, null: false, default: 0
         t.text :warning
         t.boolean :require_intervention, null: false, default: false
         t.timestamps default: -> { "CURRENT_TIMESTAMP" }, null: false
-        t.index %i(merge_id schema_name table_name),
+        t.index %i(merge_id schema_name table_name column_name),
                 unique: true,
-                name: "index_patient_merge_operations_on_event_and_table"
+                name: "index_patient_merge_operations_on_merge_and_schema_and_table"
       end
     end
   end

@@ -3,8 +3,16 @@ module Renalware
     # Find all tables in the primary database that have a foreign key pointing to
     # renalware.patients.id - usually these will be in the renalware schema but not always, and
     # usually called patient_id ..but not always.
+    # Note the query pay return the same table more than once if it has multiple FKs to patients.id
+    # (transplant_donations).
     class MergeableTablesQuery
       include Callable
+
+      # NEVER include these tables in a merge!
+      ALWAYS_EXCLUDE_TABLES = [
+        "patient_merge_merges",
+        "patients" # We never merge patients via this mechanism
+      ].freeze
 
       SQL_TABLES_WITH_PATIENT_FK = <<-SQL.squish.freeze
         SELECT
@@ -22,6 +30,7 @@ module Renalware
           AND ccu.table_schema = 'renalware'
           AND ccu.table_name = 'patients'
           AND ccu.column_name = 'id'
+          and tc.table_name NOT IN (#{ALWAYS_EXCLUDE_TABLES.map { "'#{it}'" }.join(', ')})
       SQL
 
       # For each returned row, optionally yield schema the data to allow as a nicer API.

@@ -11922,6 +11922,7 @@ CREATE TABLE renalware.patient_merge_operations (
     merge_id bigint NOT NULL,
     schema_name character varying NOT NULL,
     table_name character varying NOT NULL,
+    column_name character varying NOT NULL,
     merged boolean NOT NULL,
     updated_count integer DEFAULT 0 NOT NULL,
     warning text,
@@ -13825,7 +13826,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -13905,7 +13906,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -25722,10 +25723,10 @@ CREATE INDEX index_patient_merge_merges_on_minor_patient_id ON renalware.patient
 
 
 --
--- Name: index_patient_merge_operations_on_event_and_table; Type: INDEX; Schema: renalware; Owner: -
+-- Name: index_patient_merge_operations_on_merge_and_schema_and_table; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE UNIQUE INDEX index_patient_merge_operations_on_event_and_table ON renalware.patient_merge_operations USING btree (merge_id, schema_name, table_name);
+CREATE UNIQUE INDEX index_patient_merge_operations_on_merge_and_schema_and_table ON renalware.patient_merge_operations USING btree (merge_id, schema_name, table_name, column_name);
 
 
 --

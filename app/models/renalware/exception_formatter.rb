@@ -5,8 +5,8 @@ module Renalware
 
     def to_s
       [
-        "#{error.backtrace.first}: #{error.message} (#{error.class})",
-        error.backtrace.drop(1).map { |line| "\t#{line}" }
+        "#{error.backtrace&.first}: #{error.message} (#{error.class})",
+        error.backtrace&.drop(1)&.map { |line| "\t#{line}" }
       ].join("\n")
     end
     private attr_reader :error
