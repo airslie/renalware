@@ -2,7 +2,16 @@ class CreatePatientMergeOperations < ActiveRecord::Migration[7.0]
   # rubocop:disable Rails/ThreeStateBooleanColumn
   def change
     within_renalware_schema do
-      create_table :patient_merge_operations do |t|
+      comment = <<~COMMENT.squish
+        Belongs to a PatientMerge::Merge and records the result of attempting to update
+        a particular table.column that has a foreign key to renalware.patients.id.
+        If merged is true, updated_count records how many rows were updated to point to the
+        surviving patient (may be 0). The warnings column may contain any warnings that were
+        generated during the merge operation. These can be present even if merged is true.
+        This list of operations with warnings can be used to inform the user of any
+        potential issues they may need to check after the merge.
+      COMMENT
+      create_table(:patient_merge_operations, comment: comment) do |t|
         t.references :merge,
                      null: false,
                      foreign_key: { to_table: :patient_merge_merges },

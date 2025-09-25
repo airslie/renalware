@@ -1,5 +1,5 @@
 module Renalware
-  # A value object that wraps a full qualifies column reference eg schema.table.column
+  # A value object that wraps a fully qualified column reference eg schema.table.column
   # with some AR-sanitised methods added to make it more helpful in various contexts.
   class ColumnReference
     attr_reader :schema, :table, :column

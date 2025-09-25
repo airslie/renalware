@@ -9,10 +9,10 @@ module Renalware
       include Callable
 
       # NEVER include these tables in a merge!
-      ALWAYS_EXCLUDE_TABLES = [
-        "patient_merge_merges",
-        "patients" # We never merge patients via this mechanism
-      ].freeze
+      ALWAYS_EXCLUDE_TABLES = %w(
+        patient_merge_merges
+        patients
+      ).freeze
 
       SQL_TABLES_WITH_PATIENT_FK = <<-SQL.squish.freeze
         SELECT
