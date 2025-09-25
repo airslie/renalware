@@ -2,6 +2,14 @@ module Renalware::Patients::Merges
   class Operation < ApplicationRecord
     belongs_to :merge
 
+    composed_of :column_reference,
+                class_name: "Renalware::ColumnReference",
+                mapping: {
+                  schema_name: :schema,
+                  table_name: :table,
+                  column_name: :column
+                }
+
     validates :merge,
               :schema_name,
               :table_name,

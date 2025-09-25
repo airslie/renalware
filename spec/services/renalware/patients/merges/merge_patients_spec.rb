@@ -34,7 +34,7 @@ module Renalware
           it "marks the merge as failed with an error message" do
             expect {
               service.call
-            }.to change { Patients::Merge.where(status: :failed).count }.by(1)
+            }.to change { Patients::Merges::Merge.where(status: :failed).count }.by(1)
 
             expect(merge.reload.status).to eq("failed")
             expect(merge.failure_message).to include("Merge failed")

@@ -10,7 +10,11 @@ module Renalware
       include Broadcasting
 
       pattr_initialize [:merge!]
-      delegate :major_patient, :major_patient_id, :minor_patient, :minor_patient_id, to: :merge
+      delegate :major_patient,
+               :major_patient_id,
+               :minor_patient,
+               :minor_patient_id,
+               to: :merge
 
       def call
         begin
@@ -58,15 +62,13 @@ module Renalware
       end
 
       def merge_minor_patient_into_major_patient_in_tables_with_a_patients_fk
-        MergeableTablesQuery.new.call do |schema_name, table_name, column_name|
-          rule = rule_for(schema_name:, table_name:)
+        MergeableTablesQuery.new.call do |column_reference|
+          rule = rule_for(column_reference:)
           allow_pubsub_listeners_to_veto_merge_or_update_warning(rule)
           merge.operations.create!(
-            schema_name:,
-            table_name:,
-            column_name:,
+            column_reference: column_reference,
             merged: rule.merge?,
-            updated_count: rule.merge? && merge_records(schema_name:, table_name:, column_name:),
+            updated_count: rule.merge? && merge_records(column_reference:),
             warning: rule.warning_message
           )
         end
@@ -85,8 +87,9 @@ module Renalware
       end
 
       # Find the merge rule for schema+table or schema.*
-      def rule_for(schema_name:, table_name:)
-        rules["#{schema_name}.#{table_name}"] || rules["#{schema_name}.*"]
+      def rule_for(column_reference:)
+        rules["#{column_reference.schema}.#{column_reference.table}"] ||
+          rules["#{column_reference.schema}.*"]
       end
 
       # Memoize a hash of rules keyed by schema.table
@@ -96,11 +99,9 @@ module Renalware
 
       # Update all records that reference the minor patient to point to the major patient,
       # and return the number of updated rows
-      def merge_records(schema_name:, table_name:, column_name:)
+      def merge_records(column_reference:)
         UpdatePatientFkQuery.new(
-          schema_name:,
-          table_name:,
-          column_name:,
+          column_reference:,
           major_patient_id:,
           minor_patient_id:
         ).call

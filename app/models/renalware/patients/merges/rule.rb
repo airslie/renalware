@@ -7,5 +7,13 @@ module Renalware::Patients::Merges
   class Rule < ApplicationRecord
     validates :schema_name, :table_name, :merge, presence: true
     validates :table_name, uniqueness: { scope: :schema_name }
+
+    composed_of :column_reference,
+                class_name: "Renalware::ColumnReference",
+                mapping: {
+                  schema_name: :schema,
+                  table_name: :table,
+                  unused: :column
+                }
   end
 end

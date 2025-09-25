@@ -36,9 +36,14 @@ module Renalware
       # For each returned row, optionally yield schema the data to allow as a nicer API.
       def call
         ActiveRecord::Base.connection.execute(SQL_TABLES_WITH_PATIENT_FK).each do |row|
-          if block_given?
-            yield row["table_schema"], row["table_name"], row["column_name"]
-          end
+          next unless block_given?
+
+          column = ColumnReference.new(
+            row["table_schema"],
+            row["table_name"],
+            row["column_name"]
+          )
+          yield column
         end
       end
     end

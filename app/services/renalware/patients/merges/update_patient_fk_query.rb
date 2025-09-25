@@ -17,10 +17,10 @@ module Renalware
       pattr_initialize [
         :major_patient_id!,
         :minor_patient_id!,
-        :schema_name!,
-        :table_name!,
-        :column_name!
+        :column_reference!
       ]
+
+      delegate :schema, :table, :column, to: :column_reference
 
       def call
         validate_arguments
@@ -33,13 +33,14 @@ module Renalware
       # - updating schema.table.updated_at?
       # - updating patients.updated_at?
       def update_records
+        col = column_reference.quoted_column
         sql = <<-SQL.squish
           UPDATE
-            #{quoted_table}
+            #{column_reference.quoted_table}
           SET
-            #{quoted_column} = $1
+            #{col} = $1
           WHERE
-            #{quoted_column} = $2 AND #{quoted_column} <> $1
+            #{col} = $2 AND #{col} <> $1
         SQL
 
         int_type = ActiveRecord::Type::Integer.new
@@ -49,15 +50,8 @@ module Renalware
         ]
 
         # This returns the number of rows updated
-        connection.exec_update(sql, "UpdatePatientFkQuery#update", binds)
+        ActiveRecord::Base.connection.exec_update(sql, "UpdatePatientFkQuery#update", binds)
       end
-
-      def quoted_table
-        "#{connection.quote_table_name(schema_name)}.#{connection.quote_table_name(table_name)}"
-      end
-
-      def quoted_column = @quoted_column ||= connection.quote_column_name(column_name)
-      def connection = ActiveRecord::Base.connection
 
       # Some rather over the top argument validation but this is a
       # potentially dangerous operation so better safe than sorry.
@@ -65,9 +59,9 @@ module Renalware
       def validate_arguments
         raise ArgumentError, "major_patient_id is required" if major_patient_id.blank?
         raise ArgumentError, "minor_patient_id is required" if minor_patient_id.blank?
-        raise ArgumentError, "schema_name is required" if schema_name.blank?
-        raise ArgumentError, "table_name is required" if table_name.blank?
-        raise ArgumentError, "column_name is required" if column_name.blank?
+        raise ArgumentError, "schema is required" if schema.blank?
+        raise ArgumentError, "table is required" if table.blank?
+        raise ArgumentError, "column is required" if column.blank?
         if minor_patient_id == major_patient_id
           raise ArgumentError, "minor_patient_id must be different from major_patient_id"
         end
@@ -75,7 +69,7 @@ module Renalware
         Integer(major_patient_id)
         Integer(minor_patient_id)
 
-        [schema_name, table_name, column_name].each do |ident|
+        [schema, table, column].each do |ident|
           raise ArgumentError, "invalid identifier: #{ident.inspect}" unless ident.match?(IDENT_RE)
         end
       end
