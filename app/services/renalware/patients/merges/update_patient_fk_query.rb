@@ -4,7 +4,7 @@ module Renalware
     # For a schema.table, update the FK that points to renalware.patients.id so that references
     # to the minor patient point to the major patient.
     # E.g.
-    #  update renalware.events set patient_id = <major_patient_id>
+    #  update renalware.events set patient_id = <major_patient_id>, updated_at = now()
     #  where patient_id = <minor_patient_id>;
     # The use raw SQL because the patient merge process initially using SQL to find all
     # tables with a FK to renalware.patients.id and then iterates over them.
@@ -27,9 +27,6 @@ module Renalware
 
       private
 
-      # To think about:
-      # - updating schema.table.updated_at?
-      # - updating patients.updated_at?
       def update_records # rubocop:disable Metrics/MethodLength
         col = quoted_column
         sql = <<-SQL.squish
