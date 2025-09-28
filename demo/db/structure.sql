@@ -11863,8 +11863,16 @@ ALTER SEQUENCE renalware.patient_primary_care_physicians_id_seq OWNED BY renalwa
 
 CREATE TABLE renalware.patient_religions (
     id integer NOT NULL,
-    name character varying NOT NULL
+    name character varying NOT NULL,
+    code character varying
 );
+
+
+--
+-- Name: COLUMN patient_religions.code; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.patient_religions.code IS 'eg ''E'' for ''Jain''';
 
 
 --
@@ -25467,6 +25475,13 @@ CREATE INDEX index_patient_primary_care_physicians_on_name ON renalware.patient_
 
 
 --
+-- Name: index_patient_religions_on_code; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_patient_religions_on_code ON renalware.patient_religions USING btree (code);
+
+
+--
 -- Name: index_patient_worries_on_created_by_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -31582,9 +31597,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware,renalware_demo,public,heroku_ext;
+SET search_path TO renalware, renalware_demo, public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250928122632'),
 ('20250902071000'),
 ('20250901181111'),
 ('20250830204357'),
