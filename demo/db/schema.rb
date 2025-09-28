@@ -4398,6 +4398,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["patient_id"], name: "index_patient_master_index_deprecated_on_patient_id"
   end
 
+  create_table "patient_merge_logs", comment: "Logs of individual record updates made as part of a patient merge operation. Each record indicates that a record in some table had its patient_id (or other FK column as specified in the merge_operation.column_name) updated from the minor patient to the major patient.", force: :cascade do |t|
+    t.bigint "operation_id", null: false
+    t.integer "id_of_updated_record", null: false
+    t.index ["operation_id", "id_of_updated_record"], name: "index_merge_operation_logs_on_ids"
+    t.index ["operation_id"], name: "index_patient_merge_logs_on_operation_id"
+  end
+
   create_table "patient_merge_merges", comment: "Record and status of patient merges from external systems, such as HL7 A34 or A40 messages. See A34 or A40 HL7 online spec for an understanding of major and minor patients. Supports one merge pair at a time (a major patient and a minor patient) as per spec. If the upstream EPR requires multiple minors then they will send multiple messages. Note that we only create a row in this table if, on receipt of an A34 or A40 message, we were able to find both the major and minor patients in our system.", force: :cascade do |t|
     t.bigint "major_patient_id", null: false, comment: "The patient that the minor patient was merged into"
     t.bigint "minor_patient_id", null: false, comment: "The patient that was merged into the major patient"
@@ -4413,7 +4420,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["minor_patient_id"], name: "index_patient_merge_merges_on_minor_patient_id"
   end
 
-  create_table "patient_merge_operations", force: :cascade do |t|
+  create_table "patient_merge_operations", comment: "Belongs to a PatientMerge::Merge and records the result of attempting to update a particular table.column that has a foreign key to renalware.patients.id. If merged is true, updated_count records how many rows were updated to point to the surviving patient (may be 0). The warnings column may contain any warnings that were generated during the merge operation. These can be present even if merged is true. This list of operations with warnings can be used to inform the user of any potential issues they may need to check after the merge.", force: :cascade do |t|
     t.bigint "merge_id", null: false
     t.string "schema_name", null: false
     t.string "table_name", null: false
@@ -6390,6 +6397,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   add_foreign_key "patient_bookmarks", "patients"
   add_foreign_key "patient_bookmarks", "users"
   add_foreign_key "patient_master_index_deprecated", "patients"
+  add_foreign_key "patient_merge_logs", "patient_merge_operations", column: "operation_id"
   add_foreign_key "patient_merge_merges", "feed_messages"
   add_foreign_key "patient_merge_merges", "patients", column: "major_patient_id"
   add_foreign_key "patient_merge_merges", "patients", column: "minor_patient_id"
@@ -6932,7 +6940,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
             WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
        LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
             WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
+    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.reporting_bone_audit", sql_definition: <<-SQL
@@ -6968,7 +6976,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
             WHERE (e2.pth > (300)::numeric)) e7 ON (true))
        LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
             WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
+    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.supportive_care_mdm_patients", sql_definition: <<-SQL

@@ -12,6 +12,9 @@ module Renalware
       ALWAYS_EXCLUDE_TABLES = %w(
         patient_merge_merges
         patients
+        patient_master_index
+        feed_replay_requests
+        feed_logs
       ).freeze
 
       SQL_TABLES_WITH_PATIENT_FK = <<-SQL.squish.freeze
@@ -31,19 +34,16 @@ module Renalware
           AND ccu.table_name = 'patients'
           AND ccu.column_name = 'id'
           and tc.table_name NOT IN (#{ALWAYS_EXCLUDE_TABLES.map { "'#{it}'" }.join(', ')})
+        ORDER BY tc.table_schema, tc.table_name, kcu.column_name;
       SQL
 
-      # For each returned row, optionally yield schema the data to allow as a nicer API.
-      def call
-        ActiveRecord::Base.connection.execute(SQL_TABLES_WITH_PATIENT_FK).each do |row|
-          next unless block_given?
-
-          column = ColumnReference.new(
+      def self.call
+        ActiveRecord::Base.connection.execute(SQL_TABLES_WITH_PATIENT_FK).map do |row|
+          ColumnReference.new(
             row["table_schema"],
             row["table_name"],
             row["column_name"]
           )
-          yield column
         end
       end
     end

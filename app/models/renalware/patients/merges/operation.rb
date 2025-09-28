@@ -1,6 +1,7 @@
 module Renalware::Patients::Merges
   class Operation < ApplicationRecord
     belongs_to :merge
+    has_many :logs, dependent: :destroy
 
     composed_of :column_reference,
                 class_name: "Renalware::ColumnReference",

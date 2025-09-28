@@ -11821,6 +11821,43 @@ ALTER SEQUENCE renalware.patient_master_index_deprecated_id_seq OWNED BY renalwa
 
 
 --
+-- Name: patient_merge_logs; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.patient_merge_logs (
+    id bigint NOT NULL,
+    operation_id bigint NOT NULL,
+    id_of_updated_record integer NOT NULL
+);
+
+
+--
+-- Name: TABLE patient_merge_logs; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON TABLE renalware.patient_merge_logs IS 'Logs of individual record updates made as part of a patient merge operation. Each record indicates that a record in some table had its patient_id (or other FK column as specified in the merge_operation.column_name) updated from the minor patient to the major patient.';
+
+
+--
+-- Name: patient_merge_logs_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.patient_merge_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: patient_merge_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.patient_merge_logs_id_seq OWNED BY renalware.patient_merge_logs.id;
+
+
+--
 -- Name: patient_merge_merges; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -11930,6 +11967,13 @@ CREATE TABLE renalware.patient_merge_operations (
     created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
+
+
+--
+-- Name: TABLE patient_merge_operations; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON TABLE renalware.patient_merge_operations IS 'Belongs to a PatientMerge::Merge and records the result of attempting to update a particular table.column that has a foreign key to renalware.patients.id. If merged is true, updated_count records how many rows were updated to point to the surviving patient (may be 0). The warnings column may contain any warnings that were generated during the merge operation. These can be present even if merged is true. This list of operations with warnings can be used to inform the user of any potential issues they may need to check after the merge.';
 
 
 --
@@ -13826,7 +13870,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -13906,7 +13950,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -18126,6 +18170,13 @@ ALTER TABLE ONLY renalware.patient_master_index_deprecated ALTER COLUMN id SET D
 
 
 --
+-- Name: patient_merge_logs id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_merge_logs ALTER COLUMN id SET DEFAULT nextval('renalware.patient_merge_logs_id_seq'::regclass);
+
+
+--
 -- Name: patient_merge_merges id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -20440,6 +20491,14 @@ ALTER TABLE ONLY renalware.patient_marital_statuses
 
 ALTER TABLE ONLY renalware.patient_master_index_deprecated
     ADD CONSTRAINT patient_master_index_deprecated_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: patient_merge_logs patient_merge_logs_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_merge_logs
+    ADD CONSTRAINT patient_merge_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -24939,6 +24998,13 @@ CREATE INDEX index_medication_routes_on_weighting ON renalware.medication_routes
 
 
 --
+-- Name: index_merge_operation_logs_on_ids; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_merge_operation_logs_on_ids ON renalware.patient_merge_logs USING btree (operation_id, id_of_updated_record);
+
+
+--
 -- Name: index_messaging_messages_on_author_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -25699,6 +25765,13 @@ CREATE INDEX index_patient_master_index_deprecated_on_nhs_number ON renalware.pa
 --
 
 CREATE INDEX index_patient_master_index_deprecated_on_patient_id ON renalware.patient_master_index_deprecated USING btree (patient_id);
+
+
+--
+-- Name: index_patient_merge_logs_on_operation_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_patient_merge_logs_on_operation_id ON renalware.patient_merge_logs USING btree (operation_id);
 
 
 --
@@ -31023,6 +31096,14 @@ ALTER TABLE ONLY renalware.medication_prescriptions
 
 
 --
+-- Name: patient_merge_logs fk_rails_d3c1acb1bd; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_merge_logs
+    ADD CONSTRAINT fk_rails_d3c1acb1bd FOREIGN KEY (operation_id) REFERENCES renalware.patient_merge_operations(id);
+
+
+--
 -- Name: admission_requests fk_rails_d42c308e35; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -31969,6 +32050,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20251010132653'),
 ('20250928122632'),
 ('20250928102047'),
+('20250928054658'),
 ('20250926083859'),
 ('20250918162029'),
 ('20250918043403'),

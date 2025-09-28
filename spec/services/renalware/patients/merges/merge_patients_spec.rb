@@ -2,25 +2,74 @@ module Renalware
   module Patients::Merges
     describe MergePatients do
       subject(:service) { described_class.new(merge:) }
+      let(:merge) { create(:patient_merge, major_patient: major, minor_patient: minor) }
+      let(:major) { create(:patient) }
+      let(:minor) { create(:patient) }
 
-      let(:merge) { create(:patient_merge) }
-      let(:major_patient) { merge.major_patient }
-      let(:minor_patient) { merge.minor_patient }
+      def stub_mergeable_tables_query_to_events_only
+        allow(MergeableTablesQuery).to receive(:call).and_return(
+          [ColumnReference.new("renalware", "events", "patient_id")]
+        )
+      end
 
-      before { create(:patient_merge_rule, schema_name: "renalware", table_name: "*") }
+      def create_default_merge_rule
+        create(:patient_merge_rule, schema_name: "renalware", table_name: "*")
+      end
+
+      before do
+        create_default_merge_rule
+        stub_mergeable_tables_query_to_events_only
+      end
 
       describe "#call" do
         # rubocop:disable RSpec/ChangeByZero
         context "when the merge is valid" do
-          it "merges the patients and marks the merge as completed" do
-            service
-            expect {
-              service.call
-            }.to change(Merge, :count).by(0) # No new merges created
-              .and change { Merge.where(status: :completed).count }.by(1)
+          before do
+            # Create some events for each patient. The 2 for the minor patient should be
+            # reassigned to the major patient
+            create(:event, patient: major)
+            create_list(:event, 2, patient: minor)
 
-            expect(merge.reload.status).to eq("completed")
-            expect(minor_patient.reload.merged_into_patient_id).to eq(major_patient.id)
+            service
+          end
+
+          it "merges the minor patient into the major patient and marks the merge as completed" do
+            old_updated_at = 1.day.ago
+            major.update_column(:updated_at, old_updated_at)
+            minor.update_column(:updated_at, old_updated_at)
+            freeze_time do
+              expect {
+                described_class.new(merge:).call
+              }.to change(Merge, :count).by(0) # No new merges created
+                .and change(Merge.status_completed, :count).by(1)
+                .and change(Merge.status_in_progress, :count).by(-1)
+                .and change(Operation, :count).by(1) # 1 per table
+                .and change(Log, :count).by(2) # 2 rows will be updated
+                .and change(major, :updated_at).from(old_updated_at).to(Time.current)
+                .and change(minor, :updated_at).from(old_updated_at).to(Time.current)
+
+              merge.reload
+              minor.reload
+              major.reload
+
+              expect(merge).to have_attributes(
+                status: "completed",
+                failure_message: nil,
+                updated_at: Time.current
+              )
+              expect(minor).to have_attributes(merged_into_patient_id: major.id)
+              operation = merge.operations.first
+              expect(operation).to have_attributes(
+                column_reference: have_attributes(
+                  schema: "renalware", table: "events", column: "patient_id"
+                ),
+                merged: true,
+                warning: nil,
+                updated_count: 2
+              )
+              expect(Renalware::Events::Event.for_patient(minor.id).count).to eq(0)
+              expect(Renalware::Events::Event.for_patient(major.id).count).to eq(3)
+            end
           end
         end
         # rubocop:enable RSpec/ChangeByZero

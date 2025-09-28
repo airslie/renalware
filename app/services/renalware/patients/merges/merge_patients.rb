@@ -62,15 +62,17 @@ module Renalware
       end
 
       def merge_minor_patient_into_major_patient_in_tables_with_a_patients_fk
-        MergeableTablesQuery.new.call do |column_reference|
+        MergeableTablesQuery.call.each do |column_reference|
           rule = rule_for(column_reference:)
           allow_pubsub_listeners_to_veto_merge_or_update_warning(rule)
-          merge.operations.create!(
+          operation = merge.operations.create!(
             column_reference: column_reference,
             merged: rule.merge?,
-            updated_count: rule.merge? && merge_records(column_reference:),
             warning: rule.warning_message
           )
+          if rule.merge?
+            operation.update!(updated_count: merge_records(operation:))
+          end
         end
       end
 
@@ -98,16 +100,10 @@ module Renalware
       end
 
       # Update all records that reference the minor patient to point to the major patient,
-      # and return the number of updated rows
-      def merge_records(column_reference:)
-        UpdatePatientFkQuery.new(
-          column_reference:,
-          major_patient_id:,
-          minor_patient_id:
-        ).call
-      end
-
-      def connection = ActiveRecord::Base.connection
+      # and return the number of updated rows. Also writes a Patients::Merges::Log record for
+      # each updated row
+      def merge_records(operation:) = UpdatePatientFkQuery.new(operation:).call
+      def connection                = ActiveRecord::Base.connection
     end
   end
 end

@@ -3,6 +3,7 @@ FactoryBot.define do
     merge factory: :patient_merge
     schema_name { "renalware" }
     table_name { "events" }
+    column_name { "patient_id" }
     merged { true }
   end
 end

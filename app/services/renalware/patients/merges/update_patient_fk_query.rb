@@ -14,13 +14,11 @@ module Renalware
     class UpdatePatientFkQuery
       IDENT_RE = /\A[a-zA-Z_][a-zA-Z0-9_$]*\z/
 
-      pattr_initialize [
-        :major_patient_id!,
-        :minor_patient_id!,
-        :column_reference!
-      ]
+      pattr_initialize [:operation!]
 
-      delegate :schema, :table, :column, to: :column_reference
+      delegate :column_reference, :merge, to: :operation
+      delegate :major_patient_id, :minor_patient_id, to: :merge
+      delegate :schema, :table, :column, :quoted_column, :quoted_table, to: :column_reference
 
       def call
         validate_arguments
@@ -32,15 +30,22 @@ module Renalware
       # To think about:
       # - updating schema.table.updated_at?
       # - updating patients.updated_at?
-      def update_records
-        col = column_reference.quoted_column
+      def update_records # rubocop:disable Metrics/MethodLength
+        col = quoted_column
         sql = <<-SQL.squish
+        WITH updated AS (
           UPDATE
-            #{column_reference.quoted_table}
+            #{quoted_table}
           SET
             #{col} = $1
           WHERE
             #{col} = $2 AND #{col} <> $1
+          RETURNING #{col}
+        )
+        INSERT INTO renalware.patient_merge_logs
+          (operation_id, id_of_updated_record)
+          SELECT #{operation.id}, updated.#{col}
+          FROM updated
         SQL
 
         int_type = ActiveRecord::Type::Integer.new
