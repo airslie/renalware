@@ -89,8 +89,7 @@ module Renalware
 
     # Scheduled jobs; Compatible with GoodJob
     class << self
-      # rubocop:disable Metrics/MethodLength
-      def scheduled_jobs_config
+      def scheduled_jobs_config # rubocop:disable Metrics/MethodLength
         {
           ods_sync: {
             cron: "every day at 6am",
@@ -147,29 +146,35 @@ module Renalware
             cron: "every day at 2am",
             class: "Renalware::HD::TerminateAdministeredUnwitnessedStatPrescriptionsJob",
             description: "Does what it says on the tin :)"
-          },
-
-          mesh_handshake: {
-            cron: "every day at 2am",
-            class: "Renalware::Letters::Transports::Mesh::HandshakeJob",
-            description: "Lets ToC know to keep the inbox connection alive"
-          },
-
-          # mesh_check_inbox_for_outstanding_responses: {
-          #   cron: "every 1 minute",
-          #   class: "Renalware::Letters::Transports::Mesh::CheckInboxJob",
-          #   description: "Check our MESH inbox for incoming ToC messages"
-          # },
-
-          reconcile_mesh_transmissions_job: {
-            cron: "every 2 minutes",
-            class: "Renalware::Letters::Transports::Mesh::ReconcileOperationsJob",
-            description: ""
           }
         }.merge(good_job_config_to_enable_feed_import_via_raw_hl7_messages_table)
           .merge(good_job_config_to_enable_mirth_monitoring)
+          .merge(good_job_config_to_enable_gp_connect_polling)
       end
-      # rubocop:enable Metrics/MethodLength
+    end
+
+    def good_job_config_to_enable_gp_connect_polling # rubocop:disable Metrics/MethodLength
+      return {} unless Renalware.config.send_gp_letters_over_mesh == true
+
+      {
+        mesh_handshake: {
+          cron: "every day at 2am",
+          class: "Renalware::Letters::Transports::Mesh::HandshakeJob",
+          description: "Lets ToC know to keep the inbox connection alive"
+        },
+
+        mesh_check_inbox_for_outstanding_responses: {
+          cron: "every 1 minute",
+          class: "Renalware::Letters::Transports::Mesh::CheckInboxJob",
+          description: "Check our MESH inbox for incoming messages"
+        },
+
+        reconcile_mesh_transmissions_job: {
+          cron: "every 2 minutes",
+          class: "Renalware::Letters::Transports::Mesh::ReconcileOperationsJob",
+          description: ""
+        }
+      }
     end
 
     def good_job_config_to_enable_feed_import_via_raw_hl7_messages_table
