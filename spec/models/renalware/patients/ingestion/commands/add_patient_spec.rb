@@ -60,8 +60,6 @@ module Renalware::Patients::Ingestion
 
           hl7_message = Renalware::Feeds::HL7Message.new(::HL7::Message.new([msh, pid]))
 
-          allow(Renalware::Patients::Ingestion::UpdateMasterPatientIndex).to receive(:call)
-
           result = nil
           reason = "123"
           expect {
@@ -69,7 +67,6 @@ module Renalware::Patients::Ingestion
           }.to change(Renalware::Patient, :count).by(1)
 
           expect(result).to be_a(Renalware::Patient)
-          expect(Renalware::Patients::Ingestion::UpdateMasterPatientIndex).to have_received(:call)
 
           patient = Renalware::Patient.find_by!(nhs_number: "9999999999")
 
@@ -93,8 +90,6 @@ module Renalware::Patients::Ingestion
             hl7_message = Renalware::Feeds::HL7Message.new(HL7::Message.new)
             # Stub the PatientLocator to not find the patient
             allow(Renalware::Feeds::PatientLocator).to receive(:call).and_return(nil)
-            # Stub UpdateMasterPatientIndex so it does not get in the way
-            allow(Renalware::Patients::Ingestion::UpdateMasterPatientIndex).to receive(:call)
             # Mock a patient..
             patient = build(:patient, id: 123)
             allow(patient).to receive(:save!).and_return(true)
@@ -124,8 +119,6 @@ module Renalware::Patients::Ingestion
             patient = instance_double(Renalware::Patient, "by=": nil, new_record?: true)
             # Stub the PatientLocator to find the patient
             allow(Renalware::Feeds::PatientLocator).to receive(:call).and_return(patient)
-            # Stub UpdateMasterPatientIndex so it does not get in the way
-            allow(Renalware::Patients::Ingestion::UpdateMasterPatientIndex).to receive(:call)
 
             expect {
               described_class.call(hl7_message)

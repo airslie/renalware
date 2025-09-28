@@ -1,6 +1,3 @@
-# This test currently targets a dummy patient/abridgements path so we can simulate
-# a user searching for a patient in the master index, At some point that functionality will be moved
-# to patients/new and this test will need updating.
 describe "A user adds a patient" do
   describe "add patient flow" do
     include ConfigHelper
@@ -44,67 +41,6 @@ describe "A user adds a patient" do
       expect(page).to have_content("Date of Birth:09-Dec-2022")
       expect(page).to have_content("HOSP1 No:12345")
       expect(page).to have_content("Hospital centre:Dover Hospital")
-    end
-  end
-
-  describe "displaying search results that match user-entered criteria" do
-    context "when an abridged patient exists in the master index" do
-      it "displays the abridged patient" do
-        login_as_clinical
-        create(
-          :abridged_patient,
-          hospital_number: "123",
-          given_name: "John",
-          family_name: "SMITH",
-          born_on: "1967-01-01"
-        )
-
-        visit patients_abridgements_path
-
-        fill_in "Search by hospital number or name", with: "123"
-        click_on "Search"
-
-        expect(page).to have_content("SMITH, John")
-      end
-
-      context "when another unmatching abridged patient exists with same DOB" do
-        let(:dob) { "1967-01-01" }
-
-        it "displays the second patient under 'Patients matching by DOB' heading" do
-          login_as_clinical
-          create(
-            :abridged_patient,
-            hospital_number: "123",
-            given_name: "John",
-            family_name: "SMITH",
-            born_on: dob
-          )
-          create(
-            :abridged_patient,
-            hospital_number: "456",
-            given_name: "Jake",
-            family_name: "OTHER",
-            born_on: dob
-          )
-          create(:abridged_patient, family_name: "NOMATCH")
-
-          visit patients_abridgements_path
-
-          fill_in "Search by hospital number or name", with: "123"
-          click_on "Search"
-
-          within(".search-results") do
-            expect(page).to have_content("SMITH, John")
-          end
-
-          within(".search-results--by-dob") do
-            expect(page).to have_content("OTHER, Jake")
-            expect(page).to have_no_content("SMITH, John")
-          end
-
-          expect(page).to have_no_content("NOMATCH")
-        end
-      end
     end
   end
 end

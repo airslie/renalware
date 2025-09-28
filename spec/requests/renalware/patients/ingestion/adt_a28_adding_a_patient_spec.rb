@@ -67,15 +67,6 @@ describe "HL7 ADT^A28 message handling: 'Add person information'" do
     end
   end
 
-  context "when the patient is not in the master index" do
-    it "adds them to the master patient index" do
-      # See also UpdateMasterPatientIndex
-      expect {
-        FeedJob.new(message).perform
-      }.to change(Renalware::Patients::Abridgement, :count).by(1)
-    end
-  end
-
   def verify_patient_properties(patient)
     expect(patient).to have_attributes(
       family_name: family_name,
