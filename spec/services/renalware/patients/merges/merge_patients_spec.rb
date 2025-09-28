@@ -27,16 +27,21 @@ module Renalware
           before do
             # Create some events for each patient. The 2 for the minor patient should be
             # reassigned to the major patient
-            create(:event, patient: major)
-            create_list(:event, 2, patient: minor)
+            create(:simple_event, patient: major)
+            create_list(:simple_event, 2, patient: minor)
 
             service
           end
 
+          # rubocop:disable RSpec/ExampleLength
+          # rubocop:disable RSpec/MultipleExpectations
           it "merges the minor patient into the major patient and marks the merge as completed" do
             old_updated_at = 1.day.ago
             major.update_column(:updated_at, old_updated_at)
             minor.update_column(:updated_at, old_updated_at)
+
+            minor_events_ids_bf_merging = Renalware::Events::Event.for_patient(minor.id).pluck(:id)
+
             freeze_time do
               expect {
                 described_class.new(merge:).call
@@ -67,10 +72,23 @@ module Renalware
                 warning: nil,
                 updated_count: 2
               )
-              expect(Renalware::Events::Event.for_patient(minor.id).count).to eq(0)
-              expect(Renalware::Events::Event.for_patient(major.id).count).to eq(3)
+              expect(operation.logs.count).to eq(2)
+              expect(operation.logs.pluck(:id_of_updated_record).sort)
+                .to eq(minor_events_ids_bf_merging.sort)
+
+              updated_events = Renalware::Events::Event.where(id: minor_events_ids_bf_merging)
+              expect(updated_events.count).to eq(2)
+              expect(
+                updated_events.pluck(:updated_at).uniq.map { it.change(usec: 0) }
+              ).to eq([Time.current])
+              expect(updated_events.pluck(:patient_id).uniq).to eq([major.id])
+
+              expect(Events::Event.for_patient(minor.id).count).to eq(0)
+              expect(Events::Event.for_patient(major.id).count).to eq(3)
             end
           end
+          # rubocop:enable RSpec/ExampleLength
+          # rubocop:enable RSpec/MultipleExpectations
         end
         # rubocop:enable RSpec/ChangeByZero
 

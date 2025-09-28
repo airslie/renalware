@@ -34,17 +34,14 @@ module Renalware
         col = quoted_column
         sql = <<-SQL.squish
         WITH updated AS (
-          UPDATE
-            #{quoted_table}
-          SET
-            #{col} = $1
-          WHERE
-            #{col} = $2 AND #{col} <> $1
-          RETURNING #{col}
+          UPDATE  #{quoted_table}
+          SET     #{col} = $1, updated_at = #{quoted_time}
+          WHERE   #{col} = $2 AND #{col} <> $1
+          RETURNING id
         )
         INSERT INTO renalware.patient_merge_logs
           (operation_id, id_of_updated_record)
-          SELECT #{operation.id}, updated.#{col}
+          SELECT #{operation.id}, updated.id
           FROM updated
         SQL
 
@@ -79,6 +76,10 @@ module Renalware
         end
       end
       # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+      # We use Rails current time rather than CURRENT_TIMESTAMP to make testing easier
+      # eg using freeze_time (which CURRENT_TIMESTAMP does not respect)
+      def quoted_time = ActiveRecord::Base.connection.quote(Time.current)
     end
   end
 end
