@@ -6,6 +6,10 @@ module Renalware
 
         subject { described_class.new(message) }
 
+        let(:religion) { create(:patient_religion, code: "B1", name: "Buddhism") }
+        let(:primary_care_physician) { build_stubbed(:primary_care_physician) }
+        let(:practice) { build_stubbed(:practice) }
+
         before do
           allow(Renalware.config).to receive_messages(
             patient_hospital_identifiers: {
@@ -18,7 +22,7 @@ module Renalware
             .and_return(:simple)
         end
 
-        def hl7_data
+        def hl7_data # rubocop:disable Metrics/MethodLength
           OpenStruct.new(
             hospital_number: "A123",
             nhs_number: "0000000001",
@@ -29,12 +33,10 @@ module Renalware
             died_at: Time.zone.parse("2003-03-02").to_date,
             gp_code: "G123",
             practice_code: "P456",
-            sex: "M"
+            sex: "M",
+            religion: "B1" # code for Buddhist
           )
         end
-
-        let(:primary_care_physician) { build_stubbed(:primary_care_physician) }
-        let(:practice) { build_stubbed(:practice) }
 
         it "maps a message to a patient" do
           message = hl7_message_from_file("ADT_A31", hl7_data)
@@ -42,6 +44,7 @@ module Renalware
 
           stub_primary_care_physician_find
           stub_practice_find
+          religion
 
           actual = mapped_patient.fetch
 
@@ -55,7 +58,8 @@ module Renalware
             born_on: Time.zone.parse(message.patient_identification.born_on).to_date,
             died_on: Time.zone.parse(message.patient_identification.died_at).to_date,
             primary_care_physician: primary_care_physician,
-            practice: practice
+            practice: practice,
+            religion: religion
           )
           expect(actual.sex.code).to eq(message.patient_identification.sex)
 

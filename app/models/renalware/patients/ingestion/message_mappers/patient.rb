@@ -7,7 +7,7 @@ module Renalware
         # the patient.
         class Patient < MessageMapper
           delegate :patient_identification, to: :message
-          delegate :address, to: :patient_identification
+          delegate :address, :religion, to: :patient_identification
 
           def initialize(message, patient = nil)
             @patient = patient || ::Renalware::Patient.new
@@ -36,6 +36,7 @@ module Renalware
               sex: patient_identification.sex,
               ethnicity: find_ethnicity,
               marital_status: patient_identification.marital_status,
+              religion: find_religion,
               practice: find_practice(message.practice_code) || patient.practice,
               primary_care_physician: find_primary_care_physician(message.gp_code),
               email: patient_identification.email,
@@ -72,6 +73,16 @@ module Renalware
 
           def find_ethnicity
             Patients::Ethnicity.find_by(rr18_code: patient_identification.ethnic_group)
+          end
+
+          # Support finding religion by code or name
+          def find_religion
+            return if religion.nil?
+
+            Patients::Religion
+              .where(code: religion)
+              .or(Patients::Religion.where(name: religion))
+              .first
           end
 
           # We need to bear in mind the situation where the patient may have accidentally been

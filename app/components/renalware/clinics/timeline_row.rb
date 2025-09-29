@@ -4,10 +4,6 @@ module Renalware
   class Clinics::TimelineRow < TimelineRow
     private
 
-    def row_toggler
-      dietetics? ? super : TableCell()
-    end
-
     def description
       TableCell { @record.clinic.name }
     end
@@ -19,10 +15,14 @@ module Renalware
     end
 
     def detail
-      return "" unless dietetics?
-
       TableDetailRow(COLUMNS) do
-        render partial("/renalware/dietetics/clinic_visits/summary", clinic_visit: @record)
+        if dietetics?
+          render partial("/renalware/dietetics/clinic_visits/summary", clinic_visit: @record)
+        else
+          render NameService
+            .from_model(@record, to: "Detail", keep_class: true)
+            .new(@record)
+        end
       end
     end
 
