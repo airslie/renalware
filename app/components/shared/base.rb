@@ -29,8 +29,10 @@ class Shared::Base < Phlex::HTML
     super()
   end
 
-  if @debug
+  if ENV["PHLEX_DEBUG_COMMENTS"]
     def before_template
+      return unless @debug
+
       comment { "Before #{self.class.name}" }
       super
     end
