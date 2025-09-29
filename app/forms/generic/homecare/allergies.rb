@@ -2,6 +2,8 @@
 
 class Forms::Generic::Homecare::Allergies < Forms::Base
   def build
+    return if args.allergies.nil?
+
     move_down 30
     font_size 10
     if args.no_known_allergies

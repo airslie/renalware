@@ -10,11 +10,12 @@
     thead
       tr
         th.protocol-hd-profile HD Profile
-        th.protocol-allergies
-          | Allergies
-          - if clinical_patient.allergy_status_updated_at
-            span.allergy_status_updated_at
-              = " #{l(clinical_patient.allergy_status_updated_at&.to_date)}"
+        - if Renalware.config.enable_allergies
+          th.protocol-allergies
+            | Allergies
+            - if clinical_patient.allergy_status_updated_at
+              span.allergy_status_updated_at
+                = " #{l(clinical_patient.allergy_status_updated_at&.to_date)}"
         th.protocol-prescriptions Prescriptions on HD
         th.protocol-recent-pathology Recent Pathology
     tbody
@@ -22,7 +23,8 @@
         td
           = render "profile", protocol: protocol, profile: protocol.profile, formats: :html
         td
-          = render "allergies", patient: protocol.patient, formats: :html
+          - if Renalware.config.enable_allergies
+            = render "allergies", patient: protocol.patient, formats: :html
           = render "virology", protocol: protocol, formats: :html
         td
           = render "prescriptions", prescriptions: protocol.prescriptions, formats: :html

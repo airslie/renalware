@@ -54,6 +54,8 @@ class Forms::Alcura::Homecare::PatientDetails < Forms::Alcura::Homecare::Base
   private
 
   def allergies
+    return "" if args.allergies.nil?
+
     arr = Array(args.allergies).uniq.compact.join("<br>")
     arr.prepend("No Known Allergies") if args.no_known_allergies == true
     arr

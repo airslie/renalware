@@ -62,9 +62,11 @@ module Renalware
             )
           end
 
-          clinical_patient = Clinical.cast_patient(patient)
-          args.no_known_allergies = (clinical_patient.allergy_status == :no_known_allergies)
-          args.allergies = Array(clinical_patient.allergies).map(&:description)
+          if Renalware.config.enable_allergies
+            clinical_patient = Clinical.cast_patient(patient)
+            args.no_known_allergies = (clinical_patient.allergy_status == :no_known_allergies)
+            args.allergies = Array(clinical_patient.allergies).map(&:description)
+          end
           args
         end
 

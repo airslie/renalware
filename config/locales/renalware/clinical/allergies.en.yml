@@ -3,6 +3,7 @@ en:
   renalware:
     clinical:
       allergies:
+        disabled: Allergy management is disabled
         list:
           delete: Delete
           edit: Edit

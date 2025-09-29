@@ -9,6 +9,8 @@ module Renalware
       delegate :allergies, to: :clinical_patient
 
       def to_partial_path
+        return nil unless Renalware.config.enable_allergies
+
         "renalware/letters/parts/allergies"
       end
 

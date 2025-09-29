@@ -59,6 +59,8 @@ class Forms::Fresenius::Homecare::PatientDetailsTable < Forms::Fresenius::Homeca
   private
 
   def known_allergies_cell
+    return { content: "", rowspan: 3 } if args.allergies.nil?
+
     allergies = Array(args.allergies).compact.uniq.join("<br>")
     {
       content: "<b><font name='ZapfDingbats'>#{CHECKBOX}</font>Yes please specify</b>" \
