@@ -1,4 +1,11 @@
 describe Renalware::Users::LastSigninComponent, type: :component do
+  let(:one_month_ago) { 1.month.ago }
+  let(:current_time) { Time.current }
+  let(:two_days_ago) { 2.days.ago }
+
+  let(:success_message) { "You last signed in" }
+  let(:failed_message) { "Your account had a failed sign-in attempt" }
+
   context "when the user has never signed in" do
     it "renders nothing" do
       user = build_stubbed(:user, last_sign_in_at: nil, current_sign_in_at: nil)
@@ -14,8 +21,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
     it "renders nothing" do
       user = build_stubbed(
         :user,
-        last_sign_in_at: "2020-10-10 01:01:01",
-        current_sign_in_at: "2020-10-10 01:01:01"
+        last_sign_in_at: current_time,
+        current_sign_in_at: current_time
       )
       component = described_class.new(current_user: user)
 
@@ -29,13 +36,14 @@ describe Renalware::Users::LastSigninComponent, type: :component do
     it "renders the last signin date" do
       user = build_stubbed(
         :user,
-        last_sign_in_at: "2020-09-09 09:09:09",
-        current_sign_in_at: "2020-10-10 01:01:01"
+        last_sign_in_at: one_month_ago,
+        current_sign_in_at: current_time
       )
       component = described_class.new(current_user: user)
 
       render_inline(component).to_html
-      expect(page).to have_content("You last signed in at 09:09 on 09-Sep-2020")
+      expect(page).to have_content success_message
+      expect(page).to have_content "1 month ago"
     end
   end
 
@@ -44,13 +52,14 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       it "renders the failed signin attempt" do
         user = build_stubbed(
           :user,
-          last_failed_sign_in_at: "2020-09-09 09:09:09",
-          current_sign_in_at: "2020-10-10 01:01:01"
+          last_failed_sign_in_at: two_days_ago,
+          current_sign_in_at: current_time
         )
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content("You failed to sign in at 09:09 on 09-Sep-2020")
+        expect(page).to have_content failed_message
+        expect(page).to have_content "2 days ago"
       end
     end
 
@@ -58,14 +67,15 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       it "renders the failed signin attempt" do
         user = build_stubbed(
           :user,
-          last_failed_sign_in_at: "2020-09-09 09:09:09",
-          last_sign_in_at: "2020-10-10 01:01:01",
-          current_sign_in_at: "2020-10-10 01:01:01"
+          last_failed_sign_in_at: one_month_ago,
+          last_sign_in_at: current_time,
+          current_sign_in_at: current_time
         )
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content("You failed to sign in at 09:09 on 09-Sep-2020")
+        expect(page).to have_content failed_message
+        expect(page).to have_content "1 month ago"
       end
     end
 
@@ -73,14 +83,15 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       it "renders the failed signin attempt" do
         user = build_stubbed(
           :user,
-          last_failed_sign_in_at: "2020-09-09 09:09:09",
-          last_sign_in_at: "2020-09-09 08:09:09",
-          current_sign_in_at: "2020-10-10 01:01:01"
+          last_failed_sign_in_at: two_days_ago,
+          last_sign_in_at: one_month_ago,
+          current_sign_in_at: current_time
         )
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content("You failed to sign in at 09:09 on 09-Sep-2020")
+        expect(page).to have_content failed_message
+        expect(page).to have_content "2 days ago"
       end
     end
 
@@ -88,14 +99,15 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       it "renders the last signin attempt (not the failed signin)" do
         user = build_stubbed(
           :user,
-          last_failed_sign_in_at: "2020-09-09 09:09:09",
-          last_sign_in_at: "2020-09-09 10:09:09",
-          current_sign_in_at: "2020-10-10 01:01:01"
+          last_failed_sign_in_at: one_month_ago,
+          last_sign_in_at: two_days_ago,
+          current_sign_in_at: current_time
         )
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content("You last signed in at 10:09 on 09-Sep-2020")
+        expect(page).to have_content success_message
+        expect(page).to have_content "2 days ago"
       end
     end
   end

@@ -4,6 +4,7 @@ module Renalware
     # user signed in. This is a National Cyber Security Centre recommendation.
     class LastSigninComponent < ApplicationComponent
       include Renalware::UsersHelper
+      include Renalware::TooltipHelper
 
       pattr_initialize [:current_user!]
       delegate :last_sign_in_at,
@@ -12,14 +13,11 @@ module Renalware
                to: :current_user
 
       def sign_in_message
-        key, at =
-          if failed_sign_in_more_recent_than_last_sign_in?
-            [".failed_sign_in", last_failed_sign_in_at]
-          else
-            [".last_sign_in", effective_last_sign_in_at]
-          end
-
-        t(key, time: at.strftime("%H:%M"), date: at.strftime("%d-%b-%Y"))
+        if failed_sign_in_more_recent_than_last_sign_in?
+          t(".failed_sign_in", datetime: datetime(last_failed_sign_in_at)).html_safe
+        else
+          t(".last_sign_in", datetime: datetime(effective_last_sign_in_at)).html_safe
+        end
       end
 
       def render?
@@ -27,6 +25,17 @@ module Renalware
       end
 
       private
+
+      def datetime(at)
+        tooltip(
+          label: time_ago_in_words(at),
+          content: "<span class='whitespace-nowrap'>#{l(at)}</span>"
+        )
+      end
+
+      def background_class
+        "bg-red-200 px-2" if failed_sign_in_more_recent_than_last_sign_in?
+      end
 
       def failed_sign_in_more_recent_than_last_sign_in?
         return false if last_failed_sign_in_at.nil?

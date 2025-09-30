@@ -10,13 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
---
-
--- *not* creating schema, since initdb creates it
-
-
---
 -- Name: renalware; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -11929,7 +11922,7 @@ CREATE VIEW renalware.patient_summaries AS
           WHERE (clinic_visits.patient_id = patients.id)) AS clinic_visits_count,
     ( SELECT count(*) AS count
            FROM renalware.letter_letters
-          WHERE (letter_letters.patient_id = patients.id)) AS letters_count,
+          WHERE ((letter_letters.patient_id = patients.id) AND (letter_letters.deleted_at IS NULL))) AS letters_count,
     ( SELECT count(*) AS count
            FROM renalware.modality_modalities
           WHERE (modality_modalities.patient_id = patients.id)) AS modalities_count,
@@ -13588,7 +13581,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -13668,7 +13661,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -31601,6 +31594,7 @@ SET search_path TO renalware, renalware_demo, public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250928122632'),
+('20250926083859'),
 ('20250902071000'),
 ('20250901181111'),
 ('20250830204357'),

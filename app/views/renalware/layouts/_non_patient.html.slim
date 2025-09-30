@@ -1,24 +1,25 @@
 - generate_page_title(local_assigns: local_assigns)
 
 .non-patient-page.main-content
-  .layout-wrapper
+  .layout-wrapper.mt-4
     .non-patient-page-header(class=("with-tabs" if content_for?(:tabs)))
       .row
         .columns.small-12
-          ul.page-heading
-            li
-              .flex.items-center.gap-2
-                h1
-                  = breadcrumbs_and_title(breadcrumbs: local_assigns[:breadcrumbs],
-                                        title: local_assigns[:title])
-                = yield(:links_to_other_apps) if content_for?(:links_to_other_apps)
+          ul.flex.flex-row.justify-between.ml-0.gap-6
+            li.flex.items-start.gap-2
+              h1 style="margin-top: 0;"
+                = breadcrumbs_and_title(breadcrumbs: local_assigns[:breadcrumbs],
+                                      title: local_assigns[:title])
+              = yield(:links_to_other_apps) if content_for?(:links_to_other_apps)
 
-            li.page-actions
-              / Output any page-level actions
-              = yield(:actions)
+            - if content_for?(:user_info)
+              li.flex.flex-col.items-end
+                = yield(:user_info)
+            - if content_for?(:actions)
+              li.page-actions.flex-shrink-0
+                = yield(:actions)
 
           - if content_for?(:tabs)
-
             = yield(:tabs)
 
     .row

@@ -7395,7 +7395,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
             WHERE (clinic_visits.patient_id = patients.id)) AS clinic_visits_count,
       ( SELECT count(*) AS count
              FROM letter_letters
-            WHERE (letter_letters.patient_id = patients.id)) AS letters_count,
+            WHERE ((letter_letters.patient_id = patients.id) AND (letter_letters.deleted_at IS NULL))) AS letters_count,
       ( SELECT count(*) AS count
              FROM modality_modalities
             WHERE (modality_modalities.patient_id = patients.id)) AS modalities_count,
