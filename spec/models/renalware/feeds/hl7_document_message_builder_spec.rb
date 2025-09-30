@@ -81,7 +81,7 @@ module Renalware
                 expect(msg[:PID].to_s).to eq(
                   "PID||9999999999^^^NHS|111^^^CODE1~222^^^CODE2~333^^^CODE3||Jones^^Patricia^^Ms||19700101"
                 )
-                expect(msg[:PV1].to_s).to eq("PV1|||||||||||||||||||")
+                expect(msg[:PV1].to_s).to eq("PV1||O|||||||||||||||||")
 
                 expect(msg[:TXA].to_s).to eq(
                   "TXA||CL^Clinic Letter|ED^Electronic Document|" \
@@ -214,7 +214,7 @@ module Renalware
                 expect(msg[:PID].to_s).to eq(
                   "PID||9999999999^^^NHS|111^^^CODE1~222^^^CODE2~333^^^CODE3||Jones^^Patricia^^Ms||19700101"
                 )
-                expect(msg[:PV1].to_s).to eq("PV1|||||||||||||||||||")
+                expect(msg[:PV1].to_s).to eq("PV1||O|||||||||||||||||")
 
                 expect(msg[:TXA].to_s).to eq(
                   "TXA||CL^Clinic Letter|ED^Electronic Document|" \
@@ -260,7 +260,7 @@ module Renalware
 
               msg = described_class.call(renderable: letter, document:)
 
-              expect(msg[:PV1].to_s).to eq("PV1|||C1||||||||||||||||V1")
+              expect(msg[:PV1].to_s).to eq("PV1||O|C1||||||||||||||||V1")
             end
           end
         end

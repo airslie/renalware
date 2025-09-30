@@ -81,6 +81,7 @@ module Renalware
 
       def pv1
         seg = HL7::Message::Segment::PV1.new
+        seg.patient_class = "O" # Always send as outpatient
         if renderable.respond_to?(:visit_number)
           seg.visit_number = renderable.visit_number
         end
