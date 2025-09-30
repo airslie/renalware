@@ -245,6 +245,9 @@ module Renalware
     config_accessor(:feeds_outpatient_clinic_resolution_strategy) {
       ENV.fetch("FEEDS_OUTPATIENT_CLINIC_RESOLUTION_STRATEGY", "by_code").to_sym
     }
+    config_accessor(:feeds_outgoing_documents_hospital_service) {
+      ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_HOSPITAL_SERVICE", "") # eg. "361^Nephrology"
+    }
     config_accessor(:feeds_outgoing_documents_use_guids) {
       ActiveModel::Type::Boolean.new.cast(
         ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_USE_GUIDS", "false")
