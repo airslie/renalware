@@ -7,7 +7,7 @@ module Renalware
         # the patient.
         class Patient < MessageMapper
           delegate :patient_identification, to: :message
-          delegate :address, :religion, to: :patient_identification
+          delegate :address, :religion, :primary_language, to: :patient_identification
 
           def initialize(message, patient = nil)
             @patient = patient || ::Renalware::Patient.new
@@ -37,6 +37,7 @@ module Renalware
               ethnicity: find_ethnicity,
               marital_status: patient_identification.marital_status,
               religion: find_religion,
+              language: find_language,
               practice: find_practice(message.practice_code) || patient.practice,
               primary_care_physician: find_primary_care_physician(message.gp_code),
               email: patient_identification.email,
@@ -82,6 +83,15 @@ module Renalware
             Patients::Religion
               .where(code: religion)
               .or(Patients::Religion.where(name: religion))
+              .first
+          end
+
+          def find_language
+            return if primary_language.nil?
+
+            Language
+              .where(code: primary_language)
+              .or(Language.where(name: primary_language))
               .first
           end
 

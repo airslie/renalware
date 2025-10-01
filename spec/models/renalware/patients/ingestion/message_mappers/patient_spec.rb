@@ -7,8 +7,10 @@ module Renalware
         subject { described_class.new(message) }
 
         let(:religion) { create(:patient_religion, code: "B1", name: "Buddhism") }
+        let(:language) { create(:language, :english) }
         let(:primary_care_physician) { build_stubbed(:primary_care_physician) }
         let(:practice) { build_stubbed(:practice) }
+        let(:ethnicity) { create(:ethnicity, :black_caribbean) }
 
         before do
           allow(Renalware.config).to receive_messages(
@@ -34,7 +36,9 @@ module Renalware
             gp_code: "G123",
             practice_code: "P456",
             sex: "M",
-            religion: "B1" # code for Buddhist
+            religion: "B1", # code for Buddhist
+            primary_language: "en", # code for English
+            ethnicity_code: "M" # code for Black Caribbean
           )
         end
 
@@ -45,6 +49,8 @@ module Renalware
           stub_primary_care_physician_find
           stub_practice_find
           religion
+          language
+          ethnicity
 
           actual = mapped_patient.fetch
 
@@ -59,7 +65,9 @@ module Renalware
             died_on: Time.zone.parse(message.patient_identification.died_at).to_date,
             primary_care_physician: primary_care_physician,
             practice: practice,
-            religion: religion
+            religion: religion,
+            language: language,
+            ethnicity: ethnicity
           )
           expect(actual.sex.code).to eq(message.patient_identification.sex)
 
