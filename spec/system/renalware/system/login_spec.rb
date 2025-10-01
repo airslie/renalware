@@ -16,7 +16,7 @@ module Renalware
         click_on "Log in"
 
         expect(page).to have_content "Signed in successfully"
-        expect(page).to have_content "You last signed in at"
+        expect(page).to have_content "You last signed in 1 day ago."
       end
     end
 
@@ -48,7 +48,9 @@ module Renalware
 
         expect(page).to have_current_path root_path
         expect(page).to have_content "Signed in successfully"
-        expect(page).to have_content "You failed to sign in at"
+        expect(page).to have_content(
+          "Your account had a failed sign-in attempt less than a minute ago"
+        )
       end
     end
 

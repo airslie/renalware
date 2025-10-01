@@ -151,7 +151,7 @@ section.display {
 
   .non-patient-page-header {
     margin: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
     padding: 0;
 
     &.with-tabs {
@@ -166,21 +166,23 @@ section.display {
 
   ul,
   dl {
-    display: block;
     float: none;
     margin-bottom: 0;
+  }
+
+  dl {
+    display: block;
+  }
+
+  .has-tip {
+    font-weight: bold;
+    color: $black;
+    border-bottom: dotted 1px $black;
   }
 
   .sub-nav {
     position: relative;
     top: 1px;
-  }
-
-  .page-heading {
-    clear: both;
-    float: left;
-    margin: 0;
-    padding: 1.4rem 0 0.4rem;
   }
 }
 

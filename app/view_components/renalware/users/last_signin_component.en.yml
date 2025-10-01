@@ -3,5 +3,7 @@ en:
   renalware:
     users:
       last_signin_component:
-        last_sign_in: You last signed in at %{time} on %{date}
-        failed_sign_in: You failed to sign in at %{time} on %{date}
+        last_sign_in: You last signed in %{datetime} ago.
+        failed_sign_in: >
+          Your account had a failed sign-in attempt %{datetime} ago.<br>
+          If this was not you, then consider changing your password and contacting IT help desk.
