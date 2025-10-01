@@ -117,7 +117,6 @@ group :development do
   gem "sentry-opentelemetry"
   gem "sentry-ruby"
   gem "sentry-rails"
-  gem "turnip", require: false
   # rubocop:enable Bundler/OrderedGems
 end
 

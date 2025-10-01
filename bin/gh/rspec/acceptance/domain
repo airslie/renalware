@@ -1,2 +1,0 @@
-#!/bin/sh
-bin/rspec --pattern "{spec,packs/**/spec}/acceptance/**/*.feature" --format progress

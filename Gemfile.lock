@@ -347,8 +347,6 @@ GEM
       cucumber (>= 5, < 10)
       railties (>= 5.2, < 9)
     cucumber-tag-expressions (6.1.1)
-    cuke_modeler (3.24.0)
-      cucumber-gherkin (< 33.0)
     daemons (1.4.1)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
@@ -965,9 +963,6 @@ GEM
     turbo-rails (2.0.13)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
-    turnip (4.4.1)
-      cuke_modeler (~> 3.15)
-      rspec (>= 3.0, < 4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode (0.4.4.5)
@@ -1108,7 +1103,6 @@ DEPENDENCIES
   terser
   test-prof
   thruster
-  turnip
   vcr
   web-console
   webmock (~> 3.7)

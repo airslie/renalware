@@ -1,5 +1,4 @@
 --require spec/rails_helper
 --color
 --format doc
---require turnip/rspec
 --default-path .
