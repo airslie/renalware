@@ -11,7 +11,8 @@ module Renalware
             HOSP1: :local_patient_id,
             HOSP2: :local_patient_id_2,
             HOSP3: :local_patient_id_3
-          }
+          },
+          feeds_outgoing_documents_hospital_service: "361^Nephrology"
         )
 
         Hospitals::Centre.create!(code: "CODE1", abbrev: "HOSP1", name: "HOSP1")
@@ -81,7 +82,7 @@ module Renalware
                 expect(msg[:PID].to_s).to eq(
                   "PID||9999999999^^^NHS|111^^^CODE1~222^^^CODE2~333^^^CODE3||Jones^^Patricia^^Ms||19700101"
                 )
-                expect(msg[:PV1].to_s).to eq("PV1|||||||||||||||||||")
+                expect(msg[:PV1].to_s).to eq("PV1||O||||||||361^Nephrology|||||||||")
 
                 expect(msg[:TXA].to_s).to eq(
                   "TXA||CL^Clinic Letter|ED^Electronic Document|" \
@@ -214,7 +215,7 @@ module Renalware
                 expect(msg[:PID].to_s).to eq(
                   "PID||9999999999^^^NHS|111^^^CODE1~222^^^CODE2~333^^^CODE3||Jones^^Patricia^^Ms||19700101"
                 )
-                expect(msg[:PV1].to_s).to eq("PV1|||||||||||||||||||")
+                expect(msg[:PV1].to_s).to eq("PV1||O||||||||361^Nephrology|||||||||")
 
                 expect(msg[:TXA].to_s).to eq(
                   "TXA||CL^Clinic Letter|ED^Electronic Document|" \
@@ -260,7 +261,7 @@ module Renalware
 
               msg = described_class.call(renderable: letter, document:)
 
-              expect(msg[:PV1].to_s).to eq("PV1|||C1||||||||||||||||V1")
+              expect(msg[:PV1].to_s).to eq("PV1||O|C1|||||||361^Nephrology|||||||||V1")
             end
           end
         end

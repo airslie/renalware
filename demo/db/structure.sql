@@ -11718,10 +11718,10 @@ ALTER SEQUENCE renalware.patient_marital_statuses_id_seq OWNED BY renalware.pati
 
 
 --
--- Name: patient_master_index; Type: TABLE; Schema: renalware; Owner: -
+-- Name: patient_master_index_deprecated; Type: TABLE; Schema: renalware; Owner: -
 --
 
-CREATE TABLE renalware.patient_master_index (
+CREATE TABLE renalware.patient_master_index_deprecated (
     id bigint NOT NULL,
     patient_id bigint,
     nhs_number character varying,
@@ -11743,10 +11743,10 @@ CREATE TABLE renalware.patient_master_index (
 
 
 --
--- Name: patient_master_index_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+-- Name: patient_master_index_deprecated_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
 --
 
-CREATE SEQUENCE renalware.patient_master_index_id_seq
+CREATE SEQUENCE renalware.patient_master_index_deprecated_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -11755,10 +11755,10 @@ CREATE SEQUENCE renalware.patient_master_index_id_seq
 
 
 --
--- Name: patient_master_index_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+-- Name: patient_master_index_deprecated_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
 --
 
-ALTER SEQUENCE renalware.patient_master_index_id_seq OWNED BY renalware.patient_master_index.id;
+ALTER SEQUENCE renalware.patient_master_index_deprecated_id_seq OWNED BY renalware.patient_master_index_deprecated.id;
 
 
 --
@@ -17881,10 +17881,10 @@ ALTER TABLE ONLY renalware.patient_marital_statuses ALTER COLUMN id SET DEFAULT 
 
 
 --
--- Name: patient_master_index id; Type: DEFAULT; Schema: renalware; Owner: -
+-- Name: patient_master_index_deprecated id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY renalware.patient_master_index ALTER COLUMN id SET DEFAULT nextval('renalware.patient_master_index_id_seq'::regclass);
+ALTER TABLE ONLY renalware.patient_master_index_deprecated ALTER COLUMN id SET DEFAULT nextval('renalware.patient_master_index_deprecated_id_seq'::regclass);
 
 
 --
@@ -20176,11 +20176,11 @@ ALTER TABLE ONLY renalware.patient_marital_statuses
 
 
 --
--- Name: patient_master_index patient_master_index_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+-- Name: patient_master_index_deprecated patient_master_index_deprecated_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY renalware.patient_master_index
-    ADD CONSTRAINT patient_master_index_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY renalware.patient_master_index_deprecated
+    ADD CONSTRAINT patient_master_index_deprecated_pkey PRIMARY KEY (id);
 
 
 --
@@ -25398,31 +25398,24 @@ CREATE UNIQUE INDEX index_patient_marital_statuses_on_code ON renalware.patient_
 
 
 --
--- Name: index_patient_master_index_on_family_name_and_given_name; Type: INDEX; Schema: renalware; Owner: -
+-- Name: index_patient_master_index_deprecated_on_hospital_number; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE INDEX index_patient_master_index_on_family_name_and_given_name ON renalware.patient_master_index USING btree (family_name, given_name);
-
-
---
--- Name: index_patient_master_index_on_hospital_number; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_patient_master_index_on_hospital_number ON renalware.patient_master_index USING btree (hospital_number);
+CREATE INDEX index_patient_master_index_deprecated_on_hospital_number ON renalware.patient_master_index_deprecated USING btree (hospital_number);
 
 
 --
--- Name: index_patient_master_index_on_nhs_number; Type: INDEX; Schema: renalware; Owner: -
+-- Name: index_patient_master_index_deprecated_on_nhs_number; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE INDEX index_patient_master_index_on_nhs_number ON renalware.patient_master_index USING btree (nhs_number);
+CREATE INDEX index_patient_master_index_deprecated_on_nhs_number ON renalware.patient_master_index_deprecated USING btree (nhs_number);
 
 
 --
--- Name: index_patient_master_index_on_patient_id; Type: INDEX; Schema: renalware; Owner: -
+-- Name: index_patient_master_index_deprecated_on_patient_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE INDEX index_patient_master_index_on_patient_id ON renalware.patient_master_index USING btree (patient_id);
+CREATE INDEX index_patient_master_index_deprecated_on_patient_id ON renalware.patient_master_index_deprecated USING btree (patient_id);
 
 
 --
@@ -28674,10 +28667,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 
 
 --
--- Name: patient_master_index fk_rails_37b31022ff; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+-- Name: patient_master_index_deprecated fk_rails_37b31022ff; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY renalware.patient_master_index
+ALTER TABLE ONLY renalware.patient_master_index_deprecated
     ADD CONSTRAINT fk_rails_37b31022ff FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
@@ -31602,6 +31595,7 @@ SET search_path TO renalware, renalware_demo, public, heroku_ext;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250928122632'),
 ('20250926083859'),
+('20250928102047'),
 ('20250902071000'),
 ('20250901181111'),
 ('20250830204357'),
