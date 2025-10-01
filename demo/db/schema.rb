@@ -4338,7 +4338,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
     t.index ["code"], name: "index_patient_marital_statuses_on_code", unique: true
   end
 
-  create_table "patient_master_index", force: :cascade do |t|
+  create_table "patient_master_index_deprecated", force: :cascade do |t|
     t.bigint "patient_id"
     t.string "nhs_number"
     t.string "hospital_number"
@@ -4355,10 +4355,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
     t.string "gp_code"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["family_name", "given_name"], name: "index_patient_master_index_on_family_name_and_given_name"
-    t.index ["hospital_number"], name: "index_patient_master_index_on_hospital_number"
-    t.index ["nhs_number"], name: "index_patient_master_index_on_nhs_number"
-    t.index ["patient_id"], name: "index_patient_master_index_on_patient_id"
+    t.index ["hospital_number"], name: "index_patient_master_index_deprecated_on_hospital_number"
+    t.index ["nhs_number"], name: "index_patient_master_index_deprecated_on_nhs_number"
+    t.index ["patient_id"], name: "index_patient_master_index_deprecated_on_patient_id"
   end
 
   create_table "patient_practice_memberships", id: :serial, force: :cascade do |t|
@@ -6309,7 +6308,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
   add_foreign_key "patient_attachments", "users", column: "updated_by_id"
   add_foreign_key "patient_bookmarks", "patients"
   add_foreign_key "patient_bookmarks", "users"
-  add_foreign_key "patient_master_index", "patients"
+  add_foreign_key "patient_master_index_deprecated", "patients"
   add_foreign_key "patient_practice_memberships", "patient_practices", column: "practice_id"
   add_foreign_key "patient_practice_memberships", "patient_primary_care_physicians", column: "primary_care_physician_id"
   add_foreign_key "patient_worries", "patient_worry_categories", column: "worry_category_id"

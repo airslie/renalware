@@ -12,9 +12,7 @@ module Renalware
           end
 
           def call
-            patient = add_patient_if_not_exists
-            UpdateMasterPatientIndex.call(message)
-            patient
+            add_patient_if_not_exists
           end
 
           private

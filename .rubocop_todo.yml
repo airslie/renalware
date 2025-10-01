@@ -275,7 +275,6 @@ Metrics/MethodLength:
     - 'app/models/renalware/pathology/obx_mapping.rb'
     - 'app/models/renalware/patient.rb'
     - 'app/models/renalware/patients/ingestion/message_mappers/patient.rb'
-    - 'app/models/renalware/patients/ingestion/update_master_patient_index.rb'
     - 'app/models/renalware/patients/sync_practices_via_api.rb'
     - 'app/models/renalware/pd/adequacy_calculated_attributes.rb'
     - 'app/models/renalware/pd/mdm_patients_query.rb'
@@ -460,7 +459,6 @@ RSpec/NestedGroups:
   Exclude:
     - 'spec/models/renalware/letters/revise_letter_spec.rb'
     - 'spec/models/renalware/pathology/ingestion/aki_listener_spec.rb'
-    - 'spec/models/renalware/patients/ingestion/update_master_patient_index_spec.rb'
     - 'spec/models/renalware/ukrdc/patients_query_spec.rb'
 
 # Offense count: 14
