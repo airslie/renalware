@@ -11929,7 +11929,7 @@ CREATE VIEW renalware.patient_summaries AS
           WHERE (clinic_visits.patient_id = patients.id)) AS clinic_visits_count,
     ( SELECT count(*) AS count
            FROM renalware.letter_letters
-          WHERE (letter_letters.patient_id = patients.id)) AS letters_count,
+          WHERE ((letter_letters.patient_id = patients.id) AND (letter_letters.deleted_at IS NULL))) AS letters_count,
     ( SELECT count(*) AS count
            FROM renalware.modality_modalities
           WHERE (modality_modalities.patient_id = patients.id)) AS modalities_count,
@@ -31594,6 +31594,7 @@ SET search_path TO renalware, renalware_demo, public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250928122632'),
+('20250926083859'),
 ('20250928102047'),
 ('20250902071000'),
 ('20250901181111'),

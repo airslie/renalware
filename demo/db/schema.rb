@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
   create_schema "renalware"
   create_schema "renalware_demo"
@@ -1437,7 +1438,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
   ], force: :cascade
 
   create_enum :pd_pet_type, [
-    "full",
+    "full",Imperial want to disable references to allergies in the ui. Eventually they will come via feed but initially I think they want to remove them from Renalware because if not entered in Renalware , it can say ‘no known allergies’ even though in cerner they might have allergies.
+So wld need to remove via a config setting from a few places. Some sites will still use allergies in Renalware so the setting is opt-out ( defaults to allergies enabled) and imperial wld set it to disabled explicitly so no one else affected. Places allergies mentioned (of top of my head but might be others)
+
+    in clinical profile from where you can add/remove them
+    the allergies alert under the patient banner
+    on home care prescriptions form pdf (previously Renalware-forms)
+    hd sessions form/protocol perhaps
+    others??
+
+
     "fast",
   ], force: :cascade
 
@@ -7394,7 +7404,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
             WHERE (clinic_visits.patient_id = patients.id)) AS clinic_visits_count,
       ( SELECT count(*) AS count
              FROM letter_letters
-            WHERE (letter_letters.patient_id = patients.id)) AS letters_count,
+            WHERE ((letter_letters.patient_id = patients.id) AND (letter_letters.deleted_at IS NULL))) AS letters_count,
       ( SELECT count(*) AS count
              FROM modality_modalities
             WHERE (modality_modalities.patient_id = patients.id)) AS modalities_count,

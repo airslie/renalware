@@ -3,6 +3,7 @@
 RSpec.describe "Deleting a letter", :js do
   let(:doctor) { create(:user, :clinical) }
   let(:other_doctor) { create(:user, :clinical) }
+  let(:super_admin) { create(:user, :super_admin) }
   let(:patient) { letter.patient }
 
   context "when letter is pending review" do
@@ -33,12 +34,38 @@ RSpec.describe "Deleting a letter", :js do
   context "when letter is approved" do
     let(:letter) { create(:approved_letter, by: doctor) }
 
-    it "cannot be deleted" do
-      login_as doctor
-      visit patient_letters_letters_path(patient)
+    context "when logged in as regular user" do
+      it "cannot be deleted" do
+        login_as doctor
+        visit patient_letters_letters_path(patient)
 
-      expect(page).to have_content "Approved"
-      expect(page).to have_no_button t("btn.delete")
+        expect(page).to have_content "Approved"
+        expect(page).to have_no_button t("btn.delete")
+      end
+    end
+
+    context "when logged in as super admin" do
+      it "can be deleted and updates letters count in navigation" do
+        login_as super_admin
+        visit patient_letters_letters_path(patient)
+
+        within(".patient-side-nav") do
+          expect(page).to have_content("Letters (1)")
+        end
+
+        expect(page).to have_content "Approved"
+        expect(page).to have_link t("btn.delete")
+
+        accept_alert { first(:link, t("btn.delete")).click }
+        expect(page).to have_content "Letters"
+
+        within(".patient-side-nav") do
+          expect(page).to have_content("Letters (0)")
+        end
+
+        expect(Renalware::Letters::Letter.with_deleted.count).to eq(1)
+        expect(Renalware::Letters::Letter.count).to eq(0)
+      end
     end
   end
 end
