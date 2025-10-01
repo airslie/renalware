@@ -79,9 +79,8 @@ module Renalware
     end
 
     def from_model(item)
-      render NameService
-        .from_model(item.record, to: "TimelineRow")
-        .new(sort_date: item.sort_date, record: item.record)
+      row_class = NameService.from_model(item.record, to: "TimelineRow")
+      render row_class.new(sort_date: item.sort_date, record: item.record)
     end
   end
 end

@@ -117,19 +117,7 @@
           - colspan = compact ? 8 : 11
           td(colspan=colspan)
             .quick-preview
-              dl.dl-horizontal
-                dt Author
-                dd=consult.created_by
-                dt Modality
-                dd= consult.patient_current_modality
-                dt Description
-                dd= simple_format consult.description
-                dt E-Alert
-                dd= yes_no consult.e_alert
-                dt Specialty
-                dd= consult.specialty
-                dt Specialty notes
-                dd= consult.consult_type
+              = render Renalware::Admissions::ConsultDetail.new(consult.__getobj__)
 
         / When printing we just show the notes on the second row
         tr.print-only.child-row
