@@ -40,7 +40,7 @@ module Renalware
           it do
             expect(resource.id).to eq(binary_uuid)
             expect(resource.contentType).to eq("application/pdf")
-            expect(resource.content).to eq(Base64.encode64("123"))
+            expect(resource.content).to eq(Base64.strict_encode64("123"))
           end
 
           it "profile" do

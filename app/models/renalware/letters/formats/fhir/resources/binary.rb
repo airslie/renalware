@@ -19,7 +19,7 @@ module Renalware
               },
               id: arguments.binary_uuid,
               contentType: "application/pdf",
-              content: Base64.encode64(arguments.pdf_content)
+              content: Base64.strict_encode64(arguments.pdf_content)
             )
           }
         end
