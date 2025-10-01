@@ -71,6 +71,16 @@ module Renalware
       end
 
       def authorise(params)
+        # Below in
+        #   user.roles = ...
+        # ActiveRecord reconciles the difference in roles by calling
+        #   'DELETE FROM roles_users'
+        # directly, bypassing RolesUser#destroy so we do not get any callbacks and thus no
+        # paper trail entry. So to get a 'destroy' paper_trail entry we have destroy any
+        # removed roles ourselves first.
+        if (removed_roles = user.roles - sanitized_roles(params)).any?
+          RolesUser.where(user_id: user.id, role_id: removed_roles.map(&:id)).map(&:destroy)
+        end
         user.roles = sanitized_roles(params)
       end
 
