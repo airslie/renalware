@@ -35,7 +35,7 @@ module Renalware
           def create_or_update_admission
             existing_admission = find_admission_with_matching_visit_number
             if existing_admission.present?
-              # A02 transfer or A03 discharge or A08 update
+              # A02 transfer or A03 discharge or A08 update etc
               update(existing_admission)
             else
               create_new_admission
