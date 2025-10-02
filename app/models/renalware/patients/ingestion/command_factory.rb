@@ -25,7 +25,7 @@ module Renalware
         def make_update_patient(msg)    = Patients::Ingestion::Commands::UpdatePatient.new(msg)
         def make_admit_patient(msg)     = Admissions::Ingestion::Commands::AdmitPatient.new(msg)
         def make_update_admission(msg)  = Admissions::Ingestion::Commands::AdmitPatient.new(msg)
-        def make_cancel_admission(msg)  = Admissions::Ingestion::Commands::AdmitPatient.new(msg)
+        def make_cancel_admission(msg)  = Admissions::Ingestion::Commands::CancelAdmission.new(msg)
         def make_transfer_patient(msg)  = Admissions::Ingestion::Commands::AdmitPatient.new(msg)
         def make_discharge_patient(msg) = Admissions::Ingestion::Commands::AdmitPatient.new(msg)
         def make_cancel_discharge(msg)  = Admissions::Ingestion::Commands::AdmitPatient.new(msg)

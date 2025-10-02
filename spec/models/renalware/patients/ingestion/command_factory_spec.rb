@@ -17,7 +17,7 @@ module Renalware
             discharge_patient: Admissions::Ingestion::Commands::AdmitPatient,
             admit_patient: Admissions::Ingestion::Commands::AdmitPatient,
             update_admission: Admissions::Ingestion::Commands::AdmitPatient,
-            cancel_admission: Admissions::Ingestion::Commands::AdmitPatient,
+            cancel_admission: Admissions::Ingestion::Commands::CancelAdmission,
             transfer_patient: Admissions::Ingestion::Commands::AdmitPatient,
             cancel_discharge: Admissions::Ingestion::Commands::AdmitPatient
           }.each do |message_type, command_class|
