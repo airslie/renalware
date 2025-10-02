@@ -11,6 +11,7 @@ module Renalware
         "ADT^A01" => :admit_patient,
         "ADT^A04" => :admit_patient,
         "ADT^A02" => :transfer_patient,
+        "ADT^A12" => :transfer_patient,
         "ADT^A03" => :discharge_patient,
         "ADT^A05" => :schedule_new_appointment,
         "ADT^A08" => :update_admission,
