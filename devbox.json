@@ -33,6 +33,7 @@
   "env": {
     "SETUP_COMPLETE":           "$DEVBOX_PROJECT_ROOT/.devbox/.setup-complete",
     "PLAYWRIGHT_BROWSERS_PATH": "$DEVBOX_PACKAGES_DIR",
+    "NODE_OPTIONS":           "--max-old-space-size=8192",
   },
   "shell": {
     "init_hook": [
@@ -62,7 +63,7 @@
         "touch \"$SETUP_COMPLETE\"",
         "devbox services down",
         "echo \"Setup complete!\"",
-        "echo \"Now run `devbox services up` to start process-compose\"",
+        "echo 'Now run `devbox services up` to start process-compose'",
       ],
       "reset": [
         "devbox run purge",
