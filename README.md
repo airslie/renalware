@@ -35,7 +35,8 @@ git clone git@github.com:airslie/renalware-core.git
 cd ./renalware-core
 direnv allow
 devbox run setup
-devbox services up # CTRL+C to shut it down
+devbox services up  # Start PostgreSQL (in separate terminal or background)
+bin/dev             # Start application processes (web, worker, js, css)
 ```
 
 Additionally, you can run `devbox run reset` which will delete the PostgreSQL
@@ -52,24 +53,29 @@ Visit [http://localhost:3000](http://localhost:3000) and login in one of the dem
 
 They all share the password `renalware`.
 
-## Devbox
+## Development Environment
 
-Devbox, Direnv & process-compose are a suite of tools designed to make local
-development easier. It manages package dependencies, aids in initial setup and 
-spins up related services. Under the hood it uses Nix which is a declarative, 
-immutable package manager.
+### Devbox & Direnv
 
-Devbox is a cross-platform project scoped package manager. Think npm + brew.
+Devbox and Direnv manage package dependencies and local environment setup. Under
+the hood it uses Nix which is a declarative, immutable package manager.
+
+**Devbox** is a cross-platform project scoped package manager. Think npm + brew.
 See devbox.json for the configuration and devbox.lock for the versions. Docs at
 https://www.jetify.com/docs/devbox/.
 
-Direnv sets up your local environment when entering a directory. Think 
+**Direnv** sets up your local environment when entering a directory. Think
 chruby/dotenv. It's integrated with Devbox. Docs at https://direnv.net/.
 
-process-compose spins up multiple possibly dependent services or processes. Like
-a local docker-compose. process-compose is integrated with Devbox. See 
-`./process-compose.yml` for the configuration. Packages may also install
-additional configuration in `.devbox/virtenv/<package>/process-compose.yml`. Docs
-at https://f1bonacc1.github.io/process-compose/launcher/.
+### Process Management
+
+**Infrastructure services** (PostgreSQL) are managed by Devbox's process-compose
+integration via `devbox services up`. See `./process-compose.yml` for configuration.
+
+**Application processes** (web server, background workers, JS/CSS watchers) are
+managed by Foreman via `bin/dev`. See `Procfile.dev` for the process configuration.
+
+This separation keeps infrastructure services running independently while allowing
+easy restart of application processes during development.
 
 
