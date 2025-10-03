@@ -5,9 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Setup and Environment
-- `devenv run setup` - Initial setup including database creation and seeding
-- `devenv run reset` - Delete PostgreSQL database and re-run setup
-- `devenv up` - Start all services (PostgreSQL, Rails server, etc.)
+- `devbox run setup` - Initial setup including database creation and seeding
+- `devbox run reset` - Delete PostgreSQL database and re-run setup
+- `devbox services up` - Start all services (PostgreSQL, Rails server, etc.)
 
 ### Testing
 - `bin/rspec` - Run RSpec tests
@@ -63,7 +63,7 @@ The application is organized into medical/clinical domains under `app/models/ren
 - Pathology result ingestion from external systems
 
 ### Development Environment
-Uses devenv/Nix for reproducible development environments with process-compose for service orchestration. Local development runs on port 3000 with demo users (superkch, kchdoc, kchnurse, kchguest) using password "renalware".
+Uses Devbox/Nix for reproducible development environments with process-compose for service orchestration. Local development runs on port 3000 with demo users (superkch, kchdoc, kchnurse, kchguest) using password "renalware".
 - You can use demo/db/schema.rb to check the database/model structure
 
 ### Testing
