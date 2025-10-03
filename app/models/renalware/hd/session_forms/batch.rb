@@ -13,6 +13,8 @@ module Renalware
         )
 
         def percent_complete
+          return 0 if batch_items_count.to_i.zero?
+
           ((items.where(status: :compiled).count.to_f / batch_items_count) * 100).ceil
         end
       end
