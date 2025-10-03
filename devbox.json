@@ -1,7 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
   "packages": {
-    "postgresql": "16",
+    "postgresql_16": {
+      "version": "16",
+      "outputs": ["out", "dev"],
+    },
     "libyaml": {
       "version": "latest",
       "outputs": ["dev"],
@@ -9,10 +12,6 @@
     "pkg-config": "latest",
     "gcc":        "latest",
     "gnumake":    "latest",
-    "libpq": {
-      "version": "latest",
-      "outputs": ["dev"],
-    },
     "lsof":           "latest",
     "wkhtmltopdf":    "latest",
     "yarn":           "latest",
@@ -27,9 +26,9 @@
       "outputs": ["fonts", "out"],
     },
     "pandoc":                     "latest",
-    "ruby":                       "3.4.3",
     "playwright-driver.browsers": "",
     "inotifytools":               "latest",
+    "ruby":                       "3.4",
   },
   "env": {
     "SETUP_COMPLETE":           "$DEVBOX_PROJECT_ROOT/.devbox/.setup-complete",
@@ -37,12 +36,17 @@
   },
   "shell": {
     "init_hook": [
-      "[ -f \"$SETUP_COMPLETE\" ] || bundle check || bundle",
+      "if [ ! -f $SETUP_COMPLETE ]; then",
+      "  echo 'Welcome to the Renalware codebase!'",
+      "  echo 'To get started, run `devbox run setup`.'",
+      "  echo 'This will install all the dependencies and create the database.'",
+      "fi",
     ],
     "scripts": {
       "purge": [
         "rm -rf $PGDATA && mkdir -p $PGDATA",
         "rm -f \"$SETUP_COMPLETE\"",
+        "echo You may also want to rm -rf .devbox if you get problems installing dependencies such as Ruby",
       ],
       "setup": [
         "[ -f \"$SETUP_COMPLETE\" ] && echo Nothing to do, run: 'devbox run reset' to re-initialize the project && exit 0",
