@@ -17,6 +17,12 @@ class Forms::Generic::Homecare::Document < Forms::Base
 
   def build
     Prawn::Font::AFM.hide_m17n_warning = true
+    sections.each { |klass| to_class(klass).new(document, args).build }
+  end
+
+  private
+
+  def sections
     %w(
       Heading
       PatientDetails
@@ -26,10 +32,8 @@ class Forms::Generic::Homecare::Document < Forms::Base
       DeliveryFrequencies
       Signoff
       Footer
-    ).each { |klass| to_class(klass).new(document, args).build }
+    ).tap { |s| s.delete("Allergies") unless Renalware.config.enable_allergies }
   end
-
-  private
 
   def to_class(name)
     "Forms::Generic::Homecare::#{name}".constantize
