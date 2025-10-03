@@ -5,8 +5,10 @@ module Renalware
       extend Enumerize
       include PatientsRansackHelper
       include RansackAll
+      include OrderedScope
 
       PRIORITY_VALUES = (1..20)
+      ORDER_FIELDS = [:started_on].freeze
       validates :patient_id, presence: true
       validates :started_on, presence: true
       validates :description, presence: true
@@ -31,6 +33,10 @@ module Renalware
       enumerize :aki_risk, in: %i(yes no unknown)
 
       scope :active, -> { where(ended_on: nil) }
+
+      def patient_current_modality
+        patient&.current_modality
+      end
 
       ransacker :priority do
         Arel.sql("coalesce(priority, -1)")
