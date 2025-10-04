@@ -35,10 +35,9 @@ git clone git@github.com:airslie/renalware-core.git
 cd ./renalware-core
 direnv allow
 devbox run setup
-devbox services up  # Start PostgreSQL (in separate terminal or background)
+devbox services up  # Start PostgreSQL with process-compose
 bin/dev             # Start application processes (web, worker, js, css)
 ```
-
 Additionally, you can run `devbox run reset` which will delete the PostgreSQL
 database files for this project and then runs setup again. For a complete reset
 (including removing gems) you can simply `rm -rf .devbox`. See `devbox run` for

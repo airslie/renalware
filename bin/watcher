@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# This script is used to get around memory leaks in Chokidar used by TailwindCSS
+# 3 when using --watch. The solution is to upgrade to TailwindCSS 4 as fixes
+# have been implemented. This seems to be more common on Linux than MacOS.
+
 WATCHED_DIR="app"
 EXCLUDE_REGEX="built.js"
 DEBOUNCE_TIME=2   # seconds to wait for event quiet period
