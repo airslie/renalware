@@ -1092,7 +1092,7 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   shoulda-matchers (~> 6.1)
-  simplecov (~> 0.17)
+  simplecov
   solid_cache
   sprockets-rails
   stackprof
@@ -1114,4 +1114,4 @@ RUBY VERSION
    ruby 3.4.5p51
 
 BUNDLED WITH
-   2.6.7
+   2.7.2
