@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Renalware
-  class Clinical::DukeActivityStatusIndex::Detail < Detail
+  class Clinical::DukeActivityStatusIndexDetail < Detail
     def view_template
       super do
         DetailItem(document, :score)

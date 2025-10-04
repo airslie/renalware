@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Renalware
-  RSpec.describe Clinical::DukeActivityStatusIndex::Detail do
+  RSpec.describe Clinical::DukeActivityStatusIndexDetail do
     subject { described_class.new(record) }
 
     let(:record) { build(:duke_activity_status_index) }
