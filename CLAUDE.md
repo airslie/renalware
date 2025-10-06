@@ -83,6 +83,11 @@ Uses Devbox/Nix for reproducible development environments. Infrastructure servic
 - Use descriptive test names that document behavior
 - Avoid code comments, tests and well named methods are the documentation
 
+### Coverage Reporting
+SimpleCov is configured to track code coverage for both RSpec and Cucumber tests:
+- **CI/CD**: Coverage is automatically collected and uploaded to Codecov
+- **Reports**: Coverage reports are available at `coverage/index.html` after running tests
+
 ### Rules
 - Follow existing code style, conventions and patterns
 - Add planning documents to plans/ starting with today's date and short description (using lowercase & underscrores)

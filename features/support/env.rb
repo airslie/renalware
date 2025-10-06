@@ -1,8 +1,9 @@
 ENV["RAILS_ENV"] ||= "test"
 
-if ENV.key?("CC_TEST_REPORTER_ID") || ENV.key?("SIMPLECOV")
+if ENV.key?("COVERAGE")
   require "simplecov"
-  SimpleCov.command_name "Cucumber-#{ENV['TEST_DEPTH'] || 'domain'}"
+  # Ensure coverage is merged not overwritten
+  SimpleCov.command_name "Cucumber-#{ENV.fetch('TEST_DEPTH', 'domain')}"
 end
 
 require File.expand_path("../../demo/config/environment.rb", __dir__)

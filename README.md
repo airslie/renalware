@@ -77,4 +77,36 @@ managed by Foreman via `bin/dev`. See `Procfile.dev` for the process configurati
 This separation keeps infrastructure services running independently while allowing
 easy restart of application processes during development.
 
+## Testing
+
+The project includes comprehensive test coverage using RSpec for unit/integration tests and Cucumber for feature tests.
+
+### Running Tests
+
+```bash
+# Run all tests
+bundle exec rake
+
+# Run RSpec tests only
+bin/rspec
+
+# Run Cucumber tests only
+bin/cucumber
+
+# Run combined tests with coverage report
+bin/coverage
+```
+
+### Coverage Reporting
+
+SimpleCov is integrated to track code coverage across both test suites:
+
+- **Local development**: Run `bin/coverage` to generate a combined coverage report
+- **CI/CD**: Coverage is automatically collected on every push and PR
+- **Reports**: Coverage reports are deployed to GitHub Pages on main branch
+- **PR feedback**: Coverage summaries are automatically posted on pull requests
+- **Thresholds**: Minimum 80% overall coverage, 70% per file
+
+Coverage reports include both line and branch coverage metrics, with detailed breakdowns by file and directory.
+
 

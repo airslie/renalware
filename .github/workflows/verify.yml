@@ -1,16 +1,16 @@
 name: Verify
 
-# Do not run when a tag pushed, or when merging to main
+# Do not run when a tag pushed
 # Do not run if updating docs
 on:
   push:
     tags-ignore:
       - "*"
-    branches-ignore:
-      - main
     paths-ignore:
       - "docs/**"
       - "README.md"
+  pull_request:
+    branches: [main]
 
 # Cancel any running actions triggered on the same branch.
 # NB: github.ref is the branch or tag that triggered the workflow run.
@@ -25,6 +25,7 @@ env:
   POSTGRES_PASSWORD: postgres
   RAILS_ENV: test
   PGHOST: localhost
+  COVERAGE: true
 
 jobs:
   linters:
@@ -73,7 +74,6 @@ jobs:
           bundle exec bundle audit --update
 
   tests:
-    needs: linters
     timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
@@ -159,6 +159,9 @@ jobs:
       - name: Install dependencies
         run: sudo apt install -y ghostscript pandoc
 
+      - name: Create coverage directory
+        run: mkdir -p coverage
+
       - name: Run tests
         env:
           PGHOST: localhost
@@ -174,3 +177,47 @@ jobs:
           name: test-failure-screenshots
           path: demo/tmp/capybara
           if-no-files-found: ignore
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ strategy.job-index }}
+          path: coverage/.resultset.json
+          if-no-files-found: ignore
+          include-hidden-files: true
+
+  coverage:
+    name: Coverage Report
+    needs: tests
+    runs-on: ubuntu-latest
+    if: always()
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: coverage-artifacts
+
+      - name: Merge coverage reports
+        env:
+          COVERAGE: true
+          RAILS_ENV: test
+        run: bin/collate-coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

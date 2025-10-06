@@ -80,6 +80,7 @@ group :test do
   # gem "selenium-webdriver", "4.28.0"
   gem "shoulda-matchers", "~> 6.1"
   gem "simplecov", require: false # only loaded if required
+  gem "simplecov-cobertura", "~> 3.1", require: false
   gem "test-prof"
   gem "vcr", require: false
   gem "webmock", "~> 3.7", require: false
