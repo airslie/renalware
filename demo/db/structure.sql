@@ -4200,8 +4200,16 @@ CREATE TABLE renalware.transplant_registration_status_descriptions (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     rr_code integer,
-    rr_comment text
+    rr_comment text,
+    ukrdc_assessment_outcome_code integer
 );
+
+
+--
+-- Name: COLUMN transplant_registration_status_descriptions.ukrdc_assessment_outcome_code; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.transplant_registration_status_descriptions.ukrdc_assessment_outcome_code IS 'See UKRR Dataset 5+. Valid values are 1 through 3.';
 
 
 --
@@ -4908,8 +4916,7 @@ CREATE TABLE renalware.death_locations (
     patients_actual_count integer DEFAULT 0 NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    rr_outcome_code integer,
-    rr_outcome_text character varying
+    ukrdc_assessment_outcome_code integer
 );
 
 
@@ -9832,7 +9839,7 @@ CREATE TABLE renalware.low_clearance_dialysis_plans (
     deleted_at timestamp without time zone,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    ukrdc_rr51_outcome_code integer
+    ukrdc_assessment_outcome_code integer
 );
 
 
@@ -9844,10 +9851,10 @@ COMMENT ON COLUMN renalware.low_clearance_dialysis_plans.code IS 'Required only 
 
 
 --
--- Name: COLUMN low_clearance_dialysis_plans.ukrdc_rr51_outcome_code; Type: COMMENT; Schema: renalware; Owner: -
+-- Name: COLUMN low_clearance_dialysis_plans.ukrdc_assessment_outcome_code; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON COLUMN renalware.low_clearance_dialysis_plans.ukrdc_rr51_outcome_code IS 'For UKRDC Care Planning Assessments. See UKRR Dataset 5+. Valid values are 4 through 10. Not using an enum here as codes may change in a future UKRDC release';
+COMMENT ON COLUMN renalware.low_clearance_dialysis_plans.ukrdc_assessment_outcome_code IS 'For UKRDC Care Planning Assessments. See UKRR Dataset 5+. Valid values are 4 through 10.';
 
 
 --
@@ -16410,6 +16417,71 @@ ALTER SEQUENCE renalware.transplant_versions_id_seq OWNED BY renalware.transplan
 
 
 --
+-- Name: ukrdc_assessment_outcomes; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.ukrdc_assessment_outcomes (
+    code integer NOT NULL,
+    description character varying,
+    assessment_type_id bigint NOT NULL,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: ukrdc_assessment_outcomes_code_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.ukrdc_assessment_outcomes_code_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ukrdc_assessment_outcomes_code_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.ukrdc_assessment_outcomes_code_seq OWNED BY renalware.ukrdc_assessment_outcomes.code;
+
+
+--
+-- Name: ukrdc_assessment_types; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.ukrdc_assessment_types (
+    id bigint NOT NULL,
+    code character varying NOT NULL,
+    description character varying,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: ukrdc_assessment_types_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.ukrdc_assessment_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ukrdc_assessment_types_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.ukrdc_assessment_types_id_seq OWNED BY renalware.ukrdc_assessment_types.id;
+
+
+--
 -- Name: ukrdc_batches; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -18897,6 +18969,20 @@ ALTER TABLE ONLY renalware.transplant_versions ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: ukrdc_assessment_outcomes code; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.ukrdc_assessment_outcomes ALTER COLUMN code SET DEFAULT nextval('renalware.ukrdc_assessment_outcomes_code_seq'::regclass);
+
+
+--
+-- Name: ukrdc_assessment_types id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.ukrdc_assessment_types ALTER COLUMN id SET DEFAULT nextval('renalware.ukrdc_assessment_types_id_seq'::regclass);
+
+
+--
 -- Name: ukrdc_batches id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -21313,6 +21399,22 @@ ALTER TABLE ONLY renalware.transplant_rejection_treatments
 
 ALTER TABLE ONLY renalware.transplant_versions
     ADD CONSTRAINT transplant_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ukrdc_assessment_outcomes ukrdc_assessment_outcomes_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.ukrdc_assessment_outcomes
+    ADD CONSTRAINT ukrdc_assessment_outcomes_pkey PRIMARY KEY (code);
+
+
+--
+-- Name: ukrdc_assessment_types ukrdc_assessment_types_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.ukrdc_assessment_types
+    ADD CONSTRAINT ukrdc_assessment_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -27811,6 +27913,13 @@ CREATE INDEX index_transplant_versions_on_item_id ON renalware.transplant_versio
 
 
 --
+-- Name: index_ukrdc_assessment_outcomes_on_assessment_type_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_ukrdc_assessment_outcomes_on_assessment_type_id ON renalware.ukrdc_assessment_outcomes USING btree (assessment_type_id);
+
+
+--
 -- Name: index_ukrdc_measurement_units_on_name; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -28494,6 +28603,14 @@ ALTER TABLE ONLY renalware.events
 
 ALTER TABLE ONLY renalware.events
     ADD CONSTRAINT events_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: death_locations fk_rails_00de28eb89; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.death_locations
+    ADD CONSTRAINT fk_rails_00de28eb89 FOREIGN KEY (ukrdc_assessment_outcome_code) REFERENCES renalware.ukrdc_assessment_outcomes(code);
 
 
 --
@@ -29201,6 +29318,14 @@ ALTER TABLE ONLY renalware.patients
 
 
 --
+-- Name: ukrdc_assessment_outcomes fk_rails_384bd50878; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.ukrdc_assessment_outcomes
+    ADD CONSTRAINT fk_rails_384bd50878 FOREIGN KEY (assessment_type_id) REFERENCES renalware.ukrdc_assessment_types(id);
+
+
+--
 -- Name: medication_prescriptions fk_rails_38f0cfe718; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29513,6 +29638,14 @@ ALTER TABLE ONLY renalware.messaging_receipts
 
 
 --
+-- Name: low_clearance_dialysis_plans fk_rails_5151a5b88c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.low_clearance_dialysis_plans
+    ADD CONSTRAINT fk_rails_5151a5b88c FOREIGN KEY (ukrdc_assessment_outcome_code) REFERENCES renalware.ukrdc_assessment_outcomes(code);
+
+
+--
 -- Name: hd_prescription_administrations fk_rails_51e9a49d43; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29526,6 +29659,14 @@ ALTER TABLE ONLY renalware.hd_prescription_administrations
 
 ALTER TABLE ONLY renalware.hd_slot_requests
     ADD CONSTRAINT fk_rails_5262597fc7 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: transplant_registration_status_descriptions fk_rails_52d18131bb; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_registration_status_descriptions
+    ADD CONSTRAINT fk_rails_52d18131bb FOREIGN KEY (ukrdc_assessment_outcome_code) REFERENCES renalware.ukrdc_assessment_outcomes(code);
 
 
 --
@@ -32143,6 +32284,11 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260216170537'),
+('20260211063527'),
+('20260211061047'),
+('20260210185453'),
+('20260210155641'),
 ('20260205172045'),
 ('20260202160254'),
 ('20260112190854'),

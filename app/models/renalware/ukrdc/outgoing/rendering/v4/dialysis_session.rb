@@ -36,6 +36,7 @@ module Renalware
                 session_elem << procedure_time_element
                 session_elem << entered_at_element
                 session_elem << external_id_element
+                session_elem << symptomatic_hypotension_element
                 session_elem << vascular_access_element
                 session_elem << vascular_access_site_element
                 session_elem << time_dialysed_element
@@ -78,6 +79,13 @@ module Renalware
               end
             end
 
+            def symptomatic_hypotension_element
+              create_node(
+                "SymtomaticHypotension", # SIC
+                session.had_intradialytic_hypotension?
+              )
+            end
+
             def vascular_access_element
               if session.access_rr41_code.present?
                 create_node("VascularAccess") do |elem|
@@ -96,22 +104,20 @@ module Renalware
               end
             end
 
-            # rubocop:disable Metrics/AbcSize
-            def attributes_element
-              create_node("Attributes") do |elem|
-                elem << create_node("QHD19", session.had_intradialytic_hypotension?)
-                elem << create_node("QHD20", session.access_rr02_code)
-                elem << create_node("QHD21", session.access_rr41_code)
-                elem << create_node("QHD22", "N") # Access in two sites simultaneously
-                elem << create_node("QHD30", coerce_to_integer(session.blood_flow))
-                elem << create_node("QHD31", coerce_to_integer(session.duration_in_minutes))
-                if session.sodium_content.present?
-                  elem << create_node("QHD32", session.sodium_content) # Sodium in Dialysate
-                end
-                elem << create_node("QHD33", "U") # TODO: Lookup needling Method
-              end
-            end
-            # rubocop:enable Metrics/AbcSize
+            # def attributes_element
+            #   create_node("Attributes") do |elem|
+            #     elem << create_node("QHD19", session.had_intradialytic_hypotension?)
+            #     elem << create_node("QHD20", session.access_rr02_code)
+            #     elem << create_node("QHD21", session.access_rr41_code)
+            #     elem << create_node("QHD22", "N") # Access in two sites simultaneously
+            #     elem << create_node("QHD30", coerce_to_integer(session.blood_flow))
+            #     elem << create_node("QHD31", coerce_to_integer(session.duration_in_minutes))
+            #     if session.sodium_content.present?
+            #       elem << create_node("QHD32", session.sodium_content) # Sodium in Dialysate
+            #     end
+            #     elem << create_node("QHD33", "U") # TODO: Lookup needling Method
+            #   end
+            # end
           end
         end
       end

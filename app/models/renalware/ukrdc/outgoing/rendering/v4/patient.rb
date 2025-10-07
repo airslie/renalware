@@ -12,9 +12,9 @@ module Renalware
             #  "Unique identifier not attributable to patient, Site code plus internal record
             #   number or similar eg. RAJ01-12345"
             # Since we do not like to hand out primary keys for security reasons, and the uuids we
-            # already have on patient, which might otherwise satisfy this requirement, are rather long
-            # (the IDN07 identifier spec says max 20 chars) we generate a unique 10 char base 58
-            # string.
+            # already have on patient, which might otherwise satisfy this requirement, are rather
+            # long (the IDN07 identifier spec says max 20 chars) we generate a unique 10 char
+            # base 58 string.
             def self.generate_renal_registry_id
               rr_id = nil
               loop do
@@ -54,6 +54,7 @@ module Renalware
                 ukrdc_patient_elem << documents_element
                 ukrdc_patient_elem << encounters_element
                 ukrdc_patient_elem << opt_outs_element
+                ukrdc_patient_elem << assessments_element
               end
             end
 
@@ -67,7 +68,7 @@ module Renalware
             end
 
             def opt_outs_element
-              ukrr_opt_out_element = OptOut.new(patient: patient).xml
+              ukrr_opt_out_element = OptOut.new(patient:).xml
               if ukrr_opt_out_element
                 create_node("OptOuts") { |opt_outs| opt_outs << ukrr_opt_out_element }
               end
@@ -96,11 +97,11 @@ module Renalware
               return if address.blank?
 
               create_node("Addresses") do |addresses|
-                addresses << Address.new(address: address).xml
+                addresses << Address.new(address:).xml
               end
             end
 
-            def patient_numbers_element = PatientNumbers.new(patient: patient).xml
+            def patient_numbers_element = PatientNumbers.new(patient:).xml
             def born_on_element = create_node("BirthTime", patient.born_on.to_datetime)
             def gender_element = create_node("Gender", patient.sex&.nhs_dictionary_number)
 
@@ -119,12 +120,13 @@ module Renalware
               end
             end
 
-            def family_doctor_element     = FamilyDoctor.new(patient: patient).xml
-            def primary_language_element  = PrimaryLanguage.new(patient: patient).xml
-            def lab_orders_element        = LabOrders.new(patient: patient).xml
-            def observations_element      = Observations.new(patient: patient).xml
-            def procedures_element        = Procedures.new(patient: patient).xml
-            def diagnoses_element         = Diagnoses.new(patient: patient).xml
+            def family_doctor_element     = FamilyDoctor.new(patient:).xml
+            def primary_language_element  = PrimaryLanguage.new(patient:).xml
+            def lab_orders_element        = LabOrders.new(patient:).xml
+            def observations_element      = Observations.new(patient:).xml
+            def procedures_element        = Procedures.new(patient:).xml
+            def diagnoses_element         = Diagnoses.new(patient:).xml
+            def assessments_element       = Assessments.new(patient:).xml
 
             def death_element
               create_node("Death", true) if patient.dead?
@@ -133,7 +135,7 @@ module Renalware
             def medications_element
               create_node("Medications") do |medications_element|
                 patient.prescriptions_with_numeric_dose_amount.each do |prescription|
-                  medications_element << Medication.new(prescription: prescription).xml
+                  medications_element << Medication.new(prescription:).xml
                 end
               end
             end
@@ -143,7 +145,7 @@ module Renalware
 
               create_node("Documents") do |documents_element|
                 patient.letters.each do |letter|
-                  documents_element << Document.new(letter: letter).xml
+                  documents_element << Document.new(letter:).xml
                 end
               end
             end
@@ -156,7 +158,7 @@ module Renalware
               create_node("Encounters") do |elem|
                 patient.treatments.each do |treatment|
                   klass = treatment_class_for(treatment.modality_description)
-                  elem << klass.new(treatment: treatment).xml
+                  elem << klass.new(treatment:).xml
                 end
               end
             end

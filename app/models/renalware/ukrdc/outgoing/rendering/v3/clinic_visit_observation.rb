@@ -14,7 +14,7 @@ module Renalware
 
               Observation.new(
                 observed_at: visit.datetime,
-                measurement: measurement,
+                measurement:,
                 i18n_key: i18n_key || method
               ).xml
             end

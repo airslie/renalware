@@ -15,8 +15,8 @@ module Renalware
               ].compact.join("-")
 
               super(
-                treatment: treatment,
-                encounter_number: encounter_number
+                treatment:,
+                encounter_number:
               )
             end
           end

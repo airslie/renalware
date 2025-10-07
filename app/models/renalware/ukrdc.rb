@@ -5,5 +5,9 @@ module Renalware
     class QuestionNotFoundError < StandardError; end
 
     def self.table_name_prefix = "ukrdc_"
+
+    module Assessments
+      def self.table_name_prefix = "ukrdc_assessment_"
+    end
   end
 end

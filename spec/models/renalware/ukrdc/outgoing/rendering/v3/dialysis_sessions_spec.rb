@@ -17,7 +17,7 @@ module Renalware
             expected_xml = "<DialysisSessions start=\"2021-01-01\" stop=\"2021-02-01\"/>"
 
             actual_xml = format_xml(
-              described_class.new(patient: patient, sessions: []).xml
+              described_class.new(patient:, sessions: []).xml
             )
 
             expect(actual_xml).to eq(expected_xml)

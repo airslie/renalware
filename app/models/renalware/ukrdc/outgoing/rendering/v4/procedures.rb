@@ -26,8 +26,8 @@ module Renalware
                 Renalware::HD::SessionPresenter.new(session)
               end
               elem << DialysisSessions.new(
-                patient: patient,
-                sessions: sessions
+                patient:,
+                sessions:
               ).xml
             end
 

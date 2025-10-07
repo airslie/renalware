@@ -8,7 +8,7 @@ module Renalware
           it "renders nothing" do
             patient = instance_double(PatientPresenter, prd_description_code: nil)
 
-            xml = described_class.new(patient: patient).xml
+            xml = described_class.new(patient:).xml
 
             expect(xml).to be_nil
           end
@@ -35,9 +35,9 @@ module Renalware
               </RenalDiagnosis>
             XML
 
-            xml = format_xml(described_class.new(patient: patient).xml)
+            xml = format_xml(described_class.new(patient:).xml)
 
-            expect(xml).to eq(expected_xml)
+            expect(xml).to match_xml(expected_xml)
           end
         end
       end

@@ -51,11 +51,11 @@ module Renalware
             end
 
             def cause_of_death_element
-              CauseOfDeath.new(patient: patient).xml
+              CauseOfDeath.new(patient:).xml
             end
 
             def renal_diagnosis_element
-              RenalDiagnosis.new(patient: patient).xml
+              RenalDiagnosis.new(patient:).xml
             end
           end
         end

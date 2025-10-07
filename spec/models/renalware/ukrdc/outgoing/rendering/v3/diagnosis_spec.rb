@@ -29,7 +29,7 @@ module Renalware
             ).xml
           )
 
-          expect(xml).to eq(expected_xml)
+          expect(xml).to match_xml(expected_xml)
         end
       end
     end

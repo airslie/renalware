@@ -20,9 +20,9 @@ module Renalware
             </Allergy>
           XML
 
-          xml = format_xml(described_class.new(allergy: allergy).xml)
+          xml = format_xml(described_class.new(allergy:).xml)
 
-          expect(xml).to eq(expected_xml)
+          expect(xml).to match_xml(expected_xml)
         end
       end
     end

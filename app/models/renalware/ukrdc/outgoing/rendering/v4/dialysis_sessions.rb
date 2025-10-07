@@ -20,7 +20,7 @@ module Renalware
                 sessions_elem[:stop] = patient.changes_up_until.to_date.iso8601
 
                 sessions.each do |session|
-                  sessions_elem << DialysisSession.new(session: session).xml
+                  sessions_elem << DialysisSession.new(session:).xml
                 end
               end
             end

@@ -16,9 +16,9 @@ module Renalware
             </User>
           XML
 
-          xml = format_xml(described_class.new(user: user).xml)
+          xml = format_xml(described_class.new(user:).xml)
 
-          expect(xml).to eq(expected_xml)
+          expect(xml).to match_xml(expected_xml)
         end
       end
     end

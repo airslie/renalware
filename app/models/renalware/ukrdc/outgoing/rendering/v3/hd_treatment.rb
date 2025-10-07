@@ -15,8 +15,8 @@ module Renalware
               ].compact.join("-")
 
               super(
-                treatment: treatment,
-                encounter_number: encounter_number,
+                treatment:,
+                encounter_number:,
                 attributes: { "QBL05" => treatment.hospital_unit&.unit_type_rr8 }
               )
             end

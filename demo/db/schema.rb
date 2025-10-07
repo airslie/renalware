@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_16_170537) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -2292,8 +2292,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
     t.string "name", null: false
     t.integer "patients_actual_count", default: 0, null: false, comment: "Counter cache for the number of patients who died at this location"
     t.integer "patients_preferred_count", default: 0, null: false, comment: "Counter cache for the number of patients preferring this location"
-    t.integer "rr_outcome_code"
-    t.string "rr_outcome_text"
+    t.integer "ukrdc_assessment_outcome_code"
     t.datetime "updated_at", null: false
     t.index "TRIM(BOTH FROM lower((name)::text))", name: "idx_death_locations_name", unique: true, where: "(deleted_at IS NULL)"
     t.index ["deleted_at"], name: "index_death_locations_on_deleted_at"
@@ -3886,7 +3885,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
     t.datetime "created_at", null: false
     t.datetime "deleted_at", precision: nil
     t.string "name", null: false
-    t.integer "ukrdc_rr51_outcome_code", comment: "For UKRDC Care Planning Assessments. See UKRR Dataset 5+. Valid values are 4 through 10. Not using an enum here as codes may change in a future UKRDC release"
+    t.integer "ukrdc_assessment_outcome_code", comment: "For UKRDC Care Planning Assessments. See UKRR Dataset 5+. Valid values are 4 through 10."
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_low_clearance_dialysis_plans_on_code", unique: true
     t.index ["deleted_at"], name: "index_low_clearance_dialysis_plans_on_deleted_at"
@@ -6003,6 +6002,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
     t.integer "position", default: 0
     t.integer "rr_code"
     t.text "rr_comment"
+    t.integer "ukrdc_assessment_outcome_code", comment: "See UKRR Dataset 5+. Valid values are 1 through 3."
     t.datetime "updated_at", precision: nil, null: false
     t.index ["code"], name: "index_transplant_registration_status_descriptions_on_code"
     t.index ["position"], name: "index_transplant_registration_status_descriptions_on_position"
@@ -6076,12 +6076,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
     t.index ["item_type", "item_id"], name: "tx_versions_type_id"
   end
 
+  create_table "renalware.ukrdc_assessment_outcomes", primary_key: "code", id: :serial, force: :cascade do |t|
+    t.bigint "assessment_type_id", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.string "description"
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["assessment_type_id"], name: "index_ukrdc_assessment_outcomes_on_assessment_type_id"
+  end
+
+  create_table "renalware.ukrdc_assessment_types", force: :cascade do |t|
+    t.string "code", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.string "description"
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+  end
+
   create_table "renalware.ukrdc_batches", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "renalware.ukrdc_measurement_units", force: :cascade do |t|
+    t.string "alias", default: [], array: true
     t.datetime "created_at", precision: nil, null: false
     t.string "description"
     t.string "name", null: false
@@ -6345,6 +6361,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
   add_foreign_key "renalware.clinical_igan_risks", "renalware.patients"
   add_foreign_key "renalware.clinical_igan_risks", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.clinical_igan_risks", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.death_locations", "renalware.ukrdc_assessment_outcomes", column: "ukrdc_assessment_outcome_code", primary_key: "code"
   add_foreign_key "renalware.directory_people", "renalware.users", column: "created_by_id", name: "directory_people_created_by_id_fk"
   add_foreign_key "renalware.directory_people", "renalware.users", column: "updated_by_id", name: "directory_people_updated_by_id_fk"
   add_foreign_key "renalware.drug_homecare_forms", "renalware.drug_suppliers", column: "supplier_id"
@@ -6493,6 +6510,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
   add_foreign_key "renalware.letter_section_snapshots", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_signatures", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_signatures", "renalware.users"
+  add_foreign_key "renalware.low_clearance_dialysis_plans", "renalware.ukrdc_assessment_outcomes", column: "ukrdc_assessment_outcome_code", primary_key: "code"
   add_foreign_key "renalware.low_clearance_profiles", "renalware.low_clearance_referrers", column: "referrer_id"
   add_foreign_key "renalware.low_clearance_profiles", "renalware.patients"
   add_foreign_key "renalware.low_clearance_profiles", "renalware.users", column: "created_by_id"
@@ -6712,6 +6730,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
   add_foreign_key "renalware.transplant_recipient_operations", "renalware.patients"
   add_foreign_key "renalware.transplant_recipient_operations", "renalware.transplant_induction_agents", column: "induction_agent_id"
   add_foreign_key "renalware.transplant_recipient_workups", "renalware.patients"
+  add_foreign_key "renalware.transplant_registration_status_descriptions", "renalware.ukrdc_assessment_outcomes", column: "ukrdc_assessment_outcome_code", primary_key: "code"
   add_foreign_key "renalware.transplant_registration_statuses", "renalware.transplant_registration_status_descriptions", column: "description_id"
   add_foreign_key "renalware.transplant_registration_statuses", "renalware.transplant_registrations", column: "registration_id"
   add_foreign_key "renalware.transplant_registration_statuses", "renalware.users", column: "created_by_id", name: "transplant_registration_statuses_created_by_id_fk"
@@ -6721,6 +6740,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
   add_foreign_key "renalware.transplant_rejection_episodes", "renalware.transplant_rejection_treatments", column: "treatment_id"
   add_foreign_key "renalware.transplant_rejection_episodes", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.transplant_rejection_episodes", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.ukrdc_assessment_outcomes", "renalware.ukrdc_assessment_types", column: "assessment_type_id"
   add_foreign_key "renalware.ukrdc_transmission_logs", "renalware.patients"
   add_foreign_key "renalware.ukrdc_transmission_logs", "renalware.ukrdc_batches", column: "batch_id"
   add_foreign_key "renalware.ukrdc_treatments", "renalware.hd_profiles"

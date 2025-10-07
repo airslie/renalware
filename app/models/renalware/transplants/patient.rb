@@ -1,6 +1,7 @@
 module Renalware
   module Transplants
     class Patient < Renalware::Patient
+      # Note really there can be only one registration per patient
       has_many :registrations,
                dependent: :restrict_with_exception
 

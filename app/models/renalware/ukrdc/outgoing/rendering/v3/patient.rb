@@ -67,7 +67,7 @@ module Renalware
             end
 
             def opt_outs_element
-              ukrr_opt_out_element = OptOut.new(patient: patient).xml
+              ukrr_opt_out_element = OptOut.new(patient:).xml
               if ukrr_opt_out_element
                 create_node("OptOuts") { |opt_outs| opt_outs << ukrr_opt_out_element }
               end
@@ -96,12 +96,12 @@ module Renalware
               return if address.blank?
 
               create_node("Addresses") do |addresses|
-                addresses << Address.new(address: address).xml
+                addresses << Address.new(address:).xml
               end
             end
 
             def patient_numbers_element
-              PatientNumbers.new(patient: patient).xml
+              PatientNumbers.new(patient:).xml
             end
 
             def born_on_element
@@ -128,11 +128,11 @@ module Renalware
             end
 
             def family_doctor_element
-              FamilyDoctor.new(patient: patient).xml
+              FamilyDoctor.new(patient:).xml
             end
 
             def primary_language_element
-              PrimaryLanguage.new(patient: patient).xml
+              PrimaryLanguage.new(patient:).xml
             end
 
             def death_element
@@ -140,19 +140,19 @@ module Renalware
             end
 
             def lab_orders_element
-              LabOrders.new(patient: patient).xml
+              LabOrders.new(patient:).xml
             end
 
             def medications_element
               create_node("Medications") do |medications_element|
                 patient.prescriptions_with_numeric_dose_amount.each do |prescription|
-                  medications_element << Medication.new(prescription: prescription).xml
+                  medications_element << Medication.new(prescription:).xml
                 end
               end
             end
 
             def observations_element
-              Observations.new(patient: patient).xml
+              Observations.new(patient:).xml
             end
 
             def documents_element
@@ -160,13 +160,13 @@ module Renalware
 
               create_node("Documents") do |documents_element|
                 patient.letters.each do |letter|
-                  documents_element << Document.new(letter: letter).xml
+                  documents_element << Document.new(letter:).xml
                 end
               end
             end
 
-            def procedures_element = Procedures.new(patient: patient).xml
-            def diagnoses_element  = Diagnoses.new(patient: patient).xml
+            def procedures_element = Procedures.new(patient:).xml
+            def diagnoses_element  = Diagnoses.new(patient:).xml
 
             # Treatments (modalities in RW parlance) are put under the Encounters element.
             # Treatments are generated during the export process - see GenerateTimeline.
@@ -176,7 +176,7 @@ module Renalware
               create_node("Encounters") do |elem|
                 patient.treatments.each do |treatment|
                   klass = treatment_class_for(treatment.modality_description)
-                  elem << klass.new(treatment: treatment).xml
+                  elem << klass.new(treatment:).xml
                 end
               end
             end

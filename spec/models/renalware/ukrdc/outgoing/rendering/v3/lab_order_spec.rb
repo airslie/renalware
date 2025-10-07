@@ -82,12 +82,7 @@ module Renalware
             </LabOrder>
           XML
 
-          actual_xml = format_xml(described_class.new(patient: patient, request: request).xml)
-
-          if actual_xml != expected_xml
-            p actual_xml
-            p expected_xml
-          end
+          actual_xml = format_xml(described_class.new(patient:, request:).xml)
 
           expect(actual_xml).to eq(expected_xml)
         end

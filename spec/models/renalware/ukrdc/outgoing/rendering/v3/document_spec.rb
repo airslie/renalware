@@ -41,7 +41,7 @@ module Renalware
 
         it do
           create(:hospital_unit, unit_code: "KCH", renal_registry_code: "123")
-          renderer = double(call: "xxx") # rubocop:disable RSpec/VerifiedDoubles
+          renderer = double(call: "xxx")
           allow(Renalware::Letters::RendererFactory).to receive(:renderer_for).and_return(renderer)
           expected_stream = Base64.encode64("xxx")
           letter = create_a_letter
@@ -72,9 +72,9 @@ module Renalware
             </Document>
           XML
 
-          xml = format_xml(described_class.new(letter: letter).xml)
+          xml = format_xml(described_class.new(letter:).xml)
 
-          expect(xml).to eq(expected_xml)
+          expect(xml).to match_xml(expected_xml)
         end
       end
     end

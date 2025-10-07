@@ -30,7 +30,7 @@ module Renalware
             patient.ukrdc_external_id = SecureRandom.uuid
             patient.secure_id = SecureRandom.uuid
             patient.renal_registry_id =
-              UKRDC::Outgoing::Rendering::Patient.generate_renal_registry_id
+              UKRDC::Outgoing::Rendering::V4::Patient.generate_renal_registry_id
             patient.hospital_centre_id = host_hospital_centre_id
           end
 

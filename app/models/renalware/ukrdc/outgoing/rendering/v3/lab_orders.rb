@@ -20,7 +20,7 @@ module Renalware
                 lab_orders[:stop] = patient.changes_up_until.to_date.iso8601
 
                 patient.observation_requests.each do |request|
-                  lab_orders << LabOrder.new(patient: patient, request: request).xml
+                  lab_orders << LabOrder.new(patient:, request:).xml
                 end
               end
             end

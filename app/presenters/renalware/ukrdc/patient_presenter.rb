@@ -185,6 +185,13 @@ module Renalware
         Transplants::RecipientOperation.for_patient(id).order(performed_on: :asc)
       end
 
+      def assessments
+        [
+          NullObject.instance,
+          NullObject.instance
+        ]
+      end
+
       private
 
       def comorbidity_date_time_from_year(year)

@@ -11,7 +11,7 @@ module Renalware
       # - description eg "litres" => no match
       # - alias array eg ["litre"] => match
       def self.for_dmd_name(name)
-        where(name: name)
+        where(name:)
           .or(where(description: name)
             .or(where("? = ANY(alias)", name))).first
       end

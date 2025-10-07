@@ -32,7 +32,7 @@ module Renalware
 
           xml = Ox.dump(described_class.new(address:).xml, indent: -1)
 
-          expect(xml).to eq(expected_xml)
+          expect(xml).to match_xml(expected_xml)
         end
 
         it "omits Country if country code is blank" do
@@ -56,7 +56,7 @@ module Renalware
 
           xml = Ox.dump(described_class.new(address:).xml, indent: -1)
 
-          expect(xml).to eq(expected_xml)
+          expect(xml).to match_xml(expected_xml)
         end
       end
     end

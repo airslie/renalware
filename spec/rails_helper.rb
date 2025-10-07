@@ -58,6 +58,10 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   config.full_backtrace = false
 
+  config.expect_with :rspec do |c|
+    c.max_formatted_output_length = nil
+  end
+
   # System tests use Rack::Test for non JS test and headless Chrome for JS specs
   config.before(:each, type: :system) do
     driven_by :rack_test

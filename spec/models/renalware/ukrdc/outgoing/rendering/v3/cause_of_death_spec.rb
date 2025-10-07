@@ -31,7 +31,7 @@ module Renalware
 
             xml = format_xml(described_class.new(patient:).xml)
 
-            expect(xml).to eq(expected_xml)
+            expect(xml).to match_xml(expected_xml)
           end
         end
 

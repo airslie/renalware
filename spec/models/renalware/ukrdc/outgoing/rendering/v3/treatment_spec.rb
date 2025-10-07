@@ -37,7 +37,7 @@ module Renalware
           XML
 
           actual_xml = format_xml(
-            described_class.new(treatment: treatment).xml
+            described_class.new(treatment:).xml
           )
 
           expect(actual_xml).to eq(expected_xml)
@@ -52,7 +52,7 @@ module Renalware
             )
 
             xml = format_xml(
-              described_class.new(treatment: treatment, encounter_number: "123").xml
+              described_class.new(treatment:, encounter_number: "123").xml
             )
 
             expect(xml).to match("<EncounterNumber>123</EncounterNumber>")
@@ -69,7 +69,7 @@ module Renalware
             )
 
             xml = format_xml(
-              described_class.new(treatment: treatment).xml
+              described_class.new(treatment:).xml
             )
 
             expect(xml).to match("<Code>X123</Code>")
@@ -87,7 +87,7 @@ module Renalware
 
             xml = format_xml(
               described_class.new(
-                treatment: treatment,
+                treatment:,
                 attributes: { "QBL05" => "TEST", "QBL99" => "", "QBL100" => nil }
               ).xml
             )

@@ -47,12 +47,13 @@ module Renalware
           session = Renalware::HD::Session::Closed.new(
             started_at: "2018-11-01 11:00",
             stopped_at: "2018-11-01 13:00",
-            duration: 120,
-            dialysate: dialysate,
+            duration: 121,
+            dialysate:,
             updated_by: build_stubbed(:user, family_name: "F", given_name: "G", username: "U"),
             hospital_unit: build_stubbed(:hospital_unit, unit_code: "U")
           )
-          session.document.dialysis.blood_flow = 99
+          session.document.dialysis.blood_flow = "no"
+          session.document.complications.had_intradialytic_hypotension = false
           allow(session).to receive(:uuid).and_return("UUID")
           presenter = Renalware::HD::SessionPresenter.new(session)
           allow(presenter).to receive_messages(
@@ -86,6 +87,7 @@ module Renalware
                 <Code>DOV</Code>
               </EnteredAt>
               <ExternalId>UUID</ExternalId>
+              <SymtomaticHypotension>N</SymtomaticHypotension>
               <VascularAccess>
                 <CodingStandard>LOCAL</CodingStandard>
                 <Code>RR02</Code>
@@ -100,7 +102,7 @@ module Renalware
 
           actual_xml = format_xml(described_class.new(session: presenter).xml)
 
-          expect(actual_xml).to eq(expected_xml)
+          expect(actual_xml).to match_xml(expected_xml)
         end
         # rubocop:enable RSpec/ExampleLength
       end

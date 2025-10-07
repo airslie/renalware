@@ -27,7 +27,7 @@ module Renalware
     }.each do |code, (name, rr51_code)|
       LowClearance::DialysisPlan.transaction do
         LowClearance::DialysisPlan.find_or_create_by!(code: code, name: name) do |plan|
-          plan.ukrdc_rr51_outcome_code = rr51_code
+          plan.ukrdc_assessment_outcome_code = rr51_code
         end
       end
     end

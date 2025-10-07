@@ -18,7 +18,6 @@ module Renalware
             def treatment_element
               create_node("Treatment") do |elem|
                 elem << create_node("EncounterNumber", encounter_number || treatment.modality_id)
-                # elem << create_node("EncounterType", "N")
                 elem << create_node("FromTime", treatment.started_on&.iso8601)
                 if treatment.ended_on.present?
                   elem << create_node("ToTime", treatment.ended_on&.iso8601)

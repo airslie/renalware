@@ -14,7 +14,7 @@ module Renalware
                   parent_element << Observation.new(
                     observed_at: observation_times[pre_or_post]&.iso8601,
                     measurement: value.to_s[0, 19].strip,
-                    i18n_key: i18n_key,
+                    i18n_key:,
                     pre_post: pre_or_post.to_s.upcase # eg PRE or POST
                   ).xml
                 end

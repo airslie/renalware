@@ -7,7 +7,8 @@ module Renalware
       UNIT_TYPE_RR8_MAP = {
         hospital: "HOSP",
         satellite: "SATL",
-        home: "HOME"
+        home: "HOME",
+        incentre: "INCENTRE"
       }.freeze
 
       belongs_to :hospital_centre,
@@ -38,8 +39,8 @@ module Renalware
       end
 
       # Map unit_type to its equivalent Renal Registry RR8 code.
-      def unit_type_rr8_for(unit)
-        UNIT_TYPE_RR8_MAP[unit.unit_type.to_sym]
+      def unit_type_rr8
+        UNIT_TYPE_RR8_MAP.fetch(unit_type.to_sym, "INCENTRE")
       end
     end
   end

@@ -18,19 +18,19 @@ module Renalware
           route = create(:medication_route, code: "Route1", name: "Route1")
           create(
             :prescription,
-            patient: patient,
-            drug: drug,
+            patient:,
+            drug:,
             frequency: "daily",
-            dose_amount: dose_amount,
+            dose_amount:,
             unit_of_measure: uom,
             medication_route: route,
-            prescribed_on: prescribed_on
+            prescribed_on:
           )
         end
 
         def create_terminated_prescription(patient, terminated_on:, **)
           terminated_prescription = create_prescription_for(patient, **)
-          terminated_prescription.terminate(by: create(:user), terminated_on: terminated_on).save!
+          terminated_prescription.terminate(by: create(:user), terminated_on:).save!
           terminated_prescription
         end
 

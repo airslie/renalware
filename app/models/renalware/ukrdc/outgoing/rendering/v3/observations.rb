@@ -28,9 +28,9 @@ module Renalware
               patient.clinic_visits.each do |visit|
                 clinic_visit_methods_hash.each do |method, i18n_key|
                   parent_elem << ClinicVisitObservation.new(
-                    visit: visit,
-                    method: method,
-                    i18n_key: i18n_key
+                    visit:,
+                    method:,
+                    i18n_key:
                   ).xml
                 end
               end
@@ -39,7 +39,7 @@ module Renalware
             def add_hd_session_observations_elements_to(parent_elem)
               patient.finished_hd_sessions.each do |session|
                 HDSessionObservations
-                  .new(session: session)
+                  .new(session:)
                   .create_observation_nodes_under(parent_elem)
               end
             end
