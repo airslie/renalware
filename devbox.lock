@@ -714,19 +714,9 @@
         }
       }
     },
-    "playwright-driver.browsers": {
-      "resolved": "github:NixOS/nixpkgs/641d909c4a7538f1539da9240dedb1755c907e40?narHash=sha256-HfVZCXic9XLBgybP0318ym3cDnGwBs%2F%2BH5MgxFVYF4I%3D#playwright-driver.browsers",
-      "source": "nixpkg",
-      "systems": {
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "path": "/nix/store/wsvpxsmbdcdv0xd2kasbwpjk320mqc7f-playwright-browsers",
-              "default": true
-            }
-          ]
-        }
-      }
+    "playwright.browsers": {
+      "resolved": "github:NixOS/nixpkgs/dc704e6102e76aad573f63b74c742cd96f8f1e6c?narHash=sha256-O7eHcgkQXJNygY6AypkF9tFhsoDQjpNEojw3eFs73Ow%3D#playwright.browsers",
+      "source": "nixpkg"
     },
     "postgresql_16@16": {
       "last_modified": "2025-09-21T09:21:16Z",

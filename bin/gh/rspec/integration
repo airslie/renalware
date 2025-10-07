@@ -1,2 +1,2 @@
 #!/bin/sh
-bin/rspec --pattern "{spec,packs/**/spec}/{integration,requests,acceptance,system}/**/*_spec.rb" --format progress
+TEST_DEPTH=integration bin/rspec --pattern "{spec,packs/**/spec}/{integration,requests,acceptance,system}/**/*_spec.rb" --format progress

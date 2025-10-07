@@ -79,7 +79,8 @@ group :test do
   gem "rspec-retry"
   # gem "selenium-webdriver", "4.28.0"
   gem "shoulda-matchers", "~> 6.1"
-  gem "simplecov", "~> 0.17", require: false # only loaded if required
+  gem "simplecov", require: false # only loaded if required
+  gem "simplecov-cobertura", "~> 3.1", require: false
   gem "test-prof"
   gem "vcr", require: false
   gem "webmock", "~> 3.7", require: false
@@ -125,7 +126,7 @@ group :development, :test do
   gem "bundler-audit", require: false
   gem "capybara-playwright-driver"
   # Start debugger with binding.b [https://github.com/ruby/debug]
-  gem "debug", ">= 1.0.0", platforms: %i(mri mingw x64_mingw)
+  gem "debug", ">= 1.0.0", platforms: %i(mri windows)
   gem "factory_bot_rails", "~> 6.2"
   gem "launchy", require: false
   gem "overcommit"

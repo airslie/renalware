@@ -897,6 +897,9 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
+    simplecov-cobertura (3.1.0)
+      rexml
+      simplecov (~> 0.19)
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
     sin_lru_redux (2.5.2)
@@ -1092,7 +1095,8 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   shoulda-matchers (~> 6.1)
-  simplecov (~> 0.17)
+  simplecov
+  simplecov-cobertura (~> 3.1)
   solid_cache
   sprockets-rails
   stackprof
@@ -1114,4 +1118,4 @@ RUBY VERSION
    ruby 3.4.5p51
 
 BUNDLED WITH
-   2.6.7
+   2.7.2

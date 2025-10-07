@@ -1,6 +1,12 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
 
+if ENV.key?("COVERAGE")
+  require "simplecov"
+  # Ensure coverage is merged not overwritten
+  SimpleCov.command_name "RSpec-#{ENV.fetch('TEST_DEPTH', 'unit')}"
+end
+
 require_relative "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../demo/config/environment"

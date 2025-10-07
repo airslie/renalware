@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'simplecov'
+SimpleCov.collate Dir["coverage-artifacts/**/.resultset.json"], 'rails' do
+  require 'simplecov-cobertura'
+  formatter SimpleCov::Formatter::CoberturaFormatter
+end
+
