@@ -256,7 +256,9 @@ module Renalware
 
             expect(result).to be false
             expect(user).to be_new_record
-            expect(user.errors[:base]).to include("User must be in a valid LDAP group (renalware or renalware-readonly)")
+            expect(user.errors[:base]).to include(
+              "User must be in a valid LDAP group (renalware or renalware-readonly)"
+            )
           end
         end
 
@@ -300,8 +302,9 @@ module Renalware
 
       context "when user is in renalware LDAP group" do
         before do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group|
+            group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
         end
 
         context "when user currently has read_only role" do
@@ -344,8 +347,9 @@ module Renalware
 
       context "when user is in renalware-readonly LDAP group" do
         before do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(false)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(true)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group|
+            group == Renalware::LdapAuthenticatable::RENALWARE_READONLY_GROUP
+          end
         end
 
         context "when user currently has clinical role" do
@@ -388,12 +392,14 @@ module Renalware
 
       context "when user is not in any valid LDAP group" do
         it "unapproves the user" do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
-          user = create(:user, role: nil, roles: [clinical_role], approved: true)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
+            username == "renalwareuser-1" &&
+              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
+          user = create(:user, role: nil, roles: [clinical_role], approved: true,
+                               username: "renalwareuser-1")
 
-          allow(user).to receive_messages(in_renalware_group?: false,
-                                          in_renalware_readonly_group?: false)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -401,13 +407,15 @@ module Renalware
         end
 
         it "does not modify already unapproved user" do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
-          user = create(:user, role: nil, roles: [readonly_role], approved: true)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
+            username == "renalwareuser-2" &&
+              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
+          user = create(:user, role: nil, roles: [readonly_role], approved: true,
+                               username: "renalwareuser-2")
           user.update_column(:approved, false)
 
-          allow(user).to receive_messages(in_renalware_group?: false,
-                                          in_renalware_readonly_group?: false)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
 
           initial_updated_at = user.reload.updated_at
 
@@ -422,12 +430,13 @@ module Renalware
 
       context "when user has admin-level roles" do
         it "does not modify super_admin role" do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
-          user = create(:user, role: nil, roles: [super_admin_role])
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
+            username == "superadmin-1" &&
+              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
+          user = create(:user, role: nil, roles: [super_admin_role], username: "superadmin-1")
 
-          allow(user).to receive_messages(in_renalware_group?: false,
-                                          in_renalware_readonly_group?: false)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -435,12 +444,12 @@ module Renalware
         end
 
         it "does not modify admin role" do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
-          user = create(:user, role: nil, roles: [admin_role])
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
+            username == "admin-1" && group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
+          user = create(:user, role: nil, roles: [admin_role], username: "admin-1")
 
-          allow(user).to receive_messages(in_renalware_group?: false,
-                                          in_renalware_readonly_group?: false)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -448,12 +457,12 @@ module Renalware
         end
 
         it "does not modify devops role" do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
-          user = create(:user, role: nil, roles: [devops_role])
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
+            username == "devops-1" && group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
+          user = create(:user, role: nil, roles: [devops_role], username: "devops-1")
 
-          allow(user).to receive_messages(in_renalware_group?: false,
-                                          in_renalware_readonly_group?: false)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -463,11 +472,15 @@ module Renalware
 
       context "when LDAP group check fails" do
         it "unapproves user as fallback" do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
-          user = create(:user, role: nil, roles: [clinical_role], approved: true)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
+            username == "erroruser-1" &&
+              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
+          user = create(:user, role: nil, roles: [clinical_role], approved: true,
+                               username: "erroruser-1")
 
-          allow(user).to receive(:in_renalware_group?).and_raise(StandardError.new("LDAP error"))
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
+            .and_raise(StandardError.new("LDAP error"))
           allow(Rails.logger).to receive(:error)
 
           user.synchronize_ldap_roles
@@ -476,14 +489,19 @@ module Renalware
         end
 
         it "logs the error" do
-          allow_any_instance_of(described_class).to receive(:in_renalware_group?).and_return(true)
-          allow_any_instance_of(described_class).to receive(:in_renalware_readonly_group?).and_return(false)
-          user = create(:user, role: nil, roles: [clinical_role])
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
+            username == "erroruser-2" &&
+              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+          end
+          user = create(:user, role: nil, roles: [clinical_role], username: "erroruser-2")
 
-          allow(user).to receive(:in_renalware_group?).and_raise(StandardError.new("LDAP error"))
-          expect(Rails.logger).to receive(:error).at_least(:once)
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
+            .and_raise(StandardError.new("LDAP error"))
+          allow(Rails.logger).to receive(:error)
 
           user.synchronize_ldap_roles
+
+          expect(Rails.logger).to have_received(:error).at_least(:once)
         end
       end
     end

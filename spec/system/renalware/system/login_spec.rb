@@ -150,8 +150,9 @@ module Renalware
     context "when LDAP authentication is enabled" do
       before do
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow_any_instance_of(Renalware::User).to receive(:in_renalware_group?).and_return(true)
-        allow_any_instance_of(Renalware::User).to receive(:in_renalware_readonly_group?).and_return(false)
+        allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group|
+          group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+        end
       end
 
       it "hides signup and forgot password links" do
