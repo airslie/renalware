@@ -112,12 +112,13 @@ module Renalware
         end
 
         context "when LDAP authentication is enabled" do
-          before do
-            allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-          end
-
           let(:admin_user) { create(:user, username: "admin_user") }
           let(:witness_user) { create(:user, username: "witness_user") }
+
+          before do
+            allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+            allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(true)
+          end
 
           it "validates administrator password against LDAP" do
             allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)

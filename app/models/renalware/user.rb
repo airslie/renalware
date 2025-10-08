@@ -15,6 +15,7 @@ module Renalware
     validates :given_name, presence: true
     validates :family_name, presence: true
     validate :approval_with_roles, on: :update
+    validate :ldap_group_membership_required, on: :create
     validates :professional_position, presence: {
       on: :update,
       if: ->(user) { user.with_extended_validation }
@@ -144,6 +145,15 @@ module Renalware
         assign_ldap_role
       else
         roles << Role.find_by!(name: :clinical)
+      end
+    end
+
+    def ldap_group_membership_required
+      return unless ldap_enabled?
+      return unless new_record?
+
+      unless in_valid_ldap_group?
+        errors.add(:base, "User must be in a valid LDAP group (renalware or renalware-readonly)")
       end
     end
   end

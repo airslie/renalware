@@ -6,7 +6,10 @@ module Renalware
       user = Renalware::User.find_by(username: user_params[:username])
       user&.touch(:last_failed_sign_in_at) unless user_valid?(user)
 
-      super
+      super do |resource|
+        resource.synchronize_ldap_roles if resource.respond_to?(:synchronize_ldap_roles)
+        track_signin
+      end
     end
 
     # Define the path to go to after logging in:
@@ -19,7 +22,6 @@ module Renalware
     #   regardless of how long ago they signed out, because in this instance devise removes it's
     #   entries in the session cookie.
     def after_sign_in_path_for(resource)
-      track_signin
       max_duration_of_url_memory = Renalware.config.duration_of_last_url_memory_after_session_expiry
       max_duration_has_passed = last_sign_in_at <= max_duration_of_url_memory.ago
       max_duration_has_passed ? dashboard_path : super

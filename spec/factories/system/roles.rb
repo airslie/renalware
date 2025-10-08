@@ -29,5 +29,10 @@ FactoryBot.define do
     trait :hd_prescriber do
       name { :hd_prescriber }
     end
+
+    trait :devops do
+      name { :devops }
+      hidden { true }
+    end
   end
 end
