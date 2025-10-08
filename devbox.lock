@@ -780,8 +780,8 @@
         }
       }
     },
-    "playwright.browsers": {
-      "resolved": "github:NixOS/nixpkgs/dc704e6102e76aad573f63b74c742cd96f8f1e6c?narHash=sha256-O7eHcgkQXJNygY6AypkF9tFhsoDQjpNEojw3eFs73Ow%3D#playwright.browsers",
+    "playwright-driver.browsers": {
+      "resolved": "github:NixOS/nixpkgs/dc704e6102e76aad573f63b74c742cd96f8f1e6c?narHash=sha256-O7eHcgkQXJNygY6AypkF9tFhsoDQjpNEojw3eFs73Ow%3D#playwright-driver.browsers",
       "source": "nixpkg"
     },
     "postgresql_16@16": {
