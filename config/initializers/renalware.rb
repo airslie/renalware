@@ -44,7 +44,6 @@ Renalware.configure do |config|
     "Renalware::Letters::ResolveDefaultElectronicCCs" => [
       "Renalware::HD::PatientListener"
     ],
-    "Renalware::Pathology::CreateObservationRequests" => [],
     "Renalware::Events::CreateEvent" => [],
     "Renalware::Events::UpdateEvent" => [],
     "Renalware::Events::DeleteEvent" => [],
@@ -56,6 +55,9 @@ Renalware.configure do |config|
       "Renalware::Pathology::Ingestion::AKIListener",
       "Renalware::Pathology::Ingestion::MessageListener",
       "Renalware::Clinics::Ingestion::MessageListener",
+      "Renalware::Pathology::KFRE::Listener"
+    ],
+    "Renalware::Pathology::CreateObservationRequests" => [
       "Renalware::Pathology::KFRE::Listener"
     ]
   }
