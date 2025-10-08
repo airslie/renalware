@@ -28,6 +28,44 @@ env:
   COVERAGE: true
 
 jobs:
+  assets:
+    name: Build Assets
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Setup node and yarn with caching
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "yarn"
+
+      - name: Install js packages with yarn
+        run: yarn install --frozen-lockfile
+
+      - name: Asset cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            demo/public/assets
+            demo/tmp/cache/assets/sprockets
+          key: asset-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            asset-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
+            asset-cache-${{ runner.os }}-${{ github.ref }}-
+            asset-cache-${{ runner.os }}-
+
+      - name: Assets precompile
+        run: bin/rails assets:precompile --trace
+
   linters:
     name: Linters
     timeout-minutes: 10
@@ -45,35 +83,12 @@ jobs:
       - name: Rubocop
         run: bundle exec rubocop
 
-      - name: Setup node and yarn with caching
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "yarn"
-
-      - name: Install js packages with yarn
-        run: yarn install --frozen-lockfile # optional, --immutable
-
-      - name: Asset cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            demo/public/assets
-            demo/tmp/cache/assets/sprockets
-          key: asset-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            asset-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
-            asset-cache-${{ runner.os }}-${{ github.ref }}-
-            asset-cache-${{ runner.os }}-
-
-      - name: Assets precompile
-        run: bin/rails assets:precompile --trace
-
       - name: Run security checks
         run: |
           bundle exec bundle audit --update
 
   tests:
+    needs: assets
     timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
