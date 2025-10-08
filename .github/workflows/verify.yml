@@ -1,4 +1,4 @@
-name: CI
+name: Verify
 
 # Do not run when a tag pushed
 # Do not run if updating docs
