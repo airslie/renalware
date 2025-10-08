@@ -1,4 +1,4 @@
-name: Verify
+name: CI
 
 # Do not run when a tag pushed
 # Do not run if updating docs
@@ -99,8 +99,6 @@ jobs:
           - bin/gh/rspec/integration
           - bin/gh/cucumber/domain
           - bin/gh/cucumber/web
-
-    name: ${{ matrix.command }}
 
     services:
       postgres:
