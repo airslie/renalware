@@ -45,6 +45,9 @@ AllCops:
     - "features/support/env.xaction_view.rb"
     - "demo/db/schema.rb"
 
+Rails/FindByOrAssignmentMemoization:
+  Enabled: false
+
 Style/SafeNavigationChainLength:
   Enabled: true
   Max: 3

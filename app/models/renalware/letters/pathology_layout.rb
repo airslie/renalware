@@ -28,7 +28,7 @@ module Renalware
         Pathology::ObservationDescription
           .select(:id, :code, :letter_group, :letter_order)
           .where.not(letter_group: nil)
-          .order("letter_group asc, letter_order asc")
+          .order(:letter_group, :letter_order)
           .group_by(&:letter_group)
           .each do |group_number, descriptions|
           yield(group_number, descriptions) if block_given?

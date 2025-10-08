@@ -85,7 +85,7 @@ Gem::Specification.new do |s|
   s.add_dependency "prawn", "~> 2.5.0"
   s.add_dependency "prawn-table", "~> 0.2"
   s.add_dependency "psych", "~>5.1.2" # required for ruby 3.x to avoid invalid database.yml error
-  s.add_dependency "puma", ">= 4.3"
+  s.add_dependency "puma", ">= 6.6", "< 7" # Puma 7 may require testing due to call back changes
   s.add_dependency "pundit", "~> 2.5.0"
   s.add_dependency "rack"
   s.add_dependency "rack-attack"

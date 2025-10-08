@@ -2,8 +2,8 @@ module Renalware
   module Transplants
     describe Registration do
       let(:registration) { create(:transplant_registration, :with_statuses) }
-      let(:earliest_status) { registration.statuses.order("created_at ASC").first }
-      let(:latest_status) { registration.statuses.order("created_at DESC").first }
+      let(:earliest_status) { registration.statuses.order(:created_at).first }
+      let(:latest_status) { registration.statuses.order(created_at: :desc).first }
       let(:clinician) { create(:user, :clinical) }
       let(:status_description) { create(:transplant_registration_status_description) }
       let(:status_description1) do

@@ -227,13 +227,13 @@ RSpec.describe Renalware::Letters::Sections do
       end
 
       it "returns the capd details" do
-        expect(rows[0].map { it[:label] }).to eq [
+        expect(rows[0].pluck(:label)).to eq [
           "Treatment", "Assistance", "Exchanges Done By"
         ]
-        expect(rows[1].map { it[:label] }).to eq [
+        expect(rows[1].pluck(:label)).to eq [
           "Dry Weight", "Min Dry Weight", "Max Dry Weight", "BMI"
         ]
-        expect(rows[2].map { it[:label] }).to eq [
+        expect(rows[2].pluck(:label)).to eq [
           "UKT Transplant Status", "Date"
         ]
       end
