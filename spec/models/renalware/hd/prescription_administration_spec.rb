@@ -188,10 +188,10 @@ module Renalware
           it "handles LDAP server errors gracefully" do
             allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
               .with(admin_user.username, "any_password")
-              .and_raise(StandardError.new("LDAP server unreachable"))
+              .and_raise(Net::LDAP::Error.new("LDAP server unreachable"))
             allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
               .with(witness_user.username, "any_password")
-              .and_raise(StandardError.new("LDAP server unreachable"))
+              .and_raise(Net::LDAP::Error.new("LDAP server unreachable"))
             allow(Rails.logger).to receive(:error)
 
             administration = described_class.new(
@@ -203,8 +203,12 @@ module Renalware
             )
             administration.valid?
 
-            expect(administration.errors[:administered_by_password]).to eq(["Invalid password"])
-            expect(administration.errors[:witnessed_by_password]).to eq(["Invalid password"])
+            expect(administration.errors[:administered_by_password]).to eq(
+              [I18n.t("renalware.system.errors.ldap.service_unavailable")]
+            )
+            expect(administration.errors[:witnessed_by_password]).to eq(
+              [I18n.t("renalware.system.errors.ldap.service_unavailable")]
+            )
             expect(administration.administrator_authorised).to be false
             expect(administration.witness_authorised).to be false
           end

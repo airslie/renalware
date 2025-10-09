@@ -33,6 +33,9 @@ module Renalware
         unless witness.valid_password?(password)
           errors.add(:password, "Invalid password")
         end
+      rescue Net::LDAP::Error, DeviseLdapAuthenticatable::LdapException => e
+        Rails.logger.error "LDAP error during witness password validation: #{e.message}"
+        errors.add(:password, I18n.t("renalware.system.errors.ldap.service_unavailable"))
       end
 
       def witness = User.find(user_id)

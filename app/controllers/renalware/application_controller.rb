@@ -4,14 +4,18 @@ module Renalware
   # - define the default layout
   # - intercept requests with before_action etc.
   class ApplicationController < ::ApplicationController
+    include Concerns::LdapErrorHandler
+
     # Prevent CSRF attacks by raising an exception.
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :reset_session
 
-    if Renalware.config.ldap_authentication
-      rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
-        render text: exception, status: :internal_server_error
-      end
+    private
+
+    def handle_ldap_error(exception)
+      log_ldap_error(exception)
+      flash[:alert] = ldap_error_message
+      redirect_back(fallback_location: root_path)
     end
   end
 end

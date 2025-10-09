@@ -99,14 +99,16 @@ module Renalware
             it "handles LDAP server errors gracefully during witnessing" do
               allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
                 .with(witness.username, "any_password")
-                .and_raise(StandardError.new("LDAP server unreachable"))
+                .and_raise(Net::LDAP::Error.new("LDAP server unreachable"))
               allow(witness).to receive(:valid_password?).with("any_password").and_call_original
               allow(Rails.logger).to receive(:error)
 
               form.password = "any_password"
 
               expect(form).not_to be_valid
-              expect(form.errors[:password]).to include("Invalid password")
+              expect(form.errors[:password]).to include(
+                I18n.t("renalware.system.errors.ldap.service_unavailable")
+              )
             end
           end
         end

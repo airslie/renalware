@@ -471,37 +471,17 @@ module Renalware
       end
 
       context "when LDAP group check fails" do
-        it "unapproves user as fallback" do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
-            username == "erroruser-1" &&
-              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
-          end
-          user = create(:user, role: nil, roles: [clinical_role], approved: true,
-                               username: "erroruser-1")
+        it "raises the LDAP error" do
+          # Stub LDAP during user creation to allow the test to proceed
+          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(true)
 
+          user = create(:user, role: nil, roles: [clinical_role], approved: true)
+
+          # Now stub to raise the error when synchronize_ldap_roles is called
           allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
-            .and_raise(StandardError.new("LDAP error"))
-          allow(Rails.logger).to receive(:error)
+            .and_raise(Net::LDAP::Error.new("LDAP error"))
 
-          user.synchronize_ldap_roles
-
-          expect(user.reload).not_to be_approved
-        end
-
-        it "logs the error" do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group|
-            username == "erroruser-2" &&
-              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
-          end
-          user = create(:user, role: nil, roles: [clinical_role], username: "erroruser-2")
-
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
-            .and_raise(StandardError.new("LDAP error"))
-          allow(Rails.logger).to receive(:error)
-
-          user.synchronize_ldap_roles
-
-          expect(Rails.logger).to have_received(:error).at_least(:once)
+          expect { user.synchronize_ldap_roles }.to raise_error(Net::LDAP::Error)
         end
       end
     end

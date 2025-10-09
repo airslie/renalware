@@ -19,3 +19,8 @@ en:
           page_title: Server error
           support_info: ''
           #   subheading: 'Try again in a few minutes. If it still doesn''t work, please let us know.'
+        ldap:
+          service_unavailable: |
+            We are currently unable to confirm your details due to a temporary issue.
+            This is being investigated. Please try again later.
+            For IT: This is an LDAP connection issue.

@@ -44,19 +44,12 @@ module Renalware
       return if current_base_role == expected_role
 
       update_base_role(current_base_role, expected_role)
-    rescue StandardError => e
-      Rails.logger.error "Failed to synchronize LDAP roles for user #{username}: #{e.message}"
-      Rails.logger.error e.backtrace.join("\n")
-      update(approved: false)
     end
 
     private
 
     def valid_ldap_authentication?(password)
       ::Devise::LDAP::Adapter.valid_credentials?(username, password)
-    rescue StandardError => e
-      Rails.logger.error "LDAP authentication failed for user #{username}: #{e.message}"
-      false
     end
 
     def ldap_enabled?
@@ -69,9 +62,6 @@ module Renalware
 
     def in_ldap_group?(group)
       ::Devise::LDAP::Adapter.in_ldap_group?(username, group)
-    rescue StandardError => e
-      Rails.logger.error "LDAP group check failed for user #{username}: #{e.message}"
-      false
     end
 
     def in_renalware_group?

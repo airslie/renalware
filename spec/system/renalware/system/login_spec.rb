@@ -195,21 +195,6 @@ module Renalware
         expect(page).to have_current_path(new_user_session_path)
         expect(page).to have_text("Invalid Username or password")
       end
-
-      it "handles LDAP server connection errors gracefully" do
-        allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
-          .with(user.username, "any_password")
-          .and_raise(StandardError.new("LDAP server unreachable"))
-
-        visit new_user_session_path
-
-        fill_in "Username", with: user.username
-        fill_in "Password", with: "any_password"
-        click_on "Log in"
-
-        expect(page).to have_current_path(new_user_session_path)
-        expect(page).to have_text("Invalid Username or password")
-      end
     end
 
     context "when LDAP authentication is disabled" do
