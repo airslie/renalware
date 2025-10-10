@@ -100,7 +100,7 @@ en:
       already_signed_out: Signed out successfully.
       new:
         sign_in: Sign in
-      signed_in: Signed in successfully.
+      signed_in: ""
       signed_out: Signed out successfully.
     shared:
       links:
