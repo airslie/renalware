@@ -31,7 +31,7 @@ module Renalware
         )
           return if pathology_params.nil? # e.g. patient does not exist
 
-          CreateObservationRequests.new.call(pathology_params, feed_message_id: feed_message_id)
+          CreateObservationRequests.call(pathology_params, feed_message_id: feed_message_id)
         end
       end
     end

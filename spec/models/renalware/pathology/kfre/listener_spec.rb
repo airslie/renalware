@@ -1,8 +1,11 @@
 module Renalware
   module Pathology
     describe KFRE::Listener do
+      include PathologySpecHelper
+
       subject(:listener) { described_class.new }
 
+      let(:egfr) { "5.0" }
       let(:acr) { 300 } # > 300 = severely increased
       let(:local_patient_id) { "Z999990" }
       let(:dob) { "2015-04-01" }
@@ -26,140 +29,92 @@ module Renalware
         create(:user, username: Renalware::SystemUser.username)
       end
 
-      def pid(
-        born_on: "20000101",
-        nhs_number: nil,
-        internal_id: nil
-      )
-        instance_double(
-          Renalware::Feeds::PatientIdentification,
-          nhs_number: patient.local_patient_id,
-          internal_id: internal_id,
-          born_on: born_on,
-          identifiers: {
-            nhs_number: nhs_number,
-            local_patient_id: internal_id
-          }.compact_blank
+      def give_patient_an_egfr(patient, value)
+        create_request_with_observations(
+          patient: patient,
+          obx_codes: ["EGFR"],
+          requested_at: 1.month.ago,
+          result: value
         )
       end
 
       describe "KFRE generation" do
-        describe "#oru_message_arrived" do
-          context "when the message does not contain an ACR result" do
+        describe "#after_observation_request_persisted" do
+          context "when the obr does not contain an ACR result" do
             it "does not create a KFRE" do
-              hl7_message = instance_double(
-                Renalware::Feeds::HL7Message,
-                observation_requests: []
-              )
+              obr = create(:pathology_observation_request, patient: patient)
+              expect(obr.observations.count).to eq(0)
 
               expect {
-                described_class.new.oru_message_arrived(hl7_message: hl7_message)
+                described_class.new.after_observation_request_persisted(obr)
               }.not_to change(Renalware::Pathology::Observation, :count)
             end
           end
 
-          context "when the message contains ACR result" do
+          context "when the obr contains an ACR result" do
             context "when the patient has no recent egfr" do
               it "does not create a KFRE" do
-                hl7_message = instance_double(
-                  Renalware::Feeds::HL7Message,
-                  patient_identification: pid(internal_id: patient.local_patient_id),
-                  observation_requests: [
-                    instance_double(
-                      Renalware::Feeds::HL7Message::ObservationRequest,
-                      identifier: "SOME_OBR",
-                      name: "SOME_OBR",
-                      ordering_provider_name: "::name::",
-                      placer_order_number: "::pcs code::",
-                      filler_order_number: "::fillernum::",
-                      observed_at: observation_datetime,
-                      observations: [
-                        instance_double(
-                          Renalware::Feeds::HL7Message::Observation,
-                          identifier: "ACR",
-                          name: "ACR",
-                          observed_at: observation_datetime,
-                          value: "10",
-                          comment: "",
-                          cancelled: nil,
-                          units: "mg"
-                        )
-                      ]
-                    )
-                  ]
+                obr = create_request_with_observations(
+                  patient: patient,
+                  obx_codes: ["ACR"],
+                  result: acr.to_s
                 )
+                # Sanity check
+                expect(patient.current_observation_set.values.dig("ACR", "result")).to eq(acr.to_s)
+                expect(obr.observations.count).to eq(1)
 
                 expect {
-                  described_class.new.oru_message_arrived(hl7_message: hl7_message)
+                  described_class.new.after_observation_request_persisted(obr)
                 }.not_to change(Renalware::Pathology::Observation, :count)
               end
             end
 
-            # rubocop:disable RSpec/ExampleLength
             context "when the patient has an egfr" do
-              it "creates 5 and 2 yr KFREs" do
-                # Creating an EGFR here will cause the results to be inserted into
-                # patient.current_observation_set and we use this later, accessing it as
-                # patient.current_observation_set.values.egrf_result
-                create(
-                  :pathology_observation,
-                  description: create(:pathology_observation_description, code: "EGFR"),
-                  request: create(:pathology_observation_request, patient: patient),
-                  result: "10"
-                )
+              before { give_patient_an_egfr(patient, egfr) }
 
-                hl7_message = instance_double(
-                  Renalware::Feeds::HL7Message,
-                  patient_identification: pid(internal_id: patient.local_patient_id),
-                  observation_requests: [
-                    instance_double(
-                      Renalware::Feeds::HL7Message::ObservationRequest,
-                      identifier: "SOME_OBR",
-                      name: "SOME_OBR",
-                      ordering_provider_name: "::name::",
-                      placer_order_number: "::pcs code::",
-                      filler_order_number: "::fillernum::",
-                      observed_at: observation_datetime,
-                      observations: [
-                        instance_double(
-                          Renalware::Feeds::HL7Message::Observation,
-                          identifier: "ACR",
-                          name: "ACR",
-                          observed_at: observation_datetime,
-                          value: "10",
-                          comment: "",
-                          cancelled: nil,
-                          units: "mg"
-                        )
-                      ]
-                    )
-                  ]
+              it "creates 5 and 2 yr KFREs" do
+                # Sanity check that the patient has the expected egfr
+                expect(patient.current_observation_set.values.dig("EGFR", "result")).to eq(egfr)
+
+                obr = create_request_with_observations(
+                  patient: patient,
+                  obx_codes: ["ACR"],
+                  requested_at: Time.zone.parse(observation_datetime),
+                  result: "10.0",
+                  observed_at: Time.zone.parse(observation_datetime)
                 )
 
                 freeze_time do
+                  # Stub the actual calculation - we are testing the listener
+                  # not the calc service
                   allow(KFRE::CalculateKFRE)
                     .to receive(:call)
                     .and_return(KFRE::Result.new(yr2: 10.1, yr5: 20.2))
 
+                  # The listener should create 2 observations, one for each of the 2 and 5 year
+                  # results. We use configured OBX codes for the ACR input and KFRE outputs.
+                  # See config/initializers/renalware.rb
                   expect {
-                    described_class.new.oru_message_arrived(hl7_message: hl7_message)
+                    described_class.new.after_observation_request_persisted(obr)
                   }.to change(Renalware::Pathology::Observation, :count).by(2)
 
+                  # Check the KFRE calc service was called with expected args
                   expect(KFRE::CalculateKFRE)
                     .to have_received(:call)
-                    .with(acr: 10.0, age: 34, egfr: "10", sex: "M")
+                    .with(acr: 10.0, age: 34, egfr: egfr, sex: "M")
 
                   patient.reload
 
                   # Requested and observed at timestamps should match the acr datetime
                   expected_date_time = Time.zone.parse(observation_datetime)
 
+                  # This is the KFRE request created by the listener
                   kfre_obr = patient.observation_requests.order(created_at: :desc).last
                   expect(kfre_obr).to have_attributes(requested_at: expected_date_time)
                   expect(kfre_obr.description.code).to eq("KFRE")
-
                   expect(kfre_obr.observations.count).to eq(2)
 
+                  # There should be a 2 year KFRE observation
                   kfre_obx = kfre_obr.observations.detect do |obx|
                     obx.description.code == Renalware.config.pathology_kfre_2y_obx_code
                   end
@@ -168,6 +123,7 @@ module Renalware
                     observed_at: expected_date_time
                   )
 
+                  # There should be a 5 year KFRE observation
                   kfre_obx = kfre_obr.observations.detect do |obx|
                     obx.description.code == Renalware.config.pathology_kfre_5y_obx_code
                   end
@@ -178,7 +134,6 @@ module Renalware
                 end
               end
             end
-            # rubocop:enable RSpec/ExampleLength
           end
         end
       end

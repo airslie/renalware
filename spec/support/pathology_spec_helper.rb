@@ -31,7 +31,8 @@ module PathologySpecHelper
                                        requested_at: 1.year.ago,
                                        created_at: nil,
                                        count: 1,
-                                       result: "1.1")
+                                       result: "1.1",
+                                       observed_at: nil)
     request_desc = create(:pathology_request_description, code: obr_code)
     create(
       :pathology_observation_request,
@@ -49,7 +50,7 @@ module PathologySpecHelper
             :pathology_observation,
             request: request,
             description: description,
-            observed_at: num.years.ago,
+            observed_at: observed_at || num.years.ago,
             result: result
           )
         end
