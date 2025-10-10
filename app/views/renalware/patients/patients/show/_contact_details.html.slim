@@ -17,4 +17,6 @@ article
       dt Telephone
       dd= patient.current_address&.telephone
     dt Next of kin
-    dd= patient.next_of_kin
+    dd= (patient.next_of_kin || "").gsub("\n", tag.br).html_safe
+    dt Next of kin notes
+    dd= (patient.next_of_kin_notes || "").gsub("\n", tag.br).html_safe
