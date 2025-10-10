@@ -210,6 +210,26 @@ module Renalware
               expect(args.no_known_allergies).to be(true)
             end
           end
+
+          context "when allergies are disabled" do
+            it "does not populate allergy fields in args" do
+              allow(Renalware.config).to receive(:enable_allergies).and_return(false)
+
+              delivery_event = create(
+                :medication_delivery_event,
+                homecare_form: homecare_form,
+                patient: patient,
+                prescription_duration: "3"
+              )
+
+              adapter = described_class.new(delivery_event: delivery_event)
+
+              args = adapter.build_args
+
+              expect(args.no_known_allergies).to be_nil
+              expect(args.allergies).to eq([])
+            end
+          end
         end
       end
     end

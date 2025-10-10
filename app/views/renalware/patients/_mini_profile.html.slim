@@ -1,3 +1,4 @@
 .patient-summary
   = render "renalware/renal/profiles/mini", patient: patient
-  = render "renalware/clinical/allergies/mini", patient: patient
+  - if Renalware.config.enable_allergies
+    = render "renalware/clinical/allergies/mini", patient: patient

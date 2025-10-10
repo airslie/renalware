@@ -65,10 +65,11 @@
               dt Location:
               dd= patient.actual_death_location&.name
 
-      .columns.medium-12.large-6
-        = render "renalware/clinical/allergies/list",
-                 patient: patient,
-                 allergies: profile.allergies
+      - if Renalware.config.enable_allergies
+        .columns.medium-12.large-6
+          = render "renalware/clinical/allergies/list",
+                   patient: patient,
+                   allergies: profile.allergies
 
       .columns.medium-12.large-6
         = render "renalware/events/swabs/list",

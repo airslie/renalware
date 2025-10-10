@@ -54,6 +54,7 @@ module Renalware
     config_accessor(:allow_qr_codes_in_letters) do
       ENV.fetch("ALLOW_QR_CODES_IN_LETTERS", "false") == "true"
     end
+    config_accessor(:enable_allergies) { ENV.fetch("ENABLE_ALLERGIES", "true") == "true" }
     config_accessor(:site_name) { "Renalware" }
     config_accessor(:hospital_name) { ENV.fetch("HOSPITAL_NAME", "KINGS COLLEGE HOSPITAL") }
     config_accessor(:hospital_address) { ENV.fetch("HOSPITAL_ADDRESS", "") } # comma-delimited

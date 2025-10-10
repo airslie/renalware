@@ -17,15 +17,16 @@ html
     - with_format(:html) do
       = render "patient_details", patient: presenter.patient
 
-    section
-      h3 Allergies
-      - allergies = Renalware::Clinical.cast_patient(presenter.patient).allergies
-      - if allergies.any?
-        ul.allergies
-          - allergies.each do |allergy|
-            li= allergy.description
-      - else
-        p None
+    - if Renalware.config.enable_allergies
+      section
+        h3 Allergies
+        - allergies = Renalware::Clinical.cast_patient(presenter.patient).allergies
+        - if allergies.any?
+          ul.allergies
+            - allergies.each do |allergy|
+              li= allergy.description
+        - else
+          p None
 
     section.review
       = render Renalware::Medications::LatestReviewComponent.new(patient: presenter.patient)

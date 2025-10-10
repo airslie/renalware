@@ -4,6 +4,8 @@ module Renalware
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
 
+      before_action :check_allergies_enabled
+
       def create
         result = CreateAllergy.new(clinical_patient, current_user).call(allergy_params) do |allergy|
           authorize allergy
@@ -30,6 +32,12 @@ module Renalware
 
       def allergy_params
         params.require(:clinical_allergy).permit([:description])
+      end
+
+      def check_allergies_enabled
+        return if Renalware.config.enable_allergies
+
+        redirect_to patient_clinical_profile_path(patient), alert: t(".disabled")
       end
     end
   end
