@@ -150,7 +150,7 @@ module Renalware
     context "when LDAP authentication is enabled" do
       before do
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group|
+        allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group, _attr|
           group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
         end
       end
@@ -168,7 +168,7 @@ module Renalware
           .with(user.username, "ldap_password")
           .and_return(true)
         allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
-          .with(user.username, Renalware::LdapAuthenticatable::RENALWARE_GROUP)
+          .with(user.username, Renalware::LdapAuthenticatable::RENALWARE_GROUP, "member")
           .and_return(true)
 
         visit new_user_session_path

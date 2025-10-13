@@ -18,7 +18,7 @@ module Renalware
       return unless ldap_enabled?
 
       self.email = ldap_param("mail")
-      self.given_name = ldap_param("givenName")
+      self.given_name = ldap_param("givenName") || ldap_param("cn")
       self.family_name = ldap_param("sn")
       self.approved = in_valid_ldap_group?
     end
@@ -46,22 +46,22 @@ module Renalware
       update_base_role(current_base_role, expected_role)
     end
 
-    private
-
     def valid_ldap_authentication?(password)
       ::Devise::LDAP::Adapter.valid_credentials?(username, password)
     end
+
+    private
 
     def ldap_enabled?
       Renalware.config.ldap_authentication
     end
 
     def ldap_param(attribute)
-      ::Devise::LDAP::Adapter.get_ldap_param(username, attribute).first
+      ::Devise::LDAP::Adapter.get_ldap_param(username, attribute)&.first
     end
 
     def in_ldap_group?(group)
-      ::Devise::LDAP::Adapter.in_ldap_group?(username, group)
+      ::Devise::LDAP::Adapter.in_ldap_group?(username, group, "member")
     end
 
     def in_renalware_group?

@@ -10,7 +10,7 @@ module Renalware
       create(:role, :clinical)
       @request.env["devise.mapping"] = ::Devise.mappings[:user]
       allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-      allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group|
+      allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group, _attr|
         group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
       end
       sign_out :user # Ensure no user is signed in before testing login
@@ -106,7 +106,7 @@ module Renalware
             .with(user.username, "valid_password")
             .and_return(true)
           allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
-            .with(user.username, Renalware::LdapAuthenticatable::RENALWARE_GROUP)
+            .with(user.username, Renalware::LdapAuthenticatable::RENALWARE_GROUP, "member")
             .and_return(true)
         end
 

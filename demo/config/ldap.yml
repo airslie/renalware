@@ -7,10 +7,12 @@ authorizations: &authorizations
   group_base: ou=groups,dc=renalware,dc=app
   # Requires config.ldap_check_group_membership in devise.rb be true
   # Can have multiple values, must match all to be authorized
+  #
+  # * We do our own membership checking, as users can be in either or both
+  # * clinical or read_only groups.
   required_groups:
     # If only a group name is given, membership will be checked against "uniqueMember"
     #- cn=admins,ou=groups,dc=renalware,dc=app
-    - cn=renalware,ou=groups,dc=renalware,dc=app
     # If an array is given, the first element will be the attribute to check against, the second the group name
     #- ["moreMembers", "cn=renalware,ou=groups,dc=renalware,dc=app"]
   # Requires config.ldap_check_attributes in devise.rb to be true
@@ -22,13 +24,13 @@ authorizations: &authorizations
    # Can have multiple attributes set to true or false to check presence, all must match all to be authorized
   require_attribute_presence:
     mail: true
-    telephoneNumber: true
+    telephoneNumber: false
     serviceAccount: false
 
  # Environment
 
 shared: &shared
-  host: <%= ENV["LDAP_HOST"] %>
+  host: <%= ENV.fetch("LDAP_HOST", "localhost") %>
   port: <%= ENV.fetch("LDAP_PORT", 389) %>
   # Admin user to bind as, to perform searches
   admin_password: <%= ENV.fetch("LDAP_ADMIN_PASSWORD") %>
