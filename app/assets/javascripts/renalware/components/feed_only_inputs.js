@@ -11,9 +11,6 @@ Renalware.FeedOnlyInputs = (function() {
     if (Renalware.Configuration.config.disable_inputs_controlled_by_tissue_typing_feed) {
       $("input,textarea,select").filter("[data-controlled-by-tissue-typing-feed]").prop("disabled", true);
     }
-    if (Renalware.Configuration.config.disable_inputs_controlled_by_demographics_feed) {
-      $("input,textarea,select").filter("[data-controlled-by-demographics-feed]").prop("disabled", true);
-    }
   };
 
   return {

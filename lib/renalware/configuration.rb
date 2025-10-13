@@ -303,8 +303,16 @@ module Renalware
     config_accessor(:batch_printing_enabled) { true }
     config_accessor(:allow_uploading_patient_attachments) { true }
     config_accessor(:generate_pathology_request_forms_from_hd_mdm_listing) { true }
-    config_accessor(:disable_inputs_controlled_by_tissue_typing_feed) { false }
-    config_accessor(:disable_inputs_controlled_by_demographics_feed) { false }
+    config_accessor(:disable_inputs_controlled_by_tissue_typing_feed) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("DISABLE_INPUTS_CONTROLLED_BY_TISSUE_TYPING_FEED", "false")
+      )
+    }
+    config_accessor(:disable_inputs_controlled_by_demographics_feed) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("DISABLE_INPUTS_CONTROLLED_BY_DEMOGRAPHICS_FEED", "false")
+      )
+    }
     config_accessor(:enforce_user_prescriber_flag) {
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("ENFORCE_USER_PRESCRIBER_FLAG", "false"))
     }
