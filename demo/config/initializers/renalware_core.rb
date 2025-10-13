@@ -35,4 +35,6 @@ Renalware.configure do |config|
   config.mesh_organisation_ods_code = "RAJ01"
   config.mesh_organisation_uuid = "36944886-8c9b-4ada-b15d-500bff58e018"
   config.mesh_itk_organisation_uuid = "36944886-8c9b-4ada-b15d-500bff58e018"
+
+  # config.disable_inputs_controlled_by_demographics_feed = true
 end

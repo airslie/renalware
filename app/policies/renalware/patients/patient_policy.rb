@@ -1,6 +1,18 @@
 module Renalware
   module Patients
     class PatientPolicy < BasePolicy
+      # If new patients are being added to RW solely via HL7 feed, then there is no need
+      # for clinicians or admins to be able to add patients manually via the UI.
+      # Only super_admins can add patients manually in this case.
+      def create?
+        if Renalware.config.disable_inputs_controlled_by_demographics_feed
+          user_is_super_admin?
+        else
+          super
+        end
+      end
+      alias new? create?
+
       def update_pkb_renalreg_preferences?
         if Renalware.config.only_admins_can_update_pkb_renalreg_preferences
           user_is_any_admin?
