@@ -8,6 +8,8 @@ module Renalware
 
         user_is_admin? || user_is_super_admin? || !record.immutable?
       end
+
+      def copy_to_clipboard? = true
     end
   end
 end

@@ -1,8 +1,17 @@
 = content_for :actions do
+  - if policy(session).copy_to_clipboard?
+    li= link_to "#",
+                title: "Copy session details to clipboard",
+                data: { controller: "clipboard-async",
+                        action: "clipboard-async#copy",
+                        "clipboard-async-url_value": patient_hd_session_clipboard_path(session.patient, session),
+                        "clipboard-async-target": "button" } do
+        .pt-2= inline_icon(:copy, size: :lg)
   - if policy(session).edit?
     li= link_to t("btn.edit"),
                 edit_patient_hd_session_path(session.patient, session),
                 class: :button
+
 
 = within_patient_layout(title: session_title(session),
                         breadcrumbs: hd_summary_breadcrumb(session.patient)) do
