@@ -13,6 +13,11 @@ module Renalware
       end
       alias new? create?
 
+      # Certain patient demographics fields are controlled cannot be edited if HL7 is controlling
+      # demographics. Only super_admins can edit these fields in this case.
+      # Its the same logic as for create? above.
+      alias update_demographics? create?
+
       def update_pkb_renalreg_preferences?
         if Renalware.config.only_admins_can_update_pkb_renalreg_preferences
           user_is_any_admin?

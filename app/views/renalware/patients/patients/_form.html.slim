@@ -1,5 +1,4 @@
-- editing = (defined?(:editing) && editing).presence || false
-- controlled_by_demographics_feed = editing ? { "data-controlled-by-demographics-feed" => true } : {}
+- disabled_prop = policy(patient).update_demographics? ? {} : { disabled: true }
 
 .columns.large-12
   = field_set_tag do
@@ -8,7 +7,7 @@
     = f.input :nhs_number,
               wrapper: :horizontal_small,
               autofocus: true,
-              input_html: controlled_by_demographics_feed
+              input_html: disabled_prop
 
     / If configured to do so we disable the first patient_identifier aka local_patient_id eg the
     / BLT or KCH number. The others are unlikely to come in via feed so are editable.
@@ -17,7 +16,7 @@
                 as: :string,
                 label: "#{key} No",
                 wrapper: :horizontal_small,
-                input_html: index.zero? ? controlled_by_demographics_feed : {}
+                input_html: index.zero? ? disabled_prop : {}
 
     = f.association :hospital_centre,
                     collection: Renalware::Hospitals::Centre.host_site.ordered,
@@ -25,15 +24,15 @@
                     input_html: { class: "mb-3" }
 
     = f.input :external_patient_id, wrapper: :horizontal_small
-    = f.input :title, wrapper: :horizontal_tiny
-    = f.input :family_name, wrapper: :horizontal_small, input_html: controlled_by_demographics_feed
-    = f.input :given_name, wrapper: :horizontal_small, input_html: controlled_by_demographics_feed
+    = f.input :title, wrapper: :horizontal_tiny, input_html: disabled_prop
+    = f.input :family_name, wrapper: :horizontal_small, input_html: disabled_prop
+    = f.input :given_name, wrapper: :horizontal_small, input_html: disabled_prop
     /= f.input :suffix, wrapper: :horizontal_small
     = f.input :born_on,
               as: :flatpickr,
               label: "DoB",
               wrapper: :horizontal_datepicker,
-              input_html: controlled_by_demographics_feed
+              input_html: disabled_prop
     = f.input :sex,
         selected: patient.sex.code,
         collection: Renalware::Gender.all,
@@ -41,40 +40,39 @@
         include_blank: "Please select",
         required: true,
         wrapper: :horizontal_small,
-        input_html: controlled_by_demographics_feed
+        input_html: disabled_prop
     = f.association :ethnicity,
         label_method: :name, value_method: :id,
         include_blank: "Please select",
         wrapper: :horizontal_small,
-        input_html: controlled_by_demographics_feed
+        input_html: disabled_prop
     = f.association :country_of_birth,
         include_blank: "Please select",
         wrapper: :horizontal_small,
-        input_html: controlled_by_demographics_feed
+        input_html: disabled_prop
     = f.association :religion,
         label_method: :name, value_method: :id,
         include_blank: "Please select",
         wrapper: :horizontal_small,
-        input_html: controlled_by_demographics_feed
+        input_html: disabled_prop
     = f.association :language,
         label_method: :name, value_method: :id,
         include_blank: "Please select main language",
         wrapper: :horizontal_small,
-        input_html: controlled_by_demographics_feed
+        input_html: disabled_prop
     = f.input :marital_status,
         include_blank: "Please select marital status",
         wrapper: :horizontal_small,
-        input_html: controlled_by_demographics_feed
+        input_html: disabled_prop
     = f.input :paediatric_patient_indicator,
         as: :inline_radio_buttons,
         label: "If under 18 years, is the recipient being treated in a paediatric unit?",
         wrapper: :horizontal_small
 
-    = f.input :telephone1, wrapper: :horizontal_small, input_html: controlled_by_demographics_feed
-    = f.input :telephone2, wrapper: :horizontal_small, input_html: controlled_by_demographics_feed
-    = f.input :email, wrapper: :horizontal_small, input_html: controlled_by_demographics_feed
-    = f.input :next_of_kin, as: :text, wrapper: :horizontal_large
-
+    = f.input :telephone1, wrapper: :horizontal_small, input_html: disabled_prop
+    = f.input :telephone2, wrapper: :horizontal_small, input_html: disabled_prop
+    = f.input :email, wrapper: :horizontal_small, input_html: disabled_prop
+    = f.input :next_of_kin, as: :text, wrapper: :horizontal_large, input_html: disabled_prop.merge(rows: 6)
     - if patient.persisted?
       .row
         .section-underliner
@@ -136,7 +134,7 @@
     fieldset id="current_address"
       legend Current Address
       = a.input :id, as: :hidden
-      = render "renalware/addresses/form", a: a, controlled_by_feed_options: controlled_by_demographics_feed
+      = render "renalware/addresses/form", a: a, controlled_by_feed_options: disabled_prop
 
 .columns.large-12
   = field_set_tag do

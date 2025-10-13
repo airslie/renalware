@@ -24,7 +24,7 @@ module Renalware
             .to receive(:disable_inputs_controlled_by_demographics_feed).and_return(true)
         end
 
-        permissions :new?, :create? do
+        permissions :new?, :create?, :update_demographics? do
           it do
             is_expected.not_to permit(guest, patient)
             is_expected.not_to permit(clinician, patient)

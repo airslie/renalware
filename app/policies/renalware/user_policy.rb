@@ -3,6 +3,7 @@ module Renalware
     def update?
       super && !user_update_self?
     end
+    alias edit? update?
 
     def assign_role?(role)
       return false if role.hidden

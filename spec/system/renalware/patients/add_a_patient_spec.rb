@@ -2,7 +2,12 @@ describe "A user adds a patient" do
   describe "add patient flow" do
     include ConfigHelper
 
-    before { configure_patient_hospital_identifiers }
+    before do
+      configure_patient_hospital_identifiers
+      allow(Renalware.config)
+        .to receive(:disable_inputs_controlled_by_demographics_feed)
+        .and_return(false)
+    end
 
     it "adds a patient successfully" do
       login_as_clinical

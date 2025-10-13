@@ -1,3 +1,9 @@
+= content_for(:actions) do
+  - unless policy(patient).update_demographics?
+    div.flex
+      span.border.rounded.px-2.py-1.shadow.bg-blue-50
+        | Disabled fields are updated automatically via feed
+
 = within_patient_layout(title: "Edit", breadcrumbs: breadcrumb_for("Demographics", patient)) do
   .row.document
     .columns.small-12
