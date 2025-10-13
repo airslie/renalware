@@ -138,7 +138,7 @@ module Renalware
             if parts[1]&.downcase == "email"
               hash[:email] = parts[0]
             else
-              hash[:telephone] << parts[0]
+              hash[:telephone] << [parts[1], parts[0]].compact_blank.join(": ")
             end
           end
         end
