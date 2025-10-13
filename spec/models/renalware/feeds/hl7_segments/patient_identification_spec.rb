@@ -176,6 +176,19 @@ module Renalware::Feeds
         end
       end
 
+      context 'when phone_home PID.13 has a "" value' do
+        let(:raw_message) do
+          <<~RAW
+            PID|||||||||||||""^MOBILE~""^HOME~""^EMAIL|
+          RAW
+        end
+
+        it "clears the numbers in telephone" do
+          expect(pi.telephone).to eq(%w(MOBILE HOME))
+          expect(pi.email).to eq("")
+        end
+      end
+
       context "when phone_home PID.13 present with a different order" do
         let(:raw_message) do
           <<~RAW

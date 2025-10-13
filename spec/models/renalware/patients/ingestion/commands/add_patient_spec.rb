@@ -77,8 +77,8 @@ module Renalware::Patients::Ingestion
           # We should have saved all the numbers
           expect(patient).to have_attributes(
             email: "bad-email-address",
-            telephone1: "tel1",
-            telephone2: "tel2"
+            telephone1: "MOBILE: tel1",
+            telephone2: "HOME: tel2"
           )
         end
       end
