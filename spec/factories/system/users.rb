@@ -105,5 +105,33 @@ FactoryBot.define do
     trait :system do
       username { Renalware::SystemUser.username }
     end
+
+    trait :with_ldap_enabled do
+      transient do
+        ldap_groups { [Renalware::LdapAuthenticatable::RENALWARE_GROUP] }
+      end
+
+      before(:create) do |user, evaluator|
+        fake_adapter = Class.new do
+          def initialize(groups)
+            @groups = groups
+          end
+
+          def user_in_group?(_username, group_dn)
+            @groups.include?(group_dn)
+          end
+
+          def valid_credentials?(_username, _password)
+            true
+          end
+
+          def get_ldap_param(_username, _attribute)
+            nil
+          end
+        end.new(evaluator.ldap_groups)
+
+        user.define_singleton_method(:ldap_adapter) { fake_adapter }
+      end
+    end
   end
 end

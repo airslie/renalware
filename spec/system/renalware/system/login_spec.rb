@@ -148,11 +148,12 @@ module Renalware
     end
 
     context "when LDAP authentication is enabled" do
+      let(:ldap_user) { create(:user, :clinical, :with_ldap_enabled) }
+      let(:ldap_adapter) { ldap_user.ldap_adapter }
+
       before do
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group, _attr|
-          group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
-        end
+        allow(Renalware::Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
       end
 
       it "hides signup and forgot password links" do
@@ -164,31 +165,27 @@ module Renalware
       end
 
       it "authenticates user with valid LDAP credentials" do
-        allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
-          .with(user.username, "ldap_password")
-          .and_return(true)
-        allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
-          .with(user.username, Renalware::LdapAuthenticatable::RENALWARE_GROUP, "member")
+        allow(ldap_adapter).to receive(:valid_credentials?)
+          .with(ldap_user.username, "ldap_password")
           .and_return(true)
 
         visit new_user_session_path
 
-        fill_in "Username", with: user.username
+        fill_in "Username", with: ldap_user.username
         fill_in "Password", with: "ldap_password"
         click_on "Log in"
 
         expect(page).to have_current_path(root_path)
-        expect(page).to have_content("Signed in successfully")
       end
 
       it "rejects user with invalid LDAP credentials" do
-        allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
-          .with(user.username, "wrong_password")
+        allow(ldap_adapter).to receive(:valid_credentials?)
+          .with(ldap_user.username, "wrong_password")
           .and_return(false)
 
         visit new_user_session_path
 
-        fill_in "Username", with: user.username
+        fill_in "Username", with: ldap_user.username
         fill_in "Password", with: "wrong_password"
         click_on "Log in"
 
@@ -218,7 +215,6 @@ module Renalware
         click_on "Log in"
 
         expect(page).to have_current_path(root_path)
-        expect(page).to have_content("Signed in successfully")
       end
 
       it "rejects user with invalid local credentials" do

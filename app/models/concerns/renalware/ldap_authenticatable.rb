@@ -47,7 +47,7 @@ module Renalware
     end
 
     def valid_ldap_authentication?(password)
-      ::Devise::LDAP::Adapter.valid_credentials?(username, password)
+      ldap_adapter.valid_credentials?(username, password)
     end
 
     private
@@ -56,12 +56,16 @@ module Renalware
       Renalware.config.ldap_authentication
     end
 
+    def ldap_adapter
+      @ldap_adapter ||= Ldap::Adapter.new
+    end
+
     def ldap_param(attribute)
-      ::Devise::LDAP::Adapter.get_ldap_param(username, attribute)&.first
+      ldap_adapter.get_ldap_param(username, attribute)
     end
 
     def in_ldap_group?(group)
-      ::Devise::LDAP::Adapter.in_ldap_group?(username, group, "member")
+      ldap_adapter.user_in_group?(username, group)
     end
 
     def in_renalware_group?
