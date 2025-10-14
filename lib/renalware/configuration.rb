@@ -57,7 +57,7 @@ module Renalware
     config_accessor(:enable_allergies) { ENV.fetch("ENABLE_ALLERGIES", "true") == "true" }
 
     # if true we use LDAP eg ActiveDirectory
-    config_accessor(:ldap_authentication) { ENV.fetch("ENABLE_LDAP", "false") == "true" }
+    config_accessor(:ldap_authentication) { ENV.fetch("LDAP_ENABLE", "false") == "true" }
     # if false, new LDAP users require manual approval
     config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
 
