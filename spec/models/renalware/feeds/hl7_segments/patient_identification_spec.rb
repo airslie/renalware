@@ -171,8 +171,21 @@ module Renalware::Feeds
         end
 
         it do
-          expect(pi.telephone).to eq(%w(tel1 tel2))
+          expect(pi.telephone).to eq(["MOBILE: tel1", "HOME: tel2"])
           expect(pi.email).to eq("testrenal@test.co")
+        end
+      end
+
+      context 'when phone_home PID.13 has a "" value' do
+        let(:raw_message) do
+          <<~RAW
+            PID|||||||||||||""^MOBILE~""^HOME~""^EMAIL|
+          RAW
+        end
+
+        it "clears the numbers in telephone" do
+          expect(pi.telephone).to eq(%w(MOBILE HOME))
+          expect(pi.email).to eq("")
         end
       end
 
@@ -180,6 +193,19 @@ module Renalware::Feeds
         let(:raw_message) do
           <<~RAW
             PID|||||||||||||tel1^MOBILE~testrenal@test.co^EMAIL~tel2^HOME|
+          RAW
+        end
+
+        it do
+          expect(pi.telephone).to eq(["MOBILE: tel1", "HOME: tel2"])
+          expect(pi.email).to eq("testrenal@test.co")
+        end
+      end
+
+      context "when phone_home PID.13 present with no types" do
+        let(:raw_message) do
+          <<~RAW
+            PID|||||||||||||tel1~tel2~testrenal@test.co^EMAIL|
           RAW
         end
 

@@ -199,8 +199,8 @@ module Renalware::Patients::Ingestion
           expect(patient.reload).to have_attributes(expected_hosp_numbers)
           expect(patient).to have_attributes(
             email: "testrenal@test.co",
-            telephone1: "tel1",
-            telephone2: "tel2"
+            telephone1: "MOBILE: tel1",
+            telephone2: "HOME: tel2"
           )
         end
       end

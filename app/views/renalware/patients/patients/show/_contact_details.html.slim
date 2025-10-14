@@ -9,12 +9,10 @@ article
     - if patient.current_address&.email.present?
       dt Email
       dd= patient.current_address&.email
-    - if patient.telephone1.present?
-      dt Telephone
-      dd= patient.telephone1
-    - if patient.telephone2.present?
-      dt Telephone
-      dd= patient.telephone2
+    dt Telephone
+    dd= patient.telephone1
+    dt Telephone
+    dd= patient.telephone2
     - if patient.current_address&.telephone.present?
       dt Telephone
       dd= patient.current_address&.telephone

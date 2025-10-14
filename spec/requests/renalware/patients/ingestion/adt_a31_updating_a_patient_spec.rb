@@ -216,8 +216,8 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
       primary_care_physician: primary_care_physician,
       practice: practice,
       email: "x@y.com",
-      telephone1: "tel1",
-      telephone2: nil # since '""' was in the message
+      telephone1: "HOME: tel1",
+      telephone2: "MOBILE"
     )
 
     expect(patient.current_address).to have_attributes(
