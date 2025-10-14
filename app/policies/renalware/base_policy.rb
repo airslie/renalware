@@ -19,10 +19,6 @@ module Renalware
       has_any_role?
     end
 
-    def show?
-      has_any_role?
-    end
-
     def create?
       return true if user_is_devops? || user_is_super_admin?
       return permission_for_restricted? if restricted?
@@ -30,27 +26,21 @@ module Renalware
       write_privileges?
     end
 
-    def update?
-      create?
-    end
+    def show? = has_any_role?
+    def contact_added? = update?
+    def debug? = user_is_super_admin?
 
-    def destroy?
-      create?
-    end
-
-    def sort?
-      update?
-    end
-
-    alias move? sort?
-
-    def contact_added?
-      update?
-    end
-
-    def debug?
-      user_is_super_admin?
-    end
+    # Note that its important to use `alias` to maintain lexical scope for the various predicates,
+    # rather than alias_method or eg `def update? = create?` otherwise any subclasses that overrides
+    # eg create? but not update? could behave unpredictably. Using alias in this base policy means
+    # that if the subclass has overridden create? but not update?, then subclass.update? will call
+    # the create? method on the superclass, not the subclass. Simples.
+    alias destroy?  create?
+    alias update?   create?
+    alias edit?     create?
+    alias new?      create?
+    alias sort?     create?
+    alias move?     sort?
 
     protected
 
