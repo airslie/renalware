@@ -50,6 +50,10 @@ module Renalware
       ldap_adapter.valid_credentials?(username, password)
     end
 
+    def ldap_requires_manual_approval?
+      ldap_enabled? && !Renalware.config.ldap_auto_approve_users
+    end
+
     private
 
     def ldap_enabled?

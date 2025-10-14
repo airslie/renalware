@@ -34,6 +34,7 @@ en:
       unconfirmed: You have to confirm your email address before continuing.
       user:
         not_approved: Your account needs approval before you can access the system.
+        not_approved_ldap: Your credentials have been verified. Please contact your administrator to approve your access to this system.
     mailer:
       confirmation_instructions:
         action: Confirm my account
@@ -100,6 +101,8 @@ en:
       already_signed_out: Signed out successfully.
       new:
         sign_in: Sign in
+      pre_production_notice: This is a pre-production system. You may not have access until approved by an administrator.
+      awaiting_approval: Your credentials have been verified. Please contact your administrator to approve your access to this system.
       signed_in: ""
       signed_out: Signed out successfully.
     shared:

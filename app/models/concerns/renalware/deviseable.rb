@@ -39,6 +39,8 @@ module Renalware
           :banned
         elsif approved?
           super
+        elsif ldap_requires_manual_approval?
+          :not_approved_ldap
         else
           :not_approved
         end

@@ -1,3 +1,7 @@
+- if Renalware.config.ldap_authentication && !Renalware.config.ldap_auto_approve_users
+  .alert-box.alert.m-1.rounded.shadow-sm(class="!py-3 !border-0 mt-1 mx-1")
+    = t("devise.sessions.pre_production_notice")
+
 .alert-box.warning.m-1.rounded.shadow-sm(class="!py-3 !border-0 mt-1 mx-1")
   | NOTICE: This system contains patient clinical records. All information is highly
   |  confidential and must be treated as such. All data must be used with the Data
