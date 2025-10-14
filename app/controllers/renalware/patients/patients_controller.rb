@@ -96,7 +96,7 @@ module Renalware
           :nhs_number, :family_name, :given_name, :sex, :country_of_birth_id,
           :ethnicity_id, :born_on, :paediatric_patient_indicator, :cc_on_all_letters,
           :title, :suffix, :marital_status, :telephone1, :telephone2, :email, :religion_id,
-          :language_id, :cc_decision_on, :next_of_kin,
+          :language_id, :cc_decision_on, :next_of_kin, :next_of_kin_notes,
           :local_patient_id, :local_patient_id_2, :local_patient_id_3,
           :local_patient_id_4, :local_patient_id_5, :external_patient_id,
           :send_to_renalreg, :send_to_rpv, :renalreg_decision_on, :rpv_decision_on,

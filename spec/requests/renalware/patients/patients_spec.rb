@@ -67,7 +67,11 @@ describe "Managing patients" do
   describe "PATCH update" do
     context "with valid attributes" do
       it "updates a record" do
-        attributes = { given_name: "My Edited Patient", next_of_kin: "ABC" }
+        attributes = {
+          given_name: "My Edited Patient",
+          next_of_kin: "ABC",
+          next_of_kin_notes: "Some notes"
+        }
         patch patient_path(patient), params: { patient: attributes }
 
         expect(response).to have_http_status(:redirect)
@@ -81,7 +85,8 @@ describe "Managing patients" do
         updated_patient = Renalware::Patient.find_by(attributes)
         expect(updated_patient).to have_attributes(
           updated_by: @current_user,
-          next_of_kin: "ABC"
+          next_of_kin: "ABC",
+          next_of_kin_notes: "Some notes"
         )
 
         expect(response).to be_successful

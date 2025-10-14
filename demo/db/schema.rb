@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_10_132653) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -4505,7 +4505,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
     t.datetime "checked_for_ukrdc_changes_at", precision: nil
     t.bigint "hospital_centre_id"
     t.bigint "named_consultant_id"
-    t.text "next_of_kin"
+    t.text "next_of_kin_notes", comment: "Manually entered next of kin details, not from HL7"
     t.bigint "named_nurse_id"
     t.bigint "preferred_death_location_id"
     t.text "preferred_death_location_notes"
@@ -4517,6 +4517,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
     t.bigint "marital_status_id"
     t.enum "confidentiality", default: "normal", null: false, comment: "Correspondence will not be sent via GP Connect if set to restricted", enum_type: "enum_confidentiality"
     t.string "ehr_person_identifier", comment: "For use with an EHR eg Millennium. This is a unique identifier for the patient in the EHR system, and maybe be populated during the HL7 ingestion that creates the patient. SHould not be searchable from, or displayed in, the UI."
+    t.text "next_of_kin", comment: "Next of kin details from HL7 NK1 segments"
     t.index "lower((family_name)::text), given_name", name: "idx_patients_on_lower_family_name"
     t.index ["actual_death_location_id"], name: "index_patients_on_actual_death_location_id"
     t.index ["country_of_birth_id"], name: "index_patients_on_country_of_birth_id"
@@ -6846,7 +6847,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
             WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
        LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
             WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
+    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.reporting_bone_audit", sql_definition: <<-SQL
@@ -6882,7 +6883,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_122632) do
             WHERE (e2.pth > (300)::numeric)) e7 ON (true))
        LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
             WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
+    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.supportive_care_mdm_patients", sql_definition: <<-SQL

@@ -6,7 +6,7 @@ module Renalware
         # (ADT^A28) we parse the patient level information from the HL7 message and update or create
         # the patient.
         class Patient < MessageMapper
-          delegate :patient_identification, to: :message
+          delegate :patient_identification, :next_of_kins, to: :message
           delegate :address, :religion, :primary_language, to: :patient_identification
 
           def initialize(message, patient = nil)
@@ -43,6 +43,7 @@ module Renalware
               email: patient_identification.email,
               telephone1: patient_identification.telephone[0],
               telephone2: patient_identification.telephone[1],
+              next_of_kin: next_of_kins,
               **patient_identification.identifiers
             }.compact_blank
 

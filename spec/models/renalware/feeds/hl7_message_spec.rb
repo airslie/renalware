@@ -94,6 +94,47 @@ module Renalware::Feeds
       end
     end
 
+    describe "#nk1" do
+      context "when no NK1 segments exist in the HL7 message" do
+        it do
+          expect(decorator.nk1).to be_an(Array)
+          expect(decorator.nk1).to be_empty
+          expect(decorator.next_of_kins).to eq("")
+        end
+      end
+
+      context "when there is one NK1 segment in the HL7 message" do
+        let(:raw_message) do
+          <<~RAW
+            MSH|^~\&|ADT|iSOFT Engine|eGate|Kings|20191030155640||MFN^M02|1861609776|P|2.3|||AL|AL
+            NK1|1|DOE^MARY|MTH^MOTHER|
+          RAW
+        end
+
+        it "is an array of 1 HL7Segments::NK1" do
+          expect(decorator.nk1).to be_an(Array)
+          expect(decorator.nk1.size).to eq(1)
+          expect(decorator.next_of_kins).to eq("MTH MOTHER\nMARY DOE")
+        end
+      end
+
+      context "when there are two NK1s segments in the HL7 message" do
+        let(:raw_message) do
+          <<~RAW
+            MSH|^~\&|ADT|iSOFT Engine|eGate|Kings|20191030155640||MFN^M02|1861609776|P|2.3|||AL|AL
+            NK1|1|DOE^MARY|MTH^MOTHER|
+            NK1|2|DOE^JOHN|FTH^FATHER|
+          RAW
+        end
+
+        it "is an array of 2 HL7Segments::NK1" do
+          expect(decorator.nk1).to be_an(Array)
+          expect(decorator.nk1.size).to eq(2)
+          expect(decorator.next_of_kins).to eq("MTH MOTHER\nMARY DOE\nFTH FATHER\nJOHN DOE")
+        end
+      end
+    end
+
     describe "#event_type" do
       subject { decorator.event_type }
 

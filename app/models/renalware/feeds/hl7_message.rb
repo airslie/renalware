@@ -127,12 +127,13 @@ module Renalware
       end
 
       def action                  = ACTIONS.fetch(type, :no_matching_command)
-      def patient_identification  = Renalware::Feeds::PatientIdentification.new(self[:PID])
+      def patient_identification  = PatientIdentification.new(self[:PID])
       def orc_order_status        = first_orc_segment.order_status
       def orc_filler_order_number = first_orc_segment.filler_order_number
-      def pv1                     = Renalware::Feeds::HL7Segments::PV1.new(self[:PV1])
-      def pv2                     = Renalware::Feeds::HL7Segments::PV2.new(self[:PV2])
-      def sch                     = Renalware::Feeds::HL7Segments::SCH.new(self[:SCH])
+      def nk1                     = Array(self[:NK1]).map { HL7Segments::NK1.new(it) }
+      def pv1                     = HL7Segments::PV1.new(self[:PV1])
+      def pv2                     = HL7Segments::PV2.new(self[:PV2])
+      def sch                     = HL7Segments::SCH.new(self[:SCH])
       def time                    = self[:MSH].time
       def type                    = self[:MSH].message_type
       def header_id               = self[:MSH].message_control_id
@@ -144,6 +145,8 @@ module Renalware
       def to_hl7 # rubocop:disable Lint/UselessMethodDefinition
         super
       end
+
+      def next_of_kins = nk1.map(&:to_fs).join("\n")
 
       def event_type
         parts = type.split("^")

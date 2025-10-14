@@ -73,6 +73,8 @@
     = f.input :telephone2, wrapper: :horizontal_small, input_html: disabled_prop
     = f.input :email, wrapper: :horizontal_small, input_html: disabled_prop
     = f.input :next_of_kin, as: :text, wrapper: :horizontal_large, input_html: disabled_prop.merge(rows: 6)
+    = f.input :next_of_kin_notes, as: :text, wrapper: :horizontal_large, input_html: { rows: 3 }
+
     - if patient.persisted?
       .row
         .section-underliner

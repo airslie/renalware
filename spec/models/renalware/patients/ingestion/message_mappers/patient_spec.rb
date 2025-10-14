@@ -67,7 +67,8 @@ module Renalware
             practice: practice,
             religion: religion,
             language: language,
-            ethnicity: ethnicity
+            ethnicity: ethnicity,
+            next_of_kin: message.next_of_kins
           )
           expect(actual.sex.code).to eq(message.patient_identification.sex)
 
