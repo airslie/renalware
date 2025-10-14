@@ -58,6 +58,23 @@ module Renalware
       expect(build(:user, :unapproved)).not_to be_approved
     end
 
+    describe "#active_for_authentication?" do
+      it "returns false for unapproved users" do
+        user = build(:user, approved: false)
+        expect(user.active_for_authentication?).to be(false)
+      end
+
+      it "returns true for approved users" do
+        user = build(:user, approved: true)
+        expect(user.active_for_authentication?).to be(true)
+      end
+
+      it "returns false for banned users" do
+        user = build(:user, approved: true, banned: true)
+        expect(user.active_for_authentication?).to be(false)
+      end
+    end
+
     describe "read_only?" do
       it "denotes a user with the read_only role" do
         expect(create(:user, :read_only)).to have_role(:read_only)
@@ -318,6 +335,34 @@ module Renalware
           user.ldap_before_save
 
           expect(user.given_name).to eq("John Doe")
+        end
+      end
+
+      context "when ldap_auto_approve_users is enabled" do
+        it "sets approved to true when user is in valid LDAP group" do
+          allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(true)
+          allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+            .with(user.username, "givenName")
+            .and_return(["John"])
+          allow(user).to receive(:in_valid_ldap_group?).and_return(true)
+
+          user.ldap_before_save
+
+          expect(user.approved).to be(true)
+        end
+      end
+
+      context "when ldap_auto_approve_users is disabled" do
+        it "sets approved to false when user is in valid LDAP group" do
+          allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(false)
+          allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+            .with(user.username, "givenName")
+            .and_return(["John"])
+          allow(user).to receive(:in_valid_ldap_group?).and_return(true)
+
+          user.ldap_before_save
+
+          expect(user.approved).to be(false)
         end
       end
     end

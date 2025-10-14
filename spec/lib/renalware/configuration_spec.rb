@@ -10,4 +10,10 @@ describe Renalware::Configuration do
       expect(config.delay_after_which_a_finished_session_becomes_immutable).to eq(6.hours)
     end
   end
+
+  describe "#ldap_auto_approve_users" do
+    it "defaults to true for backward compatibility" do
+      expect(config.ldap_auto_approve_users).to be(true)
+    end
+  end
 end

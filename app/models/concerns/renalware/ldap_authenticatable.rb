@@ -20,7 +20,7 @@ module Renalware
       self.email = ldap_param("mail")
       self.given_name = ldap_param("givenName") || ldap_param("cn")
       self.family_name = ldap_param("sn")
-      self.approved = in_valid_ldap_group?
+      self.approved = in_valid_ldap_group? && Renalware.config.ldap_auto_approve_users
     end
 
     def assign_ldap_role

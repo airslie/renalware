@@ -55,7 +55,12 @@ module Renalware
       ENV.fetch("ALLOW_QR_CODES_IN_LETTERS", "false") == "true"
     end
     config_accessor(:enable_allergies) { ENV.fetch("ENABLE_ALLERGIES", "true") == "true" }
-    config_accessor(:ldap_authentication) { ENV.fetch("ENABLE_LDAP", "false") == "true" } # if true we use LDAP eg ActiveDirectory
+
+    # if true we use LDAP eg ActiveDirectory
+    config_accessor(:ldap_authentication) { ENV.fetch("ENABLE_LDAP", "false") == "true" }
+    # if false, new LDAP users require manual approval
+    config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
+
     config_accessor(:site_name) { "Renalware" }
     config_accessor(:hospital_name) { ENV.fetch("HOSPITAL_NAME", "KINGS COLLEGE HOSPITAL") }
     config_accessor(:hospital_address) { ENV.fetch("HOSPITAL_ADDRESS", "") } # comma-delimited
