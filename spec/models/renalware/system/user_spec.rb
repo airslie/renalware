@@ -297,23 +297,25 @@ module Renalware
 
     describe "#ldap_before_save" do
       let(:user) { build(:user, username: "testuser") }
+      let(:ldap_adapter) { instance_double(Ldap::Adapter) }
 
       before do
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+        allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+        allow(ldap_adapter).to receive(:param)
           .with(user.username, "sn")
-          .and_return(["Doe"])
-        allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+          .and_return("Doe")
+        allow(ldap_adapter).to receive(:param)
           .with(user.username, "mail")
-          .and_return(["john.doe@example.com"])
+          .and_return("john.doe@example.com")
         allow(user).to receive(:in_valid_ldap_group?).and_return(true)
       end
 
       context "when givenName is present" do
         it "sets given_name from givenName attribute" do
-          allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+          allow(ldap_adapter).to receive(:param)
             .with(user.username, "givenName")
-            .and_return(["John"])
+            .and_return("John")
           allow(user).to receive(:in_valid_ldap_group?).and_return(true)
 
           user.ldap_before_save
@@ -324,12 +326,12 @@ module Renalware
 
       context "when givenName is nil" do
         it "falls back to cn attribute" do
-          allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+          allow(ldap_adapter).to receive(:param)
             .with(user.username, "givenName")
             .and_return(nil)
-          allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+          allow(ldap_adapter).to receive(:param)
             .with(user.username, "cn")
-            .and_return(["John Doe"])
+            .and_return("John Doe")
           allow(user).to receive(:in_valid_ldap_group?).and_return(true)
 
           user.ldap_before_save
@@ -341,9 +343,9 @@ module Renalware
       context "when ldap_auto_approve_users is enabled" do
         it "sets approved to true when user is in valid LDAP group" do
           allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(true)
-          allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+          allow(ldap_adapter).to receive(:param)
             .with(user.username, "givenName")
-            .and_return(["John"])
+            .and_return("John")
           allow(user).to receive(:in_valid_ldap_group?).and_return(true)
 
           user.ldap_before_save
@@ -355,9 +357,9 @@ module Renalware
       context "when ldap_auto_approve_users is disabled" do
         it "sets approved to false when user is in valid LDAP group" do
           allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(false)
-          allow(::Devise::LDAP::Adapter).to receive(:get_ldap_param)
+          allow(ldap_adapter).to receive(:param)
             .with(user.username, "givenName")
-            .and_return(["John"])
+            .and_return("John")
           allow(user).to receive(:in_valid_ldap_group?).and_return(true)
 
           user.ldap_before_save
@@ -375,9 +377,11 @@ module Renalware
       let!(:admin_role) { create(:role, :admin) }
       let!(:super_admin_role) { create(:role, :super_admin) }
       let!(:devops_role) { create(:role, :devops) }
+      let(:ldap_adapter) { instance_double(Ldap::Adapter) }
 
       before do
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+        allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
       end
 
       context "when LDAP is disabled" do
@@ -391,7 +395,7 @@ module Renalware
 
       context "when user is in renalware LDAP group" do
         before do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group, _attr|
+          allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
             group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
           end
         end
@@ -435,7 +439,7 @@ module Renalware
 
       context "when user is in renalware-readonly LDAP group" do
         before do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |_username, group, _attr|
+          allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
             group == Renalware::LdapAuthenticatable::RENALWARE_READONLY_GROUP
           end
         end
@@ -479,14 +483,14 @@ module Renalware
 
       context "when user is not in any valid LDAP group" do
         it "unapproves the user" do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group, _attr|
+          allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "renalwareuser-1" &&
               group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
           end
           user = create(:user, role: nil, roles: [clinical_role], approved: true,
                                username: "renalwareuser-1")
 
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -494,7 +498,7 @@ module Renalware
         end
 
         it "does not modify already unapproved user" do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group, _attr|
+          allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "renalwareuser-2" &&
               group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
           end
@@ -503,7 +507,7 @@ module Renalware
           user.update_column(:approved, false)
           initial_updated_at = user.reload.updated_at
 
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -514,13 +518,13 @@ module Renalware
 
       context "when user has admin-level roles" do
         it "does not modify super_admin role" do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group, _attr|
+          allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "superadmin-1" &&
               group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
           end
           user = create(:user, role: nil, roles: [super_admin_role], username: "superadmin-1")
 
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -528,12 +532,12 @@ module Renalware
         end
 
         it "does not modify admin role" do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group, _attr|
+          allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "admin-1" && group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
           end
           user = create(:user, role: nil, roles: [admin_role], username: "admin-1")
 
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -541,12 +545,12 @@ module Renalware
         end
 
         it "does not modify devops role" do
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?) do |username, group, _attr|
+          allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "devops-1" && group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
           end
           user = create(:user, role: nil, roles: [devops_role], username: "devops-1")
 
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(false)
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
 
           user.synchronize_ldap_roles
 
@@ -557,15 +561,15 @@ module Renalware
       context "when LDAP group check fails" do
         it "raises the LDAP error" do
           # Stub LDAP during user creation to allow the test to proceed
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(true)
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
 
           user = create(:user, role: nil, roles: [clinical_role], approved: true)
 
           # Now stub to raise the error when synchronize_ldap_roles is called
-          allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?)
-            .and_raise(Net::LDAP::Error.new("LDAP error"))
+          allow(ldap_adapter).to receive(:user_in_group?)
+            .and_raise(Renalware::Ldap::Error.new("LDAP error"))
 
-          expect { user.synchronize_ldap_roles }.to raise_error(Net::LDAP::Error)
+          expect { user.synchronize_ldap_roles }.to raise_error(Renalware::Ldap::Error)
         end
       end
     end

@@ -9,13 +9,5 @@ module Renalware
     # Prevent CSRF attacks by raising an exception.
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :reset_session
-
-    private
-
-    def handle_ldap_error(exception)
-      log_ldap_error(exception)
-      flash[:alert] = ldap_error_message
-      redirect_back(fallback_location: root_path)
-    end
   end
 end

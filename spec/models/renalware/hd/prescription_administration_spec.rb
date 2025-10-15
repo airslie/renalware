@@ -114,17 +114,19 @@ module Renalware
         context "when LDAP authentication is enabled" do
           let(:admin_user) { create(:user, username: "admin_user") }
           let(:witness_user) { create(:user, username: "witness_user") }
+          let(:ldap_adapter) { instance_double(Ldap::Adapter) }
 
           before do
             allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-            allow(::Devise::LDAP::Adapter).to receive(:in_ldap_group?).and_return(true)
+            allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+            allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
           end
 
           it "validates administrator password against LDAP" do
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(admin_user.username, "ldap_admin_password")
               .and_return(true)
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(witness_user.username, "ldap_witness_password")
               .and_return(true)
 
@@ -144,10 +146,10 @@ module Renalware
           end
 
           it "rejects invalid LDAP password for administrator" do
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(admin_user.username, "wrong_admin_password")
               .and_return(false)
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(witness_user.username, "ldap_witness_password")
               .and_return(true)
 
@@ -165,10 +167,10 @@ module Renalware
           end
 
           it "rejects invalid LDAP password for witness" do
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(admin_user.username, "ldap_admin_password")
               .and_return(true)
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(witness_user.username, "wrong_witness_password")
               .and_return(false)
 
@@ -186,12 +188,12 @@ module Renalware
           end
 
           it "handles LDAP server errors gracefully" do
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(admin_user.username, "any_password")
-              .and_raise(Net::LDAP::Error.new("LDAP server unreachable"))
-            allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+              .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
+            allow(ldap_adapter).to receive(:valid_credentials?)
               .with(witness_user.username, "any_password")
-              .and_raise(Net::LDAP::Error.new("LDAP server unreachable"))
+              .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
             allow(Rails.logger).to receive(:error)
 
             administration = described_class.new(

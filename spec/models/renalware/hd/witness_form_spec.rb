@@ -69,12 +69,15 @@ module Renalware
           end
 
           context "when LDAP authentication is enabled" do
+            let(:ldap_adapter) { instance_double(Ldap::Adapter) }
+
             before do
               allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+              allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
             end
 
             it "validates witness password against LDAP" do
-              allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+              allow(ldap_adapter).to receive(:valid_credentials?)
                 .with(witness.username, "ldap_password")
                 .and_return(true)
               allow(witness).to receive(:valid_password?).with("ldap_password").and_call_original
@@ -85,7 +88,7 @@ module Renalware
             end
 
             it "rejects invalid LDAP password for witness" do
-              allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+              allow(ldap_adapter).to receive(:valid_credentials?)
                 .with(witness.username, "wrong_password")
                 .and_return(false)
               allow(witness).to receive(:valid_password?).with("wrong_password").and_call_original
@@ -97,9 +100,9 @@ module Renalware
             end
 
             it "handles LDAP server errors gracefully during witnessing" do
-              allow(::Devise::LDAP::Adapter).to receive(:valid_credentials?)
+              allow(ldap_adapter).to receive(:valid_credentials?)
                 .with(witness.username, "any_password")
-                .and_raise(Net::LDAP::Error.new("LDAP server unreachable"))
+                .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
               allow(witness).to receive(:valid_password?).with("any_password").and_call_original
               allow(Rails.logger).to receive(:error)
 

@@ -1,25 +1,23 @@
 module Renalware
   module Ldap
     class Adapter
-      delegate :valid_credentials?, to: :"::Devise::LDAP::Adapter"
+      def valid_credentials?(username, password)
+        ::Devise::LDAP::Adapter.valid_credentials?(username, password)
+      rescue Net::LDAP::Error, DeviseLdapAuthenticatable::LdapException => e
+        raise Error, "#{e.class}: #{e.message}", cause: e
+      end
 
-      def get_ldap_param(username, attribute)
+      def param(username, attribute)
         ::Devise::LDAP::Adapter.get_ldap_param(username, attribute)&.first
+      rescue Net::LDAP::Error, DeviseLdapAuthenticatable::LdapException => e
+        raise Error, "#{e.class}: #{e.message}", cause: e
       end
 
       def user_in_group?(username, group_dn)
         # "member" is the standard LDAP attribute for group membership
         ::Devise::LDAP::Adapter.in_ldap_group?(username, group_dn, "member")
-      end
-
-      def user_attributes(username, attributes)
-        attributes.index_with { |attr| get_ldap_param(username, attr) }
-      end
-
-      def user_profile(username)
-        user_attributes(username, %w(mail givenName cn sn)).tap do |attrs|
-          attrs["givenName"] ||= attrs["cn"]
-        end
+      rescue Net::LDAP::Error, DeviseLdapAuthenticatable::LdapException => e
+        raise Error, "#{e.class}: #{e.message}", cause: e
       end
     end
   end

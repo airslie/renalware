@@ -4,14 +4,16 @@ module Renalware
       extend ActiveSupport::Concern
 
       included do
-        rescue_from(
-          Net::LDAP::Error,
-          DeviseLdapAuthenticatable::LdapException,
-          with: :handle_ldap_error
-        )
+        rescue_from(Ldap::Error, with: :handle_ldap_error)
       end
 
       private
+
+      def handle_ldap_error(exception)
+        log_ldap_error(exception)
+        flash[:alert] = ldap_error_message
+        redirect_back(fallback_location: root_path)
+      end
 
       def log_ldap_error(exception)
         exception_msg = "#{exception.class} - #{exception.message}"

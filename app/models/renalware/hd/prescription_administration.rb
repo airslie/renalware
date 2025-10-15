@@ -125,7 +125,7 @@ module Renalware
         else
           errors.add(:administered_by_password, "Invalid password")
         end
-      rescue Net::LDAP::Error, DeviseLdapAuthenticatable::LdapException => e
+      rescue Ldap::Error => e
         Rails.logger.error "LDAP error during administrator password check: #{e.message}"
         self.administrator_authorised = false
         errors.add(:administered_by_password,
@@ -141,7 +141,7 @@ module Renalware
         else
           errors.add(:witnessed_by_password, "Invalid password")
         end
-      rescue Net::LDAP::Error, DeviseLdapAuthenticatable::LdapException => e
+      rescue Ldap::Error => e
         Rails.logger.error "LDAP error during witness password check: #{e.message}"
         self.witness_authorised = false
         errors.add(:witnessed_by_password,

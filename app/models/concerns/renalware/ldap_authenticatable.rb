@@ -65,7 +65,7 @@ module Renalware
     end
 
     def ldap_param(attribute)
-      ldap_adapter.get_ldap_param(username, attribute)
+      ldap_adapter.param(username, attribute)
     end
 
     def in_ldap_group?(group)
@@ -90,16 +90,14 @@ module Renalware
 
     def ldap_role_for_user
       return :clinical if in_renalware_group?
-      return :read_only if in_renalware_readonly_group?
 
-      nil
+      :read_only if in_renalware_readonly_group?
     end
 
     def current_permission_role
       return :clinical if role_names.include?("clinical")
-      return :read_only if role_names.include?("read_only")
 
-      nil
+      :read_only if role_names.include?("read_only")
     end
 
     def update_base_role(old_role, new_role)

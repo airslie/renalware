@@ -20,11 +20,11 @@ module Renalware
     end
 
     describe "POST #create" do
-      context "when LDAP server raises Net::LDAP::Error" do
+      context "when LDAP server raises Ldap::Error" do
         before do
           allow(ldap_adapter).to receive(:valid_credentials?)
             .with(user.username, "any_password")
-            .and_raise(Net::LDAP::Error.new("LDAP server unreachable"))
+            .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
         end
 
         it "returns 503 status" do
@@ -62,44 +62,8 @@ module Renalware
           post :create, params: { user: { username: user.username, password: "any_password" } }
 
           expect(Rails.logger).to have_received(:error)
-            .with(/LDAP error in sessions#create.*Net::LDAP::Error/)
+            .with(/LDAP error in sessions#create.*Renalware::Ldap::Error/)
           expect(Rails.logger).to have_received(:error).at_least(:once)
-        end
-      end
-
-      context "when LDAP raises DeviseLdapAuthenticatable::LdapException" do
-        before do
-          allow(ldap_adapter).to receive(:valid_credentials?)
-            .with(user.username, "any_password")
-            .and_raise(DeviseLdapAuthenticatable::LdapException.new("Connection timeout"))
-        end
-
-        it "returns 503 status" do
-          post :create, params: { user: { username: user.username, password: "any_password" } }
-
-          expect(response).to have_http_status(:service_unavailable)
-        end
-
-        it "displays user-friendly error message" do
-          post :create, params: { user: { username: user.username, password: "any_password" } }
-
-          expect(flash.now[:alert]).to include(
-            "We are currently unable to confirm your details due to a temporary issue"
-          )
-        end
-
-        it "renders the new template" do
-          post :create, params: { user: { username: user.username, password: "any_password" } }
-
-          expect(response).to render_template(:new)
-        end
-
-        it "does not update last_failed_sign_in_at" do
-          original_timestamp = user.last_failed_sign_in_at
-
-          post :create, params: { user: { username: user.username, password: "any_password" } }
-
-          expect(user.reload.last_failed_sign_in_at).to eq(original_timestamp)
         end
       end
 
