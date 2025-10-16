@@ -4,8 +4,6 @@ module Renalware
   # - define the default layout
   # - intercept requests with before_action etc.
   class ApplicationController < ::ApplicationController
-    include Concerns::LdapErrorHandler
-
     # Prevent CSRF attacks by raising an exception.
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :reset_session

@@ -3,16 +3,13 @@ module Renalware
     module LdapErrorHandler
       extend ActiveSupport::Concern
 
-      included do
-        rescue_from(Ldap::Error, with: :handle_ldap_error)
-      end
+      included { rescue_from(Ldap::Error, with: :handle_ldap_error) }
 
       private
 
       def handle_ldap_error(exception)
         log_ldap_error(exception)
-        flash[:alert] = ldap_error_message
-        redirect_back(fallback_location: root_path)
+        redirect_back fallback_location: new_user_session_path, alert: ldap_error_message
       end
 
       def log_ldap_error(exception)

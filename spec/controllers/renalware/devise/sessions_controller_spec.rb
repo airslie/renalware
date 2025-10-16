@@ -27,25 +27,19 @@ module Renalware
             .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
         end
 
-        it "returns 503 status" do
+        it "redirects back to login page" do
           post :create, params: { user: { username: user.username, password: "any_password" } }
 
-          expect(response).to have_http_status(:service_unavailable)
+          expect(response).to redirect_to(new_user_session_path)
         end
 
         it "displays user-friendly error message" do
           post :create, params: { user: { username: user.username, password: "any_password" } }
 
-          expect(flash.now[:alert]).to include(
+          expect(flash[:alert]).to include(
             "We are currently unable to confirm your details due to a temporary issue"
           )
-          expect(flash.now[:alert]).to include("This is being investigated")
-        end
-
-        it "renders the new template" do
-          post :create, params: { user: { username: user.username, password: "any_password" } }
-
-          expect(response).to render_template(:new)
+          expect(flash[:alert]).to include("This is being investigated")
         end
 
         it "does not update last_failed_sign_in_at" do

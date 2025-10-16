@@ -1,7 +1,6 @@
 module Renalware
   class Devise::SessionsController < ::Devise::SessionsController
     include Concerns::DeviseControllerMethods
-    include Concerns::LdapErrorHandler
 
     def create
       user = Renalware::User.find_by(username: user_params[:username])
@@ -49,15 +48,6 @@ module Renalware
 
     def track_signin
       ahoy.track "signin"
-    end
-
-    def handle_ldap_error(exception)
-      log_ldap_error(exception)
-
-      flash.now[:alert] = ldap_error_message
-      self.resource = resource_class.new(sign_in_params)
-      clean_up_passwords(resource)
-      render :new, status: :service_unavailable
     end
   end
 end
