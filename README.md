@@ -77,6 +77,13 @@ managed by Foreman via `bin/dev`. See `Procfile.dev` for the process configurati
 This separation keeps infrastructure services running independently while allowing
 easy restart of application processes during development.
 
+### Git Hooks
+
+After Ruby version updates, disable Overcommit hooks temporarily if `git pull` fails:
+```bash
+OVERCOMMIT_DISABLE=1 git pull
+```
+
 ## Testing
 
 The project includes comprehensive test coverage using RSpec for unit/integration tests and Cucumber for feature tests.
