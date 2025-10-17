@@ -2,8 +2,6 @@ module Renalware
   module LdapAuthenticatable
     extend ActiveSupport::Concern
 
-    RENALWARE_GROUP = "cn=renalware,ou=groups,dc=renalware,dc=app".freeze
-    RENALWARE_READONLY_GROUP = "cn=renalware-readonly,ou=groups,dc=renalware,dc=app".freeze
     ADMIN_LEVEL_ROLES = %w(super_admin admin devops).freeze
 
     def valid_password?(password)
@@ -73,11 +71,11 @@ module Renalware
     end
 
     def in_renalware_group?
-      in_ldap_group?(RENALWARE_GROUP)
+      in_ldap_group?(Renalware.config.ldap_clinical_group)
     end
 
     def in_renalware_readonly_group?
-      in_ldap_group?(RENALWARE_READONLY_GROUP)
+      in_ldap_group?(Renalware.config.ldap_readonly_group)
     end
 
     def admin_level_user?

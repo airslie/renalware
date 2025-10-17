@@ -14,7 +14,7 @@ module Renalware
       allow(Renalware::Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
       allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
       allow(ldap_adapter).to receive(:user_in_group?)
-        .with(anything, Renalware::LdapAuthenticatable::RENALWARE_GROUP)
+        .with(anything, Renalware.config.ldap_clinical_group)
         .and_return(true)
       sign_out :user # Ensure no user is signed in before testing login
     end

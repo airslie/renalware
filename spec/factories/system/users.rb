@@ -108,7 +108,7 @@ FactoryBot.define do
 
     trait :with_ldap_enabled do
       transient do
-        ldap_groups { [Renalware::LdapAuthenticatable::RENALWARE_GROUP] }
+        ldap_groups { [Renalware.config.ldap_clinical_group] }
       end
 
       before(:create) do |user, evaluator|

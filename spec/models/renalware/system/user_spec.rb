@@ -396,7 +396,7 @@ module Renalware
       context "when user is in renalware LDAP group" do
         before do
           allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
-            group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+            group == Renalware.config.ldap_clinical_group
           end
         end
 
@@ -440,7 +440,7 @@ module Renalware
       context "when user is in renalware-readonly LDAP group" do
         before do
           allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
-            group == Renalware::LdapAuthenticatable::RENALWARE_READONLY_GROUP
+            group == Renalware.config.ldap_readonly_group
           end
         end
 
@@ -485,7 +485,7 @@ module Renalware
         it "unapproves the user" do
           allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "renalwareuser-1" &&
-              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+              group == Renalware.config.ldap_clinical_group
           end
           user = create(:user, role: nil, roles: [clinical_role], approved: true,
                                username: "renalwareuser-1")
@@ -500,7 +500,7 @@ module Renalware
         it "does not modify already unapproved user" do
           allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "renalwareuser-2" &&
-              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+              group == Renalware.config.ldap_clinical_group
           end
           user = create(:user, role: nil, roles: [readonly_role], approved: true,
                                username: "renalwareuser-2", updated_at: 2.minutes.ago)
@@ -520,7 +520,7 @@ module Renalware
         it "does not modify super_admin role" do
           allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
             username == "superadmin-1" &&
-              group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+              group == Renalware.config.ldap_clinical_group
           end
           user = create(:user, role: nil, roles: [super_admin_role], username: "superadmin-1")
 
@@ -533,7 +533,7 @@ module Renalware
 
         it "does not modify admin role" do
           allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
-            username == "admin-1" && group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+            username == "admin-1" && group == Renalware.config.ldap_clinical_group
           end
           user = create(:user, role: nil, roles: [admin_role], username: "admin-1")
 
@@ -546,7 +546,7 @@ module Renalware
 
         it "does not modify devops role" do
           allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
-            username == "devops-1" && group == Renalware::LdapAuthenticatable::RENALWARE_GROUP
+            username == "devops-1" && group == Renalware.config.ldap_clinical_group
           end
           user = create(:user, role: nil, roles: [devops_role], username: "devops-1")
 

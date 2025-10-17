@@ -60,6 +60,14 @@ module Renalware
     config_accessor(:ldap_authentication) { ENV.fetch("LDAP_ENABLE", "false") == "true" }
     # if false, new LDAP users require manual approval
     config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
+    # LDAP group for clinical users
+    config_accessor(:ldap_clinical_group) {
+      ENV.fetch("LDAP_CLINICAL_GROUP", "cn=renalware,ou=groups,dc=renalware,dc=app")
+    }
+    # LDAP group for read-only users
+    config_accessor(:ldap_readonly_group) {
+      ENV.fetch("LDAP_READONLY_GROUP", "cn=renalware-readonly,ou=groups,dc=renalware,dc=app")
+    }
 
     config_accessor(:site_name) { "Renalware" }
     config_accessor(:hospital_name) { ENV.fetch("HOSPITAL_NAME", "KINGS COLLEGE HOSPITAL") }
