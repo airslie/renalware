@@ -4,7 +4,7 @@ Devise.setup do |config|
   # ==> LDAP Configuration
 
   # If set to true, will log LDAP queries to the Rails logger.
-  config.ldap_logger = true
+  config.ldap_logger = Renalware.config.ldap_logger
 
   config.ldap_config = Rails.root.join("config/ldap.yml")
 
@@ -15,7 +15,7 @@ Devise.setup do |config|
 
   # When doing password resets, if true will update the LDAP server. Requires admin password in
   # the ldap.yml
-  config.ldap_update_password = true
+  config.ldap_update_password = false
 
   # When set to true, the user trying to login will be checked to make sure they are in all of
   # groups specified in the ldap.yml file.

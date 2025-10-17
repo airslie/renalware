@@ -1,34 +1,3 @@
-# Authorizations
-# Uncomment out the merging for each environment that you'd like to include.
-# You can also just copy and paste the tree (do not include the "authorizations") to each
-# environment if you need something different per environment.
-authorizations: &authorizations
-  allow_unauthenticated_bind: false
-  group_base: ou=groups,dc=renalware,dc=app
-  # Requires config.ldap_check_group_membership in devise.rb be true
-  # Can have multiple values, must match all to be authorized
-  #
-  # * We do our own membership checking, as users can be in either or both
-  # * clinical or read_only groups.
-  required_groups:
-    # If only a group name is given, membership will be checked against "uniqueMember"
-    #- cn=admins,ou=groups,dc=renalware,dc=app
-    # If an array is given, the first element will be the attribute to check against, the second the group name
-    #- ["moreMembers", "cn=renalware,ou=groups,dc=renalware,dc=app"]
-  # Requires config.ldap_check_attributes in devise.rb to be true
-  # Can have multiple attributes and values, must match all to be authorized
-  require_attribute:
-    objectClass: inetOrgPerson
-    authorizationRole: postsAdmin
-   # Requires config.ldap_check_attributes_presence in devise.rb to be true
-   # Can have multiple attributes set to true or false. If false, the attribute
-   # must not be present, if true, the attribute must be present.
-  require_attribute_presence:
-    mail: true
-    serviceAccount: false
-
- # Environment
-
 shared: &shared
   host: <%= ENV.fetch("LDAP_HOST", "localhost") %>
   port: <%= ENV.fetch("LDAP_PORT", 389) %>
@@ -41,14 +10,15 @@ shared: &shared
 development:
   ssl: false
   <<: *shared
-  # <<: *authorizations
 
 test:
   ssl: simple_tls
   <<: *shared
-  # <<: *authorizations
+
+uat:
+  ssl: true
+  <<: *shared
 
 production:
-  ssl: false
+  ssl: true
   <<: *shared
-  # <<: *authorizations

@@ -58,6 +58,8 @@ module Renalware
 
     # if true we use LDAP eg ActiveDirectory
     config_accessor(:ldap_authentication) { ENV.fetch("LDAP_ENABLE", "false") == "true" }
+    # if true, LDAP queries will be logged (may expose sensitive info, use only for debugging)
+    config_accessor(:ldap_logger) { ENV.fetch("LDAP_LOGGER", "false") == "true" }
     # if false, new LDAP users require manual approval
     config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
     # LDAP group for clinical users
