@@ -29,6 +29,17 @@ module Renalware
       expect(page).to have_text "Invalid Username or password"
     end
 
+    it "attempts to sign in with a non-existent username" do
+      visit root_path
+
+      fill_in "Username", with: "nonexistentuser123"
+      fill_in "Password", with: "anypassword"
+      click_on "Log in"
+
+      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_text "Invalid Username or password"
+    end
+
     context "when attempting to sign in with invalid credentials" do
       it "shows the failed attempt on a subsequent login" do
         visit root_path
