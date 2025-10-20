@@ -35,6 +35,7 @@ en:
       user:
         not_approved: Your account needs approval before you can access the system.
         not_approved_ldap: Your credentials have been verified. Please contact your administrator to approve your access to this system.
+        not_authorized: You are not authorised to access this system.
     mailer:
       confirmation_instructions:
         action: Confirm my account

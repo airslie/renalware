@@ -129,6 +129,21 @@ module Renalware
       end
     end
 
+    context "when a banned user attempts to sign in" do
+      it "does not sign them in" do
+        banned_user = create(:user, :clinical, banned: true)
+
+        visit new_user_session_path
+
+        fill_in "Username", with: banned_user.username
+        fill_in "Password", with: banned_user.password
+        click_on "Log in"
+
+        expect(page).to have_current_path new_user_session_path
+        expect(page).to have_text "You have been actively blocked from logging in"
+      end
+    end
+
     context "when an inactive user attempts to sign in" do
       it "does not sign them in" do
         inactive = create(:user, last_activity_at: 90.days.ago)

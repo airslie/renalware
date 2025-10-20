@@ -54,10 +54,10 @@ module Renalware
       def inactive_message
         if banned?
           :banned
+        elsif !new_record? && !approved?
+          ldap_requires_manual_approval? ? :not_approved_ldap : :not_approved
         elsif approved?
           super
-        elsif ldap_requires_manual_approval?
-          :not_approved_ldap
         else
           :not_approved
         end

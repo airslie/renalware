@@ -311,6 +311,8 @@ module Renalware
     end
 
     config.to_prepare do
+      require_relative "../devise/strategies/ldap_authenticatable"
+
       Rails
         .application
         .config

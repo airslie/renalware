@@ -232,64 +232,31 @@ module Renalware
         end
       end
 
-      context "when LDAP authentication is enabled" do
-        before do
-          allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        end
+      context "when LDAP is enabled" do
+        context "when user is not in a valid LDAP group" do
+          let(:ldap_adapter) { instance_double(Ldap::Adapter) }
 
-        context "when user is in renalware LDAP group" do
-          it "assigns clinical role and approves user" do
-            user = build(:user, role: nil)
-            allow(user).to receive_messages(in_renalware_group?: true,
-                                            in_renalware_readonly_group?: false)
-            user.save!
-
-            clinical_role = Role.find_by!(name: :clinical)
-            expect(user.roles).to contain_exactly(clinical_role)
-            expect(user).to be_approved
+          before do
+            allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+            allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
           end
-        end
 
-        context "when user is in renalware-readonly LDAP group" do
-          it "assigns read_only role and approves user" do
-            user = build(:user, role: nil)
-            allow(user).to receive_messages(in_renalware_group?: false,
-                                            in_renalware_readonly_group?: true)
-            user.save!
-
-            readonly_role = Role.find_by!(name: :read_only)
-            expect(user.roles).to contain_exactly(readonly_role)
-            expect(user).to be_approved
-          end
-        end
-
-        context "when user is not in any valid LDAP group" do
-          it "prevents user creation" do
-            user = build(:user, role: nil, approved: false)
-            allow(user).to receive_messages(in_renalware_group?: false,
-                                            in_renalware_readonly_group?: false)
+          it "prevents user creation with validation error" do
+            user = build(:user, username: "testuser")
+            allow(ldap_adapter).to receive(:param)
+              .with(user.username, "mail").and_return("test@example.com")
+            allow(ldap_adapter).to receive(:param)
+              .with(user.username, "givenName").and_return("Test")
+            allow(ldap_adapter).to receive(:param)
+              .with(user.username, "sn").and_return("User")
+            allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
 
             result = user.save
 
             expect(result).to be false
-            expect(user).to be_new_record
-            expect(user.errors[:base]).to include(
-              "User must be in a valid LDAP group (renalware or renalware-readonly)"
-            )
-          end
-        end
-
-        context "when LDAP group check fails" do
-          it "prevents user creation" do
-            user = build(:user, role: nil, approved: false)
-            allow(user).to receive_messages(in_renalware_group?: false,
-                                            in_renalware_readonly_group?: false)
-            allow(Rails.logger).to receive(:error)
-
-            result = user.save
-
-            expect(result).to be false
-            expect(user).to be_new_record
+            expect(user.persisted?).to be(false)
+            expect(user.errors[:base])
+              .to include("You are not authorised to access this system")
           end
         end
       end
@@ -341,7 +308,7 @@ module Renalware
       end
 
       context "when ldap_auto_approve_users is enabled" do
-        it "sets approved to true when user is in valid LDAP group" do
+        it "sets approved to true" do
           allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(true)
           allow(ldap_adapter).to receive(:param)
             .with(user.username, "givenName")
@@ -355,7 +322,7 @@ module Renalware
       end
 
       context "when ldap_auto_approve_users is disabled" do
-        it "sets approved to false when user is in valid LDAP group" do
+        it "sets approved to false" do
           allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(false)
           allow(ldap_adapter).to receive(:param)
             .with(user.username, "givenName")
@@ -365,6 +332,20 @@ module Renalware
           user.ldap_before_save
 
           expect(user.approved).to be(false)
+        end
+      end
+
+      context "when user is not in a valid LDAP group" do
+        it "does not set approved status" do
+          allow(ldap_adapter).to receive(:param)
+            .with(user.username, "givenName")
+            .and_return("John")
+          allow(user).to receive(:in_valid_ldap_group?).and_return(false)
+
+          approved_before = user.approved
+          user.ldap_before_save
+
+          expect(user.approved).to eq(approved_before)
         end
       end
     end
@@ -481,38 +462,23 @@ module Renalware
         end
       end
 
-      context "when user is not in any valid LDAP group" do
-        it "unapproves the user" do
-          allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
-            username == "renalwareuser-1" &&
-              group == Renalware.config.ldap_clinical_group
-          end
-          user = create(:user, role: nil, roles: [clinical_role], approved: true,
-                               username: "renalwareuser-1")
-
-          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
-
-          user.synchronize_ldap_roles
-
-          expect(user.reload).not_to be_approved
+      # TODO: What happens when user was previously approved but is now not in a valid LDAP group?
+      context "when user is not in a valid LDAP group" do
+        let(:username) { "renalwareuser-1" }
+        let(:roles) { [clinical_role] }
+        let(:user) do
+          create(:user, role: nil, roles:, approved: true, username:, updated_at: 2.minutes.ago)
         end
 
-        it "does not modify already unapproved user" do
-          allow(ldap_adapter).to receive(:user_in_group?) do |username, group|
-            username == "renalwareuser-2" &&
-              group == Renalware.config.ldap_clinical_group
-          end
-          user = create(:user, role: nil, roles: [readonly_role], approved: true,
-                               username: "renalwareuser-2", updated_at: 2.minutes.ago)
-          user.update_column(:approved, false)
-          initial_updated_at = user.reload.updated_at
+        before do
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(true, false)
+        end
 
-          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
-
+        it "unapproves the user" do
           user.synchronize_ldap_roles
 
           expect(user.reload).not_to be_approved
-          expect(user.reload.updated_at).to eq(initial_updated_at)
+          expect(user.roles).to be_empty
         end
       end
 
@@ -560,12 +526,10 @@ module Renalware
 
       context "when LDAP group check fails" do
         it "raises the LDAP error" do
-          # Stub LDAP during user creation to allow the test to proceed
           allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
 
           user = create(:user, role: nil, roles: [clinical_role], approved: true)
 
-          # Now stub to raise the error when synchronize_ldap_roles is called
           allow(ldap_adapter).to receive(:user_in_group?)
             .and_raise(Renalware::Ldap::Error.new("LDAP error"))
 
