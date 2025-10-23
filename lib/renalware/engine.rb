@@ -11,6 +11,7 @@ require "cocoon"
 require "concurrent-ruby"
 require "devise"
 require "devise-security"
+require "net/ldap"
 require "delayed_job_active_record"
 require "diffy"
 require "dumb_delegator"
@@ -204,7 +205,7 @@ module Renalware
     # config.view_component.test_controller = "Renalware::BaseController"
     config.view_component.view_component_path = "app/view_components"
 
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    config.autoload_paths << config.root.join("lib")
     config.autoload_paths << config.root.join("app/validators/concerns")
     config.autoload_paths << config.root.join("app/view_components")
 
@@ -310,6 +311,16 @@ module Renalware
     end
 
     config.to_prepare do
+      # Register custom LDAP authenticatable module with Devise so it can be used in devise() calls
+      ::Devise.add_module(:ldap_authenticatable, strategy: true, model: true)
+
+      # Eagerly load Devise strategies so they register with Warden during boot
+      # These files contain Warden::Strategies.add calls that need to execute before authentication
+      # Cannot be lazy-loaded by Zeitwerk as they need to run during initialization
+      require "devise/models/ldap_authenticatable"
+      require "devise/strategies/renalware_database_authenticatable"
+      require "devise/strategies/ldap_authenticatable"
+
       Rails
         .application
         .config

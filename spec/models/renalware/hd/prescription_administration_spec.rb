@@ -110,6 +110,111 @@ module Renalware
             expect(errors[:witnessed_by_id]).to eq(["Must be a different user"])
           end
         end
+
+        context "when LDAP authentication is enabled" do
+          let(:admin_user) { create(:user, username: "admin_user") }
+          let(:witness_user) { create(:user, username: "witness_user") }
+          let(:ldap_adapter) { instance_double(Ldap::Adapter) }
+
+          before do
+            allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+            allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+            allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+          end
+
+          it "validates administrator password against LDAP" do
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(admin_user.username, "ldap_admin_password")
+              .and_return(true)
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(witness_user.username, "ldap_witness_password")
+              .and_return(true)
+
+            administration = described_class.new(
+              administered: true,
+              administered_by: admin_user,
+              witnessed_by: witness_user,
+              administered_by_password: "ldap_admin_password",
+              witnessed_by_password: "ldap_witness_password"
+            )
+            administration.valid?
+
+            expect(administration.errors[:administered_by_password]).to be_empty
+            expect(administration.errors[:witnessed_by_password]).to be_empty
+            expect(administration.administrator_authorised).to be true
+            expect(administration.witness_authorised).to be true
+          end
+
+          it "rejects invalid LDAP password for administrator" do
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(admin_user.username, "wrong_admin_password")
+              .and_return(false)
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(witness_user.username, "ldap_witness_password")
+              .and_return(true)
+
+            administration = described_class.new(
+              administered: true,
+              administered_by: admin_user,
+              witnessed_by: witness_user,
+              administered_by_password: "wrong_admin_password",
+              witnessed_by_password: "ldap_witness_password"
+            )
+            administration.valid?
+
+            expect(administration.errors[:administered_by_password]).to eq(["Invalid password"])
+            expect(administration.administrator_authorised).to be false
+          end
+
+          it "rejects invalid LDAP password for witness" do
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(admin_user.username, "ldap_admin_password")
+              .and_return(true)
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(witness_user.username, "wrong_witness_password")
+              .and_return(false)
+
+            administration = described_class.new(
+              administered: true,
+              administered_by: admin_user,
+              witnessed_by: witness_user,
+              administered_by_password: "ldap_admin_password",
+              witnessed_by_password: "wrong_witness_password"
+            )
+            administration.valid?
+
+            expect(administration.errors[:witnessed_by_password]).to eq(["Invalid password"])
+            expect(administration.witness_authorised).to be false
+          end
+
+          it "handles LDAP server errors gracefully" do
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(admin_user.username, "any_password")
+              .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(witness_user.username, "any_password")
+              .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
+            allow(Rails.logger).to receive(:error)
+
+            administration = described_class.new(
+              administered: true,
+              administered_by: admin_user,
+              witnessed_by: witness_user,
+              administered_by_password: "any_password",
+              witnessed_by_password: "any_password"
+            )
+            administration.valid?
+
+            expect(administration.errors[:administered_by_password]).to eq(
+              [I18n.t("renalware.system.errors.ldap.service_unavailable")]
+            )
+            expect(administration.errors[:witnessed_by_password]).to eq(
+              [I18n.t("renalware.system.errors.ldap.service_unavailable")]
+            )
+            expect(administration.administrator_authorised).to be false
+            expect(administration.witness_authorised).to be false
+          end
+        end
       end
 
       context "when the HD prescription is stat (give once)" do

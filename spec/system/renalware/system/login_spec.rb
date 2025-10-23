@@ -1,9 +1,10 @@
 module Renalware
   describe "Authentication", :js do
     let(:last_sign_in_at) { nil }
-
     let(:user) { create(:user, :clinical) }
     let(:unapproved_user) { create(:user, :unapproved) }
+
+    before { create(:role, :clinical) }
 
     context "when previously signed in" do
       let(:user) { create(:user, :clinical, :previously_signed_in) }
@@ -22,6 +23,17 @@ module Renalware
     it "attempts to sign in with no credentials" do
       visit root_path
 
+      click_on "Log in"
+
+      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_text "Invalid Username or password"
+    end
+
+    it "attempts to sign in with a non-existent username" do
+      visit root_path
+
+      fill_in "Username", with: "nonexistentuser123"
+      fill_in "Password", with: "anypassword"
       click_on "Log in"
 
       expect(page).to have_current_path new_user_session_path
@@ -117,6 +129,21 @@ module Renalware
       end
     end
 
+    context "when a banned user attempts to sign in" do
+      it "does not sign them in" do
+        banned_user = create(:user, :clinical, banned: true)
+
+        visit new_user_session_path
+
+        fill_in "Username", with: banned_user.username
+        fill_in "Password", with: banned_user.password
+        click_on "Log in"
+
+        expect(page).to have_current_path new_user_session_path
+        expect(page).to have_text "You have been actively blocked from logging in"
+      end
+    end
+
     context "when an inactive user attempts to sign in" do
       it "does not sign them in" do
         inactive = create(:user, last_activity_at: 90.days.ago)
@@ -143,6 +170,88 @@ module Renalware
         click_on "Log in"
 
         expect(page).to have_current_path root_path
+      end
+    end
+
+    context "when LDAP authentication is enabled" do
+      let(:ldap_user) { create(:user, :clinical, :with_ldap_enabled) }
+      let(:ldap_adapter) { ldap_user.ldap_adapter }
+
+      before do
+        allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+        allow(Renalware::Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+      end
+
+      it "hides signup and forgot password links" do
+        visit new_user_session_path
+
+        expect(page).to have_content("Sign in") # Wait for page to load
+        expect(page).to have_no_link("Sign up")
+        expect(page).to have_no_link("Forgotten your password?")
+      end
+
+      it "authenticates user with valid LDAP credentials" do
+        allow(ldap_adapter).to receive(:valid_credentials?)
+          .with(ldap_user.username, "ldap_password")
+          .and_return(true)
+
+        visit new_user_session_path
+
+        fill_in "Username", with: ldap_user.username
+        fill_in "Password", with: "ldap_password"
+        click_on "Log in"
+
+        expect(page).to have_current_path(root_path)
+      end
+
+      it "rejects user with invalid LDAP credentials" do
+        allow(ldap_adapter).to receive(:valid_credentials?)
+          .with(ldap_user.username, "wrong_password")
+          .and_return(false)
+
+        visit new_user_session_path
+
+        fill_in "Username", with: ldap_user.username
+        fill_in "Password", with: "wrong_password"
+        click_on "Log in"
+
+        expect(page).to have_current_path(new_user_session_path)
+        expect(page).to have_text("Invalid Username or password")
+      end
+    end
+
+    context "when LDAP authentication is disabled" do
+      before do
+        allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+      end
+
+      it "shows signup link" do
+        visit new_user_session_path
+
+        expect(page).to have_link("Sign up")
+        # Note: forgot password link may not appear if recoverable module isn't loaded
+        # This depends on how devise modules are configured at boot time
+      end
+
+      it "authenticates user with valid local credentials" do
+        visit new_user_session_path
+
+        fill_in "Username", with: user.username
+        fill_in "Password", with: user.password
+        click_on "Log in"
+
+        expect(page).to have_current_path(root_path)
+      end
+
+      it "rejects user with invalid local credentials" do
+        visit new_user_session_path
+
+        fill_in "Username", with: user.username
+        fill_in "Password", with: "wrong_password"
+        click_on "Log in"
+
+        expect(page).to have_current_path(new_user_session_path)
+        expect(page).to have_text("Invalid Username or password")
       end
     end
   end

@@ -76,62 +76,60 @@ module Renalware
                 # Sanity check that the patient has the expected egfr
                 expect(patient.current_observation_set.values.dig("EGFR", "result")).to eq(egfr)
 
+                expected_date_time = Time.zone.parse(observation_datetime)
+
                 obr = create_request_with_observations(
                   patient: patient,
                   obx_codes: ["ACR"],
-                  requested_at: Time.zone.parse(observation_datetime),
+                  requested_at: expected_date_time,
                   result: "10.0",
-                  observed_at: Time.zone.parse(observation_datetime)
+                  observed_at: expected_date_time
                 )
 
-                freeze_time do
-                  # Stub the actual calculation - we are testing the listener
-                  # not the calc service
-                  allow(KFRE::CalculateKFRE)
-                    .to receive(:call)
-                    .and_return(KFRE::Result.new(yr2: 10.1, yr5: 20.2))
+                # Stub the actual calculation - we are testing the listener
+                # not the calc service
+                allow(KFRE::CalculateKFRE)
+                  .to receive(:call)
+                  .and_return(KFRE::Result.new(yr2: 10.1, yr5: 20.2))
 
-                  # The listener should create 2 observations, one for each of the 2 and 5 year
-                  # results. We use configured OBX codes for the ACR input and KFRE outputs.
-                  # See config/initializers/renalware.rb
-                  expect {
-                    described_class.new.after_observation_request_persisted(obr)
-                  }.to change(Renalware::Pathology::Observation, :count).by(2)
+                # The listener should create 2 observations, one for each of the 2 and 5 year
+                # results. We use configured OBX codes for the ACR input and KFRE outputs.
+                # See config/initializers/renalware.rb
+                expect {
+                  described_class.new.after_observation_request_persisted(obr)
+                }.to change(Renalware::Pathology::Observation, :count).by(2)
 
-                  # Check the KFRE calc service was called with expected args
-                  expect(KFRE::CalculateKFRE)
-                    .to have_received(:call)
-                    .with(acr: 10.0, age: 34, egfr: egfr, sex: "M")
+                # Check the KFRE calc service was called with expected args
+                expect(KFRE::CalculateKFRE)
+                  .to have_received(:call)
+                  .with(acr: 10.0, age: 34, egfr: egfr, sex: "M")
 
-                  patient.reload
+                patient.reload
 
-                  # Requested and observed at timestamps should match the acr datetime
-                  expected_date_time = Time.zone.parse(observation_datetime)
+                # Find the KFRE request created by the listener
+                kfre_obr = patient.observation_requests.joins(:description)
+                  .find_by(pathology_request_descriptions: { code: "KFRE" })
+                expect(kfre_obr).to be_present
+                expect(kfre_obr).to have_attributes(requested_at: expected_date_time)
+                expect(kfre_obr.observations.count).to eq(2)
 
-                  # This is the KFRE request created by the listener
-                  kfre_obr = patient.observation_requests.order(created_at: :desc).last
-                  expect(kfre_obr).to have_attributes(requested_at: expected_date_time)
-                  expect(kfre_obr.description.code).to eq("KFRE")
-                  expect(kfre_obr.observations.count).to eq(2)
-
-                  # There should be a 2 year KFRE observation
-                  kfre_obx = kfre_obr.observations.detect do |obx|
-                    obx.description.code == Renalware.config.pathology_kfre_2y_obx_code
-                  end
-                  expect(kfre_obx).to have_attributes(
-                    result: "10.1", # TODO
-                    observed_at: expected_date_time
-                  )
-
-                  # There should be a 5 year KFRE observation
-                  kfre_obx = kfre_obr.observations.detect do |obx|
-                    obx.description.code == Renalware.config.pathology_kfre_5y_obx_code
-                  end
-                  expect(kfre_obx).to have_attributes(
-                    result: "20.2",
-                    observed_at: expected_date_time
-                  )
+                # There should be a 2 year KFRE observation
+                kfre_obx = kfre_obr.observations.detect do |obx|
+                  obx.description.code == Renalware.config.pathology_kfre_2y_obx_code
                 end
+                expect(kfre_obx).to have_attributes(
+                  result: "10.1",
+                  observed_at: expected_date_time
+                )
+
+                # There should be a 5 year KFRE observation
+                kfre_obx = kfre_obr.observations.detect do |obx|
+                  obx.description.code == Renalware.config.pathology_kfre_5y_obx_code
+                end
+                expect(kfre_obx).to have_attributes(
+                  result: "20.2",
+                  observed_at: expected_date_time
+                )
               end
             end
           end

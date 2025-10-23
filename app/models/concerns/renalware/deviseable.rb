@@ -9,8 +9,31 @@ module Renalware
 
     included do
       class_eval do
-        devise(:expirable, :database_authenticatable, :registerable, :lockable,
-               :rememberable, :trackable, :validatable, :timeoutable, :recoverable)
+        modules = %i(
+          database_authenticatable
+          ldap_authenticatable
+          expirable
+          registerable
+          lockable
+          rememberable
+          trackable
+          validatable
+          timeoutable
+        )
+
+        # Both database_authenticatable and ldap_authenticatable modules are
+        # always loaded to provide model methods. Each has a corresponding
+        # Warden strategy that checks Renalware.config.ldap_authentication
+        # to determine which authentication method to use at runtime.
+        #
+        # Password recovery (forgot password) is only enabled for database auth,
+        # since LDAP users manage their passwords via LDAP.
+        modules << :recoverable unless Renalware.config.ldap_authentication
+        #
+        # See:
+        # - lib/devise/strategies/renalware_database_authenticatable.rb
+        # - lib/devise/strategies/ldap_authenticatable.rb
+        devise(*modules)
       end
 
       # Makes the User 'approvable'
@@ -22,6 +45,8 @@ module Renalware
       def inactive_message
         if banned?
           :banned
+        elsif !new_record? && !approved?
+          ldap_requires_manual_approval? ? :not_approved_ldap : :not_approved
         elsif approved?
           super
         else

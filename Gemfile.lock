@@ -547,6 +547,9 @@ GEM
     net-imap (0.5.12)
       date
       net-protocol
+    net-ldap (0.20.0)
+      base64
+      ostruct
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.2.2)
@@ -557,10 +560,6 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
-    nokogiri (1.18.10-aarch64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.10-arm64-darwin)
-      racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-gnu)
       racc (~> 1.4)
     octokit (4.25.1)
@@ -930,8 +929,6 @@ GEM
     tailwindcss-rails (3.3.0)
       railties (>= 7.0.0)
       tailwindcss-ruby
-    tailwindcss-ruby (3.4.17-aarch64-linux)
-    tailwindcss-ruby (3.4.17-arm64-darwin)
     tailwindcss-ruby (3.4.17-x86_64-linux)
     temple (0.10.4)
     terminal-table (4.0.0)
@@ -941,8 +938,6 @@ GEM
     test-prof (1.4.4)
     thor (1.4.0)
     thread_safe (0.3.6)
-    thruster (0.1.15-aarch64-linux)
-    thruster (0.1.15-arm64-darwin)
     thruster (0.1.15-x86_64-linux)
     tilt (2.6.1)
     timeliness (0.5.3)
@@ -1006,10 +1001,6 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
-  aarch64-linux
-  arm64-darwin-22
-  arm64-darwin-23
-  arm64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
@@ -1042,6 +1033,7 @@ DEPENDENCIES
   jsbundling-rails (~> 1.0)
   launchy
   matrix
+  net-ldap
   net-smtp
   nhs_api_client!
   opentelemetry-exporter-otlp

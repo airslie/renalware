@@ -31,9 +31,15 @@ FactoryBot.define do
       additional_roles { nil }
     end
 
-    after(:create) do |user, obj|
-      user.roles << create(:role, obj.role) if obj.role.present?
-      Array(obj.additional_roles).each { |role| user.roles << create(:role, role) }
+    after(:build) do |user, evaluator|
+      if evaluator.role.present?
+        role_record = create(:role, evaluator.role)
+        user.roles << role_record
+      end
+      Array(evaluator.additional_roles).each do |role|
+        role_record = create(:role, role)
+        user.roles << role_record
+      end
     end
 
     trait :previously_signed_in do
@@ -98,6 +104,34 @@ FactoryBot.define do
 
     trait :system do
       username { Renalware::SystemUser.username }
+    end
+
+    trait :with_ldap_enabled do
+      transient do
+        ldap_groups { [Renalware.config.ldap_clinical_group] }
+      end
+
+      before(:create) do |user, evaluator|
+        fake_adapter = Class.new do
+          def initialize(groups)
+            @groups = groups
+          end
+
+          def user_in_group?(_username, group_dn)
+            @groups.include?(group_dn)
+          end
+
+          def valid_credentials?(_username, _password)
+            true
+          end
+
+          def get_ldap_param(_username, _attribute)
+            nil
+          end
+        end.new(evaluator.ldap_groups)
+
+        user.define_singleton_method(:ldap_adapter) { fake_adapter }
+      end
     end
   end
 end

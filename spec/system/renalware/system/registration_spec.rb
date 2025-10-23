@@ -1,5 +1,7 @@
 module Renalware
   describe "User registration" do
+    before { create(:role, :clinical) }
+
     it "A user registers giving incomplete information" do
       visit new_user_registration_path
 

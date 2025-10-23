@@ -1,6 +1,72 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "apache-directory-server@latest": {
+      "last_modified": "2025-07-28T17:09:23Z",
+      "resolved": "github:NixOS/nixpkgs/648f70160c03151bc2121d179291337ad6bc564b#apache-directory-server",
+      "source": "devbox-search",
+      "version": "2.0.0.AM26",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b60bahkk84k4m4yhn6vjfgfpgxz005d2-apache-directory-server-2.0.0.AM26",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/b60bahkk84k4m4yhn6vjfgfpgxz005d2-apache-directory-server-2.0.0.AM26"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/frl1l572dz4rk7i034igyl32wx81jhpi-apache-directory-server-2.0.0.AM26",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/frl1l572dz4rk7i034igyl32wx81jhpi-apache-directory-server-2.0.0.AM26"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/i708y45vr532kiflgqcqlcs9k2v2ws17-apache-directory-server-2.0.0.AM26",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/i708y45vr532kiflgqcqlcs9k2v2ws17-apache-directory-server-2.0.0.AM26"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/kg1d2yk1zgidkp8hnpw4zkvnsx30i47h-apache-directory-server-2.0.0.AM26",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/kg1d2yk1zgidkp8hnpw4zkvnsx30i47h-apache-directory-server-2.0.0.AM26"
+        }
+      }
+    },
+    "apache-directory-studio@latest": {
+      "last_modified": "2025-08-02T08:13:18Z",
+      "resolved": "github:NixOS/nixpkgs/c02d05bcf73fb496c604798c2268ed424a09e73e#apache-directory-studio",
+      "source": "devbox-search",
+      "version": "2.0.0-M17",
+      "systems": {
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/qcg3sxid8dnsgb5z3jbxpmwk773653im-apache-directory-studio-2.0.0-M17",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/qcg3sxid8dnsgb5z3jbxpmwk773653im-apache-directory-studio-2.0.0-M17"
+        }
+      }
+    },
     "gcc@latest": {
       "last_modified": "2025-09-18T16:33:27Z",
       "resolved": "github:NixOS/nixpkgs/f4b140d5b253f5e2a1ff4e5506edbf8267724bde#gcc15",
@@ -714,8 +780,8 @@
         }
       }
     },
-    "playwright.browsers": {
-      "resolved": "github:NixOS/nixpkgs/dc704e6102e76aad573f63b74c742cd96f8f1e6c?narHash=sha256-O7eHcgkQXJNygY6AypkF9tFhsoDQjpNEojw3eFs73Ow%3D#playwright.browsers",
+    "playwright-driver.browsers": {
+      "resolved": "github:NixOS/nixpkgs/dc704e6102e76aad573f63b74c742cd96f8f1e6c?narHash=sha256-O7eHcgkQXJNygY6AypkF9tFhsoDQjpNEojw3eFs73Ow%3D#playwright-driver.browsers",
       "source": "nixpkg"
     },
     "postgresql_16@16": {

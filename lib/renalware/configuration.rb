@@ -55,6 +55,22 @@ module Renalware
       ENV.fetch("ALLOW_QR_CODES_IN_LETTERS", "false") == "true"
     end
     config_accessor(:enable_allergies) { ENV.fetch("ENABLE_ALLERGIES", "true") == "true" }
+
+    config_accessor(:ldap_authentication) { ENV.fetch("LDAP_ENABLE", "false") == "true" }
+    # if true, LDAP queries will be logged (may expose sensitive info, use only for debugging)
+    config_accessor(:ldap_logger) { ENV.fetch("LDAP_LOGGER", "false") == "true" }
+    config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
+    config_accessor(:ldap_clinical_group) { ENV.fetch("LDAP_CLINICAL_GROUP", "cn=renalware,ou=groups,dc=renalware,dc=app") }
+    config_accessor(:ldap_readonly_group) { ENV.fetch("LDAP_READONLY_GROUP", "cn=renalware-readonly,ou=groups,dc=renalware,dc=app") }
+    # LDAP connection settings
+    config_accessor(:ldap_host) { ENV.fetch("LDAP_HOST", "localhost") }
+    config_accessor(:ldap_port) { ENV.fetch("LDAP_PORT", 389).to_i }
+    config_accessor(:ldap_admin_password) { ENV.fetch("LDAP_ADMIN_PASSWORD", nil) }
+    config_accessor(:ldap_admin_user) { ENV.fetch("LDAP_ADMIN_USER", "cn=admin,dc=renalware,dc=app") }
+    config_accessor(:ldap_base) { ENV.fetch("LDAP_BASE", "dc=renalware,dc=app") }
+    config_accessor(:ldap_username_attribute) { ENV.fetch("LDAP_USERNAME_ATTRIBUTE", "uid") }
+    config_accessor(:ldap_ssl) { ENV.fetch("LDAP_SSL", !Rails.env.local?) }
+
     config_accessor(:site_name) { "Renalware" }
     config_accessor(:hospital_name) { ENV.fetch("HOSPITAL_NAME", "KINGS COLLEGE HOSPITAL") }
     config_accessor(:hospital_address) { ENV.fetch("HOSPITAL_ADDRESS", "") } # comma-delimited

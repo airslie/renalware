@@ -5,6 +5,7 @@ module Renalware
     include Deviseable
     include Personable
     include RansackAll
+    include LdapAuthenticatable
 
     has_many :roles_users, dependent: :destroy
     has_many :roles, through: :roles_users
@@ -57,6 +58,8 @@ module Renalware
     end
 
     store_accessor :preferences, :experimental_features
+
+    after_create :assign_default_role_if_needed
 
     # Non-persistent attribute to signify we want to use extended validation.
     # We need to refactor this by using a form object for updating a user.
@@ -132,6 +135,13 @@ module Renalware
       if approved? && roles.empty?
         errors.add(:approved, "approved users must have a role")
       end
+    end
+
+    def assign_default_role_if_needed
+      return if roles.exists?
+      return assign_ldap_role if ldap_enabled?
+
+      roles << Role.find_by!(name: :clinical)
     end
   end
 end
