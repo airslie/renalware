@@ -48,8 +48,8 @@ module Renalware
     describe "class" do
       it "includes Deviseable to authenticate using Devise" do
         expect(described_class.ancestors).to include(Deviseable)
-        arr = %i(expirable database_authenticatable rememberable registerable
-                 validatable trackable timeoutable recoverable lockable)
+        arr = %i(expirable rememberable registerable validatable trackable timeoutable
+                 recoverable lockable database_authenticatable ldap_authenticatable)
         expect(described_class.devise_modules).to match_array(arr)
       end
     end
@@ -462,7 +462,6 @@ module Renalware
         end
       end
 
-      # TODO: What happens when user was previously approved but is now not in a valid LDAP group?
       context "when user is not in a valid LDAP group" do
         let(:username) { "renalwareuser-1" }
         let(:roles) { [clinical_role] }
@@ -474,10 +473,10 @@ module Renalware
           allow(ldap_adapter).to receive(:user_in_group?).and_return(true, false)
         end
 
-        it "unapproves the user" do
+        it "removes LDAP roles but keeps user approved" do
           user.synchronize_ldap_roles
 
-          expect(user.reload).not_to be_approved
+          expect(user.reload).to be_approved
           expect(user.roles).to be_empty
         end
       end
@@ -534,6 +533,51 @@ module Renalware
             .and_raise(Renalware::Ldap::Error.new("LDAP error"))
 
           expect { user.synchronize_ldap_roles }.to raise_error(Renalware::Ldap::Error)
+        end
+      end
+    end
+
+    describe "#valid_password?" do
+      let(:ldap_adapter) { instance_double(Ldap::Adapter) }
+      let(:user) { create(:user, username: "testuser", approved: true) }
+
+      before do
+        create(:role, :clinical)
+        allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+        allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+        # Stub group membership for user creation - we need the user to be in a group initially
+        allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+      end
+
+      context "when LDAP is disabled" do
+        it "uses database authentication" do
+          allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+          user = create(:user, password: "password123")
+
+          expect(user.valid_password?("password123")).to be true
+          expect(user.valid_password?("wrongpassword")).to be false
+        end
+      end
+
+      context "when LDAP is enabled" do
+        context "when user has valid LDAP credentials" do
+          it "returns true regardless of group membership" do
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(user.username, "correct_password")
+              .and_return(true)
+
+            expect(user.valid_password?("correct_password")).to be true
+          end
+        end
+
+        context "when user has invalid LDAP credentials" do
+          it "returns false" do
+            allow(ldap_adapter).to receive(:valid_credentials?)
+              .with(user.username, "wrong_password")
+              .and_return(false)
+
+            expect(user.valid_password?("wrong_password")).to be false
+          end
         end
       end
     end

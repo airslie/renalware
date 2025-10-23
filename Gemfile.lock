@@ -14,14 +14,6 @@ GIT
     capybara-select-2 (0.5.1)
 
 GIT
-  remote: https://github.com/airslie/devise_ldap_authenticatable.git
-  revision: 00ed74eb0d13c16e2f736ab8116f7b62c9b8195a
-  specs:
-    devise_ldap_authenticatable (0.8.7)
-      devise (>= 3.4.1)
-      net-ldap (>= 0.16.0)
-
-GIT
   remote: https://github.com/airslie/fhir_stu3_models.git
   revision: 2c7f65f39b3fbed0cdff62736d75a61f6507792f
   specs:
@@ -100,7 +92,6 @@ PATH
       delayed_job_active_record (~> 4.1.2)
       devise (~> 4.8)
       devise-security
-      devise_ldap_authenticatable
       diffy
       dotenv-rails
       dumb_delegator (~> 1.1)
@@ -1030,7 +1021,6 @@ DEPENDENCIES
   daemons
   database_cleaner
   debug (>= 1.0.0)
-  devise_ldap_authenticatable!
   execjs
   factory_bot_rails (~> 6.2)
   faker
@@ -1043,6 +1033,7 @@ DEPENDENCIES
   jsbundling-rails (~> 1.0)
   launchy
   matrix
+  net-ldap
   net-smtp
   nhs_api_client!
   opentelemetry-exporter-otlp

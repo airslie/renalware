@@ -10,6 +10,7 @@ module Renalware
     before do
       create(:role, :clinical)
       @request.env["devise.mapping"] = ::Devise.mappings[:user]
+      # Enable LDAP authentication for these tests
       allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
       allow(Renalware::Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
       allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
@@ -97,6 +98,45 @@ module Renalware
             }.to change {
                    user.reload.last_failed_sign_in_at
                  }.to(be_within(1.second).of(Time.current))
+          end
+        end
+      end
+
+      context "when user has valid LDAP credentials but is not in a valid LDAP group" do
+        let(:removed_user) { create(:user, :clinical, username: "removed_user") }
+
+        before do
+          allow(ldap_adapter).to receive(:valid_credentials?)
+            .with(removed_user.username, "valid_password")
+            .and_return(true)
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+        end
+
+        it "does not sign in" do
+          post :create,
+               params: { user: { username: removed_user.username, password: "valid_password" } }
+
+          expect(controller.current_user).to be_nil
+        end
+
+        it "displays not authorized message" do
+          post :create,
+               params: { user: { username: removed_user.username, password: "valid_password" } }
+
+          expect(flash[:alert]).to include(
+            I18n.t("devise.failure.user.not_authorized")
+          )
+        end
+
+        it "shows the login page" do
+          post :create,
+               params: { user: { username: removed_user.username, password: "valid_password" } }
+
+          if response.redirect?
+            expect(response).to redirect_to(new_user_session_path)
+          else
+            expect(response).to have_http_status(:ok)
+            expect(response).to render_template("devise/sessions/new")
           end
         end
       end

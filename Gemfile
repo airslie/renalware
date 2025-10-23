@@ -8,8 +8,6 @@ ruby file: ".ruby-version"
 gem "activesupport_cache_database", github: "airslie/activesupport-cache-database"
 gem "sprockets-rails"
 
-gem "devise_ldap_authenticatable", github: "airslie/devise_ldap_authenticatable"
-
 # https://opentelemetry.io/docs/instrumentation/ruby/getting-started/
 # See demo/config/initializers/opentelemetry.rb where we load this group if
 # opentelemetry is enabled with an ENV var.
@@ -31,6 +29,7 @@ gem "daemons", require: false # to use cmds like `bin/delayed_job start`
 gem "faker"
 gem "i18n-tasks", "~> 1.0.12"
 gem "jsbundling-rails", "~> 1.0"
+gem "net-ldap"
 gem "net-smtp", require: false # remove in Rails 7
 gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
 gem "paper_trail"

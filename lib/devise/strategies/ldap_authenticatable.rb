@@ -2,10 +2,13 @@ require "devise/strategies/authenticatable"
 
 module Devise
   module Strategies
-    # Override the devise_ldap_authenticatable gem's strategy to handle authorization errors
+    # Custom LDAP authentication strategy for Renalware
+    # Handles authorization errors and group-based access control
     class LdapAuthenticatable < Authenticatable
-      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       def authenticate!
+        return unless Renalware.config.ldap_authentication
+
         # This calls our own find_for_ldap_authentication method in
         # ldap_authenticatable concern.
         resource = mapping.to.find_for_ldap_authentication(
@@ -16,8 +19,11 @@ module Devise
 
         if resource.persisted?
           if validate(resource) { resource.valid_ldap_authentication?(password) }
+            unless resource.in_valid_ldap_group?
+              return fail!(:not_authorized)
+            end
+
             remember_me(resource)
-            resource.after_ldap_authentication
             success!(resource)
           else
             return fail(:invalid)
@@ -26,7 +32,7 @@ module Devise
 
         if resource.new_record?
           if resource.errors[:base].any?
-            fail(:not_authorized)
+            fail!(:not_authorized)
           elsif validate(resource) { resource.valid_ldap_authentication?(password) }
             fail(:not_found_in_database)
           else
@@ -34,7 +40,7 @@ module Devise
           end
         end
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     end
   end
 end
