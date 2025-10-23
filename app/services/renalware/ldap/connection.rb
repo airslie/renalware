@@ -67,6 +67,11 @@ module Renalware
         end
       end
 
+      def bind(use_user_dn: true)
+        ldap.auth(use_user_dn ? user_dn : username, password)
+        ldap if ldap.bind
+      end
+
       private
 
       attr_reader :password
@@ -82,11 +87,6 @@ module Renalware
           base: config.ldap_base,
           encryption: config.ldap_ssl ? :simple_tls : nil
         )
-      end
-
-      def bind(use_user_dn: true)
-        ldap.auth(use_user_dn ? user_dn : username, password)
-        ldap if ldap.bind
       end
 
       def admin_ldap

@@ -5,7 +5,6 @@ module Renalware
     include Deviseable
     include Personable
     include RansackAll
-    include LdapAuthenticatable
 
     has_many :roles_users, dependent: :destroy
     has_many :roles, through: :roles_users
