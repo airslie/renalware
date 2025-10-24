@@ -10,6 +10,8 @@ module Devise
       end
 
       class_methods do
+        delegate :info, :debug, :error, to: ::Renalware::Ldap::Logger
+
         # Custom implementation for finding/creating users from LDAP authentication
         # Supports authorization errors and auto-creation of users on first login
         #
@@ -36,7 +38,10 @@ module Devise
 
           if resource.new_record? && resource.valid_ldap_authentication?(attributes[:password])
             resource.ldap_before_save if resource.respond_to?(:ldap_before_save)
-            resource.save
+            unless resource.save
+              error_messages = resource.errors.full_messages.join(", ")
+              error("Error saving new user #{resource.username}: #{error_messages}")
+            end
           end
 
           resource
@@ -57,7 +62,7 @@ module Devise
         return unless ldap_enabled?
 
         self.email = ldap_param("mail")
-        self.given_name = ldap_param("givenName") || ldap_param("cn")
+        self.given_name = ldap_param("givenName")
         self.family_name = ldap_param("sn")
         self.approved = Renalware.config.ldap_auto_approve_users if in_valid_ldap_group?
       end

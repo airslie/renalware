@@ -1,6 +1,8 @@
 module Renalware
   module Ldap
     class RoleSynchronizer
+      delegate :info, :debug, :error, to: ::Renalware::Ldap::Logger
+
       ADMIN_LEVEL_ROLES = %w(super_admin admin devops).freeze
       LDAP_ROLES = %w(clinical read_only).freeze
 
@@ -8,26 +10,45 @@ module Renalware
         return unless ldap_enabled?
 
         role_name = determine_role(user)
-        return unless role_name
+        unless role_name
+          info("No role determined for user: #{user.username}")
+          return
+        end
 
         role = Role.find_by!(name: role_name)
         user.roles << role
+        info("Assigned role #{role_name} to user: #{user.username}")
+      end
+
+      def skip_sync?(user)
+        return false unless admin_level_user?(user)
+
+        info("Skipping role sync for admin-level user: #{user.username}")
+        true
+      end
+
+      def remove_roles?(user, role)
+        return false unless role.nil?
+
+        info("User #{user.username} not in any groups, removing roles")
+        true
       end
 
       def synchronize_roles(user)
         return unless ldap_enabled?
-        return if admin_level_user?(user)
+
+        return if skip_sync?(user)
 
         expected_role = determine_role(user)
         current_role = current_base_role(user)
 
-        if expected_role.nil?
-          remove_roles(user)
-          return
-        end
+        debug("Role sync for #{user.username}: from=#{current_role}, to=#{expected_role}")
+
+        return remove_roles(user) if remove_roles?(user, expected_role)
 
         return if current_role == expected_role
 
+        info("Updating role for #{user.username}: #{current_role} -> #{expected_role}")
         update_role(user, current_role, expected_role)
       end
 
