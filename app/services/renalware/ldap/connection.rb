@@ -56,7 +56,8 @@ module Renalware
                  entry.dn
                else
                  # Fallback: construct DN from config
-                 "#{config.ldap_username_attribute}=#{@username},#{config.ldap_base}"
+                 username_attr = config.ldap_attribute_mappings["username"]
+                 "#{username_attr}=#{@username},#{config.ldap_base}"
                end
           debug("dn lookup: #{dn}")
           dn
@@ -65,8 +66,9 @@ module Renalware
 
       def search_for_user
         @search_for_user ||= begin
-          filter = Net::LDAP::Filter.eq(config.ldap_username_attribute, @username)
-          debug("search for user: #{config.ldap_username_attribute}=#{@username}")
+          username_attr = config.ldap_attribute_mappings["username"]
+          filter = Net::LDAP::Filter.eq(username_attr, @username)
+          debug("search for user: #{username_attr}=#{@username}")
 
           entries = []
           ldap.search(filter: filter) do |found_entry|
