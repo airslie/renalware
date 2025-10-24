@@ -38,8 +38,6 @@ gem "rails", "~> 8.0.1"
 gem "ruby-prof", require: false
 gem "sendgrid-ruby", "~> 6.7"
 gem "solid_cache"
-gem "tailwindcss-rails", "~> 3.0"
-gem "tailwindcss-ruby"
 gem "terser"
 gem "thruster"
 # Re wkhtmltopdf binary for letter generation
