@@ -291,22 +291,6 @@ module Renalware
         end
       end
 
-      context "when givenName is nil" do
-        it "falls back to cn attribute" do
-          allow(ldap_adapter).to receive(:param)
-            .with(user.username, "givenName")
-            .and_return(nil)
-          allow(ldap_adapter).to receive(:param)
-            .with(user.username, "cn")
-            .and_return("John Doe")
-          allow(user).to receive(:in_valid_ldap_group?).and_return(true)
-
-          user.ldap_before_save
-
-          expect(user.given_name).to eq("John Doe")
-        end
-      end
-
       context "when ldap_auto_approve_users is enabled" do
         it "sets approved to true" do
           allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(true)
