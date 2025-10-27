@@ -234,21 +234,21 @@ module Renalware
 
       context "when LDAP is enabled" do
         context "when user is not in a valid LDAP group" do
-          let(:ldap_adapter) { instance_double(Ldap::Adapter) }
+          let(:ldap_connection) { instance_double(Ldap::Connection) }
 
           before do
             allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-            allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+            allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
           end
 
           it "prevents user creation with validation error" do
             user = build(:user, username: "testuser")
-            allow(ldap_adapter).to receive(:param)
-              .with(user.username, "mail").and_return("test@example.com")
-            allow(ldap_adapter).to receive(:param)
-              .with(user.username, "givenName").and_return("Test")
-            allow(ldap_adapter).to receive(:param)
-              .with(user.username, "sn").and_return("User")
+            allow(ldap_connection).to receive(:param)
+              .with("mail").and_return("test@example.com")
+            allow(ldap_connection).to receive(:param)
+              .with("givenName").and_return("Test")
+            allow(ldap_connection).to receive(:param)
+              .with("sn").and_return("User")
             allow(ldap_connection).to receive(:user_in_group?).and_return(false)
 
             result = user.save
@@ -515,13 +515,13 @@ module Renalware
     end
 
     describe "#valid_password?" do
-      let(:ldap_adapter) { instance_double(Ldap::Adapter) }
+      let(:ldap_connection) { instance_double(Ldap::Connection) }
       let(:user) { create(:user, username: "testuser", approved: true) }
 
       before do
         create(:role, :clinical)
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+        allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
         # Stub group membership for user creation - we need the user to be in a group initially
         allow(ldap_connection).to receive(:user_in_group?).and_return(true)
       end
@@ -539,8 +539,7 @@ module Renalware
       context "when LDAP is enabled" do
         context "when user has valid LDAP credentials" do
           it "returns true regardless of group membership" do
-            allow(ldap_adapter).to receive(:valid_credentials?)
-              .with(user.username, "correct_password")
+            allow(ldap_connection).to receive(:valid_credentials?)
               .and_return(true)
 
             expect(user.valid_password?("correct_password")).to be true
@@ -549,8 +548,7 @@ module Renalware
 
         context "when user has invalid LDAP credentials" do
           it "returns false" do
-            allow(ldap_adapter).to receive(:valid_credentials?)
-              .with(user.username, "wrong_password")
+            allow(ldap_connection).to receive(:valid_credentials?)
               .and_return(false)
 
             expect(user.valid_password?("wrong_password")).to be false

@@ -33,7 +33,8 @@ module Renalware
           ldap_admin_user: "admin",
           ldap_admin_password: "admin_password",
           ldap_clinical_group: "cn=clinical,ou=groups,dc=renalware,dc=app",
-          ldap_readonly_group: "cn=readonly,ou=groups,dc=renalware,dc=app"
+          ldap_readonly_group: "cn=readonly,ou=groups,dc=renalware,dc=app",
+          ldap_logger: true
         )
         allow(Net::LDAP).to receive(:new).and_return(ldap_mock)
       end

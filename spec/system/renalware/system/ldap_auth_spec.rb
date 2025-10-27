@@ -1,31 +1,30 @@
 module Renalware
   describe "LDAP Authentication", :js do
     let(:ldap_user) { build(:user, :clinical, :with_ldap_enabled) }
-    let(:ldap_adapter) { instance_double(Renalware::Ldap::Adapter) }
+    let(:ldap_connection) { instance_double(Renalware::Ldap::Connection) }
 
     before do
       allow(Renalware.config).to receive_messages(
         ldap_authentication: true,
         ldap_auto_approve_users: true
       )
-      allow(Renalware::Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+      allow(Renalware::Ldap::Connection).to receive(:new).and_return(ldap_connection)
     end
 
     context "when user enters valid credentials" do
       before do
-        allow(ldap_adapter).to receive(:valid_credentials?)
-          .with(ldap_user.username, "ldap_password")
+        allow(ldap_connection).to receive(:valid_credentials?)
           .and_return(true)
 
-        allow(ldap_adapter).to receive(:user_in_group?)
-          .with(ldap_user.username, Renalware.config.ldap_clinical_group)
+        allow(ldap_connection).to receive(:user_in_group?)
+          .with(Renalware.config.ldap_clinical_group)
           .and_return(true)
 
-        allow(ldap_adapter).to receive(:param).with(ldap_user.username, "mail")
+        allow(ldap_connection).to receive(:param).with("mail")
           .and_return(ldap_user.email)
-        allow(ldap_adapter).to receive(:param).with(ldap_user.username, "givenName")
+        allow(ldap_connection).to receive(:param).with("givenName")
           .and_return(ldap_user.given_name)
-        allow(ldap_adapter).to receive(:param).with(ldap_user.username, "sn")
+        allow(ldap_connection).to receive(:param).with("sn")
           .and_return(ldap_user.family_name)
       end
 
@@ -82,8 +81,7 @@ module Renalware
 
     context "when user enters invalid credentials" do
       before do
-        allow(ldap_adapter).to receive(:valid_credentials?)
-          .with(ldap_user.username, "ldap_password")
+        allow(ldap_connection).to receive(:valid_credentials?)
           .and_return(false)
       end
 
@@ -100,12 +98,8 @@ module Renalware
 
     context "when user is not in a valid LDAP group" do
       before do
-        allow(ldap_adapter).to receive(:valid_credentials?)
-          .with(ldap_user.username, "ldap_password")
-          .and_return(true)
-
-        allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
-        allow(ldap_adapter).to receive(:param)
+        allow(ldap_connection).to receive_messages(valid_credentials?: true, user_in_group?: false)
+        allow(ldap_connection).to receive(:param)
       end
 
       it "shows an error" do
