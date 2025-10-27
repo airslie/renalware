@@ -29,7 +29,6 @@ gem "daemons", require: false # to use cmds like `bin/delayed_job start`
 gem "faker"
 gem "i18n-tasks", "~> 1.0.12"
 gem "jsbundling-rails", "~> 1.0"
-gem "net-ldap"
 gem "net-smtp", require: false # remove in Rails 7
 gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
 gem "paper_trail"
