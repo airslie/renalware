@@ -144,7 +144,7 @@ PATH
       slim-rails
       store_model (< 5)
       tailwindcss-rails (~> 3.0)
-      tailwindcss-ruby
+      tailwindcss-ruby (~> 3.4)
       turbo-rails (= 2.0.13)
       validates_timeliness
       view_component (< 4.0)
@@ -1081,8 +1081,6 @@ DEPENDENCIES
   stackprof
   strong_migrations
   tailwind_merge (< 1.0)
-  tailwindcss-rails (~> 3.0)
-  tailwindcss-ruby
   terser
   test-prof
   thruster

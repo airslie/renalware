@@ -5,17 +5,19 @@ module Renalware
     routes { Renalware::Engine.routes }
 
     let(:user) { create(:user, :clinical) }
-    let(:ldap_adapter) { instance_double(Renalware::Ldap::Adapter) }
+    let(:ldap_adapter) { instance_double(Renalware::Ldap::Connection) }
 
     before do
       create(:role, :clinical)
       @request.env["devise.mapping"] = ::Devise.mappings[:user]
       # Enable LDAP authentication for these tests
       allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-      allow(Renalware::Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+      allow(Renalware::Ldap::Connection).to receive(:new)
+        .with(hash_including(username: anything))
+        .and_return(ldap_adapter)
       allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
       allow(ldap_adapter).to receive(:user_in_group?)
-        .with(anything, Renalware.config.ldap_clinical_group)
+        .with(Renalware.config.ldap_clinical_group)
         .and_return(true)
       sign_out :user # Ensure no user is signed in before testing login
     end
@@ -24,7 +26,6 @@ module Renalware
       context "when LDAP server raises Ldap::Error" do
         before do
           allow(ldap_adapter).to receive(:valid_credentials?)
-            .with(user.username, "any_password")
             .and_raise(Renalware::Ldap::Error.new("LDAP server unreachable"))
         end
 
@@ -65,7 +66,6 @@ module Renalware
       context "when valid LDAP credentials are provided" do
         before do
           allow(ldap_adapter).to receive(:valid_credentials?)
-            .with(user.username, "valid_password")
             .and_return(true)
         end
 
@@ -80,7 +80,6 @@ module Renalware
       context "when invalid LDAP credentials are provided" do
         before do
           allow(ldap_adapter).to receive(:valid_credentials?)
-            .with(user.username, "wrong_password")
             .and_return(false)
         end
 
@@ -103,13 +102,20 @@ module Renalware
       end
 
       context "when user has valid LDAP credentials but is not in a valid LDAP group" do
-        let(:removed_user) { create(:user, :clinical, username: "removed_user") }
+        let(:removed_user) do
+          # Temporarily allow user to be created (user is in group during creation)
+          allow(ldap_adapter).to receive(:user_in_group?)
+            .with(Renalware.config.ldap_clinical_group)
+            .and_return(true)
+          user = create(:user, :clinical, username: "removed_user")
+          # Reset mock so subsequent tests see user as not in group
+          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+          user
+        end
 
         before do
           allow(ldap_adapter).to receive(:valid_credentials?)
-            .with(removed_user.username, "valid_password")
             .and_return(true)
-          allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
         end
 
         it "does not sign in" do
@@ -145,7 +151,6 @@ module Renalware
         before do
           allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(false)
           allow(ldap_adapter).to receive(:valid_credentials?)
-            .with(user.username, "valid_password")
             .and_return(true)
         end
 

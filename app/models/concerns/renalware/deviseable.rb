@@ -9,31 +9,34 @@ module Renalware
 
     included do
       class_eval do
-        modules = %i(
-          database_authenticatable
-          ldap_authenticatable
-          expirable
-          registerable
-          lockable
-          rememberable
-          trackable
-          validatable
-          timeoutable
-        )
-
         # Both database_authenticatable and ldap_authenticatable modules are
         # always loaded to provide model methods. Each has a corresponding
         # Warden strategy that checks Renalware.config.ldap_authentication
         # to determine which authentication method to use at runtime.
-        #
-        # Password recovery (forgot password) is only enabled for database auth,
-        # since LDAP users manage their passwords via LDAP.
-        modules << :recoverable unless Renalware.config.ldap_authentication
-        #
         # See:
         # - lib/devise/strategies/renalware_database_authenticatable.rb
         # - lib/devise/strategies/ldap_authenticatable.rb
-        devise(*modules)
+        devise(
+          :database_authenticatable,
+          :ldap_authenticatable,
+          :expirable,
+          :registerable,
+          :lockable,
+          :rememberable,
+          :trackable,
+          :validatable,
+          :timeoutable
+        )
+
+        # Password recovery (forgot password) is only enabled for database auth,
+        # since LDAP users manage their passwords via LDAP.
+        # Advise we enable this statically to a) make it easier to test and b)
+        # to allow for future scenarios where database auth needs to be used fro
+        # certain users even when LDAP is enabled.
+        devise(:recoverable) unless Renalware.config.ldap_authentication
+
+        # We also add any hospital-specific modules that have been configured
+        devise(*Renalware.config.devise_extra_modules) if Renalware.config.devise_extra_modules.any?
       end
 
       # Makes the User 'approvable'

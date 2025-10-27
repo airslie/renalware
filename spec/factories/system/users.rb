@@ -32,6 +32,9 @@ FactoryBot.define do
     end
 
     after(:build) do |user, evaluator|
+      # Skip role assignment if user already exists (persisted) and we're using find_or_create
+      next if user.persisted? && user.roles.any?
+
       if evaluator.role.present?
         role_record = create(:role, evaluator.role)
         user.roles << role_record
@@ -132,6 +135,10 @@ FactoryBot.define do
 
         user.define_singleton_method(:ldap_adapter) { fake_adapter }
       end
+    end
+
+    trait :find_or_create do
+      initialize_with { Renalware::User.find_or_create_by(username: username) }
     end
   end
 end

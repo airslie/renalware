@@ -28,16 +28,15 @@ module Renalware
     end
 
     context "when LDAP authentication is enabled" do
-      let(:ldap_adapter) { instance_double(Ldap::Adapter) }
+      let(:ldap_adapter) { instance_double(Ldap::Connection) }
 
       before do
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(Ldap::Adapter).to receive(:new).and_return(ldap_adapter)
+        allow(Ldap::Connection).to receive(:new).and_return(ldap_adapter)
       end
 
       it "validates current password against LDAP" do
         allow(ldap_adapter).to receive(:valid_credentials?)
-          .with(@clinician.username, "correct_ldap_password")
           .and_return(true)
 
         fill_in "Professional position", with: "Senior Nurse"
@@ -53,7 +52,6 @@ module Renalware
 
       it "rejects update with incorrect LDAP password" do
         allow(ldap_adapter).to receive(:valid_credentials?)
-          .with(@clinician.username, "wrong_password")
           .and_return(false)
 
         fill_in "Professional position", with: "Senior Nurse"

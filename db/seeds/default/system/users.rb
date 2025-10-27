@@ -1,14 +1,23 @@
 require_relative "../../seeds_helper"
 
 module Renalware
+  include SeedsHelper
+
   Rails.benchmark "Adding System User" do
-    Renalware::User.find_or_create_by!(given_name: "System", family_name: "User") do |user|
-      user.username = Renalware::SystemUser.username
-      user.password = "P!#{SecureRandom.hex(20)}"
-      user.email = "systemuser@renalware.net"
-      user.roles = [Renalware::Role.find_by!(name: :super_admin)]
-      user.approved = true
-      user.signature = "System User"
-    end
+    ensure_factory_bot_loaded
+
+    FactoryBot.create(
+      :user,
+      :with_ldap_enabled,
+      :find_or_create,
+      given_name: "System",
+      family_name: "User",
+      username: Renalware::SystemUser.username,
+      password: "P!#{SecureRandom.hex(20)}",
+      email: "systemuser@renalware.net",
+      approved: true,
+      signature: "System User",
+      role: :super_admin
+    )
   end
 end

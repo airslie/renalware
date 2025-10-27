@@ -20,6 +20,11 @@ module Renalware
     # Force dotenv to load the .env file at this stage so we can read in the config defaults
     Dotenv::Rails.load
 
+    # Hospital-specific devise modules to load (comma-separated list, e.g., "module1,module2")
+    config_accessor(:devise_extra_modules) do
+      ENV.fetch("DEVISE_EXTRA_MODULES", "").split(",").map { it.strip.to_sym }
+    end
+
     # Links to eg Power BI or Qlick Sense that you might like to display on the login page
     # and on the user's Dashboard when you log in.
     # Needs to be a 2d array [[title,url],[title,url]] loaded from an ENV var in the format
@@ -68,7 +73,17 @@ module Renalware
     config_accessor(:ldap_admin_password) { ENV.fetch("LDAP_ADMIN_PASSWORD", nil) }
     config_accessor(:ldap_admin_user) { ENV.fetch("LDAP_ADMIN_USER", "cn=admin,dc=renalware,dc=app") }
     config_accessor(:ldap_base) { ENV.fetch("LDAP_BASE", "dc=renalware,dc=app") }
-    config_accessor(:ldap_username_attribute) { ENV.fetch("LDAP_USERNAME_ATTRIBUTE", "uid") }
+    config_accessor(:ldap_attribute_mappings) do
+      default_mappings = {
+        "username" => "uid",
+        "email" => "mail",
+        "given_name" => "givenName",
+        "family_name" => "sn"
+      }
+      mappings_string = ENV.fetch("LDAP_ATTRIBUTE_MAPPINGS", nil)
+      custom_mappings = mappings_string ? JSON.parse(mappings_string) : {}
+      default_mappings.merge(custom_mappings)
+    end
     config_accessor(:ldap_ssl) { ENV.fetch("LDAP_SSL", !Rails.env.local?) }
 
     config_accessor(:site_name) { "Renalware" }

@@ -10,4 +10,13 @@ module SeedsHelper
       klass.paper_trail.enable if klass.paper_trail.respond_to?(:enable)
     end
   end
+
+  def ensure_factory_bot_loaded
+    require "factory_bot_rails"
+    require "faker"
+    return if FactoryBot.factories.any?
+
+    FactoryBot.definition_file_paths = Array(Renalware::Engine.root.join("spec", "factories"))
+    FactoryBot.find_definitions
+  end
 end
