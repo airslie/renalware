@@ -3,7 +3,7 @@ module Renalware
     describe RoleSynchronizer do
       subject(:synchronizer) { described_class.new }
 
-      let(:ldap_adapter) { instance_double(Adapter) }
+      let(:ldap_connection) { instance_double(Connection) }
       let!(:clinical_role) { create(:role, :clinical) }
       let!(:readonly_role) { create(:role, :read_only) }
       let!(:prescriber_role) { create(:role, :prescriber) }
@@ -14,7 +14,7 @@ module Renalware
 
       before do
         allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(Adapter).to receive(:new).and_return(ldap_adapter)
+        allow(Connection).to receive(:new).and_return(ldap_connection)
       end
 
       describe "#assign_role" do
@@ -32,7 +32,7 @@ module Renalware
 
         context "when user is in renalware LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+            allow(ldap_connection).to receive(:user_in_group?) do |group|
               group == Renalware.config.ldap_clinical_group
             end
           end
@@ -46,7 +46,7 @@ module Renalware
 
         context "when user is in renalware-readonly LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+            allow(ldap_connection).to receive(:user_in_group?) do |group|
               group == Renalware.config.ldap_readonly_group
             end
           end
@@ -60,7 +60,7 @@ module Renalware
 
         context "when user is not in any valid LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(false)
           end
 
           it "does not assign any role" do
@@ -82,7 +82,7 @@ module Renalware
 
         context "when user is in renalware LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+            allow(ldap_connection).to receive(:user_in_group?) do |group|
               group == Renalware.config.ldap_clinical_group
             end
           end
@@ -126,7 +126,7 @@ module Renalware
 
         context "when user is in renalware-readonly LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+            allow(ldap_connection).to receive(:user_in_group?) do |group|
               group == Renalware.config.ldap_readonly_group
             end
           end
@@ -174,11 +174,11 @@ module Renalware
           let(:user) do
             # Create user first with LDAP returning true, then change the stub
             # to simulate the user being removed from the LDAP group
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(true)
             u = create(:user, role: nil, roles:, approved: true, username:,
                               updated_at: 2.minutes.ago)
             # Now simulate user no longer in any valid LDAP group
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(false)
             u
           end
 
@@ -193,10 +193,10 @@ module Renalware
         context "when user has admin-level roles" do
           it "does not modify super_admin role" do
             # Allow creation first
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(true)
             user = create(:user, role: nil, roles: [super_admin_role], username: "superadmin-1")
             # Now simulate no group membership
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(false)
 
             synchronizer.synchronize_roles(user)
 
@@ -205,10 +205,10 @@ module Renalware
 
           it "does not modify admin role" do
             # Allow creation first
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(true)
             user = create(:user, role: nil, roles: [admin_role], username: "admin-1")
             # Now simulate no group membership
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(false)
 
             synchronizer.synchronize_roles(user)
 
@@ -217,10 +217,10 @@ module Renalware
 
           it "does not modify devops role" do
             # Allow creation first
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(true)
             user = create(:user, role: nil, roles: [devops_role], username: "devops-1")
             # Now simulate no group membership
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(false)
 
             synchronizer.synchronize_roles(user)
 
@@ -231,10 +231,10 @@ module Renalware
         context "when LDAP group check fails" do
           it "raises the LDAP error" do
             # Allow creation first
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(true)
             user = create(:user, role: nil, roles: [clinical_role], approved: true)
             # Now simulate LDAP error
-            allow(ldap_adapter).to receive(:user_in_group?)
+            allow(ldap_connection).to receive(:user_in_group?)
               .and_raise(Error.new("LDAP error"))
 
             expect { synchronizer.synchronize_roles(user) }.to raise_error(Error)
@@ -247,7 +247,7 @@ module Renalware
 
         context "when user is in renalware LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+            allow(ldap_connection).to receive(:user_in_group?) do |group|
               group == Renalware.config.ldap_clinical_group
             end
           end
@@ -259,7 +259,7 @@ module Renalware
 
         context "when user is in renalware-readonly LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+            allow(ldap_connection).to receive(:user_in_group?) do |group|
               group == Renalware.config.ldap_readonly_group
             end
           end
@@ -271,7 +271,7 @@ module Renalware
 
         context "when user is not in any valid LDAP group" do
           before do
-            allow(ldap_adapter).to receive(:user_in_group?).and_return(false)
+            allow(ldap_connection).to receive(:user_in_group?).and_return(false)
           end
 
           it "returns nil" do
@@ -282,28 +282,28 @@ module Renalware
 
       describe "#admin_level_user?" do
         it "returns true for super_admin role" do
-          allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+          allow(ldap_connection).to receive(:user_in_group?).and_return(true)
           user = create(:user, role: nil, roles: [super_admin_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(true)
         end
 
         it "returns true for admin role" do
-          allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+          allow(ldap_connection).to receive(:user_in_group?).and_return(true)
           user = create(:user, role: nil, roles: [admin_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(true)
         end
 
         it "returns true for devops role" do
-          allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+          allow(ldap_connection).to receive(:user_in_group?).and_return(true)
           user = create(:user, role: nil, roles: [devops_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(true)
         end
 
         it "returns false for clinical role" do
-          allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+          allow(ldap_connection).to receive(:user_in_group?) do |group|
             group == Renalware.config.ldap_clinical_group
           end
           user = create(:user, role: nil, roles: [clinical_role])
@@ -312,7 +312,7 @@ module Renalware
         end
 
         it "returns false for read_only role" do
-          allow(ldap_adapter).to receive(:user_in_group?) do |_username, group|
+          allow(ldap_connection).to receive(:user_in_group?) do |group|
             group == Renalware.config.ldap_readonly_group
           end
           user = create(:user, role: nil, roles: [readonly_role])
@@ -321,7 +321,7 @@ module Renalware
         end
 
         it "returns false for user with no roles" do
-          allow(ldap_adapter).to receive(:user_in_group?).and_return(true)
+          allow(ldap_connection).to receive(:user_in_group?).and_return(true)
           user = create(:user, role: nil)
           user.roles.clear
 

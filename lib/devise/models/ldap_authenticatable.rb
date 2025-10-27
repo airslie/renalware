@@ -77,7 +77,7 @@ module Devise
       end
 
       def valid_ldap_authentication?(password)
-        ldap_adapter.valid_credentials?(username, password)
+        ldap_connection(password).valid_credentials?
       end
 
       def ldap_requires_manual_approval?
@@ -94,8 +94,8 @@ module Devise
         Renalware.config.ldap_authentication
       end
 
-      def ldap_adapter
-        @ldap_adapter ||= Renalware::Ldap::Adapter.new
+      def ldap_connection(password = nil)
+        Renalware::Ldap::Connection.new(username: username, password: password)
       end
 
       def ldap_role_synchronizer
@@ -103,11 +103,11 @@ module Devise
       end
 
       def ldap_param(attribute)
-        ldap_adapter.param(username, attribute)
+        ldap_connection.param(attribute)
       end
 
       def in_ldap_group?(group)
-        ldap_adapter.user_in_group?(username, group)
+        ldap_connection.user_in_group?(group)
       end
 
       def in_renalware_group?

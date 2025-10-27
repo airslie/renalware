@@ -69,12 +69,12 @@ module Renalware
         Renalware.config.ldap_authentication
       end
 
-      def ldap_adapter
-        @ldap_adapter ||= Adapter.new
+      def ldap_connection(username)
+        Connection.new(username: username)
       end
 
       def in_ldap_group?(user, group)
-        ldap_adapter.user_in_group?(user.username, group)
+        ldap_connection(user.username).user_in_group?(group)
       end
 
       def in_renalware_group?(user)

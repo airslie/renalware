@@ -27,7 +27,8 @@ module Renalware
         entry = search_for_user
         return unless entry
 
-        entry[attribute]
+        value = entry[attribute]
+        value.presence
       end
 
       # group_dn: Full DN of the group (e.g., "cn=clinical,ou=groups,dc=renalware,dc=app")
@@ -47,6 +48,10 @@ module Renalware
         info("User #{user_dn} is #{'not ' unless in_group}in group: #{group_dn}")
 
         in_group
+      end
+
+      def user_in_group?(group_dn)
+        in_group?(group_dn, "member")
       end
 
       def user_dn
@@ -127,7 +132,9 @@ module Renalware
         result = ldap_connection.get_operation_result
         return if result.code.zero?
 
-        raise Error, "LDAP operation failed: #{result.message}"
+        message = "LDAP operation failed: #{result.code} - #{result.message}"
+        error(message)
+        raise Error, message
       end
     end
   end
