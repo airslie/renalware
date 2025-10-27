@@ -20,6 +20,11 @@ module Renalware
     # Force dotenv to load the .env file at this stage so we can read in the config defaults
     Dotenv::Rails.load
 
+    # Hospital-specific devise modules to load (comma-separated list, e.g., "module1,module2")
+    config_accessor(:devise_extra_modules) do
+      ENV.fetch("DEVISE_EXTRA_MODULES", "").split(",").map { it.strip.to_sym }
+    end
+
     # Links to eg Power BI or Qlick Sense that you might like to display on the login page
     # and on the user's Dashboard when you log in.
     # Needs to be a 2d array [[title,url],[title,url]] loaded from an ENV var in the format
