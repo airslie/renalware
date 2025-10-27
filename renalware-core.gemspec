@@ -73,6 +73,7 @@ Gem::Specification.new do |s|
   s.add_dependency "lograge", "~> 0.11"
   s.add_dependency "naught", "~> 1.1.0"
   s.add_dependency "nested_form", "~> 0.3.2"
+  s.add_dependency "net-ldap"
   s.add_dependency "net-sftp", "~> 4.0"
   s.add_dependency "nokogiri", "~> 1.9"
   s.add_dependency "ox", "~> 2.13"
