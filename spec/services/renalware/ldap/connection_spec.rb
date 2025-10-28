@@ -397,14 +397,14 @@ module Renalware
 
           it "raises Error with meaningful message" do
             expect { connection.search_for_user }
-              .to raise_error(Error, /LDAP operation failed/)
+              .to raise_error(Error, /operation failed/)
           end
 
           it "logs the error" do
             allow(Rails.logger).to receive(:error)
             expect { connection.search_for_user }.to raise_error(Error)
             expect(Rails.logger).to have_received(:error)
-              .with(/LDAP operation failed: 1 - LDAP connection failed/)
+              .with(/operation failed: 1 - LDAP connection failed/)
           end
         end
 

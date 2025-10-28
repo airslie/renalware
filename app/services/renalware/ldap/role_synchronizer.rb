@@ -1,7 +1,7 @@
 module Renalware
   module Ldap
     class RoleSynchronizer
-      delegate :info, :debug, :error, to: ::Renalware::Ldap::Logger
+      delegate :info, :error, to: ::Renalware::Ldap::Logger
 
       ADMIN_LEVEL_ROLES = %w(super_admin admin devops).freeze
       LDAP_ROLES = %w(clinical read_only).freeze
@@ -42,7 +42,7 @@ module Renalware
         expected_role = determine_role(user)
         current_role = current_base_role(user)
 
-        debug("Role sync for #{user.username}: from=#{current_role}, to=#{expected_role}")
+        info("Role sync for #{user.username}: from=#{current_role}, to=#{expected_role}")
 
         return remove_roles(user) if remove_roles?(user, expected_role)
 

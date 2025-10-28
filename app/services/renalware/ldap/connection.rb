@@ -3,7 +3,7 @@ require "net/ldap"
 module Renalware
   module Ldap
     class Connection
-      delegate :info, :debug, :error, to: ::Renalware::Ldap::Logger
+      delegate :info, :error, to: ::Renalware::Ldap::Logger
 
       attr_reader :username
 
@@ -16,11 +16,6 @@ module Renalware
         return false if @password.blank?
 
         !bind.nil?
-      end
-
-      def log(result, message: "Operation failed", negative: "not ")
-        message = message.gsub(negative, "") if result
-        debug(message)
       end
 
       def param(attribute)
@@ -43,13 +38,14 @@ module Renalware
           in_group = true if entry[group_attribute].include?(user_dn)
         end
 
-        check_operation_result!(admin_ldap)
+        log_failure(admin_ldap, raise_on_error: true)
 
         info("User #{user_dn} is #{'not ' unless in_group}in group: #{group_dn}")
 
         in_group
       end
 
+      # This can probably be removed. Use in_group? directly
       def user_in_group?(group_dn)
         in_group?(group_dn, "member")
       end
@@ -64,7 +60,7 @@ module Renalware
                  username_attr = config.ldap_attribute_mappings["username"]
                  "#{username_attr}=#{@username},#{config.ldap_base}"
                end
-          debug("dn lookup: #{dn}")
+          info("dn lookup: #{dn}")
           dn
         end
       end
@@ -73,15 +69,15 @@ module Renalware
         @search_for_user ||= begin
           username_attr = config.ldap_attribute_mappings["username"]
           filter = Net::LDAP::Filter.eq(username_attr, @username)
-          debug("search for user: #{username_attr}=#{@username}")
+          info("search for user: #{username_attr}=#{@username}")
 
           entries = []
           ldap.search(filter: filter) do |found_entry|
             entries << found_entry
           end
 
-          check_operation_result!(ldap)
-          debug("search yielded #{entries.size} matches")
+          log_failure(ldap, raise_on_error: true)
+          info("search yielded #{entries.size} matches")
 
           entries.first
         end
@@ -93,7 +89,7 @@ module Renalware
           info("Valid credentials for user: #{username}")
           ldap
         else
-          info("Invalid credentials for user: #{username}")
+          log_failure(ldap)
           nil
         end
       end
@@ -128,13 +124,13 @@ module Renalware
         raise Error, "Cannot bind to LDAP server with admin credentials"
       end
 
-      def check_operation_result!(ldap_connection)
+      def log_failure(ldap_connection, raise_on_error: false)
         result = ldap_connection.get_operation_result
-        return if result.code.zero?
+        return true if result.code.zero?
 
-        message = "LDAP operation failed: #{result.code} - #{result.message}"
+        message = "operation failed: #{result.code} - #{result.message}"
         error(message)
-        raise Error, message
+        raise Error, message if raise_on_error
       end
     end
   end
