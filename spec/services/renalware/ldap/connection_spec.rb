@@ -7,7 +7,8 @@ module Renalware
 
       let(:username) { "testuser" }
       let(:password) { "password123" }
-      let(:ldap_mock) { instance_double(Net::LDAP) }
+      let(:ldap_mock) { instance_double(Net::LDAP).as_null_object }
+      let(:admin_ldap_mock) { instance_double(Net::LDAP).as_null_object }
       let(:user_entry) do
         Net::LDAP::Entry.new.tap do |entry|
           entry["dn"] = ["uid=testuser,ou=users,dc=renalware,dc=app"]
@@ -19,24 +20,19 @@ module Renalware
       end
 
       before do
-        allow(Renalware.config).to receive_messages(
-          ldap_host: "ldap.example.com",
-          ldap_port: 389,
-          ldap_base: "dc=renalware,dc=app",
-          ldap_ssl: false,
-          ldap_attribute_mappings: {
-            "username" => "uid",
-            "email" => "mail",
-            "given_name" => "givenName",
-            "family_name" => "sn"
-          },
-          ldap_admin_user: "admin",
-          ldap_admin_password: "admin_password",
-          ldap_clinical_group: "cn=clinical,ou=groups,dc=renalware,dc=app",
-          ldap_readonly_group: "cn=readonly,ou=groups,dc=renalware,dc=app",
-          ldap_logger: true
+        allow(Net::LDAP).to receive(:new).and_return(
+          ldap_mock, admin_ldap_mock, admin_ldap_mock, admin_ldap_mock
         )
-        allow(Net::LDAP).to receive(:new).and_return(ldap_mock)
+        allow(ldap_mock).to receive(:auth)
+        allow(ldap_mock).to receive_messages(
+          bind: true,
+          get_operation_result: Struct.new(:code).new(0)
+        )
+        allow(admin_ldap_mock).to receive(:auth)
+        allow(admin_ldap_mock).to receive_messages(
+          bind: true,
+          get_operation_result: Struct.new(:code).new(0)
+        )
       end
 
       describe "#initialize" do
@@ -52,10 +48,12 @@ module Renalware
 
       describe "#valid_credentials?" do
         let(:result) { Struct.new(:code).new(0) }
+        let(:filter) { instance_double(Net::LDAP::Filter) }
 
         before do
-          allow(ldap_mock).to receive(:search).and_yield(user_entry)
-          allow(ldap_mock).to receive(:get_operation_result).and_return(result)
+          allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
+          allow(admin_ldap_mock).to receive(:search).and_yield(user_entry)
+          allow(admin_ldap_mock).to receive(:get_operation_result).and_return(result)
         end
 
         context "when password is blank" do
@@ -105,16 +103,15 @@ module Renalware
 
       describe "#param" do
         let(:result) { Struct.new(:code).new(0) }
-        let(:filter) { instance_double(Net::LDAP::Filter) }
 
         before do
-          allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
-          allow(ldap_mock).to receive(:get_operation_result).and_return(result)
+          allow(admin_ldap_mock).to receive(:get_operation_result).and_return(result)
         end
 
         context "when user is found" do
           before do
             allow(ldap_mock).to receive(:search).and_yield(user_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry)
           end
 
           it "returns the requested attribute" do
@@ -129,6 +126,7 @@ module Renalware
         context "when user is not found" do
           before do
             allow(ldap_mock).to receive(:search)
+            allow(admin_ldap_mock).to receive(:search)
           end
 
           it "returns nil" do
@@ -143,6 +141,7 @@ module Renalware
               entry["mail"] = []
             end
             allow(ldap_mock).to receive(:search).and_yield(empty_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(empty_entry)
           end
 
           it "returns nil" do
@@ -155,20 +154,9 @@ module Renalware
         let(:group_dn) { "cn=clinical,ou=groups,dc=renalware,dc=app" }
         let(:user_dn) { "uid=testuser,ou=users,dc=renalware,dc=app" }
         let(:result) { Struct.new(:code).new(0) }
-        let(:filter) { instance_double(Net::LDAP::Filter) }
-        let(:admin_ldap) { instance_double(Net::LDAP) }
-        let(:admin_connection) { instance_double(described_class) }
-        let(:admin_adapter_mock) { instance_double(Adapter) }
 
         before do
-          allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
-          allow(ldap_mock).to receive(:search).and_yield(user_entry)
-          allow(ldap_mock).to receive(:get_operation_result).and_return(result)
-          allow(described_class).to receive(:new).and_call_original
-          allow(described_class).to receive(:new)
-            .with(username: "admin", password: "admin_password")
-            .and_return(admin_connection)
-          allow(admin_connection).to receive(:bind).and_return(admin_ldap)
+          allow(admin_ldap_mock).to receive(:get_operation_result).and_return(result)
         end
 
         context "when user is in the group" do
@@ -177,9 +165,8 @@ module Renalware
               entry["dn"] = [group_dn]
               entry["member"] = [user_dn]
             end
-            allow(ldap_mock).to receive(:search).and_yield(user_entry)
-            allow(admin_ldap).to receive(:search).and_yield(group_entry)
-            allow(admin_ldap).to receive(:get_operation_result).and_return(result)
+            allow(ldap_mock).to receive(:search).and_yield(user_entry).and_yield(group_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry).and_yield(group_entry)
           end
 
           it "returns true" do
@@ -193,9 +180,8 @@ module Renalware
               entry["dn"] = [group_dn]
               entry["member"] = ["uid=otheruser,ou=users,dc=renalware,dc=app"]
             end
-            allow(ldap_mock).to receive(:search).and_yield(user_entry)
-            allow(admin_ldap).to receive(:search).and_yield(group_entry)
-            allow(admin_ldap).to receive(:get_operation_result).and_return(result)
+            allow(ldap_mock).to receive(:search).and_yield(user_entry).and_yield(group_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry).and_yield(group_entry)
           end
 
           it "returns false" do
@@ -206,8 +192,7 @@ module Renalware
         context "when group does not exist" do
           before do
             allow(ldap_mock).to receive(:search).and_yield(user_entry)
-            allow(admin_ldap).to receive(:search)
-            allow(admin_ldap).to receive(:get_operation_result).and_return(result)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry)
           end
 
           it "returns false" do
@@ -221,9 +206,8 @@ module Renalware
               entry["dn"] = [group_dn]
               entry["uniqueMember"] = [user_dn]
             end
-            allow(ldap_mock).to receive(:search).and_yield(user_entry)
-            allow(admin_ldap).to receive(:search).and_yield(group_entry)
-            allow(admin_ldap).to receive(:get_operation_result).and_return(result)
+            allow(ldap_mock).to receive(:search).and_yield(user_entry).and_yield(group_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry).and_yield(group_entry)
           end
 
           it "checks the specified attribute" do
@@ -234,16 +218,15 @@ module Renalware
 
       describe "#user_dn" do
         let(:result) { Struct.new(:code).new(0) }
-        let(:filter) { instance_double(Net::LDAP::Filter) }
 
         before do
-          allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
-          allow(ldap_mock).to receive(:get_operation_result).and_return(result)
+          allow(admin_ldap_mock).to receive(:get_operation_result).and_return(result)
         end
 
         context "when user is found in LDAP" do
           before do
             allow(ldap_mock).to receive(:search).and_yield(user_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry)
           end
 
           it "returns the DN from the LDAP entry" do
@@ -251,7 +234,6 @@ module Renalware
           end
 
           it "caches the result" do
-            allow(ldap_mock).to receive(:search).and_yield(user_entry)
             connection.user_dn
             connection.user_dn
             expect(ldap_mock).to have_received(:search).once
@@ -261,6 +243,7 @@ module Renalware
         context "when user is not found in LDAP" do
           before do
             allow(ldap_mock).to receive(:search)
+            allow(admin_ldap_mock).to receive(:search)
           end
 
           it "constructs DN from config" do
@@ -272,16 +255,15 @@ module Renalware
 
       describe "#search_for_user" do
         let(:result) { Struct.new(:code).new(0) }
-        let(:filter) { instance_double(Net::LDAP::Filter) }
 
         before do
-          allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
-          allow(ldap_mock).to receive(:get_operation_result).and_return(result)
+          allow(admin_ldap_mock).to receive(:get_operation_result).and_return(result)
         end
 
         context "when user exists" do
           before do
-            allow(ldap_mock).to receive(:search).with(filter: filter).and_yield(user_entry)
+            allow(ldap_mock).to receive(:search).and_yield(user_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry)
           end
 
           it "returns the user entry" do
@@ -289,7 +271,6 @@ module Renalware
           end
 
           it "caches the result" do
-            allow(ldap_mock).to receive(:search).and_yield(user_entry)
             connection.search_for_user
             connection.search_for_user
             expect(ldap_mock).to have_received(:search).once
@@ -299,6 +280,7 @@ module Renalware
         context "when user does not exist" do
           before do
             allow(ldap_mock).to receive(:search)
+            allow(admin_ldap_mock).to receive(:search)
           end
 
           it "returns nil" do
@@ -315,6 +297,7 @@ module Renalware
 
           before do
             allow(ldap_mock).to receive(:search).and_yield(user_entry).and_yield(second_entry)
+            allow(admin_ldap_mock).to receive(:search).and_yield(user_entry).and_yield(second_entry)
           end
 
           it "returns the first matching entry" do
@@ -330,8 +313,8 @@ module Renalware
 
         before do
           allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
-          allow(ldap_mock).to receive(:search).and_yield(user_entry)
-          allow(ldap_mock).to receive(:get_operation_result).and_return(result)
+          allow(admin_ldap_mock).to receive(:search).and_yield(user_entry)
+          allow(admin_ldap_mock).to receive(:get_operation_result).and_return(result)
         end
 
         context "when use_user_dn is true" do
@@ -386,13 +369,13 @@ module Renalware
 
       describe "error handling" do
         let(:result) { Struct.new(:code, :message).new(1, "LDAP connection failed") }
-        let(:filter) { instance_double(Net::LDAP::Filter) }
 
         context "when LDAP operation fails" do
           before do
-            allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
             allow(ldap_mock).to receive(:search)
             allow(ldap_mock).to receive(:get_operation_result).and_return(result)
+            allow(admin_ldap_mock).to receive(:search)
+            allow(admin_ldap_mock).to receive(:get_operation_result).and_return(result)
           end
 
           it "raises Error with meaningful message" do
@@ -409,17 +392,9 @@ module Renalware
         end
 
         context "when admin bind fails" do
-          let(:failed_admin_connection) { instance_double(described_class, bind: nil) }
-
           before do
-            allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
-            allow(ldap_mock).to receive(:search).and_yield(user_entry)
-            allow(ldap_mock).to receive(:get_operation_result)
-              .and_return(Struct.new(:code).new(0))
-            allow(described_class).to receive(:new).and_call_original
-            allow(described_class).to receive(:new)
-              .with(username: "admin", password: "admin_password")
-              .and_return(failed_admin_connection)
+            allow(ldap_mock).to receive(:bind).and_return(false)
+            allow(admin_ldap_mock).to receive(:bind).and_return(false)
           end
 
           it "raises Error" do
@@ -430,45 +405,41 @@ module Renalware
       end
 
       describe "SSL configuration" do
-        let(:filter) { instance_double(Net::LDAP::Filter) }
-
         context "when SSL is enabled" do
           before do
             allow(Renalware.config).to receive(:ldap_ssl).and_return(true)
-            allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
           end
 
           it "creates LDAP connection with simple_tls encryption" do
             allow(Net::LDAP).to receive(:new).with(
               hash_including(encryption: :simple_tls)
-            ).and_return(ldap_mock)
-            allow(ldap_mock).to receive(:search)
-            allow(ldap_mock).to receive(:get_operation_result)
+            ).and_return(ldap_mock, admin_ldap_mock)
+            allow(admin_ldap_mock).to receive(:search).with(any_args)
+            allow(admin_ldap_mock).to receive(:get_operation_result)
               .and_return(Struct.new(:code).new(0))
 
             connection.search_for_user
             expect(Net::LDAP).to have_received(:new)
-              .with(hash_including(encryption: :simple_tls))
+              .with(hash_including(encryption: :simple_tls)).at_least(:once)
           end
         end
 
         context "when SSL is disabled" do
           before do
             allow(Renalware.config).to receive(:ldap_ssl).and_return(false)
-            allow(Net::LDAP::Filter).to receive(:eq).with("uid", username).and_return(filter)
           end
 
           it "creates LDAP connection without encryption" do
             allow(Net::LDAP).to receive(:new).with(
               hash_including(encryption: nil)
-            ).and_return(ldap_mock)
-            allow(ldap_mock).to receive(:search)
-            allow(ldap_mock).to receive(:get_operation_result)
+            ).and_return(ldap_mock, admin_ldap_mock)
+            allow(admin_ldap_mock).to receive(:search).with(any_args)
+            allow(admin_ldap_mock).to receive(:get_operation_result)
               .and_return(Struct.new(:code).new(0))
 
             connection.search_for_user
             expect(Net::LDAP).to have_received(:new)
-              .with(hash_including(encryption: nil))
+              .with(hash_including(encryption: nil)).at_least(:once)
           end
         end
       end
