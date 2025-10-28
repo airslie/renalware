@@ -7,14 +7,14 @@ module Devise
     # a fork of schlumpfit/devise_ldap_authenticatable.
     # Handles authorization errors and group-based access control
     class LdapAuthenticatable < Authenticatable
-      delegate :info, :debug, :error, to: ::Renalware::Ldap::Logger
+      delegate :info, :error, to: ::Renalware::Ldap::Logger
 
       # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       def authenticate!
         return unless Renalware.config.ldap_authentication
 
         username = authentication_hash[:username]
-        debug("Auth attempt for user: #{username}")
+        info("Auth attempt for user: #{username}")
 
         # This calls our own find_for_ldap_authentication method in
         # ldap_authenticatable concern.

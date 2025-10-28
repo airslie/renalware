@@ -38,13 +38,14 @@ module Renalware
           in_group = true if entry[group_attribute].include?(user_dn)
         end
 
-        check_operation_result!(admin_ldap)
+        log_failure(admin_ldap, raise_on_error: true)
 
         info("User #{user_dn} is #{'not ' unless in_group}in group: #{group_dn}")
 
         in_group
       end
 
+      # This can probably be removed. Use in_group? directly
       def user_in_group?(group_dn)
         in_group?(group_dn, "member")
       end
@@ -75,7 +76,7 @@ module Renalware
             entries << found_entry
           end
 
-          check_operation_result!(ldap)
+          log_failure(ldap, raise_on_error: true)
           info("search yielded #{entries.size} matches")
 
           entries.first
@@ -88,7 +89,7 @@ module Renalware
           info("Valid credentials for user: #{username}")
           ldap
         else
-          info("Invalid credentials for user: #{username}")
+          log_failure(ldap)
           nil
         end
       end
@@ -123,13 +124,13 @@ module Renalware
         raise Error, "Cannot bind to LDAP server with admin credentials"
       end
 
-      def check_operation_result!(ldap_connection)
+      def log_failure(ldap_connection, raise_on_error: false)
         result = ldap_connection.get_operation_result
-        return if result.code.zero?
+        return true if result.code.zero?
 
         message = "operation failed: #{result.code} - #{result.message}"
         error(message)
-        raise Error, message
+        raise Error, message if raise_on_error
       end
     end
   end
