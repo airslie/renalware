@@ -72,11 +72,11 @@ module Renalware
           info("search for user: #{username_attr}=#{@username}")
 
           entries = []
-          ldap.search(filter: filter) do |found_entry|
+          admin_ldap.search(filter: filter) do |found_entry|
             entries << found_entry
           end
 
-          log_failure(ldap, raise_on_error: true)
+          log_failure(admin_ldap, raise_on_error: true)
           info("search yielded #{entries.size} matches")
 
           entries.first
@@ -126,7 +126,7 @@ module Renalware
 
       def log_failure(ldap_connection, raise_on_error: false)
         result = ldap_connection.get_operation_result
-        return true if result.code.zero?
+        return if result.code.zero?
 
         message = "operation failed: #{result.code} - #{result.message}"
         error(message)

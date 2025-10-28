@@ -6,22 +6,3 @@ version: "0.5"
 # PostgreSQL is loaded by it's own devbox service
 
 processes:
-  # Vector database for AI/ML features used by claude-context
-  milvus:
-    command: docker compose up
-    working_dir: /data/containers/airslie-main-milvus
-    availability:
-      restart: on_failure
-    readiness_probe:
-      http_get:
-        host: localhost
-        port: 9091
-        path: /healthz
-      initial_delay_seconds: 10
-      period_seconds: 10
-      timeout_seconds: 5
-      success_threshold: 1
-      failure_threshold: 3
-    shutdown:
-      command: docker compose down
-      timeout_seconds: 30
