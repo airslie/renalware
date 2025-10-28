@@ -3,7 +3,7 @@ require "net/ldap"
 module Renalware
   module Ldap
     class Connection
-      delegate :info, :debug, :error, to: ::Renalware::Ldap::Logger
+      delegate :info, :error, to: ::Renalware::Ldap::Logger
 
       attr_reader :username
 
@@ -16,11 +16,6 @@ module Renalware
         return false if @password.blank?
 
         !bind.nil?
-      end
-
-      def log(result, message: "Operation failed", negative: "not ")
-        message = message.gsub(negative, "") if result
-        debug(message)
       end
 
       def param(attribute)
@@ -64,7 +59,7 @@ module Renalware
                  username_attr = config.ldap_attribute_mappings["username"]
                  "#{username_attr}=#{@username},#{config.ldap_base}"
                end
-          debug("dn lookup: #{dn}")
+          info("dn lookup: #{dn}")
           dn
         end
       end
@@ -73,7 +68,7 @@ module Renalware
         @search_for_user ||= begin
           username_attr = config.ldap_attribute_mappings["username"]
           filter = Net::LDAP::Filter.eq(username_attr, @username)
-          debug("search for user: #{username_attr}=#{@username}")
+          info("search for user: #{username_attr}=#{@username}")
 
           entries = []
           ldap.search(filter: filter) do |found_entry|
@@ -81,7 +76,7 @@ module Renalware
           end
 
           check_operation_result!(ldap)
-          debug("search yielded #{entries.size} matches")
+          info("search yielded #{entries.size} matches")
 
           entries.first
         end
@@ -132,7 +127,7 @@ module Renalware
         result = ldap_connection.get_operation_result
         return if result.code.zero?
 
-        message = "LDAP operation failed: #{result.code} - #{result.message}"
+        message = "operation failed: #{result.code} - #{result.message}"
         error(message)
         raise Error, message
       end

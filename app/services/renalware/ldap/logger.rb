@@ -2,10 +2,6 @@ module Renalware
   module Ldap
     class Logger
       class << self
-        def debug(message)
-          Rails.logger.debug(add_prefix(message)) if log?
-        end
-
         def info(message)
           Rails.logger.info(add_prefix(message)) if log?
         end
