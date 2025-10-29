@@ -115,11 +115,11 @@ module Renalware
           end
 
           it "returns the requested attribute" do
-            expect(connection.param("mail")).to eq(["testuser@example.com"])
+            expect(connection.param("mail")).to eq("testuser@example.com")
           end
 
           it "returns the givenName attribute" do
-            expect(connection.param("givenName")).to eq(["Test"])
+            expect(connection.param("givenName")).to eq("Test")
           end
         end
 
