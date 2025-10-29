@@ -65,8 +65,8 @@ module Renalware
     # if true, LDAP queries will be logged (may expose sensitive info, use only for debugging)
     config_accessor(:ldap_logger) { ENV.fetch("LDAP_LOGGER", "false") == "true" }
     config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
-    config_accessor(:ldap_clinical_group) { ENV.fetch("LDAP_CLINICAL_GROUP", "cn=renalware,ou=groups,dc=renalware,dc=app") }
-    config_accessor(:ldap_readonly_group) { ENV.fetch("LDAP_READONLY_GROUP", "cn=renalware-readonly,ou=groups,dc=renalware,dc=app") }
+    config_accessor(:ldap_clinical_group) { ENV.fetch("LDAP_CLINICAL_GROUP", "cn=renalware (clinical),ou=groups,dc=renalware,dc=app") }
+    config_accessor(:ldap_readonly_group) { ENV.fetch("LDAP_READONLY_GROUP", "cn=renalware (readonly),ou=groups,dc=renalware,dc=app") }
     # LDAP connection settings
     config_accessor(:ldap_host) { ENV.fetch("LDAP_HOST", "localhost") }
     config_accessor(:ldap_port) { ENV.fetch("LDAP_PORT", 389).to_i }

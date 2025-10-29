@@ -22,17 +22,20 @@ module Renalware
         entry = search_for_user
         return unless entry
 
-        value = entry[attribute]
+        # entry[attribute] may return an array so take the first element
+        value = Array(entry[attribute]).first
         value.presence
       end
 
       # group_dn: Full DN of the group (e.g., "cn=clinical,ou=groups,dc=renalware,dc=app")
+      #           Note we escape this because names like 'Group1 (Clinicians)' are not valid DN
+      #           syntax ie parentheses etc need to be escaped.
       # group_attribute: Attribute that contains group members (default: "member")
       def in_group?(group_dn, group_attribute = "member")
         in_group = false
 
         admin_ldap.search(
-          base: group_dn,
+          base: Net::LDAP::Filter.escape(group_dn),
           scope: Net::LDAP::SearchScope_BaseObject
         ) do |entry|
           in_group = true if entry[group_attribute].include?(user_dn)
@@ -68,7 +71,7 @@ module Renalware
       def search_for_user
         @search_for_user ||= begin
           username_attr = config.ldap_attribute_mappings["username"]
-          filter = Net::LDAP::Filter.eq(username_attr, @username)
+          filter = Net::LDAP::Filter.eq(username_attr, Net::LDAP::Filter.escape(@username))
           info("search for user: #{username_attr}=#{@username}")
 
           entries = []
