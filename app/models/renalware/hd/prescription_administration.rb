@@ -51,11 +51,11 @@ module Renalware
       def authorised?
         return true unless administered?
 
-        administrator_authorised? && witness_authorised?
+        signed_off_at.present?
       end
 
       def witnessed?
-        administered? && witness_authorised?
+        administered? && authorised?
       end
 
       # stat means give one time only
@@ -101,6 +101,7 @@ module Renalware
       def validate_witness?
         return false if not_administered?
         return false if skip_witness_validation
+        return false unless Renalware.config.hd_session_prescriptions_require_signoff
 
         true
       end
@@ -120,32 +121,50 @@ module Renalware
         return if administered_by.blank?
 
         self.administrator_authorised = false
-        if administered_by.valid_password?(administered_by_password)
-          self.administrator_authorised = true
-        else
-          errors.add(:administered_by_password, "Invalid password")
+        handle_ldap_error_for(:administered_by_password) do
+          if administered_by.valid_password?(administered_by_password)
+            self.administrator_authorised = true
+            set_signed_off_at_if_fully_authorised
+          else
+            errors.add(:administered_by_password, "Invalid password")
+          end
         end
-      rescue Ldap::Error => e
-        Rails.logger.error "LDAP error during administrator password check: #{e.message}"
-        self.administrator_authorised = false
-        errors.add(:administered_by_password,
-                   I18n.t("renalware.system.errors.ldap.service_unavailable"))
       end
 
       def check_witnessed_by_password
         return if witnessed_by.blank?
 
-        self.witness_authorised = false
-        if witnessed_by.valid_password?(witnessed_by_password)
-          self.witness_authorised = true
-        else
-          errors.add(:witnessed_by_password, "Invalid password")
+        handle_ldap_error_for(:witnessed_by_password) do
+          self.witness_authorised = false
+          if witnessed_by.valid_password?(witnessed_by_password)
+            self.witness_authorised = true
+            set_signed_off_at_if_fully_authorised
+          else
+            errors.add(:witnessed_by_password, "Invalid password")
+          end
         end
+      end
+
+      def set_signed_off_at_if_fully_authorised
+        return unless administrator_authorised?
+        return if skip_witness_validation
+
+        if witness_required_by_configuration?
+          self.signed_off_at = Time.current if witness_authorised?
+        else
+          self.signed_off_at = Time.current
+        end
+      end
+
+      def witness_required_by_configuration?
+        Renalware.config.hd_session_prescriptions_require_signoff
+      end
+
+      def handle_ldap_error_for(error_field)
+        yield
       rescue Ldap::Error => e
-        Rails.logger.error "LDAP error during witness password check: #{e.message}"
-        self.witness_authorised = false
-        errors.add(:witnessed_by_password,
-                   I18n.t("renalware.system.errors.ldap.service_unavailable"))
+        Rails.logger.error "LDAP error during password check: #{e.message}"
+        errors.add(error_field, I18n.t("renalware.system.errors.ldap.service_unavailable"))
       end
     end
   end

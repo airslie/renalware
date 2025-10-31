@@ -7861,7 +7861,8 @@ CREATE TABLE renalware.hd_prescription_administrations (
     reason_id bigint,
     deleted_at timestamp without time zone,
     patient_id bigint,
-    recorded_on date
+    recorded_on date,
+    signed_off_at timestamp(6) without time zone
 );
 
 
@@ -32062,6 +32063,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20251117115422'),
 ('20251111183914'),
 ('20251103141332'),
+('20251030103059'),
 ('20251010132653'),
 ('20250928122632'),
 ('20250928102047'),

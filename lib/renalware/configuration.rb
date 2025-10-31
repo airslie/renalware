@@ -315,7 +315,11 @@ module Renalware
         ENV.fetch("HD_ACUITY_ASSESSMENT_EDIT_WINDOW", "PT12H")
       )
     end
-    config_accessor(:hd_session_prescriptions_require_signoff) { true }
+    config_accessor(:hd_session_prescriptions_require_signoff) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("HD_SESSION_PRESCRIPTIONS_REQUIRE_SIGNOFF", "true")
+      )
+    }
     config_accessor(:hd_session_require_patient_group_directions) {
       ActiveModel::Type::Boolean.new.cast(
         ENV.fetch("HD_SESSION_REQUIRE_PATIENT_GROUP_DIRECTIONS", "false")

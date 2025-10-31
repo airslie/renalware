@@ -3014,6 +3014,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_124954) do
     t.datetime "deleted_at", precision: nil
     t.bigint "patient_id"
     t.date "recorded_on"
+    t.datetime "signed_off_at"
     t.index ["administered_by_id"], name: "index_hd_prescription_administrations_on_administered_by_id"
     t.index ["created_by_id"], name: "index_hd_prescription_administrations_on_created_by_id"
     t.index ["deleted_at"], name: "index_hd_prescription_administrations_on_deleted_at"
