@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_132653) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -523,6 +523,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_132653) do
     "V04",
     "W01",
     "W02",
+    "Z01",
+    "Z02",
     "Z73",
     "Z74",
     "Z75",
@@ -1255,6 +1257,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_132653) do
     "V04",
     "W01",
     "W02",
+    "Z01",
+    "Z02",
     "Z73",
     "Z74",
     "Z75",

@@ -724,6 +724,8 @@ CREATE TYPE renalware.hl7_event_type AS ENUM (
     'V04',
     'W01',
     'W02',
+    'Z01',
+    'Z02',
     'Z73',
     'Z74',
     'Z75',
@@ -31608,6 +31610,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251103141332'),
 ('20251010132653'),
 ('20250928122632'),
 ('20250928102047'),
