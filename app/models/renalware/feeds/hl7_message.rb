@@ -28,6 +28,8 @@ module Renalware
         "SIU^S14" => :schedule_new_appointment,
         "SIU^S15" => :cancel_appointment,
         "SIU^S26" => :schedule_new_appointment,
+        "SIU^Z01" => :schedule_new_appointment,
+        "SIU^Z02" => :schedule_new_appointment,
         "ORM^O01" => :add_patient
       }.freeze
 
