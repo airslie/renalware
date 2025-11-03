@@ -1,9 +1,8 @@
-- if Renalware.config.enable_allergies
-  .list.allergies
-    b.subtitle Allergies:
-    - if allergies.any?
-      ul
-        - allergies.each do |allergy|
-          li.allergy= allergy.description
-    - else
-      p= allergies.allergy_status&.text
+.list.allergies
+  b.subtitle Allergies:
+  - if allergies.any?
+    ul
+      - allergies.each do |allergy|
+        li.allergy= allergy.description
+  - else
+    p= allergies.allergy_status&.text

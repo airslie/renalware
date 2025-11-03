@@ -16,6 +16,11 @@ module Renalware
         let(:clinical) { false }
         let(:sections) { [] }
 
+        before do
+          # by default expect allergies part to be included on the letter
+          allow(Renalware.config).to receive_messages(enable_allergies: true)
+        end
+
         context "with clinical letter event" do
           let(:clinical) { true }
 
@@ -41,7 +46,7 @@ module Renalware
         describe "#to_h" do
           subject(:filter) { instance.filter }
 
-          let(:parts) { [Part::RecentPathologyResults, Part::Problems] }
+          let(:parts) { [Part::RecentPathologyResults, Part::Problems, Part::Allergies] }
           let(:instance) do
             described_class.new(
               parts:,
@@ -58,7 +63,20 @@ module Renalware
           context "when include_pathology_in_letter_body is false" do
             let(:include_pathology_in_letter_body) { false }
 
-            it { is_expected.to eq([Part::Problems]) }
+            it { is_expected.to eq([Part::Problems, Part::Allergies]) }
+          end
+
+          context "when allergies parts is configured to be excluded from the letter" do
+            # This spec tests the identifier on each part, rather then the class, for interest
+            subject(:filter) { instance.filter.map(&:identifier) }
+
+            let(:include_pathology_in_letter_body) { true }
+
+            before do
+              allow(Renalware.config).to receive_messages(enable_allergies: false)
+            end
+
+            it { is_expected.to eq %i(recent_pathology_results problems) }
           end
         end
       end

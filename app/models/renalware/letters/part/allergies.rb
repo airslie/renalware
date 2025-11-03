@@ -8,15 +8,8 @@ module Renalware
       delegate :allergy_status, to: :clinical_patient
       delegate :allergies, to: :clinical_patient
 
-      def to_partial_path
-        return nil unless Renalware.config.enable_allergies
-
-        "renalware/letters/parts/allergies"
-      end
-
-      def clinical_patient
-        ::Renalware::Clinical.cast_patient(patient)
-      end
+      def to_partial_path   = "renalware/letters/parts/allergies"
+      def clinical_patient  = ::Renalware::Clinical.cast_patient(patient)
     end
   end
 end

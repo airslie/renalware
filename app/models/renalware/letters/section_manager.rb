@@ -17,12 +17,10 @@ module Renalware
           parts:,
           include_pathology_in_letter_body: letterhead.include_pathology_in_letter_body?
         )
-        filtered_classes.filter.map do |klass|
-          klass.new(letter: letter)
-        end
+        filtered_classes.filter.map { |klass| klass.new(letter: letter) }
       end
 
-      # Given a hash of letter section classes (i.e. the class names for each Part that should be
+      # Given an array of section classes (i.e. the class names for each Part that should be
       # included in the letter, where each Part is responsible for rendering a section of the
       # letter) and other options, this class filters out certain sections based on conditions,
       # for example if a site does not want pathology, the recent_pathology_results key is
@@ -31,7 +29,9 @@ module Renalware
         pattr_initialize [:parts!, :include_pathology_in_letter_body!]
 
         def filter
-          remove_recent_observations_section_if_no_pathology_required_in_body(parts)
+          remove_recent_observations_section_if_no_pathology_required_in_body
+          remove_allergies_section_if_allergies_not_enabled
+          parts
         end
 
         private
@@ -40,13 +40,16 @@ module Renalware
         # #include_pathology_in_letter_body flag on the letterhead, which is site-specific.
         # TODO: It might be better to link the letterhead to the Hospitals::Site and
         # put the site-specific configuration in say a jsonb field on the Site.
-        def remove_recent_observations_section_if_no_pathology_required_in_body(part_classes)
+        def remove_recent_observations_section_if_no_pathology_required_in_body
           unless include_pathology_in_letter_body
-            part_classes = part_classes.reject { |klass|
-              klass.identifier == :recent_pathology_results
-            }
+            parts.reject! { it&.identifier == :recent_pathology_results }
           end
-          part_classes
+        end
+
+        def remove_allergies_section_if_allergies_not_enabled
+          unless Renalware.config.enable_allergies
+            parts.reject! { it&.identifier == :allergies }
+          end
         end
       end
     end
