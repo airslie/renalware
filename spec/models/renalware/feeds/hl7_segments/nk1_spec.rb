@@ -7,13 +7,19 @@ module Renalware::Feeds::HL7Segments
     end
 
     describe "#to_fs" do
-      it do
-        expect(nk1.to_fs).to eq(
-          "SPO SPOUSE\nMR JOHN DOE CBE\nphone / business-phone\naddress1, address2"
-        )
+      context 'when there the address contains "' do
+        let(:raw_message) do
+          'NK1|1|DOE^JOHN^A^CBE^""^""^^^|SPO^SPOUSE|address1^""|phone|""||Y|'
+        end
+
+        it "removes them" do
+          expect(nk1.to_fs).to eq(
+            "SPO SPOUSE\nJOHN DOE CBE\nphone\naddress1"
+          )
+        end
       end
 
-      context "with missing fields" do
+      describe "with missing fields" do
         let(:raw_message) { "NK1|1|DOE^JOHN^A^^^^^^|||||||" }
 
         it do
@@ -21,7 +27,15 @@ module Renalware::Feeds::HL7Segments
         end
       end
 
-      context "with no fields" do
+      describe 'with "" in values fields' do
+        let(:raw_message) { 'NK1|1|DOE^JOHN^A^""^""^""^""^""^|||||||' }
+
+        it do
+          expect(nk1.to_fs).to eq("JOHN DOE")
+        end
+      end
+
+      describe "with no fields" do
         let(:raw_message) { "NK1|1|||||||||||" }
 
         it do
