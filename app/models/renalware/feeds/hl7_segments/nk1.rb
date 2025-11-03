@@ -26,14 +26,16 @@ module Renalware
             name_parts[1], # given name
             name_parts[0], # family name
             name_parts[3]  # suffix
-          ].compact_blank.join(" ")
+          ].compact_blank.reject { it == '""' }.join(" ")
         end
 
-        def formatted_relationship = safe_split(:relationship).join(" ")
-        def formatted_phone = safe_split(:phone_number)[0]
-        def formatted_business_phone = safe_split(:business_phone_number)[0]
-        def formatted_address = safe_split(:address).compact_blank.join(", ")
+        def formatted_relationship = format_field(:relationship)
+        def formatted_phone = format_field(:phone_number)
+        def formatted_business_phone = format_field(:business_phone_number)
+        def formatted_address = format_field(:address)
+
         def safe_split(field) = (send(field) || "").split("^")
+        def format_field(field) = safe_split(field).reject { it == '""' }.join(" ")
       end
     end
   end
