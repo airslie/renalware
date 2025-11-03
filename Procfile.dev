@@ -26,7 +26,7 @@ js: yarn build --watch
 # Note too that the build:css script in the root package json delegates to the
 # build:css script in demo/package.json to mimic behaviour in site rails apps.
 #
-css: bin/watcher "yarn build:css"
+css: yarn build:css --watch
 
 # Docusaurus
 # docs: cd documentation && yarn run start -p 3001

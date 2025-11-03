@@ -14,6 +14,7 @@ module Renalware
                :observations_after,
                :dialysis,
                :complications,
+               :hdf,
                to: :document, allow_nil: true
       delegate :access_type,
                :access_type_abbreviation, # a concatenation of rr02 and rr41

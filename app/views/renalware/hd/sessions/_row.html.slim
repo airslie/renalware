@@ -1,7 +1,18 @@
 tbody.hd-session-row(class=[session.state, stripe_class])
   tr
     td.toggleable--toggler-container.noprint(rowspan=2)= row_toggler
-    td.noprint(rowspan=2)= session.edit_or_view_url
+    td.actions.noprint(rowspan=2)
+        - if policy(session).copy_to_clipboard?
+          = link_to("#",
+                    title: "Copy session details to clipboard",
+                    data: { controller: "clipboard-async",
+                            action: "clipboard-async#copy",
+                            "clipboard-async-url_value": patient_hd_session_clipboard_url(session.patient, session),
+                            "clipboard-async-status_target": "status" ,
+                            title: "Copy session details" }) do
+            = inline_icon(:copy, size: :sm, class: "inline")
+
+        = session.edit_or_view_url
     td.col-width-date(rowspan=2)= session.performed_on
     td
       - if session.hospital_unit_unit_type == "home"

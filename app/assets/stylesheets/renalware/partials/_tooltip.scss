@@ -8,3 +8,15 @@
   border-radius: 3px;
   padding: 0.2rem 0.4rem;
 }
+
+.floating-tooltip {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 10000;
+  pointer-events: none;
+  white-space: nowrap;
+}

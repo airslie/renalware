@@ -50,6 +50,7 @@ import LettersBatchCompileController from "./letters/batch_compile_controller"
 import ClipboardController from "./clipboard_controller"
 import TableHighlightRowController from "./table_highlight_row_controller"
 import TourController from "./help/tour_controller"
+import ClipboardAsyncController from "./clipboard_async_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
@@ -116,3 +117,4 @@ application.register("letters-batch-compile", LettersBatchCompileController)
 application.register("clipboard", ClipboardController)
 application.register("table-row-highlight", TableHighlightRowController)
 application.register("tour", TourController)
+application.register("clipboard-async", ClipboardAsyncController)

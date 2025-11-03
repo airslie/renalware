@@ -1,0 +1,43 @@
+NHS: <%= patient.nhs_number %>
+MRN: <%= patient.local_patient_id %>
+Started: <%= I18n.l(session.started_at) %>
+Duration: <%= session.duration %>
+Hospital Unit: <%= session.hospital_unit %>
+Put On By: <%= session.signed_on_by %>
+Taken Off By: <%= session.signed_off_by %>
+
+Pre-weight: <%= session.observations_before.weight %> kg
+Post-weight: <%= session.observations_after.weight %> kg
+Pre-pulse: <%= session.observations_before.pulse %> bpm
+Post-pulse: <%= session.observations_after.pulse %> bpm
+Pre-blood-pressure: <%= session.observations_before.blood_pressure %> mmHg
+Post-blood-pressure: <%= session.observations_after.blood_pressure %> mmHg
+Pre-temperature: <%= session.observations_before.temperature %> °C
+Post-temperature: <%= session.observations_after.temperature %> °C
+Pre-respiratory-rate: <%= session.observations_before.respiratory_rate %>
+Post-respiratory-rate: <%= session.observations_after.respiratory_rate %>
+Pre-bm-stix: <%= session.observations_before.bm_stix %>
+Post-bm-stix: <%= session.observations_after.bm_stix %>
+
+Access Type: <%= session.access_type %>
+Access side: <%= session.access_side %>
+Fistula Plus Line: <%= session.info.fistula_plus_line %>
+Single Needle: <%= session.info.single_needle %>
+Lines reversed: <%= session.info.lines_reversed %>
+Machine No: <%= session.info.machine_no %>
+Is access first use: <%= session.info.is_access_first_use %>
+Cannulation type: <%= session.info.cannulation_type %>
+Needle size: <%= session.info.needle_size %>
+Arterial Pressure: <%= session.dialysis.arterial_pressure %>
+Venous pressure: <%= session.dialysis.venous_pressure %>
+Fluid Removed: <%= session.dialysis.fluid_removed %>
+Blood Flow Rate: <%= session.dialysis.flow_rate %>
+Dialysate Flow Rate: <%= session.dialysis.flow_rate %>
+Machine URR6Machine KTV: <%= session.dialysis.machine_ktv %>
+Litres Processed: <%= session.dialysis.litres_processed %>
+Washback quality: <%= session.dialysis.washback_quality %>
+
+Subs fluid pct: <%= session.hdf.subs_fluid_pct %>
+Subs goal: <%= session.hdf.subs_goal %>
+Subs rate: <%= session.hdf.subs_rate %>
+Subs volume: <%= session.hdf.subs_volume %>
