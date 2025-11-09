@@ -48,7 +48,6 @@ module Renalware
 
           def find_admission_with_matching_visit_number
             Admission
-              .currently_admitted
               .where(patient: patient)
               .where(visit_number: visit_number)
               .order(created_at: :desc)
