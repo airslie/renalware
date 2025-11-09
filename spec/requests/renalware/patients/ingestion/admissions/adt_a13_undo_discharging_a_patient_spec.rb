@@ -136,4 +136,29 @@ describe "HL7 ADT^A13 message handling: 'Undo Discharging a Patient'" do
       verify_admission(Renalware::Admissions::Admission.last)
     end
   end
+
+  context "when patient and a matching discharged admission is found" do
+    it "updates the admission" do
+      patient = create_patient
+      unit = create(:hospital_unit)
+      discharged_admission = create(
+        :admissions_admission,
+        patient: patient,
+        visit_number: visit_number,
+        reason_for_admission: "via HL7",
+        by: system_user,
+        hospital_ward: create(:hospital_ward, hospital_unit: unit),
+        discharged_on: Time.zone.today
+      )
+      msg = hl7_message_from_raw_string(raw_hl7)
+
+      expect {
+        Renalware::Admissions::Ingestion::Commands::AdmitPatient.call(msg)
+      }.to not_change(Renalware::Admissions::Admission, :count)
+        .and not_change(Renalware::Patient, :count)
+
+      expect(discharged_admission.reload).to have_attributes(discharged_on: nil)
+      verify_admission(Renalware::Admissions::Admission.last)
+    end
+  end
 end
