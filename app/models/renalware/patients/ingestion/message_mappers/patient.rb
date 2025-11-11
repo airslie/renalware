@@ -7,7 +7,7 @@ module Renalware
         # the patient.
         class Patient < MessageMapper
           delegate :patient_identification, :next_of_kins, to: :message
-          delegate :address, :religion, :primary_language, to: :patient_identification
+          delegate :address, :religion, :primary_language, :nationality, to: :patient_identification
 
           def initialize(message, patient = nil)
             @patient = patient || ::Renalware::Patient.new
@@ -44,6 +44,7 @@ module Renalware
               telephone1: patient_identification.telephone[0],
               telephone2: patient_identification.telephone[1],
               next_of_kin: next_of_kins,
+              country_of_birth: find_nationality,
               **patient_identification.identifiers
             }.compact_blank
 
@@ -75,6 +76,10 @@ module Renalware
 
           def find_ethnicity
             Patients::Ethnicity.find_by(rr18_code: patient_identification.ethnic_group)
+          end
+
+          def find_nationality
+            Renalware::System::Country.find_by(alpha3: nationality.upcase) if nationality.present?
           end
 
           # Support finding religion by code or name

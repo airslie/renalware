@@ -11,6 +11,7 @@ module Renalware
         let(:primary_care_physician) { build_stubbed(:primary_care_physician) }
         let(:practice) { build_stubbed(:practice) }
         let(:ethnicity) { create(:ethnicity, :black_caribbean) }
+        let(:british_nationality) { create(:united_kingdom) }
 
         before do
           allow(Renalware.config).to receive_messages(
@@ -38,12 +39,16 @@ module Renalware
             sex: "M",
             religion: "B1", # code for Buddhist
             primary_language: "en", # code for English
-            ethnicity_code: "M" # code for Black Caribbean
+            ethnicity_code: "M", # code for Black Caribbean
+            nationality: "GBR"
           )
         end
 
         it "maps a message to a patient" do
+          british_nationality
           message = hl7_message_from_file("ADT_A31", hl7_data)
+          p message
+          p message.patient_identification.nationality
           mapped_patient = described_class.new(message)
 
           stub_primary_care_physician_find
@@ -68,6 +73,7 @@ module Renalware
             religion: religion,
             language: language,
             ethnicity: ethnicity,
+            country_of_birth: british_nationality,
             next_of_kin: message.next_of_kins
           )
           expect(actual.sex.code).to eq(message.patient_identification.sex)
