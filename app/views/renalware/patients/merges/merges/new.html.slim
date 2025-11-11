@@ -1,0 +1,14 @@
+= within_new_admin_layout(title: "Create Patient Merge") do
+  = form_with model: merge, url: renalware.patients_merges_path, local: true do |f|
+    = render "renalware/shared/errors", model: f.object
+    div
+      = f.label :major_patient_id, "Major patient ID"
+      = f.text_field :major_patient_id, html: { autofocus: true }
+    div
+      = f.label :minor_patient_id, "Minor patient ID"
+      = f.text_field :minor_patient_id, html: { autofocus: true }
+    div
+      = f.hidden_field :message_type, value: "manual"
+      = f.hidden_field :source, value: "manual"
+
+    = f.submit "Create Merge", class: "button"

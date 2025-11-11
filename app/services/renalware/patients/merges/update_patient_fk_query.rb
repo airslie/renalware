@@ -6,7 +6,7 @@ module Renalware
     # E.g.
     #  update renalware.events set patient_id = <major_patient_id>, updated_at = now()
     #  where patient_id = <minor_patient_id>;
-    # The use raw SQL because the patient merge process initially using SQL to find all
+    # Use raw SQL because the patient merge process initially using SQL to find all
     # tables with a FK to renalware.patients.id and then iterates over them.
     # As its using raw SQL we need to be very careful to validate the arguments.
     # See MergeableTablesQuery

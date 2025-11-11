@@ -4627,7 +4627,8 @@ CREATE TABLE renalware.clinical_allergies (
     recorded_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone,
     created_by_id integer NOT NULL,
-    updated_by_id integer NOT NULL
+    updated_by_id integer NOT NULL,
+    updated_at timestamp(6) without time zone
 );
 
 
@@ -11318,7 +11319,9 @@ CREATE TABLE renalware.pathology_requests_patient_rules (
     patient_id integer,
     start_date date,
     end_date date,
-    lab_id integer
+    lab_id integer,
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -32043,9 +32046,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware, renalware_demo, public, heroku_ext;
+SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251111183914'),
 ('20251103141332'),
 ('20251010132653'),
 ('20250928122632'),

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_11_183914) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -2013,6 +2013,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.datetime "deleted_at", precision: nil
     t.integer "created_by_id", null: false
     t.integer "updated_by_id", null: false
+    t.datetime "updated_at"
     t.index ["created_by_id"], name: "index_clinical_allergies_on_created_by_id"
     t.index ["deleted_at"], name: "index_clinical_allergies_on_deleted_at"
     t.index ["patient_id"], name: "index_clinical_allergies_on_patient_id"
@@ -4232,6 +4233,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.date "start_date"
     t.date "end_date"
     t.integer "lab_id"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["lab_id"], name: "index_pathology_requests_patient_rules_on_lab_id"
     t.index ["patient_id"], name: "index_pathology_requests_patient_rules_on_patient_id"
   end

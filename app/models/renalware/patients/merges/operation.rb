@@ -17,5 +17,7 @@ module Renalware::Patients::Merges
               :column_name,
               presence: true
     validates :column_name, uniqueness: { scope: [:merge_id, :schema_name, :table_name] }
+
+    def self.policy_class = Renalware::BasePolicy
   end
 end

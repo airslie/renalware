@@ -25,6 +25,8 @@ module Renalware::Patients::Merges
     validates :major_patient, :minor_patient, :message_type, :status, presence: true
     validate :major_and_minor_patients_are_different
 
+    def self.policy_class = Renalware::BasePolicy
+
     def failed!(error)
       update!(
         status: :failed,

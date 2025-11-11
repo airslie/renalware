@@ -12,6 +12,7 @@ super_admin:
   - Renalware::Feeds::OutgoingDocument
   - Renalware::Deaths::Location
   - Renalware::Drugs::PatientGroupDirection
+  - Renalware::Patients::Merges::Merge
 admin:
   - Renalware::User
   - Renalware::BagType
