@@ -1,17 +1,7 @@
 module Renalware
   describe Patients::Merges::UpdatePatientFkQuery do
     subject(:query) do
-      operation = Renalware::Patients::Merges::Operation.new(
-        :patients_merges_operation,
-        column_reference: ColumnReference.new(schema, table, column),
-        major_patient_id: major_patient_id,
-        minor_patient_id: minor_patient_id
-      )
       described_class.new(operation: operation)
-      #   column_reference: ColumnReference.new(schema, table, column),
-      #   major_patient_id: major_patient_id,
-      #   minor_patient_id: minor_patient_id
-      # )
     end
 
     let(:schema) { "renalware" }
@@ -22,6 +12,20 @@ module Renalware
     let(:other_patient) { create(:patient) }
     let(:major_patient_id) { major_patient&.id }
     let(:minor_patient_id) { minor_patient&.id }
+    let(:merge) {
+      create(
+        :patient_merge,
+        major_patient: major_patient,
+        minor_patient: minor_patient
+      )
+    }
+    let(:operation) {
+      create(
+        :patient_merge_operation,
+        merge: merge,
+        column_reference: ColumnReference.new(schema, table, column)
+      )
+    }
 
     describe "#update" do
       context "when there are records to update" do
@@ -59,7 +63,9 @@ module Renalware
         let(:major_patient) { nil }
 
         it "raises an ArgumentError" do
-          expect { query.call }.to raise_error(ArgumentError, /major_patient_id is required/)
+          expect {
+            query.call
+          }.to raise_error(ActiveRecord::RecordInvalid, /Major patient can't be blank/)
         end
       end
 
@@ -67,7 +73,9 @@ module Renalware
         let(:minor_patient) { nil }
 
         it "raises an ArgumentError" do
-          expect { query.call }.to raise_error(ArgumentError, /minor_patient_id is required/)
+          expect {
+            query.call
+          }.to raise_error(ActiveRecord::RecordInvalid, /Minor patient can't be blank/)
         end
       end
 
@@ -75,7 +83,9 @@ module Renalware
         let(:schema) { nil }
 
         it "raises an ArgumentError for missing schema" do
-          expect { query.call }.to raise_error(ArgumentError, /schema is required/)
+          expect {
+            query.call
+          }.to raise_error(ActiveRecord::RecordInvalid, /Schema name can't be blank/)
         end
       end
 
@@ -83,7 +93,9 @@ module Renalware
         let(:table) { nil }
 
         it "raises an ArgumentError for missing table" do
-          expect { query.call }.to raise_error(ArgumentError, /table is required/)
+          expect {
+            query.call
+          }.to raise_error(ActiveRecord::RecordInvalid, /Table name can't be blank/)
         end
       end
 
@@ -91,7 +103,9 @@ module Renalware
         let(:column) { nil }
 
         it "raises an ArgumentError for missing column" do
-          expect { query.call }.to raise_error(ArgumentError, /column is required/)
+          expect {
+            query.call
+          }.to raise_error(ActiveRecord::RecordInvalid, /Column name can't be blank/)
         end
       end
 
@@ -116,34 +130,6 @@ module Renalware
 
         it "raises an ArgumentError" do
           expect { query.call }.to raise_error(ArgumentError, /invalid identifier/)
-        end
-      end
-
-      context "when minor_patient_id is the same as major_patient_id" do
-        let(:minor_patient_id) { major_patient_id }
-
-        it "raises an ArgumentError" do
-          expect(major_patient_id).to eq(minor_patient_id) # sanity check
-          expect { query.call }.to raise_error(
-            ArgumentError,
-            /minor_patient_id must be different from major_patient_id/
-          )
-        end
-      end
-
-      context "when major_patient_id is not an integer" do
-        let(:major_patient_id) { "not-an-integer" }
-
-        it "raises an ArgumentError" do
-          expect { query.call }.to raise_error(ArgumentError, /invalid value for Integer/)
-        end
-      end
-
-      context "when minor_patient_id is not an integer" do
-        let(:minor_patient_id) { "not-an-integer" }
-
-        it "raises an ArgumentError" do
-          expect { query.call }.to raise_error(ArgumentError, /invalid value for Integer/)
         end
       end
     end

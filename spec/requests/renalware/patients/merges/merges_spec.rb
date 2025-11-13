@@ -14,7 +14,7 @@ describe "Viewing patients merges" do
       get patients_merges_path
 
       expect(response).to be_successful
-      expect(response.body).to include("Patient merges")
+      expect(response.body).to include("Patient Merges")
       expect(response.body).to include("Major")
       expect(response.body).to include("Minor")
     end

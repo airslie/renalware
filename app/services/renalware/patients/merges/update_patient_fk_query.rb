@@ -12,6 +12,8 @@ module Renalware
     # See MergeableTablesQuery
     #
     class UpdatePatientFkQuery
+      include Callable
+
       IDENT_RE = /\A[a-zA-Z_][a-zA-Z0-9_$]*\z/
 
       pattr_initialize [:operation!]
@@ -54,25 +56,24 @@ module Renalware
 
       # Some rather over the top argument validation but this is a
       # potentially dangerous operation so better safe than sorry.
-      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       def validate_arguments
         raise ArgumentError, "major_patient_id is required" if major_patient_id.blank?
         raise ArgumentError, "minor_patient_id is required" if minor_patient_id.blank?
         raise ArgumentError, "schema is required" if schema.blank?
         raise ArgumentError, "table is required" if table.blank?
         raise ArgumentError, "column is required" if column.blank?
-        if minor_patient_id == major_patient_id
-          raise ArgumentError, "minor_patient_id must be different from major_patient_id"
-        end
 
         Integer(major_patient_id)
         Integer(minor_patient_id)
+        raise ArgumentError, "minor_patient_id cannot be 0" if minor_patient_id.zero?
+        raise ArgumentError, "major_patient_id cannot be 0" if major_patient_id.zero?
 
         [schema, table, column].each do |ident|
           raise ArgumentError, "invalid identifier: #{ident.inspect}" unless ident.match?(IDENT_RE)
         end
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
       # We use Rails current time rather than CURRENT_TIMESTAMP to make testing easier
       # eg using freeze_time (which CURRENT_TIMESTAMP does not respect)

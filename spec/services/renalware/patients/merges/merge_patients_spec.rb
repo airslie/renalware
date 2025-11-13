@@ -93,10 +93,11 @@ module Renalware
         # rubocop:enable RSpec/ChangeByZero
 
         context "when the merge fails" do
-          # before do
-          #   # do something to make the merge fail??
-          #   # allow(merge).to receive(:persisted?).and_return(false)
-          # end
+          before do
+            # do something to make the merge fail??
+            # what can we do? What makes
+            allow(UpdatePatientFkQuery).to receive(:call).and_raise("Merge failed")
+          end
 
           it "marks the merge as failed with an error message" do
             expect {
