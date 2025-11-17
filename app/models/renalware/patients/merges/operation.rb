@@ -1,6 +1,6 @@
 module Renalware::Patients::Merges
   class Operation < ApplicationRecord
-    belongs_to :merge
+    belongs_to :merge, counter_cache: :operations_count
     has_many :logs, dependent: :destroy
 
     composed_of :column_reference,

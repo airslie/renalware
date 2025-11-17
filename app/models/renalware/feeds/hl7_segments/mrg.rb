@@ -8,9 +8,19 @@ module Renalware
       # E.g.
       #   MRG|123456^^^ICHT
       class MRG < SimpleDelegator
-        def mrn
-          prior_hospital_identifiers
+        def prior_identifiers
+          @prior_identifiers ||= begin
+            hash = {}
+            # hash[:nhs_number] = nhs_number if nhs_number.present?
+            Renalware.config.patient_hospital_identifiers.each do |assigning_auth, column|
+              hosp_no = prior_hospital_identifiers[assigning_auth]
+              hash[column] = hosp_no if hosp_no.present?
+            end
+            hash.compact_blank
+          end
         end
+
+        private
 
         def prior_hospital_identifiers
           return [] unless defined?(prior_patient_identifier_list)

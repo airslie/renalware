@@ -11874,7 +11874,8 @@ CREATE TABLE renalware.patient_merge_merges (
     failure_message text,
     feed_message_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    operations_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -32049,6 +32050,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251117115422'),
 ('20251111183914'),
 ('20251103141332'),
 ('20251010132653'),

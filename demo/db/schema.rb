@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_11_183914) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_115422) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -4418,6 +4418,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_183914) do
     t.bigint "feed_message_id", comment: "The feed message that triggered this merge"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "operations_count", default: 0, null: false
     t.index ["feed_message_id"], name: "index_patient_merge_merges_on_feed_message_id"
     t.index ["major_patient_id"], name: "index_patient_merge_merges_on_major_patient_id"
     t.index ["minor_patient_id"], name: "index_patient_merge_merges_on_minor_patient_id"

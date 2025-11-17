@@ -10,14 +10,18 @@ module Renalware
           pattr_initialize :message
 
           def call
-            merge = Patients::Merges::Merge.new(
-              major_patient: major_patient,
-              minor_patient: minor_patient,
-              message_type: message.event_type,
-              source: "HL7",
-              feed_message: message.record
-            )
-            Patients::Merges::MergePatients.call(merge: merge)
+            return unless major_patient && minor_patient
+
+            Merges::Merge.transaction do
+              merge = Patients::Merges::Merge.create!(
+                major_patient: major_patient,
+                minor_patient: minor_patient,
+                message_type: message.event_type,
+                source: "HL7",
+                feed_message: nil
+              )
+              Patients::Merges::MergePatients.call(merge: merge)
+            end
           end
 
           private
@@ -30,19 +34,21 @@ module Renalware
           end
 
           def minor_patient
-            patients = Renalware::Patient.none
+            @minor_patient ||= begin
+              patients = Renalware::Patient.none
 
-            # OR together all the identifiers eg if the PID segment contained an NHS number and one
-            # hospital number: WHERE ("nhs_number= '123' OR local_patient_id = '456')
-            mrg.prior_hospital_identifiers.each do |column, hosp_no|
-              patients = patients.or(Renalware::Patient.where(column => hosp_no))
-            end
+              # OR together all the identifiers eg if the PID segment contained an NHS number and
+              # one hospital number: WHERE ("nhs_number= '123' OR local_patient_id = '456')
+              mrg.prior_identifiers.each do |column, hosp_no|
+                patients = patients.or(Renalware::Patient.where(column => hosp_no))
+              end
 
-            if patients.length > 1 # avoid a count query
-              raise ArgumentError, "More than one patient matches! #{identifiers}"
-              # Will go back in the queue
-            else
-              patients.first # may be null if no match
+              if patients.length > 1 # avoid a count query
+                raise ArgumentError, "More than one patient matches! #{identifiers}"
+                # Will go back in the queue
+              else
+                patients.first # may be null if no match
+              end
             end
           end
 
