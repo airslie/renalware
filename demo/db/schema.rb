@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_17_115422) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_124954) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -4608,6 +4608,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_115422) do
     t.string "ehr_person_identifier", comment: "For use with an EHR eg Millennium. This is a unique identifier for the patient in the EHR system, and maybe be populated during the HL7 ingestion that creates the patient. SHould not be searchable from, or displayed in, the UI."
     t.bigint "merged_into_patient_id", comment: "After an HL7 A34 or A40 merge, points to the major patient\nthat this minor patient was merged into\n"
     t.text "next_of_kin", comment: "Next of kin details from HL7 NK1 segments"
+    t.datetime "merged_at"
     t.index "lower((family_name)::text), given_name", name: "idx_patients_on_lower_family_name"
     t.index ["actual_death_location_id"], name: "index_patients_on_actual_death_location_id"
     t.index ["country_of_birth_id"], name: "index_patients_on_country_of_birth_id"
@@ -4626,6 +4627,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_115422) do
     t.index ["local_patient_id_4"], name: "index_patients_on_local_patient_id_4", unique: true
     t.index ["local_patient_id_5"], name: "index_patients_on_local_patient_id_5", unique: true
     t.index ["marital_status_id"], name: "index_patients_on_marital_status_id"
+    t.index ["merged_at"], name: "index_patients_on_merged_at", where: "(merged_at IS NULL)"
     t.index ["merged_into_patient_id"], name: "index_patients_on_merged_into_patient_id"
     t.index ["named_consultant_id"], name: "index_patients_on_named_consultant_id"
     t.index ["named_nurse_id"], name: "index_patients_on_named_nurse_id"

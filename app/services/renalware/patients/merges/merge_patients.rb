@@ -76,8 +76,13 @@ module Renalware
         end
       end
 
+      # Mark the minor patient as merged into the major patient
+      # Bypasses validations and callbacks
       def mark_minor_patient_as_merged
-        minor_patient.update_column(:merged_into_patient_id, major_patient.id)
+        minor_patient.update_columns(
+          merged_into_patient_id: major_patient.id,
+          merged_at: Time.current
+        )
       end
 
       # PubSub listeners may veto the merge in this table by setting rule.merge = false

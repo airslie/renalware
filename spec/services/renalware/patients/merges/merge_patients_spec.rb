@@ -62,7 +62,10 @@ module Renalware
                 failure_message: nil,
                 updated_at: Time.current
               )
-              expect(minor).to have_attributes(merged_into_patient_id: major.id)
+              expect(minor).to have_attributes(
+                merged_into_patient_id: major.id,
+                merged_at: Time.current
+              )
               operation = merge.operations.first
               expect(operation).to have_attributes(
                 column_reference: have_attributes(

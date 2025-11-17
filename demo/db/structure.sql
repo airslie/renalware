@@ -2940,7 +2940,8 @@ CREATE TABLE renalware.patients (
     confidentiality renalware.enum_confidentiality DEFAULT 'normal'::renalware.enum_confidentiality NOT NULL,
     ehr_person_identifier character varying,
     merged_into_patient_id bigint,
-    next_of_kin text
+    next_of_kin text,
+    merged_at timestamp(6) without time zone
 );
 
 
@@ -26066,6 +26067,13 @@ CREATE INDEX index_patients_on_marital_status_id ON renalware.patients USING btr
 
 
 --
+-- Name: index_patients_on_merged_at; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_patients_on_merged_at ON renalware.patients USING btree (merged_at) WHERE (merged_at IS NULL);
+
+
+--
 -- Name: index_patients_on_merged_into_patient_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -32050,6 +32058,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251117124954'),
 ('20251117115422'),
 ('20251111183914'),
 ('20251103141332'),
