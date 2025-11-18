@@ -57,7 +57,7 @@ module Renalware
 
             set_modality(
               patient: patient,
-              modality_description: FactoryBot.create(:hd_modality_description),
+              modality_description: create(:hd_modality_description),
               by: patient.created_by
             )
 
