@@ -12,16 +12,14 @@ module Renalware
           def call
             return unless major_patient && minor_patient
 
-            Merges::Merge.transaction do
-              merge = Patients::Merges::Merge.create!(
-                major_patient: major_patient,
-                minor_patient: minor_patient,
-                message_type: message.event_type,
-                source: "HL7",
-                feed_message: nil
-              )
-              Patients::Merges::MergePatients.call(merge: merge)
-            end
+            merge = Patients::Merges::Merge.create!(
+              major_patient: major_patient,
+              minor_patient: minor_patient,
+              message_type: message.event_type,
+              source: "HL7",
+              feed_message: nil
+            )
+            Patients::Merges::MergePatients.call(merge: merge)
           end
 
           private

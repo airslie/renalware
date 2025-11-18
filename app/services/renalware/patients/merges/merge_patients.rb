@@ -27,8 +27,7 @@ module Renalware
           end
         rescue StandardError => e
           # At this point the above transaction will have been rolled back
-          merge.failed!(e) rescue nil # rubocop:disable Style/RescueModifier
-          raise e
+          merge.failed!(e)
         end
       end
 
@@ -107,7 +106,7 @@ module Renalware
       # Update all records that reference the minor patient to point to the major patient,
       # and return the number of updated rows. Also writes a Patients::Merges::Log record for
       # each updated row
-      def merge_records(operation:) = UpdatePatientFkQuery.new(operation:).call
+      def merge_records(operation:) = UpdatePatientFkQuery.call(operation:)
       def connection                = ActiveRecord::Base.connection
     end
   end

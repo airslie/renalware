@@ -6,6 +6,9 @@ module Renalware::Patients::Ingestion
     subject(:service) { described_class }
 
     let(:system_user) { create(:user, username: Renalware::SystemUser.username) }
+    let(:fallback_rule) {
+      create(:patient_merge_rule, schema_name: "renalware", table_name: "*", merge: true)
+    }
 
     before do
       allow(Renalware.config).to receive_messages(
@@ -28,6 +31,7 @@ module Renalware::Patients::Ingestion
     describe "#call" do
       context "when to do" do
         it "to do" do
+          fallback_rule
           major_patient = create(
             :patient,
             local_patient_id: "MAJ123",
@@ -35,10 +39,9 @@ module Renalware::Patients::Ingestion
             born_on: Date.new(2001, 1, 1)
           )
 
-          _minor_patient = create(
+          minor_patient = create(
             :patient,
             local_patient_id: "MIN456",
-            nhs_number: "9999999999",
             born_on: Date.new(2002, 2, 2)
           )
 
@@ -55,9 +58,14 @@ module Renalware::Patients::Ingestion
           result = nil
           expect {
             result = described_class.call(hl7_message)
-          }.to change(Renalware::Patient, :count).by(1)
+          }.to change(Renalware::Patient, :count).by(-1)
+            .and not_change(Renalware::Patient.with_deleted, :count)
 
-          expect(result).to be_a(Renalware::Patient)
+          expect(minor_patient.reload).to be_deleted
+          expect(minor_patient).to have_attributes(
+            merged_into_patient_id: major_patient.id,
+            merged_at: be_within(2.seconds).of(Time.current)
+          )
         end
       end
     end

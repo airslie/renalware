@@ -98,7 +98,6 @@ module Renalware
         context "when the merge fails" do
           before do
             # do something to make the merge fail??
-            # what can we do? What makes
             allow(UpdatePatientFkQuery).to receive(:call).and_raise("Merge failed")
           end
 
