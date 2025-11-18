@@ -30,7 +30,7 @@
       - merges.each do |merge|
         tr
           td= merge.id
-          td= link_to "View", renalware.patients_merge_operations_path(merge)
+          td= link_to "Operations", renalware.patients_merge_operations_path(merge)
           td= merge.operations_count
           td= merge.operations.where(merged: true).count
           td= merge.operations.where(require_intervention: true).count

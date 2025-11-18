@@ -23,8 +23,8 @@ module Renalware
         private
 
         def prior_hospital_identifiers
-          return [] unless defined?(prior_patient_identifier_list)
-          return [] if prior_patient_identifier_list.blank?
+          return {} unless defined?(prior_patient_identifier_list)
+          return {} if prior_patient_identifier_list.blank?
 
           @prior_hospital_identifiers ||= prior_patient_identifier_list
             .split("~")

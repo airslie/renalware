@@ -29,7 +29,7 @@ module Renalware::Feeds::HL7Segments
         let(:raw_message) { "MRG|" }
 
         it "returns an empty array" do
-          expect(mrg.prior_identifiers).to eq([])
+          expect(mrg.prior_identifiers).to eq({})
         end
       end
     end
