@@ -1,0 +1,33 @@
+
+= within_new_admin_layout(title: "Operations for Merge ##{merge.id}")
+  table
+    thead
+      tr
+        th Merge ID
+        th Operation ID
+        th Schema Name
+        th Table Name
+        th Column Name
+        th Count of Changes
+        th Merged
+        th Require Intervention
+        th Warning
+        /th Major Patient Value
+        /th Minor Patient Value
+        th Updated At
+
+    tbody
+      - merge.operations.order(created_at: :desc).each do |operation|
+        tr
+          td= operation.merge.id
+          td= operation.id
+          td= operation.schema_name
+          td= operation.table_name
+          td= operation.column_name
+          td= operation.updated_count
+          td = operation.merged
+          td = operation.require_intervention
+          td = operation.warning
+          /td= operation.major_patient_value
+          /td= operation.minor_patient_value
+          td= l(operation.updated_at)

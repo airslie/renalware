@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_124954) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -706,6 +706,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "y2",
   ], force: :cascade
 
+  create_enum :patient_merge_message_types, [
+    "A34",
+    "A40",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_sources, [
+    "HL7",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_statuses, [
+    "in_progress",
+    "completed",
+    "failed",
+  ], force: :cascade
+
   create_enum :pd_pet_type, [
     "full",
     "fast",
@@ -1440,6 +1457,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     "y2",
   ], force: :cascade
 
+  create_enum :patient_merge_message_types, [
+    "A34",
+    "A40",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_sources, [
+    "HL7",
+    "manual",
+  ], force: :cascade
+
+  create_enum :patient_merge_statuses, [
+    "in_progress",
+    "completed",
+    "failed",
+  ], force: :cascade
+
   create_enum :pd_pet_type, [
     "full",
     "fast",
@@ -1979,6 +2013,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.datetime "deleted_at", precision: nil
     t.integer "created_by_id", null: false
     t.integer "updated_by_id", null: false
+    t.datetime "updated_at"
     t.index ["created_by_id"], name: "index_clinical_allergies_on_created_by_id"
     t.index ["deleted_at"], name: "index_clinical_allergies_on_deleted_at"
     t.index ["patient_id"], name: "index_clinical_allergies_on_patient_id"
@@ -4198,6 +4233,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.date "start_date"
     t.date "end_date"
     t.integer "lab_id"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["lab_id"], name: "index_pathology_requests_patient_rules_on_lab_id"
     t.index ["patient_id"], name: "index_pathology_requests_patient_rules_on_patient_id"
   end
@@ -4364,6 +4401,54 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["patient_id"], name: "index_patient_master_index_deprecated_on_patient_id"
   end
 
+  create_table "patient_merge_logs", comment: "Logs of individual record updates made as part of a patient merge operation. Each record indicates that a record in some table had its patient_id (or other FK column as specified in the merge_operation.column_name) updated from the minor patient to the major patient.", force: :cascade do |t|
+    t.bigint "operation_id", null: false
+    t.integer "id_of_updated_record", null: false
+    t.index ["operation_id", "id_of_updated_record"], name: "index_merge_operation_logs_on_ids"
+    t.index ["operation_id"], name: "index_patient_merge_logs_on_operation_id"
+  end
+
+  create_table "patient_merge_merges", comment: "Record and status of patient merges from external systems, such as HL7 A34 or A40 messages. See A34 or A40 HL7 online spec for an understanding of major and minor patients. Supports one merge pair at a time (a major patient and a minor patient) as per spec. If the upstream EPR requires multiple minors then they will send multiple messages. Note that we only create a row in this table if, on receipt of an A34 or A40 message, we were able to find both the major and minor patients in our system.", force: :cascade do |t|
+    t.bigint "major_patient_id", null: false, comment: "The patient that the minor patient was merged into"
+    t.bigint "minor_patient_id", null: false, comment: "The patient that was merged into the major patient"
+    t.enum "source", null: false, comment: "The source system of the merge, e.g., 'HL7'", enum_type: "patient_merge_sources"
+    t.enum "message_type", null: false, comment: "The type of merge message, e.g., 'A34' or 'A40'", enum_type: "patient_merge_message_types"
+    t.enum "status", default: "in_progress", null: false, comment: "The status of the merge, e.g., 'in_progress'", enum_type: "patient_merge_statuses"
+    t.text "failure_message", comment: "Populated when status is 'failed'"
+    t.bigint "feed_message_id", comment: "The feed message that triggered this merge"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "operations_count", default: 0, null: false
+    t.index ["feed_message_id"], name: "index_patient_merge_merges_on_feed_message_id"
+    t.index ["major_patient_id"], name: "index_patient_merge_merges_on_major_patient_id"
+    t.index ["minor_patient_id"], name: "index_patient_merge_merges_on_minor_patient_id"
+  end
+
+  create_table "patient_merge_operations", comment: "Belongs to a PatientMerge::Merge and records the result of attempting to update a particular table.column that has a foreign key to renalware.patients.id. If merged is true, updated_count records how many rows were updated to point to the surviving patient (may be 0). The warnings column may contain any warnings that were generated during the merge operation. These can be present even if merged is true. This list of operations with warnings can be used to inform the user of any potential issues they may need to check after the merge.", force: :cascade do |t|
+    t.bigint "merge_id", null: false
+    t.string "schema_name", null: false
+    t.string "table_name", null: false
+    t.string "column_name", null: false
+    t.boolean "merged", null: false
+    t.integer "updated_count", default: 0, null: false
+    t.text "warning"
+    t.boolean "require_intervention", default: false, null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["merge_id", "schema_name", "table_name", "column_name"], name: "index_patient_merge_operations_on_merge_and_schema_and_table", unique: true
+    t.index ["merge_id"], name: "index_patient_merge_operations_on_merge_id"
+  end
+
+  create_table "patient_merge_rules", comment: "Specifies actions to take for a specific schema.table when doing a patient merge (eg HL7 A34). A * in the table_name indicates all tables in the schema that have a patient_id column and are not otherwise specified. Possible values are eg to merge silently, merge but warn the user that some interaction may be required, skip this table etc. See model for details.", force: :cascade do |t|
+    t.string "schema_name", null: false
+    t.string "table_name", null: false
+    t.boolean "merge", default: true, null: false
+    t.text "warning_message", comment: "Displayed to the user if present after a merge"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["schema_name", "table_name"], name: "index_patient_merge_rules_on_schema_name_and_table_name", unique: true
+  end
+
   create_table "patient_practice_memberships", id: :serial, force: :cascade do |t|
     t.integer "practice_id", null: false
     t.integer "primary_care_physician_id", null: false
@@ -4521,7 +4606,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.bigint "marital_status_id"
     t.enum "confidentiality", default: "normal", null: false, comment: "Correspondence will not be sent via GP Connect if set to restricted", enum_type: "enum_confidentiality"
     t.string "ehr_person_identifier", comment: "For use with an EHR eg Millennium. This is a unique identifier for the patient in the EHR system, and maybe be populated during the HL7 ingestion that creates the patient. SHould not be searchable from, or displayed in, the UI."
+    t.bigint "merged_into_patient_id", comment: "After an HL7 A34 or A40 merge, points to the major patient\nthat this minor patient was merged into\n"
     t.text "next_of_kin", comment: "Next of kin details from HL7 NK1 segments"
+    t.datetime "merged_at"
     t.index "lower((family_name)::text), given_name", name: "idx_patients_on_lower_family_name"
     t.index ["actual_death_location_id"], name: "index_patients_on_actual_death_location_id"
     t.index ["country_of_birth_id"], name: "index_patients_on_country_of_birth_id"
@@ -4540,6 +4627,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
     t.index ["local_patient_id_4"], name: "index_patients_on_local_patient_id_4", unique: true
     t.index ["local_patient_id_5"], name: "index_patients_on_local_patient_id_5", unique: true
     t.index ["marital_status_id"], name: "index_patients_on_marital_status_id"
+    t.index ["merged_at"], name: "index_patients_on_merged_at", where: "(merged_at IS NULL)"
+    t.index ["merged_into_patient_id"], name: "index_patients_on_merged_into_patient_id"
     t.index ["named_consultant_id"], name: "index_patients_on_named_consultant_id"
     t.index ["named_nurse_id"], name: "index_patients_on_named_nurse_id"
     t.index ["practice_id"], name: "index_patients_on_practice_id"
@@ -6314,6 +6403,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   add_foreign_key "patient_bookmarks", "patients"
   add_foreign_key "patient_bookmarks", "users"
   add_foreign_key "patient_master_index_deprecated", "patients"
+  add_foreign_key "patient_merge_logs", "patient_merge_operations", column: "operation_id"
+  add_foreign_key "patient_merge_merges", "feed_messages"
+  add_foreign_key "patient_merge_merges", "patients", column: "major_patient_id"
+  add_foreign_key "patient_merge_merges", "patients", column: "minor_patient_id"
+  add_foreign_key "patient_merge_operations", "patient_merge_merges", column: "merge_id"
   add_foreign_key "patient_practice_memberships", "patient_practices", column: "practice_id"
   add_foreign_key "patient_practice_memberships", "patient_primary_care_physicians", column: "primary_care_physician_id"
   add_foreign_key "patient_worries", "patient_worry_categories", column: "worry_category_id"
@@ -6333,6 +6427,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_141332) do
   add_foreign_key "patients", "patient_practices", column: "practice_id", name: "patients_practice_id_fk"
   add_foreign_key "patients", "patient_primary_care_physicians", column: "primary_care_physician_id"
   add_foreign_key "patients", "patient_religions", column: "religion_id"
+  add_foreign_key "patients", "patients", column: "merged_into_patient_id"
   add_foreign_key "patients", "system_countries", column: "country_of_birth_id"
   add_foreign_key "patients", "users", column: "created_by_id", name: "patients_created_by_id_fk"
   add_foreign_key "patients", "users", column: "named_consultant_id"

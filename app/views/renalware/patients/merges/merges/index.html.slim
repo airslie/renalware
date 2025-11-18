@@ -1,0 +1,44 @@
+= content_for(:actions) do
+  - if Rails.env.local?
+    = link_to t("btn.add"),
+              renalware.new_patients_merge_path,
+              class: "button"
+
+= within_new_admin_layout(title: "Patient Merges")
+  table.mt-8
+    thead
+      tr
+        th
+        th.bg-red-100.text-center(colspan=5) Operations
+        th.bg-green-100.text-center(colspan=2) Patients
+        th(colspan=6)
+      tr
+        th ID
+        th.bg-red-100
+        th.bg-red-100 Total
+        th.bg-red-100 Merged
+        th.bg-red-100 Req Intervention
+        th.bg-red-100 Warning
+        th.bg-green-100 Major
+        th.bg-green-100 Minor
+        th Source
+        th Message Type
+        th Status
+        th Created At
+        th Updated At
+    tbody
+      - merges.each do |merge|
+        tr
+          td= merge.id
+          td= link_to "Operations", renalware.patients_merge_operations_path(merge)
+          td= merge.operations_count
+          td= merge.operations.where(merged: true).count
+          td= merge.operations.where(require_intervention: true).count
+          td= merge.operations.where(warning: true).count
+          td= link_to(merge.major_patient.to_s, renalware.patient_path(merge.major_patient))
+          td= link_to(merge.minor_patient.to_s, renalware.patient_path(merge.minor_patient))
+          td= merge.source
+          td= merge.message_type
+          td= merge.status
+          td= l(merge.created_at)
+          td= l(merge.updated_at)

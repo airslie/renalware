@@ -54,6 +54,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "LSOA"
   inflect.acronym "MDM"
   inflect.acronym "MDMs"
+  inflect.acronym "MRG"
   inflect.acronym "MS"
   inflect.acronym "MSOA"
   inflect.acronym "NHS"

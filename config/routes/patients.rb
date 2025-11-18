@@ -1,4 +1,7 @@
 namespace :patients do
+  resources :merges, controller: "merges/merges" do
+    resources :operations, only: :index, controller: "merges/operations"
+  end
   get "mdms/:scope", to: "mdms#show", as: :mdms
   resources :primary_care_physicians
   resources :practices, only: [] do

@@ -134,6 +134,7 @@ module Renalware
       def orc_order_status        = first_orc_segment.order_status
       def orc_filler_order_number = first_orc_segment.filler_order_number
       def nk1                     = Array(self[:NK1]).map { HL7Segments::NK1.new(it) }
+      def mrg                     = Array(self[:MRG]).map { HL7Segments::MRG.new(it) }
       def pv1                     = HL7Segments::PV1.new(self[:PV1])
       def pv2                     = HL7Segments::PV2.new(self[:PV2])
       def sch                     = HL7Segments::SCH.new(self[:SCH])

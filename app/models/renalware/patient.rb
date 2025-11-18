@@ -9,6 +9,8 @@ module Renalware
     extend FriendlyId
     include RansackAll
 
+    acts_as_paranoid column: :merged_at
+
     before_validation :handle_double_quote_attributes_values
     # Before creation generate a UUID to use in urls with friendly_id (i.e. in #to_param)
     # Note if inserting directly into the database (bypassing Rails) this will still work as there

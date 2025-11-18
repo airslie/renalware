@@ -63,6 +63,12 @@ RSpec.configure do |config|
     driven_by :rack_test
   end
 
+  config.before(:each, type: :request) do
+    # Don't render exception pages; raise instead
+    # Rails.application.env_config["action_dispatch.show_exceptions"] = false
+    # Rails.application.env_config["action_dispatch.show_detailed_exceptions"] = false
+  end
+
   Capybara.register_driver :my_playwright do |app|
     Capybara::Playwright::Driver.new(
       app,

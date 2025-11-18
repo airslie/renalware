@@ -92,7 +92,7 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         command:
           - bin/gh/rspec/unit
