@@ -32,6 +32,8 @@ FactoryBot.define do
       name { "Investigation" }
       slug { "investigations" }
       event_class_name { "Renalware::Events::Investigation" }
+      author_change_window_hours { -1 }
+      admin_change_window_hours { -1 }
     end
 
     factory :clinical_frailty_score_event_type do
