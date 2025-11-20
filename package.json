@@ -49,7 +49,7 @@
     "build:css": "./demo/bin/yarn build:css"
   },
   "devDependencies": {
-    "playwright": "1.55.1",
+    "playwright": "1.54.1",
     "prettier": "^3.4",
     "stylelint": "^16.21.1",
     "stylelint-config-standard-scss": "^15.0.1",

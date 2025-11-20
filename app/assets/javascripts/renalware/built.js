@@ -15169,7 +15169,7 @@ var hasRequiredSlimselect;
 function requireSlimselect () {
 	if (hasRequiredSlimselect) return slimselect$1.exports;
 	hasRequiredSlimselect = 1;
-	(function (module, exports) {
+	(function (module, exports$1) {
 		(function (global, factory) {
 		    module.exports = factory() ;
 		})(slimselect, (function () {
@@ -20215,10 +20215,10 @@ var hasRequired_default;
 function require_default () {
 	if (hasRequired_default) return _default$1.exports;
 	hasRequired_default = 1;
-	(function (module, exports) {
+	(function (module, exports$1) {
 		(function (global, factory) {
-		  factory(exports) ;
-		}(_default, (function (exports) {
+		  factory(exports$1) ;
+		}(_default, (function (exports$1) {
 		  var english = {
 		      weekdays: {
 		          shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -20291,10 +20291,10 @@ function require_default () {
 		      time_24hr: false,
 		  };
 
-		  exports.default = english;
-		  exports.english = english;
+		  exports$1.default = english;
+		  exports$1.english = english;
 
-		  Object.defineProperty(exports, '__esModule', { value: true });
+		  Object.defineProperty(exports$1, '__esModule', { value: true });
 
 		}))); 
 	} (_default$1, _default$1.exports));
