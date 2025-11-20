@@ -6,7 +6,7 @@ module Renalware
       include Pagy::Backend
 
       def index
-        authorize Drug
+        authorize DMDMatch
 
         dmd_matches_search = DMDMatch.ransack(params.fetch(:q, {}))
         dmd_matches_search.sorts = "name"
@@ -20,7 +20,7 @@ module Renalware
       end
 
       def new
-        authorize Drug
+        authorize DMDMatch
 
         form = Form.new
 
@@ -28,7 +28,7 @@ module Renalware
       end
 
       def create
-        authorize Drug
+        authorize DMDMatch
 
         form = Form.new(
           params.require(Form.model_name.param_key).permit(:file)
