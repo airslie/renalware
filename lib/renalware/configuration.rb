@@ -38,6 +38,7 @@ module Renalware
     end
 
     config_accessor(:disable_dmd_synchroniser_job) { ENV["DISABLE_DMD_SYNCHRONISER_JOB"].to_i > 0 }
+    config_accessor(:enable_dmd_match) { ENV.fetch("ENABLE_DMD_MATCH", "false") == "true" }
 
     # URL of an externally-hosted HTML or PDF Renalware user guide.
     config_accessor(:help_user_guide_link) {
