@@ -9,7 +9,7 @@ RSpec.describe "Recording a snippet", :js do
     visit authoring.snippets_path
 
     click_on "Create new"
-    fill_in "Title", with: title
+    fill_in "Title", with: "<script>alert('xss')</script>#{title}"
     fill_trix_editor with: body
     click_on "Create"
 
