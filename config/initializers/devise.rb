@@ -261,4 +261,15 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+config.omniauth_path_prefix = '/users/auth'
+
+  config.omniauth(
+    :entra_id,
+    client_id:     ENV['ENTRA_CLIENT_ID'],
+    client_secret: ENV['ENTRA_CLIENT_SECRET'],
+    tenant_id:     ENV['ENTRA_TENANT_ID'],
+    authorize_params: {
+      scope: 'openid profile email'
+    }
+  )
 end

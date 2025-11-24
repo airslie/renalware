@@ -25,7 +25,9 @@ module Renalware
           :rememberable,
           :trackable,
           :validatable,
-          :timeoutable
+          :timeoutable,
+          :omniauthable,
+          omniauth_providers: [:entra_id]
         )
 
         # Password recovery (forgot password) is only enabled for database auth,

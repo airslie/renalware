@@ -4282,7 +4282,8 @@ CREATE TABLE renalware.users (
     gmc_code character varying,
     nursing_experience_level renalware.nursing_experience_level_enum,
     uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    last_failed_sign_in_at timestamp(6) without time zone
+    last_failed_sign_in_at timestamp(6) without time zone,
+    azure_uid character varying
 );
 
 
@@ -13876,7 +13877,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -13956,7 +13957,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -27909,6 +27910,13 @@ CREATE INDEX index_users_on_approved ON renalware.users USING btree (approved);
 
 
 --
+-- Name: index_users_on_azure_uid; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_azure_uid ON renalware.users USING btree (azure_uid);
+
+
+--
 -- Name: index_users_on_expired_at; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -32059,6 +32067,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251123203146'),
 ('20251117124954'),
 ('20251117115422'),
 ('20251111183914'),

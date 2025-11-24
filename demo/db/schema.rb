@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_17_124954) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_23_203146) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -6034,9 +6034,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_124954) do
     t.enum "nursing_experience_level", enum_type: "nursing_experience_level_enum"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.datetime "last_failed_sign_in_at"
+    t.string "azure_uid"
     t.index "lower((email)::text)", name: "index_users_on_lower_email", unique: true
     t.index "lower((username)::text)", name: "index_users_on_lower_username", unique: true
     t.index ["approved"], name: "index_users_on_approved"
+    t.index ["azure_uid"], name: "index_users_on_azure_uid", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"
     t.index ["family_name"], name: "index_users_on_family_name"
     t.index ["given_name"], name: "index_users_on_given_name"
@@ -6947,7 +6949,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_124954) do
             WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
        LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
             WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.reporting_bone_audit", sql_definition: <<-SQL
@@ -6983,7 +6985,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_124954) do
             WHERE (e2.pth > (300)::numeric)) e7 ON (true))
        LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
             WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-    WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+    WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
     GROUP BY e1.modality_desc;
   SQL
   create_view "renalware.supportive_care_mdm_patients", sql_definition: <<-SQL
