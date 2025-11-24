@@ -6,6 +6,8 @@ module Renalware
     has_many :users, through: :roles_users
 
     validates :name, uniqueness: true
+    scope :restricted, -> { where(name: %i(devops super_admin)) }
+    scope :unrestricted, -> { where.not(name: %i(devops super_admin)) }
 
     def self.fetch(ids)
       return none if Array.wrap(ids).empty?

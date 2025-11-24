@@ -56,8 +56,10 @@ module Renalware
         )
     end
 
+    # Make sure to exclude restricted roles from being assigned in case the params
+    # have been tampered with.
     def role_ids
-      (user_params[:role_ids] || []).compact_blank
+      Array(user_params[:role_ids]).compact_blank.map(&:to_i) - Role.restricted.pluck(:id)
     end
   end
 end
