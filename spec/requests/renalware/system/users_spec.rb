@@ -1,6 +1,7 @@
 describe "Managing Users" do
   let(:user) { create(:user, :unapproved, :clinical, prescriber: false) }
   let!(:clinical_role) { create(:role, :clinical) }
+  let!(:super_admin_role) { create(:role, :super_admin) }
 
   describe "GET index" do
     it "responds with a list" do
@@ -95,6 +96,31 @@ describe "Managing Users" do
             hidden: true,
             approved: true
           )
+
+          follow_redirect!
+
+          expect(response).to be_successful
+        end
+
+        it "prevents roles manipulation ie an admin elevating themselves to super_admin" do
+          forbidden_role_ids = [super_admin_role.id]
+
+          attributes = {
+            role_ids: user.role_ids + forbidden_role_ids,
+            consultant: "true",
+            hidden: true
+          }
+
+          patch admin_user_path(user), params: { approve: "title of approve btn", user: attributes }
+
+          expect(response).to have_http_status(:redirect)
+          expect(Renalware::User).to exist(
+            id: user.id,
+            consultant: true,
+            hidden: true,
+            approved: true
+          )
+          expect(user.reload.roles.map(&:name)).to eq ["clinical"] # not super_admin
 
           follow_redirect!
 

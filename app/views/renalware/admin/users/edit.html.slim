@@ -28,7 +28,7 @@
 
       .my-2
         p.p-0.m-0.mt-4.font-bold Role
-        - Renalware::Role.all.order(id: :asc).each_with_index do |role, index|
+        - Renalware::Role.unrestricted.order(id: :asc).each_with_index do |role, index|
           - element_id = "user_role_ids_#{index}"
           - policy = Pundit.policy(current_user, user)
           - disabled = !policy.assign_role?(role)

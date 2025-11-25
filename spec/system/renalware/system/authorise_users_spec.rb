@@ -125,17 +125,6 @@ module Renalware
       expect(page).to have_no_content(expired.username)
     end
 
-    it "An admin cannot assign super_admin role to anyone" do
-      approved
-      visit admin_users_path
-      within("tbody") do
-        find("a[href='#{edit_admin_user_path(approved)}']").click
-      end
-
-      # 'Hidden' super_admin role appears as a disabled checkbox
-      expect(find("input[type='checkbox'][disabled='disabled']")).not_to be_nil
-    end
-
     it "An admin cannot remove the super_admin role" do
       superadmin = create(:user, :super_admin)
       visit admin_users_path
