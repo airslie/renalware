@@ -216,6 +216,84 @@ module Renalware
         end
       end
 
+      context "when witnesses are not required" do
+        before do
+          allow(Renalware.config)
+            .to receive(:hd_session_prescriptions_require_signoff)
+            .and_return(false)
+        end
+
+        it "is valid without a witness" do
+          admin_user = create(:user, password: "password")
+          administration = described_class.new(
+            administered: true,
+            administered_by: admin_user,
+            administered_by_password: "password",
+            prescription: create(:prescription),
+            recorded_on: Time.zone.today
+          )
+
+          expect(administration).to be_valid
+        end
+
+        it "sets signed_off_at when administrator validates" do
+          admin_user = create(:user, password: "password")
+          administration = described_class.new(
+            administered: true,
+            administered_by: admin_user,
+            administered_by_password: "password",
+            prescription: create(:prescription),
+            recorded_on: Time.zone.today
+          )
+          administration.valid?
+
+          expect(administration.signed_off_at).to be_present
+          expect(administration).to be_authorised
+        end
+      end
+
+      context "when witnesses are required" do
+        before do
+          allow(Renalware.config)
+            .to receive(:hd_session_prescriptions_require_signoff)
+            .and_return(true)
+        end
+
+        it "sets signed_off_at when both administrator and witness validate" do
+          admin_user = create(:user, password: "admin_password")
+          witness_user = create(:user, password: "witness_password")
+          administration = described_class.new(
+            administered: true,
+            administered_by: admin_user,
+            administered_by_password: "admin_password",
+            witnessed_by: witness_user,
+            witnessed_by_password: "witness_password",
+            prescription: create(:prescription),
+            recorded_on: Time.zone.today
+          )
+          administration.valid?
+
+          expect(administration.signed_off_at).to be_present
+          expect(administration).to be_authorised
+        end
+
+        it "does not set signed_off_at when saved with skip_witness_validation" do
+          admin_user = create(:user, password: "password")
+          administration = described_class.new(
+            administered: true,
+            administered_by: admin_user,
+            administered_by_password: "password",
+            skip_witness_validation: true,
+            prescription: create(:prescription),
+            recorded_on: Time.zone.today
+          )
+          administration.valid?
+
+          expect(administration.signed_off_at).to be_nil
+          expect(administration).not_to be_authorised
+        end
+      end
+
       context "when the HD prescription is stat (give once)" do
         let(:pwd) { "password" }
         let(:user1) { create(:user, password: pwd) }

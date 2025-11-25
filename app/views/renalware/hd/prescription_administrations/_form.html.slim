@@ -90,8 +90,7 @@
 
       .modal__footer
         .right
-          / NB: 'Save' is the best name for this button
-          = fpa.submit t("btn.save"), class: "button"
+          = fpa.submit "Sign-off", class: "button"
           | &nbsp;&nbsp;
           = fpa.submit "Save and Witness Later",
                        name: "hd_prescription_administration[skip_witness_validation]",

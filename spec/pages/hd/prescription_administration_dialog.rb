@@ -89,7 +89,7 @@ module Pages
 
       def save
         within(MODAL_CONTAINER_ID) do
-          click_on t("btn.save")
+          click_on "Sign-off"
         end
       end
 

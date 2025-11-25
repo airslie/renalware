@@ -137,9 +137,9 @@ RSpec.describe "Administering drugs from HD Dashboard, independent of HD Session
           dialog.not_administered_reason = reason.name
           dialog.notes = "abc"
 
-          # Choosing Administered = No should have changed the save button text to Save
+          # Choosing Administered = No should have changed the save button text to Sign-off
           # and hidden the 'Save and witness later' button
-          expect(dialog.save_button_captions).to eq ["Save"]
+          expect(dialog.save_button_captions).to eq ["Sign-off"]
           dialog.save
 
           expect(page).not_to have_css(dialog.container_css)
@@ -176,7 +176,7 @@ RSpec.describe "Administering drugs from HD Dashboard, independent of HD Session
           dialog.administered_by = nurse
           dialog.administered_by_password = password
 
-          expect(dialog.save_button_captions).to eq(["Save", "Save and Witness Later"])
+          expect(dialog.save_button_captions).to eq(["Sign-off", "Save and Witness Later"])
 
           dialog.save_and_witness_later
 
@@ -219,7 +219,7 @@ RSpec.describe "Administering drugs from HD Dashboard, independent of HD Session
           dialog.witnessed_by = witness
           dialog.witnessed_by_password = password
 
-          expect(dialog.save_button_captions).to eq(["Save", "Save and Witness Later"])
+          expect(dialog.save_button_captions).to eq(["Sign-off", "Save and Witness Later"])
 
           dialog.save
 

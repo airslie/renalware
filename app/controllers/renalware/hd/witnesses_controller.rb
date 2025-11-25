@@ -37,6 +37,7 @@ module Renalware
         administration.witnessed_by_password = form.password
         unless form.update_user_only
           administration.witness_authorised = true
+          administration.signed_off_at = Time.current
         end
         administration.save_by(current_user)
       end

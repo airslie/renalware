@@ -6,7 +6,12 @@ module Renalware
       let(:user2) { create(:user, password: pwd) }
       let(:prescription) { create(:prescription, administer_on_hd: true, stat: true) }
 
-      before { create(:user, :system) }
+      before do
+        create(:user, :system)
+        allow(Renalware.config)
+          .to receive(:hd_session_prescriptions_require_signoff)
+          .and_return(true)
+      end
 
       describe "#perform" do
         def prescription_administration(witnessed:, administered:, stat:)
