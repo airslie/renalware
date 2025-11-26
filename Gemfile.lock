@@ -570,6 +570,8 @@ GEM
     nio4r (2.7.5)
     nokogiri (1.18.10-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.18.10-x86_64-linux-gnu)
+      racc (~> 1.4)
     oauth2 (2.0.18)
       faraday (>= 0.17.3, < 4.0)
       jwt (>= 1.0, < 4.0)
@@ -963,6 +965,7 @@ GEM
       railties (>= 7.0.0)
       tailwindcss-ruby
     tailwindcss-ruby (3.4.17-arm64-darwin)
+    tailwindcss-ruby (3.4.17-x86_64-linux)
     temple (0.10.4)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
@@ -972,6 +975,7 @@ GEM
     thor (1.4.0)
     thread_safe (0.3.6)
     thruster (0.1.16-arm64-darwin)
+    thruster (0.1.16-x86_64-linux)
     tilt (2.6.1)
     timeliness (0.5.3)
     timeout (0.4.4)
@@ -1036,6 +1040,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-24
+  x86_64-linux
 
 DEPENDENCIES
   activesupport_cache_database!

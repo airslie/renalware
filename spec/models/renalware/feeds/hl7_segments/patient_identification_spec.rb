@@ -24,6 +24,16 @@ module Renalware::Feeds
         end
       end
 
+      context "when patient_id_list is blank" do
+        let(:raw_message) do
+          <<~RAW
+            PID||123456789^^^NHS^ignoreme||
+          RAW
+        end
+
+        it { expect(pi.hospital_identifiers).to eq({}) }
+      end
+
       describe "#nhs_number" do
         context "when NHS number is in PID-2" do
           let(:raw_message) do
