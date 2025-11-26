@@ -76,6 +76,9 @@ Gem::Specification.new do |s|
   s.add_dependency "net-ldap"
   s.add_dependency "net-sftp", "~> 4.0"
   s.add_dependency "nokogiri", "~> 1.9"
+  s.add_dependency "omniauth"
+  s.add_dependency "omniauth-entra-id" # OAuth2/OIDC against Entra ID
+  s.add_dependency "omniauth-rails_csrf_protection"
   s.add_dependency "ox", "~> 2.13"
   s.add_dependency "pagy", "~> 9.0"
   s.add_dependency "pandoc-ruby", "~> 2.1.4"
