@@ -119,7 +119,7 @@ module Devise
       end
 
       def ldap_group_membership
-        return if in_valid_ldap_group?
+        return if roles.any? || in_valid_ldap_group?
 
         errors.add(:base, "You are not authorised to access this system")
       end

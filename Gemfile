@@ -5,6 +5,10 @@ gemspec
 
 ruby file: ".ruby-version"
 
+gem "omniauth"
+gem "omniauth-entra-id" # OAuth2/OIDC against Entra ID
+gem "omniauth-rails_csrf_protection"
+
 gem "activesupport_cache_database", github: "airslie/activesupport-cache-database"
 gem "sprockets-rails"
 

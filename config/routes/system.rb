@@ -21,6 +21,7 @@ resources :mock_errors, only: [:index], controller: "system/mock_errors"
 devise_for :users,
            class_name: "Renalware::User",
            controllers: {
+             omniauth_callbacks: "renalware/devise/omniauth_callbacks",
              registrations: "renalware/devise/registrations",
              sessions: "renalware/devise/sessions",
              passwords: "renalware/devise/passwords"

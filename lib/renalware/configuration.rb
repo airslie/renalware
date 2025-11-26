@@ -87,6 +87,10 @@ module Renalware
     end
     config_accessor(:ldap_ssl) { ENV.fetch("LDAP_SSL", !Rails.env.local?) }
 
+    config_accessor(:entra_omniauth_enabled) {
+      ENV.fetch("ENTRA_OMNIAUTH_ENABLED", "false") == "true"
+    }
+
     config_accessor(:site_name) { "Renalware" }
     config_accessor(:hospital_name) { ENV.fetch("HOSPITAL_NAME", "KINGS COLLEGE HOSPITAL") }
     config_accessor(:hospital_address) { ENV.fetch("HOSPITAL_ADDRESS", "") } # comma-delimited

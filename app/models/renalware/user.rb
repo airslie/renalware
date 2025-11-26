@@ -69,6 +69,54 @@ module Renalware
 
     def self.policy_class = UserPolicy
 
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    # Experimental - create or update a user from an Entra ID (Azure AD) OmniAuth hash
+    def self.from_entra_id_omniauth(auth)
+      # auth is OmniAuth::AuthHash
+      uid  = auth.uid
+      info = auth.info
+
+      email = info.email&.downcase
+      _name  = info.name || info.nickname
+
+      # Pick your own mapping rules here
+      user = find_or_initialize_by(azure_uid: uid)
+
+      if user.new_record?
+        # Fallback: match on email if you already have users
+        user = find_or_initialize_by(email: email) if email.present?
+        user.azure_uid = uid
+        # For username we want to use the sAMAccountName synced from on-prem AD.
+        # eg sAMAccountName -> onPremisesSamAccountName in Entra.
+        # Then we need to add a claim mapping in Entra ID app registration
+        # to include this in the token.
+        # or now use the uid directly.
+        user.username ||= uid # change to sAMAccountName when available
+        user.email ||= email
+        user.family_name ||= info.last_name
+        user.given_name  ||= info.first_name
+        # Optionally set random password if you still need Devise validations:
+        user.password ||= SecureRandom.hex(32)
+        user.approved = true
+      end
+
+      entra_roles = Array(auth.extra.raw_info["roles"]).map(&:downcase)
+      sync_entra_role(user, "clinical", entra_roles)
+      sync_entra_role(user, "read_only", entra_roles)
+      user.save! if user.changed?
+      user
+    end
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+
+    def self.sync_entra_role(user, role_name, entra_roles)
+      role = Role.find_by!(name: role_name)
+      if entra_roles.include?(role.name) && user.roles.exclude?(role)
+        user.roles << role
+      else
+        user.roles.delete(role)
+      end
+    end
+
     # So we can uses these scopes as Ransack predicates eg. { expired: true }
     def self.ransackable_scopes(_auth_object = nil)
       %i(unapproved inactive expired)
