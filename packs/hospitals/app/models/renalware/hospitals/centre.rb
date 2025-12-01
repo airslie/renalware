@@ -30,6 +30,7 @@ module Renalware
       validates :name, presence: true
 
       def self.policy_class = BasePolicy
+      def self.site_default = active.default.host_site.ordered.first
 
       def hd_sites
         units.hd_sites.ordered

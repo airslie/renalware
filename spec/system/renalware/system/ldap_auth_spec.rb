@@ -2,6 +2,7 @@ module Renalware
   describe "LDAP Authentication", :js do
     let(:ldap_user) { build(:user, :clinical, :with_ldap_enabled) }
     let(:ldap_connection) { instance_double(Renalware::Ldap::Connection) }
+    let(:hospital_centre) { create(:hospital_centre, :default) }
 
     before do
       allow(Renalware.config).to receive_messages(
@@ -29,6 +30,9 @@ module Renalware
       end
 
       it "successfully logins in a new user" do
+        hospital_centre
+        expect(Renalware::Hospitals::Centre.site_default).to eq(hospital_centre)
+
         visit new_user_session_path
         fill_in "Username", with: ldap_user.username
         fill_in "Password", with: "ldap_password"
@@ -37,6 +41,15 @@ module Renalware
         fullname = "#{ldap_user.given_name} #{ldap_user.family_name}"
         expect(page).to have_content("#{fullname}\nClinical")
         expect(page).to have_current_path(root_path)
+
+        user = User.find_by(username: ldap_user.username)
+        expect(user).to have_attributes(
+          email: ldap_user.email,
+          given_name: ldap_user.given_name,
+          family_name: ldap_user.family_name,
+          hospital_centre: hospital_centre,
+          approved: true
+        )
       end
 
       it "successfully logs in an existing user" do
