@@ -5,6 +5,7 @@ module Renalware
 
       def edit?
         return false unless record.persisted?
+        return false unless write_privileges?
 
         user_is_admin? || user_is_super_admin? || !record.immutable?
       end

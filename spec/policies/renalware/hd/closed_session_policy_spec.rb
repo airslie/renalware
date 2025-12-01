@@ -3,7 +3,7 @@ module Renalware
     describe ClosedSessionPolicy, type: :policy do
       subject(:policy) { described_class }
 
-      let(:user) { User.new }
+      let(:user) { create(:user, :clinical) }
       let(:session) { HD::Session::Closed.new }
 
       %i(edit? destroy?).each do |permission|

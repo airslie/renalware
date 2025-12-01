@@ -113,7 +113,7 @@ module Renalware
 
       def edit_or_view_url
         i18n_scope = "renalware.hd.sessions.#{session.state}"
-        if immutable?
+        if immutable? || !view_context.policy(session).edit?
           view_context.link_to(I18n.t(".view", scope: i18n_scope),
                                view_context.patient_hd_session_path(patient, self),
                                class: "nowrap")
