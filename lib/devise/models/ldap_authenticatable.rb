@@ -65,6 +65,7 @@ module Devise
         self.email = ldap_param(mappings["email"])
         self.given_name = ldap_param(mappings["given_name"])
         self.family_name = ldap_param(mappings["family_name"])
+        self.hospital_centre = Renalware::Hospitals::Centre.site_default
         self.approved = Renalware.config.ldap_auto_approve_users if in_valid_ldap_group?
       end
 

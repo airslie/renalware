@@ -7,5 +7,11 @@ FactoryBot.define do
     name { "Dover Hospital" }
     code { "DOV" }
     host_site { true }
+
+    trait :default do
+      default_site { true }
+      host_site { true }
+      active { true }
+    end
   end
 end
