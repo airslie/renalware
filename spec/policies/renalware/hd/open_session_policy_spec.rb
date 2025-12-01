@@ -3,7 +3,7 @@ module Renalware
     describe OpenSessionPolicy, type: :policy do
       subject(:policy) { described_class }
 
-      let(:user) { build(:user, :super_admin) }
+      let(:user) { create(:user, :super_admin) }
       let(:session) { HD::Session::Closed.new }
 
       %i(edit? destroy?).each do |permission|
