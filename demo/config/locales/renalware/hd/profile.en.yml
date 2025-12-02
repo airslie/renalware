@@ -4,6 +4,6 @@ en:
     renalware/hd/profile_document/anticoagulant:
       type:
         heparin: Heparin
-        enoxyparin: Enoxyparin
+        enoxyparin: Enoxaparin
         warfarin: Warfarin
         none: None
