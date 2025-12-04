@@ -24,6 +24,7 @@ module Renalware
           :rememberable,
           :trackable,
           :validatable,
+          :registerable,
           :timeoutable,
           :omniauthable,
           omniauth_providers: [:entra_id]
@@ -34,7 +35,7 @@ module Renalware
         # Advise we enable this statically to a) make it easier to test and b)
         # to allow for future scenarios where database auth needs to be used fro
         # certain users even when LDAP is enabled.
-        devise(:recoverable, :registerable) unless Renalware.config.ldap_authentication
+        devise(:recoverable) unless Renalware.config.ldap_authentication
 
         # We also add any hospital-specific modules that have been configured
         devise(*Renalware.config.devise_extra_modules) if Renalware.config.devise_extra_modules.any?
