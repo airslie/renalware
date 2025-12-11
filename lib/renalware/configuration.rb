@@ -85,7 +85,9 @@ module Renalware
       custom_mappings = mappings_string ? JSON.parse(mappings_string) : {}
       default_mappings.merge(custom_mappings)
     end
-    config_accessor(:ldap_ssl) { ENV.fetch("LDAP_SSL", !Rails.env.local?) }
+    config_accessor(:ldap_ssl) {
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("LDAP_SSL", !Rails.env.local?))
+    }
 
     config_accessor(:entra_omniauth_enabled) {
       ENV.fetch("ENTRA_OMNIAUTH_ENABLED", "false") == "true"
