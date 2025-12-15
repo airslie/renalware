@@ -131,7 +131,7 @@ module Renalware
 
       def action                  = ACTIONS.fetch(type, :no_matching_command)
       def patient_identification  = PatientIdentification.new(self[:PID])
-      def orc_order_status        = first_orc_segment.order_status
+      def orc_order_status        = first_orc_segment.order_status.presence
       def orc_filler_order_number = first_orc_segment.filler_order_number
       def nk1                     = Array(self[:NK1]).map { HL7Segments::NK1.new(it) }
       def mrg                     = Array(self[:MRG]).map { HL7Segments::MRG.new(it) }
