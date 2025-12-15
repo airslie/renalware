@@ -218,7 +218,7 @@ module Renalware::Pathology
                     comment: "::comment::",
                     cancelled: nil,
                     units: "mg",
-                    result_status: "F"
+                    result_status: ""
                   )
                 ]
               )
@@ -227,8 +227,33 @@ module Renalware::Pathology
         }
 
         it "uses 'UNKNOWN'" do
-          requests = described_class.new(hl7_message).parse
-          expect(requests.first[:observation_request][:requestor_name]).to eq("UNKNOWN")
+          params = described_class.new(hl7_message).parse
+
+          # TODO: We also text here that result_status "" maps to nil
+          expect(params).to eq(
+            [
+              {
+                patient_id: patient.id,
+                observation_request: {
+                  description_id: request_description.id,
+                  requestor_name: "UNKNOWN",
+                  requestor_order_number: "::pcs code::",
+                  filler_order_number: "::fillernum::",
+                  requested_at: "2009-11-11 18:41:00 +0000",
+                  observations_attributes: [
+                    description_id: observation_description.id,
+                    observed_at: "2009-11-11 18:41:00 +0000", # Copied from OBR requested datetime!
+                    result: "::value::",
+                    comment: "::comment::",
+                    cancelled: nil,
+                    result_status: nil
+                  ]
+                }
+              }
+            ]
+          )
+          # expect(requests.first[:observation_request][:requestor_name]).to eq("UNKNOWN")
+          # expect(requests.first[:observation_request][:requestor_name]).to eq("UNKNOWN")
         end
       end
 

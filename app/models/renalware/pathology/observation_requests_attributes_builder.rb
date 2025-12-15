@@ -114,7 +114,7 @@ module Renalware
               result: observation.value,
               comment: observation.comment,
               cancelled: observation.cancelled,
-              result_status: observation.result_status
+              result_status: observation.result_status.presence
             }
           else
             nil # will be removed by compact

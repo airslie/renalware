@@ -6,12 +6,13 @@ module Renalware::Feeds
 
     let(:message_type) { "ORU^R01" }
     let(:sex) { "F" }
+    let(:orc_order_status) { "CM" }
     let(:raw_message) do
       msg = <<~RAW
         MSH|^~\&|HM|LBE|SCM||20091112164645||#{message_type}|1258271|P|2.3.1|||AL||||
         PID||123456789^^^NHS|Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
-        ORC|RE|^PCS|09B0099478^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
+        ORC|RE|^PCS|09B0099478^LA||#{orc_order_status}||||200911111841|||MID^KINGS MIDWIVES|||||||
         OBR|1|123456^PCS|09B0099478^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB||6.09|10\\S\\12/L|||||F|||200911112026||BBKA^Donald DUCK|
       RAW
@@ -52,6 +53,14 @@ module Renalware::Feeds
       context "when an ORC segment exists in the HL7 message" do
         it "extracts the ORC .5 Order Status" do
           expect(decorator.orc_order_status).to eq("CM")
+        end
+
+        context "when it is ''" do
+          let(:orc_order_status) { "" }
+
+          it "uses nil" do
+            expect(decorator.orc_order_status).to be_nil
+          end
         end
       end
 
