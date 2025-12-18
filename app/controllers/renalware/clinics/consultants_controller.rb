@@ -56,7 +56,7 @@ module Renalware
       private
 
       def consultant_params
-        params.require(:consultant).permit(:name, :code, :telephone)
+        params.require(:consultant).permit(:name, :code, :sds_user_id, :telephone)
       end
 
       def find_and_authorise_consultant

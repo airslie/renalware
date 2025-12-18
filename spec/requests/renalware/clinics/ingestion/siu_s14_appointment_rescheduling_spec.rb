@@ -14,7 +14,7 @@ describe "HL7 SIU^S14 - Notification of Appointment Modification" do
   #   SCH|149549023|||||Undo Cancel|Nephrology New||30|MINUTES|^^30^20241106113000^20241106120000||||||||||||||Confirmed
   #   PID|1||10769861^^^RNJ 5C4 MRN^MRN||MOLLY^RENALEIGHT^^^^^CURRENT||19870101|2|||166 Rush Home Road^^^ROMFORD^AN7 0JR^^HOME^^||0789898989^MOBILE~0209999999^HOME~testrenal@co.in^EMAIL|""^BUSINESS||M||13401076||||P||||||||N
   #   PD1|||THE CHRISP STREET HTH CTR^^F84062|G999^SMALL^AM^^^^^^EXTID
-  #   PV1|1|O|RNJ Renal OPD^Nephrology New^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH|""|||Z3590850|G999||361||||""||||OPREFERRAL|924301153^^^RNJATTNUM^VISITID|||||||||||||||||""|""||RNJ ROYALLONDON||||||
+  #   PV1|1|O|RNJ Renal OPD^Nephrology New^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH|""|||C3590850|G999||361||||""||||OPREFERRAL|924301153^^^RNJATTNUM^VISITID|||||||||||||||||""|""||RNJ ROYALLONDON||||||
   #   RGS|1
   #   AIG|1||Stevens, Stanley
   #   AIL|1||RNJ Renal OPD^^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH

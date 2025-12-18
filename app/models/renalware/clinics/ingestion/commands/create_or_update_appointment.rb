@@ -97,9 +97,10 @@ module Renalware
             )
           end
 
+          # Consultant.find_or_create_by!(code: consultant.code) do |cons|
           def rwconsultant
-            @rwconsultant ||= Consultant.find_or_create_by!(code: consultant.code) do |cons|
-              cons.name = consultant.name
+            @rwconsultant ||= begin
+              Consultant.find_or_create_by_code!(code: consultant.code, name: consultant.name)
             end
           end
 

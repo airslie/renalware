@@ -15,7 +15,7 @@ describe "HL7 ADT^A05 create appointment" do
   let(:local_patient_id)  { "123" }
   let(:visit_number)      { "123" }
   let(:clinic_code)       { "clinic1" }
-  let(:consultant_code)   { "doc1" }
+  let(:consultant_code)   { "C123" }
   let(:starts_at)         { "20210809130000" }
 
   let(:data) do
@@ -146,7 +146,7 @@ describe "HL7 ADT^A05 create appointment" do
 
         expect(appointment.consultant).to have_attributes(
           name: "Mrs Jill Jones",
-          code: "doc1"
+          code: "C123"
         )
       end
     end

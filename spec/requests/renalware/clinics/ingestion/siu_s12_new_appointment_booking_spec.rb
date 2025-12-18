@@ -15,7 +15,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
   #   SCH|149549015||||||Nephrology New||30|MINUTES|^^30^20241106120000^20241106123000||||||||||||||Confirmed
   #   PID|1||10769857^^^RNJ 5C4 MRN^MRN||MOLLY^RENALOP2^^^^^CURRENT||19870101|2|||21 Rush Home Road^^^ROMFORD^RG7 0JB^^HOME^^||0766655652^MOBILE~02011110111^HOME~testrenal@test.co^EMAIL|""^BUSINESS||""||13401071||||H||||||||N
   #   PD1|||THE CHRISP STREET HTH CTR^^F84062|G999^SMAILL^AM^^^^^^EXTID
-  #   PV1|1|O|RNJ Renal OPD^Nephrology New^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH|""|||Z3590850^Smith^John^^^Dr^NHSCONSULTANTNUMBER^PRSNL^^^NONGP|G9123^Jones^JP||361||||""||||OPREFERRAL|924301148^^^RNJATTNUM^VISITID|||||||||||||||||""|""||RNJ ROYALLONDON||||||
+  #   PV1|1|O|RNJ Renal OPD^Nephrology New^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH|""|||C3590850^Smith^John^^^Dr^NHSCONSULTANTNUMBER^PRSNL^^^NONGP|G9123^Jones^JP||361||||""||||OPREFERRAL|924301148^^^RNJATTNUM^VISITID|||||||||||||||||""|""||RNJ ROYALLONDON||||||
   #   RGS|1
   #   AIG|1||Baxter, Stanley
   #   AIL|1||RNJ Renal OPD^^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH
@@ -31,7 +31,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
       SCH|149549015||||||clinic_name_copied_into_PV3.1||30|MINUTES|^^30^20241106120000^20241106123000||||||||||||||Confirmed
       PID|1||10769857^^^Dover||MOLLY^RENALOP2^^^^^CURRENT||19870101|2|||21 Rush Home Road^^^ROMFORD^RG7 0JB^^HOME^^||0766655652^MOBILE~02011110111^HOME~testrenal@test.co^EMAIL|""^BUSINESS||""||13401071||||H||||||||N
       PD1|||THE CHRISP STREET HTH CTR^^F84062|G999^SMAILL^AM^^^^^^EXTID
-      PV1|1|O|#{clinic_code}^#{clinic_name}^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH|""|||Z3590850^Smith^John^^^Dr^NHSCONSULTANTNUMBER^PRSNL^^^NONGP|G9123^Jones^JP||361||||""||||OPREFERRAL|924301148^^^RNJATTNUM^VISITID|||||||||||||||||""|""||RNJ ROYALLONDON||||||
+      PV1|1|O|#{clinic_code}^#{clinic_name}^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH|""|||C3590850^Smith^John^^^Dr^NHSCONSULTANTNUMBER^PRSNL^^^NONGP|G9123^Jones^JP||361||||""||||OPREFERRAL|924301148^^^RNJATTNUM^VISITID|||||||||||||||||""|""||RNJ ROYALLONDON||||||
       RGS|1
       AIG|1||Baxter, Stanley
       AIL|1||clinic_code_copied_into_PV3.1^^^RNJ ROYALLONDON^^AMB^RNJ MainBld RLH
@@ -59,7 +59,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
     end
   end
 
-  def create_consultant = create(:consultant, code: "Z3590850", name: "Dr John Smith")
+  def create_consultant = create(:consultant, code: "C3590850", name: "Dr John Smith")
   def create_clinic     = create(:clinic, code: clinic_code, name: clinic_name)
 
   context "when patient is not found" do
@@ -75,7 +75,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
           .and change(Renalware::Clinics::Appointment, :count).by(1)
 
         expect(Renalware::Clinics::Consultant.last).to have_attributes(
-          code: "Z3590850",
+          code: "C3590850",
           name: "Dr John Smith"
         )
 
@@ -102,7 +102,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
             .and change(Renalware::Clinics::Consultant, :count).by(1)
 
           expect(Renalware::Clinics::Consultant.last).to have_attributes(
-            code: "Z3590850",
+            code: "C3590850",
             name: "Dr John Smith"
           )
 
@@ -171,7 +171,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
 
         consultant = Renalware::Clinics::Consultant.last
         expect(consultant).to have_attributes(
-          code: "Z3590850",
+          code: "C3590850",
           name: "Dr John Smith"
         )
 

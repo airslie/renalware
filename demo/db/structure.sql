@@ -4471,8 +4471,16 @@ CREATE TABLE renalware.clinic_consultants (
     deleted_at timestamp without time zone,
     updated_by_id bigint,
     created_by_id bigint,
-    appointments_count integer DEFAULT 0
+    appointments_count integer DEFAULT 0,
+    sds_user_id character varying
 );
+
+
+--
+-- Name: COLUMN clinic_consultants.sds_user_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.clinic_consultants.sds_user_id IS 'Spine Directory Service User ID';
 
 
 --
@@ -22187,6 +22195,13 @@ CREATE UNIQUE INDEX index_clinic_consultants_on_name ON renalware.clinic_consult
 
 
 --
+-- Name: index_clinic_consultants_on_sds_user_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_clinic_consultants_on_sds_user_id ON renalware.clinic_consultants USING btree (sds_user_id);
+
+
+--
 -- Name: index_clinic_consultants_on_updated_by_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -32077,6 +32092,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware, renalware_demo, public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251218161519'),
 ('20251123203146'),
 ('20251117124954'),
 ('20251117115422'),
