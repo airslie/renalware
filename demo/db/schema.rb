@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_18_161519) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_19_110251) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -1928,7 +1928,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_161519) do
     t.index ["created_by_id"], name: "index_clinic_consultants_on_created_by_id"
     t.index ["deleted_at"], name: "index_clinic_consultants_on_deleted_at"
     t.index ["name"], name: "index_clinic_consultants_on_name", unique: true, where: "(deleted_at IS NULL)"
-    t.index ["sds_user_id"], name: "index_clinic_consultants_on_sds_user_id", unique: true
+    t.index ["sds_user_id"], name: "index_clinic_consultants_on_sds_user_id", unique: true, where: "(deleted_at IS NULL)"
     t.index ["updated_by_id"], name: "index_clinic_consultants_on_updated_by_id"
   end
 

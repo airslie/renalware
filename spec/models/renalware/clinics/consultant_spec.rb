@@ -22,6 +22,8 @@ RSpec.describe Renalware::Clinics::Consultant do
   end
 
   describe ".find_or_create_by_code!" do
+    before { create(:user, :system) }
+
     context "when code starts with C or G" do
       it "creates a new consultant when code is not found" do
         consultant = described_class.find_or_create_by_code!(
@@ -53,6 +55,29 @@ RSpec.describe Renalware::Clinics::Consultant do
           name: "Dr. No Code"
         )
         expect(consultant).to be_nil
+      end
+
+      context "when the consultant exists by name but has only an sds id and no code" do
+        it "matches on name and then update the code column" do
+          existing_consultant = create(
+            :consultant,
+            sds_user_id: "12345",
+            name: "Existing SDS Consultant",
+            code: ""
+          )
+
+          consultant = described_class.find_or_create_by_code!(
+            code: "C12345",
+            name: "Existing SDS Consultant"
+          )
+
+          expect(consultant).to eq(existing_consultant)
+          expect(consultant).to have_attributes(
+            code: "C12345",
+            sds_user_id: "12345",
+            name: "Existing SDS Consultant"
+          )
+        end
       end
     end
 
@@ -87,6 +112,29 @@ RSpec.describe Renalware::Clinics::Consultant do
           name: "Dr. No Code"
         )
         expect(consultant).to be_nil
+      end
+
+      context "when the consultant exists by name but has only a gmc code and no sds_id" do
+        it "matches on name and then update the sds id column" do
+          existing_consultant = create(
+            :consultant,
+            code: "C12345",
+            name: "Existing SDS Consultant",
+            sds_user_id: ""
+          )
+
+          consultant = described_class.find_or_create_by_code!(
+            code: "12345",
+            name: "Existing SDS Consultant"
+          )
+
+          expect(consultant).to eq(existing_consultant)
+          expect(consultant).to have_attributes(
+            name: "Existing SDS Consultant",
+            code: "C12345",
+            sds_user_id: "12345"
+          )
+        end
       end
     end
   end

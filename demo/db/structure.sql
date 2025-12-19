@@ -22198,7 +22198,7 @@ CREATE UNIQUE INDEX index_clinic_consultants_on_name ON renalware.clinic_consult
 -- Name: index_clinic_consultants_on_sds_user_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE UNIQUE INDEX index_clinic_consultants_on_sds_user_id ON renalware.clinic_consultants USING btree (sds_user_id);
+CREATE UNIQUE INDEX index_clinic_consultants_on_sds_user_id ON renalware.clinic_consultants USING btree (sds_user_id) WHERE (deleted_at IS NULL);
 
 
 --
@@ -32089,9 +32089,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware, renalware_demo, public, heroku_ext;
+SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251219110251'),
 ('20251218161519'),
 ('20251123203146'),
 ('20251117124954'),
