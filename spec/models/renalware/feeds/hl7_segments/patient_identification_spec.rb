@@ -173,6 +173,19 @@ module Renalware::Feeds
         end
       end
 
+      context "when phone_home PID.13 is '^'" do
+        let(:raw_message) do
+          <<~RAW
+            PID|||||||||||||^~^|
+          RAW
+        end
+
+        it do
+          expect(pi.email).to be_nil
+          expect(pi.telephone).to eq([])
+        end
+      end
+
       context "when phone_home PID.13 present" do
         let(:raw_message) do
           <<~RAW
