@@ -21,6 +21,13 @@ module Renalware
                         find_patient_by_dob_and_mrn
                       end
           elsif msg_contains_dob?
+            unless local_patient_id_identifiers?
+              raise(
+                Error,
+                "No MRN with a recognised assigning authority found in message"
+              )
+            end
+
             patient = find_patient_by_dob_and_mrn
             if patient.nil? && find_by_mrn.any?
               raise(

@@ -4472,15 +4472,15 @@ CREATE TABLE renalware.clinic_consultants (
     updated_by_id bigint,
     created_by_id bigint,
     appointments_count integer DEFAULT 0,
-    sds_user_id character varying
+    sds_user_id_deprecated character varying
 );
 
 
 --
--- Name: COLUMN clinic_consultants.sds_user_id; Type: COMMENT; Schema: renalware; Owner: -
+-- Name: COLUMN clinic_consultants.sds_user_id_deprecated; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON COLUMN renalware.clinic_consultants.sds_user_id IS 'Spine Directory Service User ID';
+COMMENT ON COLUMN renalware.clinic_consultants.sds_user_id_deprecated IS 'Spine Directory Service User ID';
 
 
 --
@@ -22195,10 +22195,10 @@ CREATE UNIQUE INDEX index_clinic_consultants_on_name ON renalware.clinic_consult
 
 
 --
--- Name: index_clinic_consultants_on_sds_user_id; Type: INDEX; Schema: renalware; Owner: -
+-- Name: index_clinic_consultants_on_sds_user_id_deprecated; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE UNIQUE INDEX index_clinic_consultants_on_sds_user_id ON renalware.clinic_consultants USING btree (sds_user_id) WHERE (deleted_at IS NULL);
+CREATE UNIQUE INDEX index_clinic_consultants_on_sds_user_id_deprecated ON renalware.clinic_consultants USING btree (sds_user_id_deprecated) WHERE (deleted_at IS NULL);
 
 
 --
@@ -32089,9 +32089,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware,renalware_demo,public,heroku_ext;
+SET search_path TO renalware, renalware_demo, public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251221131016'),
 ('20251219110251'),
 ('20251218161519'),
 ('20251123203146'),

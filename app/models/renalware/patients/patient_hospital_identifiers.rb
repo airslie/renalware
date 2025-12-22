@@ -8,7 +8,6 @@
 # patient number, at least until another number with a higher 'preference' is assigned to the
 # patient. The order of preference for local patient ids is set in Renalware.config (in an
 # initialiser in the host application) in
-
 module Renalware
   module Patients
     class PatientHospitalIdentifiers

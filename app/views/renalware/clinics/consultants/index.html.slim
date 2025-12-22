@@ -29,7 +29,6 @@
       tr
         th.actions.col-width-small
         th.col-width-medium= sort_link(search, :code)
-        th.col-width-medium= sort_link(search, :sds_user_id)
         th= sort_link(search, :name)
         th Telephone
         th.col-width-date-time= sort_link(search, :deleted_at)
@@ -49,7 +48,6 @@
                                   method: :delete,
                                   data: { confirm: "Are you sure?" }
           td= consultant.code
-          td= consultant.sds_user_id
           td= consultant.name
           td= consultant.telephone
           td= l(consultant.deleted_at)
