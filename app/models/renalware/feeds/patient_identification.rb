@@ -130,12 +130,15 @@ module Renalware
         age_in_years < years
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       def telecoms
         @telecoms ||= begin
           telcoms = { email: nil, telephone: [] }
           (phone_home || "").split("~").each_with_object(telcoms) do |option, hash|
-            parts = option.split("^")
-            parts[0] = "" if parts[0].strip == '""'
+            parts = Array(option&.split("^"))
+            next if parts.empty?
+
+            parts[0] = "" if parts[0]&.strip == '""'
             if parts[1]&.downcase == "email"
               hash[:email] = parts[0]
             else
@@ -144,6 +147,7 @@ module Renalware
           end
         end
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
       def email       = telecoms[:email]
       def telephone   = telecoms[:telephone]
