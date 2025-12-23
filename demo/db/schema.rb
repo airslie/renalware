@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_21_131016) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_23_084129) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -104,6 +104,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_21_131016) do
     "N",
     "O",
     "P",
+    "IP",
     "R",
     "S",
     "U",
@@ -118,6 +119,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_21_131016) do
     "DC",
     "ER",
     "HD",
+    "I",
     "IP",
     "RP",
     "SC",
@@ -855,6 +857,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_21_131016) do
     "N",
     "O",
     "P",
+    "IP",
     "R",
     "S",
     "U",
@@ -869,6 +872,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_21_131016) do
     "DC",
     "ER",
     "HD",
+    "I",
     "IP",
     "RP",
     "SC",
