@@ -250,6 +250,7 @@ CREATE TYPE renalware.enum_hl7_observation_result_status_codes AS ENUM (
     'N',
     'O',
     'P',
+    'IP',
     'R',
     'S',
     'U',
@@ -269,6 +270,7 @@ CREATE TYPE renalware.enum_hl7_orc_order_status AS ENUM (
     'DC',
     'ER',
     'HD',
+    'I',
     'IP',
     'RP',
     'SC'
@@ -32089,9 +32091,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware, renalware_demo, public, heroku_ext;
+SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251223084129'),
 ('20251221131016'),
 ('20251219110251'),
 ('20251218161519'),
