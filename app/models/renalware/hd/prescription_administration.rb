@@ -117,12 +117,17 @@ module Renalware
         administered.nil? || administered == false
       end
 
-      def check_administered_by_password
+      def check_administered_by_password # rubocop:disable Metrics/MethodLength
         return if administered_by.blank?
 
         self.administrator_authorised = false
         handle_ldap_error_for(:administered_by_password) do
-          if administered_by.valid_password?(administered_by_password)
+          password_ok = Users::LdapRebind.verify_password!(
+            username: administered_by.username,
+            password: administered_by_password
+          )
+
+          if password_ok
             self.administrator_authorised = true
             set_signed_off_at_if_fully_authorised
           else
@@ -131,12 +136,17 @@ module Renalware
         end
       end
 
-      def check_witnessed_by_password
+      def check_witnessed_by_password # rubocop:disable Metrics/MethodLength
         return if witnessed_by.blank?
 
         handle_ldap_error_for(:witnessed_by_password) do
           self.witness_authorised = false
-          if witnessed_by.valid_password?(witnessed_by_password)
+          password_ok = Users::LdapRebind.verify_password!(
+            username: witnessed_by.username,
+            password: witnessed_by_password
+          )
+
+          if password_ok
             self.witness_authorised = true
             set_signed_off_at_if_fully_authorised
           else

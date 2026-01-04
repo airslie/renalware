@@ -16,28 +16,54 @@ div class="bg-gray-50 w-full overflow-y-auto"
   div class="max-w-md w-full space-y-8 mx-auto px-4 mt-12"
     h2 class="text-3xl font-bold tracking-tight text-center" Sign in
 
-    = simple_form_for(resource,
-                      as: resource_name,
-                      url: session_path(resource_name),
-                      html: { autocomplete: "off" }) do |f|
-      div
-        = render Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: false)
+    - unless Renalware.config.ldap_authentication
+      = simple_form_for(resource,
+                        as: resource_name,
+                        url: session_path(resource_name),
+                        html: { autocomplete: "off" }) do |f|
+        div
+          = render Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: false)
 
-      = f.input :username, input_html: { autofocus: true, autocomplete: "email" }, label_html: { class: "!hidden" }, required: true
-      = f.input :password, input_html: { autocomplete: "current-password" }, label_html: { class: "!hidden" }, required: true, placeholder: true
+        = f.input :username, input_html: { autofocus: true, autocomplete: "email" }, label_html: { class: "!hidden" }, required: true
+        = f.input :password, input_html: { autocomplete: "current-password" }, label_html: { class: "!hidden" }, required: true, placeholder: true
 
-      / = f.input(:remember_me, as: :boolean, boolean_style: :inline) if devise_mapping.rememberable?
+        / = f.input(:remember_me, as: :boolean, boolean_style: :inline) if devise_mapping.rememberable?
 
-      .actions.mt-6
-        = f.submit "Log in", class: "btn btn-primary w-full"
+        .actions.mt-6
+          = f.submit "Log in", class: "btn btn-primary w-full"
 
-      .mt-8.flex.flex-col
-        - Renalware.config.external_links.each do |title, url|
-          .flex.items-center.justify-center.pb-1
-            = external_link_to(title, url, gap: 2, class: "font-bold")
-      .mt-6
-        = render "signup_help"
-        = render "devise/shared/links"
-      - if devise_mapping.omniauthable? && Renalware.config.entra_omniauth_enabled
+        .mt-8.flex.flex-col
+          - Renalware.config.external_links.each do |title, url|
+            .flex.items-center.justify-center.pb-1
+              = external_link_to(title, url, gap: 2, class: "font-bold")
         .mt-6
-          = link_to "Sign in with Microsoft", user_entra_id_omniauth_authorize_path, class: "btn btn-primary", method: :post
+          = render "signup_help"
+          = render "devise/shared/links"
+
+    - if Renalware.config.ldap_authentication
+      = form_with url: user_ldap_omniauth_callback_path, method: :post, local: true, html: { autocomplete: "off" }, data: { turbo: false } do |f|
+        div
+          = render Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: false)
+
+
+        .flex.flex-col
+          div
+            = f.label :username, "Username"
+            = f.text_field :username, input_html: { autofocus: true, autocomplete: "username" }, label_html: { class: "!hidden" }, required: true
+          div
+            = f.label :username, "Password"
+            = f.password_field :password, input_html: { autocomplete: "current-password" }, label_html: { class: "!hidden" }, required: true, placeholder: true
+
+        .actions.mt-6
+          = f.submit "Log in", class: "btn btn-primary w-full"
+
+        .mt-8.flex.flex-col
+          - Renalware.config.external_links.each do |title, url|
+            .flex.items-center.justify-center.pb-1
+              = external_link_to(title, url, gap: 2, class: "font-bold")
+        .mt-6
+          = render "devise/shared/links"
+
+    - if devise_mapping.omniauthable? && Renalware.config.entra_omniauth_enabled
+      .mt-6
+        = link_to "Sign in with Microsoft", user_entra_id_omniauth_authorize_path, class: "btn btn-primary", method: :post

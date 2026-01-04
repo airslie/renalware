@@ -18,7 +18,7 @@ module Renalware
         # - lib/devise/strategies/ldap_authenticatable.rb
         devise(
           :database_authenticatable,
-          :ldap_authenticatable,
+          # :ldap_authenticatable,
           :expirable,
           :lockable,
           :rememberable,
@@ -27,7 +27,7 @@ module Renalware
           :registerable,
           :timeoutable,
           :omniauthable,
-          omniauth_providers: [:entra_id]
+          omniauth_providers: [:entra_id, :ldap]
         )
 
         # Password recovery (forgot password) is only enabled for database auth,
