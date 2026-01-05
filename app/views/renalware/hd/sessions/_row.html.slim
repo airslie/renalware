@@ -2,6 +2,8 @@ tbody.hd-session-row(class=[session.state, stripe_class])
   tr
     td.toggleable--toggler-container.noprint(rowspan=2)= row_toggler
     td.actions.noprint(rowspan=2)
+      / Don't attempt to render links or use policies if this is an active job ie if request is nil
+      - if request
         - if policy(session).copy_to_clipboard?
           = link_to("#",
                     title: "Copy session details to clipboard",
