@@ -31,6 +31,47 @@ module Renalware::Patients::Ingestion
     # rubocop:enable Metrics/MethodLength
 
     describe "#call" do
+      context "when the patient does not exist" do
+        it "does not create a patient" do
+          hl7_data = OpenStruct.new(
+            hospital_number: "A123",
+            nhs_number: "9999999999",
+            family_name: "new_family_name",
+            given_name: "new_given_name",
+            born_on: Date.parse("2000-01-01")
+          )
+          hl7_message = hl7_message_from_file("ADT_A31", hl7_data)
+
+          expect {
+            described_class.new(hl7_message).call
+          }.not_to change(Renalware::Patient, :count)
+        end
+
+        context "when the patient does not exist but config says always create patients" do
+          before do
+            create(:user, :system)
+            allow(Renalware.config)
+              .to receive(:feeds_always_create_patient_on_a31_a28_as_tie_is_filtering_by_renal)
+              .and_return(true)
+          end
+
+          it "does creates a patient" do
+            hl7_data = OpenStruct.new(
+              hospital_number: "A123",
+              nhs_number: "9999999999",
+              family_name: "new_family_name",
+              given_name: "new_given_name",
+              born_on: Date.parse("2000-01-01")
+            )
+            hl7_message = hl7_message_from_file("ADT_A31", hl7_data)
+
+            expect {
+              described_class.new(hl7_message).call
+            }.to change(Renalware::Patient, :count).by(1)
+          end
+        end
+      end
+
       context "when the patient has the death modality but no cause of death or died_on set" do
         it "can update the patient without triggering missing cause of death validations" do
           patient = create_deceased_patient_with_incomplete_death_attributes(

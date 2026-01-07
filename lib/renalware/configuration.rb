@@ -297,6 +297,15 @@ module Renalware
       [:pdf, :rtf].find { |x| x == fmt } || :pdf
     }
 
+    config_accessor(:feeds_always_create_patient_on_a31_a28_as_tie_is_filtering_by_renal) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch(
+          "FEEDS_ALWAYS_CREATE_PATIENT_ON_A31_A28_AS_TIE_IS_FILTERING_BY_RENAL",
+          "false"
+        )
+      )
+    }
+
     config_accessor(:replay_historical_pathology_when_new_patient_added) {
       ActiveModel::Type::Boolean.new.cast(
         ENV.fetch("REPLAY_HISTORICAL_PATHOLOGY_WHEN_NEW_PATIENT_ADDED", "true")
