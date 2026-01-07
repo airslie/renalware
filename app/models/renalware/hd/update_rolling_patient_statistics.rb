@@ -8,9 +8,10 @@ module Renalware
 
       def call
         return unless recent_sessions.any?
+        return if effective_hospital_unit.nil?
 
         stats = rolling_stats_for_this_patient
-        stats.hospital_unit = most_recently_used_hospital_unit
+        stats.hospital_unit = effective_hospital_unit
         stats.assign_attributes(auditable_sessions.to_h)
         stats.session_count = recent_sessions.count
         stats.save!
@@ -37,9 +38,11 @@ module Renalware
         ).first_or_initialize
       end
 
-      def most_recently_used_hospital_unit
-        recent_sessions.last.hospital_unit
+      def effective_hospital_unit
+        patient.hd_profile&.hospital_unit || most_recently_used_hospital_unit
       end
+
+      def most_recently_used_hospital_unit = recent_sessions.last.hospital_unit
     end
   end
 end
