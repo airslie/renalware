@@ -20,16 +20,6 @@
         div= t("devise.registrations.edit.currently_waiting_confirmation_for_email", email: resource.unconfirmed_email)
 
       .field.large-8.small-6
-        = f.label :password
-        i = t("devise.registrations.edit.leave_blank_if_you_don_t_want_to_change_it")
-        = f.password_field :password, autocomplete: "off"
-      p = Renalware.config.password_policy_description
-
-      .field.large-8.small-6
-        = f.label :password_confirmation
-        = f.password_field :password_confirmation, autocomplete: "off"
-
-      .field.large-8.small-6
         = f.label :current_password
         i= t("devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes")
         = f.password_field :current_password, autocomplete: "off"
@@ -54,5 +44,18 @@
       / .field.large-8.small-6
       /   = f.label :language
       /   = f.collection_select(:language, [["English", "en-GB"]], :last, :first, prompt: true)
+
+      - unless Renalware.config.ldap_authentication || Renalware.config.entra_omniauth_enabled
+        div.bg-gray-50.p-4.rounded.border.mb-4
+          div.font-bold.mb-2 Change your password
+          .field.large-8.small-6
+            = f.label :password, "New password"
+            i = t("devise.registrations.edit.leave_blank_if_you_don_t_want_to_change_it")
+            = f.password_field :password, autocomplete: "off"
+          p = Renalware.config.password_policy_description
+
+          .field.large-8.small-6
+            = f.label :password_confirmation
+            = f.password_field :password_confirmation, autocomplete: "off"
 
       = save_or_cancel(form: f, back_path: :back)
