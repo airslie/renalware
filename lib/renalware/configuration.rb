@@ -351,9 +351,18 @@ module Renalware
         ENV.fetch("HD_SESSION_FORM_PRESCRIPTION_DAYS_LOOKAHEAD", 10)
       ) || 10
     }
-    config_accessor(:batch_printing_enabled) { true }
+    config_accessor(:batch_printing_enabled) {
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("BATCH_PRINTING_ENABLED", "true"))
+    }
     config_accessor(:allow_uploading_patient_attachments) { true }
-    config_accessor(:generate_pathology_request_forms_from_hd_mdm_listing) { true }
+    config_accessor(:generate_pathology_request_forms_from_hd_mdm_listing) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("GENERATE_PATHOLOGY_REQUEST_FORMS_FROM_HD_MDM_LISTING", "true")
+      )
+    }
+    config_accessor(:hd_max_session_forms_to_print_in_a_batch) {
+      ActiveModel::Type::Integer.new.cast(ENV.fetch("HD_MAX_SESSION_FORMS_TO_PRINT_IN_A_BATCH", 50))
+    }
     config_accessor(:disable_inputs_controlled_by_tissue_typing_feed) {
       ActiveModel::Type::Boolean.new.cast(
         ENV.fetch("DISABLE_INPUTS_CONTROLLED_BY_TISSUE_TYPING_FEED", "false")
