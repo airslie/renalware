@@ -1,18 +1,31 @@
-.page-action-inline-form
+.flex.items-start
+
   - if Renalware.config.batch_printing_enabled
-    / This form lets us batch print the HD Session Forms for all patients in the list (all pages)
-    = simple_form_for batch_print_form,
-                      as: :batch,
-                      url: hd_session_forms_batches_path,
-                      method: :post,
-                      remote: true do |f|
-      = f.input :patient_ids, as: :hidden_array
-      = button_tag(type: "submit",
-                  class: "button secondary",
-                  disabled: presenter.patients.none?) do
-        .flex.items-center.gap-2
-          = inline_icon(:printer, size: :md)
-          = "Batch Print #{presenter.pagy.count} HD Session Forms"
+    - too_many_patients = presenter.pagy.count > Renalware.config.hd_max_session_forms_to_print_in_a_batch
+    - disabled = presenter.patients.none? || too_many_patients
+
+    .flex.items-start
+
+      - if too_many_patients
+        div.px-2.bg-blue-50.border.border-gray-50.rounded.mr-3
+          i.fa.fa-info-circle.text-blue-500.mr-3
+          = "Too many patients to batch print - filter to maximum #{Renalware.config.hd_max_session_forms_to_print_in_a_batch}"
+
+      / This form lets us batch print the HD Session Forms for all patients in the list (all pages)
+      = simple_form_for batch_print_form,
+                        as: :batch,
+                        url: hd_session_forms_batches_path,
+                        method: :post,
+                        remote: true do |f|
+        = f.input :patient_ids, as: :hidden_array
+        = button_tag(type: "submit",
+                    class: "button secondary",
+                    style: "#{disabled ? 'color: gray; cursor: not-allowed;' : ''}" ,
+                    disabled: disabled) do
+          .flex.items-center.gap-2
+            = inline_icon(:printer, size: :md)
+            = "Batch Print #{presenter.pagy.count} HD Session Forms"
+
 
   / This form lets us generate pathology request forms (eg for monthly bloods) for all patients
   / in the list (all pages)
