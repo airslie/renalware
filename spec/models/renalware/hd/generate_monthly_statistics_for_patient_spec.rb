@@ -8,6 +8,7 @@ module Renalware
       let(:patient) { create(:hd_patient) }
       let(:period) { MonthPeriod.new(month: 12, year: 2016) }
       let(:hospital_unit) { create(:hospital_unit) }
+      let(:hospital_unit2) { create(:hospital_unit) }
       let(:month) { 12 }
       let(:year)  { 2016 }
       let(:hgb)   { create(:pathology_observation_description, :hgb) }
@@ -94,6 +95,34 @@ module Renalware
           expect(stats.pathology_snapshot[code]).to eq(
             "result" => "1.0", "observed_at" => "2016-12-03T00:00:00"
           )
+        end
+      end
+
+      context "when the patient has an HD profile with a hospital unit" do
+        it "uses that hospital unit for the stats row" do
+          create(:hd_profile, patient: patient, hospital_unit: hospital_unit2)
+          travel_to Date.new(2016, 12, 3) do
+            create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+          end
+
+          expect { command.call }.to change(PatientStatistics, :count).by(1)
+
+          stats = PatientStatistics.first
+          expect(stats.hospital_unit).to eq(hospital_unit2)
+        end
+      end
+
+      context "when the patient has an HD profile with no hospital unit" do
+        it "uses that hospital unit for the stats row" do
+          create(:hd_profile, patient: patient, hospital_unit: nil)
+          travel_to Date.new(2016, 12, 3) do
+            create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+          end
+
+          expect { command.call }.to change(PatientStatistics, :count).by(1)
+
+          stats = PatientStatistics.first
+          expect(stats.hospital_unit).to eq(hospital_unit)
         end
       end
     end

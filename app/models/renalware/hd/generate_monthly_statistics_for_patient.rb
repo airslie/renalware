@@ -18,9 +18,10 @@ module Renalware
 
       def create_patient_statistics(sessions)
         return unless sessions.any?
+        return if effective_hospital_unit(sessions).nil?
 
         stats = build_patient_statistics
-        stats.hospital_unit = most_recently_used_hospital_unit(sessions)
+        stats.hospital_unit = effective_hospital_unit(sessions)
         stats.assign_attributes(auditable_sessions(sessions).to_h)
         stats.session_count = sessions.length
         stats.pathology_snapshot = capture_pathology_snapshot
@@ -42,6 +43,10 @@ module Renalware
 
       def most_recently_used_hospital_unit(sessions)
         sessions.last&.hospital_unit
+      end
+
+      def effective_hospital_unit(sessions)
+        patient.hd_profile&.hospital_unit || most_recently_used_hospital_unit(sessions)
       end
 
       def capture_pathology_snapshot
