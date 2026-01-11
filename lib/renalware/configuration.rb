@@ -100,7 +100,11 @@ module Renalware
       ENV.fetch("TELEPHONE_ON_HOMECARE_DELIVERY_FORMS", "")
     }
     config_accessor(:hospital_department) { ENV.fetch("HOSPITAL_DEPARTMENT", "Renal") }
-    config_accessor(:delay_after_which_a_finished_session_becomes_immutable) { 6.hours }
+    config_accessor(:delay_after_which_a_finished_session_becomes_immutable) {
+      ActiveModel::Type::Integer.new.cast(
+        ENV.fetch("DELAY_AFTER_WHICH_A_FINISHED_SESSION_BECOMES_IMMUTABLE_HOURS", 6)
+      ).hours
+    }
     config_accessor(:new_clinic_visit_deletion_window) { 24.hours }
     config_accessor(:new_clinic_visit_edit_window) { 7.days }
     config_accessor(:salutation_prefix) { "Dear" }
