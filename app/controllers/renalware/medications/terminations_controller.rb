@@ -4,10 +4,9 @@ module Renalware
       include PresenterHelper
       include Concerns::ReturnTo
 
-      before_action :load_patient
-
       def new
         termination = prescription.build_termination(terminated_on: Date.current)
+        authorize termination
 
         render_form(
           prescription, termination,
@@ -17,6 +16,7 @@ module Renalware
 
       def create
         termination = prescription.build_termination(termination_params)
+        authorize termination
 
         if termination.save(validate: false)
           redirect_to return_to_param || patient_prescriptions_path(patient)
