@@ -1,12 +1,11 @@
 module Renalware
   module Letters
     class FormattedLettersController < Letters::BaseController
-      before_action :load_patient
-
       layout "renalware/layouts/letter"
 
       def show
         letter = find_letter(params[:letter_id])
+        authorize letter
         letter = present_letter(letter)
 
         respond_to do |format|
@@ -19,7 +18,8 @@ module Renalware
       private
 
       def find_letter(id)
-        @patient.letters
+        patient
+          .letters
           .with_patient
           .with_main_recipient
           .with_cc_recipients
