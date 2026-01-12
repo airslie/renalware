@@ -90,7 +90,6 @@ module Renalware::Feeds
           )
         else
           result = described_class.call(patient_identification: pi)
-          p scenarios_overrides
           if scenarios_overrides[:found] == true
             expect(result).to eq(patient)
           else

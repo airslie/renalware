@@ -27,7 +27,7 @@ describe "Rendering guide/help JSON for a Help::Tours::Page" do
         )
 
         get help_tours_page_path(id: "foo", format: :json)
-        p response
+
         expect(response).to be_successful
         expect(response.content_type).to match("application/json")
 

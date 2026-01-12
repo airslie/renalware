@@ -47,10 +47,7 @@ module Renalware
         it "maps a message to a patient" do
           british_nationality
           message = hl7_message_from_file("ADT_A31", hl7_data)
-          p message
-          p message.patient_identification.nationality
           mapped_patient = described_class.new(message)
-
           stub_primary_care_physician_find
           stub_practice_find
           religion
