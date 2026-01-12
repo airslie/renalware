@@ -76,7 +76,7 @@ group :test do
   gem "rspec_junit_formatter", "~> 0.4"
   gem "rspec-retry"
   # gem "selenium-webdriver", "4.28.0"
-  gem "shoulda-matchers", "~> 6.1"
+  gem "shoulda-matchers", "~> 7.0"
   gem "simplecov", require: false # only loaded if required
   gem "simplecov-cobertura", "~> 3.1", require: false
   gem "test-prof"
@@ -107,7 +107,7 @@ group :development do
   gem "rubocop-rake", require: false
   gem "rubocop-rspec", require: false
   gem "rubocop-rspec_rails", require: false
-  gem "ruby-lsp", "~> 0.24.2", require: false
+  gem "ruby-lsp", "~> 0.24", require: false
   gem "web-console"
 
   # For sentry error reporting and metrics - load stackprof first
