@@ -2,8 +2,8 @@ require_relative "rails_helper"
 
 FactoryBot.definition_file_paths = Array(Renalware::Engine.root.join("spec", "factories"))
 FactoryBot.find_definitions
-factory_names = FactoryBot.factories.map(&:name)
-puts "Checking factories #{factory_names.first}"
+# factory_names = FactoryBot.factories.map(&:name)
+# puts "Checking factories #{factory_names.first}"
 
 RSpec.describe "Factories" do
   pending "Skipping factories spec for now - some flakiness in CI, and not critical"
