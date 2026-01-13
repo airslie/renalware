@@ -1,10 +1,9 @@
 module Renalware
   module Patients
     class WorriesController < BaseController
-      before_action :load_patient, only: :create
-
       # idempotent
       def create
+        authorize Worry, :create?
         worry = Worry.find_or_create_by!(patient: patient) do |wor|
           wor.by = user
         end

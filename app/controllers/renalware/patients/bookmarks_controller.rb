@@ -3,8 +3,6 @@ module Renalware
     class BookmarksController < BaseController
       include Pagy::Backend
 
-      before_action :load_patient, only: :create
-
       # Display the user's bookmarks
       def index
         search = BookmarksQuery.new(
@@ -19,6 +17,7 @@ module Renalware
 
       # idempotent
       def create
+        authorize Bookmark, :create?
         Bookmark.find_or_create_by!(user: user, patient: patient) do |bookmark|
           bookmark.assign_attributes(bookmark_params)
         end
