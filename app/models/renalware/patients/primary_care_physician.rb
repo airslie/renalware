@@ -23,27 +23,27 @@ module Renalware
       validates :name, presence: true
       alias_attribute :family_name, :name
 
-      def full_name
-        :name
+      scope :ordered, -> { order(default_gp: :asc, name: :asc) }
+
+      # Used when the patient has a practice but no gp assigned, and we need to
+      # send them a letter. We add this generic GP to any practice that needs it in order to be
+      # able to send a letter.
+      def self.generic
+        gp = find_or_initialize_by(name: "General Practitioner", code: "GENERIC")
+        if gp.new_record?
+          gp.practitioner_type = "GP"
+          # Don't validate because PrimaryCarePhysicians::AddressValidator says at least one
+          # practice must be present, at there none at this point.
+          gp.save!(validate: false)
+        end
+        gp
       end
 
-      def given_name
-        ""
-      end
-
-      def to_s
-        [title, name].compact.join(" ")
-      end
-
-      def skip_given_name_validation?
-        true
-      end
-
-      scope :ordered, -> { order(name: :asc) }
-
-      def title
-        "Dr"
-      end
+      def full_name     = :name
+      def given_name    = ""
+      def to_s          = [title, name].compact.join(" ")
+      def title         = "Dr"
+      def skip_given_name_validation? = true
 
       def salutation
         [

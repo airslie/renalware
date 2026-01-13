@@ -6,9 +6,9 @@ article.main-recipient
 
     .radio_buttons.row.optional.letter_main_recipient_person_role.field_with_hint
       .columns.small-12
-        - if patient.primary_care_physician.nil? || patient.practice.nil?
+        - if patient.practice.nil?
           .panel
-            | No option to send to GP as patient is missing a practice or GP
+            | No option to send to GP as patient is missing a practice
         = fmr.collection_radio_buttons(:person_role,
                                        letter.person_roles,
                                        :second,

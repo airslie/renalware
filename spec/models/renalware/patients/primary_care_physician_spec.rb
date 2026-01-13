@@ -26,5 +26,23 @@ module Renalware::Patients
         )
       end
     end
+
+    describe ".generic" do
+      it "finds or creates a system-level default GP" do
+        # Initially does not exists but will create JIT
+        gp = nil
+        expect {
+          gp = described_class.generic
+        }.to change(described_class, :count).by(1)
+        expect(gp).to have_attributes(name: "General Practitioner", code: "GENERIC")
+
+        # look again and it will be there already so this tests that branch
+        gp = nil
+        expect {
+          gp = described_class.generic
+        }.not_to change(described_class, :count)
+        expect(gp).to have_attributes(name: "General Practitioner", code: "GENERIC")
+      end
+    end
   end
 end

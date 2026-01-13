@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_23_084129) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_12_190854) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -4466,6 +4466,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_084129) do
     t.date "joined_on"
     t.date "left_on"
     t.boolean "active", default: true, null: false
+    t.boolean "default_gp", default: false, null: false, comment: "A membership with default_gp=true will be the default GP for a Practice in case the patient has no specific PrimaryCarePhysician assigned (one is required for letters etc). Only one (undeleted) membership per Practice can have default_gp=true. Generally this will be assigned to the system-level Generic PrimaryCarePhysician unless a specific PrimaryCarePhysician is assigned as default."
+    t.index ["default_gp", "practice_id"], name: "index_unique_default_gp_per_practice", unique: true, where: "((default_gp = true) AND (deleted_at IS NULL))"
     t.index ["deleted_at"], name: "index_patient_practice_memberships_on_deleted_at"
     t.index ["practice_id", "primary_care_physician_id"], name: "idx_practice_membership", unique: true
     t.index ["practice_id"], name: "index_patient_practice_memberships_on_practice_id"
@@ -5326,6 +5328,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_084129) do
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "hidden", default: false, null: false
     t.boolean "enforce", default: false, null: false
+    t.string "ad_role_name"
     t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
@@ -6098,6 +6101,37 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_084129) do
     t.integer "item_id", null: false
     t.datetime "created_at", precision: nil
     t.index ["item_type", "item_id"], name: "index_virology_versions_on_item_type_and_item_id"
+  end
+
+  create_table "xx", id: false, force: :cascade do |t|
+    t.integer "patient_id"
+    t.integer "hospital_unit_id"
+    t.integer "modality_description_id"
+    t.date "performed_on"
+    t.time "start_time"
+    t.time "end_time"
+    t.integer "duration"
+    t.text "notes"
+    t.integer "created_by_id"
+    t.integer "updated_by_id"
+    t.jsonb "document"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.integer "signed_on_by_id"
+    t.integer "signed_off_by_id"
+    t.string "type"
+    t.datetime "signed_off_at", precision: nil
+    t.integer "profile_id"
+    t.integer "dry_weight_id"
+    t.bigint "dialysate_id"
+    t.uuid "uuid"
+    t.bigint "external_id"
+    t.datetime "deleted_at", precision: nil
+    t.datetime "started_at", precision: nil
+    t.datetime "stopped_at", precision: nil
+    t.bigint "provider_id"
+    t.string "machine_ip_address"
+    t.bigint "hd_station_id"
   end
 
   add_foreign_key "access_assessments", "access_types", column: "type_id"
