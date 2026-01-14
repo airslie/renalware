@@ -87,14 +87,16 @@ module Renalware
       end
 
       # TODO: move to a query object
+      # Make sure that the default_gp floats to the top
       def find_practice_memberships_for(practice_id)
         PracticeMembership
           .eager_load(:primary_care_physician)
           .where(practice_id: practice_id)
-          .where("#{PrimaryCarePhysician.table_name}.deleted_at is NULL")
+          .where(patient_primary_care_physicians: { deleted_at: nil })
           .order(
-            "#{PracticeMembership.table_name}.left_on desc," \
-            "#{PrimaryCarePhysician.table_name}.name asc"
+            "patient_practice_memberships.default_gp desc," \
+            "patient_practice_memberships.left_on desc," \
+            "patient_primary_care_physicians.name asc"
           )
       end
 
