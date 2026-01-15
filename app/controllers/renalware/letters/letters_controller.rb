@@ -2,7 +2,7 @@
 
 module Renalware
   module Letters
-    class LettersController < Letters::BaseController
+    class LettersController < Letters::BaseController # rubocop:disable Metrics/ClassLength
       include Pagy::Backend
 
       before_action :load_patient, except: [:author]
@@ -45,6 +45,7 @@ module Renalware
 
       def new
         @patient = load_and_authorize_patient
+        ensure_patient_has_primary_care_physician
         letter = LetterFactory.new(
           @patient,
           event: find_event,
@@ -108,6 +109,18 @@ module Renalware
       end
 
       private
+
+      # Ensure that the patient has a primary care physician and if not assign the default one
+      # from their practice (if they have one).
+      def ensure_patient_has_primary_care_physician
+        return if @patient.practice.blank?
+        return if @patient.primary_care_physician.present?
+
+        @patient.by = SystemUser.find # Use system user so as to not implicate the current_user
+        @patient.primary_care_physician =
+          @patient.practice.default_primary_care_physician.becomes(Letters::PrimaryCarePhysician)
+        @patient.save!(validate: false)
+      end
 
       def load_and_authorize_patient
         patient = Patient.includes(:prescriptions).find_by(secure_id: params[:patient_id])
