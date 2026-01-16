@@ -94,3 +94,4 @@ renalware.code-workspace
 .unused-env
 spec/dummy
 .claude/settings.local.json
+demo/MESH_NHS_CA_FILE
