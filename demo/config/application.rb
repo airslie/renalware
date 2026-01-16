@@ -46,11 +46,6 @@ module Demo
       config.raise_on_file_not_found = true
     end
 
-    # We want to start being agnostic about ActiveJob backend rather than being attached to
-    # DelayedJob so am using good_job in the demo.
-    # At the time of writing there are still a couple DelayedJob references in core eg using a
-    # Struct for the job class in order to override the max_tries - which does not seem to be
-    # possible in delayed_job when inheriting from ActiveJob::Base - but I might be wrong
     config.active_job.queue_adapter = :good_job
   end
 end
