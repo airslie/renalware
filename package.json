@@ -22,8 +22,6 @@
     "classlist.js": "^1.1.20150312",
     "date-fns": "^4.1.0",
     "debounce": "^2.2.0",
-    "eslint": "^9.9",
-    "eslint-plugin-import": "^2.7.0",
     "flatpickr": "^4.6.13",
     "foundation-datepicker": "1.5.0",
     "highcharts": "11.4.8",
@@ -49,10 +47,9 @@
     "build:css": "./demo/bin/yarn build:css"
   },
   "devDependencies": {
+    "eslint": "^9.9",
+    "eslint-plugin-import": "^2.7.0",
     "playwright": "1.54.1",
-    "prettier": "^3.4",
-    "stylelint": "^16.21.1",
-    "stylelint-config-standard-scss": "^15.0.1",
-    "stylelint-scss": "^6.12.1"
+    "prettier": "^3.4"
   }
 }
