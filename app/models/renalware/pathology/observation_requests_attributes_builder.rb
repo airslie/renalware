@@ -20,30 +20,22 @@ module Renalware
       alias_attribute :requests, :observation_requests
 
       # hl7_message is an HL7Message (a decorator around an ::HL7::Message)
-      def initialize(hl7_message, logger = Delayed::Worker.logger)
+      def initialize(hl7_message)
         @hl7_message = hl7_message
-        @logger = logger
       end
 
       # Return an array of observation request attributes (with a nested array of
       # child observation attributes) for each OBR in the HL7 message.
       # The resulting array will be used to create the corresponding database records.
       def parse
-        if renalware_patient?
-          build_patient_params
-        else
-          logger.debug("Did not process pathology for #{internal_id}: not a renalware patient")
-          nil
-        end
+        build_patient_params if renalware_patient?
       end
 
-      def renalware_patient?
-        patient.present?
-      end
+      def renalware_patient? = patient.present?
 
       private
 
-      attr_reader :hl7_message, :logger
+      attr_reader :hl7_message
 
       def sender
         @sender ||= Sender.resolve!(

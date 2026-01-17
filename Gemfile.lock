@@ -257,7 +257,7 @@ GEM
       execjs (~> 2)
     awesome_print (1.9.2)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1202.0)
+    aws-partitions (1.1205.0)
     aws-sdk-core (3.241.3)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -289,7 +289,7 @@ GEM
     bindex (0.8.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
-    bootsnap (1.20.1)
+    bootsnap (1.21.1)
       msgpack (~> 1.2)
     brakeman (7.1.2)
       racc
@@ -455,7 +455,7 @@ GEM
       logger
     highline (3.1.2)
       reline
-    httparty (0.24.0)
+    httparty (0.24.2)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -540,9 +540,10 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0924)
+    mime-types-data (3.2026.0113)
     mini_mime (1.1.5)
-    minitest (5.26.2)
+    minitest (6.0.1)
+      prism (~> 1.5)
     msgpack (1.8.0)
     multi_test (1.1.0)
     multi_xml (0.8.1)
@@ -610,7 +611,8 @@ GEM
       opentelemetry-semantic_conventions
     opentelemetry-helpers-sql (0.3.0)
       opentelemetry-api (~> 1.7)
-    opentelemetry-helpers-sql-processor (0.3.1)
+    opentelemetry-helpers-sql-processor (0.4.0)
+      opentelemetry-api (~> 1.0)
       opentelemetry-common (~> 0.21)
     opentelemetry-instrumentation-action_mailer (0.6.1)
       opentelemetry-instrumentation-active_support (~> 0.10)
@@ -632,11 +634,11 @@ GEM
       opentelemetry-registry (~> 0.1)
     opentelemetry-instrumentation-concurrent_ruby (0.24.0)
       opentelemetry-instrumentation-base (~> 0.25)
-    opentelemetry-instrumentation-faraday (0.30.1)
+    opentelemetry-instrumentation-faraday (0.31.0)
       opentelemetry-instrumentation-base (~> 0.25)
-    opentelemetry-instrumentation-net_http (0.26.1)
+    opentelemetry-instrumentation-net_http (0.27.0)
       opentelemetry-instrumentation-base (~> 0.25)
-    opentelemetry-instrumentation-pg (0.34.1)
+    opentelemetry-instrumentation-pg (0.35.0)
       opentelemetry-helpers-sql
       opentelemetry-helpers-sql-processor
       opentelemetry-instrumentation-base (~> 0.25)
@@ -896,13 +898,13 @@ GEM
     securerandom (0.4.1)
     sendgrid-ruby (6.7.0)
       ruby_http_client (~> 3.4)
-    sentry-opentelemetry (6.2.0)
+    sentry-opentelemetry (6.3.0)
       opentelemetry-sdk (~> 1.0)
-      sentry-ruby (~> 6.2.0)
-    sentry-rails (6.2.0)
+      sentry-ruby (~> 6.3.0)
+    sentry-rails (6.3.0)
       railties (>= 5.2.0)
-      sentry-ruby (~> 6.2.0)
-    sentry-ruby (6.2.0)
+      sentry-ruby (~> 6.3.0)
+    sentry-ruby (6.3.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     shoulda-matchers (7.0.1)

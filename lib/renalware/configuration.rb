@@ -232,11 +232,11 @@ module Renalware
         transfer_of_care: "TOC_FHIR_OP_ATTEN"
       }[letters_mesh_workflow]
     }
-    config_accessor(:mesh_path_to_nhs_ca_file)    { ENV.fetch("MESH_PATH_TO_NHS_CA_FILE", "??") }
-    config_accessor(:mesh_nhs_ca_cert)            { ENV.fetch("MESH_NHS_CA_CERT", "??") }
-    config_accessor(:mesh_path_to_client_cert)    { ENV.fetch("MESH_PATH_TO_CLIENT_CERT", "??") }
+    config_accessor(:mesh_path_to_nhs_ca_file)    { ENV.fetch("MESH_PATH_TO_NHS_CA_FILE", "MESH_NHS_CA_FILE") }
+    config_accessor(:mesh_nhs_ca_cert)            { ENV.fetch("MESH_NHS_CA_CERT", "MESH_NHS_CA_CERT") }
+    config_accessor(:mesh_path_to_client_cert)    { ENV.fetch("MESH_PATH_TO_CLIENT_CERT", "MESH_CLIENT_CERT") }
     config_accessor(:mesh_client_cert)            { ENV.fetch("MESH_CLIENT_CERT", "") }
-    config_accessor(:mesh_path_to_client_key)     { ENV.fetch("MESH_PATH_TO_CLIENT_KEY", "??") }
+    config_accessor(:mesh_path_to_client_key)     { ENV.fetch("MESH_PATH_TO_CLIENT_KEY", "MESH_CLIENT_KEY") }
     config_accessor(:mesh_client_key)             { ENV.fetch("MESH_CLIENT_KEY", "") }
     config_accessor(:mesh_organisation_uuid)      { ENV.fetch("MESH_ORGANISATION_UUID", "??") }
     config_accessor(:mesh_itk_organisation_uuid)  { ENV.fetch("MESH_ORGANISATION_UUID", "??") }
