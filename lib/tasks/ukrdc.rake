@@ -87,9 +87,6 @@ namespace :ukrdc do
     logger.level     = Logger::INFO
     Rails.logger     = logger
 
-    # Using perform_now here because the delayed_job retry mechanism is a bit odd
-    # (there seems to be a retry at the delayed_job level and at the ActiveJob level..) anyway
-    # we do not to retry at all so making it synchronous.
     Renalware::UKRDC::Outgoing::TransferFilesJob.perform_now
   end
 end

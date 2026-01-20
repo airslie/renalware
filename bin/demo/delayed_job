@@ -1,5 +1,0 @@
-#!/bin/sh
-
-pushd demo
-bundle exec rake jobs:work
-popd

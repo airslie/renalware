@@ -44,8 +44,6 @@ Gem::Specification.new do |s|
   s.add_dependency "combine_pdf", "~> 1.0.26"
   s.add_dependency "concurrent-ruby", "~> 1.1"
   s.add_dependency "cronex", "~> 0.6"
-  s.add_dependency "delayed_job", "~> 4.1.4"
-  s.add_dependency "delayed_job_active_record", "~> 4.1.2"
   s.add_dependency "devise", "~> 4.8"
   s.add_dependency "devise-security"
   s.add_dependency "diffy"
