@@ -24863,8 +24863,7 @@ class GridRowAutoSpanController extends Controller {
   static targets = ["content"]
 
   connect() {
-    grid = this.element;
-    // let rowHeight = parseInt(
+    let grid = this.element;
     let rowHeight =  parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
     let rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
 
