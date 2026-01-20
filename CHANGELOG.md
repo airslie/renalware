@@ -11,9 +11,113 @@ This project adheres to Semantic Versioning.
 
 ## 2.4.5.6
 ### Added
+- HD Acuity Assessments #5403
+- Link to the User Guide from the help menu #5428
+- Additional validation when witnessing an HD Prescription #5432
+  - Correctly display a validation error if the witnessing user is the same as the original administering user (was previously not displayed)
+  - Only display invalid password error if witness != administering user
+  - Add some padding between inputs on the form
+- Store source clinic name in appointment #5470
+  - If we are using a mapped clinic name, its useful to have a record of the original
+- Store hl7 processing errors in a new feed_raw_hl7_message_errors table #5473
+- Add link to training videos from Help menu #5477
+- Add modality-specific data to clinical letter template #5448
+  - detailed description to follow.
+- Add by_name_with_jit_creation strategy when resolving a clinic from HL7 feed (ICH) #5491
+  - Used when the feed is pre-filtered by Renal specialty but there is no concept of clinic code at the hosp.
+    Try to find a clinic by the name in the feed; if not found create it.
+- Find and associate a religion when adding a patient in HL7 #5505
+  - Previously religion was not looked-up and associated when adding/updating a patient in HL7. Add a new code column to patient religions to support coded HL7 values eg B1 = Buddhist. Update religion seeds with a standard coded NHS set from https://archive.datadictionary.nhs.uk/DD%20Release%20May%202024/attributes/religious_or_other_belief_system_affiliation_code.html
+- Add ClinicVisit notes to timeline #5500
+- Capture language and ethnicity from HL7 PID #5516
+- Support HL7 ADT^A11 Undo Admission message #5519
+- Support HL7 ADT^A12 Undo Transfer messages #5520
+- Support HL7 ADT^A13 Undo Discharge messages #5521
+- Add Consults to Timeline #5498
+- Add option to disable allergies (allergies are enabled by default) #5507
+- A34 merge minor into major patient #5501
+- Support Next of Kin NK1 segments via HL7 #5542
+  - When NK1 segments are passed in the HL7, iterate over them to a create a linefeed-separated string and persist this in patients.next_of_kin
+  - Rename existing patients.next_of_kin to patients.next_of_kin_notes and allow it to be manually updatable. Create a new patients.next_of_kin that will be updated by feed only
+- Allow user authentication via LDAP #3417
+- Allow user authentication via Azure Entra OpenID Connect #5595
+- Handle SIU^S26 DNA #5569
+  - On receipt of an S26, we do nothing if appointment is found
+    (we don't support DNAing via HL7 currently), but if not found we create it.
+- Copy HD session summary as text to clipboard #5547
+  - from a icon/link in the HD Sessions table
+- Handle SIU^Z01 and SIU^Z01 messages #5570
+  - These custom messages are used at Imperial for OP check in/out.
+- Add a config setting to allow all ADT messages to create a patient #5645
+  - At some sites, ADT messages are filtered by renal specialty at the TIE, so if we receive an ADT^A31
+  we should create the patient if they do not exist
+
 ### Changed
+- Disable autocomplete on patient search #5271
+- Use a 'document deleted' PDF or RTF when sending MDM deletion msg #5409
+- Support using uuids for MSH[10] and TXA[12] in MDM^T02 #5460
+  - If FEEDS_OUTGOING_DOCUMENTS_USE_GUIDS=true then use guids (default to current behaviour)
+- HL7 clinic resolution chanegs #5461
+  - (eg Barts) If FEEDS_OUTPATIENT_CLINIC_RESOLUTION_STRATEGY has the new option "by_name_mapping",
+    we will try to resolve
+    the clinic by looking up the HL7 clinic name in a clinic_mappings table
+    If no mapping exists, we create one with the default clinic (if any) and
+    return that clinic. If no default clinic exists, we create the mapping
+    with a nil clinic_id and return nil.
+    This lets us map a specific clinic (sometimes including consultant) eg
+    'Nephrology New Steve Smith' to a more generalised clinic eg
+    'Nephrology New'.
+- MDM^T02 changes #5512
+  - add patient class O to PV1.2
+  - add configurable hospital service eg 361^Nephrology to PV1.10
+- Remove master_patient_index table as unused #5503
+- Failed sign-in changes #5499
+  - If there are unsuccessful attempts to login before yo actually login, display a warning
+    'Your account had a failed login attempt x hours ago. If this was not you, then consider
+    changing your password and contacting IT help desk.'
+- Audit changes to the RolesUser table in the system_versions table #5514
+- Don't display 'Signed in successfully' on signin (not useful) #5540
+- Capture the type of telephone number from HL7 PID
+  - Eg instead of storing "07970..." use the telecoms type provided eg "MOBILE: 07979 9797979"
+- Add patient nationality from HL7 #5581
+- Disable unused DMD Match page #5589
+- Allow HD dug administration witnessing to be optional (defaults to required) #5566
+- Only allow printing a max batch size of N HD Session forms #5647
+  - Add a config setting Renalware.config.hd_max_session_forms_to_print_in_a_batch eg 50
+    and if the MDM list shows more than that, disable the Batch Print button and display a
+    message explaining why it is disabled.
+- Hide Change Password fields on Update Profile if using LDAP/Entra #5648
+  - since password changes are done in AD/Entra
+- HD MonthlyStatistics hospital_unit changes #5651
+  - By default assign the hd_profile.hospital_unit to stats.hospital_uit if there is one, otherwise assign the unit from the most recent session. If still no unit resolved, do not save the stats.
+- Let an ENV variable control delay_after_which_a_finished_session_becomes_immutable config setting #5654
+- Support sending letters to patients with no GP assigned #5663
+  - If the patient has a practice but no GP, use a generic Dr General Practitioner. This will be
+    added to the practice as a GP, and used prospectively in letters for the patient
+- Allow finding a consultant by name #5633
+  - during HL7 processing when finding a consultant to assign to an appointment
+    search first by code ad then by name. This is because the same consultant could be identified
+    in different messages using different codes (GMC, SDSid, ...) and the one we have in the
+    clinic_consultants table might not be one in the message, so searching by name provides a backstop
+
 ### Fixed
-todo
+- Renal Reg Preflight changes #5413
+  - fixed 'ESRF after' filter
+  - add patients.died_on column and allow sorting
+  - fix sorting on esrf date
+- Bug: Timeline detail toggle not working #5438
+- Fix sorting by Hospital Unit bug on HD Ongoing Sessions #5439
+- Use Inotify to avoid memory leaks with Chokidar #5463
+  - including this in the changelog as it sounds exotic. Nothing to see here though.
+- BUG: Letters count in LH gutter not updating after letters deleted #5502
+- Fix occasional batch letter printing division ny zero error #5529
+- Fix KFRE calculation bug where ACR OBX is mapped #5538
+  - If the incoming HL7 messages contains an alternative name for ACR ecg UMCR, and there is an OBX mapping in place to actually store the result under the 'ACR' code, then the KFRE calculation that follows on does not always find ACR value. The code was listening for an event at the wrong level ie 'oru_message_arrived' (receiving a pre-mapping HL7 message) rather than the 'after_observation_request_persisted' event, which is passed in a post-mapping pathology_observation_request.
+- Prevent XSS attack in snippets title when managing snippets #5596
+- Prevent read-only user from deleting unsigned-off HD Sessions #5604
+- Correct the spelling of Enoxaparin in the anticoag list #5608
+- Update PathologyObservationsGroupedByDate SQL view #5472
+  - To order non-numeric results more relevantly
 
 ## 2.4.5.5
 ### Added
