@@ -379,6 +379,7 @@
     "schemaname",
     "SDSID",
     "sendable",
+    "sendgrid",
     "sens",
     "sess",
     "sftped",
