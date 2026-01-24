@@ -398,6 +398,10 @@ module Renalware
       }
     end
 
+    config_accessor(:mail_delivery_method) do
+      ENV.fetch("MAIL_DELIVERY_METHOD", "microsoft_graph_api").to_sym
+    end
+
     config_accessor(:user_dashboard_display_named_patients) { true }
     config_accessor(:users_expire_after) {
       ActiveModel::Type::Integer.new.cast(ENV.fetch("USERS_EXPIRE_AFTER", 90))

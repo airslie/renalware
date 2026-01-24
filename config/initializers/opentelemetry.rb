@@ -9,7 +9,7 @@ if !Rails.env.test? && ENV.fetch("ENABLE_OPENTELEMETRY", 0).to_i == 1
   # OTEL_TRACES_SAMPLER_ARG is a float between 0.0 and 1.0 representing the fraction of traces to
   # sample. So 0.1 = 10%
   sampler = if Rails.env.local?
-              OpenTelemetry::SDK::Trace::Samplers.always_on
+              OpenTelemetry::SDK::Trace::Samplers.trace_id_ratio_based(1.0)
             else
               raw = ENV.fetch("OTEL_TRACES_SAMPLER_ARG", "0.1")
               fraction = Float(raw) rescue 0.1 # rubocop:disable Style/RescueModifier
