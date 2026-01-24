@@ -23,6 +23,7 @@ if !Rails.env.test? && ENV.fetch("ENABLE_OPENTELEMETRY", 0).to_i == 1
     c.use "OpenTelemetry::Instrumentation::Rack"
     c.use "OpenTelemetry::Instrumentation::Rails"
     c.use "OpenTelemetry::Instrumentation::PG"
+    c.use "OpenTelemetry::Instrumentation::ActiveJob"
 
     # Ensure exporting async and limit memory growth under back-pressure.
     c.add_span_processor(

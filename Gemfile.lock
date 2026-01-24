@@ -1067,6 +1067,7 @@ DEPENDENCIES
   net-smtp
   nhs_api_client!
   opentelemetry-exporter-otlp
+  opentelemetry-instrumentation-active_job
   opentelemetry-instrumentation-faraday
   opentelemetry-instrumentation-net_http
   opentelemetry-instrumentation-pg
