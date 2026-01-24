@@ -5328,7 +5328,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_190854) do
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "hidden", default: false, null: false
     t.boolean "enforce", default: false, null: false
-    t.string "ad_role_name"
     t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
@@ -6101,37 +6100,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_190854) do
     t.integer "item_id", null: false
     t.datetime "created_at", precision: nil
     t.index ["item_type", "item_id"], name: "index_virology_versions_on_item_type_and_item_id"
-  end
-
-  create_table "xx", id: false, force: :cascade do |t|
-    t.integer "patient_id"
-    t.integer "hospital_unit_id"
-    t.integer "modality_description_id"
-    t.date "performed_on"
-    t.time "start_time"
-    t.time "end_time"
-    t.integer "duration"
-    t.text "notes"
-    t.integer "created_by_id"
-    t.integer "updated_by_id"
-    t.jsonb "document"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.integer "signed_on_by_id"
-    t.integer "signed_off_by_id"
-    t.string "type"
-    t.datetime "signed_off_at", precision: nil
-    t.integer "profile_id"
-    t.integer "dry_weight_id"
-    t.bigint "dialysate_id"
-    t.uuid "uuid"
-    t.bigint "external_id"
-    t.datetime "deleted_at", precision: nil
-    t.datetime "started_at", precision: nil
-    t.datetime "stopped_at", precision: nil
-    t.bigint "provider_id"
-    t.string "machine_ip_address"
-    t.bigint "hd_station_id"
   end
 
   add_foreign_key "access_assessments", "access_types", column: "type_id"

@@ -35,7 +35,6 @@ gem "paper_trail"
 gem "party_foul", "~> 1.5.5", github: "airslie/party_foul"
 gem "rails", "~> 8.0.1"
 gem "ruby-prof", require: false
-gem "sendgrid-ruby", "~> 6.7"
 gem "solid_cache"
 gem "terser"
 gem "thruster"

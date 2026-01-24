@@ -14366,8 +14366,7 @@ CREATE TABLE renalware.roles (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     hidden boolean DEFAULT false NOT NULL,
-    enforce boolean DEFAULT false NOT NULL,
-    ad_role_name character varying
+    enforce boolean DEFAULT false NOT NULL
 );
 
 
@@ -16846,42 +16845,6 @@ CREATE SEQUENCE renalware.virology_versions_id_seq
 --
 
 ALTER SEQUENCE renalware.virology_versions_id_seq OWNED BY renalware.virology_versions.id;
-
-
---
--- Name: xx; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.xx (
-    patient_id integer,
-    hospital_unit_id integer,
-    modality_description_id integer,
-    performed_on date,
-    start_time time without time zone,
-    end_time time without time zone,
-    duration integer,
-    notes text,
-    created_by_id integer,
-    updated_by_id integer,
-    document jsonb,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    signed_on_by_id integer,
-    signed_off_by_id integer,
-    type character varying,
-    signed_off_at timestamp without time zone,
-    profile_id integer,
-    dry_weight_id integer,
-    dialysate_id bigint,
-    uuid uuid,
-    external_id bigint,
-    deleted_at timestamp without time zone,
-    started_at timestamp without time zone,
-    stopped_at timestamp without time zone,
-    provider_id bigint,
-    machine_ip_address character varying,
-    hd_station_id bigint
-);
 
 
 --
@@ -32147,7 +32110,6 @@ SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260112190854'),
-('20260103171336'),
 ('20251223084129'),
 ('20251221131016'),
 ('20251219110251'),

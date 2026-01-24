@@ -97,6 +97,7 @@ Gem::Specification.new do |s|
   s.add_dependency "ruby-hl7", "~> 1.3"
   s.add_dependency "sassc-rails", "~> 2.1.0"
   s.add_dependency "scenic", "~> 1.5"
+  s.add_dependency "sendgrid-ruby", "~> 6.7"
   s.add_dependency "simple_form", "~> 5.1"
   s.add_dependency "sinatra"
   s.add_dependency "slim-rails"
