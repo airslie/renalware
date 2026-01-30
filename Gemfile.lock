@@ -149,7 +149,7 @@ PATH
       store_model (< 5)
       tailwindcss-rails (~> 3.0)
       tailwindcss-ruby (~> 3.4)
-      turbo-rails (= 2.0.13)
+      turbo-rails (= 2.0.23)
       validates_timeliness
       view_component (< 4.0)
       virtus (~> 1.0.5)
@@ -984,7 +984,7 @@ GEM
     tsort (0.2.0)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
-    turbo-rails (2.0.13)
+    turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)
