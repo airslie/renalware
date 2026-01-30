@@ -527,9 +527,7 @@ module Renalware
     #
     # SendGrid API config
     #
-    config_accessor(:sendgrid_api_key) do
-      ENV.fetch("SENDGRID_API_KEY") { Rails.application.credentials[:sendgrid_api_key] }
-    end
+    config_accessor(:sendgrid_api_key) { ENV.fetch("SENDGRID_API_KEY", nil) }
     config_accessor(:sendgrid_email_address) do
       ENV["SENDGRID_EMAIL_ADDRESS"] ||
         ENV["MAIL_OAUTH_EMAIL_ADDRESS"] ||
