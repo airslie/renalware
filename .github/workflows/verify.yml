@@ -20,7 +20,7 @@ concurrency:
 
 env:
   BUNDLE_GITHUB__COM: ${{ secrets.CR_PAT }}
-  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+  # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   RAILS_ENV: test
@@ -159,7 +159,7 @@ jobs:
 
       - name: Setup test database
         env:
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           RAILS_ENV: test

@@ -43,7 +43,7 @@ module Renalware
       expect(letter.becomes(Renalware::Letters::Letter).reload.gp_send_status).to eq("pending")
     end
 
-    it "sets gp send status to pending if patient confidentiality is restricted" do
+    it "sets gp send status to not_applicable if patient confidentiality is restricted" do
       patient.update_column(:confidentiality, :restricted)
       expect(letter.gp_send_status).to eq("not_applicable")
 
