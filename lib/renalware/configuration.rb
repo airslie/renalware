@@ -189,9 +189,9 @@ module Renalware
       ENV.fetch("UKRDC_SEND_RREG_PATIENTS", "true") == "true"
     }
 
-    config_accessor(:nhs_client_id)     { ENV.fetch("NHS_CLIENT_ID") { Rails.application.credentials.nhs_client_id } }
-    config_accessor(:nhs_client_secret) { ENV.fetch("NHS_CLIENT_SECRET") { Rails.application.credentials.nhs_client_secret } }
-    config_accessor(:nhs_trud_api_key)  { ENV.fetch("NHS_TRUD_API_KEY") { Rails.application.credentials.nhs_trud_api_key } }
+    config_accessor(:nhs_client_id)     { ENV.fetch("NHS_CLIENT_ID", "") }
+    config_accessor(:nhs_client_secret) { ENV.fetch("NHS_CLIENT_SECRET", "") }
+    config_accessor(:nhs_trud_api_key)  { ENV.fetch("NHS_TRUD_API_KEY", "") }
 
     # MESHAPI
     # Introduce an optional delay between letter approval and letter send, in order to allow
