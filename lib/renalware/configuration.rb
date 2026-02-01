@@ -109,7 +109,24 @@ module Renalware
     config_accessor(:new_clinic_visit_edit_window) { 7.days }
     config_accessor(:salutation_prefix) { "Dear" }
     config_accessor(:page_title_spearator) { " : " }
-    config_accessor(:patient_hospital_identifiers) { {} }
+    # The mapping of hospital identifiers to local_patient_id columns/fields
+    # can be done in the client using an initializer, but we can also load it from
+    # an ENV var as a JSON string for convenience.
+    config_accessor(:patient_hospital_identifiers) {
+      defaults = <<~IDENTIFIERS
+        {
+          "Dover": "local_patient_id",
+          "White": "local_patient_id_2",
+          "Sole": "local_patient_id_3",
+          "Lundy": "local_patient_id_4",
+          "Malin": "local_patient_id_5"
+        }
+      IDENTIFIERS
+
+      JSON
+        .parse(ENV.fetch("PATIENT_HOSPITAL_IDENTIFIERS", defaults))
+        .each_with_object({}) { |(k, v), h| h[k.to_sym] = v.to_sym }
+    }
     config_accessor(:session_timeout_polling_frequency) { 1.minute }
     config_accessor(:session_timeout) {
       ActiveModel::Type::Integer.new.cast(ENV.fetch("SESSION_TIMEOUT", 20)) # use eg 10080 in dev
@@ -358,7 +375,9 @@ module Renalware
     config_accessor(:batch_printing_enabled) {
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("BATCH_PRINTING_ENABLED", "true"))
     }
-    config_accessor(:allow_uploading_patient_attachments) { true }
+    config_accessor(:allow_uploading_patient_attachments) {
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("ALLOW_UPLOADING_PATIENT_ATTACHMENTS", "true"))
+    }
     config_accessor(:generate_pathology_request_forms_from_hd_mdm_listing) {
       ActiveModel::Type::Boolean.new.cast(
         ENV.fetch("GENERATE_PATHOLOGY_REQUEST_FORMS_FROM_HD_MDM_LISTING", "true")
