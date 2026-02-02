@@ -41,39 +41,30 @@ module Renalware
     config_accessor(:enable_dmd_match) { ENV.fetch("ENABLE_DMD_MATCH", "false") == "true" }
 
     # URL of an externally-hosted HTML or PDF Renalware user guide.
-    config_accessor(:help_user_guide_link) {
-      ENV.fetch("HELP_USER_GUIDE_LINK", "https://airslie.com/rw_user_guide/")
-    }
-    config_accessor(:help_training_videos_link) {
-      ENV.fetch("HELP_TRAINING_VIDEOS_LINK", "https://airslie.com/rw_onboarding/")
-    }
-    config_accessor(:help_tours_page_cache_expiry_seconds) {
-      ENV.fetch("HELP_TOURS_PAGE_CACHE_EXPIRY_SECONDS", "3600").to_i
-    }
-    config_accessor(:report_filter_cache_expiry_seconds) {
-      ENV.fetch("REPORT_FILTER_CACHE_EXPIRY_SECONDS", "60").to_i
-    }
-    config_accessor(:letters_render_pdfs_with_prawn) {
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("LETTERS_RENDER_PDFS_WITH_PRAWN", "false"))
-    }
-    config_accessor(:letters_mesh_workflow) { :gp_connect } # or :transfer_of_care
-    config_accessor(:allow_qr_codes_in_letters) do
-      ENV.fetch("ALLOW_QR_CODES_IN_LETTERS", "false") == "true"
-    end
-    config_accessor(:enable_allergies) { ENV.fetch("ENABLE_ALLERGIES", "true") == "true" }
+    config_accessor(:help_user_guide_link)                  { ENV.fetch("HELP_USER_GUIDE_LINK", "https://airslie.com/rw_user_guide/") }
+    config_accessor(:help_training_videos_link)             { ENV.fetch("HELP_TRAINING_VIDEOS_LINK", "https://airslie.com/rw_onboarding/") }
+    config_accessor(:help_tours_page_cache_expiry_seconds)  { ENV.fetch("HELP_TOURS_PAGE_CACHE_EXPIRY_SECONDS", "3600").to_i }
+    config_accessor(:report_filter_cache_expiry_seconds)    { ENV.fetch("REPORT_FILTER_CACHE_EXPIRY_SECONDS", "60").to_i }
+    config_accessor(:letters_render_pdfs_with_prawn)        { ActiveModel::Type::Boolean.new.cast(ENV.fetch("LETTERS_RENDER_PDFS_WITH_PRAWN", "false")) }
+    config_accessor(:letters_mesh_workflow)                 { :gp_connect } # or :transfer_of_care
+    config_accessor(:allow_qr_codes_in_letters)             { ENV.fetch("ALLOW_QR_CODES_IN_LETTERS", "false") == "true" }
+    config_accessor(:enable_allergies)                      { ENV.fetch("ENABLE_ALLERGIES", "true") == "true" }
 
-    config_accessor(:ldap_authentication) { ENV.fetch("LDAP_ENABLE", "false") == "true" }
+    # Authentication settings
+    config_accessor(:entra_omniauth_enabled)                { ENV.fetch("ENTRA_OMNIAUTH_ENABLED", "false") == "true" }
+    config_accessor(:ldap_authentication)                   { ENV.fetch("LDAP_ENABLE", "false") == "true" }
     # if true, LDAP queries will be logged (may expose sensitive info, use only for debugging)
-    config_accessor(:ldap_logger) { ENV.fetch("LDAP_LOGGER", "false") == "true" }
-    config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
-    config_accessor(:ldap_clinical_group) { ENV.fetch("LDAP_CLINICAL_GROUP", "cn=renalware (clinical),ou=groups,dc=renalware,dc=app") }
-    config_accessor(:ldap_readonly_group) { ENV.fetch("LDAP_READONLY_GROUP", "cn=renalware (readonly),ou=groups,dc=renalware,dc=app") }
+    config_accessor(:ldap_logger)                           { ENV.fetch("LDAP_LOGGER", "false") == "true" }
+    config_accessor(:ldap_auto_approve_users)               { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
+    config_accessor(:ldap_clinical_group)                   { ENV.fetch("LDAP_CLINICAL_GROUP", "cn=renalware (clinical),ou=groups,dc=renalware,dc=app") }
+    config_accessor(:ldap_readonly_group)                   { ENV.fetch("LDAP_READONLY_GROUP", "cn=renalware (readonly),ou=groups,dc=renalware,dc=app") }
     # LDAP connection settings
     config_accessor(:ldap_host) { ENV.fetch("LDAP_HOST", "localhost") }
     config_accessor(:ldap_port) { ENV.fetch("LDAP_PORT", 389).to_i }
     config_accessor(:ldap_admin_password) { ENV.fetch("LDAP_ADMIN_PASSWORD", nil) }
     config_accessor(:ldap_admin_user) { ENV.fetch("LDAP_ADMIN_USER", "cn=admin,dc=renalware,dc=app") }
     config_accessor(:ldap_base) { ENV.fetch("LDAP_BASE", "dc=renalware,dc=app") }
+    config_accessor(:ldap_ssl) { ActiveModel::Type::Boolean.new.cast(ENV.fetch("LDAP_SSL", !Rails.env.local?)) }
     config_accessor(:ldap_attribute_mappings) do
       default_mappings = {
         "username" => "uid",
@@ -85,21 +76,14 @@ module Renalware
       custom_mappings = mappings_string ? JSON.parse(mappings_string) : {}
       default_mappings.merge(custom_mappings)
     end
-    config_accessor(:ldap_ssl) {
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("LDAP_SSL", !Rails.env.local?))
-    }
 
-    config_accessor(:entra_omniauth_enabled) {
-      ENV.fetch("ENTRA_OMNIAUTH_ENABLED", "false") == "true"
-    }
-
-    config_accessor(:site_name) { "Renalware" }
-    config_accessor(:hospital_name) { ENV.fetch("HOSPITAL_NAME", "KINGS COLLEGE HOSPITAL") }
-    config_accessor(:hospital_address) { ENV.fetch("HOSPITAL_ADDRESS", "") } # comma-delimited
+    config_accessor(:site_name)             { "Renalware" }
+    config_accessor(:hospital_department)   { ENV.fetch("HOSPITAL_DEPARTMENT", "Renal") }
+    config_accessor(:hospital_name)         { ENV.fetch("HOSPITAL_NAME", "KINGS COLLEGE HOSPITAL") }
+    config_accessor(:hospital_address)      { ENV.fetch("HOSPITAL_ADDRESS", "") } # comma-delimited
     config_accessor(:telephone_on_homecare_delivery_forms) {
       ENV.fetch("TELEPHONE_ON_HOMECARE_DELIVERY_FORMS", "")
     }
-    config_accessor(:hospital_department) { ENV.fetch("HOSPITAL_DEPARTMENT", "Renal") }
     config_accessor(:delay_after_which_a_finished_session_becomes_immutable) {
       ActiveModel::Type::Integer.new.cast(
         ENV.fetch("DELAY_AFTER_WHICH_A_FINISHED_SESSION_BECOMES_IMMUTABLE_HOURS", 6)
