@@ -6348,8 +6348,26 @@ CREATE TABLE renalware.feed_messages (
     orc_order_status renalware.enum_hl7_orc_order_status,
     dob date,
     orc_filler_order_number character varying,
-    sent_at timestamp(6) without time zone
+    sent_at timestamp(6) without time zone,
+    result_thread_key character varying
 );
+
+
+--
+-- Name: COLUMN feed_messages.result_thread_key; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.feed_messages.result_thread_key IS 'A key to identify messages that are part of the same result thread, where the result thread
+is _basically_ ORC placer order number, but we prefix it with the sending app identifier
+from MSH-4, and suffix it with the fist OBR observation request identifier (OBR-4).
+ie LAB1:123445:UE
+The reasoning behind is that we need to be able to group the ''same'' OUR^R01 message as it
+progresses through its states (orc order status A -> IP -> CM) so we can remove all but the
+final CM message (there can be >1 CM) in a housekeeping SQL function.
+We cannot use ORC filler order number for this as it spans multiple messages. So we
+use placer order number which is unique per OBR, but pre-and suffix it as above to
+guarantee uniqueness.
+';
 
 
 --
@@ -23101,6 +23119,13 @@ CREATE INDEX index_feed_messages_on_patient_identifiers ON renalware.feed_messag
 
 
 --
+-- Name: index_feed_messages_on_result_thread_key; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_feed_messages_on_result_thread_key ON renalware.feed_messages USING btree (result_thread_key);
+
+
+--
 -- Name: index_feed_messages_on_sent_at; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -32109,6 +32134,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260202160254'),
 ('20260112190854'),
 ('20251223084129'),
 ('20251221131016'),

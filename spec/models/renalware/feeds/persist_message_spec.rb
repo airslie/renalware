@@ -12,6 +12,7 @@ module Renalware::Feeds
           event_type: "A31",
           orc_order_status: "CM",
           orc_filler_order_number: "123",
+          result_thread_key: "::result thread key::",
           header_id: "::header id::",
           patient_dob: Date.parse("20010101"),
           to_hl7: "::message body::",
@@ -75,7 +76,7 @@ module Renalware::Feeds
         # | local_patient_id_3 |  HOSP3 | HOSPY  |  N
         # | local_patient_id_4 |  HOSP4 | HOSP4  |  Y
         # | local_patient_id_5 |  nil   | HOSP5  |  N
-        it "silently fails to update unmatched data" do
+        it "silently fails to update unmatched data" do # rubocop:disable RSpec/ExampleLength
           hl7_message = instance_double(
             HL7Message,
             time: Time.zone.parse("2023-01-01 00:00:01"),
@@ -86,6 +87,7 @@ module Renalware::Feeds
             patient_dob: Date.parse("20010101"),
             header_id: "::header id::",
             orc_filler_order_number: "123",
+            result_thread_key: "::result thread key::",
             to_hl7: "::message body::",
             patient_identification: double(
               internal_id: "123",
@@ -130,6 +132,7 @@ module Renalware::Feeds
             event_type: "A31",
             orc_order_status: nil,
             orc_filler_order_number: "123",
+            result_thread_key: "::result thread key::",
             patient_dob: Date.parse("20010101"),
             header_id: "::header id::",
             to_hl7: "::message body::",
