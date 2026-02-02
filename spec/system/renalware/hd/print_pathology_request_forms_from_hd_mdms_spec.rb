@@ -8,6 +8,8 @@ describe "Batch printing Pathology request forms (for monthly bloods) from the H
   before do
     ActiveJob::Base.queue_adapter = :test
     ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+    allow(Renalware.config)
+      .to receive(:generate_pathology_request_forms_from_hd_mdm_listing).and_return(true)
   end
 
   def create_hd_patient(family_name, user)

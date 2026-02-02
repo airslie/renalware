@@ -2,6 +2,10 @@
 RSpec.describe "Administering drugs from HD Dashboard, independent of HD Session", :js do
   let(:patient) { create(:hd_patient) }
 
+  before do
+    allow(Renalware.config).to receive(:hd_session_prescriptions_require_signoff).and_return(true)
+  end
+
   def create_prescription_for(patient, drug_name: "Drug1")
     create(
       :prescription,

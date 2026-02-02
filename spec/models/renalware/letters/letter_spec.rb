@@ -1,6 +1,8 @@
 module Renalware
   module Letters
     describe Letter do
+      before { allow(Renalware.config).to receive(:send_gp_letters_over_mesh).and_return(true) }
+
       it_behaves_like "a Paranoid model"
 
       it :aggregate_failures do

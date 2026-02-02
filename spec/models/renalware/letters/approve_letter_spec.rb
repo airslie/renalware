@@ -16,6 +16,7 @@ module Renalware
     before do
       ActiveJob::Base.queue_adapter = :test
       ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+      allow(Renalware.config).to receive(:send_gp_letters_over_mesh).and_return(true)
     end
 
     it "updates when and by who the letter was approved" do

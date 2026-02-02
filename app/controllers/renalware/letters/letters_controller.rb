@@ -44,7 +44,7 @@ module Renalware
 
       def new # rubocop:disable Metrics/MethodLength
         patient = load_the_patient
-        ensure_patient_has_primary_care_physician
+        ensure_patient_has_primary_care_physician(patient)
         letter = LetterFactory.new(
           patient,
           event: find_event,

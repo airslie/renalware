@@ -46,7 +46,7 @@ module Renalware
         end
 
         context "with a two page letter" do
-          let(:lines_of_body_text) { 80 }
+          let(:lines_of_body_text) { 82 }
 
           it "renders the letter to PDF and saves the number of pages found" do
             expect {
