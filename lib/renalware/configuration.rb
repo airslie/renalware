@@ -384,7 +384,7 @@ module Renalware
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("ENFORCE_USER_PRESCRIBER_FLAG", "false"))
     }
     config_accessor(:allow_modality_history_amendments) {
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("ALLOW_MODALITY_HISTORY_AMENDMENTS", "false"))
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("ALLOW_MODALITY_HISTORY_AMENDMENTS", "true"))
     }
     config_accessor(:auto_terminate_hd_prescriptions_after_period) { 6.months }
     config_accessor(:auto_terminate_hd_stat_prescriptions_after_period) { 14.days }
