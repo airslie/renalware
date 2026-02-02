@@ -124,6 +124,27 @@ module Renalware
         Array(self[:OBR]).map { |obr| ObservationRequest.new(obr) }
       end
 
+      # A key to identify messages that are part of the same result thread, where the result thread
+      # is _basically_ ORC placer order number, but we prefix it with the sending app identifier
+      # from MSH-4, and suffix it with the fist OBR observation request identifier (OBR-4).
+      # ie LAB1:123445:UE
+      # The reasoning behind is that we need to be able to group the 'same' OUR^R01 message as it
+      # progresses through its states (orc order status A -> IP -> CM) so we can remove all but the
+      # final CM message (there can be >1 CM) in a housekeeping SQL function.
+      # We could use ORC filler order number for this but it spans multiple messages. So we
+      # use placer order number if we can, which is unique per OBR, and
+      # otherwise orc_filler_order_number, but pre-and suffix it as above to guarantee uniqueness.
+      def result_thread_key
+        return if orc_order_status.blank? || observation_requests.empty?
+        return if orc_placer_order_number.blank? && orc_filler_order_number.blank?
+
+        [
+          sending_app,
+          orc_placer_order_number.presence || orc_filler_order_number.presence,
+          observation_requests.first.identifier
+        ].compact.map { |str| str.strip.tr(" ", "-") }.join(":")
+      end
+
       def patient_dob
         dob = self[:PID]&.patient_dob
         Date.parse(dob) if dob.present?
@@ -132,7 +153,8 @@ module Renalware
       def action                  = ACTIONS.fetch(type, :no_matching_command)
       def patient_identification  = PatientIdentification.new(self[:PID])
       def orc_order_status        = first_orc_segment.order_status.presence
-      def orc_filler_order_number = first_orc_segment.filler_order_number
+      def orc_filler_order_number = first_orc_segment.filler_order_number.split("^").first.presence
+      def orc_placer_order_number = first_orc_segment.placer_order_number.split("^").first.presence
       def nk1                     = Array(self[:NK1]).map { HL7Segments::NK1.new(it) }
       def mrg                     = Array(self[:MRG]).map { HL7Segments::MRG.new(it) }
       def pv1                     = HL7Segments::PV1.new(self[:PV1])

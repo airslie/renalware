@@ -12,11 +12,51 @@ module Renalware::Feeds
         MSH|^~\&|HM|LBE|SCM||20091112164645||#{message_type}|1258271|P|2.3.1|||AL||||
         PID||123456789^^^NHS|Z999990^^^HOSP1||RABBIT^JESSICA^^^MS||19880924|#{sex}|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR|||||||||||||||||||
         PV1||Inpatient|NIBC^^^^^^^^|||||MID^KINGS MIDWIVES||||||||||NHS|HXF888888^^^Visit Number|||||||||
-        ORC|RE|^PCS|09B0099478^LA||#{orc_order_status}||||200911111841|||MID^KINGS MIDWIVES|||||||
+        ORC|RE|P123^PCS|09B0099478^LA||#{orc_order_status}||||200911111841|||MID^KINGS MIDWIVES|||||||
         OBR|1|123456^PCS|09B0099478^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
         OBX|1|TX|WBC^WBC^MB||6.09|10\\S\\12/L|||||F|||200911112026||BBKA^Donald DUCK|
       RAW
       msg
+    end
+
+    describe "#result_thread_key" do
+      subject { decorator.result_thread_key }
+
+      context "when ORC placer order number and filler order number is missing" do
+        let(:raw_message) do
+          <<~RAW
+            MSH|^~\&|SENDING-APP|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
+            ORC|RE|^PCS|^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
+            OBR|1|123456^PCS|09B0099478^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
+          RAW
+        end
+
+        it { is_expected.to be_nil }
+      end
+
+      context "when ORC placer order number is present" do
+        let(:raw_message) do
+          <<~RAW
+            MSH|^~\&|SENDING-APP|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
+            ORC|RE|PLACER_ORDER_NUMBER_456^PCS|FILLER_ORDER_NUMBER_123^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
+            OBR|1|123456^PCS|09B0099478^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
+          RAW
+        end
+
+        it { is_expected.to eq("SENDING-APP:PLACER_ORDER_NUMBER_456:FBC") }
+      end
+
+      context "when ORC placer order number is missing" do
+        let(:raw_message) do
+          <<~RAW
+            MSH|^~\&|SENDING-APP|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
+            ORC|RE|^PCS|FILLER_ORDER_NUMBER_123^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
+            OBR|1|123456^PCS|09B0099478^LA|FBC^FULL BLOOD COUNT^MB||200911111841|200911111841|||||||200911111841|B^Blood|MID^KINGS MIDWIVES||09B0099478||||200911121646||HM|F||||||||||||||||||
+          RAW
+        end
+
+        it { is_expected.to eq("SENDING-APP:FILLER_ORDER_NUMBER_123:FBC") }
+      end
     end
 
     describe "#patient_dob" do
@@ -28,7 +68,20 @@ module Renalware::Feeds
     describe "#orc_filler_order_number" do
       context "when an ORC segment exists in the HL7 message" do
         it "extracts the ORC.3 Filler Order Number" do
-          expect(decorator.orc_filler_order_number).to eq("09B0099478^LA")
+          expect(decorator.orc_filler_order_number).to eq("09B0099478")
+        end
+
+        context "when ORC filler order number is blank in HL7 message" do
+          let(:raw_message) do
+            <<~RAW
+              MSH|^~\&|SENDING-APP|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
+              ORC|RE|^PCS|^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
+            RAW
+          end
+
+          it "returns nil" do
+            expect(decorator.orc_filler_order_number).to be_nil
+          end
         end
       end
 
@@ -38,13 +91,46 @@ module Renalware::Feeds
             MSH|^~\&|ADT|iSOFT Engine|eGate|Kings|20191030155640||MFN^M02|1861609776|P|2.3|||AL|AL
             MFI|STF|PIMS|UPD|20191030155640|20191030155640|NE
             MFE|MAD|1861609776|20191030155640|193814
-            STF|193814|C1119528^^^^MAINCODE~XXX^^^^DG~C1119528^^^^GMC|Xxx^Xxxx^^^Mr|CONLT|UNKNOWN||A|100^Trauma and Orthopaedic~102^Fracture||020 0000 000^PHONE|X Hospital NHS Foundation Trust^Somewhere^London, Greater London^^N1 1AAS^UK^BUSIN|20120912000000
-            PRA|200000|XYZ^XX Hospital NHS Trust^TRUST|||100^NAT^MAIN~TRAUMA^DG^MAIN~01^ABC^MAIN~FRAC^DG^SEC1~020^LOCAL^SEC1|||20120912
           RAW
         end
 
         it "returns nil" do
           expect(decorator.orc_filler_order_number).to be_nil
+        end
+      end
+    end
+
+    describe "#orc_placer_order_number" do
+      context "when an ORC segment exists in the HL7 message" do
+        it "extracts the ORC.3 Filler Order Number" do
+          expect(decorator.orc_placer_order_number).to eq("P123")
+        end
+
+        context "when ORC filler order number is blank in HL7 message" do
+          let(:raw_message) do
+            <<~RAW
+              MSH|^~\&|SENDING-APP|LBE|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
+              ORC|RE|^PCS|^LA||CM||||200911111841|||MID^KINGS MIDWIVES|||||||
+            RAW
+          end
+
+          it "returns nil" do
+            expect(decorator.orc_placer_order_number).to be_nil
+          end
+        end
+      end
+
+      context "when an ORC segment does not exist in the HL7 message" do
+        let(:raw_message) do
+          <<~RAW
+            MSH|^~\&|ADT|iSOFT Engine|eGate|Kings|20191030155640||MFN^M02|1861609776|P|2.3|||AL|AL
+            MFI|STF|PIMS|UPD|20191030155640|20191030155640|NE
+            MFE|MAD|1861609776|20191030155640|193814
+          RAW
+        end
+
+        it "returns nil" do
+          expect(decorator.orc_placer_order_number).to be_nil
         end
       end
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_12_190854) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_02_160254) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -2549,6 +2549,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_190854) do
     t.date "dob"
     t.string "orc_filler_order_number"
     t.datetime "sent_at"
+    t.string "result_thread_key", comment: "A key to identify messages that are part of the same result thread, where the result thread\nis _basically_ ORC placer order number, but we prefix it with the sending app identifier\nfrom MSH-4, and suffix it with the fist OBR observation request identifier (OBR-4).\nie LAB1:123445:UE\nThe reasoning behind is that we need to be able to group the 'same' OUR^R01 message as it\nprogresses through its states (orc order status A -> IP -> CM) so we can remove all but the\nfinal CM message (there can be >1 CM) in a housekeeping SQL function.\nWe cannot use ORC filler order number for this as it spans multiple messages. So we\nuse placer order number which is unique per OBR, but pre-and suffix it as above to\nguarantee uniqueness.\n"
     t.index ["body_hash"], name: "index_feed_messages_on_body_hash", unique: true
     t.index ["created_at"], name: "index_feed_messages_created_at_nonauto", order: :desc
     t.index ["dob"], name: "index_feed_messages_on_dob"
@@ -2561,6 +2562,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_12_190854) do
     t.index ["nhs_number"], name: "index_feed_messages_on_nhs_number"
     t.index ["orc_filler_order_number"], name: "index_feed_messages_on_orc_filler_order_number"
     t.index ["patient_identifiers"], name: "index_feed_messages_on_patient_identifiers", using: :gin
+    t.index ["result_thread_key"], name: "index_feed_messages_on_result_thread_key"
     t.index ["sent_at"], name: "index_feed_messages_on_sent_at"
   end
 
