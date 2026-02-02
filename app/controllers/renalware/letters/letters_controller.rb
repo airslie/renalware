@@ -5,8 +5,6 @@ module Renalware
     class LettersController < Letters::BaseController # rubocop:disable Metrics/ClassLength
       include Pagy::Backend
 
-      before_action :load_patient, except: [:author]
-
       # The turbo-rails gem mixes in a concern that will access request.headers on each request
       # to determine if a layout should be rendered. However when we render a PDF using the
       # render_to_string helper method that WickedPDF adds to ActionController,
@@ -17,6 +15,7 @@ module Renalware
 
       def index
         pagy, letters = pagy(find_letters)
+        authorize letters
         render(
           locals: {
             letters: present_letters(letters),
@@ -43,16 +42,17 @@ module Renalware
         @letter = present_letter(find_letter(params[:id]))
       end
 
-      def new
-        @patient = load_and_authorize_patient
-        ensure_patient_has_primary_care_physician
+      def new # rubocop:disable Metrics/MethodLength
+        patient = load_the_patient
+        ensure_patient_has_primary_care_physician(patient)
         letter = LetterFactory.new(
-          @patient,
+          patient,
           event: find_event,
           clinical: clinical?
         )
           .with_contacts_as_default_ccs
           .build
+        authorize letter
         RememberedLetterPreferences.new(session).apply_to(letter)
         letter.author_id ||= current_user.id
         render_form(letter, :new)
@@ -63,20 +63,21 @@ module Renalware
       end
 
       def create
+        authorize Letter, :create?
         attributes = letter_params.merge(event: find_event)
         DraftLetter.build
           .subscribe(self)
-          .call(@patient, attributes)
+          .call(patient, attributes)
       end
 
       def update
+        authorize Letter, :create?
         ReviseLetter.build
           .subscribe(self)
-          .call(@patient, params[:id], letter_params)
+          .call(patient, params[:id], letter_params)
       end
 
       def destroy
-        load_and_authorize_patient
         letter = find_letter(params[:id])
         authorize letter
         DeleteLetter.call(letter: letter, by: current_user)
@@ -85,7 +86,7 @@ module Renalware
 
       def draft_letter_successful(letter)
         RememberedLetterPreferences.new(session).persist(letter)
-        redirect_to_letter_show(@patient, letter)
+        redirect_to_letter_show(patient, letter)
       end
 
       def draft_letter_failed(letter)
@@ -94,7 +95,7 @@ module Renalware
       end
 
       def revise_letter_successful(letter)
-        redirect_to_letter_show(@patient, letter)
+        redirect_to_letter_show(patient, letter)
       end
 
       def revise_letter_failed(letter)
@@ -103,7 +104,8 @@ module Renalware
       end
 
       def contact_added
-        contact = @patient.contacts.find(params[:id])
+        authorize Letter, :edit?
+        contact = patient.contacts.find(params[:id])
         @contact = ContactPresenter.new(contact)
         @letter = LetterFormPresenter.new(Letter.new)
       end
@@ -112,24 +114,24 @@ module Renalware
 
       # Ensure that the patient has a primary care physician and if not assign the default one
       # from their practice (if they have one).
-      def ensure_patient_has_primary_care_physician
-        return if @patient.practice.blank?
-        return if @patient.primary_care_physician.present?
+      def ensure_patient_has_primary_care_physician(patient)
+        return if patient.practice.blank?
+        return if patient.primary_care_physician.present?
 
-        @patient.by = SystemUser.find # Use system user so as to not implicate the current_user
-        @patient.primary_care_physician =
-          @patient.practice.default_primary_care_physician.becomes(Letters::PrimaryCarePhysician)
-        @patient.save!(validate: false)
+        patient.by = SystemUser.find # Use system user so as to not implicate the current_user
+        patient.primary_care_physician =
+          patient.practice.default_primary_care_physician.becomes(Letters::PrimaryCarePhysician)
+        patient.save!(validate: false)
       end
 
-      def load_and_authorize_patient
-        patient = Patient.includes(:prescriptions).find_by(secure_id: params[:patient_id])
-        authorize patient
-        patient
+      def load_the_patient
+        Patient
+          .includes(:prescriptions)
+          .find_by(secure_id: params[:patient_id])
       end
 
       def find_letters
-        @patient
+        patient
           .letters
           .ordered
           .with_main_recipient
@@ -140,7 +142,9 @@ module Renalware
       end
 
       def find_letter(id)
-        @patient.letters.find(id)
+        patient.letters.find(id).tap do |letter|
+          authorize letter
+        end
       end
 
       def present_letters(letters)
@@ -164,7 +168,7 @@ module Renalware
         contacts = find_contacts
         contact = build_contact
         render action, locals: {
-          patient: @patient,
+          patient: patient,
           letter: letter,
           contact: contact,
           contacts: contacts,
@@ -176,7 +180,7 @@ module Renalware
       def find_event
         return if event_type.blank?
 
-        event_class.for_patient(@patient).find(event_id)
+        event_class.for_patient(patient).find(event_id)
       end
 
       def find_contact_descriptions
@@ -184,7 +188,7 @@ module Renalware
       end
 
       def find_contacts
-        ContactsPresenter.new(@patient.contacts.with_description.ordered, ContactPresenter)
+        ContactsPresenter.new(patient.contacts.with_description.ordered, ContactPresenter)
       end
 
       def build_contact

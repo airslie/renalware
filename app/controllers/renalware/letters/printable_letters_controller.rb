@@ -14,7 +14,8 @@ module Renalware
       private
 
       def find_letter(id)
-        patient.letters
+        patient
+          .letters
           .approved
           .with_patient
           .with_main_recipient
