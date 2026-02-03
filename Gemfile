@@ -53,12 +53,6 @@ gem "good_job", "~> 4.0"
 
 gem "matrix"
 
-# FIXME: Gemspec doesn't support git/commit so we'll need to copy this to other apps
-# Once this commit is released we can switch to latest version
-# https://github.com/yippee-fun/phlex-rails/commit/8dd6d5a32cd26cb557d77c3a22ad94a9bd786acd
-# Adds mark_safe option to register_output_helper needed to render pagy_nav
-gem "phlex-rails", git: "https://github.com/yippee-fun/phlex-rails",
-                   ref: "8dd6d5a32cd26cb557d77c3a22ad94a9bd786acd"
 gem "tailwind_merge", "< 1.0" # For Tailwind 3.4
 
 group :test do
