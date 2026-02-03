@@ -15,7 +15,7 @@ class CreateHDAcuityAssessments < ActiveRecord::Migration[7.0]
       end
 
       safety_assured do
-        execute <<-SQL.squish
+        execute <<~SQL.squish
           ALTER TABLE hd_acuity_assessments
           ADD CONSTRAINT check_ratio_valid_values
           CHECK (ratio IN (0.25, 0.33, 0.5, 1.0));

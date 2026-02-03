@@ -4,7 +4,7 @@ class AddOBXMappingFunction < ActiveRecord::Migration[5.2]
   end
 
   def down
-    connection.execute(<<-SQL.squish)
+    connection.execute(<<~SQL.squish)
       DROP FUNCTION IF EXISTS
         renalware.pathology_resolve_observation_description(varchar,varchar);
     SQL

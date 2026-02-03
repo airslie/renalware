@@ -1,7 +1,7 @@
 class CreateDrugPatientGroupDirections < ActiveRecord::Migration[7.0]
   def change
     within_renalware_schema do
-      comment = <<-COMMENT.squish
+      comment = <<~COMMENT.squish
         Patient group directions (PGDs) are written instructions to help you supply or
         administer medicines to patients, usually in planned circumstances
         https://www.gov.uk/government/publications/patient-group-directions-pgds/

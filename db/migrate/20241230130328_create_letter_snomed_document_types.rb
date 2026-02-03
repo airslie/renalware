@@ -1,7 +1,7 @@
 class CreateLetterSnomedDocumentTypes < ActiveRecord::Migration[7.1]
   def change
     within_renalware_schema do
-      comment = <<-COMMENT.squish
+      comment = <<~COMMENT.squish
         SNOMED codes and their description that are attached to a letter description (aka
         letter topic) and used as the FHIR Composition.document_type in GP Connect messages.
         There can be only one default type, and this is used wherever a letter description has no

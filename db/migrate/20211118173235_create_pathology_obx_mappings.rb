@@ -1,7 +1,7 @@
 class CreatePathologyOBXMappings < ActiveRecord::Migration[5.2]
   def change
     within_renalware_schema do
-      comment = <<-COMMENT.squish
+      comment = <<~COMMENT.squish
         In a multi-site installation, one hospital might use a different OBX code (eg HB or HBN)
         from the one Renalware expects (in this case HGB). This table enables that mapping so that
         incoming OBX results from different sites are mapped to a single observation_description.

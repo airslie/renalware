@@ -10,7 +10,7 @@ module Renalware
       # Parse the results into an Nag object for ease of handling.
       # Do not allow a SQL error to stop UI rendering, so in this case return a Null object.
       def execute_sql_function_for(patient)
-        result = ActiveRecord::Base.connection.execute(<<-SQL.squish)
+        result = ActiveRecord::Base.connection.execute(<<~SQL.squish)
           select * from #{sql_function_name}(#{patient.id})
         SQL
         row = result.first

@@ -2,7 +2,7 @@ class CreateDemoReportAndChart < ActiveRecord::Migration[7.0]
   # rubocop:disable Metrics/MethodLength
   def change
     within_renalware_schema(suffix: :demo) do
-      create_view(:reporting_example_data, sql_definition: <<-SQL.squish)
+      create_view(:reporting_example_data, sql_definition: <<~SQL.squish)
         with dates as (
           SELECT date_trunc('day', dd)::date AS dt
               FROM generate_series

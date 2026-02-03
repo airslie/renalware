@@ -11,7 +11,7 @@ class CreateLowClearanceProfiles < ActiveRecord::Migration[5.1]
       add_index :low_clearance_profiles, :document, using: :gin
 
       sql_for_modality_type = lambda { |mod_desc_type|
-        <<-SQL.squish
+        <<~SQL.squish
           UPDATE modality_descriptions SET type = #{connection.quote(mod_desc_type)}
           WHERE name = 'Low Clearance' or name = 'Advanced Kidney Care';
         SQL
@@ -25,7 +25,7 @@ class CreateLowClearanceProfiles < ActiveRecord::Migration[5.1]
           # Move the low_clearance section of renal_profiles.document into
           # low_clearance_profiles.document
           connection.execute(
-            <<-SQL.squish
+            <<~SQL.squish
               INSERT INTO low_clearance_profiles (patient_id, document, updated_at,
               created_at, updated_by_id, created_by_id)
               SELECT patient_id, rp.document -> 'low_clearance', updated_at, created_at,

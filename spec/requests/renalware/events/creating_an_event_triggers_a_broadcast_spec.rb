@@ -1,7 +1,7 @@
 describe "Creating a Event triggers an event_created broadcast" do
   context "when creating a simple event" do
     it "broadcasts a Wisper 'event_created' message" do
-      Object.send(:remove_const, "MyEventListener") if Object.constants.include?("MyEventListener")
+      Object.send(:remove_const, "MyEventListener") if Object.const_defined?("MyEventListener")
       Object.const_set(:MyEventListener, Class.new { def event_created(event) end })
 
       map = Renalware.config.broadcast_subscription_map

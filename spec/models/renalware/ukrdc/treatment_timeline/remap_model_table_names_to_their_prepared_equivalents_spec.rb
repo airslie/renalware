@@ -39,7 +39,7 @@ module Renalware
           table_name_before = Renalware::HD::Profile.table_name
           table_name_after = "ukrdc_prepared_hd_profiles"
           # Create the prepared table with 0 rows, so we will know if we have the right table
-          connection.execute(<<-SQL.squish)
+          connection.execute(<<~SQL.squish)
             drop table if exists #{table_name_after};
             select * into #{table_name_after} from hd_profiles limit 0;
           SQL

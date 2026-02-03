@@ -54,7 +54,7 @@ module Renalware
         end
 
         def table_exists?(table_name)
-          result = connection.execute(<<-SQL.squish)
+          result = connection.execute(<<~SQL.squish)
             SELECT 1
             WHERE EXISTS (
               SELECT 1 FROM information_schema.tables WHERE table_name = '#{table_name}')

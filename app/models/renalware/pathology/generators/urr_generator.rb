@@ -22,7 +22,7 @@ module Renalware
 
         # Returns array of PG::Result
         def execute_sql_fn
-          ActiveRecord::Base.connection.execute(<<-SQL.squish)
+          ActiveRecord::Base.connection.execute(<<~SQL.squish)
             select * from renalware.pathology_missing_urrs(
               #{hours_to_search_behind_for_pre_ure_result},
               #{hours_to_search_ahead_for_pre_ure_result},

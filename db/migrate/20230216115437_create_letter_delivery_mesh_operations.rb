@@ -23,7 +23,7 @@ class CreateLetterDeliveryMeshOperations < ActiveRecord::Migration[6.0]
         send_message
       )
 
-      table_comment = <<-COMMENT.squish
+      table_comment = <<~COMMENT.squish
         Each row represents a MESH API message.
         There are two types of message
         - outbound XML FHIR messages containing the letter content and supporting metadata

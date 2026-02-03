@@ -53,7 +53,7 @@ module Renalware
           def patient
             @patient ||= begin
               mrn = params[:mrn]
-              sql = <<-SQL.squish
+              sql = <<~SQL.squish
                 local_patient_id = ? or
                 local_patient_id_2 = ? or
                 local_patient_id_3 = ? or

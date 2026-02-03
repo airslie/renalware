@@ -6,7 +6,7 @@ describe Renalware::System::SqlFunctionJob do
   end
 
   it "raise an error if the SQL fn does not return an array int[] with 2 values" do
-    ActiveRecord::Base.connection.execute(<<-SQL.squish)
+    ActiveRecord::Base.connection.execute(<<~SQL.squish)
       CREATE FUNCTION renalware.test_fn(out random_name integer)
         LANGUAGE plpgsql AS $$
       BEGIN
@@ -21,7 +21,7 @@ describe Renalware::System::SqlFunctionJob do
 
   context "when target function is defined correctly" do
     it "job executes the SQL fn and creates an APILog entry storing the resulting out parameters" do
-      ActiveRecord::Base.connection.execute(<<-SQL.squish)
+      ActiveRecord::Base.connection.execute(<<~SQL.squish)
         CREATE FUNCTION renalware.test_fn(out records_added integer, out records_updated integer)
           LANGUAGE plpgsql AS $$
         BEGIN
@@ -41,7 +41,7 @@ describe Renalware::System::SqlFunctionJob do
     end
 
     it "job stores the error in APILog if the SQL fn has an exception" do
-      ActiveRecord::Base.connection.execute(<<-SQL.squish)
+      ActiveRecord::Base.connection.execute(<<~SQL.squish)
         CREATE FUNCTION renalware.test_fn(out records_added integer, out records_updated integer)
           LANGUAGE plpgsql AS $$
         BEGIN

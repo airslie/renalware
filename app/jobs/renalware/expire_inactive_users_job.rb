@@ -10,7 +10,7 @@ module Renalware
     queue_with_priority 10 # low
 
     def perform
-      sql = <<-SQL.squish
+      sql = <<~SQL.squish
         UPDATE renalware.users set expired_at = NOW()
         WHERE last_activity_at <
           (NOW() - INTERVAL '#{days_after_which_an_inactive_user_should_be_expired} days')

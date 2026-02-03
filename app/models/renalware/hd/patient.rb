@@ -16,7 +16,7 @@ module Renalware
 
       scope :with_profile, lambda {
         includes(hd_profile: :hospital_unit)
-          .joins(<<-SQL.squish)
+          .joins(<<~SQL.squish)
             LEFT OUTER JOIN hd_profiles ON hd_profiles.patient_id = patients.id
             LEFT OUTER JOIN hospital_units ON hd_profiles.hospital_unit_id = hospital_units.id
           SQL

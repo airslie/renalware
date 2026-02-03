@@ -6,7 +6,7 @@ module Renalware
         # to a drug that is VTM using fulltext search;
         # Can easily be extended to show the second and third closest matches;
 
-        SQL = <<-SQL.squish
+        SQL = <<~SQL.squish
           with matches AS (
             select
               regexp_replace(drug_name, 'Coil|coil|oil|Oil|Beta| C |Ointment|ointment|-C|Sodium|Light|Citralock V|Duralock-C|Human | Sulphate|Iron-Hydroxide|Kay Cee L|L-Thyroxine|Omega-3-Acid|Polytar Liquid|Acetate Tablets|Vitamin B|Vitamin E|Vitamins Capsules|', '', 'g') as drug_name,

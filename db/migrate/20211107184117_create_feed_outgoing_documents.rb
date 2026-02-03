@@ -3,7 +3,7 @@ class CreateFeedOutgoingDocuments < ActiveRecord::Migration[5.2]
     within_renalware_schema do
       create_enum :feed_outgoing_document_state, %w(queued errored processed)
 
-      table_comment = <<-COMMENT.squish
+      table_comment = <<~COMMENT.squish
         A queue of documents (letters, events) that require processing by an external
         system e.g. Mirth. For example when a letter is approved, a hospital's Renalware host app
         may listener for that event and write a row to this table, including

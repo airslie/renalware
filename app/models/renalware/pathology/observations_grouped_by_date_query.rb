@@ -75,7 +75,7 @@ module Renalware
       # 2016-09-04, "{""TSH"": [""0.36"", """"]}"
       # ...
       def to_sql
-        <<-SQL.squish
+        <<~SQL.squish
           select obs_req.patient_id, (obs.observed_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/London')::date AS observed_on,
           jsonb_object_agg(obs_desc.code, ARRAY[obs.result, obs.comment] order by observed_at asc) results
           from pathology_observations obs

@@ -2,7 +2,7 @@ module Renalware
   procedure1 = procedure2 = nil
   users = User.limit(3).to_a
   patient = Accesses::Patient.find_by(local_patient_id: "Z100003")
-  dummy_text = <<-TEXT.squish
+  dummy_text = <<~TEXT.squish
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor
     sit amet, consectetur adipiscing elit."
   TEXT

@@ -6,7 +6,7 @@ module Renalware::Letters::Transports
       include MeshSpecHelper
 
       let(:dummy_cert) {
-        <<-CERT.squish
+        <<~CERT.squish
           -----BEGIN CERTIFICATE-----
           MIIB4TCCAYugAwIBAgIUKgirkph4+M8xyXY09xldX8ZHWdUwDQYJKoZIhvcNAQEL
           BQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM
@@ -24,7 +24,7 @@ module Renalware::Letters::Transports
       }
 
       let(:dummy_key) {
-        <<-KEY.squish
+        <<~KEY.squish
           -----BEGIN PRIVATE KEY-----
           MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAuNWTxVofoMlbQuE0
           pcvP6eVhsMmw5SlRbinlfKEPSbLQKf5Vq/KvsBCsiBXAQPFOYMIv4gZIOCiX/7ro

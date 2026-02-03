@@ -34,7 +34,7 @@ module Renalware
       # HGB                                                      => HGB
       #
       def self.observation_description_for(code:, sender:)
-        where = <<-SQL.squish
+        where = <<~SQL.squish
           (
             pathology_obx_mappings.code_alias = ? AND
             pathology_obx_mappings.sender_id = ?

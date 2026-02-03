@@ -7,7 +7,7 @@ class AddNamedNurseToPatients < ActiveRecord::Migration[5.2]
       reversible do |direction|
         direction.up do
           # Migrate the named_nurse_id column from hd_profiles to patients
-          sql = <<-SQL.squish
+          sql = <<~SQL.squish
             UPDATE renalware.patients P
             SET named_nurse_id = HP.named_nurse_id
             FROM renalware.hd_profiles HP

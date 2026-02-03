@@ -8,7 +8,7 @@ module Renalware
       @user = user
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength
     def call
       HD::Scheduling::DiarySlot.delete_all
       HD::Scheduling::Diary.delete_all
@@ -163,7 +163,7 @@ module Renalware
       #   position: row["position"]
       # ).save_by!(user)
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength
   end
 
   CreateDiary.new(Renalware::Hospitals::Unit.first, User.first).call

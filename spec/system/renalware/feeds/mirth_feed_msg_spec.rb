@@ -63,7 +63,7 @@ describe "Mirth HL7 feed processing simulation" do
                     "NULL"
                   end
 
-    ActiveRecord::Base.connection.execute(<<-SQL.squish)
+    ActiveRecord::Base.connection.execute(<<~SQL.squish)
       select * from renalware.feed_msgs_upsert_from_mirth(
         _sent_at => #{fmt_sent_at},
         _message_type => '#{message_type}',

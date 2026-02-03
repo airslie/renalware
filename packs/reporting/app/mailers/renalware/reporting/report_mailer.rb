@@ -42,7 +42,7 @@ module Renalware
       # e.g.
       # ["reporting_daily_pathology", "reporting_daily_letters"]
       def reporting_daily_views
-        result = ActiveRecord::Base.connection.execute(<<-SQL.squish)
+        result = ActiveRecord::Base.connection.execute(<<~SQL.squish)
           SELECT relname FROM pg_class
           WHERE relkind = 'v'
           AND relname like 'reporting_daily_%'

@@ -1,7 +1,7 @@
 class CreateMergeOperationLogs < ActiveRecord::Migration[8.0]
   def change
     within_renalware_schema do
-      comment = <<-COMMENT.squish
+      comment = <<~COMMENT.squish
         Logs of individual record updates made as part of a patient merge operation.
         Each record indicates that a record in some table had its patient_id (or other FK column as
         specified in the merge_operation.column_name) updated from the minor patient to the

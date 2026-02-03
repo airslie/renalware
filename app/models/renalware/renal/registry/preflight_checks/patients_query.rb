@@ -70,7 +70,7 @@ module Renalware
           end
 
           def where_conditions
-            <<-SQL.squish
+            <<~SQL.squish
               (patients.ethnicity_id is NULL)
               OR
               (renal_profiles.id IS NULL)

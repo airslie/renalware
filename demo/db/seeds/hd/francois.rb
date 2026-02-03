@@ -99,7 +99,6 @@ module Renalware
     # end_times = ["15:30", "15:45", "16:00"]
     dialysate_id = HD::Dialysate.first.id
 
-    # rubocop:disable Metrics/AbcSize
     def self.session_document
       {
         info: {
@@ -157,8 +156,6 @@ module Renalware
         }
       }
     end
-    # rubocop:enable Metrics/AbcSize
-
     # Make the most recent session ongoing
     HD::Session::Open.create!(
       patient_id: patient.id,

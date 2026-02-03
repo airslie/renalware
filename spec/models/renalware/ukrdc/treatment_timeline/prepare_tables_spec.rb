@@ -14,7 +14,7 @@ module Renalware
                 "tables and save them as eg ukrdc_prepared_hd_profiles" do
           it "calls the SQL function" do
             # We can assert this by making a test SQL function raise an exception
-            connection.execute(<<-SQL.squish)
+            connection.execute(<<~SQL.squish)
               create function renalware.ukrdc_prepare_tables() RETURNS void
               LANGUAGE plpgsql AS $$
               BEGIN
