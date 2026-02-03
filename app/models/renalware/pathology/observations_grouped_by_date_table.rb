@@ -43,21 +43,10 @@ module Renalware
       class Row
         pattr_initialize :row
 
-        def observed_on
-          Time.zone.parse(row[:observed_on]).to_date
-        end
-
-        def observed_at
-          observed_on
-        end
-
-        def result_for(code)
-          row_hash[code&.to_sym]&.first
-        end
-
-        def comment_for(code)
-          row_hash[code&.to_sym]&.last
-        end
+        def observed_on       = Renalware::DateUtils.to_date(row[:observed_on])
+        def observed_at       = observed_on
+        def result_for(code)  = row_hash[code&.to_sym]&.first
+        def comment_for(code) = row_hash[code&.to_sym]&.last
 
         # A hash keyed by OBX code, containing an array of [result, comment] arrays, e.g.
         #
