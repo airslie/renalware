@@ -82,7 +82,9 @@ module Renalware
             # Update the end date on the previous treatment - ie the one we just added is
             # taking over as the currently active treatment
             unless treatments.length <= 1
+              # rubocop:disable Style/NegativeArrayIndex
               previous_treatment = treatments[treatments.length - 2]
+              # rubocop:enable Style/NegativeArrayIndex
               previous_treatment.update!(ended_on: start_date)
             end
           end

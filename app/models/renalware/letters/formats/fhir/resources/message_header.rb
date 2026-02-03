@@ -10,7 +10,6 @@ module Renalware
         include Support::Construction
         include Support::Helpers
 
-        # rubocop:disable Metrics/MethodLength
         def call
           {
             fullUrl: arguments.transaction_urn, # the send_message operation
@@ -74,7 +73,6 @@ module Renalware
             )
           }
         end
-        # rubocop:enable Metrics/MethodLength
       end
     end
   end

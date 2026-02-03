@@ -7,7 +7,6 @@ module Renalware
           include Support::Construction
           include Support::Helpers
 
-          # rubocop:disable Metrics/MethodLength
           def call
             {
               fullUrl: arguments.letter_urn,
@@ -52,9 +51,7 @@ module Renalware
               )
             }
           end
-          # rubocop:enable Metrics/MethodLength
 
-          # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
           def sections
             [                                                         # Implemented?
               Sections::AllergiesAndAdverseReactions.call(arguments), # Y
@@ -86,7 +83,6 @@ module Renalware
               Sections::SocialContext.call(arguments)                 # N/A
             ].compact
           end
-          # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
         end
       end
     end
