@@ -7,7 +7,7 @@ module Renalware
         XPATHS = {
           dob: "string(Patient[1]/BirthTime)",
           family_name: "string(Patient[1]/Names[1]/Name/Family)",
-          nhs_number: <<-XPATH.squish
+          nhs_number: <<~XPATH.squish
             string(
               Patient[1]/
                 PatientNumbers/

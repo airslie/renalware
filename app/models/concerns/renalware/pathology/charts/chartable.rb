@@ -45,7 +45,7 @@ module Renalware
 
           def to_sql(chartable)
             if chartable.chart_sql_function_name.present?
-              <<-SQL.squish
+              <<~SQL.squish
                 select * from
                 #{chartable.chart_sql_function_name}(
                   #{patient_id},
@@ -53,7 +53,7 @@ module Renalware
                 )
               SQL
             else
-              <<-SQL.squish
+              <<~SQL.squish
                 select * from
                 renalware.pathology_chart_series(
                   #{patient_id},

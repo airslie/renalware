@@ -2,7 +2,7 @@ module Renalware
   module Drugs
     module DMDMigration
       class TradeFamilyMatcher
-        SQL = <<-SQL.squish
+        SQL = <<~SQL.squish
           with matches AS (
             select
               regexp_replace(drug_name, 'Adult|Activated|Blue|Clear|dose|Rectal|Tube|Continuous|ORAL|use|HB|Human|Free|1 |Alpha|alpha|Cream|Adrenaline|Nail|HC | HC|Efferveschent|Liquid|1%|Inhaler|-C|Eye|Calcium|cream|Syrup|Ear|Bisulphate|Sulphate|Light|liquid| V|Co-|Oil|Q10|Linctus|Phosphate|Vitamin|hydrochloride|Cranberry|gel|10%|Sodium|MR|Tabs|tabs|FolicComplete|Gentamicin|GlucosaminePowder|Patch|Decanoate|Hydrocortisone|Patch|Ibuprofen|Ibesartan|iron|SR|Shampoo|Carbonate|Hydrochloride|Lidocaine|Lidocain|White|50%|Paraffin|Lithium|Loratadine|Citrate|Carboate|Mebeverine|2%|eye|Methionin|Methionine|Multivitamin|EC|Beta|Drop|LA|Powder|100,|Emollient|XL|Paracetamol|Water|Potassium|Effervescent|beta|Senna|1-|drop|Budesonide|200 |Carbomer|Chlorhexidine|Chrlorphenamine|Clotrimazole|co-|Salicylate|Gel|Evening|Fluconazole|Flupentixol|Decanoate|Folic| bd|Glucosamine|Iron|L-|Gel|B6|Phenol|Neo-|Nystatin|Oral|XL|Phenytoin|Standard|Bicarbonate|Chloride|patch|Salbutamol|effervescent|Selenium|50 |carbonate|Sodium|Compound|Vitamin B| B | A,| D |Vitamin E| C |Zinc|zuclopenthixol|Menthol|15%|300|Isophane|Irbesartan|Supplementation|Supplement|Biopatch|Chlorphenamine|Tropical|Vitamin D|Chewable|Retard', '', 'g') as drug_name,

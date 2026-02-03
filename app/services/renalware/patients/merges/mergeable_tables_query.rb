@@ -17,7 +17,7 @@ module Renalware
         feed_logs
       ).freeze
 
-      SQL_TABLES_WITH_PATIENT_FK = <<-SQL.squish.freeze
+      SQL_TABLES_WITH_PATIENT_FK = <<~SQL.squish.freeze
         SELECT
           tc.table_schema,
           tc.table_name,

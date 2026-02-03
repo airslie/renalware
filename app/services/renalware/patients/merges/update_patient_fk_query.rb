@@ -31,17 +31,17 @@ module Renalware
 
       def update_records # rubocop:disable Metrics/MethodLength
         col = quoted_column
-        sql = <<-SQL.squish
-        WITH updated AS (
-          UPDATE  #{quoted_table}
-          SET     #{col} = $1, updated_at = #{quoted_time}
-          WHERE   #{col} = $2 AND #{col} <> $1
-          RETURNING id
-        )
-        INSERT INTO renalware.patient_merge_logs
-          (operation_id, id_of_updated_record)
-          SELECT #{operation.id}, updated.id
-          FROM updated
+        sql = <<~SQL.squish
+          WITH updated AS (
+            UPDATE  #{quoted_table}
+            SET     #{col} = $1, updated_at = #{quoted_time}
+            WHERE   #{col} = $2 AND #{col} <> $1
+            RETURNING id
+          )
+          INSERT INTO renalware.patient_merge_logs
+            (operation_id, id_of_updated_record)
+            SELECT #{operation.id}, updated.id
+            FROM updated
         SQL
 
         int_type = ActiveRecord::Type::Integer.new

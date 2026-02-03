@@ -41,7 +41,7 @@ module Renalware
 
         # rubocop:disable Rails/WhereRange
         def patients_with_a_transplant_date_in_the_past_3_months
-          joins(<<-SQL.squish)
+          joins(<<~SQL.squish)
             LEFT JOIN transplant_recipient_operations
             ON patients.id = transplant_recipient_operations.patient_id
           SQL
@@ -57,7 +57,7 @@ module Renalware
 
         # rubocop:disable Rails/WhereRange
         def patients_with_a_transplant_operation_in_the_past_year
-          joins(<<-SQL.squish)
+          joins(<<~SQL.squish)
             LEFT JOIN transplant_recipient_operations
             ON patients.id = transplant_recipient_operations.patient_id
           SQL

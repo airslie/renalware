@@ -128,7 +128,7 @@ module Renalware
         return false if observation.value.blank? && observation.comment.blank?
 
         if observed_at.blank?
-          System::Log.warning(<<-MSG.squish)
+          System::Log.warning(<<~MSG.squish)
             Skipping OBX missing observation date: OBR.7 date is blank.
             MSH=#{hl7_message.header_id}
             OBR=#{request.placer_order_number || request.filler_order_number}

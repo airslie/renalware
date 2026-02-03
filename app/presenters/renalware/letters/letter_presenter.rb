@@ -109,7 +109,7 @@ module Renalware
       def typist = created_by
 
       def patient_summary_string
-        <<-PAT.squish
+        <<~PAT.squish
           #{patient.title.presence || patient.sex.salutation} #{patient.full_name}
           (#{patient.sex.code} DOB: #{::I18n.l(patient.born_on)}
           #{patient.hospital_identifiers} NHS No: #{patient.nhs_number})

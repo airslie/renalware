@@ -121,7 +121,7 @@ module Renalware
         seg.document_content_presentation = "ED^Electronic Document"
         seg.activity_date_time = approved_at
         # primary_activity_provider_code is the author
-        seg.primary_activity_provider_code = <<-AUTHOR.squish
+        seg.primary_activity_provider_code = <<~AUTHOR.squish
           #{author.gmc_code}^#{author.family_name}^#{author.given_name}
         AUTHOR
 

@@ -34,7 +34,7 @@ module Renalware
       # Note we can only use Postgres COPY if we stream the CSV content from STDIN (otherwise)
       # the CSV file would have to reside on the same server as the database.
       def upload_csv_into_working_table(conn)
-        sql = <<-SQL.squish
+        sql = <<~SQL.squish
           drop table if exists public.tmp_lad_data;
           create table public.tmp_lad_data(
             pcd7 text, pcd8 text, pcds text, dointr text, doterm text,
@@ -64,7 +64,7 @@ module Renalware
       end
 
       def denormalize_uploaded_data(conn)
-        sql = <<-SQL.squish
+        sql = <<~SQL.squish
           CREATE INDEX tmp_lad_data_idx ON public.tmp_lad_data USING btree (ladcd, lsoa11cd, msoa11cd);
 
           insert into renalware.geography_local_authority_districts(code, name)

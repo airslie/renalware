@@ -143,13 +143,13 @@ module Renalware
         # rubocop:enable Metrics/AbcSize
 
         def default_where_sql
-          <<-SQL.squish
+          <<~SQL.squish
             (patients.hospital_centre_id = ? and ?)
           SQL
         end
 
         def research_participation_membership_where_sql
-          <<-SQL.squish
+          <<~SQL.squish
             (
               (patients.hospital_centre_id = ?)
               and not exists(
@@ -166,7 +166,7 @@ module Renalware
         end
 
         def research_user_is_investigator_where_sql
-          <<-SQL.squish
+          <<~SQL.squish
             exists (
               select from research_participations rp
                 inner join research_studies rs on rs.id = rp.study_id

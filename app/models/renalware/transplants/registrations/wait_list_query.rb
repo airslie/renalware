@@ -39,7 +39,7 @@ module Renalware
           def having_ukt_recipient_number(number)
             return all if number.blank?
 
-            where(<<-SQL.squish, number)
+            where(<<~SQL.squish, number)
               transplant_registrations.document -> 'codes' ->> 'uk_transplant_patient_recipient_number' = ?
             SQL
           end
@@ -50,22 +50,22 @@ module Renalware
               joins(statuses: :description)
                 .where(transplant_registration_statuses: { terminated_on: nil })
                 .where(
-                  <<-SQL.squish
-                  (
-                    transplant_registration_status_descriptions.code in ('active')
-                    and
+                  <<~SQL.squish
                     (
-                      transplant_registrations.document -> 'uk_transplant_centre' ->> 'status' not ilike 'A'
+                      transplant_registration_status_descriptions.code in ('active')
+                      and
+                      (
+                        transplant_registrations.document -> 'uk_transplant_centre' ->> 'status' not ilike 'A'
+                      )
                     )
-                  )
-                  or
-                  (
-                    transplant_registration_status_descriptions.code not in ('active')
-                    and
+                    or
                     (
-                      transplant_registrations.document -> 'uk_transplant_centre' ->> 'status' ilike 'A'
+                      transplant_registration_status_descriptions.code not in ('active')
+                      and
+                      (
+                        transplant_registrations.document -> 'uk_transplant_centre' ->> 'status' ilike 'A'
+                      )
                     )
-                  )
                   SQL
                 )
             else
@@ -132,7 +132,7 @@ module Renalware
             end
 
             ransacker :ukt_status do
-              Arel.sql(<<-SQL.squish)
+              Arel.sql(<<~SQL.squish)
                 COALESCE(
                   transplant_registrations.document -> 'uk_transplant_centre' ->> 'status',
                   ''

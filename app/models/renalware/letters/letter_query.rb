@@ -19,7 +19,7 @@ module Renalware
           # of the knock-on effects of doing this elsewhere in the app.
           clinic_id = 1 if clinic_id == true
 
-          join_sql = <<-SQL.squish
+          join_sql = <<~SQL.squish
             inner join clinic_visits
               on clinic_visits.clinic_id = ?
               and clinic_visits.id = letter_letters.event_id

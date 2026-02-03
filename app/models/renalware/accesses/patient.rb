@@ -12,7 +12,7 @@ module Renalware
       def current_plan = plans.current.first
 
       scope :with_current_plan, lambda {
-        joins(<<-SQL.squish)
+        joins(<<~SQL.squish)
           left outer join access_plans on access_plans.patient_id = patients.id
             and access_plans.terminated_at is null
           left outer join access_plan_types
@@ -24,7 +24,7 @@ module Renalware
       # needs to choose just one, otherwise queries that merge in this scope
       # can have duplicates, or worse, broken pagination.
       scope :with_profile, lambda {
-        joins(<<-SQL.squish)
+        joins(<<~SQL.squish)
           left outer join (
             select distinct on (patient_id) * from access_profiles
               where

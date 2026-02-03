@@ -33,7 +33,7 @@ module Renalware
       end
 
       def execute_function(sql_fn_name_and_args)
-        ActiveRecord::Base.connection.execute(<<-SQL.squish)
+        ActiveRecord::Base.connection.execute(<<~SQL.squish)
           select * from #{sql_fn_name_and_args};
         SQL
       end

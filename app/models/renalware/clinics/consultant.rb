@@ -13,7 +13,7 @@ module Renalware
 
       scope :ordered, -> { order(deleted_at: :desc, name: :asc) }
       scope :with_last_appointment_date, lambda {
-        select(<<-SQL.squish)
+        select(<<~SQL.squish)
           (
             SELECT max(clinic_appointments.starts_at)
             FROM clinic_appointments

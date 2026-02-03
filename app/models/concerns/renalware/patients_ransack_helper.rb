@@ -66,7 +66,7 @@ module Renalware
 
       # rubocop:disable Metrics/MethodLength
       def identity_sql(query)
-        sql = <<-SQL.squish
+        sql = <<~SQL.squish
           patients.local_patient_id = :ucase_term OR
           patients.local_patient_id_2 = :ucase_term OR
           patients.local_patient_id_3 = :ucase_term OR
@@ -92,7 +92,7 @@ module Renalware
       end
 
       def full_name_sql
-        <<-SQL.squish
+        <<~SQL.squish
           patients.family_name ILIKE :family_name AND
           patients.given_name ILIKE :given_name
         SQL

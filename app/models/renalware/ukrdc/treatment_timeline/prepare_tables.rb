@@ -13,7 +13,7 @@ module Renalware
         def self.call
           Treatment.delete_all
           connection = ActiveRecord::Base.connection
-          result = connection.execute(<<-SQL.squish)
+          result = connection.execute(<<~SQL.squish)
             select 1 where exists(select 1 from pg_proc where proname = 'ukrdc_prepare_tables');
           SQL
           if result.ntuples == 1

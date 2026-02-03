@@ -65,7 +65,7 @@ module Renalware
 
         # rubocop:disable Metrics/MethodLength
         def pending_transmission_ids_with_two_successful_download_operations
-          sql = <<-SQL.squish
+          sql = <<~SQL.squish
             select lmt.id from letter_mesh_transmissions lmt
             where
               lmt.status = 'pending'
@@ -109,7 +109,7 @@ module Renalware
         # rubocop:disable Metrics/MethodLength
         def transmissions_with_no_response_within_configured_period
           timeout_duration = Renalware.config.mesh_timeout_transmissions_with_no_response_after
-          sql = <<-SQL.squish
+          sql = <<~SQL.squish
             select
               lmt.id, lmt.letter_id
             from

@@ -26,7 +26,7 @@ module Renalware
 
       module Scopes
         def having_an_unmet_preference
-          sql = <<-SQL.squish
+          sql = <<~SQL.squish
             (hd_preference_sets.hospital_unit_id > 0 AND
               hd_profiles.hospital_unit_id != hd_preference_sets.hospital_unit_id) OR
             (coalesce(hd_preference_sets.schedule_definition_id, 0) != 0 AND

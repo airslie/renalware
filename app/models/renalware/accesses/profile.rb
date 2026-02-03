@@ -14,13 +14,13 @@ module Renalware
 
       scope :ordered, -> { order(formed_on: :desc) }
       scope :current, lambda {
-        where(<<-SQL.squish, date: Time.zone.today)
+        where(<<~SQL.squish, date: Time.zone.today)
           started_on <= :date AND
           (terminated_on IS NULL OR terminated_on > :date)
         SQL
       }
       scope :past_and_future, lambda {
-        where(<<-SQL.squish, date: Time.zone.today)
+        where(<<~SQL.squish, date: Time.zone.today)
           (started_on > :date OR started_on IS NULL) OR
           (terminated_on IS NOT NULL AND terminated_on <= :date)
         SQL

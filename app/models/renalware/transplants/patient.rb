@@ -10,7 +10,7 @@ module Renalware
               dependent: :restrict_with_exception
 
       scope :with_registration_statuses, lambda {
-        joins(<<-SQL.squish)
+        joins(<<~SQL.squish)
           left outer join transplant_registrations
             on transplant_registrations.patient_id = patients.id
           left outer join transplant_registration_statuses
