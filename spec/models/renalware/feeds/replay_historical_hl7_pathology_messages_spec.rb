@@ -2,7 +2,7 @@ module Renalware
   module Feeds
     describe ReplayHistoricalHL7PathologyMessages do
       let(:hl7) do
-        <<-HL7.squish
+        <<~HL7.squish
           MSH|^~\&|HM|RAJ01|SCM||20091112164645||ORU^R01|1258271|P|2.3.1|||AL||||
           PID||7179209791^NHS|Z100002^^^Dover||RABBIT^JESSICA^^^MS||19480922|F|||18 RABBITHOLE ROAD^LONDON^^^SE8 8JR||||||||||||||||||201010102359|
           ORC|RE|0031111111^PCS|18T1111111^LA||CM||||201801221418|||xxx^xx, xxxx
