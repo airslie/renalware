@@ -7,7 +7,7 @@ class CreatePathologyMissingUrrsFunction < ActiveRecord::Migration[6.0]
 
   def down
     within_renalware_schema do
-      connection.execute(<<-SQL.squish)
+      connection.execute(<<~SQL.squish)
         DROP FUNCTION IF EXISTS renalware.pathology_missing_urrs(
           int, int, varchar, varchar, varchar
         );

@@ -16,7 +16,7 @@ class AddIndexesToFeedMessages < ActiveRecord::Migration[6.0]
   # would ever finish... Better to not use CONCURRENTLY and pause Mirth - or remember to resubmit
   # failed jobs once the index is built.
   def up
-    connection.execute(<<-SQL.squish)
+    connection.execute(<<~SQL.squish)
       CREATE INDEX IF NOT EXISTS index_feed_messages_created_at_nonauto ON
         renalware.feed_messages
           USING BTREE (created_at DESC);
@@ -24,7 +24,7 @@ class AddIndexesToFeedMessages < ActiveRecord::Migration[6.0]
   end
 
   def down
-    connection.execute(<<-SQL.squish)
+    connection.execute(<<~SQL.squish)
       DROP INDEX IF EXISTS index_feed_messages_created_at_nonauto;
     SQL
   end

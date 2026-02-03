@@ -18,7 +18,7 @@ class CreateEventVersions < ActiveRecord::Migration[5.2]
         dir.up   {
           safety_assured do
             # Because BLT already have this object, we check for its existence before creating
-            execute(<<-SQL.squish)
+            execute(<<~SQL.squish)
               CREATE INDEX CONCURRENTLY IF NOT EXISTS
                 index_event_versions_on_item_type_and_item_id
                 ON renalware.event_versions USING btree (item_type, item_id);

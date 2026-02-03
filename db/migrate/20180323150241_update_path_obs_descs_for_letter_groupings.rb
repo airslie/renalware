@@ -1,7 +1,7 @@
 class UpdatePathObsDescsForLetterGroupings < ActiveRecord::Migration[5.1]
   def change
     within_renalware_schema do
-      sql = <<-SQL.squish
+      sql = <<~SQL.squish
         UPDATE renalware.pathology_observation_descriptions set letter_group = NULL, letter_order = NULL;
         UPDATE renalware.pathology_observation_descriptions set letter_group=1, letter_order=1 where code = 'HGB';
         UPDATE renalware.pathology_observation_descriptions set letter_group=1, letter_order=2 where code = 'WBC';

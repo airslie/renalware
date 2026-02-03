@@ -7,7 +7,7 @@ class CreateHDDNANag < ActiveRecord::Migration[5.2]
 
   def down
     within_renalware_schema do
-      connection.execute(<<-SQL.squish)
+      connection.execute(<<~SQL.squish)
         DROP FUNCTION patient_nag_hd_dna(
           p_id integer,
           out out_severity system_nag_severity,

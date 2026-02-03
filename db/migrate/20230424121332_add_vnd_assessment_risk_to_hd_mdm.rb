@@ -6,7 +6,7 @@ class AddVNDAssessmentRiskToHDMDM < ActiveRecord::Migration[7.0]
 
         reversible do |direction|
           direction.up do
-            execute <<-SQL.squish
+            execute <<~SQL.squish
               update renalware.system_view_metadata
               set filters = '[
                 {"code": "schedule", "type": 0},
@@ -19,7 +19,7 @@ class AddVNDAssessmentRiskToHDMDM < ActiveRecord::Migration[7.0]
             SQL
           end
           direction.down do
-            execute <<-SQL.squish
+            execute <<~SQL.squish
               update renalware.system_view_metadata
               set filters = '[
                 {"code": "schedule", "type": 0},

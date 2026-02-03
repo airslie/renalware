@@ -28,7 +28,7 @@ class CreateMedicationDeliveryEvents < ActiveRecord::Migration[5.2]
       # These aren't guaranteed to be contiguous because of the way we use them.
       reversible do |direction|
         direction.up do
-          connection.execute(<<-SQL.squish)
+          connection.execute(<<~SQL.squish)
             CREATE SEQUENCE renalware.medication_delivery_purchase_order_number_seq
             AS integer
             START WITH 100

@@ -8,7 +8,7 @@ module Renalware
   # transplant_registration_statuses
 
   Rails.benchmark "SQL INSERT Transplant Registration for Roger RABBIT" do
-    connection.execute(<<-SQL.squish)
+    connection.execute(<<~SQL.squish)
       INSERT INTO transplant_registrations
       (patient_id, referred_on, assessed_on, entered_on,
       contact, notes, document, created_at, updated_at)
@@ -57,7 +57,7 @@ module Renalware
 
   Rails.benchmark "SQL INSERT Transplant Recipient Workup for Roger RABBIT" do
     # Execute a sql statement
-    connection.execute(<<-SQL.squish)
+    connection.execute(<<~SQL.squish)
       INSERT INTO transplant_recipient_workups
       (patient_id, document, created_at, updated_at, created_by_id, updated_by_id)
       VALUES (1, '{"scores": {
@@ -88,7 +88,7 @@ module Renalware
   end
 
   Rails.benchmark "SQL INSERT Transplant Recipient Operation for Roger RABBIT" do
-    connection.execute(<<-SQL.squish)
+    connection.execute(<<~SQL.squish)
       INSERT INTO transplant_recipient_operations
       (patient_id, performed_on, theatre_case_start_time, donor_kidney_removed_from_ice_at,
       operation_type, hospital_centre_id, kidney_perfused_with_blood_at, cold_ischaemic_time,
