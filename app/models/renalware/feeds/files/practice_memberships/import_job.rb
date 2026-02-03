@@ -14,14 +14,14 @@ module Renalware
             log "Before upload there are #{practice_membership_count} practice memberships"
             file.update!(status: :processing, attempts: file.attempts + 1)
             status = :success
-            elapsed_ms = Benchmark.ms { process_archive(file.location) }
+            elapsed_ms = Benchmark.realtime { process_archive(file.location) }
             log "After upload there are #{practice_membership_count} practice memberships"
           rescue StandardError => e
             Rails.logger.error(formatted_exception(e))
             status = :failure
             raise e
           ensure
-            file.update!(status: status, result: strio.string, time_taken: elapsed_ms)
+            file.update!(status: status, result: strio.string, time_taken: elapsed_ms * 1000)
           end
 
           private
