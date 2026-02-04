@@ -27,13 +27,13 @@ gem "autoprefixer-rails"
 gem "aws-sdk-s3", require: false # for active storage when using Heroku for test environments
 gem "bootsnap", require: false # speeds up rspec and rails server boot time in development
 gem "faker"
-gem "i18n-tasks", "~> 1.0.12"
+gem "i18n-tasks", require: false
 gem "jsbundling-rails", "~> 1.0"
 gem "net-smtp", require: false # remove in Rails 7
 gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
 gem "paper_trail"
 gem "party_foul", "~> 1.5.5", github: "airslie/party_foul"
-gem "rails", "~> 8.0.1"
+gem "rails", "~> 8.1.2"
 gem "ruby-prof", require: false
 gem "solid_cache"
 gem "terser"
@@ -53,12 +53,6 @@ gem "good_job", "~> 4.0"
 
 gem "matrix"
 
-# FIXME: Gemspec doesn't support git/commit so we'll need to copy this to other apps
-# Once this commit is released we can switch to latest version
-# https://github.com/yippee-fun/phlex-rails/commit/8dd6d5a32cd26cb557d77c3a22ad94a9bd786acd
-# Adds mark_safe option to register_output_helper needed to render pagy_nav
-gem "phlex-rails", git: "https://github.com/yippee-fun/phlex-rails",
-                   ref: "8dd6d5a32cd26cb557d77c3a22ad94a9bd786acd"
 gem "tailwind_merge", "< 1.0" # For Tailwind 3.4
 
 group :test do

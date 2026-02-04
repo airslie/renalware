@@ -30,11 +30,12 @@ module Renalware
 
       def call
         logger.tagged(batch.number) do
-          summary.milliseconds_taken = Benchmark.ms do
+          elapsed = Benchmark.realtime do
             create_patient_xml_files
             encrypt_patient_xml_files
             copy_encrypted_xml_files_into_the_outgoing_folder
           end
+          summary.milliseconds_taken = elapsed * 1000
           paths.create_symlink_to_latest_timestamped_folder_so_it_is_easier_to_eyeball
           build_summary
           print_summary
