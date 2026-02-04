@@ -295,6 +295,8 @@ module Renalware
       app.config.time_zone = "London"
       app.config.active_record.time_zone_aware_types = [:datetime]
       app.config.active_record.dump_schemas = :all
+      # TODO: remove this once we have fixed all queries that require an explicit order
+      app.config.active_record.raise_on_missing_required_finder_order_columns = false
       config.exceptions_app = lambda do |env|
         Renalware::System::ErrorsController.action(:show).call(env)
       end
