@@ -14,19 +14,15 @@ module Renalware
     #    Renalware::PD.config.delivery_intervals
     #
     class Configuration
-      include ActiveSupport::Configurable
+      include Renalware::ConfigAccessors
 
       config_accessor(:delivery_intervals) { [1.week, 2.weeks, 3.weeks, 4.weeks] }
-
       config_accessor(:training_durations) { (1..15).map(&:days) }
     end
 
-    def self.config
-      @config ||= Configuration.new
-    end
-
-    def self.configure
-      yield config
+    class << self
+      def config        = Configuration.config # rubocop:disable Rails/Delegate
+      def configure(&)  = Configuration.configure(&)
     end
 
     module APD

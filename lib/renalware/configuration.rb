@@ -15,7 +15,7 @@
 # rubocop:disable Layout/LineLength
 module Renalware
   class Configuration # rubocop:disable Metrics/ClassLength
-    include ActiveSupport::Configurable
+    include Renalware::ConfigAccessors
 
     # Force dotenv to load the .env file at this stage so we can read in the config defaults
     Dotenv::Rails.load
@@ -569,12 +569,9 @@ module Renalware
     end
   end
 
-  def self.config
-    @config ||= Configuration.new
-  end
-
-  def self.configure
-    yield config
+  class << self
+    def config        = Configuration.config # rubocop:disable Rails/Delegate
+    def configure(&)  = Configuration.configure(&)
   end
 end
 # rubocop:enable Layout/LineLength
