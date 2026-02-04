@@ -2,7 +2,7 @@ describe "Rendering guide/help JSON for a Help::Tours::Page" do
   describe "GET show" do
     context "when a help tour for the page is not found" do
       it "responds with empty JSON" do
-        get help_tours_page_path(id: "foo")
+        get help.tours_page_path(id: "foo")
 
         expect(response).to be_successful
         expect(response.content_type).to match("application/json")
@@ -26,7 +26,7 @@ describe "Rendering guide/help JSON for a Help::Tours::Page" do
           position: 1
         )
 
-        get help_tours_page_path(id: "foo", format: :json)
+        get help.tours_page_path(id: "foo", format: :json)
 
         expect(response).to be_successful
         expect(response.content_type).to match("application/json")
