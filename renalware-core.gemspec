@@ -84,6 +84,7 @@ Gem::Specification.new do |s|
   s.add_dependency "paranoia", "~> 3.0"
   s.add_dependency "pdf-reader", "~> 2.9"
   s.add_dependency "pg", "~> 1.1"
+  s.add_dependency "phlex-rails"
   s.add_dependency "prawn", "~> 2.5.0"
   s.add_dependency "prawn-table", "~> 0.2"
   s.add_dependency "psych", "~>5.1.2" # required for ruby 3.x to avoid invalid database.yml error

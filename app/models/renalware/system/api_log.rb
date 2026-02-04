@@ -11,8 +11,8 @@ module Renalware
 
       def self.with_log(identifier, **)
         log = create!(identifier: identifier, status: STATUS_WORKING, **)
-        elapsed_ms = Benchmark.ms { yield(log) } if block_given?
-        log.update!(status: STATUS_DONE, elapsed_ms: elapsed_ms)
+        elapsed = Benchmark.realtime { yield(log) } if block_given?
+        log.update!(status: STATUS_DONE, elapsed_ms: elapsed * 1000)
         log
       rescue StandardError => e
         log.update(

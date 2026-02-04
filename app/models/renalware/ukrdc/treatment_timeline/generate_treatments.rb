@@ -10,9 +10,10 @@ module Renalware
         end
 
         def call
-          elapsed_ms = Benchmark.ms do
+          elapsed = Benchmark.realtime do
             generate_treatments
           end
+          elapsed_ms = elapsed * 1000
           log("\nCreated #{UKRDC::Treatment.count} UKRDC Treatments in #{elapsed_ms / 1000.0}s")
         end
 
