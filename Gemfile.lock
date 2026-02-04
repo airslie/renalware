@@ -32,13 +32,6 @@ GIT
       rails
 
 GIT
-  remote: https://github.com/airslie/party_foul.git
-  revision: 215834ca503162fea7c674649c103ba55636168b
-  specs:
-    party_foul (1.5.6)
-      octokit (~> 4.2)
-
-GIT
   remote: https://github.com/airslie/rack-host-redirect.git
   revision: a74796367ecc084d8feeb0bfc35e0e99d15045ec
   specs:
@@ -568,9 +561,6 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0, >= 2.0.3)
       version_gem (~> 1.1, >= 1.1.9)
-    octokit (4.25.1)
-      faraday (>= 1, < 3)
-      sawyer (~> 0.9)
     omniauth (2.1.4)
       hashie (>= 3.4.6)
       logger
@@ -884,9 +874,6 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sawyer (0.9.3)
-      addressable (>= 2.3.5)
-      faraday (>= 0.17.3, < 3)
     scenic (1.9.0)
       activerecord (>= 4.0.0)
       railties (>= 4.0.0)
@@ -1079,7 +1066,6 @@ DEPENDENCIES
   opentelemetry-sdk
   overcommit
   paper_trail
-  party_foul (~> 1.5.5)!
   pry-rails
   query_count
   rack-host-redirect!
