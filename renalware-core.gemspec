@@ -44,7 +44,7 @@ Gem::Specification.new do |s|
   s.add_dependency "combine_pdf", "~> 1.0.26"
   s.add_dependency "concurrent-ruby", "~> 1.1"
   s.add_dependency "cronex", "~> 0.6"
-  s.add_dependency "devise", "~> 4.8"
+  s.add_dependency "devise", ">= 5"
   s.add_dependency "devise-security"
   s.add_dependency "diffy"
   s.add_dependency "dotenv-rails"
