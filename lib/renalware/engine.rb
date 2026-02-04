@@ -304,6 +304,7 @@ module Renalware
     config.before_initialize do
       # Load the config at this stage to make sure we
       # load from the demo/.env
+      require "renalware/config_accessors"
       require "renalware/configuration"
 
       # In development don't ajax poll so often for a timeout as it can upset our byebug sessions.

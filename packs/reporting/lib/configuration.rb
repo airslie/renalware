@@ -1,19 +1,16 @@
 module Renalware
   module Reporting
     class Configuration
-      include ActiveSupport::Configurable
+      include Renalware::ConfigAccessors
 
-      config_accessor(:filter_cache_expiry_seconds) {
+      config_accessor(:filter_cache_expiry_seconds) do
         ENV.fetch("REPORTING_FILTER_CACHE_EXPIRY_SECONDS", "60").to_i
-      }
+      end
     end
 
-    def self.config
-      @config ||= Configuration.new
-    end
-
-    def self.configure
-      yield config
+    class << self
+      def config        = Configuration.config # rubocop:disable Rails/Delegate
+      def configure(&)  = Configuration.configure(&)
     end
   end
 end

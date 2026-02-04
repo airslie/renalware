@@ -1,5 +1,3 @@
-# require "lib/configuration"
-
 module Renalware
   module Reporting
     def self.table_name_prefix = "reporting_"
