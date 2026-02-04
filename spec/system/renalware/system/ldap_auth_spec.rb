@@ -105,7 +105,7 @@ module Renalware
         click_on "Log in"
 
         expect(page).to have_current_path(new_user_session_path)
-        expect(page).to have_text("Invalid Username or password")
+        expect(page).to have_text("Invalid username or password")
       end
     end
 
