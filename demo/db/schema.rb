@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_160254) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_05_172045) do
   create_schema "renalware"
   create_schema "renalware_demo"
 
@@ -3886,6 +3886,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_160254) do
     t.datetime "created_at", null: false
     t.datetime "deleted_at", precision: nil
     t.string "name", null: false
+    t.integer "ukrdc_rr51_outcome_code", comment: "For UKRDC Care Planning Assessments. See UKRR Dataset 5+. Valid values are 4 through 10. Not using an enum here as codes may change in a future UKRDC release"
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_low_clearance_dialysis_plans_on_code", unique: true
     t.index ["deleted_at"], name: "index_low_clearance_dialysis_plans_on_deleted_at"
