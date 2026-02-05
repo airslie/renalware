@@ -3,4 +3,4 @@ development:
 test:
   notifier: 'silent'
 production:
-  notifier: 'party_foul_adapter'
+  notifier: 'silent'
