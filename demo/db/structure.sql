@@ -9831,7 +9831,8 @@ CREATE TABLE renalware.low_clearance_dialysis_plans (
     name character varying NOT NULL,
     deleted_at timestamp without time zone,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    ukrdc_rr51_outcome_code integer
 );
 
 
@@ -9840,6 +9841,13 @@ CREATE TABLE renalware.low_clearance_dialysis_plans (
 --
 
 COMMENT ON COLUMN renalware.low_clearance_dialysis_plans.code IS 'Required only for migration from the code-based enumeration';
+
+
+--
+-- Name: COLUMN low_clearance_dialysis_plans.ukrdc_rr51_outcome_code; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.low_clearance_dialysis_plans.ukrdc_rr51_outcome_code IS 'For UKRDC Care Planning Assessments. See UKRR Dataset 5+. Valid values are 4 through 10. Not using an enum here as codes may change in a future UKRDC release';
 
 
 --
@@ -32131,9 +32139,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware, renalware_demo, public, heroku_ext;
+SET search_path TO renalware,renalware_demo,public,heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260205172045'),
 ('20260202160254'),
 ('20260112190854'),
 ('20251223084129'),
