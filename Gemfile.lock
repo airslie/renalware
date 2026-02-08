@@ -665,7 +665,7 @@ GEM
       ruby-rc4
       ttfunk
     pg (1.5.9)
-    phlex (2.4.0)
+    phlex (2.4.1)
       refract (~> 1.0)
       zeitwerk (~> 2.7)
     phlex-rails (2.4.0)
