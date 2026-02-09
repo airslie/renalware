@@ -33,7 +33,7 @@ module Renalware
 
     def nhs_numbers
       @nhs_numbers ||= CSV.foreach(
-        Engine.root.join("doc/example_nhs_numbers.txt"),
+        Rails.root.join("doc/example_nhs_numbers.txt"),
         headers: false
       ).flat_map(&:first)
     end

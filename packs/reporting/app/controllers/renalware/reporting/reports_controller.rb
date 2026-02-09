@@ -3,7 +3,7 @@ module Renalware
     class ReportsController < BaseController
       include Pagy::Backend
 
-      helper Engine.helpers
+      helper Rails.application.helpers
 
       class ReportOptions
         attr_reader_initialize [

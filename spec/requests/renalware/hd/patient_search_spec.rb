@@ -34,7 +34,7 @@ describe "Patient HD Search e.g. when adding patients to a slot" do
   describe "dialysing_at_hospital" do
     it "returns [] when there are no HD patients" do
       pd_pat # no hd patients
-      get renalware.hd_patients_dialysing_at_hospital_path(format: :json)
+      get hd_patients_dialysing_at_hospital_path(format: :json)
 
       expect(response).to be_successful
       expect(response.parsed_body).to be_empty
@@ -44,7 +44,7 @@ describe "Patient HD Search e.g. when adding patients to a slot" do
       hd_pat1
       pd_pat
 
-      get renalware.hd_patients_dialysing_at_hospital_path(format: :json)
+      get hd_patients_dialysing_at_hospital_path(format: :json)
 
       expect(response).to be_successful
       expect(response.parsed_body).to match([patient_json(hd_pat1)])
@@ -55,7 +55,7 @@ describe "Patient HD Search e.g. when adding patients to a slot" do
       hd_pat2
       pd_pat
 
-      get renalware.hd_patients_dialysing_at_hospital_path(format: :json, term: hd_pat2.family_name)
+      get hd_patients_dialysing_at_hospital_path(format: :json, term: hd_pat2.family_name)
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq([patient_json(hd_pat2)])
@@ -65,7 +65,7 @@ describe "Patient HD Search e.g. when adding patients to a slot" do
   describe "dialysing_at_unit" do
     it "returns [] when there are no HD patients" do
       pd_pat # no hd patients
-      get renalware.hd_patients_dialysing_at_unit_path(unit_id: unit1.id, format: :json)
+      get hd_patients_dialysing_at_unit_path(unit_id: unit1.id, format: :json)
 
       expect(response).to be_successful
       expect(response.parsed_body).to be_empty
@@ -79,7 +79,7 @@ describe "Patient HD Search e.g. when adding patients to a slot" do
 
       pd_pat
 
-      get renalware.hd_patients_dialysing_at_unit_path(unit_id: unit1.id, format: :json)
+      get hd_patients_dialysing_at_unit_path(unit_id: unit1.id, format: :json)
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq([patient_json(hd_pat1, unit1.unit_code)])
@@ -91,7 +91,7 @@ describe "Patient HD Search e.g. when adding patients to a slot" do
       create(:hd_profile, hospital_unit: unit1, patient_id: hd_pat2.id)
       pd_pat
 
-      get renalware.hd_patients_dialysing_at_hospital_path(format: :json, term: hd_pat2.family_name)
+      get hd_patients_dialysing_at_hospital_path(format: :json, term: hd_pat2.family_name)
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq([patient_json(hd_pat2, unit1.unit_code)])

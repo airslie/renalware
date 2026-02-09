@@ -17,8 +17,8 @@
             svg.h-6.w-6.stroke-current.text-black viewBox="0 0 24 26"  stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
               path d="M12 20V10M18 20V4M6 20v-4"
 
-        = link_to t("btn.show_all"), renalware.patient_pd_pet_results_path(patient), remote: true, class: "float-none button flex-initial secondary"
-        = link_to t("btn.add"), renalware.new_patient_pd_pet_result_path(patient), class: "float-none button flex-initial"
+        = link_to t("btn.show_all"), patient_pd_pet_results_path(patient), remote: true, class: "float-none button flex-initial secondary"
+        = link_to t("btn.add"), new_patient_pd_pet_result_path(patient), class: "float-none button flex-initial"
 
     #pet-results-table data-tabs-target="panel"
 
@@ -31,5 +31,5 @@
     .chart.hidden.mt-5 data-tabs-target="panel"
       div(style="display:block; position:relative; height: 400px; width: 100%; text-align: center; margin-bottom: 20px")
         #containerx(data-controller="pd-pet-chart"
-                    data-pd-pet-chart-url=renalware.patient_pd_pet_results_path(patient, format: :json)
+                    data-pd-pet-chart-url=patient_pd_pet_results_path(patient, format: :json)
                     style="position: absolute; left: 0; top: 30px; max-width: 700px")

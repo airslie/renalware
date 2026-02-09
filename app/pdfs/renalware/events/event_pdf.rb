@@ -80,7 +80,7 @@ module Renalware
       def render_hospital_centre_info
         bounding_box([340, cursor], width: 200) do
           image_path = "app/assets/images/renalware/nhs_a4_letter_logo_black.png"
-          image Renalware::Engine.root.join(image_path), height: 30, position: :right
+          image Rails.root.join(image_path), height: 30, position: :right
           move_down 10
           text event.hospital_centre_trust_name, align: :right
           text event.hospital_centre_trust_caption, align: :right

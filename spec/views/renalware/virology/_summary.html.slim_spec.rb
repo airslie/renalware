@@ -1,6 +1,6 @@
 describe "renalware/virology/profiles/summary" do
   virology_attributes = %i(hiv hepatitis_b hepatitis_b_core_antibody hepatitis_c htlv).freeze
-  helper(Renalware::Engine.routes.url_helpers, Renalware::AttributeNameHelper)
+  helper(Renalware::AttributeNameHelper)
 
   let(:patient) { create(:virology_patient).tap(&:create_profile) }
   let(:profile) { patient.profile }

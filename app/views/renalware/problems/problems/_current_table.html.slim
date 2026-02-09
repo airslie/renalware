@@ -8,5 +8,5 @@ table#current_problems.manual-stripes.auto-layout
       th.col-width-date Updated on
       td.col-width-medium.nowrap Updated by
       th.col-width-tiny Reorder
-  = content_tag(:tbody, class: "sortables", data: { rel: sort_patient_problems_path(@patient) }) do
+  = content_tag :tbody, class: "sortables", data: { controller: "sortable", sortable_rel_value: sort_patient_problems_path(@patient) } do
     = render partial: "renalware/problems/problems/current_problem", collection: problems, as: :problem

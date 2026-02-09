@@ -9,7 +9,7 @@ module Renalware
 
       def handle_ldap_error(exception)
         log_ldap_error(exception)
-        redirect_back fallback_location: new_user_session_path, alert: ldap_error_message
+        redirect_back fallback_location: login_path_fallback, alert: ldap_error_message
       end
 
       def log_ldap_error(exception)
@@ -22,6 +22,14 @@ module Renalware
 
       def ldap_error_message
         I18n.t("renalware.system.errors.ldap.service_unavailable")
+      end
+
+      def login_path_fallback
+        return new_user_session_path if respond_to?(:new_user_session_path)
+        return main_app.new_user_session_path if respond_to?(:main_app) &&
+                                                 main_app.respond_to?(:new_user_session_path)
+
+        "/users/sign_in"
       end
     end
   end

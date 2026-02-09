@@ -17,4 +17,4 @@
     = f.simple_fields_for(:adequacy, form.adequacy) do |fa|
       = render "renalware/pd/adequacy_results/form_fields", form: fa
 
-  = save_or_cancel(form: f, back_path: renalware.patient_pd_dashboard_path(form.patient))
+  = save_or_cancel(form: f, back_path: patient_pd_dashboard_path(form.patient))

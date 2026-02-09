@@ -4,7 +4,7 @@
   .mb-4
     h6 Optional section
 
-    - section_options = (["none"] + LETTER_SECTION_IDENTIFIERS) \
+    - section_options = (["none"] + Renalware::Letters::LETTER_SECTION_IDENTIFIERS) \
       .map { [t("renalware.letters.sections.#{it}"), it] }
     = f.collection_radio_buttons :section_identifier,
       section_options,

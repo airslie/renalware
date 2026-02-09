@@ -3,7 +3,7 @@
 class Forms::Fresenius::Homecare::Heading < Forms::Fresenius::Homecare::Base
   def build
     image(
-      Renalware::Engine.root.join("app/assets/images/renalware/fresenius_logo.jpg"),
+      Rails.root.join("app/assets/images/renalware/fresenius_logo.jpg"),
       width: 200,
       at: [0, 810]
     )

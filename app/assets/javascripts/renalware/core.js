@@ -14,9 +14,6 @@
 //= require jquery2
 //= require jquery-readyselector
 //= require rails-ujs
-//= require jquery-ui/core
-//= require jquery-ui/widgets/sortable
-//= require jquery-ui/effects/effect-highlight
 //= require foundation/foundation
 //= require foundation/foundation.alert
 //= require foundation/foundation.dropdown

@@ -4,7 +4,7 @@ module Renalware
   Rails.benchmark "Adding NHS Practices" do
     sample_status = "SAMPLE ONLY"
     Patients::Practice.transaction do
-      # NOTE: use '_sample' file for demo/devel
+      # NOTE: use '_sample' file for dev
       CSV.foreach(File.join(File.dirname(__FILE__), "nhs_practices_sample.csv"), headers: true) do |row|
         practice = Patients::Practice.find_or_initialize_by(code: row["code"])
         practice.name = row["name"]

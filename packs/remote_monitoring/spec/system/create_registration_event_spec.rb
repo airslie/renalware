@@ -7,7 +7,7 @@ describe "Create remote monitoring registration event", :js do
     create(:remote_monitoring_frequency, :"4M")
     create(:remote_monitoring_referral_reason, description: "ABC")
 
-    visit renalware.new_patient_event_path(patient)
+    visit main_app.new_patient_event_path(patient)
 
     slim_select "Remote Monitoring Registration", from: "Event type"
 
@@ -35,7 +35,7 @@ describe "Create remote monitoring registration event", :js do
       click_on "Create"
     }.to change(Renalware::Events::Event, :count).by(1)
 
-    expect(page).to have_current_path(renalware.patient_events_path(patient))
+    expect(page).to have_current_path(main_app.patient_events_path(patient))
 
     registration = Renalware::Events::Event.where(patient:).last
     expect(registration.document).to have_attributes(

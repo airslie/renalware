@@ -1,4 +1,3 @@
 #!/usr/bin/env sh
 
-# Start good_job in the demo app
-cd demo && bundle exec good_job start && cd -
+bundle exec good_job start

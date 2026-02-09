@@ -2,9 +2,9 @@
   article.messages
     header
       h2
-        = link_to formatted_title(t(".title")), renalware.patient_messaging_internal_messages_path(patient)
+        = link_to formatted_title(t(".title")), patient_messaging_internal_messages_path(patient)
       ul
-        li= link_to t("btn.view_all"), renalware.patient_messaging_internal_messages_path(patient), class: "button"
+        li= link_to t("btn.view_all"), patient_messaging_internal_messages_path(patient), class: "button"
 
     - if messages.any?
       table.toggleable.easy-read data-controller="toggle"

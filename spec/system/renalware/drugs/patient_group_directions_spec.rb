@@ -15,7 +15,7 @@ describe "Patient Group Directions (PGD)" do
 
   it "creating a PGD" do
     login_as_super_admin
-    visit renalware.new_drugs_patient_group_direction_path
+    visit new_drugs_patient_group_direction_path
 
     within(".non-patient-page") do
       expect(body).to have_content("New Patient Group Direction")

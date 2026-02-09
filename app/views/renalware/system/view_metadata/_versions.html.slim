@@ -17,6 +17,6 @@ table
         td= Renalware::User.find_by(id: version.whodunnit)
         td.text-right
           = link_to("Restore",
-                    renalware.restore_system_view_metadatum_path(view, version_at: version.created_at),
+                    restore_system_view_metadatum_path(view, version_at: version.created_at),
                     data: { method: :patch },
                     class: "button compact secondary")

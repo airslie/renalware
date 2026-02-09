@@ -22,7 +22,7 @@ module Renalware
         end
 
         class CloseableSession < SimpleDelegator
-          include Renalware::Engine.routes.url_helpers
+          include Rails.application.routes.url_helpers
 
           def close
             self.profile = patient.hd_profile

@@ -16,7 +16,7 @@ describe "A user views a list of users" do
       professional_position: "CEO"
     )
 
-    visit renalware.users_path
+    visit users_path
 
     expect(page).to have_content("Users")
     expect(page).to have_content("Fred Jones")

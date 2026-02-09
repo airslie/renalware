@@ -1,7 +1,7 @@
 describe "HTTP Caching" do
   let(:patient) { create(:patient, :minimal) }
 
-  # Note demo/app/controllers/applciation_controller
+  # Note app/controllers/applciation_controller
   # must include the cache busting concern for this test to pass
   context "when hitting a page inside the engine" do
     describe "Cache-Control HTTP Header" do

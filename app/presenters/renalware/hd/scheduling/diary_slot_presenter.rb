@@ -3,7 +3,7 @@ module Renalware
   module HD
     module Scheduling
       class DiarySlotPresenter < SimpleDelegator
-        include Renalware::Engine.routes.url_helpers
+        include Rails.application.routes.url_helpers
 
         delegate :master?, to: :diary, allow_nil: true
 

@@ -22,7 +22,7 @@ ruby:
                     label: "State",
                     collection: Renalware::Feeds::OutgoingDocument.states.values
         .medium-3.large-3.columns.actions.end
-          .mt-px= filter_or_reset(form: f, reset_path: renalware.feeds_outgoing_documents_path)
+          .mt-px= filter_or_reset(form: f, reset_path: feeds_outgoing_documents_path)
 
 = within_new_admin_layout(title: "Outgoing Documents") do
   = render Renalware::Feeds::OutgoingDocumentsStatusComponent.new(current_user: current_user, period_in_days: 30, include_chrome: false)
@@ -57,7 +57,7 @@ ruby:
           td.bg-pink-50= doc.renderable_id
           td.bg-pink-50
             = link_to "JSON/HL7",
-                      renalware.feeds_queued_outgoing_document_path(doc),
+                      feeds_queued_outgoing_document_path(doc),
                       target: "_blank"
 
   == pagy_nav(pagy) if pagy.pages > 1

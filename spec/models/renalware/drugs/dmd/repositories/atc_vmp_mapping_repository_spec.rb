@@ -5,7 +5,7 @@ module Renalware
     describe Repositories::AtcVMPMappingRepository do
       describe "#call" do
         let(:test_zip_file) {
-          Renalware::Engine.root.join("spec", "fixtures", "files", "nhs_atc_code_mappings.zip")
+          Rails.root.join("spec/fixtures/files/nhs_atc_code_mappings.zip")
         }
 
         let(:temp_zip) { Tempfile.new(["test", ".zip"]) }

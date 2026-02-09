@@ -8,6 +8,15 @@ module Renalware
       def chart_id
         @chart_id ||= dom_id(chartable)
       end
+
+      def chart_data_path
+        # In app mode route helpers are not prefixed with "renalware_".
+        helper_name =
+          "patient_#{chartable.model_name.singular_route_key.delete_prefix('renalware_')}_path"
+        public_send(helper_name, patient, chartable, format: :json)
+      rescue NoMethodError
+        polymorphic_path([patient, chartable], format: :json)
+      end
     end
   end
 end

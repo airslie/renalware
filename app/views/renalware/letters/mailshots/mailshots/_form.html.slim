@@ -9,7 +9,7 @@
     .columns.small-12
       = form.input(:sql_view_name,
         collection: Renalware::Letters::Mailshots::DataSource.all.map(&:viewname),
-        input_html: { data: { remote: "true", url: renalware.letters_mailshots_patient_previews_path } })
+        input_html: { data: { remote: "true", url: letters_mailshots_patient_previews_path } })
 
     .columns.medium-6
       = form.association :letterhead

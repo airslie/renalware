@@ -25,8 +25,7 @@ devise_for :users,
              registrations: "renalware/devise/registrations",
              sessions: "renalware/devise/sessions",
              passwords: "renalware/devise/passwords"
-           },
-           module: :devise
+           }
 
 # Session keepalive endpoint returning server-calculated expiry metadata.
 get "/keep_session_alive" => "session_timeout#keep_session_alive", as: "keep_session_alive"

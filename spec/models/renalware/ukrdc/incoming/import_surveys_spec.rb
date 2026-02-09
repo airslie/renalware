@@ -12,7 +12,7 @@ module Renalware
         end.new
       end
 
-      # For testing, we will keep the files in the rails tmp folder ./demo/tmp/ukrdc
+      # For testing, we will keep the files in the rails tmp folder ./tmp/ukrdc
       before do
         allow(Renalware.config)
           .to receive(:ukrdc_working_path)

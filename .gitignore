@@ -25,7 +25,8 @@ documentation/.docusaurus
 /.bundle
 /vendor/bundle
 
-# Ignore all logfiles and tempfiles.
+# # Ignore all logfiles and tempfiles.
+/log/*.log.*
 /log/*.log
 /tmp
 
@@ -75,6 +76,20 @@ rerun.txt
 /demo_dead/app/assets/builds/tailwind.css
 /demo_dead/MESH_NHS_CA_FILE
 
+/demo*/log/*.log
+/demo*/log/*.log.*
+/demo*/tmp
+/demo*/public/assets
+/demo*/.byebug_history
+/demo*/tmp/miniprofiler
+/demo*/tmp/capybara
+/demo-old/log/*.log
+/demo-old/log/*.log.*
+/demo-old/tmp
+/demo-old/public/assets
+/demo-old/.byebug_history
+/demo-old/tmp/miniprofiler
+/demo-old/tmp/capybara
 /pkg
 .rubocop-https*
 /data
@@ -83,15 +98,33 @@ rerun.txt
 key.gpg
 /letter-pdf-1-104-20180830113638-05b485cce1aecfcfceb1f52149d0c673.pdf
 /node_modules
+/demo*/generated_organisations.csv
+/demo*/coverage
+/demo-old/generated_organisations.csv
+/demo-old/coverage
+/demo*/generated_organisations.csv
+/demo*/coverage
+/letter-pdf-1-104-20180830113638-05b485cce1aecfcfceb1f52149d0c673.pdf
+/node_modules
+/demo*/node_modules
+/demo*/package-lock.json
 /package-lock.json
+demo*/storage/**/*
 /egpcur.zip
 /yarn-error.log
 /public/renalware-core-packs
 /public/renalware/renalware-core-packs
 /public/packs-test
+/demo*/public/renalware-core-packs
 log/.bash_history
 /*.pdf
 .env.development
+demo-old/yarn-error.log
+demo*/yarn-error.log
+.env.development
+demo*/config/tailwind.config.js
+demo*/app/assets/builds/tailwind.css
+app/assets/builds/tailwind.css
 ukrdc_keyring.*
 config/master.key
 /app/assets/javascripts/renalware/built.js.map
@@ -112,11 +145,10 @@ renalware.code-workspace
 .unused-env
 spec/dummy
 .claude/settings.local.json
+demo*/MESH_NHS_CA_FILE
 rubocop-*.yml
 .env.2
-log/test.log.0
 MESH_NHS_CA_FILE
-log/development.log.0
 .envrc
 MESH_NHS_CA_FILE
 demo-old/.byebug_history
@@ -135,3 +167,7 @@ demo-old/node_modules/.yarn-integrity
 log/development.log.0
 log/test.log.0
 .env.2
+app/assets/builds/tailwind.css
+MESH_NHS_CA_FILE
+.env.2
+app/assets/builds/tailwind.css

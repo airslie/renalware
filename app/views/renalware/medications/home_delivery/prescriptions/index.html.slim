@@ -6,7 +6,7 @@
     .columns.small-12.medium-6
       = simple_form_for(form,
                         as: :search,
-                        url: renalware.medications_home_delivery_prescriptions_path(named_filter: params[:named_filter]),
+                        url: medications_home_delivery_prescriptions_path(named_filter: params[:named_filter]),
                         method: :get) do |f|
         = f.input :modality_description_id,
                   collection: Renalware::Modalities::Description.order(:name),
@@ -17,10 +17,10 @@
  dl.sub-nav
     dd
       = link_to "ESA",
-                renalware.medications_home_delivery_prescriptions_path(named_filter: "esa")
+                medications_home_delivery_prescriptions_path(named_filter: "esa")
     dd
       = link_to "Immunosuppressant",
-                renalware.medications_home_delivery_prescriptions_path(named_filter: "immunosuppressant")
+                medications_home_delivery_prescriptions_path(named_filter: "immunosuppressant")
 
 = within_admin_layout(title: "Home Delivery Prescriptions") do
   table

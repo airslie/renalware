@@ -7,7 +7,7 @@ describe "Create Duke Activity Status Index (DASI) event", :js do
 
     create(:duke_activity_status_index_event_type)
 
-    visit renalware.patient_clinical_profile_path(patient)
+    visit patient_clinical_profile_path(patient)
 
     within ".page-actions" do
       click_on "Add"
@@ -42,7 +42,7 @@ describe "Create Duke Activity Status Index (DASI) event", :js do
       click_on "Create"
     }.to change(Renalware::Events::Event, :count).by(1)
 
-    expect(page).to have_current_path(renalware.patient_events_path(patient))
+    expect(page).to have_current_path(patient_events_path(patient))
 
     registration = Renalware::Events::Event.where(patient:).last
     expect(registration.document).to have_attributes(

@@ -16,7 +16,7 @@ module SeedsHelper
     require "faker"
     return if FactoryBot.factories.any?
 
-    FactoryBot.definition_file_paths = Array(Renalware::Engine.root.join("spec", "factories"))
+    FactoryBot.definition_file_paths = Array(Rails.root.join("spec/factories"))
     FactoryBot.find_definitions
   end
 end

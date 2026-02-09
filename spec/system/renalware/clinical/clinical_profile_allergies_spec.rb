@@ -11,7 +11,7 @@ describe "Clinical Profile Allergies Display" do
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
       create(:allergy, patient:, description: "Peanuts")
 
-      visit renalware.patient_clinical_profile_path(patient)
+      visit patient_clinical_profile_path(patient)
 
       expect(page).to have_content("Allergies")
       expect(page).to have_content("Peanuts")
@@ -22,7 +22,7 @@ describe "Clinical Profile Allergies Display" do
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
       create(:allergy, patient:, description: "Penicillin")
 
-      visit renalware.patient_path(patient)
+      visit patient_path(patient)
 
       expect(page).to have_css(".allergies").or have_content("Penicillin")
     end
@@ -38,7 +38,7 @@ describe "Clinical Profile Allergies Display" do
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
       create(:allergy, patient:, description: "Peanuts")
 
-      visit renalware.patient_clinical_profile_path(patient)
+      visit patient_clinical_profile_path(patient)
 
       expect(page).to have_content("SMITH, John")
       expect(page).to have_no_content("Allergies")
@@ -50,7 +50,7 @@ describe "Clinical Profile Allergies Display" do
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
       create(:allergy, patient:, description: "Penicillin")
 
-      visit renalware.patient_path(patient)
+      visit patient_path(patient)
 
       expect(page).to have_content("SMITH, John")
       expect(page).to have_no_css(".allergies")

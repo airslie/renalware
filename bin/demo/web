@@ -1,4 +1,0 @@
-#!/bin/sh
-cd demo
-bundle exec rails s
-cd ..

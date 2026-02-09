@@ -8,7 +8,7 @@ Devise.setup do |config|
   config.mailer_sender = Renalware.config.default_from_email_address
 
   config.parent_controller = "ApplicationController"
-  config.router_name = :renalware
+  config.router_name = :main_app
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'

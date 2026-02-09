@@ -16,7 +16,7 @@
     tbody
       - groups.each do |group|
         tr(id=dom_id(group))
-          td= link_to "Edit", renalware.edit_user_group_path(group)
+          td= link_to "Edit", edit_user_group_path(group)
           th= group.name
           td
             ul.ml-0

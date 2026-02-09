@@ -9,7 +9,7 @@ table.mt-4.stripeless
     - transmissions.each do |trans|
       tr(class="border-t-2 border-amber-500")
         td= link_to "View Txn", letters_transports_mesh_transmission_path(trans)
-        td= link_to trans.letter_id, renalware.patient_letters_letter_path(trans.letter.patient, trans.letter_id)
+        td= link_to trans.letter_id, patient_letters_letter_path(trans.letter.patient, trans.letter_id)
         td= l(trans.created_at)
         td
           ruby:
@@ -25,7 +25,7 @@ table.mt-4.stripeless
 
           /.italic= trans.comment
           span.rounded.bg-slate-200.py-0.px-2
-            = link_to(trans.letter.patient.to_s(:long), renalware.patient_path(trans.letter.patient), class: "text-slate-600")
+            = link_to(trans.letter.patient.to_s(:long), patient_path(trans.letter.patient), class: "text-slate-600")
           - if trans.comment.present?
             span.italic.rounded.bg-green-200.py-0.px-2.ml-2.text-green-600=trans.comment
         / td.bg-neutral-50(colspan=3)

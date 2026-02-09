@@ -1,0 +1,10 @@
+//= link renalware/core/manifest.js
+//= link_tree ../images
+//= link_tree ../pdf
+//= link_tree ../rtf
+//= link_tree ../builds
+//= link application.js
+//= link_directory ../javascripts/renalware .js
+//= link_directory ../stylesheets .css
+//= link_directory ../stylesheets/renalware .css
+//= link tailwind.css

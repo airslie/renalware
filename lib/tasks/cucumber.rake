@@ -7,7 +7,7 @@
 unless ARGV.any? { |a| a =~ /^gems/ } # Don't load anything when running the gems:* tasks
 
 vendored_cucumber_bin =
-  Dir["#{Renalware::Engine.root}/vendor/{gems,plugins}/cucumber*/bin/cucumber"].first
+  Dir[Rails.root.join("vendor/{gems,plugins}/cucumber*/bin/cucumber").to_s].first
 
 unless vendored_cucumber_bin.nil?
   $LOAD_PATH.unshift(File.dirname(vendored_cucumber_bin) + "/../lib")

@@ -9,7 +9,7 @@
 
       - if include_chrome
         ul
-          li= link_to t("btn.view_all"), renalware.feeds_outgoing_documents_path, class: "button"
+          li= link_to t("btn.view_all"), feeds_outgoing_documents_path, class: "button"
 
     dl.clear-both.mt-4.grid.rounded-lg.bg-white.overflow-hidden.divide-gray-200.grid-cols-3.divide-y-0.divide-x(style="display: grid")
       - stats.each do |state, count, latest, text_klass|

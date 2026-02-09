@@ -37,7 +37,7 @@ describe "Managing a patient's comorbidities", :js do
         by: user
       )
 
-      visit renalware.patient_comorbidities_path(patient)
+      visit patient_comorbidities_path(patient)
 
       # Toggle open all rows
       page.find_all("td a.toggler").map(&:click) # toggle open details
@@ -77,7 +77,7 @@ describe "Managing a patient's comorbidities", :js do
       desc1 = Renalware::Problems::Comorbidities::Description.create!(name: "Xxx", position: 1)
       desc2 = Renalware::Problems::Comorbidities::Description.create!(name: "Yyy", position: 2)
 
-      visit renalware.edit_patient_comorbidities_path(patient)
+      visit edit_patient_comorbidities_path(patient)
 
       expect(page).to have_content desc1.name
       expect(page).to have_content desc2.name

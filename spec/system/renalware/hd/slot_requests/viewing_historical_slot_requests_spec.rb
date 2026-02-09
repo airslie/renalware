@@ -16,7 +16,7 @@ describe "Managing a list of HD Slot Requests" do
            access_state:,
            location:)
 
-    visit renalware.historical_hd_slot_requests_path
+    visit historical_hd_slot_requests_path
 
     expect(page).to have_content("HD Slot Requests")
     expect(page).to have_content("Historical")
@@ -41,7 +41,7 @@ describe "Managing a list of HD Slot Requests" do
            access_state:,
            location:)
 
-    visit renalware.historical_hd_slot_requests_path
+    visit historical_hd_slot_requests_path
 
     within("table#slot-requests") do
       expect(page).to have_content("01-Oct-2023")
@@ -58,7 +58,7 @@ describe "Managing a list of HD Slot Requests" do
            access_state:,
            location:)
 
-    visit renalware.historical_hd_slot_requests_path
+    visit historical_hd_slot_requests_path
 
     within("table#slot-requests") do
       expect(page).to have_no_content(patient.to_s)

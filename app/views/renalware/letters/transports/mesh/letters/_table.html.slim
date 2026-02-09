@@ -22,7 +22,7 @@
           - state = letter.letter_type.demodulize.downcase
           tbody
             tr(class=state.dasherize)
-              td= link_to(letter.id, renalware.patient_letters_letter_path(letter.patient_secure_id, letter.id))
+              td= link_to(letter.id, patient_letters_letter_path(letter.patient_secure_id, letter.id))
               td.state
                 span= ::I18n.t(state, scope: "enums.letter.state")
               td= t(letter.gp_send_status, scope: "letters.gp_send_status")
@@ -31,7 +31,7 @@
               td(class=ods_klass)= letter.sent_to_practice_ods_code
               td.col-width-patient
                 = link_to(letter.patient_name,
-                          renalware.patient_clinical_summary_path(letter.patient_secure_id),
+                          patient_clinical_summary_path(letter.patient_secure_id),
                           data: { turbo_frame: "_top" })
               td= letter.author_name
               td= letter.typist_name

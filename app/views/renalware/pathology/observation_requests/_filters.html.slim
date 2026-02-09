@@ -1,6 +1,6 @@
 .columns.small-12.search-form.filters
   = simple_form_for(search,
-                    url: renalware.patient_pathology_observation_requests_path(patient),
+                    url: patient_pathology_observation_requests_path(patient),
                     method: :get) do |f|
     .row
       .columns.medium-5.large-4
@@ -11,4 +11,4 @@
                   input_html: { data: { controller: "slimselect" } }
 
       .columns.medium-2.large-2.actions.end
-        .mt-px= filter_or_reset(form: f, reset_path: renalware.patient_pathology_observation_requests_path(patient))
+        .mt-px= filter_or_reset(form: f, reset_path: patient_pathology_observation_requests_path(patient))

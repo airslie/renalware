@@ -1,5 +1,5 @@
 = within_new_admin_layout(title: "Create Patient Merge") do
-  = form_with model: merge, url: renalware.patients_merges_path, local: true do |f|
+  = form_with model: merge, url: patients_merges_path, local: true do |f|
     = render "renalware/shared/errors", model: f.object
     div
       = f.label :major_patient_id, "Major patient ID"

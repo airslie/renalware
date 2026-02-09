@@ -27,7 +27,7 @@ module Renalware
       # that the document has been deleted.
       def self.blank_file_to_send_when_document_has_been_deleted
         format = Renalware.config.feeds_outgoing_documents_letter_format # :pdf or :rtf
-        file_path = Renalware::Engine.root.join("app/assets/#{format}/deleted_document.#{format}")
+        file_path = Rails.root.join("app/assets/#{format}/deleted_document.#{format}")
         raise "Missing file #{file_path}" unless ::File.exist?(file_path)
 
         ::File.binread(file_path)

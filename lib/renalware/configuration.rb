@@ -17,8 +17,13 @@ module Renalware
   class Configuration # rubocop:disable Metrics/ClassLength
     include Renalware::ConfigAccessors
 
-    # Force dotenv to load the .env file at this stage so we can read in the config defaults
-    Dotenv::Rails.load
+    # Force dotenv to load the .env file at this stage so we can read in the config defaults.
+    # Dotenv 3.x no longer provides Dotenv::Rails, so support both APIs.
+    if defined?(Dotenv::Rails)
+      Dotenv::Rails.load
+    elsif defined?(Dotenv)
+      Dotenv.load
+    end
 
     # Hospital-specific devise modules to load (comma-separated list, e.g., "module1,module2")
     config_accessor(:devise_extra_modules) do

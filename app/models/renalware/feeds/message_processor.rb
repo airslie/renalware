@@ -40,7 +40,7 @@ module Renalware
       private
 
       def notify_exception(exception)
-        Engine.exception_notifier.notify(exception)
+        Renalware::ExceptionNotifier.notify(exception)
       end
 
       def allow_listeners_to_process_the_message

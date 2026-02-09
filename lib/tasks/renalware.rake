@@ -29,7 +29,7 @@ end
 Rake::Task["tailwindcss:build"].clear if Rake::Task.task_defined?("tailwindcss:build")
 
 # Based on the original at tailwindcss-rails/lib/tasks/build.rake
-# but using `Renalware::Engine.root` instead of `Rails.root`
+# but using `Rails.root` instead of `Rails.root`
 namespace :tailwindcss do
   desc "Build your Tailwind CSS"
   task build: :environment do |_, args|
@@ -37,9 +37,9 @@ namespace :tailwindcss do
 
     command = [
       Tailwindcss::Ruby.executable,
-      "-i", Renalware::Engine.root.join("app/assets/stylesheets/application.tailwind.css").to_s,
+      "-i", Rails.root.join("app/assets/stylesheets/application.tailwind.css").to_s,
       "-o", Rails.root.join("app/assets/builds/tailwind.css").to_s,
-      "-c", Renalware::Engine.root.join("config/tailwind.config.js").to_s
+      "-c", Rails.root.join("config/tailwind.config.js").to_s
     ].tap do |cmd|
       cmd << "--minify" unless debug
     end

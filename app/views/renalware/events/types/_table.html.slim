@@ -34,7 +34,7 @@ table
                       method: :delete,
                       data: { confirm: t("prompts.confirm_delete") }
           - if policy(event_type).subtypes?
-            = link_to "Subtypes", renalware.events_type_subtypes_path(event_type.id)
+            = link_to "Subtypes", events_type_subtypes_path(event_type.id)
         td= event_type.category&.name
         td= event_type.name
         td= l(event_type.updated_at)

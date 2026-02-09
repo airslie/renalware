@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 
-# This require_relative was changed from "../config/boot" in order to satisfy Heroku
-# PR review apps which started to fail without it in Aug 2020.
-require_relative "../demo/config/boot"
+require_relative "../config/boot"
 
 require "rake"
 Rake.application.run

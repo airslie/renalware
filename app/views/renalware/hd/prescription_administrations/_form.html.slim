@@ -64,7 +64,7 @@
 
         .authentication(
           class="#{'disabled-with-faded-overlay' unless administration.administered?}"
-          data-authentication-url=renalware.hd_prescription_administration_authorisations_path
+          data-authentication-url=hd_prescription_administration_authorisations_path
         )
           / Output username and password fields for administrator and witness
           - { administrator: :administered, witness: :witnessed }.each do |user_role, prefix|

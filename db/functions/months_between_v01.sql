@@ -1,4 +1,4 @@
-CREATE FUNCTION months_between (t_start timestamp, t_end timestamp)
+CREATE OR REPLACE FUNCTION months_between (t_start timestamp, t_end timestamp)
 RETURNS integer
 AS $$
 -- calculate the months between 2 timestamps

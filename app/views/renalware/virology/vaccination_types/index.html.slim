@@ -23,7 +23,7 @@
         th.col-width-date-time Deleted at
     tbody data-controller="sortable" data-sortable-url=move_virology_vaccination_type_path(id: ":id")
       - types.each do |type|
-        tr.virology_vaccination_type(data-id=type.id class="#{type.deleted? ? 'deleted' : ''}")
+        tr.virology_vaccination_type.sortable(data-id=type.id class="#{type.deleted? ? 'deleted' : ''}")
           td.actions
             - unless type.deleted?
               =link_to "Edit", edit_virology_vaccination_type_path(type)

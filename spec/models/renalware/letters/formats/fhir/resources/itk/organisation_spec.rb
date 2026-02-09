@@ -37,8 +37,14 @@ module Renalware::Letters
           end
         }
 
+        before do
+          allow(Renalware.config).to receive_messages(
+            mesh_organisation_ods_code: "XXX"
+          )
+        end
+
         it "renders the resource" do
-          expect(resource.identifier.first.value).to eq("RAJ01")
+          expect(resource.identifier.first.value).to eq("XXX")
         end
       end
     end

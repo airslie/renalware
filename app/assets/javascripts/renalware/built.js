@@ -10881,7 +10881,7 @@ class HDPrescriptionController extends Controller {
   }
 }
 
-const Rails$3 = window.Rails;
+const Rails$2 = window.Rails;
 
 // Handles the modal dialog used for presenting Home Delivery print options to
 // the user. Used on the prescriptions page.
@@ -10891,7 +10891,7 @@ class MedicationsHomeDeliveryModalController extends Controller {
   // Submit and re-display the form when 'drug type' or 'prescription duration'
   // dropdowns are changed
   refreshForm() {
-    Rails$3.fire(this.formTarget, "submit");
+    Rails$2.fire(this.formTarget, "submit");
   }
 
   // When the user has clicked Print (launching the PDF in a new tab), hide
@@ -11531,7 +11531,7 @@ class ChartsController extends Controller {
   }
 }
 
-const Rails$2 = window.Rails;
+const Rails$1 = window.Rails;
 const _ = window._;
 
 // This controller handles session keepalive, timeout detection and cross-tab
@@ -11675,7 +11675,7 @@ class SessionController extends Controller {
   }
 
   ajaxGet(path, { onSuccess = null, onError = null } = {}) {
-    Rails$2.ajax({
+    Rails$1.ajax({
       type: "GET",
       url: path,
       dataType: "json",
@@ -17016,40 +17016,160 @@ Sortable.mount(Remove, Revert);
 // </div>
 
 class SortableController extends Controller {
+  static values = {
+    url: String,
+    rel: String,
+  }
+
   connect() {
-    this.sortable = Sortable.create(this.element, {
+    this.container = this.element.tagName === "TABLE" ? this.element.tBodies[0] : this.element;
+    if (!this.container) return
+
+    this.sortable = Sortable.create(this.container, {
       handle: ".handle",
+      draggable: ".sortable",
       animation: 150,
       onEnd: this.end.bind(this),
     });
   }
 
+  disconnect() {
+    this.sortable?.destroy();
+  }
+
   end(event) {
-    const url = this.data.get("url");
+    if (this.hasUrlValue) return this.persistByResource(event)
+    if (this.relEndpoint()) return this.persistBySerializedIds(event.item)
+  }
 
-    // No direct server persistence
-    if (!url) return
+  persistByResource(event) {
+    const id = event.item.dataset.id;
+    if (!id) return
 
-    let id = event.item.dataset.id;
-    let data = new FormData();
-    data.append("position", event.newIndex + 1);
+    const body = new URLSearchParams({ position: event.newIndex + 1 }).toString();
+    this.request(this.urlValue.replace(":id", id), "PATCH", body);
+  }
 
-    Rails.ajax({
-      url: url.replace(":id", id),
-      type: "PATCH",
-      data: data,
+  async persistBySerializedIds(item) {
+    const rel = this.relEndpoint();
+    const serialised = this.serialiseIds();
+    if (!rel || !serialised.query) return
+
+    const response = await this.request(rel, "POST", serialised.query);
+    if (!response?.ok) return
+
+    const ids = await this.responseBody(response);
+    this.highlight(item);
+    this.updateSortOrderIndicators(ids);
+  }
+
+  serialiseIds() {
+    const items = Array.from(this.container.querySelectorAll(".sortable[id]"));
+    const parsed = items.map((item) => this.parseDomId(item.id)).filter(Boolean);
+    if (parsed.length === 0) return { query: null, paramKey: null }
+
+    const paramKey = parsed[0].paramKey;
+    const ids = parsed.filter((item) => item.paramKey === paramKey).map((item) => item.id);
+    const encodedKey = encodeURIComponent(`${paramKey}[]`);
+    const query = ids.map((id) => `${encodedKey}=${encodeURIComponent(id)}`).join("&");
+
+    return { query: query, paramKey: paramKey }
+  }
+
+  parseDomId(domId) {
+    const matched = domId.match(/^(.*)[_-](\d+)$/);
+    if (!matched) return null
+
+    return { paramKey: matched[1], id: matched[2] }
+  }
+
+  relEndpoint() {
+    return this.relValue || this.element.dataset.sortableRelValue
+  }
+
+  updateSortOrderIndicators(ids) {
+    if (typeof ids === "string") {
+      try {
+        ids = JSON.parse(ids);
+      } catch (_error) {
+        return
+      }
+    }
+
+    if (!Array.isArray(ids) || ids.length === 0) return
+
+    ids.forEach((modelId, index) => {
+      const selector = `.sortable-position-for-model-id-${modelId}`;
+      this.element.querySelectorAll(selector).forEach((cell) => {
+        cell.innerHTML = index + 1;
+      });
     });
+  }
+
+  highlight(element) {
+    if (!element) return
+
+    element.classList.add("post-action-highlight");
+    window.setTimeout(() => {
+      element.classList.remove("post-action-highlight");
+    }, 1600);
+  }
+
+  async request(url, method, body) {
+    return new Promise((resolve) => {
+      const request = new XMLHttpRequest();
+      request.open(method, url, true);
+
+      Object.entries(this.headers()).forEach(([key, value]) => {
+        request.setRequestHeader(key, value);
+      });
+
+      request.onreadystatechange = () => {
+        if (request.readyState !== 4) return
+
+        resolve({
+          ok: request.status >= 200 && request.status < 300,
+          status: request.status,
+          headers: {
+            get: (name) => request.getResponseHeader(name),
+          },
+          json: async () => JSON.parse(request.responseText || "null"),
+          text: async () => request.responseText,
+        });
+      };
+
+      request.send(body);
+    })
+  }
+
+  headers() {
+    return {
+      Accept: "application/json, text/javascript, */*; q=0.01",
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "X-CSRF-Token": this.csrfToken(),
+      "X-Requested-With": "XMLHttpRequest",
+    }
+  }
+
+  csrfToken() {
+    return document.querySelector("meta[name='csrf-token']")?.getAttribute("content") || ""
+  }
+
+  async responseBody(response) {
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) return response.json()
+    return response.text()
   }
 }
 
-const Rails$1 = window.Rails;
+const Rails = window.Rails;
 
 class SelectController extends Controller {
   refresh(event) {
     event.preventDefault();
     let selectedOption = this.element.options[this.element.selectedIndex];
     let url = selectedOption.dataset.source;
-    Rails$1.ajax({
+    Rails.ajax({
       type: "GET",
       url: url,
       dataType: "application/js"

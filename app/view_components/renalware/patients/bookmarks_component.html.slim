@@ -2,7 +2,7 @@ article.bookmarks
   header
     h2.title= t(".title")
     ul
-      li= link_to t("btn.view_all"), renalware.bookmarks_path, class: "button"
+      li= link_to t("btn.view_all"), bookmarks_path, class: "button"
 
   - if bookmarks.any?
     #bookmarks

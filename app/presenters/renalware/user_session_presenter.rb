@@ -15,7 +15,7 @@ module Renalware
     #       data-session-login-path="/users/sign_in"
     #       data-session-timeout="3600">
     def self.session_controller_data_attributes(user_session:)
-      urls = Renalware::Engine.routes.url_helpers
+      urls = Rails.application.routes.url_helpers
       {
         data: {
           controller: "session",

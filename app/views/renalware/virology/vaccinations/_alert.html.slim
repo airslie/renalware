@@ -8,5 +8,5 @@ ruby:
 li.patient-alert.vaccination
   .flex.items-center
     = inline_icon(:syringe)
-    span.title= link_to title, renalware.patient_virology_dashboard_path(event.patient)
+    span.title= link_to title, patient_virology_dashboard_path(event.patient)
     span.date= l(event.date_time.to_date)

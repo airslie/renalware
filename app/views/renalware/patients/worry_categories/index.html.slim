@@ -1,5 +1,5 @@
 = content_for(:actions) do
-  = link_to t("btn.add"), renalware.new_worry_category_path, class: "button"
+  = link_to t("btn.add"), new_worry_category_path, class: "button"
 
 = within_new_admin_layout(title: "Worry Categories") do
   = help_panel do
@@ -19,10 +19,10 @@
       - categories.each do |category|
         tr(id=dom_id(category) class="#{category.deleted? ? 'deleted' : ''}")
           td.actions
-            = link_to_if_allowed policy(category).edit?, "Edit", renalware.edit_worry_category_path(category)
+            = link_to_if_allowed policy(category).edit?, "Edit", edit_worry_category_path(category)
             = link_to_if_allowed policy(category).destroy?,
                                  "Delete",
-                                 renalware.worry_category_path(category),
+                                 worry_category_path(category),
                                  method: :delete,
                                  data: { confirm: "Are you sure?" }
           td= category.name

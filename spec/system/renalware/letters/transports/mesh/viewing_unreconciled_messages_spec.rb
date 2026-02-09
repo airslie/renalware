@@ -13,7 +13,7 @@ describe "View unreconciled messages" do
       reconciliation_error_description: "reconciliation_error1"
     )
 
-    visit renalware.letters_transports_mesh_unreconciled_messages_path
+    visit letters_transports_mesh_unreconciled_messages_path
 
     expect(page).to have_content("Unreconciled Messages")
     expect(page).to have_content("reconciliation_error1")

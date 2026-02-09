@@ -6,5 +6,5 @@ table.hd-stations
       th Location
       - if policy(Renalware::HD::Station.new).sort?
         th.col-width-tiny Reorder
-  tbody.sortables data-rel=sort_hd_unit_stations_path(unit_id: unit_id)
+  tbody.sortables data-controller="sortable" data-sortable-rel-value=sort_hd_unit_stations_path(unit_id: unit_id)
     = render stations

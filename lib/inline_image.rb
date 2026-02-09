@@ -2,7 +2,7 @@ require "base64"
 
 class InlineImage
   def initialize(file_path)
-    @filename = File.join(Renalware::Engine.root, file_path)
+    @filename = Rails.root.join(file_path)
     @data = File.read(@filename)
   end
 

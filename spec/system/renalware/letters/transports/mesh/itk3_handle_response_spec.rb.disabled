@@ -42,7 +42,7 @@ module Renalware::Letters::Transports
       # These (pending) tests seem to be creating selenium invalid session errors in latest chrome
       # so have commended out.
       # Dir[
-      #   Renalware::Engine.root.join(
+      #   Rails.root.join(
       #     "spec/fixtures/files/letters/transports/mesh/api/response_scenarios/*.yml"
       #   )
       # ].each do |file|

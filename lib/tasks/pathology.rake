@@ -5,7 +5,7 @@ namespace :pathology do
       raise NotImplementedError unless Rails.env.development?
 
       # Load the example HL7 file.
-      path = Renalware::Engine.root.join("app", "jobs", "hl7_message_example.yml")
+      path = Rails.root.join("app/jobs/hl7_message_example.yml")
       raw_message = File.read(path)
 
       # It has a struct header at the top so it can also be dumped into
@@ -29,7 +29,7 @@ namespace :pathology do
       raise NotImplementedError unless Rails.env.development?
 
       # Load the example HL7 file.
-      path = Renalware::Engine.root.join("app", "jobs", "hl7_message_example.txt")
+      path = Rails.root.join("app/jobs/hl7_message_example.txt")
       raw_message = File.read(path)
 
       # Make sure line endings are \r and not \n or as that is how the HL7 looks

@@ -1,15 +1,13 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gemspec
-
 ruby file: ".ruby-version"
 
 gem "activesupport_cache_database", github: "airslie/activesupport-cache-database"
 gem "sprockets-rails"
 
 # https://opentelemetry.io/docs/instrumentation/ruby/getting-started/
-# See demo/config/initializers/opentelemetry.rb where we load this group if
+# See config/initializers/opentelemetry.rb where we load this group if
 # opentelemetry is enabled with an ENV var.
 group :opentelemetry do
   gem "opentelemetry-exporter-otlp"
@@ -22,7 +20,6 @@ group :opentelemetry do
   gem "opentelemetry-sdk"
 end
 
-# These are visible to demo app only
 gem "autoprefixer-rails"
 gem "aws-sdk-s3", require: false # for active storage when using Heroku for test environments
 gem "bootsnap", require: false # speeds up rspec and rails server boot time in development
@@ -31,7 +28,6 @@ gem "i18n-tasks", require: false
 gem "jsbundling-rails", "~> 1.0"
 gem "net-smtp", require: false # remove in Rails 7
 gem "nhs_api_client", github: "airslie/nhs_api_client", require: false
-gem "paper_trail"
 gem "rails", "~> 8.1.2"
 gem "ruby-prof", require: false
 gem "solid_cache"
@@ -121,3 +117,83 @@ group :development, :test do
   gem "rubocop", require: false
   gem "wkhtmltopdf-binary", "0.12.6.8"
 end
+
+# From gemspec
+gem "activerecord-import", "~> 1.0"
+gem "activerecord-postgres_enum", "~> 2.0"
+gem "acts_as_list", "~> 1.1"
+gem "after_commit_everywhere"
+gem "ahoy_matey"
+gem "attr_extras"
+gem "bcrypt_pbkdf"
+gem "clipboard-rails", "~> 1.7.1"
+gem "cocoon", "~> 1.2.11"
+gem "combine_pdf", "~> 1.0.26"
+gem "concurrent-ruby", "~> 1.1"
+gem "cronex", "~> 0.6"
+gem "devise", ">= 5"
+gem "devise-security"
+gem "diffy"
+gem "dotenv-rails"
+gem "dumb_delegator", "~> 1.1"
+gem "ed25519"
+gem "email_validator", "> 1.6.0"
+gem "enumerize", "~> 2.5"
+gem "faraday"
+gem "faraday-retry"
+gem "fhir_models"
+gem "font-awesome-sass", "~> 5.6" # See icons here: https://fortawesome.github.io/Font-Awesome/icons/
+gem "friendly_id", "~> 5.3"
+gem "fugit", ">= 1.1"
+gem "groupdate", ">= 4.2", "< 7"
+gem "hashdiff", "~> 1.0"
+gem "i18n" # , "~> 1.8.9"
+gem "inline_svg", "~> 1.8"
+gem "jbuilder", "~> 2.8"
+gem "jquery-rails", "~> 4.4"
+gem "kaminari", "~> 1.1"
+gem "liquid", "~> 5.6"
+gem "lograge", "~> 0.11"
+gem "naught", "~> 1.1.0"
+gem "nested_form", "~> 0.3.2"
+gem "net-ldap"
+gem "net-sftp", "~> 4.0"
+gem "nokogiri", "~> 1.9"
+gem "omniauth"
+gem "omniauth-entra-id" # OAuth2/OIDC against Entra ID
+gem "omniauth-rails_csrf_protection"
+gem "ox", "~> 2.13"
+gem "pagy", "~> 9.0"
+gem "pandoc-ruby", "~> 2.1.4"
+gem "paper_trail"
+gem "paranoia", "~> 3.0"
+gem "pdf-reader", "~> 2.9"
+gem "pg", "~> 1.1"
+gem "phlex-rails"
+gem "prawn", "~> 2.5.0"
+gem "prawn-table", "~> 0.2"
+gem "psych", ">= 5.1.2" # required for ruby 3.x to avoid invalid database.yml error
+gem "puma", "< 8" # Puma 7 may require testing due to call back changes
+gem "pundit", "~> 2.5.0"
+gem "rack"
+gem "rack-attack"
+gem "ransack", "~> 4.2"
+gem "rqrcode", "~> 2.0"
+gem "ruby-hl7", "~> 1.3"
+gem "sassc-rails", "~> 2.1.0"
+gem "scenic", "~> 1.5"
+gem "sendgrid-ruby", "~> 6.7"
+gem "simple_form", "~> 5.1"
+gem "sinatra"
+gem "slim-rails"
+gem "store_model", "< 5"
+gem "tailwindcss-rails", "~> 3.0"
+gem "tailwindcss-ruby", "~> 3.4"
+gem "turbo-rails", "2.0.23"
+gem "validates_timeliness"
+gem "view_component", "< 4.0"
+gem "virtus", "~> 1.0.5"
+gem "wicked_pdf", "~> 2.8.0"
+gem "wisper", "~> 3.0.0"
+gem "wisper-activejob", "~> 1.0.0"
+gem "yard", ">= 0.9.35"

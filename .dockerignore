@@ -5,3 +5,8 @@ Dockerfile
 .bundle/*
 .vagrant/*
 vendor/bundle/*
+documentation/*
+spec/*
+test/*
+coverage/*
+node_modules/*

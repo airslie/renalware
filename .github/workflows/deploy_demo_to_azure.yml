@@ -1,0 +1,65 @@
+name: Build and Push Image to ACR (feature/de-engine merge)
+
+on:
+  pull_request:
+    branches:
+      - feature/de-engine
+    types:
+      - closed
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-push:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      ACR_NAME: acrrenalwaredemo
+      RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate required repo variable
+        run: |
+          if [ -z "${RESOURCE_GROUP}" ]; then
+            echo "Repository variable AZURE_RESOURCE_GROUP is required but not set."
+            exit 1
+          fi
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Resolve image metadata
+        id: meta
+        run: |
+          ACR_LOGIN_SERVER="$(az acr show --name "${ACR_NAME}" --resource-group "${RESOURCE_GROUP}" --query loginServer -o tsv)"
+          IMAGE_NAME="$(echo "${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]')"
+          IMAGE_TAG="${GITHUB_SHA::12}"
+          echo "acr_login_server=${ACR_LOGIN_SERVER}" >> "${GITHUB_OUTPUT}"
+          echo "image_name=${IMAGE_NAME}" >> "${GITHUB_OUTPUT}"
+          echo "image_tag=${IMAGE_TAG}" >> "${GITHUB_OUTPUT}"
+
+      - name: Login to ACR
+        run: az acr login --name "${ACR_NAME}"
+
+      - name: Build and push Docker image
+        run: |
+          FULL_IMAGE="${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}"
+          SHA_TAG="${FULL_IMAGE}:${{ steps.meta.outputs.image_tag }}"
+          BRANCH_TAG="${FULL_IMAGE}:feature-de-engine-latest"
+
+          docker build \
+            --tag "${SHA_TAG}" \
+            --tag "${BRANCH_TAG}" \
+            .
+
+          docker push "${SHA_TAG}"
+          docker push "${BRANCH_TAG}"

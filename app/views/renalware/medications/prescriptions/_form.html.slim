@@ -29,7 +29,7 @@
             input_html: { \
               data: { \
                 controller: "slimselect-ajax",
-                options_url: renalware.prescribable_drugs_drugs_path(term: "REPLACEME", format: :json),
+                options_url: prescribable_drugs_drugs_path(term: "REPLACEME", format: :json),
                 action: "change->alternative-form-submitter#submit",
                 "alternative-form": "drug_search_form" } },
             wrapper: :horizontal_medium

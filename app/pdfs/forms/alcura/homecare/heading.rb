@@ -3,7 +3,7 @@
 class Forms::Alcura::Homecare::Heading < Forms::Alcura::Homecare::Base
   def build
     image(
-      Renalware::Engine.root.join("app/assets/images/renalware/alcura_logo.png"),
+      Rails.root.join("app/assets/images/renalware/alcura_logo.png"),
       width: 200,
       at: [20, 800]
     )

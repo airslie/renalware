@@ -30,6 +30,14 @@ module Renalware::Letters
         end
       end
 
+      before do
+        allow(Renalware.config).to receive_messages(
+          mesh_organisation_uuid: SecureRandom.uuid,
+          mesh_itk_organisation_uuid: SecureRandom.uuid,
+          mesh_organisation_ods_code: "ABC"
+        )
+      end
+
       it "#call" do
         patient = create_patient
         letter = create_mesh_letter(patient, user)

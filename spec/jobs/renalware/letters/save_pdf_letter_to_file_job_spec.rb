@@ -21,7 +21,7 @@ describe Renalware::Letters::SavePdfLetterToFileJob do
 
   describe "#perform" do
     it "creates the specific file with the pdf letter content" do
-      file_path = Renalware::Engine.root.join("tmp", "test.pdf")
+      file_path = Rails.root.join("tmp/test.pdf")
 
       allow_any_instance_of(Renalware::Letters::LetterPresenter)
         .to receive(:to_html).and_return("test")

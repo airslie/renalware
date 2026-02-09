@@ -8,7 +8,7 @@ FactoryBot.define do
     document_date { Faker::Date.between(from: 1.year.ago, to: Time.zone.today) }
     file do
       Rack::Test::UploadedFile.new(
-        Renalware::Engine.root.join("spec/fixtures/files/cat.png")
+        Rails.root.join("spec/fixtures/files/cat.png")
       )
     end
   end

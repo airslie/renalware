@@ -1,3 +1,5 @@
+require "ahoy"
+
 class Ahoy::Store < Ahoy::DatabaseStore
   def visit_model
     Renalware::System::Visit

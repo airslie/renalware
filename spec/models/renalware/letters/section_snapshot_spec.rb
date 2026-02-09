@@ -28,7 +28,7 @@ module Renalware
 
     it do
       is_expected.to validate_inclusion_of(:section_identifier)
-        .in_array(LETTER_SECTION_IDENTIFIERS)
+        .in_array(Letters::LETTER_SECTION_IDENTIFIERS)
     end
 
     describe ".create_or_update" do

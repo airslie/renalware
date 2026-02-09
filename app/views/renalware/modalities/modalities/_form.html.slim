@@ -16,7 +16,7 @@
                     wrapper: :horizontal_medium,
                     autofocus: true
 
-          - frame_url = renalware.new_patient_modality_path(change_type_id: "REPLACE_ID")
+          - frame_url = new_patient_modality_path(change_type_id: "REPLACE_ID")
           = m.input :change_type_id,
               label: "Type of Change",
               collection: Renalware::Modalities::ChangeTypePresenter.list_for_dropdown(frame_url),

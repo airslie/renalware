@@ -9,7 +9,7 @@ describe "Renalware status page" do
   end
 
   it "does not require a login in order to view the page" do
-    get renalware.status_path
+    get status_path
 
     expect(response).not_to be_redirect # ie no unauthorised with a redirect to login page
     expect(response).to be_successful
@@ -17,12 +17,12 @@ describe "Renalware status page" do
 
   it "does not write to the database" do
     expect {
-      get renalware.status_path
+      get status_path
     }.not_to change(Renalware::System::Event, :count)
   end
 
   it "displays user activity" do
-    get renalware.status_path
+    get status_path
 
     # There will be one active user, caused by our implicit Warden login_as (and subsequent
     # logout above)

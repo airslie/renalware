@@ -19,7 +19,7 @@ describe "Searching HD Slot Requests", :js do
            access_state:,
            location:)
 
-    visit renalware.hd_slot_requests_path
+    visit hd_slot_requests_path
 
     expect(page).to have_content("HD Slot Requests")
 

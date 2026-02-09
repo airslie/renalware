@@ -7,7 +7,7 @@ article#access-needling-assessments
       li
         span
           = link_to I18n.t("btn.add"),
-                    renalware.new_patient_accesses_needling_assessment_path(patient),
+                    new_patient_accesses_needling_assessment_path(patient),
                     class: "button"
   table
     thead
@@ -24,7 +24,7 @@ article#access-needling-assessments
           td
             - if policy(assessment).destroy?
               = link_to(t("btn.delete"),
-                  renalware.patient_accesses_needling_assessment_path(patient, assessment),
+                  patient_accesses_needling_assessment_path(patient, assessment),
                   method: :delete,
                   data: { confirm: I18n.t("prompts.confirm_delete") })
 

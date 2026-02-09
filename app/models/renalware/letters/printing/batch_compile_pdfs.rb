@@ -111,7 +111,7 @@ module Renalware
 
         def blank_page_filename
           @blank_page_filename ||= begin
-            Renalware::Engine.root.join("app", "assets", "pdf", "blank_page.pdf").to_s
+            Rails.root.join("app/assets/pdf/blank_page.pdf").to_s
           end
         end
 

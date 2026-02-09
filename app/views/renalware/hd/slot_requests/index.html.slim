@@ -1,13 +1,13 @@
 = content_for(:actions) do
   = link_to t("btn.add"),
-            renalware.new_hd_slot_request_path,
+            new_hd_slot_request_path,
             class: :button,
             data: { turbo: true, turbo_frame: "modal" }
 
 = content_for(:filters) do
   = render "filters",
            query: query,
-           url: renalware.hd_slot_requests_path,
+           url: hd_slot_requests_path,
            urgency_dropdown_options: urgency_dropdown_options
 
 - content_for(:tabs) { render "tabs" }

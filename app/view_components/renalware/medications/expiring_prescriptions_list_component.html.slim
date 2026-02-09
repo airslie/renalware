@@ -4,7 +4,7 @@
       h2
         = t(".title")
       ul
-        /li= link_to t("btn.view_all"), renalware.patient_messaging_internal_messages_path(patient), class: "button"
+        /li= link_to t("btn.view_all"), patient_messaging_internal_messages_path(patient), class: "button"
 
     - if expiring_hd_prescriptions.blank?
       p.empty-section = t(".no_expiring_prescriptions")
@@ -21,7 +21,7 @@
           - expiring_hd_prescriptions.each do |prescription|
             - css_class = termination_date_is_in_the_past?(prescription) ? "bg-red-100" : ""
             tr(class=css_class)
-              td= link_to(prescription.patient, renalware.patient_prescriptions_path(prescription.patient))
+              td= link_to(prescription.patient, patient_prescriptions_path(prescription.patient))
               td= prescription.drug.name
               td= l(prescription.termination&.terminated_on)
               td= terminated_ago_in_words(prescription)

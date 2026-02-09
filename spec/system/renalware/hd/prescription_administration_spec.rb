@@ -132,7 +132,7 @@ RSpec.describe "Administering drugs from HD Dashboard, independent of HD Session
           reason = Renalware::HD::PrescriptionAdministrationReason.find_or_create_by!(name: "Cos")
           dialog = Pages::HD::PrescriptionAdministrationDialog.new(prescription: prescription)
           user = login_as_clinical
-          visit renalware.patient_hd_dashboard_path(patient)
+          visit patient_hd_dashboard_path(patient)
 
           dialog.open_by_clicking_on_drug_name
           expect(dialog).to be_visible

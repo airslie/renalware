@@ -21,7 +21,7 @@
           th.col-width-small.text-center Sort order
         th.col-width-date-time Created at
         th Deleted at
-    tbody.sortables(data-rel=sort_letters_topics_path)
+    tbody.sortables(data-controller="sortable" data-sortable-rel-value=sort_letters_topics_path)
       - topics.each do |topic|
         tr(id=dom_id(topic) class="sortable #{topic.deleted? ? 'deleted' : ''}")
           td.actions

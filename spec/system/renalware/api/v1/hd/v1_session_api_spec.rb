@@ -22,7 +22,7 @@ describe "V1 HD Session API" do
   let(:adate) { "2021-03-01" }
 
   def url_with_credentials(user: system_user, mrn: patient.local_patient_id_2, date: adate)
-    renalware.api_v1_hd_session_path(
+    main_app.api_v1_hd_session_path(
       mrn:,
       date:,
       username: user&.username,

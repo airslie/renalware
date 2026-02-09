@@ -18,7 +18,7 @@
             = f.search_field :name_or_description_cont,
                              input_html: { autocomplete: "off" }
           .small-5.large-4.columns.actions.end
-            .mt-px= filter_or_reset(form: f, reset_path: renalware.system_downloads_path)
+            .mt-px= filter_or_reset(form: f, reset_path: system_downloads_path)
 
   .downloads
     - items.each do |item|

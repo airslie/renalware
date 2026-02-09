@@ -37,7 +37,7 @@
               p= msg.description
   .row
     .columns.small-12.file-viewer
-      = simple_form_for(form, remote: true, url: renalware.feeds_hl7_test_messages_path) do |f|
+      = simple_form_for(form, remote: true, url: feeds_hl7_test_messages_path) do |f|
         = f.input :body, as: :text, input_html: { style: "font-family: monospace", rows: 11 }
         = f.submit t("btn.submit"), class: :button
       pre#output

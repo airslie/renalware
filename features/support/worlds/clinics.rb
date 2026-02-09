@@ -6,4 +6,4 @@ module World
   end
 end
 
-Dir[Renalware::Engine.root.join("features/support/worlds/clinics/*.rb")].each { |f| require f }
+Rails.root.glob("features/support/worlds/clinics/*.rb").each { |f| require f }

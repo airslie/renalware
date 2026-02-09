@@ -1,7 +1,5 @@
 require_relative "rails_helper"
 
-FactoryBot.definition_file_paths = Array(Renalware::Engine.root.join("spec", "factories"))
-FactoryBot.find_definitions
 # factory_names = FactoryBot.factories.map(&:name)
 # puts "Checking factories #{factory_names.first}"
 

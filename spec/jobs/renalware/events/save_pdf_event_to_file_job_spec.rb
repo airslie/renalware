@@ -19,7 +19,7 @@ describe Renalware::Events::SavePdfEventToFileJob do
 
   describe "#perform" do
     it "creates the specific file with the pdf event content" do
-      file_path = Renalware::Engine.root.join("tmp", "test.pdf")
+      file_path = Rails.root.join("tmp/test.pdf")
       create(:hospital_centre, code: Renalware.config.ukrdc_site_code)
 
       job.perform(event:, file_path:)

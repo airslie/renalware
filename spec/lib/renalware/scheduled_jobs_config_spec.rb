@@ -1,5 +1,5 @@
 module Renalware
-  describe "Renalware::Engine.scheduled_jobs_config", type: :model do
+  describe "Renalware::ScheduledJobs.config", type: :model do
     before do
       allow(Renalware.config).to receive_messages(
         monitoring_mirth_enabled: true,
@@ -10,7 +10,7 @@ module Renalware
     end
 
     let(:jobs_config) do
-      Renalware::Engine.scheduled_jobs_config
+      Renalware::ScheduledJobs.config
     end
 
     it "has the right jobs" do
@@ -27,6 +27,7 @@ module Renalware
           :ods_sync,
           :reconcile_mesh_transmissions_job,
           :reporting_send_daily_summary_email,
+          :schedule_refresh_of_materialized_views,
           :terminate_given_but_unwitnessed_hd_stat_prescriptions,
           :ukrdc_export
         ]

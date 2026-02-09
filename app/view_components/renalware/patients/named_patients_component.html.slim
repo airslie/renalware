@@ -2,7 +2,7 @@ article
   header
     h2= formatted_title(t(".title"))
     ul.noprint
-      li= link_to t("btn.view_all"), renalware.patients_path("q[named_nurse_id_eq]" => 2), class: "button"
+      li= link_to t("btn.view_all"), patients_path("q[named_nurse_id_eq]" => 2), class: "button"
 
   table
     thead

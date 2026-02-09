@@ -14,7 +14,7 @@ class Forms::Generic::Homecare::Heading < Forms::Base
     font_size 8
     text "As at #{args.generated_at}"
     image(
-      Renalware::Engine.root.join("app/assets/images/renalware/nhs_logo.jpg"),
+      Rails.root.join("app/assets/images/renalware/nhs_logo.jpg"),
       width: 60,
       at: [490, 800]
     )

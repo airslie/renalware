@@ -51,7 +51,7 @@
 
         - disabled_args = event.errors.any? ? { disabled: "disabled" } : {}
         = link_to t("btn.print"),
-                  renalware.patient_medications_home_delivery_event_path(id: event.id, format: :pdf),
+                  patient_medications_home_delivery_event_path(id: event.id, format: :pdf),
                   target: "_blank",
                   class: "button primary right home-delivery--print",
                   data: { action: "click->home-delivery-modal#askForPrintFeedback" },
