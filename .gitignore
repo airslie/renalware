@@ -96,3 +96,4 @@ spec/dummy
 .claude/settings.local.json
 demo/MESH_NHS_CA_FILE
 rubocop-*.yml
+.env.2
