@@ -10,11 +10,11 @@ module Renalware
 
     describe "#call" do
       it "returns only patients with a current HD modality" do
-        hd_patient = create(:patient)
+        hd_patient = create(:patient, :minimal)
         set_modality(patient: hd_patient,
                      modality_description: hd_modality_description)
 
-        pd_patient = create(:patient) # was hd, now pd, so so should not be selected
+        pd_patient = create(:patient, :minimal) # was hd, now pd, so so should not be selected
         set_modality(patient: pd_patient,
                      modality_description: hd_modality_description,
                      started_on: Time.zone.today - 1)

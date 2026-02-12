@@ -1,7 +1,7 @@
 module Renalware
   module HD
     describe SessionFactory do
-      let(:user) { create(:user, :admin) }
+      let(:user) { create(:user, :minimal, :admin) }
       let(:patient) { create(:hd_patient) }
 
       describe "building a new ongoing session" do

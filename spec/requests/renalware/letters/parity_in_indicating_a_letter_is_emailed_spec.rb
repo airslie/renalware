@@ -87,7 +87,7 @@ module Renalware
       end
 
       context "when approved" do
-        let(:user) { create(:user) }
+        let(:user) { create(:user, :minimal) }
         let(:letter) do
           let = create_letter(state: :pending_review, to: :primary_care_physician, patient: patient)
           ApproveLetter.new(let).call(by: user)
@@ -115,7 +115,7 @@ module Renalware
         let(:email) { nil }
 
         context "when approved" do
-          let(:user) { create(:user) }
+          let(:user) { create(:user, :minimal) }
           let(:letter) do
             let = create_letter(
               state: :pending_review,

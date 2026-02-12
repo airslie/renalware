@@ -21,7 +21,7 @@ module Renalware
         end
 
         def create_patient_with_modality(modality_description)
-          patient = create(:patient, by: user)
+          patient = create(:patient, :minimal, by: user)
           if modality_description
             change_patient_modality(patient, modality_description, user)
             expect(patient.reload.current_modality.description).to eq(modality_description)

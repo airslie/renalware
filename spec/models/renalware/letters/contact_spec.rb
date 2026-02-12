@@ -30,7 +30,7 @@ module Renalware
         end
 
         context "when the person is already a contact for the patient" do
-          let(:patient) { create(:letter_patient) }
+          let(:patient) { create(:letter_patient, :minimal) }
           let(:person) { create(:directory_person, by: create(:user)) }
 
           before do

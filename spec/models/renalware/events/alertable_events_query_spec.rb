@@ -1,8 +1,8 @@
 describe Renalware::Events::AlertableEventsQuery do
   describe "#call" do
     it "returns the most recent event matching the trigger" do
-      patient = create(:patient)
-      user = create(:user)
+      patient = create(:patient, :minimal)
+      user = create(:user, :minimal)
       event_type = create(:vaccination_event_type)
       Renalware::Events::EventTypeAlertTrigger.create!(
         event_type: event_type,

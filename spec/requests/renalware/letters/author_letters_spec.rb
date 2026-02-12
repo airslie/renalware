@@ -3,7 +3,7 @@ describe "An author viewing their letters" do
 
   let(:patient) { create(:letter_patient, family_name: "RABBIT") }
   let(:another_patient) { create(:letter_patient, family_name: "JONES") }
-  let(:another_user) { create(:user) }
+  let(:another_user) { create(:user, :minimal) }
 
   describe "GET index" do
     it "responds with an HTML list of letters for the curreent user" do

@@ -1,6 +1,6 @@
 describe "HD Prescription Administrations" do
-  let(:user1) { create(:user) }
-  let(:user2) { create(:user) }
+  let(:user1) { create(:user, :minimal) }
+  let(:user2) { create(:user, :minimal) }
 
   def create_prescription_for(patient, drug_name: "Drug1")
     create(

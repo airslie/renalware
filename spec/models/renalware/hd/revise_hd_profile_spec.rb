@@ -7,7 +7,7 @@ module Renalware::HD
     end
 
     describe "#call" do
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
 
       it "raises an error if the supplied profile is new and not persisted" do
         expect {
@@ -28,7 +28,7 @@ module Renalware::HD
           }
         end
 
-        let(:another_user) { create(:user) }
+        let(:another_user) { create(:user, :minimal) }
 
         let(:other_schedule) { "Mon Fri Sun" }
 

@@ -1,5 +1,5 @@
 describe "HTTP Caching" do
-  let(:patient) { create(:patient) }
+  let(:patient) { create(:patient, :minimal) }
 
   # Note demo/app/controllers/applciation_controller
   # must include the cache busting concern for this test to pass

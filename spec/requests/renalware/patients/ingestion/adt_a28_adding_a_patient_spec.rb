@@ -27,7 +27,7 @@ describe "HL7 ADT^A28 message handling: 'Add person information'" do
   let(:practice_code) { "P123456" }
   let(:practice) { create(:practice, code: practice_code) }
   let(:primary_care_physician) { create(:primary_care_physician, code: gp_code) }
-  let(:system_user) { create(:user, username: Renalware::SystemUser.username) }
+  let(:system_user) { create(:user, :minimal, username: Renalware::SystemUser.username) }
   let(:message) do
     hl7 = <<-HL7
       MSH|^~\&|iPM|iIE|TIE|TIE|20110415094635||ADT^A28|558267|P|2.4|||AL|NE
@@ -49,7 +49,12 @@ describe "HL7 ADT^A28 message handling: 'Add person information'" do
 
   context "when the patient exists in Renalware" do
     it "updates their information" do
-      patient = create(:patient, local_patient_id: local_patient_id, born_on: Date.parse(dob))
+      patient = create(
+        :patient,
+        :minimal,
+        local_patient_id: local_patient_id,
+        born_on: Date.parse(dob)
+      )
 
       expect {
         FeedJob.new(message).perform

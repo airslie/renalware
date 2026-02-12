@@ -4,7 +4,7 @@ module Renalware
       subject(:service) { described_class.new(patient: patient).call(by: user, params: params) }
 
       let(:user) { create(:user) }
-      let(:patient) { create(:patient, by: user) }
+      let(:patient) { create(:patient, :minimal, by: user) }
       let(:bag_type) { create(:bag_type) }
       let(:pre_existing_regime) do
         regime = build(:apd_regime,

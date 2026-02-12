@@ -6,7 +6,7 @@ module Renalware
       subject(:query) { described_class.new }
 
       let(:primary_care_physician) { create(:letter_primary_care_physician) }
-      let(:patient) { create(:letter_patient, primary_care_physician:) }
+      let(:patient) { create(:letter_patient, :minimal, primary_care_physician:) }
 
       describe "#call" do
         before do

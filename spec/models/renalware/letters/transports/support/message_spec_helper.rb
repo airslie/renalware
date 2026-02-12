@@ -24,7 +24,7 @@ module MessageSpecHelper
 
   def create_mesh_patient(given_name: "John", practice: nil, user: nil)
     practice ||= create(:practice)
-    user || create(:user)
+    user || create(:user, :minimal)
     create(
       :letter_patient,
       given_name: given_name,

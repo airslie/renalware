@@ -2,8 +2,8 @@ module Renalware
   describe Letters::CompleteLetter do
     include LettersSpecHelper
 
-    let(:patient) { create(:letter_patient) }
-    let(:user) { create(:user) }
+    let(:patient) { create(:letter_patient, :minimal) }
+    let(:user) { create(:user, :minimal) }
 
     it "broadcasts a letter_approved event when the letter is approved successfully" do
       letter = create_letter(state: :approved, to: :patient, patient: patient)

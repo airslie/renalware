@@ -3,8 +3,8 @@ module Renalware
     describe ElectronicRecipientOptions do
       include LettersSpecHelper
 
-      let(:patient) { create(:letter_patient, by: author) }
-      let(:another_patient) { create(:letter_patient, by: author) }
+      let(:patient) { create(:letter_patient, :minimal, by: author) }
+      let(:another_patient) { create(:letter_patient, :minimal, by: author) }
       let(:author) { create(:user, given_name: "author") }
       let(:recipient1) { create(:user, given_name: "recipient1") }
       let(:disinterested_user) { create(:user) }

@@ -6,7 +6,7 @@ module Renalware::Letters::Transports::Mesh
     include MeshSpecHelper
     include FaradayHelper
 
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :minimal) }
 
     describe "support for proc composition" do # shared example?
       it { is_expected.to respond_to(:call) }

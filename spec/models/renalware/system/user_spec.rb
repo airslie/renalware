@@ -55,22 +55,22 @@ module Renalware
     end
 
     it "is unapproved by default" do
-      expect(build(:user, :unapproved)).not_to be_approved
+      expect(build(:user, :minimal, :unapproved)).not_to be_approved
     end
 
     describe "#active_for_authentication?" do
       it "returns false for unapproved users" do
-        user = build(:user, approved: false)
+        user = build(:user, :minimal, approved: false)
         expect(user.active_for_authentication?).to be(false)
       end
 
       it "returns true for approved users" do
-        user = build(:user, approved: true)
+        user = build(:user, :minimal, approved: true)
         expect(user.active_for_authentication?).to be(true)
       end
 
       it "returns false for banned users" do
-        user = build(:user, approved: true, banned: true)
+        user = build(:user, :minimal, approved: true, banned: true)
         expect(user.active_for_authentication?).to be(false)
       end
     end
@@ -206,7 +206,7 @@ module Renalware
 
       context "when user already has roles" do
         it "does not assign any new roles" do
-          user = build(:user, role: nil)
+          user = build(:user, :minimal, role: nil)
           clinical_role = Role.find_by!(name: :clinical)
           user.roles << clinical_role
           user.save!
@@ -224,7 +224,7 @@ module Renalware
         end
 
         it "assigns clinical role by default" do
-          user = build(:user)
+          user = build(:user, :minimal)
           user.save!
 
           clinical_role = Role.find_by!(name: :clinical)
@@ -242,7 +242,7 @@ module Renalware
           end
 
           it "prevents user creation with validation error" do
-            user = build(:user, username: "testuser")
+            user = build(:user, :minimal, username: "testuser")
             user.roles = []
             allow(ldap_connection).to receive(:param)
               .with("mail").and_return("test@example.com")
@@ -264,7 +264,7 @@ module Renalware
     end
 
     describe "#ldap_before_save" do
-      let(:user) { build(:user, username: "testuser") }
+      let(:user) { build(:user, :minimal, username: "testuser") }
       let(:ldap_connection) { instance_double(Ldap::Connection) }
 
       before do

@@ -1,6 +1,6 @@
 module Renalware::Medications
   describe PrescriptionsQuery do
-    let(:patient) { create(:patient) }
+    let(:patient) { create(:patient, :minimal) }
 
     context "with no filter" do
       subject(:query) { described_class.new(relation: patient.prescriptions) }

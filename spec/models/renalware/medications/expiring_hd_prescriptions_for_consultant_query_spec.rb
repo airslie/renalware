@@ -1,7 +1,7 @@
 describe Renalware::Medications::ExpiringHDPrescriptionsForConsultantQuery do
-  let(:consultant)        { create(:user, consultant: true) }
-  let(:other_consultant)  { create(:user, consultant: true) }
-  let(:non_consultant)    { create(:user, consultant: false) }
+  let(:consultant)        { create(:user, :minimal, consultant: true) }
+  let(:other_consultant)  { create(:user, :minimal, consultant: true) }
+  let(:non_consultant)    { create(:user, :minimal, consultant: false) }
   let(:hd_patient)        { create(:hd_patient, :with_hd_modality) }
   let(:other_hd_patient)  { create(:hd_patient, :with_hd_modality) }
   let(:pd_patient)        { create(:pd_patient, :with_pd_modality) }

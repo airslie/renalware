@@ -1,7 +1,7 @@
 module Renalware::Medications
   describe RevisePrescription do
-    let(:patient) { create(:patient) }
-    let(:user) { create(:user) }
+    let(:patient) { create(:patient, :minimal) }
+    let(:user) { create(:user, :minimal) }
     let(:original_dose_amount) { "100" }
     let(:original_prescription) do
       create(
@@ -13,7 +13,7 @@ module Renalware::Medications
     end
 
     describe "#call" do
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
 
       context "when updating the prescription's dose_amount with a valid value" do
         subject!(:prescription_revision) do

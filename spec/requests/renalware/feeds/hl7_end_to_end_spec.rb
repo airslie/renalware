@@ -266,7 +266,7 @@ describe "HL7 message handling end to end" do
   context "when an observation_description has no measurement_unit but the new HL7 message " \
           "specifies one" do
     it "creates a measurement_unit (if neccessary) and assigns it to the description" do
-      create(:patient, local_patient_id: "V1111111")
+      create(:patient, :minimal, local_patient_id: "V1111111")
       create(:pathology_request_description, code: "GS")
       sodium = create_sodium_desc(mu_name: nil, suggested_mu_name: nil)
 
@@ -278,7 +278,7 @@ describe "HL7 message handling end to end" do
 
   context "when an observation_description has measurement_unit already but it is different" do
     it "leaves measurement_unit unchanged but sets suggested_measurement_unit to the new value" do
-      create(:patient, local_patient_id: "V1111111")
+      create(:patient, :minimal, local_patient_id: "V1111111")
       create(:pathology_request_description, code: "GS")
       sodium = create_sodium_desc(mu_name: "mg", suggested_mu_name: nil)
 
@@ -294,7 +294,7 @@ describe "HL7 message handling end to end" do
   context "when an observation_description has measurement_unit and suggested_measurement_unit " \
           "already, and suggested_measurement_unit matches the HL7 unit" do
     it "leaves observation_description unchanged" do
-      create(:patient, local_patient_id: "V1111111")
+      create(:patient, :minimal, local_patient_id: "V1111111")
       create(:pathology_request_description, code: "GS")
       last_year = 1.year.ago
 

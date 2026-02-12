@@ -1,6 +1,6 @@
 describe Renalware::HD::PrescriptionAdministrationsQuery do
-  let(:administrator) { create(:user, password: "password") }
-  let(:witness) { create(:user, password: "password") }
+  let(:administrator) { create(:user, :minimal, password: "password") }
+  let(:witness) { create(:user, :minimal, password: "password") }
 
   describe "validation" do
     it "raises an error if prescription is nil" do

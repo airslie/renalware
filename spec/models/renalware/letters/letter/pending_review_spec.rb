@@ -48,7 +48,7 @@ module Renalware::Letters
         end
 
         it "records who archived the letter" do
-          user = create(:user)
+          user = create(:user, :minimal)
           archived_letter = letter.generate_archive(by: user)
           archived_letter.save
           expect(archived_letter.archived_by).to eq(user)

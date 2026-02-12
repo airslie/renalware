@@ -12,7 +12,7 @@ module Renalware
       end
 
       describe "scopes" do
-        let(:patient) { create(:patient) }
+        let(:patient) { create(:patient, :minimal) }
         let!(:donor_investig) do
           create(:investigation, :transplant_donor, patient: patient)
         end

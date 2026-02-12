@@ -2,7 +2,7 @@ describe "Admission Request (TCI) management" do
   let(:reason) { create(:admissions_request_reason, description: "XYZ") }
   let(:user) { @current_user }
   let(:time) { Time.zone.now }
-  let(:patient) { create(:patient, by: user) }
+  let(:patient) { create(:patient, :minimal, by: user) }
 
   def create_request
     create(:admissions_request,

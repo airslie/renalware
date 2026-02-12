@@ -1,7 +1,7 @@
 describe "Simple events" do
   describe "PATCH update" do
     let(:event_type) { create(:event_type, name: "Simple") }
-    let(:patient) { create(:patient) }
+    let(:patient) { create(:patient, :minimal) }
 
     context "with valid attributes" do
       it "updates and redirects to the patient's events list" do

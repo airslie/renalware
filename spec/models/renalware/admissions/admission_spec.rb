@@ -2,7 +2,7 @@ describe Renalware::Admissions::Admission do
   include PatientsSpecHelper
 
   let(:patient) do
-    create(:patient).tap do |pat|
+    create(:patient, :minimal).tap do |pat|
       set_modality(
         patient: pat,
         modality_description: create(:hd_modality_description),
@@ -10,7 +10,7 @@ describe Renalware::Admissions::Admission do
       )
     end
   end
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :minimal) }
   let(:modality_desc) { create(:hd_modality_description) }
 
   it :aggregate_failures do

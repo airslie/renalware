@@ -1,5 +1,5 @@
 describe "Changing a patient's GP (primary care physician)" do
-  let(:patient) { create(:patient) }
+  let(:patient) { create(:patient, :minimal) }
   let(:primary_care_physician) { create(:primary_care_physician) }
 
   describe "GET edit" do

@@ -1,6 +1,6 @@
 describe "Donor stage management" do
   let(:user) { @current_user }
-  let(:patient) { create(:patient, by: user) }
+  let(:patient) { create(:patient, :minimal, by: user) }
 
   describe "POST create" do
     context "with valid attributes" do

@@ -1,6 +1,6 @@
 describe "Managing patients" do
   let(:user) { @current_user }
-  let(:patient) { create(:patient, by: user) }
+  let(:patient) { create(:patient, :minimal, by: user) }
   let(:algeria) { create(:algeria) }
 
   describe "GET new" do

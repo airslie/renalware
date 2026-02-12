@@ -7,7 +7,7 @@ describe "Creating a Event triggers an event_created broadcast" do
       map = Renalware.config.broadcast_subscription_map
       map["Renalware::Events::CreateEvent"] << "MyEventListener"
 
-      patient = create(:patient)
+      patient = create(:patient, :minimal)
       event_type = create(:event_type, name: "Simple")
       listener = MyEventListener.new
       allow(MyEventListener).to receive(:new).and_return(listener)

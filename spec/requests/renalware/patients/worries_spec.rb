@@ -1,6 +1,6 @@
 describe "Managing the patient worryboard" do
   let(:user) { @current_user }
-  let(:patient) { create(:patient, by: user) }
+  let(:patient) { create(:patient, :minimal, by: user) }
   let(:worry_category) { create(:worry_category, name: "CategoryA") }
 
   describe "POST create" do

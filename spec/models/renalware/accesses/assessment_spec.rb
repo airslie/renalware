@@ -13,8 +13,8 @@ module Renalware
       end
 
       describe "patient association" do
-        let(:user) { create(:user, :clinical) }
-        let(:patient) { create(:patient) }
+        let(:user) { create(:user, :minimal, :clinical) }
+        let(:patient) { create(:patient, :minimal) }
         let(:accesses_patient) { Renalware::Accesses.cast_patient(patient) }
 
         it "can be created through patient association" do

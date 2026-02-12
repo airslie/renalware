@@ -1,7 +1,7 @@
 module Renalware
   module Letters::Rendering
     describe PdfRenderer do
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
 
       def pending_review_letter
         primary_care_physician = create(:letter_primary_care_physician)

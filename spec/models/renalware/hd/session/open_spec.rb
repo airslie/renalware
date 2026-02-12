@@ -5,7 +5,7 @@ module Renalware
         build(:hd_open_session, patient: patient, signed_on_by: nurse, by: nurse)
       end
 
-      let(:nurse) { create(:user) }
+      let(:nurse) { create(:user, :minimal) }
       let(:patient) { create(:hd_patient) }
 
       it :aggregate_failures do

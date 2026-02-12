@@ -18,7 +18,7 @@ module Renalware
       end
 
       describe "#assign_role" do
-        let(:user) { build(:user, username: "testuser") }
+        let(:user) { build(:user, :minimal, username: "testuser") }
 
         context "when LDAP is disabled" do
           before do
@@ -73,7 +73,7 @@ module Renalware
         context "when LDAP is disabled" do
           it "does not modify roles" do
             allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
-            user = create(:user, role: nil, roles: [clinical_role])
+            user = create(:user, :minimal, role: nil, roles: [clinical_role])
 
             expect { synchronizer.synchronize_roles(user) }
               .not_to change { user.roles.reload.to_a }
@@ -89,7 +89,7 @@ module Renalware
 
           context "when user currently has read_only role" do
             it "upgrades to clinical role" do
-              user = create(:user, role: nil, roles: [readonly_role])
+              user = create(:user, :minimal, role: nil, roles: [readonly_role])
 
               synchronizer.synchronize_roles(user)
 
@@ -97,8 +97,9 @@ module Renalware
             end
 
             it "preserves prescriber roles during upgrade" do
-              user = create(:user, role: nil,
-                                   roles: [readonly_role, prescriber_role, hd_prescriber_role])
+              user = create(:user,
+                            :minimal,
+                            roles: [readonly_role, prescriber_role, hd_prescriber_role])
 
               synchronizer.synchronize_roles(user)
 
@@ -112,8 +113,10 @@ module Renalware
 
           context "when user already has clinical role" do
             it "does not modify roles" do
-              user = create(:user, role: nil, roles: [clinical_role, prescriber_role],
-                                   updated_at: 2.minutes.ago)
+              user = create(:user,
+                            :minimal,
+                            roles: [clinical_role, prescriber_role],
+                            updated_at: 2.minutes.ago)
               initial_updated_at = user.reload.updated_at
 
               synchronizer.synchronize_roles(user)
@@ -133,7 +136,7 @@ module Renalware
 
           context "when user currently has clinical role" do
             it "downgrades to read_only role" do
-              user = create(:user, role: nil, roles: [clinical_role])
+              user = create(:user, :minimal, role: nil, roles: [clinical_role])
 
               synchronizer.synchronize_roles(user)
 
@@ -141,8 +144,9 @@ module Renalware
             end
 
             it "preserves prescriber roles during downgrade" do
-              user = create(:user, role: nil,
-                                   roles: [clinical_role, prescriber_role, hd_prescriber_role])
+              user = create(:user,
+                            :minimal,
+                            roles: [clinical_role, prescriber_role, hd_prescriber_role])
 
               synchronizer.synchronize_roles(user)
 
@@ -156,8 +160,8 @@ module Renalware
 
           context "when user already has read_only role" do
             it "does not modify roles" do
-              user = create(:user, role: nil, roles: [readonly_role, prescriber_role],
-                                   updated_at: 2.minutes.ago)
+              user = create(:user, :minimal, role: nil, roles: [readonly_role, prescriber_role],
+                                             updated_at: 2.minutes.ago)
               initial_updated_at = user.reload.updated_at
 
               synchronizer.synchronize_roles(user)
@@ -175,8 +179,14 @@ module Renalware
             # Create user first with LDAP returning true, then change the stub
             # to simulate the user being removed from the LDAP group
             allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-            u = create(:user, role: nil, roles:, approved: true, username:,
-                              updated_at: 2.minutes.ago)
+            u = create(
+              :user,
+              :minimal,
+              roles:,
+              approved: true,
+              username:,
+              updated_at: 2.minutes.ago
+            )
             # Now simulate user no longer in any valid LDAP group
             allow(ldap_connection).to receive(:user_in_group?).and_return(false)
             u
@@ -194,7 +204,12 @@ module Renalware
           it "does not modify super_admin role" do
             # Allow creation first
             allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-            user = create(:user, role: nil, roles: [super_admin_role], username: "superadmin-1")
+            user = create(
+              :user,
+              :minimal,
+              roles: [super_admin_role],
+              username: "superadmin-1"
+            )
             # Now simulate no group membership
             allow(ldap_connection).to receive(:user_in_group?).and_return(false)
 
@@ -206,7 +221,7 @@ module Renalware
           it "does not modify admin role" do
             # Allow creation first
             allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-            user = create(:user, role: nil, roles: [admin_role], username: "admin-1")
+            user = create(:user, :minimal, role: nil, roles: [admin_role], username: "admin-1")
             # Now simulate no group membership
             allow(ldap_connection).to receive(:user_in_group?).and_return(false)
 
@@ -218,7 +233,7 @@ module Renalware
           it "does not modify devops role" do
             # Allow creation first
             allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-            user = create(:user, role: nil, roles: [devops_role], username: "devops-1")
+            user = create(:user, :minimal, role: nil, roles: [devops_role], username: "devops-1")
             # Now simulate no group membership
             allow(ldap_connection).to receive(:user_in_group?).and_return(false)
 
@@ -232,7 +247,7 @@ module Renalware
           it "raises the LDAP error" do
             # Allow creation first
             allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-            user = create(:user, role: nil, roles: [clinical_role], approved: true)
+            user = create(:user, :minimal, role: nil, roles: [clinical_role], approved: true)
             # Now simulate LDAP error
             allow(ldap_connection).to receive(:user_in_group?)
               .and_raise(Error.new("LDAP error"))
@@ -243,7 +258,7 @@ module Renalware
       end
 
       describe "#determine_role" do
-        let(:user) { build(:user, username: "testuser") }
+        let(:user) { build(:user, :minimal, username: "testuser") }
 
         context "when user is in renalware LDAP group" do
           before do
@@ -283,21 +298,21 @@ module Renalware
       describe "#admin_level_user?" do
         it "returns true for super_admin role" do
           allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-          user = create(:user, role: nil, roles: [super_admin_role])
+          user = create(:user, :minimal, role: nil, roles: [super_admin_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(true)
         end
 
         it "returns true for admin role" do
           allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-          user = create(:user, role: nil, roles: [admin_role])
+          user = create(:user, :minimal, role: nil, roles: [admin_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(true)
         end
 
         it "returns true for devops role" do
           allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-          user = create(:user, role: nil, roles: [devops_role])
+          user = create(:user, :minimal, role: nil, roles: [devops_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(true)
         end
@@ -306,7 +321,7 @@ module Renalware
           allow(ldap_connection).to receive(:user_in_group?) do |group|
             group == Renalware.config.ldap_clinical_group
           end
-          user = create(:user, role: nil, roles: [clinical_role])
+          user = create(:user, :minimal, role: nil, roles: [clinical_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(false)
         end
@@ -315,14 +330,14 @@ module Renalware
           allow(ldap_connection).to receive(:user_in_group?) do |group|
             group == Renalware.config.ldap_readonly_group
           end
-          user = create(:user, role: nil, roles: [readonly_role])
+          user = create(:user, :minimal, role: nil, roles: [readonly_role])
 
           expect(synchronizer.admin_level_user?(user)).to be(false)
         end
 
         it "returns false for user with no roles" do
           allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-          user = create(:user, role: nil)
+          user = create(:user, :minimal, role: nil)
           user.roles.clear
 
           expect(synchronizer.admin_level_user?(user)).to be(false)

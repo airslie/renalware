@@ -1,6 +1,6 @@
 module Renalware
   RSpec.describe Letters::SectionSnapshot do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :minimal) }
     let(:patient) { build(:letter_patient) }
     let(:letter) {
       create(:draft_letter,

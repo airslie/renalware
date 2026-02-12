@@ -7,9 +7,9 @@ module Renalware
     let(:schema) { "renalware" }
     let(:table) { "problem_problems" }
     let(:column) { "patient_id" }
-    let(:major_patient) { create(:patient) }
-    let(:minor_patient) { create(:patient) }
-    let(:other_patient) { create(:patient) }
+    let(:major_patient) { create(:patient, :minimal) }
+    let(:minor_patient) { create(:patient, :minimal) }
+    let(:other_patient) { create(:patient, :minimal) }
     let(:major_patient_id) { major_patient&.id }
     let(:minor_patient_id) { minor_patient&.id }
     let(:merge) {

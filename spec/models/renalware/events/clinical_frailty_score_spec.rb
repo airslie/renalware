@@ -7,12 +7,12 @@ describe Renalware::Events::ClinicalFrailtyScore do # an event
 
   it "can be saved" do
     plan = described_class.new(
-      patient: create(:patient),
+      patient: create(:patient, :minimal),
       date_time: Time.current,
       description: "desc",
       event_type: create(:clinical_frailty_score_event_type),
       document: { score: 1 },
-      by: create(:user)
+      by: create(:user, :minimal)
     )
 
     expect(plan.save).to be(true)

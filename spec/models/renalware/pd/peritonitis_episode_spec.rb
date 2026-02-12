@@ -10,11 +10,11 @@ module Renalware
     end
 
     describe "peritonitis episode" do
-      let(:patient) { create(:patient) }
+      let(:patient) { create(:patient, :minimal) }
       let(:episode) { create(:peritonitis_episode) }
       let(:mrsa) { create(:organism_code, name: "MRSA") }
       let(:ecoli) { create(:organism_code, name: "E.Coli") }
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
 
       describe "prescriptions" do
         it "can be assigned many prescriptions and organisms/sensitivities" do

@@ -6,7 +6,7 @@ module Renalware
           described_class.find_by!(modality_id: modality.id).pd_regime_id
         end
 
-        let(:user) { create(:user) }
+        let(:user) { create(:user, :minimal) }
         let(:patient) { create(:hd_patient) }
         let(:pd_modality_description) { create(:pd_modality_description) }
         let(:modality_started_on) { 1.week.ago }

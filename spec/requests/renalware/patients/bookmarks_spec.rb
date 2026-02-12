@@ -1,6 +1,6 @@
 describe "Managing bookmarks" do
   let(:user) { @current_user }
-  let(:patient) { create(:patient, by: user) }
+  let(:patient) { create(:patient, :minimal, by: user) }
 
   describe "POST create" do
     context "with valid attributes" do
@@ -79,9 +79,9 @@ describe "Managing bookmarks" do
 
     it "lists the user's bookmarks" do
       patients = [
-        create(:patient, by: user, given_name: "A"),
-        create(:patient, by: user, given_name: "B"),
-        create(:patient, by: user, given_name: "C")
+        create(:patient, :minimal, by: user, given_name: "A"),
+        create(:patient, :minimal, by: user, given_name: "B"),
+        create(:patient, :minimal, by: user, given_name: "C")
       ]
 
       puser = Renalware::Patients.cast_user(@current_user)

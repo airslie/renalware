@@ -105,8 +105,24 @@ FactoryBot.define do
       end
     end
 
+    # Use in tests that don't depend on role assignments or centre associations.
+    trait :minimal do
+      hospital_centre { nil }
+
+      transient do
+        role { nil }
+        additional_roles { nil }
+      end
+    end
+
     trait :system do
       username { Renalware::SystemUser.username }
+      hospital_centre { nil }
+
+      transient do
+        role { nil }
+        additional_roles { nil }
+      end
     end
 
     trait :with_ldap_enabled do

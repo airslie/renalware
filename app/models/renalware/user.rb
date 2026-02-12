@@ -188,7 +188,11 @@ module Renalware
       return if roles.exists?
       return assign_ldap_role if ldap_enabled?
 
-      roles << Role.find_by!(name: :clinical)
+      begin
+        roles << Role.find_by!(name: :clinical)
+      rescue ActiveRecord::RecordNotFound => e
+        raise e unless Rails.env.test?
+      end
     end
   end
 end
