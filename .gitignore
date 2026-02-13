@@ -97,3 +97,5 @@ spec/dummy
 demo/MESH_NHS_CA_FILE
 rubocop-*.yml
 .env.2
+log/test.log.0
+MESH_NHS_CA_FILE

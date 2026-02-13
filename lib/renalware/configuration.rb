@@ -131,9 +131,7 @@ module Renalware
     config_accessor(:clinic_name_code_separator) { ENV.fetch("CLINIC_NAME_CODE_SEPARATOR", " ") }
     config_accessor(:default_from_email) { "dev@airslie.com" }
     config_accessor(:display_feedback_banner) { ENV.key?("DISPLAY_FEEDBACK_BANNER") }
-    config_accessor(:display_feedback_button_in_navbar) do
-      ENV.key?("DISPLAY_FEEDBACK_BUTTON_IN_NAVBAR")
-    end
+    config_accessor(:display_feedback_button_in_navbar) { ENV.key?("DISPLAY_FEEDBACK_BUTTON_IN_NAVBAR") }
     config_accessor(:default_from_email_address) { ENV.fetch("DEFAULT_FROM_EMAIL_ADDRESS", nil) }
     config_accessor(:phone_number_on_letters) { ENV.fetch("PHONE_NUMBER_ON_LETTERS", nil) }
     config_accessor(:renal_unit_on_letters) { ENV.fetch("RENAL_UNIT_ON_LETTERS", nil) }
@@ -386,8 +384,16 @@ module Renalware
     config_accessor(:allow_modality_history_amendments) {
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("ALLOW_MODALITY_HISTORY_AMENDMENTS", "true"))
     }
-    config_accessor(:auto_terminate_hd_prescriptions_after_period) { 6.months }
-    config_accessor(:auto_terminate_hd_stat_prescriptions_after_period) { 14.days }
+    config_accessor(:auto_terminate_hd_prescriptions_after_period) {
+      ActiveSupport::Duration.parse(
+        ENV.fetch("AUTO_TERMINATE_HD_PRESCRIPTIONS_AFTER_PERIOD", "P6M")
+      )
+    }
+    config_accessor(:auto_terminate_hd_stat_prescriptions_after_period) {
+      ActiveSupport::Duration.parse(
+        ENV.fetch("AUTO_TERMINATE_HD_STAT_PRESCRIPTIONS_AFTER_PERIOD", "P14D")
+      )
+    }
     config_accessor(:enable_expiring_prescriptions_list_component) {
       ActiveModel::Type::Boolean.new.cast(
         ENV.fetch("ENABLE_EXPIRING_PRESCRIPTIONS_LIST_COMPONENT", "true")
@@ -481,7 +487,12 @@ module Renalware
       }
     }
     config_accessor(:demo_password) { "renalware" }
-    config_accessor(:password_policy_description) { "Passwords must be at least 8 characters" }
+    config_accessor(:password_policy_description) {
+      ENV.fetch(
+        "PASSWORD_POLICY_DESCRIPTION",
+        "Passwords must be at least 8 characters"
+      )
+    }
 
     # The warning to display to IE users, because we want to dissuade users from
     # using IE11. If you set this to nil the warning will not be shown
@@ -489,8 +500,17 @@ module Renalware
       "Internet Explorer is no longer fully supported. Please use Edge, Chrome or Firefox"
     }
 
-    config_accessor(:patients_must_have_at_least_one_hosp_number) { true }
-    config_accessor(:only_admins_can_update_pkb_renalreg_preferences) { false }
+    config_accessor(:patients_must_have_at_least_one_hosp_number) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("PATIENTS_MUST_HAVE_AT_LEAST_ONE_HOSP_NUMBER", "true")
+      )
+    }
+
+    config_accessor(:only_admins_can_update_pkb_renalreg_preferences) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("ONLY_ADMINS_CAN_UPDATE_PKB_RENALREG_PREFERENCES", "false")
+      )
+    }
 
     config_accessor(:pathology_hep_b_antibody_status_obx_code) {
       ENV.fetch("PATHOLOGY_HEP_B_ANTIBODY_STATUS_OBX_CODE", "BHBS")
@@ -502,7 +522,9 @@ module Renalware
     config_accessor(:pathology_hours_to_search_ahead_for_pre_ure_result) {
       ENV.fetch("PATHOLOGY_HOURS_TO_SEARCH_AHEAD_FOR_PRE_URE_RESULT", "4").to_i
     }
-    config_accessor(:pathology_acr_obx_code_for_kfre_calculation) { "ACR" }
+    config_accessor(:pathology_acr_obx_code_for_kfre_calculation) {
+      ENV.fetch("PATHOLOGY_ACR_OBX_CODE_FOR_KFRE_CALCULATION", "ACR")
+    }
     config_accessor(:pathology_kfre_2y_obx_code) { "KFRE2" }
     config_accessor(:pathology_kfre_5y_obx_code) { "KFRE5" }
     config_accessor(:pathology_kfre_obr_code) { "KFRE" }
