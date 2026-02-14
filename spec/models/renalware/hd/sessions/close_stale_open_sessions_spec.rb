@@ -5,7 +5,7 @@ module Renalware
 
       let(:patient) { create(:hd_patient) }
       let(:performed_before) { 3.days.ago }
-      let(:system_user) { create(:user, :system) }
+      let(:system_user) { create(:user, :minimal, :system) }
       let(:hospital_unit) { create(:hospital_unit) }
       let(:options) do
         {

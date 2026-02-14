@@ -3,7 +3,7 @@ module Renalware::Letters
     subject(:part) { described_class.new(letter: letter) }
 
     let(:user) { create(:user) }
-    let(:patient) { create(:letter_patient, by: user) }
+    let(:patient) { create(:letter_patient, :minimal, by: user) }
     let(:letter) { Letter.new(patient: patient) }
 
     it { is_expected.to respond_to(:results) }

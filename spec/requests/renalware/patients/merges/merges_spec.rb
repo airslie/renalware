@@ -2,8 +2,8 @@ describe "Viewing patients merges" do
   describe "GET index" do
     it "returns a successful response" do
       user = create(:user)
-      minor_patient = create(:patient, family_name: "Minor", by: user)
-      major_patient = create(:patient, family_name: "Major", by: user)
+      minor_patient = create(:patient, :minimal, family_name: "Minor", by: user)
+      major_patient = create(:patient, :minimal, family_name: "Major", by: user)
 
       create(
         :patient_merge,

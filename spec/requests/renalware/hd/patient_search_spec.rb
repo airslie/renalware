@@ -3,7 +3,7 @@ describe "Patient HD Search e.g. when adding patients to a slot" do
 
   let(:hd_mod)  { create(:hd_modality_description) }
   let(:pd_mod)  { create(:pd_modality_description) }
-  let(:user)    { create(:user) }
+  let(:user)    { create(:user, :minimal) }
   let(:hd_pat1) { create_pat(given: "HDP1X", family: "HDP1Y", nhs: "4414733227", mod_desc: hd_mod) }
   let(:hd_pat2) { create_pat(given: "HDP2X", family: "HDP2Y", nhs: "7489724309", mod_desc: hd_mod) }
   let(:pd_pat)  { create_pat(given: "PDPx", family: "PDPy", nhs: "1408462818", mod_desc: pd_mod) }

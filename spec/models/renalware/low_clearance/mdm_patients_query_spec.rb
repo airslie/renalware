@@ -11,10 +11,10 @@ module Renalware
                             result: result)
       end
 
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
 
       def create_lcc_patient
-        create(:patient).tap do |patient|
+        create(:patient, :minimal).tap do |patient|
           set_modality(patient: patient,
                        modality_description: create(:low_clearance_modality_description),
                        by: user)
@@ -32,7 +32,7 @@ module Renalware
       context "when unfiltered" do
         it "returns only AKCC patients" do
           lcc_patient = create_lcc_patient
-          create(:patient)
+          create(:patient, :minimal)
 
           # Sanity check!
           expect(lcc_patient.current_modality.description.type).to eq(

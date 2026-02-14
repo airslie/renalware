@@ -2,11 +2,11 @@ module Renalware::Letters::Transports::Mesh
   describe Transmission do
     include LettersSpecHelper
 
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :minimal) }
     let(:practice) { create(:practice) }
     let(:gp) { create(:letter_primary_care_physician, practices: [practice]) }
     let(:patient) do
-      create(:letter_patient,
+      create(:letter_patient, :minimal,
              practice: practice,
              primary_care_physician: gp,
              by: user)

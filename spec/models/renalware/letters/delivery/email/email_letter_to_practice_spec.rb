@@ -11,7 +11,7 @@ module Renalware
           cc_on_all_letters: true
         )
       end
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
       let(:letter) do
         build(:approved_letter, patient: patient, by: user).tap do |lett|
           lett.type = lett.class.sti_name # TODO: remove hack caused by RSpec timing?

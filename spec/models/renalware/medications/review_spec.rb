@@ -11,7 +11,7 @@ module Renalware::Medications
       it "returns the last review event for the patient" do
         event_type = create(:medication_review_event_type)
         user = create(:user)
-        patient = create(:patient, by: user)
+        patient = create(:patient, :minimal, by: user)
 
         target_review = described_class.create!(
           patient: patient,
@@ -65,7 +65,7 @@ module Renalware::Medications
         context "when review_date=#{opts[:review_date]} & config max months=#{opts[:max_months]}" do
           it "returns #{opts[:result]}" do
             user = create(:user)
-            patient = create(:patient, by: user)
+            patient = create(:patient, :minimal, by: user)
             create(
               :medication_review,
               patient: patient,

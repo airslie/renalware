@@ -1,5 +1,5 @@
 describe "Managing Users" do
-  let(:user) { create(:user, :unapproved, :clinical, prescriber: false) }
+  let(:user) { create(:user, :minimal, :unapproved, :clinical, prescriber: false) }
   let!(:clinical_role) { create(:role, :clinical) }
   let!(:super_admin_role) { create(:role, :super_admin) }
 
@@ -29,7 +29,7 @@ describe "Managing Users" do
 
   describe "PATCH update" do
     context "when the user is not yet approved" do
-      let(:user) { create(:user, :unapproved) }
+      let(:user) { create(:user, :minimal, :unapproved) }
 
       it "approves the user when Approve btn (has name=approve) is clicked" do
         expect(user.approved?).to be(false)
@@ -77,7 +77,7 @@ describe "Managing Users" do
     end
 
     context "when the user is already approved" do
-      let(:user) { create(:user, :clinical, approved: true) }
+      let(:user) { create(:user, :minimal, :clinical, approved: true) }
 
       context "with valid attributes" do
         it "updates a record" do

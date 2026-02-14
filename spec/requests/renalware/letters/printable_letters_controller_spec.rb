@@ -3,7 +3,7 @@ require "pdf/reader"
 describe "Rendering a letter for printing in an envelope stuffer" do
   include LettersSpecHelper
 
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :minimal) }
 
   describe "GET show" do
     it "renders a duplex interleaved address+letter PDF" do

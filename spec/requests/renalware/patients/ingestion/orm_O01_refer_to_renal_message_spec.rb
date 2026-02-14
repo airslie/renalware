@@ -31,7 +31,7 @@ describe "HL7 ORM^O01 message handling: 'Refer to Renal'" do
   let(:practice_code) { "P123456" }
   let(:practice) { create(:practice, code: practice_code) }
   let(:primary_care_physician) { create(:primary_care_physician, code: gp_code) }
-  let(:system_user) { create(:user, username: Renalware::SystemUser.username) }
+  let(:system_user) { create(:user, :minimal, username: Renalware::SystemUser.username) }
   let(:message) do
     hl7 = <<-HL7
       MSH|^~\&|BLT_TIE|BLT|RENALWARE|RENALWARE|20250307142935||ORM^O01|Q1779262221T1783390016A1044|P|2.4

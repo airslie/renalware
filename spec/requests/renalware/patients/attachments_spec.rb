@@ -1,6 +1,6 @@
 describe "Managing files attached to a patient" do
   let(:user) { @current_user }
-  let(:patient) { create(:patient, by: user) }
+  let(:patient) { create(:patient, :minimal, by: user) }
   let(:attachment_type) do
     create(:patient_attachment_type, store_file_externally: false)
   end

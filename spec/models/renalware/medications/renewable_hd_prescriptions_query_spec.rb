@@ -1,7 +1,7 @@
 module Renalware::Medications
   describe RenewableHDPrescriptionsQuery do
     let(:user) { create(:user) }
-    let(:patient) { create(:patient, by: user) }
+    let(:patient) { create(:patient, :minimal, by: user) }
     let(:yesterday) { 1.day.ago.end_of_day - 1.minute }
     let(:today) { 1.day.ago.end_of_day + 1.minute }
 

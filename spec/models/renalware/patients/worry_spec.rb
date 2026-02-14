@@ -2,7 +2,7 @@ module Renalware
   module Patients
     describe Worry do
       let(:user) { create(:user) }
-      let(:patient) { create(:patient, by: user) }
+      let(:patient) { create(:patient, :minimal, by: user) }
 
       it_behaves_like "an Accountable model"
       it_behaves_like "a Paranoid model"

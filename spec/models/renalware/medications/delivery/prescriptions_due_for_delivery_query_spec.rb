@@ -41,7 +41,7 @@ module Renalware::Medications::Delivery
     context "when there are current home delivery prescriptions" do
       it "only selects them if they are within the supplied date range" do
         travel_to Date.parse("01-01-2020") do
-          patient = create(:patient, family_name: "JONES")
+          patient = create(:patient, :minimal, family_name: "JONES")
           drug = create(:drug)
 
           prescriptions = [
@@ -64,7 +64,7 @@ module Renalware::Medications::Delivery
 
       it "excludes terminated prescriptions" do
         travel_to Date.parse("01-01-2020") do
-          patient = create(:patient, family_name: "JONES")
+          patient = create(:patient, :minimal, family_name: "JONES")
           drug = create(:drug)
 
           prescription = create_home_del_prescription(patient, drug, 2.weeks.from_now)
@@ -83,7 +83,7 @@ module Renalware::Medications::Delivery
     context "when a drug type code is supplied" do
       it "only relevant prescriptions having a drug of that drug type" do
         travel_to Date.parse("01-01-2020") do
-          patient = create(:patient)
+          patient = create(:patient, :minimal)
           esa_drug_type = create(:drug_type, :esa)
           immuno_drug_type = create(:drug_type, :immunosuppressant)
           esa_drug = create(:drug, name: "esa drug").tap { it.drug_types << esa_drug_type }

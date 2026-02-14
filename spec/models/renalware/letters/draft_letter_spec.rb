@@ -5,7 +5,7 @@ module Renalware
       let(:instance) { described_class.new }
       let(:topic) { nil }
       let(:letterhead) { create(:letter_letterhead) }
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
       let(:description) { nil }
       let(:params) do
         {

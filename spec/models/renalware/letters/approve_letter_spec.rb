@@ -8,8 +8,8 @@ module Renalware
         .broadcasting_to_configured_subscribers
     end
 
-    let(:patient) { create(:letter_patient) }
-    let(:user) { create(:user) }
+    let(:patient) { create(:letter_patient, :minimal) }
+    let(:user) { create(:user, :minimal) }
     let(:letter) { create_letter(state: :pending_review, to: :patient, patient: patient) }
     let(:approved_letter) { letter.becomes(Letters::Letter::Approved) }
 

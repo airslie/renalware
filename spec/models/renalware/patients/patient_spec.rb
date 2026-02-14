@@ -4,7 +4,7 @@ module Renalware
   describe Patient do
     include PatientsSpecHelper
 
-    subject(:patient) { create(:patient, nhs_number: "9999999999") }
+    subject(:patient) { create(:patient, :minimal, nhs_number: "9999999999") }
 
     let(:user) { create(:user) }
 
@@ -38,7 +38,7 @@ module Renalware
     describe "handing blank local_patient_id* attributes" do
       it "local_patient_id" do
         expect(
-          create(:patient, local_patient_id: "", local_patient_id_2: "A123")
+          create(:patient, :minimal, local_patient_id: "", local_patient_id_2: "A123")
         ).to have_attributes(local_patient_id: nil)
       end
 
@@ -68,7 +68,7 @@ module Renalware
           local_patient_id_4: "4",
           local_patient_id_5: "5"
         }
-        patient = create(:patient, by: user, **ids)
+        patient = create(:patient, :minimal, by: user, **ids)
         expect(patient).to have_attributes(ids)
       end
     end
@@ -274,7 +274,7 @@ module Renalware
     describe "#update" do
       context "when #died_on is specified" do
         it "stills retain patient details" do
-          patient = create(:patient)
+          patient = create(:patient, :minimal)
           expect {
             patient.update(died_on: "2015-02-25", by: user)
           }.not_to change(described_class, :count)
@@ -392,7 +392,7 @@ module Renalware
     describe "#ukrdc_external_id" do
       context "when the patient is saved without a value being explicitly set" do
         it "postgres creates a default value" do
-          patient = create(:patient)
+          patient = create(:patient, :minimal)
 
           expect(patient.reload.ukrdc_external_id.length).to be > 0
         end
@@ -403,13 +403,13 @@ module Renalware
       it "#create creates a new version" do
         with_versioning do
           expect {
-            create(:patient)
+            create(:patient, :minimal)
           }.to change(Patients::Version, :count).by(1)
         end
       end
 
       it "#update creates a new version" do
-        patient = create(:patient)
+        patient = create(:patient, :minimal)
         with_versioning do
           expect {
             patient.update(family_name: "X", by: patient.created_by)
@@ -418,14 +418,14 @@ module Renalware
       end
 
       it "#touch does not create a new version" do
-        patient = create(:patient)
+        patient = create(:patient, :minimal)
         expect {
           patient.touch
         }.not_to change(Patients::Version, :count)
       end
 
       it "#destroy" do
-        patient = create(:patient)
+        patient = create(:patient, :minimal)
         with_versioning do
           expect {
             patient.destroy!
@@ -444,7 +444,10 @@ module Renalware
       # - rename the db-backed field to the old enum name
       # Note in the seeds we populate it with the NHS data dictonary defaults.
       subject(:patient) do
-        create(:patient, marital_status: :married, marital_status1: marital_status_married)
+        create(:patient,
+               :minimal,
+               marital_status: :married,
+               marital_status1: marital_status_married)
       end
 
       let(:marital_status_married) { Patients::MaritalStatus.create!(code: "M", name: "Married") }
@@ -457,7 +460,7 @@ module Renalware
 
     describe "telecoms fields containing double quotes from HL7" do
       it "nullifies the field as per HL7 spec" do
-        patient = create(:patient, email: "x@y.com", telephone1: "123", telephone2: "456")
+        patient = create(:patient, :minimal, email: "x@y.com", telephone1: "123", telephone2: "456")
         patient.email = '""'
         patient.telephone1 = '""'
         patient.telephone2 = '""'
@@ -478,7 +481,7 @@ module Renalware
       end
 
       it "can be set to restricted" do
-        patient = create(:patient, confidentiality: :restricted)
+        patient = create(:patient, :minimal, confidentiality: :restricted)
 
         expect(patient.confidentiality_restricted?).to be true
       end

@@ -2,8 +2,8 @@ module Renalware
   module Patients
     describe AttachmentQuery do
       let(:user) { create(:user) }
-      let(:patient1) { create(:patient, by: user) }
-      let(:patient2) { create(:patient, by: user) }
+      let(:patient1) { create(:patient, :minimal, by: user) }
+      let(:patient2) { create(:patient, :minimal, by: user) }
 
       describe "#call" do
         context "when using default sort and no search argument" do

@@ -3,7 +3,7 @@ module Renalware::Letters
     describe BuildPayload do
       include LettersSpecHelper
 
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
       let(:practice) { create(:practice) }
 
       def create_patient(given_name: "John")

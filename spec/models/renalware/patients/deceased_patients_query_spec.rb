@@ -15,7 +15,7 @@ module Renalware
 
       context "when there is a patient with a died_on date" do
         it "returns that patient" do
-          patient = create(:patient, died_on: "2007-01-01")
+          patient = create(:patient, :minimal, died_on: "2007-01-01")
 
           expect(query.call).to eq([patient])
         end
@@ -23,7 +23,7 @@ module Renalware
 
       context "when there is a patient with the death modality" do
         it "returns that patient" do
-          patient = create(:patient, died_on: nil)
+          patient = create(:patient, :minimal, died_on: nil)
           set_modality(
             patient: patient,
             modality_description: create(:death_modality_description)

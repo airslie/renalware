@@ -1,7 +1,7 @@
 describe "Displaying the survey dashboard" do
   describe "GET show" do
     it "responds with the dashboard" do
-      patient = create(:patient)
+      patient = create(:patient, :minimal)
       get patient_surveys_dashboard_path(patient)
 
       expect(response).to be_successful

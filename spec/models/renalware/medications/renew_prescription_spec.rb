@@ -1,6 +1,6 @@
 module Renalware::Medications
   describe RenewPrescription do
-    let(:patient) { create(:patient) }
+    let(:patient) { create(:patient, :minimal) }
     let(:user) { create(:user) }
     let(:drug) { create(:drug) }
     let(:uncopyable_attributes) {

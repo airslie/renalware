@@ -2,8 +2,8 @@ describe "Searching patients" do
   describe "GET index" do
     context "with a hospital code filter" do
       before do
-        create(:patient, local_patient_id: "::target number::")
-        create(:patient, local_patient_id: "::another number::")
+        create(:patient, :minimal, local_patient_id: "::target number::")
+        create(:patient, :minimal, local_patient_id: "::another number::")
       end
 
       it "responds with a filtered list of records matching the hospital number" do
@@ -16,8 +16,8 @@ describe "Searching patients" do
 
     context "with a partial family name and given name filter" do
       before do
-        create(:patient, given_name: "Roger", family_name: "Rabbit")
-        create(:patient, family_name: "::another patient::")
+        create(:patient, :minimal, given_name: "Roger", family_name: "Rabbit")
+        create(:patient, :minimal, family_name: "::another patient::")
       end
 
       it "responds with a filtered list of records matching the hospital number" do
@@ -30,8 +30,8 @@ describe "Searching patients" do
 
     context "with a partial family name and given name filter using a comma delimiter" do
       before do
-        create(:patient, given_name: "Roger", family_name: "Rabbit")
-        create(:patient, family_name: "::another patient::")
+        create(:patient, :minimal, given_name: "Roger", family_name: "Rabbit")
+        create(:patient, :minimal, family_name: "::another patient::")
       end
 
       it "responds with a filtered list of records matching the hospital number" do
@@ -44,8 +44,8 @@ describe "Searching patients" do
 
     context "with a partial family name and given name filter using a comma + space delimiter" do
       before do
-        create(:patient, given_name: "Roger", family_name: "Rabbit")
-        create(:patient, family_name: "::another patient::")
+        create(:patient, :minimal, given_name: "Roger", family_name: "Rabbit")
+        create(:patient, :minimal, family_name: "::another patient::")
       end
 
       it "responds with a filtered list of records matching the hospital number" do
@@ -58,8 +58,8 @@ describe "Searching patients" do
 
     context "with a family name filter" do
       before do
-        create(:patient, given_name: "Roger", family_name: "Rabbit")
-        create(:patient, family_name: "::another patient::")
+        create(:patient, :minimal, given_name: "Roger", family_name: "Rabbit")
+        create(:patient, :minimal, family_name: "::another patient::")
       end
 
       it "responds with a filtered list of records matching the hospital number" do
@@ -72,8 +72,8 @@ describe "Searching patients" do
 
     context "with a NHS number filter" do
       before do
-        create(:patient, nhs_number: "9999999999")
-        create(:patient, nhs_number: "6393739592")
+        create(:patient, :minimal, nhs_number: "9999999999")
+        create(:patient, :minimal, nhs_number: "6393739592")
       end
 
       it "responds with a filtered list of records matching the NHS number" do

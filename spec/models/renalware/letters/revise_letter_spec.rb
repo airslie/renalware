@@ -5,8 +5,8 @@ module Renalware
 
       subject(:service) { described_class.new }
 
-      let(:user) { create(:user) }
-      let(:patient) { create(:letter_patient) }
+      let(:user) { create(:user, :minimal) }
+      let(:patient) { create(:letter_patient, :minimal) }
       let(:topic) { nil }
 
       let(:letter) {

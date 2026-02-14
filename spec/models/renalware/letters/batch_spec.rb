@@ -27,7 +27,7 @@ module Renalware
           letter = create_letter(
             state: :approved,
             to: :patient,
-            patient: create(:letter_patient)
+            patient: create(:letter_patient, :minimal)
           )
           batch = described_class.create!(by: user)
           batch.items.create(letter: letter)
@@ -66,12 +66,12 @@ module Renalware
             letter1 = create_letter(
               state: :approved,
               to: :patient,
-              patient: create(:letter_patient)
+              patient: create(:letter_patient, :minimal)
             )
             letter2 = create_letter(
               state: :approved,
               to: :patient,
-              patient: create(:letter_patient)
+              patient: create(:letter_patient, :minimal)
             )
             batch.items.create(letter: letter1, status: :compiled)
             batch.items.create(letter: letter2, status: :queued)

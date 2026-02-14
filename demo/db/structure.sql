@@ -32139,7 +32139,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware,renalware_demo,public,heroku_ext;
+SET search_path TO renalware, renalware_demo, public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260205172045'),

@@ -2,8 +2,8 @@ module Renalware
   module PD
     describe ReviseRegime do
       let(:user) { create(:user) }
-      let(:other_user) { create(:user) }
-      let(:patient) { create(:patient, by: user) }
+      let(:other_user) { create(:user, :minimal) }
+      let(:patient) { create(:patient, :minimal, by: user) }
       let!(:regime) do
         create(
           :apd_regime,

@@ -3,7 +3,7 @@ module Renalware
     describe LetterFactory do
       let(:instance) { described_class.new(patient) }
 
-      let(:patient) { create(:letter_patient) }
+      let(:patient) { create(:letter_patient, :minimal) }
 
       describe "#build" do
         it "sets the patient as the main recipient if no Primary Care Physician present" do

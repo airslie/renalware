@@ -193,7 +193,7 @@ module Renalware
             it "supplies allergy status" do
               clinical_patient = Renalware::Clinical.cast_patient(patient)
               clinical_patient.allergy_status = :no_known_allergies
-              clinical_patient.save_by!(create(:user))
+              clinical_patient.save_by!(create(:user, :minimal))
 
               delivery_event = create(
                 :medication_delivery_event,

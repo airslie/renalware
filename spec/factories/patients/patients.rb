@@ -58,5 +58,14 @@ FactoryBot.define do
     trait :with_ethnicity do
       ethnicity factory: :ethnicity
     end
+
+    # Use in tests that only need patient identifiers and not related records.
+    trait :minimal do
+      hospital_centre { nil }
+
+      transient do
+        current_address { false }
+      end
+    end
   end
 end

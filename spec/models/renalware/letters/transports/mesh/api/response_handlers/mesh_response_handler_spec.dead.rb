@@ -6,7 +6,7 @@ module Renalware::Letters::Transports::Mesh
     include MeshSpecHelper
     include FaradayHelper
 
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :minimal) }
 
     describe "#call" do
       context "when there is no message object because its a handshake, check_inbox etc" do

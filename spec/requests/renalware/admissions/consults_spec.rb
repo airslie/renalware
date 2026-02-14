@@ -14,7 +14,7 @@ module Renalware
     def create_consult
       create(:admissions_consult,
              by: user,
-             patient: create(:patient, by: user),
+             patient: create(:patient, :minimal, by: user),
              started_on: Time.zone.today,
              consult_site: consult_site,
              hospital_ward: hospital_ward,
@@ -64,7 +64,7 @@ module Renalware
     describe "POST JS create" do
       context "with valid inputs" do
         it "creates the consult" do
-          patient = create(:patient, by: user)
+          patient = create(:patient, :minimal, by: user)
           create(:hospital_ward, name: "Ward1", hospital_unit: hospital_unit)
           date = l(Time.zone.today)
 

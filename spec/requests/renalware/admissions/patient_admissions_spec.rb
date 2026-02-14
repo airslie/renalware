@@ -3,7 +3,7 @@ module Renalware
     let(:user) { create(:user) }
     let(:time) { Time.zone.now }
     let(:hospital_ward) { create(:hospital_ward, name: "Ward1") }
-    let(:patient) { create(:patient, by: user) }
+    let(:patient) { create(:patient, :minimal, by: user) }
 
     describe "GET #index" do
       it "lists the patient's inpatient admissions" do

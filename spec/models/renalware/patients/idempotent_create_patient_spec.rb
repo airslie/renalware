@@ -14,7 +14,7 @@ module Renalware::Patients
       end
 
       context "when a patient has the same hospital number" do
-        let!(:existing_patient) { create(:patient, local_patient_id: "SAME-12345") }
+        let!(:existing_patient) { create(:patient, :minimal, local_patient_id: "SAME-12345") }
 
         let(:params) do
           {

@@ -9,11 +9,11 @@ module Renalware
     end
 
     describe "exit site infection" do
-      let(:patient) { create(:patient) }
+      let(:patient) { create(:patient, :minimal) }
       let(:esi) { create(:exit_site_infection) }
       let(:lymphocytes) { create(:organism_code, name: "Lymphocytes") }
       let(:proteus) { create(:organism_code, name: "Proteus") }
-      let(:user) { create(:user) }
+      let(:user) { create(:user, :minimal) }
 
       describe "prescriptions" do
         it "can be assigned many prescriptions and organisms/sensitivities" do

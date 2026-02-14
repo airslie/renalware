@@ -2,7 +2,7 @@ module Renalware::Medications
   describe TerminateAllPatientPrescriptions do
     it "terminates all patient prescriptions but leaves untouched previously terminated ones" do
       user = create(:user)
-      patient = create(:patient, by: user)
+      patient = create(:patient, :minimal, by: user)
 
       # Create two current prescriptions
       create(:prescription, patient: patient)

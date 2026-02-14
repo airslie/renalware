@@ -4,8 +4,8 @@ module Renalware
       describe SaveSession, type: :command do
         include ActiveJob::TestHelper
 
-        let(:patient)       { build_stubbed(:hd_patient) }
-        let(:user)          { build_stubbed(:user) }
+        let(:patient)       { build_stubbed(:hd_patient, :minimal) }
+        let(:user)          { build_stubbed(:user, :minimal) }
 
         def test_listener
           Class.new do
@@ -27,7 +27,7 @@ module Renalware
 
         describe "Simple creation of session without signoff" do
           let(:patient)       { create(:hd_patient) }
-          let(:user)          { create(:user) }
+          let(:user)          { create(:user, :minimal) }
           let(:hospital_unit) { create(:hospital_unit) }
 
           it "creates a session when args are valid" do

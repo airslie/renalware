@@ -18,7 +18,7 @@ module Renalware
       }
 
       let(:study) { create(:research_study) }
-      let(:patient) { create(:patient) }
+      let(:patient) { create(:patient, :minimal) }
 
       it { is_expected.to validate_uniqueness_of(:external_id) }
       it { is_expected.to validate_uniqueness_of(:external_reference).scoped_to(:study_id) }

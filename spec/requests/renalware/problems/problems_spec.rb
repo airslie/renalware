@@ -70,7 +70,7 @@ describe "Problems" do
         expect(problems.map(&:position)).to eq([1, 2])
 
         # Another patient has a problem with position 99. It should be unaffected.
-        other_patient = create(:patient)
+        other_patient = create(:patient, :minimal)
         other_patient_problem = create(:problem, patient: other_patient)
         other_patient_problem.update_column(:position, 99)
         other_patient_problem.update_column(:updated_at, datetime)
@@ -115,7 +115,7 @@ describe "Problems" do
         expect(problems.map(&:position)).to eq([1, 2, 3])
 
         # Another patient has a problem with position 99. It should be unaffected.
-        other_patient = create(:patient)
+        other_patient = create(:patient, :minimal)
         other_patient_problem = create(:problem, patient: other_patient)
         other_patient_problem.update_column(:position, 99)
         other_patient_problem.update_column(:updated_at, datetime)
@@ -159,7 +159,7 @@ describe "Problems" do
         new_problem_id_order = [problems[2].id, problems[0].id, problems[1].id]
 
         # Another patient has a problem with position 99. It should be unaffected.
-        other_patient = create(:patient)
+        other_patient = create(:patient, :minimal)
         other_patient_problem = create(:problem, patient: other_patient)
         other_patient_problem.update_column(:position, 99)
         other_patient_problem.update_column(:updated_at, datetime)

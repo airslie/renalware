@@ -27,8 +27,8 @@ module Renalware
           )
         end
 
-        let(:patient) { create(:patient) }
-        let(:user) { create(:user) }
+        let(:patient) { create(:patient, :minimal) }
+        let(:user) { create(:user, :minimal) }
 
         it "is scoped so only 1 patient_id possible where deleted_at and allocated_at are null" do
           is_expected

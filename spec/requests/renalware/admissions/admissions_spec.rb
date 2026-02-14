@@ -6,7 +6,7 @@ module Renalware
     let(:time) { Time.zone.now }
     let(:hospital_ward) { create(:hospital_ward, name: "Ward1") }
     let(:patient) do
-      create(:patient).tap do |pat|
+      create(:patient, :minimal).tap do |pat|
         set_modality(
           patient: pat,
           modality_description: create(:hd_modality_description),

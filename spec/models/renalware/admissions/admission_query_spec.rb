@@ -9,7 +9,7 @@ module Renalware
     end
 
     it "filters by name" do
-      patient = create(:patient, family_name: "Jones", given_name: "Tom")
+      patient = create(:patient, :minimal, family_name: "Jones", given_name: "Tom")
       admission = create(:admissions_admission, patient: patient)
       create(:admissions_admission) # other admission
 

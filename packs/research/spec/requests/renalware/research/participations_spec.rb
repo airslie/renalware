@@ -39,7 +39,7 @@ describe "Managing clinical study participation" do
     it "soft deletes the participation provided the the current user is an investigator" do
       study = create_study
       create(:research_investigatorship, study: study, user: user)
-      patient = create(:patient, by: user, family_name: "ZZ")
+      patient = create(:patient, :minimal, by: user, family_name: "ZZ")
       participation = create(:research_participation, study: study, patient: patient, by: user)
 
       expect do
@@ -60,7 +60,7 @@ describe "Managing clinical study participation" do
       it "add the participant to the study provided the the current user is an investigator" do
         study = create_study
         create(:research_investigatorship, study: study, user: user)
-        patient = create(:patient, by: user)
+        patient = create(:patient, :minimal, by: user)
         params = {
           patient_id: patient.id,
           joined_on: "01-Oct-2017",

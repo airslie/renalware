@@ -23,7 +23,7 @@ describe "Updating a Event triggers an event_updated broadcast" do
     it "broadcasts a Wisper 'event_updated' message" do
       skip "This is waiting for feature/heroic to be merged which supports event editing"
 
-      patient = create(:patient)
+      patient = create(:patient, :minimal)
       event_type = create(:event_type, name: "Simple")
       event = create(:simple_event, event_type: event_type, patient: patient)
       listener = test_event_listener_class.new

@@ -7,12 +7,12 @@ describe Renalware::Events::AdvancedCarePlan do
 
   it "can be saved" do
     plan = described_class.new(
-      patient: create(:patient),
+      patient: create(:patient, :minimal),
       date_time: Time.current,
       description: "desc",
       event_type: create(:advanced_care_plan_event_type),
       document: { state: :not_required },
-      by: create(:user)
+      by: create(:user, :minimal)
     )
 
     expect(plan.save).to be(true)
