@@ -9,7 +9,7 @@
         = f.input :code_or_name_cont, label: "Code or name contains"
       .w-full.md:w-1/5.px-3.mb-6.md:mb-0
         = f.input :obx_mappings_code_alias_eq,
-            collection: Renalware::Pathology::OBXMapping.pluck(:code_alias).uniq,
+            collection: Renalware::Pathology::OBXMapping.order(:code_alias).pluck(:code_alias).uniq,
             label: "Mapping code alias"
       .w-full.md:w-1/5.px-3.mb-6.md:mb-0
         = f.input :obx_mappings_sender_id_eq,
