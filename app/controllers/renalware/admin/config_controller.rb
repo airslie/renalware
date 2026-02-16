@@ -14,6 +14,8 @@ module Renalware
           .reject { |name| name.to_s.include?("=") }
           .reject { |name| name.to_s.include?("strategy") }
           .reject { |name| name.to_s.include?("key") }
+          .reject { |name| name.to_s.include?("password") }
+          .reject { |name| name.to_s.include?("pwd") }
           .reject { |name| name == :config }
           .sort
       end
