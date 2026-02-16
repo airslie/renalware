@@ -113,11 +113,15 @@ module Renalware
 
       parsed.each_with_object({}) { |(k, v), h| h[k.to_sym] = v.to_sym }
     }
-    config_accessor(:session_timeout_polling_frequency) { 1.minute }
     config_accessor(:session_timeout) {
       ActiveModel::Type::Integer.new.cast(ENV.fetch("SESSION_TIMEOUT", 20)) # use eg 10080 in dev
     }
-    config_accessor(:session_register_user_user_activity_after) { 2.minutes }
+    config_accessor(:session_register_user_user_activity_after) {
+      # Duration#parse uses the ISO8601 duration format
+      ActiveSupport::Duration.parse(
+        ENV.fetch("SESSION_REGISTER_USER_USER_ACTIVITY_AFTER", "PT2M") # 2 mins
+      )
+    }
     config_accessor(:duration_of_last_url_memory_after_session_expiry) { 30.minutes }
     config_accessor(:broadcast_subscription_map) { {} }
     config_accessor(:include_sunday_on_hd_diaries) { false }

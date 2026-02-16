@@ -15,10 +15,8 @@ module Renalware
     end
 
     # A note on ahoy tracking:
-    # check_session_expired is defined on SessionTimeoutController
-    # using this in the that controller
-    #   skip_before_action :track_ahoy_visit, only: check_session_expired
-    # does not seem to work hence this global denylist
+    # some non-user-facing controller actions (for example session keepalive)
+    # should not be tracked and are explicitly skipped in those controllers.
 
     # rubocop:disable Rails/LexicallyScopedActionFilter
     after_action :track_action, except: :status

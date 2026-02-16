@@ -28,9 +28,7 @@ devise_for :users,
            },
            module: :devise
 
-# An ajax-polled route which will cause the users browser to redirect to the login page
-#  when their session expires
-get "/check_session_expired" => "session_timeout#check_session_expired", as: "check_session_expired"
+# Session keepalive endpoint returning server-calculated expiry metadata.
 get "/keep_session_alive" => "session_timeout#keep_session_alive", as: "keep_session_alive"
 
 # Status page
