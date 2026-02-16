@@ -11,6 +11,7 @@ describe Renalware::Configuration do
       ENABLE_EXPIRING_PRESCRIPTIONS_LIST_COMPONENT
       ENFORCE_USER_PRESCRIBER_FLAG
       DEVISE_EXTRA_MODULES
+      PATIENT_HOSPITAL_IDENTIFIERS
     )
     original_values = env_keys_that_override_defaults.index_with { |key| ENV.fetch(key, nil) }
     env_keys_that_override_defaults.each { |key| ENV.delete(key) }
@@ -47,6 +48,25 @@ describe Renalware::Configuration do
     it "can be set via ENV" do
       ENV["DEVISE_EXTRA_MODULES"] = "module1,module2"
       expect(config.devise_extra_modules).to eq([:module1, :module2])
+    end
+  end
+
+  describe "#patient_hospital_identifiers" do
+    it "uses defaults when ENV is not present" do
+      expect(config.patient_hospital_identifiers).to include(
+        Dover: :local_patient_id,
+        White: :local_patient_id_2
+      )
+    end
+
+    it "parses a double-encoded JSON value from ENV" do
+      ENV["PATIENT_HOSPITAL_IDENTIFIERS"] =
+        "{\"Dover\": \"local_patient_id\",\"White\": \"local_patient_id_2\"}".to_json
+
+      expect(config.patient_hospital_identifiers).to eq(
+        Dover: :local_patient_id,
+        White: :local_patient_id_2
+      )
     end
   end
 end

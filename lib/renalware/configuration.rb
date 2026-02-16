@@ -107,9 +107,11 @@ module Renalware
         }
       IDENTIFIERS
 
-      JSON
-        .parse(ENV.fetch("PATIENT_HOSPITAL_IDENTIFIERS", defaults))
-        .each_with_object({}) { |(k, v), h| h[k.to_sym] = v.to_sym }
+      raw = ENV.fetch("PATIENT_HOSPITAL_IDENTIFIERS", defaults)
+      parsed = JSON.parse(raw)
+      parsed = JSON.parse(parsed) if parsed.is_a?(String) # Handle double-encoded JSON in ENV.
+
+      parsed.each_with_object({}) { |(k, v), h| h[k.to_sym] = v.to_sym }
     }
     config_accessor(:session_timeout_polling_frequency) { 1.minute }
     config_accessor(:session_timeout) {
