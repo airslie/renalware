@@ -50,6 +50,6 @@
             header
               h2 Patient Group Directions
             dl.dl-horizontal
-              - session.patient_group_directions.each do |pgd|
+              - session.patient_group_directions.with_deleted.each do |pgd|
                 dt Name
                 dd= pgd.name

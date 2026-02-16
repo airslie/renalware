@@ -1,6 +1,7 @@
 module Renalware
   module Drugs
     class PatientGroupDirection < ApplicationRecord
+      acts_as_paranoid
       validates :name, presence: true
       validates :code, presence: true
       validates :code, uniqueness: { conditions: -> { where(ends_on: nil, deleted_at: nil) } }
