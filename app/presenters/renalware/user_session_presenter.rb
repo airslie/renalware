@@ -43,13 +43,27 @@ module Renalware
     def self.extract_last_request_at(user_session)
       return if user_session.blank?
 
-      user_session["last_request_at"] ||
-        user_session[:last_request_at] ||
-        user_session.dig("warden.user.user.session", "last_request_at") ||
-        user_session.dig(:'warden.user.user.session', "last_request_at") ||
-        user_session.dig("warden.user.user.session", :last_request_at) ||
-        user_session.dig(:'warden.user.user.session', :last_request_at)
+      top_level = safe_fetch(user_session, "last_request_at") ||
+                  safe_fetch(user_session, :last_request_at)
+      return top_level if top_level.present?
+
+      safe_dig(user_session, "warden.user.user.session", "last_request_at") ||
+        safe_dig(user_session, :'warden.user.user.session', "last_request_at") ||
+        safe_dig(user_session, "warden.user.user.session", :last_request_at) ||
+        safe_dig(user_session, :'warden.user.user.session', :last_request_at)
     end
     # rubocop:enable Style/QuotedSymbols
+
+    def self.safe_fetch(object, key)
+      object[key] if object.respond_to?(:[])
+    rescue StandardError
+      nil
+    end
+
+    def self.safe_dig(object, *keys)
+      object.dig(*keys) if object.respond_to?(:dig)
+    rescue StandardError
+      nil
+    end
   end
 end

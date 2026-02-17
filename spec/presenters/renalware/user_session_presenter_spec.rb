@@ -36,5 +36,17 @@ describe Renalware::UserSessionPresenter do
 
       expect(attrs.dig(:data, :session, :"expires-at-epoch-ms")).to be_nil
     end
+
+    it "does not raise when user_session does not support #dig" do
+      klass = Class.new do
+        def [](_key)
+          nil
+        end
+      end
+
+      attrs = described_class.session_controller_data_attributes(user_session: klass.new)
+
+      expect(attrs.dig(:data, :session, :"expires-at-epoch-ms")).to be_nil
+    end
   end
 end

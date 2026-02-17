@@ -11582,7 +11582,7 @@ class SessionController extends Controller {
     } else {
       this.addHandlersToMonitorUserActivity();
       if (Number.isFinite(this.initialSessionExpiryAtEpochMs)) {
-        this.setSessionExpiryAtEpochMs(this.initialSessionExpiryAtEpochMs);
+        this.setSessionExpiryFromServer(this.initialSessionExpiryAtEpochMs);
       } else {
         this.resetCheckForSessionExpiryTimeout(this.sessionTimeoutSeconds);
       }
@@ -11632,6 +11632,21 @@ class SessionController extends Controller {
     this.checkForSessionExpiryTimeout = setTimeout(this.checkForSessionExpiry.bind(this), delayMs);
   }
 
+  // Server returns absolute epoch time. If that value is already in the past
+  // relative to the browser clock (eg local clock skew or test time travel),
+  // avoid immediate reload loops and use a relative timeout instead.
+  setSessionExpiryFromServer(expiresAtEpochMs) {
+    if (!Number.isFinite(expiresAtEpochMs)) return
+
+    if (expiresAtEpochMs <= Date.now()) {
+      this.log("server expiry is in the past for this browser clock; using relative timeout");
+      this.resetCheckForSessionExpiryTimeout(this.sessionTimeoutSeconds);
+      return
+    }
+
+    this.setSessionExpiryAtEpochMs(expiresAtEpochMs);
+  }
+
   clearCheckForSessionExpiryTimeout() {
     clearTimeout(this.checkForSessionExpiryTimeout);
     this.checkForSessionExpiryTimeout = null;
@@ -11670,7 +11685,7 @@ class SessionController extends Controller {
   onKeepAliveSucceeded(responseData) {
     const expiresAtEpochMs = this.extractExpiresAtEpochMs(responseData);
     if (expiresAtEpochMs) {
-      this.setSessionExpiryAtEpochMs(expiresAtEpochMs);
+      this.setSessionExpiryFromServer(expiresAtEpochMs);
       this.broadcastSessionExpiryToAnyOpenTabs(expiresAtEpochMs);
       return
     }
@@ -11753,7 +11768,7 @@ class SessionController extends Controller {
       setTimeout(() => window.location.reload(), 500);
     } else if (event.key === this.sessionExpiryEventStorageKey) {
       const expiresAtEpochMs = this.extractExpiresAtEpochMs(this.parseStorageEventPayload(event.newValue));
-      if (expiresAtEpochMs) this.setSessionExpiryAtEpochMs(expiresAtEpochMs);
+      if (expiresAtEpochMs) this.setSessionExpiryFromServer(expiresAtEpochMs);
     }
   }
 

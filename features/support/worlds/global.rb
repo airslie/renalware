@@ -34,6 +34,19 @@ module World
       unless user.roles.map(&:id).include?(prescriber_role.id)
         user.roles << prescriber_role
       end
+
+      # Reusing users across scenarios can pick up an expired/inactive state.
+      # Ensure world users are always active and able to authenticate.
+      user.update_columns(
+        approved: true,
+        expired_at: nil,
+        hidden: false,
+        banned: false,
+        # Keep nil so time-travelled setup data does not accidentally expire users
+        # under JS/web drivers where app and test clocks can diverge.
+        last_activity_at: nil
+      )
+
       user
     end
 
