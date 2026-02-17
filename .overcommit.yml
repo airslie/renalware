@@ -1,0 +1,62 @@
+---
+verify_signatures: false
+
+PreCommit:
+  ALL:
+    exclude: &default_excludes
+      - 'docs/**/*'
+  Brakeman:
+    enabled: true
+    on_warn: fail
+  RuboCop:
+    enabled: true
+    flags:
+      - "--force-exclusion"
+      #- "--ignore-parent-exclusion"
+    on_warn: ignore
+    problem_on_unmodified_line: ignore
+    command: ['bundle', 'exec', 'rubocop'] # Invoke within Bundler context
+  CoffeeLint:
+    enabled: false
+  EsLint:
+    enabled: false
+    exclude:
+    - "**/app/assets/javascripts/**/*"
+    # problem_on_unmodified_line: ignore
+  YamlSyntax:
+    enabled: true
+  TrailingWhitespace:
+    enabled: true
+    exclude:
+    - "**/db/structure.sql"
+    - "**/*.md"
+    - "**/*.markdown"
+    - "**/spec/fixtures/attachments/**/*"
+    - "**/spec/cassettes/**/*"
+    - "app/assets/javascripts/**/*"
+  RailsSchemaUpToDate:
+    enabled: false
+  HardTabs:
+    enabled: true
+    exclude:
+    - *default_excludes
+    - "**/vendor/assets/javascripts/**/*.js"
+    - "**/spec/fixtures/attachments/**/*"
+    - "doc/*.svg"
+    - Makefile
+    - app/assets/javascripts/renalware/built.js
+  I18nMissing:
+    enabled: true
+    description: Checking for missing locale snippets
+  I18nUnused:
+    enabled: true
+    description: Checking for unused locale snippets
+  RspecFocusCheck:
+    enabled: true
+    description: Checking for "focus:" left in specs
+    include:
+    - "**/spec/**/*_spec.rb"
+  SlimLint:
+    enabled: false
+    include:
+    - "app/views/**/*.html.slim"

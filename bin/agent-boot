@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  echo "Usage: bin/agent-boot [--setup-only|--boot]" >&2
+}
+
+MODE="boot"
+if [[ "${1:-}" == "--setup-only" ]]; then
+  MODE="setup"
+elif [[ "${1:-}" == "--boot" || -z "${1:-}" ]]; then
+  MODE="boot"
+elif [[ -n "${1:-}" ]]; then
+  usage
+  exit 1
+fi
+
+WORKTREE_VAR="${WORKTREE_VAR:-$PWD/var}"
+DB_SUFFIX="${DB_SUFFIX:-$(basename "$PWD")}"
+PORT="${PORT:-3000}"
+export WORKTREE_VAR DB_SUFFIX PORT
+echo "Using WORKTREE_VAR=$WORKTREE_VAR, DB_SUFFIX=$DB_SUFFIX, PORT=$PORT"
+mkdir -p "$WORKTREE_VAR"/{tmp,log,storage,pids,cache,assets,coverage}
+bundle config set --local path "$HOME/.cache/bundle" >/dev/null
+yarn install --silent
+bundle exec rake db:migrate:reset && bundle exec rake db:seed
+
+if [[ "$MODE" == "setup" ]]; then
+  echo "Setup complete for DB_SUFFIX=$DB_SUFFIX at $WORKTREE_VAR"
+  exit 0
+fi
+
+echo "Booting on port $PORT with DB_SUFFIX=$DB_SUFFIX"
+PORT="$PORT" bin/rails s

@@ -31,7 +31,6 @@ documentation/.docusaurus
 capybara*.html
 .vimrc
 rerun.txt
-/.overcommit.yml
 /.git-hooks
 /.byebug_history
 /app/views/renalware/hd/sessions/._form.html.slim.swp
@@ -100,3 +99,4 @@ rubocop-*.yml
 log/test.log.0
 MESH_NHS_CA_FILE
 log/development.log.0
+.envrc

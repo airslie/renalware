@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+NAME="${1:?usage: bin/new-worktree agent-name}"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+BASE_DIR="../core.worktrees"
+WT_DIR="$BASE_DIR/$NAME"
+BRANCH="chore/$NAME"
+PORT_OFFSET="$(cksum <<<"$NAME" | awk '{print $1 % 100}')"
+PORT="30$(printf '%02d' "$PORT_OFFSET")"
+
+cd "$REPO_ROOT"
+mkdir -p "$BASE_DIR"
+git worktree add "$WT_DIR" -b "$BRANCH"
+
+cd "$WT_DIR"
+cat > .envrc <<EOF
+export DB_SUFFIX=$NAME
+export PORT=$PORT
+export WORKTREE_VAR=\$PWD/var
+EOF
+
+if command -v direnv >/dev/null 2>&1; then
+  direnv allow
+fi
+
+bin/agent-boot --setup-only
+
+echo "✅ worktree created at $WT_DIR"
+echo "Next: cd $WT_DIR && bin/agent-boot"

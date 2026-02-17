@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Automatically sets up your devbox environment whenever you cd into this
+# directory via our direnv integration:
+
+# eval "$(devbox generate direnv --print-envrc)"
+
+# check out https://www.jetpack.io/devbox/docs/ide_configuration/direnv/
+# for more details
+
+echo "Loading direnv environment"
+
+# Git worktree support
+export DB_SUFFIX="${DB_SUFFIX:-$(basename "$PWD")}"
+export PORT="${PORT:-3000}"
+export WORKTREE_VAR="${WORKTREE_VAR:-$PWD/var}"
