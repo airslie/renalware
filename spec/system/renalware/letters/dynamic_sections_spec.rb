@@ -11,7 +11,7 @@ module Renalware
       create(:letter_topic, text: "Topic without section")
     }
     let(:letterhead) { create(:letter_letterhead, name: "Letterhead") }
-    let(:hospital_unit) { create(:hospital_unit, name: "UNIT A", unit_code: "U_CODE") }
+    let(:hospital_unit) { create(:hospital_unit, name: "UNITA", unit_code: "U_CODE") }
     let(:hd_profile) {
       create(:hd_profile, hospital_unit: hospital_unit,
                           patient: Renalware::HD.cast_patient(patient),
@@ -38,7 +38,7 @@ module Renalware
         slim_select "Main Topic", from: "Topic"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD UnitU_CODETime5:00"
+          expect(page).to have_content "HD UnitUNITAHD Duration5:00"
         end
 
         submit_form
@@ -46,25 +46,25 @@ module Renalware
         preview_letter_page = current_path.dup
         visit "#{current_path}/formatted"
         within "section", text: "Haemodialysis" do
-          expect(page).to have_content "HD Unit\nU_CODE\nTime\n5:00"
+          expect(page).to have_content "HD Unit\nUNITA\nHD Duration\n5:00"
         end
 
         visit preview_letter_page
         click_link "Edit"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD UnitU_CODETime5:00"
+          expect(page).to have_content "HD UnitUNITAHD Duration5:00"
         end
 
         # Let's change some of the data to check the diff
-        hospital_unit.update(unit_code: "Another Code")
+        hospital_unit.update(name: "UNITB")
         hd_profile.update(prescribed_time: 99, by: user)
 
         page.refresh
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD Unit U_CODE Time 5:00"
-          expect(page).to have_content "HD Unit Another Code Time 1:39"
+          expect(page).to have_content "HD Unit UNITA HD Duration 5:00"
+          expect(page).to have_content "HD Unit UNITB HD Duration 1:39"
         end
 
         # Save, and check that the data hasn't changed
@@ -73,8 +73,8 @@ module Renalware
         click_link "Edit"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_content "HD Unit U_CODE Time 5:00"
-          expect(page).to have_content "HD Unit Another Code Time 1:39"
+          expect(page).to have_content "HD Unit UNITA HD Duration 5:00"
+          expect(page).to have_content "HD Unit UNITB HD Duration 1:39"
         end
 
         # Now use the toggle to apply updates
@@ -87,13 +87,13 @@ module Renalware
         click_link "Edit"
 
         within "article", text: "Haemodialysis" do
-          expect(page).to have_no_content "HD UnitU_CODETime5:00"
-          expect(page).to have_content "HD UnitAnother CodeTime1:39"
+          expect(page).to have_no_content "HD UnitUNITAHD Duration5:00"
+          expect(page).to have_content "HD UnitUNITBHD Duration1:39"
         end
 
         # Change to a topic which doesn't have a section
         slim_select "Topic without section", from: "Topic"
-        expect(page).to have_no_content "HD Unit\nU_CODE\nTime\n5:00"
+        expect(page).to have_no_content "HD Unit\nUNITA\nHD Duration\n5:00"
       end
     end
   end

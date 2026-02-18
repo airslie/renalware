@@ -6,6 +6,7 @@ RSpec.describe Renalware::Letters::Sections do
   let(:clinics_patient) { hd_patient.becomes(Renalware::Clinics::Patient) }
   let(:transplant_patient) { hd_patient.becomes(Renalware::Transplants::Patient) }
   let(:pathology_patient) { hd_patient.becomes(Renalware::Pathology::Patient) }
+  let(:hospital_unit) { create(:hospital_unit, name: "The Unit") }
 
   let(:hd_profile) do
     create(
@@ -13,6 +14,7 @@ RSpec.describe Renalware::Letters::Sections do
       patient: hd_patient,
       schedule_definition:,
       prescribed_time: 210,
+      hospital_unit: hospital_unit,
       by: create(:user)
     )
   end
@@ -21,7 +23,6 @@ RSpec.describe Renalware::Letters::Sections do
   end
 
   let(:schedule_definition) { create(:schedule_definition) }
-  let(:hospital_unit) { hd_profile.hospital_unit }
   let(:dry_weight) do
     create(:dry_weight, patient: clinical_patient, minimum_weight: 128.2, maximum_weight: 162.3)
   end
@@ -41,7 +42,17 @@ RSpec.describe Renalware::Letters::Sections do
     let(:rows) { described_class.new(patient, "hd").all }
 
     context "when no values" do
-      let(:hd_profile) { create(:hd_profile, patient: hd_patient) }
+      let(:hd_profile) do
+        create(
+          :hd_profile,
+          patient: hd_patient,
+          schedule_definition: nil,
+          prescribed_time: nil,
+          hospital_unit: hospital_unit,
+          by: create(:user)
+        )
+      end
+
       let(:access_plan) { nil }
       let(:access_profile) { nil }
       let(:rolling_patient_statistics) { nil }
@@ -53,7 +64,7 @@ RSpec.describe Renalware::Letters::Sections do
 
       it "does not include the entry" do
         expect(rows.first).to eq [
-          { label: "HD Unit", value: "UJZ" }
+          { label: "HD Unit", value: "The Unit" }
         ]
 
         expect(rows.second).to eq [
@@ -68,9 +79,9 @@ RSpec.describe Renalware::Letters::Sections do
 
     it "returns the schedule information" do
       expect(rows.first).to eq [
-        { label: "HD Unit", value: "UJZ" },
+        { label: "HD Unit", value: "The Unit" },
         { label: "Schedule", value: "Mon Wed Fri AM" },
-        { label: "Time", value: "3:30" }
+        { label: "HD Duration", value: "3:30" }
       ]
     end
 

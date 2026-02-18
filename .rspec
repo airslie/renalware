@@ -1,4 +1,4 @@
 --require spec/rails_helper
 --color
---format doc
+--format progress
 --default-path .

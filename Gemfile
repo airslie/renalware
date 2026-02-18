@@ -115,6 +115,9 @@ group :development, :test do
   gem "brakeman"
   gem "bundler-audit", require: false
   gem "capybara-playwright-driver"
+  gem "guard", require: false
+  gem "guard-cucumber", require: false
+  gem "guard-rspec", require: false
   # Start debugger with binding.b [https://github.com/ruby/debug]
   gem "debug", ">= 1.0.0", platforms: %i(mri windows)
   gem "factory_bot_rails", "~> 6.2"
