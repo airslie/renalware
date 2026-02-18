@@ -12,11 +12,19 @@ module Renalware
 
     let(:topic) { build(:letter_topic, section_identifier: :hd) }
     let(:hd_patient) { patient.becomes(Renalware::HD::Patient) }
+    let(:hospital_unit) { create(:hospital_unit, name: "The Unit") }
     let(:snapshot_html) do
-      "<dl><dt>HD Unit</dt><dd>UJZ</dd><dt>Time</dt><dd>3:30</dd></dl>"
+      "<dl><dt>HD Unit</dt><dd>The Unit</dd><dt>HD Duration</dt><dd>3:30</dd></dl>"
     end
 
-    before { create(:hd_profile, patient: hd_patient, prescribed_time: 210) }
+    before do
+      create(
+        :hd_profile,
+        patient: hd_patient,
+        prescribed_time: 210,
+        hospital_unit: hospital_unit
+      )
+    end
 
     it do
       is_expected.to validate_inclusion_of(:section_identifier)

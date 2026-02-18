@@ -2,10 +2,10 @@ default:
   hd:
     -
       - label: HD Unit
-        path: hd_patient.hd_profile.hospital_unit.unit_code
+        path: hd_patient.hd_profile.hospital_unit.name
       - label: Schedule
         path: hd_patient.hd_profile.current_schedule
-      - label: Time
+      - label: HD Duration
         path: hd_patient.hd_profile.prescribed_time:duration
 
     -
@@ -120,4 +120,3 @@ default:
         path: transplants_patient.current_registration.document.uk_transplant_centre.status
       - label: Date
         path: transplants_patient.current_registration.document.uk_transplant_centre.status_updated_on:date
-
