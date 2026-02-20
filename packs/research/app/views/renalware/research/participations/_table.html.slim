@@ -16,4 +16,7 @@
     tbody
       = render participations, study: study
 
-  == pagy_nav(pagy) if pagy.pages > 1
+  .clear-both.flex.items-center
+    == pagy_nav(pagy) if pagy.pages > 1
+    - if pagy.count > 0
+      .pl-4.pt-2.grow.text-right.text-gray-600= "Showing #{pagy.from}-#{pagy.to} of #{pagy.count} records"
