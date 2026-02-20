@@ -23,7 +23,7 @@ module Renalware
         last_fill_volumes: 500..5_000,
         additional_manual_exchange_volumes: 500..5_000,
         cycles_per_apd: 2..20,
-        overnight_volumes: 3_000..25_000,
+        overnight_volumes: 2_000..25_000,
         dwell_times: 10..240,
         tidal_percentages: (60..100).step(5).to_a
       ).freeze
