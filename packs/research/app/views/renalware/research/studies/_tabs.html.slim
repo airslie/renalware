@@ -1,4 +1,6 @@
 - active_tab = local_assigns[:active]
+- participants_count = study.participations.count
+- investigators_count = study.investigatorships.count
 
 dl.sub-nav.no-js-selection
   dd(class=("active" if active_tab == :summary))
@@ -9,7 +11,7 @@ dl.sub-nav.no-js-selection
         = text_with_icon_prefix("Settings", :cog)
   dd(class=("active" if active_tab == :participations))
     = link_to research.study_participations_path(study) do
-      = text_with_icon_prefix("Participants", :users)
+      = text_with_icon_prefix("Participants (#{participants_count})", :users)
   dd(class=("active" if active_tab == :investigatorships))
     = link_to research.study_investigatorships_path(study) do
-      = text_with_icon_prefix("Investigators", :user)
+      = text_with_icon_prefix("Investigators (#{investigators_count})", :user)
