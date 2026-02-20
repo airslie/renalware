@@ -13,18 +13,9 @@
             th Success
             th Failure
         tbody
-          tr
-            td Today
-            td 2
-            td 4
-            td 0
-          tr
-            td This week
-            td 2
-            td 4
-            td 0
-          tr
-            td All time
-            td 2
-            td 4
-            td 0
+          - stats.each do |period, period_stats|
+            tr
+              td= period
+              td= period_stats[:pending]
+              td= period_stats[:success]
+              td= period_stats[:failure]
