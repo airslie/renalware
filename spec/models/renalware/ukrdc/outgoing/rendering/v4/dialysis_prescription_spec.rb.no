@@ -18,8 +18,8 @@ module Renalware
               <VascularAccess></VascularAccess>
             </DialysisPrescription>
           XML
-          hd_prescription = NullObject.instance
-          actual_xml = format_xml(described_class.new(hd_prescription:).xml)
+          hd_profile = NullObject.instance
+          actual_xml = format_xml(described_class.new(hd_profile:).xml)
 
           expect(actual_xml).to match_xml(expected_xml)
         end

@@ -22,5 +22,11 @@ FactoryBot.define do
       days_text { "Mon Wed Fri" }
       diurnal_period factory: %i(hd_diurnal_period_code pm)
     end
+
+    trait :tue_sat_pm do
+      days { [2, 6] }
+      days_text { "Tue Sat" }
+      diurnal_period factory: %i(hd_diurnal_period_code pm)
+    end
   end
 end

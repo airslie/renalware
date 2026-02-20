@@ -96,7 +96,7 @@ module Renalware
                 <CodingStandard>LOCAL</CodingStandard>
                 <Code>UA</Code>
               </VascularAccessSite>
-              <TimeDialysed>120</TimeDialysed>
+              <TimeDialysed>121</TimeDialysed>
             </DialysisSession>
           XML
 
