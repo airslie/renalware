@@ -79,14 +79,14 @@
                                 collection: Renalware::User.active,
                                 wrapper: :zilch,
                                 label: false,
-                                input_html: { class: "authentication-user-id" }
+                                input_html: { class: "authentication-user-id", autocomplete: "off" }
 
               / Password is only visible as long as the user has not been authenticated
               = fpa.input :"#{prefix}_by_password",
                           as: :password,
                           placeholder: "Password",
                           class: "user-password",
-                          autocomplete: :off
+                          autocomplete: "new-password"
 
       .modal__footer
         .right
