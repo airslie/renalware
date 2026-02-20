@@ -22,7 +22,7 @@ module Renalware
 
         module Scopes
           def for_patient(patient)
-            where(patient: patient)
+            where(patient:)
           end
 
           def within_period(starting_on, ending_on)

@@ -6,7 +6,7 @@ module Renalware
       delegate :patient, to: :prescription
 
       def self.call(prescription:, limit: 1)
-        new(prescription: prescription).call(limit: limit)
+        new(prescription:).call(limit:)
       end
 
       def call(limit: 1)
@@ -15,7 +15,7 @@ module Renalware
 
         hd_patient
           .prescription_administrations
-          .where(prescription: prescription, administered: true)
+          .where(prescription:, administered: true)
           .order(recorded_on: :desc, created_at: :desc)
           .limit(limit)
       end

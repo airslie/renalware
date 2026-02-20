@@ -12,7 +12,7 @@ module Renalware
           .eager_load(drug: [:drug_types])
           .where("drug_types.id": drug_type_id)
 
-        provider.present? ? results.where(provider: provider) : results
+        provider.present? ? results.where(provider:) : results
       end
     end
   end
