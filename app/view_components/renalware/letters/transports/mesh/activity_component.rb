@@ -6,6 +6,7 @@ module Renalware
           include IconHelper
 
           pattr_initialize [:current_user!]
+          STATUS_KEYS = %i(pending success failure).freeze
 
           COLOURS = {
             success: "bg-green-200",
@@ -15,14 +16,26 @@ module Renalware
 
           def stats
             {
-              "Today" => { pending: 10, success: 11, failure: 1 },
-              "7 days" => { pending: 0, success: 101, failure: 5 },
-              "All time" => { pending: 0, success: 401, failure: 7 }
+              "Today" => stats_for(created_at: Time.zone.now.beginning_of_day..),
+              "Last 7 days" => stats_for(created_at: 7.days.ago..),
+              "Last month" => stats_for(created_at: 1.month.ago..),
+              "All time" => stats_for
             }
           end
 
           def colour_for(state)
             COLOURS[state&.to_sym]
+          end
+
+          private
+
+          def stats_for(created_at: nil)
+            scope = Transmission.where(status: STATUS_KEYS)
+            scope = scope.where(created_at:) if created_at.present?
+
+            counts = scope.group(:status).count
+
+            STATUS_KEYS.index_with { |status| counts.fetch(status.to_s, 0) }
           end
         end
       end
