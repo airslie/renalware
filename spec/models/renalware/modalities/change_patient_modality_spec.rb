@@ -1,6 +1,6 @@
 module Renalware
   describe Modalities::ChangePatientModality do
-    subject(:command) { described_class.new(patient: patient, user: user) }
+    subject(:command) { described_class.new(patient:, user:) }
 
     let(:patient)                 { build_stubbed(:patient) }
     let(:user)                    { build_stubbed(:user) }
@@ -12,20 +12,20 @@ module Renalware
 
     def build_modality(description)
       Modalities::Modality.new(
-        patient: patient,
-        description: description,
+        patient:,
+        description:,
         started_on: Time.zone.now,
-        change_type: change_type
+        change_type:
       )
     end
 
     def build_stubbed_modality(description)
       build_stubbed(
         :modality,
-        patient: patient,
-        description: description,
+        patient:,
+        description:,
         started_on: Time.zone.now,
-        change_type: change_type
+        change_type:
       )
     end
 
@@ -36,14 +36,14 @@ module Renalware
           patient = create(:patient)
           user = create(:user)
           svc_obj = described_class.new(
-            patient: patient,
-            user: user
+            patient:,
+            user:
           )
 
           result = svc_obj.call(
             description: create(:death_modality_description),
             started_on: Time.zone.today,
-            change_type: change_type
+            change_type:
           )
 
           expect(result).to be_a(Success)
@@ -60,7 +60,7 @@ module Renalware
             modality = build_modality(death)
             allow(modality).to receive(:save!).and_return(true)
 
-            result = command.call(modality: modality)
+            result = command.call(modality:)
 
             expect(modality).to have_received(:save!)
             expect(result).to be_a(Success)
@@ -72,7 +72,7 @@ module Renalware
           it "returns a Failure result object" do
             modality = build_modality(nil)
 
-            result = command.call(modality: modality)
+            result = command.call(modality:)
 
             expect(result).to be_a(Failure)
             expect(result.object).to be_a(Modalities::Modality)
@@ -91,7 +91,7 @@ module Renalware
             allow(old_modality).to receive(:save!).and_return(true)
             allow(modality).to receive(:save!).and_return(true)
 
-            result = command.call(modality: modality)
+            result = command.call(modality:)
 
             expect(result).to be_a(Success)
             expect(result.object).to be_a(Modalities::Modality)
@@ -114,14 +114,14 @@ module Renalware
             allow(modality).to receive(:save!).and_return(true)
             allow(listener).to receive(:patient_modality_changed_to_death)
 
-            result = command.call(modality: modality)
+            result = command.call(modality:)
 
             expect(result).to be_a(Success)
             expect(modality).to have_received(:save!)
             expect(old_modality).to have_received(:save!)
             expect(listener).to have_received(:patient_modality_changed_to_death).with(
-              patient: patient,
-              modality: modality,
+              patient:,
+              modality:,
               actor: user
             )
           end
@@ -131,7 +131,7 @@ module Renalware
           it "returns a Failure result object" do
             modality = build_modality(nil)
 
-            result = command.call(modality: modality)
+            result = command.call(modality:)
 
             expect(result).to be_a(Failure)
             expect(result.object).to be_a(Modalities::Modality)
@@ -143,7 +143,7 @@ module Renalware
             command.subscribe(listener)
             allow(listener).to receive(:patient_modality_changed)
 
-            command.call(modality: modality)
+            command.call(modality:)
 
             expect(listener).not_to have_received(:patient_modality_changed)
           end

@@ -13,7 +13,7 @@ describe "Allergy management" do
         params = { clinical_allergy: { description: "Nuts" } }
 
         expect {
-          post(url, params: params)
+          post(url, params:)
         }.to change(patient.allergies, :count).by(1)
         follow_redirect!
         expect(response).to be_successful
@@ -22,7 +22,7 @@ describe "Allergy management" do
 
     describe "DELETE destroy" do
       it "deletes the allergy" do
-        allergy = create(:allergy, patient: patient, by: user)
+        allergy = create(:allergy, patient:, by: user)
         url = patient_clinical_allergy_path(patient_id: patient.to_param, id: allergy.to_param)
 
         expect { delete(url) }.to change(patient.allergies, :count).by(-1)
@@ -42,7 +42,7 @@ describe "Allergy management" do
         params = { clinical_allergy: { description: "Nuts" } }
 
         expect {
-          post(url, params: params)
+          post(url, params:)
         }.not_to change(patient.allergies, :count)
 
         expect(response).to redirect_to(patient_clinical_profile_path(patient))
@@ -53,7 +53,7 @@ describe "Allergy management" do
 
     describe "DELETE destroy" do
       it "redirects with alert when allergies disabled" do
-        allergy = create(:allergy, patient: patient, by: user)
+        allergy = create(:allergy, patient:, by: user)
         url = patient_clinical_allergy_path(patient_id: patient.to_param, id: allergy.to_param)
 
         expect { delete(url) }.not_to change(patient.allergies, :count)

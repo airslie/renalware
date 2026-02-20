@@ -12,7 +12,7 @@ module Renalware
       subject {
         described_class.new(
           patient_id: patient.id,
-          study: study,
+          study:,
           joined_on: "2018-01-01"
         )
       }
@@ -27,7 +27,7 @@ module Renalware
 
     describe ".external_application_participation_url" do
       subject do
-        build_stubbed(:research_participation, study: study, external_id: "123")
+        build_stubbed(:research_participation, study:, external_id: "123")
           .external_application_participation_url
       end
 

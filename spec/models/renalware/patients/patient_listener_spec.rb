@@ -10,10 +10,10 @@ module Renalware
 
           allow(ClearPatientUKRDCData)
             .to receive(:call)
-            .with(patient: patient, by: user)
+            .with(patient:, by: user)
 
           listener.patient_modality_changed_to_death(
-            patient: patient,
+            patient:,
             modality: Object.new,
             actor: user
           )

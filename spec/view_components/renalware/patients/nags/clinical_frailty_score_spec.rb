@@ -6,7 +6,7 @@ describe "Clinical Frailty Score nag", :caching, type: :component do
   include PatientsSpecHelper
   include NagHelpers
 
-  subject(:component) { described_class.new(definition: definition, patient: patient) }
+  subject(:component) { described_class.new(definition:, patient:) }
 
   let(:described_class) { Renalware::Patients::NagComponent }
   let(:patient) { create(:patient) }
@@ -36,13 +36,13 @@ describe "Clinical Frailty Score nag", :caching, type: :component do
             context "when modality is #{modality} and age is #{age}" do
               it "severity is #{severity}" do
                 set_modality(
-                  patient: patient,
+                  patient:,
                   modality_description: create(:"#{modality}_modality_description"),
                   by: patient.created_by
                 )
                 create(
                   :clinical_frailty_score,
-                  patient: patient,
+                  patient:,
                   date_time: age.days.ago
                 )
 
@@ -64,7 +64,7 @@ describe "Clinical Frailty Score nag", :caching, type: :component do
       modalities.each do |modality|
         it "returns a severity of '#{severity}' if modality is #{modality} and a 'Missing' value" do
           set_modality(
-            patient: patient,
+            patient:,
             modality_description: create(:"#{modality}_modality_description"),
             by: patient.created_by
           )
@@ -73,7 +73,7 @@ describe "Clinical Frailty Score nag", :caching, type: :component do
           nag = definition.execute_sql_function_for(patient)
 
           expect(nag).to have_attributes(
-            severity: severity,
+            severity:,
             value: "Missing",
             date: nil
           )
@@ -105,10 +105,10 @@ describe "Clinical Frailty Score nag", :caching, type: :component do
         definition = create(
           :patient_nag_definition,
           :clinical_frailty_score,
-          relative_link: relative_link
+          relative_link:
         )
 
-        component = described_class.new(definition: definition, patient: patient)
+        component = described_class.new(definition:, patient:)
 
         expect(component.formatted_relative_link).to eq(expected_interpolated_path)
       end

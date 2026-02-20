@@ -30,7 +30,7 @@ module Renalware
             </Address>
           XML
 
-          xml = Ox.dump(described_class.new(address: address).xml, indent: -1)
+          xml = Ox.dump(described_class.new(address:).xml, indent: -1)
 
           expect(xml).to eq(expected_xml)
         end
@@ -54,7 +54,7 @@ module Renalware
             </Address>
           XML
 
-          xml = Ox.dump(described_class.new(address: address).xml, indent: -1)
+          xml = Ox.dump(described_class.new(address:).xml, indent: -1)
 
           expect(xml).to eq(expected_xml)
         end

@@ -3,7 +3,7 @@ module Renalware
     describe APISynchronisers::TradeFamilySynchroniser do
       describe "#call" do
         let(:instance) {
-          described_class.new(trade_family_repository: trade_family_repository)
+          described_class.new(trade_family_repository:)
         }
 
         let(:trade_family_repository) {

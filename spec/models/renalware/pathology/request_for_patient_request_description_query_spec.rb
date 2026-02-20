@@ -8,9 +8,9 @@ describe Renalware::Pathology::RequestForPatientRequestDescriptionQuery do
   let(:request_newest_but_unrelated) do
     create(
       :pathology_requests_request,
-      clinic: clinic,
-      patient: patient,
-      consultant: consultant,
+      clinic:,
+      patient:,
+      consultant:,
       request_descriptions: [request_description_unrelated],
       created_at: Time.zone.now
     )
@@ -18,9 +18,9 @@ describe Renalware::Pathology::RequestForPatientRequestDescriptionQuery do
   let(:request_new) do
     create(
       :pathology_requests_request,
-      clinic: clinic,
-      patient: patient,
-      consultant: consultant,
+      clinic:,
+      patient:,
+      consultant:,
       request_descriptions: [request_description],
       created_at: 1.day.ago
     )
@@ -28,9 +28,9 @@ describe Renalware::Pathology::RequestForPatientRequestDescriptionQuery do
   let(:request_old) do
     create(
       :pathology_requests_request,
-      clinic: clinic,
-      patient: patient,
-      consultant: consultant,
+      clinic:,
+      patient:,
+      consultant:,
       request_descriptions: [request_description],
       created_at: 2.days.ago
     )

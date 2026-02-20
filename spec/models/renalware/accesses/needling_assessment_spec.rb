@@ -25,8 +25,8 @@ module Renalware
           }.each do |date, difficulty|
             create(
               :access_needling_assessment,
-              patient: patient,
-              difficulty: difficulty,
+              patient:,
+              difficulty:,
               created_at: Time.zone.parse(date)
             )
           end

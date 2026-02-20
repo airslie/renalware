@@ -19,7 +19,7 @@ describe "Viewing the dashboard" do
     date = "2017-12-12 00:00:01"
     create(
       :vaccination,
-      patient: patient,
+      patient:,
       date_time: Time.zone.parse(date),
       by: user,
       document: {

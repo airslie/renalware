@@ -4,7 +4,7 @@ describe "Viewing Message Replays" do
   it do
     login_as_super_admin
     replay_request = Renalware::Feeds::ReplayRequest.create!(
-      patient: patient,
+      patient:,
       started_at: 2.hours.ago,
       finished_at: 1.hour.ago
     )

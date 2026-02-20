@@ -20,9 +20,9 @@ describe Renalware::Pathology::Requests::GlobalRule do
   let(:global_rule_set) do
     build(
       :pathology_requests_global_rule_set,
-      clinic: clinic,
+      clinic:,
       frequency_type: "Once",
-      request_description: request_description
+      request_description:
     )
   end
 

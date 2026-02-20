@@ -6,13 +6,13 @@ describe "Search wait list registrations by UKT number" do
         :transplant_registration,
         :in_status,
         status: "active",
-        patient: patient
+        patient:
       )
       registration.document.codes.uk_transplant_patient_recipient_number = ukt_number
       registration.save!
       create(:modality_change_type, :default)
       Renalware::Modalities::ChangePatientModality
-        .new(patient: patient, user: user)
+        .new(patient:, user:)
         .call(description: modality_description, started_on: Time.zone.now)
     end
   end

@@ -2,12 +2,12 @@ module Renalware
   module HD
     module Sessions
       describe AuditablePatientsInPeriodQuery do
-        subject(:query) { described_class.new(period: period) }
+        subject(:query) { described_class.new(period:) }
 
         let(:patient1) { create(:hd_patient) }
         let(:patient2) { create(:hd_patient) }
         let(:patient3) { create(:hd_patient) }
-        let(:period) { MonthPeriod.new(month: month, year: year) }
+        let(:period) { MonthPeriod.new(month:, year:) }
         let(:month) { 12 }
         let(:year) { 2016 }
 

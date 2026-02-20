@@ -7,7 +7,7 @@ describe "Viewing a patient's appointments" do
 
   describe "GET index" do
     it "responds successfully" do
-      appointment = create(:appointment, patient: patient, starts_at: 1.year.from_now)
+      appointment = create(:appointment, patient:, starts_at: 1.year.from_now)
 
       get patient_appointments_path(patient)
 

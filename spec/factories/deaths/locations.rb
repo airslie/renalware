@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :death_location, class: "Renalware::Deaths::Location" do
-    initialize_with { Renalware::Deaths::Location.find_or_create_by!(name: name) }
+    initialize_with { Renalware::Deaths::Location.find_or_create_by!(name:) }
     name { "Hospital" }
     rr_outcome_code { 14 }
     rr_outcome_text { "Hospital" }

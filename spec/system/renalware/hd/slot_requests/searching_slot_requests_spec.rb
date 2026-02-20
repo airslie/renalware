@@ -13,11 +13,11 @@ describe "Searching HD Slot Requests", :js do
     user = login_as_admin
     patient = create(:hd_patient, by: user, family_name: "FamilyXxx", local_patient_id: "MRN1")
     create(:hd_slot_request,
-           patient: patient,
+           patient:,
            created_at: "2023-10-01 03:03:03",
            urgency: "highly_urgent",
-           access_state: access_state,
-           location: location)
+           access_state:,
+           location:)
 
     visit renalware.hd_slot_requests_path
 

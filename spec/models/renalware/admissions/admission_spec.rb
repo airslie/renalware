@@ -32,12 +32,12 @@ describe Renalware::Admissions::Admission do
     it "returns only currently admitted patients" do
       create(
         :admissions_admission,
-        patient: patient,
+        patient:,
         discharged_on: "2017-12-12"
       ) # prev. admission
       current_admission = create(
         :admissions_admission,
-        patient: patient,
+        patient:,
         discharged_on: nil
       )
 
@@ -49,13 +49,13 @@ describe Renalware::Admissions::Admission do
     it "returns only discharged patients who have no discharge summary yet" do
       create(
         :admissions_admission,
-        patient: patient,
+        patient:,
         discharged_on: "2017-12-12",
         discharge_summary: "discharge summary"
       )
       disch_without_summ = create(
         :admissions_admission,
-        patient: patient,
+        patient:,
         discharged_on: "2017-12-12",
         discharge_summary: nil
       )

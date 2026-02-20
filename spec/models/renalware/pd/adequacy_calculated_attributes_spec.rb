@@ -2,7 +2,7 @@ module Renalware
   module PD
     describe AdequacyCalculatedAttributes do
       describe "#to_h" do
-        subject(:hash) { described_class.new(adequacy: adequacy, age: 50, sex: "F").to_h }
+        subject(:hash) { described_class.new(adequacy:, age: 50, sex: "F").to_h }
 
         let(:adequacy) { AdequacyResult.new }
 
@@ -31,7 +31,7 @@ module Renalware
 
       describe "#renal_urine_clearance" do
         subject do
-          described_class.new(adequacy: adequacy, age: 50, sex: "F").renal_urine_clearance
+          described_class.new(adequacy:, age: 50, sex: "F").renal_urine_clearance
         end
 
         let(:adequacy) { AdequacyResult.new(urine_urea: 10, serum_urea: 20, urine_24_vol: 3000) }
@@ -68,7 +68,7 @@ module Renalware
 
       describe "#renal_creatinine_clearance" do
         subject do
-          described_class.new(adequacy: adequacy, age: 50, sex: "F").renal_creatinine_clearance
+          described_class.new(adequacy:, age: 50, sex: "F").renal_creatinine_clearance
         end
 
         let(:adequacy) do
@@ -107,7 +107,7 @@ module Renalware
 
       describe "#residual_renal_function" do
         subject do
-          described_class.new(adequacy: adequacy, age: 50, sex: "F").residual_renal_function
+          described_class.new(adequacy:, age: 50, sex: "F").residual_renal_function
         end
 
         let(:height) { 1.23 }
@@ -118,7 +118,7 @@ module Renalware
             urine_creatinine: 30,
             serum_creatinine: 40,
             urine_24_vol: 3000,
-            height: height,
+            height:,
             weight: 100.99 # body_surface_area will eq 47.14
           )
         end
@@ -155,7 +155,7 @@ module Renalware
       describe "#pertitoneal_creatinine_clearance" do
         subject do
           described_class.new(
-            adequacy: adequacy,
+            adequacy:,
             age: 50,
             sex: "F"
           ).pertitoneal_creatinine_clearance
@@ -171,7 +171,7 @@ module Renalware
             urine_24_vol: 3000,
             dialysate_creatinine: 200,
             dial_24_vol_out: 2000,
-            height: height,
+            height:,
             weight: 100.99
           )
         end
@@ -246,7 +246,7 @@ module Renalware
 
       describe "#dietry_protein_intake" do
         subject do
-          described_class.new(adequacy: adequacy, age: 50, sex: "F").dietry_protein_intake
+          described_class.new(adequacy:, age: 50, sex: "F").dietry_protein_intake
         end
 
         let(:weight) { 100.99 }
@@ -257,7 +257,7 @@ module Renalware
             dialysate_urea: 200,
             dial_24_vol_out: 2000,
             height: 1.23,
-            weight: weight
+            weight:
           )
         end
 
@@ -292,7 +292,7 @@ module Renalware
       end
 
       describe "#renal_ktv" do
-        subject { described_class.new(adequacy: adequacy, age: 50, sex: "F").renal_ktv }
+        subject { described_class.new(adequacy:, age: 50, sex: "F").renal_ktv }
 
         let(:weight) { 100.99 }
         let(:adequacy) do
@@ -301,7 +301,7 @@ module Renalware
             urine_24_vol: 1700,
             serum_urea: 16.1,
             height: 1.23,
-            weight: weight
+            weight:
           )
         end
 
@@ -342,7 +342,7 @@ module Renalware
       end
 
       describe "#pertitoneal_ktv" do
-        subject { described_class.new(adequacy: adequacy, age: 50, sex: "F").pertitoneal_ktv }
+        subject { described_class.new(adequacy:, age: 50, sex: "F").pertitoneal_ktv }
 
         let(:weight) { 100.99 }
         let(:adequacy) do
@@ -350,7 +350,7 @@ module Renalware
             serum_urea: 16.1,
             dialysate_urea: 9.7,
             dial_24_vol_out: 8991,
-            weight: weight,
+            weight:,
             height: 1.23
           )
         end

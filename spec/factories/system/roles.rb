@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :role, class: "Renalware::Role" do
-    initialize_with { Renalware::Role.find_or_create_by(name: name) }
+    initialize_with { Renalware::Role.find_or_create_by(name:) }
 
     name { :super_admin }
     hidden { false }

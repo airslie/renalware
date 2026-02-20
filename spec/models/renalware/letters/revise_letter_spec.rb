@@ -13,8 +13,8 @@ module Renalware
       let(:letter) {
         create(:draft_letter,
                description: "TestDescription",
-               patient: patient,
-               topic: topic,
+               patient:,
+               topic:,
                main_recipient: build(:letter_recipient, :main),
                by: user)
       }
@@ -28,7 +28,7 @@ module Renalware
           :hd_profile,
           patient: hd_patient,
           prescribed_time: 210,
-          hospital_unit: hospital_unit
+          hospital_unit:
         )
       end
 
@@ -79,7 +79,7 @@ module Renalware
               let(:snapshot) do
                 create(
                   :section_snapshot,
-                  letter: letter,
+                  letter:,
                   content: "test",
                   section_identifier: :hd
                 )
@@ -101,7 +101,7 @@ module Renalware
           context 'when "update_sections" is passed as parameter' do
             context "when section snapshots have been previously created" do
               let!(:section_snapshot) {
-                create(:section_snapshot, letter: letter, section_identifier: "hd",
+                create(:section_snapshot, letter:, section_identifier: "hd",
                                           content: "old content")
               }
 

@@ -12,7 +12,7 @@ describe "Managing the patient worryboard" do
             worry_category_id: worry_category.id
           }
         }
-        post(patient_worry_path(patient), params: params)
+        post(patient_worry_path(patient), params:)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(response).to be_successful
@@ -26,9 +26,9 @@ describe "Managing the patient worryboard" do
     context "when the patient already has a worry (i.e. is on the worryboard)" do
       # Not expected to be possible in the UI but testing anyway
       it "behaves idempotently, does not fail, behaves as if the worry was just added" do
-        Renalware::Patients::Worry.new(patient: patient, by: user, notes: "Abc").save!
+        Renalware::Patients::Worry.new(patient:, by: user, notes: "Abc").save!
         params = { patients_worry: { notes: nil } }
-        post(patient_worry_path(patient), params: params)
+        post(patient_worry_path(patient), params:)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(response).to be_successful
@@ -57,7 +57,7 @@ describe "Managing the patient worryboard" do
 
     describe "DELETE destroy" do
       it "soft deletes the worry" do
-        worry = Renalware::Patients::Worry.new(patient: patient, by: user)
+        worry = Renalware::Patients::Worry.new(patient:, by: user)
         worry.save!
 
         delete patient_worry_path(patient, worry)
@@ -74,7 +74,7 @@ describe "Managing the patient worryboard" do
       with_versioning do
         it "stores a papertrail version with the correct whodunnit value" do
           expect(PaperTrail).to be_enabled
-          worry = Renalware::Patients::Worry.new(patient: patient, by: user)
+          worry = Renalware::Patients::Worry.new(patient:, by: user)
           worry.save!
 
           delete patient_worry_path(patient, worry)

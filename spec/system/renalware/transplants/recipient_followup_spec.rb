@@ -1,6 +1,6 @@
 RSpec.describe "RecipientFollowup", :js do
   let(:patient) { create(:transplant_patient, family_name: "Rabbit", local_patient_id: "12345") }
-  let(:operation) { create(:transplant_recipient_operation, patient: patient) }
+  let(:operation) { create(:transplant_recipient_operation, patient:) }
 
   describe "creating a new followup for an operation" do
     it "a new one will be be created" do
@@ -63,20 +63,20 @@ RSpec.describe "RecipientFollowup", :js do
       me = login_as_clinical
       followup = create(
         :transplant_recipient_followup,
-        operation: operation,
+        operation:,
         stent_removed_on: "2019-01-01"
       )
       rejection_episodes = [
         create(
           :transplant_rejection_episode,
-          followup: followup,
+          followup:,
           by: other_user,
           notes: "1xx",
           recorded_on: "2019-02-01"
         ),
         create(
           :transplant_rejection_episode,
-          followup: followup,
+          followup:,
           by: other_user,
           notes: "3xx",
           recorded_on: "2019-02-03"

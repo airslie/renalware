@@ -311,9 +311,9 @@ module Renalware
 
     describe "#current_modality" do
       it "returns the most recent non-deleted modality" do
-        create(:modality, patient: patient, started_on: "2015-04-19", ended_on: "2015-04-20")
-        create(:modality, patient: patient, started_on: "2015-04-20", ended_on: "2015-04-20")
-        create(:modality, :terminated, patient: patient, started_on: "2015-04-21")
+        create(:modality, patient:, started_on: "2015-04-19", ended_on: "2015-04-20")
+        create(:modality, patient:, started_on: "2015-04-20", ended_on: "2015-04-20")
+        create(:modality, :terminated, patient:, started_on: "2015-04-21")
 
         expect(patient.current_modality.started_on).to eq(Date.parse("2015-04-20"))
       end
@@ -324,7 +324,7 @@ module Renalware
         user = create(:user)
         hd = create(:hd_modality_description)
         death = create(:death_modality_description)
-        args = { patient: patient, by: user }
+        args = { patient:, by: user }
         set_modality(started_on: "2015-04-19", modality_description: hd, **args)
         set_modality(started_on: "2015-04-20", modality_description: hd, **args)
         prev = set_modality(started_on: "2015-04-21", modality_description: hd, **args)
@@ -347,7 +347,7 @@ module Renalware
       subject { patient.to_s(format) }
 
       let(:patient) {
-        described_class.new(title: title, family_name: "A", given_name: "B", nhs_number: nhs_number)
+        described_class.new(title:, family_name: "A", given_name: "B", nhs_number:)
       }
       let(:format) { :default }
       let(:title) { "Mrs" }

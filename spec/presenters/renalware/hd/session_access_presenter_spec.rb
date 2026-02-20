@@ -10,9 +10,9 @@ describe Renalware::HD::SessionAccessPresenter do
         Renalware::HD::SessionDocument,
         info: instance_double(
           Renalware::HD::SessionDocument::Info,
-          access_type: access_type,
-          access_type_abbreviation: access_type_abbreviation,
-          access_side: access_side
+          access_type:,
+          access_type_abbreviation:,
+          access_side:
         )
       )
     )

@@ -1,7 +1,7 @@
 module Renalware
   describe Patients::Merges::UpdatePatientFkQuery do
     subject(:query) do
-      described_class.new(operation: operation)
+      described_class.new(operation:)
     end
 
     let(:schema) { "renalware" }
@@ -15,14 +15,14 @@ module Renalware
     let(:merge) {
       create(
         :patient_merge,
-        major_patient: major_patient,
-        minor_patient: minor_patient
+        major_patient:,
+        minor_patient:
       )
     }
     let(:operation) {
       create(
         :patient_merge_operation,
-        merge: merge,
+        merge:,
         column_reference: ColumnReference.new(schema, table, column)
       )
     }

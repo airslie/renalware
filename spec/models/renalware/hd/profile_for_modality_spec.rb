@@ -14,7 +14,7 @@ module Renalware
           create(
             :modality,
             description: hd_modality_description,
-            patient: patient,
+            patient:,
             started_on: modality_started_on
           )
         end
@@ -25,7 +25,7 @@ module Renalware
 
         context "when an HD patient has an HD profile created on the same day" do
           it "finds the profile" do
-            profile = create(:hd_profile, patient: patient, created_at: modality.started_on)
+            profile = create(:hd_profile, patient:, created_at: modality.started_on)
 
             expect(resolved_profile_id).to eq(profile.id)
           end
@@ -35,7 +35,7 @@ module Renalware
           it "resolved the last one created that day" do
             profiles = []
             travel_to modality_started_on do
-              profiles << create(:hd_profile, patient: patient)
+              profiles << create(:hd_profile, patient:)
             end
 
             travel_to modality_started_on + 1.minute do
@@ -53,7 +53,7 @@ module Renalware
         context "when an HD patient an active HD Profile already" do
           it "resolved it" do
             hd_profile = travel_to modality_started_on - 1.year do
-              create(:hd_profile, patient: patient)
+              create(:hd_profile, patient:)
             end
 
             expect(resolved_profile_id).to eq(hd_profile.id)
@@ -65,18 +65,18 @@ module Renalware
             old_hd_modality = create(
               :modality,
               description: hd_modality_description,
-              patient: patient,
+              patient:,
               started_on: 10.years.ago,
               ended_on: 9.years.ago
             )
             newer_hd_modality = create(
               :modality,
               description: hd_modality_description,
-              patient: patient,
+              patient:,
               started_on: 1.year.ago
             )
             hd_profile = travel_to newer_hd_modality.started_on + 1.day do
-              create(:hd_profile, patient: patient)
+              create(:hd_profile, patient:)
             end
 
             expect(

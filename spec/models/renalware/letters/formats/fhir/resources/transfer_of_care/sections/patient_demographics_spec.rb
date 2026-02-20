@@ -4,8 +4,8 @@ module Renalware::Letters
       describe Sections::PatientDemographics do
         subject(:section) { described_class.new(arguments) }
 
-        let(:transmission) { instance_double(Transports::Mesh::Transmission, letter: letter) }
-        let(:arguments) { Arguments.new(transmission: transmission, transaction_uuid: "123") }
+        let(:transmission) { instance_double(Transports::Mesh::Transmission, letter:) }
+        let(:arguments) { Arguments.new(transmission:, transaction_uuid: "123") }
         let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
         let(:patient) do
           build_stubbed(
@@ -17,8 +17,8 @@ module Renalware::Letters
         let(:letter) do
           build_stubbed(
             :letter,
-            topic: topic,
-            patient: patient,
+            topic:,
+            patient:,
             archive: build_stubbed(:letter_archive)
           )
         end

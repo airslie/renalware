@@ -41,7 +41,7 @@ module Renalware
             XML
 
             parent = Ox::Element.new("X")
-            described_class.new(session: session).create_observation_nodes_under(parent)
+            described_class.new(session:).create_observation_nodes_under(parent)
 
             actual_xml = format_xml(parent)
 

@@ -15,7 +15,7 @@ describe Renalware::Letters::SaveRTFLetterToFileJob do
     create_letter(
       state: :approved,
       to: :patient,
-      patient: patient
+      patient:
     )
   end
 

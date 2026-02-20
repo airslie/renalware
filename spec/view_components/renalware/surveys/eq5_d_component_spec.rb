@@ -4,7 +4,7 @@ describe Renalware::Surveys::EQ5DComponent, type: :component do
   describe "#render?" do
     context "when the e5qd survey is not found in the database" do
       it "returns false" do
-        component = described_class.new(patient: patient)
+        component = described_class.new(patient:)
 
         expect(component.render?).to be(false)
       end
@@ -13,7 +13,7 @@ describe Renalware::Surveys::EQ5DComponent, type: :component do
     context "when the e5qd survey is found in the database" do
       it "returns true" do
         create(:eq5d_survey)
-        component = described_class.new(patient: patient)
+        component = described_class.new(patient:)
 
         expect(component.render?).to be(true)
       end

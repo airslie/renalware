@@ -1,5 +1,5 @@
 describe Renalware::Clinical::ProfilePresenter do
-  subject { described_class.new(patient: patient, params: {}) }
+  subject { described_class.new(patient:, params: {}) }
 
   let(:patient) { build(:patient) }
 

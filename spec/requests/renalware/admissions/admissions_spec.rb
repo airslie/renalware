@@ -22,11 +22,11 @@ module Renalware
     def create_admission
       create(:admissions_admission,
              by: user,
-             patient: patient,
+             patient:,
              admitted_on: Time.zone.today,
              admission_type: :unknown,
              reason_for_admission: "Reason",
-             hospital_ward: hospital_ward)
+             hospital_ward:)
     end
 
     describe "GET index", type: :system do

@@ -46,10 +46,10 @@ module Renalware::Pathology
         instance_double(
           Renalware::Feeds::PatientIdentification,
           nhs_number: patient.local_patient_id,
-          internal_id: internal_id,
-          born_on: born_on,
+          internal_id:,
+          born_on:,
           identifiers: {
-            nhs_number: nhs_number,
+            nhs_number:,
             local_patient_id: internal_id
           }.compact_blank
         )

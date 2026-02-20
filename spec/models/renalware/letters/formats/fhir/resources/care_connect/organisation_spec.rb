@@ -4,10 +4,10 @@ module Renalware
       module Resources::CareConnect
         describe Organisation do
           let(:transmission) do
-            instance_double(Transports::Mesh::Transmission, letter: letter, uuid: "TRANS1")
+            instance_double(Transports::Mesh::Transmission, letter:, uuid: "TRANS1")
           end
           let(:arguments) {
-            Arguments.new(transmission: transmission, transaction_uuid: "123")
+            Arguments.new(transmission:, transaction_uuid: "123")
           }
           let(:patient) { build_stubbed(:patient) }
           let(:letters_patient) { patient.becomes(Patient) }
@@ -29,8 +29,8 @@ module Renalware
               ),
               archive: build_stubbed(:letter_archive),
               event_id: 99,
-              author: author,
-              topic: topic
+              author:,
+              topic:
             ).tap do |let|
               let.build_main_recipient(person_role: :primary_care_physician)
             end

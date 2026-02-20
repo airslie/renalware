@@ -29,7 +29,7 @@ module Renalware::Letters
         it do
           clinic = build_stubbed(:clinic, name: "X", code: "Y")
           visit = instance_double(Renalware::Clinics::ClinicVisit, date: "2022-02-02",
-                                                                   clinic: clinic)
+                                                                   clinic:)
           event = described_class.new(visit, clinical: true)
           expect(event.description).to eq(
             "<span><span>Clinic: X Y</span><span style=\"white-space: nowrap;\"> " \

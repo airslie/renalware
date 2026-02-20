@@ -5,13 +5,13 @@ module Renalware::Problems
     it_behaves_like "an Accountable model"
 
     def create_comorbidity(patient:, recognised_at:, name: "X", position: 1, recognised: "yes")
-      description = Comorbidities::Description.find_or_create_by!(name: name, position: position)
+      description = Comorbidities::Description.find_or_create_by!(name:, position:)
       described_class.create!(
-        description: description,
-        patient: patient,
+        description:,
+        patient:,
         by: user,
-        recognised_at: recognised_at,
-        recognised: recognised
+        recognised_at:,
+        recognised:
       )
     end
 
@@ -31,7 +31,7 @@ module Renalware::Problems
       subject do
         described_class.create!(
           description: Comorbidities::Description.create!(name: "x"),
-          patient: patient,
+          patient:,
           by: user
         )
       end
@@ -54,7 +54,7 @@ module Renalware::Problems
 
         context "when there are comorbidities" do
           it "returns an empty array" do
-            create_comorbidity(patient: patient, recognised_at: "2010-01-01")
+            create_comorbidity(patient:, recognised_at: "2010-01-01")
 
             expect(patient.comorbidities.at_date(nil)).to eq([])
           end
@@ -69,7 +69,7 @@ module Renalware::Problems
 
       context "when the supplied date is before any comorbidities" do
         it "returns an empty array" do
-          create_comorbidity(patient: patient, recognised_at: "2020-01-01")
+          create_comorbidity(patient:, recognised_at: "2020-01-01")
 
           expect(patient.comorbidities.at_date(Date.parse("2010-01-01"))).to eq([])
         end
@@ -77,7 +77,7 @@ module Renalware::Problems
 
       context "when the supplied date is after any comorbidities" do
         it "returns the comorb" do
-          como = create_comorbidity(patient: patient, recognised_at: "2010-01-01")
+          como = create_comorbidity(patient:, recognised_at: "2010-01-01")
 
           expect(
             patient.comorbidities.at_date(Date.parse("2020-01-01"))

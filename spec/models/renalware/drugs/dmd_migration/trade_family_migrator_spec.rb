@@ -2,9 +2,9 @@ module Renalware::Drugs
   describe DMDMigration::TradeFamilyMigrator do
     let(:trade_family) { create(:drug_trade_family, name: "Adalat") }
     let(:drug) { create(:drug) }
-    let(:prescription) { create(:prescription, drug: drug) }
+    let(:prescription) { create(:prescription, drug:) }
     let(:match) {
-      DMDMatch.create!(drug: drug, trade_family_name: "Adalat", approved_trade_family_match: true)
+      DMDMatch.create!(drug:, trade_family_name: "Adalat", approved_trade_family_match: true)
     }
 
     before do

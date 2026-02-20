@@ -21,7 +21,7 @@ module Renalware
     describe "practices_or_address" do
       it "formats the alternative Address" do
         address = build_stubbed(:address)
-        primary_care_physician = build_stubbed(:primary_care_physician, address: address)
+        primary_care_physician = build_stubbed(:primary_care_physician, address:)
         actual = practices_or_address(primary_care_physician)
 
         expect(actual.to_s).to match("#{address.street_1}, #{address.postcode}")

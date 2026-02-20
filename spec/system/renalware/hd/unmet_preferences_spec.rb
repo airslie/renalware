@@ -21,11 +21,11 @@ describe "Viewing patients whose HD preferences do not match their profile" do
   def patient_preferring_another_schedule(name: "Jones")
     create(:hd_patient, family_name: name).tap do |patient|
       create(:hd_profile,
-             patient: patient,
+             patient:,
              schedule_definition: mon_wed_fri_am,
              hospital_unit: current_unit)
       create(:hd_preference_set,
-             patient: patient,
+             patient:,
              schedule_definition: mon_wed_fri_pm,
              hospital_unit: current_unit,
              by: user)
@@ -35,11 +35,11 @@ describe "Viewing patients whose HD preferences do not match their profile" do
   def patient_preferring_another_hospital_unit(name: "Smith")
     create(:hd_patient, family_name: name).tap do |patient|
       create(:hd_profile,
-             patient: patient,
+             patient:,
              schedule_definition: mon_wed_fri_am,
              hospital_unit: current_unit) # !
       create(:hd_preference_set,
-             patient: patient,
+             patient:,
              hospital_unit: preferred_unit, # !
              by: user)
     end
@@ -48,11 +48,11 @@ describe "Viewing patients whose HD preferences do not match their profile" do
   def patient_whose_preferences_are_met(name: "Metpost")
     create(:hd_patient, family_name: name).tap do |patient|
       create(:hd_profile,
-             patient: patient,
+             patient:,
              hospital_unit: current_unit,
              schedule_definition: mon_wed_fri_am)
       create(:hd_preference_set,
-             patient: patient,
+             patient:,
              hospital_unit: current_unit,
              schedule_definition: mon_wed_fri_am,
              by: user)

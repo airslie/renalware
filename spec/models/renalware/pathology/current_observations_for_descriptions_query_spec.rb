@@ -12,7 +12,7 @@ module Renalware
           target_descriptions = filter_targeted_descriptions(descriptions)
 
           query = described_class.new(
-            patient: patient, descriptions: target_descriptions
+            patient:, descriptions: target_descriptions
           )
           results = query.call
 
@@ -23,7 +23,7 @@ module Renalware
           missing_descriptions = add_descriptions_not_observed_for_patient("missing-1", "missing-2")
 
           query = described_class.new(
-            patient: patient, descriptions: missing_descriptions
+            patient:, descriptions: missing_descriptions
           )
           results = query.call
 
@@ -36,7 +36,7 @@ module Renalware
           create_observations(patient, descriptions)
 
           query = described_class.new(
-            patient: patient, descriptions: descriptions
+            patient:, descriptions:
           )
           results = query.call
 

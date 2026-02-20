@@ -4,7 +4,7 @@ describe Renalware::Letters::UnreadElectronicCCsComponent, type: :component do #
   def send_letter_ecc_to(user)
     author = create(:user)
     patient = create(:letter_patient)
-    letter = create_letter(state: :approved, to: :patient, patient: patient, by: author)
+    letter = create_letter(state: :approved, to: :patient, patient:, by: author)
     letter.electronic_cc_recipients << user
     letter.save_by!(author)
     letter

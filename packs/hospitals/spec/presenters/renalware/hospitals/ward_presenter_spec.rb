@@ -5,8 +5,8 @@ module Renalware
     let(:ward) do
       instance_double(
         Hospitals::Ward,
-        name: name,
-        code: code,
+        name:,
+        code:,
         hospital_unit: instance_double(Hospitals::Unit, unit_code: "UNITX", name: "Unit X")
       )
     end

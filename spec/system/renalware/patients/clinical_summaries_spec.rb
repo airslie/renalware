@@ -4,11 +4,11 @@ module Renalware
       it "renders correctly" do
         user = login_as_clinical
         patient = create(:patient, by: user)
-        create(:problem, patient: patient, by: user)
-        create(:simple_event, patient: patient, by: user)
-        create(:prescription, patient: patient, by: user)
-        create(:admissions_admission, patient: patient, by: user)
-        create(:admissions_consult, patient: patient, by: user)
+        create(:problem, patient:, by: user)
+        create(:simple_event, patient:, by: user)
+        create(:prescription, patient:, by: user)
+        create(:admissions_admission, patient:, by: user)
+        create(:admissions_consult, patient:, by: user)
 
         letter_patient = Letters.cast_patient(patient)
         letter = build(:approved_letter, patient: letter_patient, by: user)

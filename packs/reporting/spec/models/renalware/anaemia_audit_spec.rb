@@ -10,42 +10,42 @@ module Renalware
     include PatientsSpecHelper
 
     let(:uom) { create(:pathology_measurement_unit) }
-    let(:user) { create(:user) }
+    let(:by) { create(:user) }
     let(:audit_view_name) { "reporting_anaemia_audit" }
-    let(:request_description) { create(:pathology_request_description, lab: lab) }
+    let(:request_description) { create(:pathology_request_description, lab:) }
     let(:lab) { create(:pathology_lab) }
 
     def create_observation_description(code)
-      create(:pathology_observation_description, code: code, measurement_unit: uom)
+      create(:pathology_observation_description, code:, measurement_unit: uom)
     end
 
     def create_observation(patient:, description:, result:)
       request = create(
         :pathology_observation_request,
-        patient: patient,
+        patient:,
         description: request_description
       )
       create(
         :pathology_observation,
-        request: request,
-        description: description,
-        result: result
+        request:,
+        description:,
+        result:
       )
     end
 
     def create_hd_patient
-      create(:pathology_patient, by: user).tap do |patient|
-        set_modality(patient: patient,
+      create(:pathology_patient, by:).tap do |patient|
+        set_modality(patient:,
                      modality_description: create(:hd_modality_description),
-                     by: user)
+                     by:)
       end
     end
 
     def create_pd_patient
-      create(:pathology_patient, by: user).tap do |patient|
-        set_modality(patient: patient,
+      create(:pathology_patient, by:).tap do |patient|
+        set_modality(patient:,
                      modality_description: create(:pd_modality_description),
-                     by: user)
+                     by:)
       end
     end
 
@@ -83,13 +83,13 @@ module Renalware
             # hd_patients 1 and 2 have an EPO drug so no_on_epo should eq 2
             immunosuppressant_drug = create(:drug, :immunosuppressant)
             hd_patients[0, 2].each do |patient|
-              create(:prescription, patient: patient, drug: immunosuppressant_drug)
+              create(:prescription, patient:, drug: immunosuppressant_drug)
             end
 
             # hd_patients 1 and 2 also have an a drug starting with Mircer
             mircera_injection = create(:drug, name: "Mircera Injection")
             hd_patients[0, 2].each do |patient|
-              create(:prescription, patient: patient, drug: mircera_injection)
+              create(:prescription, patient:, drug: mircera_injection)
             end
 
             # hd_patient 3 has a drug starting with Neo

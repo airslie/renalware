@@ -5,9 +5,9 @@ describe "Renewing all Give On HD prescriptions via a button", :js do
     create(
       :prescription,
       drug: create(:drug, name: drug_name),
-      patient: patient,
+      patient:,
       administer_on_hd: hd,
-      by: by
+      by:
     )
   end
 

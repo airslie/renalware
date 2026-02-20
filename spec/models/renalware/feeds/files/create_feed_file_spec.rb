@@ -13,9 +13,9 @@ module Renalware
 
             expect {
               file = described_class.call(
-                file_type: file_type,
+                file_type:,
                 uploaded_file: path_to_zipfile,
-                user: user
+                user:
               )
             }.to change(Feeds::File, :count).by(1)
 

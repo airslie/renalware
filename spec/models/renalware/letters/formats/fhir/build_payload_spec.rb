@@ -9,8 +9,8 @@ module Renalware::Letters
       def create_patient(given_name: "John")
         create(
           :letter_patient,
-          given_name: given_name, # trigger value
-          practice: practice,
+          given_name:, # trigger value
+          practice:,
           primary_care_physician: create(:letter_primary_care_physician, practices: [practice]),
           by: user
         )
@@ -19,22 +19,22 @@ module Renalware::Letters
       def create_mesh_letter(patient, user, to: :primary_care_physician)
         create_letter(
           state: :approved,
-          to: to,
-          patient: patient,
+          to:,
+          patient:,
           author: user,
           topic: create(:letter_topic, snomed_document_type: create(:snomed_document_type)),
           by: user,
           approved_at: Time.zone.now
         ).reload.tap do |letter|
-          letter.archive = create(:letter_archive, letter: letter, by: user)
+          letter.archive = create(:letter_archive, letter:, by: user)
         end
       end
 
       it "#call" do
         patient = create_patient
         letter = create_mesh_letter(patient, user)
-        transmission = Transports::Mesh::Transmission.create!(letter: letter)
-        args = Arguments.new(transmission: transmission, transaction_uuid: "123")
+        transmission = Transports::Mesh::Transmission.create!(letter:)
+        args = Arguments.new(transmission:, transaction_uuid: "123")
 
         xml_string = described_class.call(args)
 

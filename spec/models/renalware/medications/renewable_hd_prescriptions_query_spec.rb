@@ -9,16 +9,16 @@ module Renalware::Medications
     def create_prescription(hd:, from:, to: nil, stat: false)
       prescription = create(
         :prescription,
-        patient: patient,
+        patient:,
         administer_on_hd: hd,
         prescribed_on: from,
-        stat: stat,
+        stat:,
         by: user
       )
       if to.present?
         create(
           :prescription_termination,
-          prescription: prescription,
+          prescription:,
           terminated_on: to,
           by: user
         )
@@ -28,7 +28,7 @@ module Renalware::Medications
     # rubocop:enable Metrics/MethodLength
 
     context "when prescription is not Give On HD, ignores all" do
-      subject(:prescriptions) { described_class.new(patient: patient).call }
+      subject(:prescriptions) { described_class.new(patient:).call }
 
       context "when prescribed_on is on or after today" do
         it "ignores prescriptions with no future termination" do
@@ -40,7 +40,7 @@ module Renalware::Medications
           pres = create_prescription(hd: false, from: 1.week.from_now, to: 2.weeks.from_now)
 
           expect(pres.administer_on_hd).to be false # sanity check
-          expect(described_class.new(patient: patient).call).to be_empty
+          expect(described_class.new(patient:).call).to be_empty
         end
       end
     end
@@ -49,7 +49,7 @@ module Renalware::Medications
       it "finds HD prescriptions prescribed before today, when they have no termination" do
         pres = create_prescription(hd: true, from: yesterday, to: nil)
 
-        expect(described_class.new(patient: patient).call).to eq [pres]
+        expect(described_class.new(patient:).call).to eq [pres]
       end
 
       it "finds prescriptions when stat is null or stat is false" do
@@ -57,26 +57,26 @@ module Renalware::Medications
         pres1 = create_prescription(hd: true, stat: false, from: yesterday, to: nil)
 
         # rubocop:disable RSpec/MatchArray
-        expect(described_class.new(patient: patient).call).to match_array([pres, pres1])
+        expect(described_class.new(patient:).call).to match_array([pres, pres1])
         # rubocop:enable RSpec/MatchArray
       end
 
       it "finds HD prescriptions with a future termination, prescribed before today" do
         pres = create_prescription(hd: true, from: yesterday, to: 1.week.from_now)
 
-        expect(described_class.new(patient: patient).call).to eq [pres]
+        expect(described_class.new(patient:).call).to eq [pres]
       end
 
       it "ignores prescriptions prescribed before today but terminated today" do
         create_prescription(hd: true, from: yesterday, to: today)
 
-        expect(described_class.new(patient: patient).call).to be_empty
+        expect(described_class.new(patient:).call).to be_empty
       end
 
       it "ignores prescriptions prescribed before today and terminated before today" do
         create_prescription(hd: true, from: 1.week.ago, to: 1.day.ago)
 
-        expect(described_class.new(patient: patient).call).to be_empty
+        expect(described_class.new(patient:).call).to be_empty
       end
 
       it "ignores stat (give once) prescriptions when stat = false" do
@@ -87,7 +87,7 @@ module Renalware::Medications
         prs = create_prescription(hd: true, stat: true, from: 1.week.from_now, to: 2.weeks.from_now)
 
         expect(prs.stat).to be true # sanity check
-        expect(described_class.new(patient: patient).call).to be_empty
+        expect(described_class.new(patient:).call).to be_empty
       end
     end
   end

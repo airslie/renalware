@@ -7,7 +7,7 @@ module Renalware
         context "when the patient has a practice" do
           it "renders it" do
             practice = build_stubbed(:practice, code: "ABC")
-            patient = build_stubbed(:patient, practice: practice)
+            patient = build_stubbed(:patient, practice:)
 
             expected_xml = <<~XML.squish.gsub("> <", "><")
               <FamilyDoctor>
@@ -15,7 +15,7 @@ module Renalware
               </FamilyDoctor>
             XML
 
-            actual_xml = format_xml(described_class.new(patient: patient).xml)
+            actual_xml = format_xml(described_class.new(patient:).xml)
 
             expect(actual_xml).to eq(expected_xml)
           end
@@ -32,7 +32,7 @@ module Renalware
               </FamilyDoctor>
             XML
 
-            actual_xml = format_xml(described_class.new(patient: patient).xml)
+            actual_xml = format_xml(described_class.new(patient:).xml)
 
             expect(actual_xml).to eq(expected_xml)
           end

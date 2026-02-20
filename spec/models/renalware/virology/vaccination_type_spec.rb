@@ -21,8 +21,8 @@ module Renalware
         }.each do |code, position|
           # Sortable will initially assign the position with the next available value.
           # We want to test position explictly hence the save and subsequent update.
-          type = described_class.create!(name: code, code: code)
-          type.update!(position: position)
+          type = described_class.create!(name: code, code:)
+          type.update!(position:)
         end
 
         codes = described_class.ordered.map(&:code)

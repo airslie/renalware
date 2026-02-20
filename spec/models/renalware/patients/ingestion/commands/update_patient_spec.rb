@@ -16,15 +16,15 @@ module Renalware::Patients::Ingestion
       create(
         :patient,
         local_patient_id: "A123",
-        born_on: born_on,
-        nhs_number: nhs_number,
+        born_on:,
+        nhs_number:,
         died_on: nil,
         first_cause: nil
       ).tap do |patient|
         set_modality(
-          patient: patient,
+          patient:,
           modality_description: create(:modality_description, :death),
-          by: by
+          by:
         )
       end
     end

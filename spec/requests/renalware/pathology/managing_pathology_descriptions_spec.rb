@@ -35,7 +35,7 @@ module Renalware::Pathology
           }
         }
 
-        patch pathology_observation_description_path(obx), params: params
+        patch(pathology_observation_description_path(obx), params:)
 
         expect(response).to be_redirect
         expect(obx.reload).to have_attributes(params[:pathology_observation_description])
@@ -52,7 +52,7 @@ module Renalware::Pathology
           }
         }
 
-        patch pathology_observation_description_path(obx), params: params
+        patch(pathology_observation_description_path(obx), params:)
 
         expect(response).to render_template("edit")
       end

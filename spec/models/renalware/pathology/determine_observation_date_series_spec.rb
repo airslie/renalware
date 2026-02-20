@@ -32,8 +32,8 @@ module Renalware
 
       def create_observations_observed_at(patient, *observation_dates)
         observation_dates.each do |observed_on|
-          request = create(:pathology_observation_request, patient: patient)
-          create(:pathology_observation, request: request, observed_at: observed_on)
+          request = create(:pathology_observation_request, patient:)
+          create(:pathology_observation, request:, observed_at: observed_on)
         end
       end
     end

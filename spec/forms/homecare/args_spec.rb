@@ -6,7 +6,7 @@ RSpec.describe Forms::Homecare::Args do
       hash = default_test_arg_values.update(
         given_name: "John",
         family_name: "SMITH",
-        title: title
+        title:
       )
       described_class.new(hash).patient_name
     }

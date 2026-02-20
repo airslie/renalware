@@ -24,7 +24,7 @@ module Renalware
 
       context "when the patient has one simple modality" do
         it "generates one Treatment with the relevant UKRDC modality code" do
-          set_modality(patient: patient, modality_description: hd_mod_desc, by: user)
+          set_modality(patient:, modality_description: hd_mod_desc, by: user)
           hd_ukrdc_modality_code
 
           service.call
@@ -33,7 +33,7 @@ module Renalware
           expect(UKRDC::Treatment.first).to have_attributes(
             modality_code: hd_ukrdc_modality_code,
             clinician: user,
-            patient: patient,
+            patient:,
             started_on: patient.current_modality.started_on,
             ended_on: nil
           )
@@ -47,7 +47,7 @@ module Renalware
         end
 
         it "generates 2 Treatments with the relevant UKRDC modality code" do
-          options = { patient: patient, modality_description: hd_mod_desc, by: user }
+          options = { patient:, modality_description: hd_mod_desc, by: user }
           modality1 = set_modality(**options, started_on: 1.month.ago)
           modality2 = set_modality(**options, started_on: 1.day.ago)
           modality1.reload # gets the change to ended_on caused by adding a successor
@@ -80,11 +80,11 @@ module Renalware
         end
 
         it "generates 1 Treatment and assigns it the appropriate DischargeReason" do
-          options = { patient: patient, modality_description: hd_mod_desc, by: user }
+          options = { patient:, modality_description: hd_mod_desc, by: user }
           set_modality(**options, started_on: 1.year.ago)
           hd_modality2 = set_modality(**options, started_on: 1.month.ago)
           transfer_out_mod = set_modality(
-            patient: patient,
+            patient:,
             modality_description: transfer_out_mod_desc,
             started_on: 1.week.ago
           )
@@ -132,7 +132,7 @@ module Renalware
           before do
             initial_profile
             set_modality(
-              patient: patient,
+              patient:,
               modality_description: hd_mod_desc,
               by: user,
               started_on: 4.weeks.ago

@@ -5,8 +5,8 @@ RSpec.describe "Copy HD session to clipboard", :js do
   let!(:hd_session) do
     create(
       :hd_closed_session,
-      patient: patient,
-      hospital_unit: hospital_unit,
+      patient:,
+      hospital_unit:,
       by: nurse
     )
   end

@@ -14,13 +14,13 @@ module Renalware
           topic = build(:letter_topic, snomed_document_type: build(:snomed_document_type))
           letter = instance_double(
             Letter,
-            patient: patient,
+            patient:,
             event: visit,
-            author: author,
-            topic: topic
+            author:,
+            topic:
           )
           Arguments.new(
-            transmission: instance_double(Transports::Mesh::Transmission, letter: letter),
+            transmission: instance_double(Transports::Mesh::Transmission, letter:),
             transaction_uuid: "123"
           )
         end

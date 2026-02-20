@@ -12,12 +12,12 @@ describe "Create an HD prescription" do
       treatable_type: "Renalware::Patient",
       dose_amount: "10",
       medication_route_id: create(:medication_route).id,
-      prescribed_on: prescribed_on,
+      prescribed_on:,
       provider: "gp",
       unit_of_measure_id: create(:drug_unit_of_measure).id,
       frequency: :once_only,
-      administer_on_hd: administer_on_hd,
-      stat: stat
+      administer_on_hd:,
+      stat:
     }
   end
 

@@ -9,7 +9,7 @@ describe "PD MDM Patients" do
                        family_name: "Rabbit",
                        local_patient_id: "12345")
 
-      set_modality(patient: patient,
+      set_modality(patient:,
                    modality_description: create(:pd_modality_description),
                    by: user)
 

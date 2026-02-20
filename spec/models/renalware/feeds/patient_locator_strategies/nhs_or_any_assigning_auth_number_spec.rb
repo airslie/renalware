@@ -54,11 +54,11 @@ module Renalware::Feeds
           born_on = locator_args.delete(:born_on)
           patient_identification = instance_double(
             Renalware::Feeds::PatientIdentification,
-            born_on: born_on,
+            born_on:,
             identifiers: locator_args
           )
 
-          result = described_class.call(patient_identification: patient_identification)
+          result = described_class.call(patient_identification:)
 
           if hash[:found]
             expect(result).to eq(patient)

@@ -1,6 +1,6 @@
 module Renalware::Letters
   describe Part::Problems do
-    let(:instance) { described_class.new(letter: Letter.new(patient: patient)) }
+    let(:instance) { described_class.new(letter: Letter.new(patient:)) }
     let(:patient) { Renalware::Letters::Patient.new }
 
     it "delegates to the patient's current problems" do

@@ -2,7 +2,7 @@ module Renalware::Drugs
   describe DrugColourPresenter do
     describe "#css_class" do
       let(:instance) { described_class.new }
-      let(:drug) { create(:drug, drug_types: drug_types, code: code) }
+      let(:drug) { create(:drug, drug_types:, code:) }
       let(:drug_types) { [] }
       let(:code) { "dmd code" }
 

@@ -6,7 +6,7 @@ module Renalware
     let(:user) { create(:user, :minimal) }
 
     it "broadcasts a letter_approved event when the letter is approved successfully" do
-      letter = create_letter(state: :approved, to: :patient, patient: patient)
+      letter = create_letter(state: :approved, to: :patient, patient:)
       completed_letter = letter.becomes(Letters::Letter::Completed)
 
       expect {
@@ -15,7 +15,7 @@ module Renalware
     end
 
     it "updates when and by who the letter was approved" do
-      letter = create_letter(state: :approved, to: :patient, patient: patient)
+      letter = create_letter(state: :approved, to: :patient, patient:)
       completed_letter = letter.becomes(Letters::Letter::Completed)
 
       time = Time.zone.now

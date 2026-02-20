@@ -8,10 +8,10 @@ module PatientsSpecHelper
     create(:modality_change_type, :default)
     # ChangePatientModality returns a Success or Failure object
     new_modality = Renalware::Modalities::ChangePatientModality
-      .new(patient: patient, user: by)
+      .new(patient:, user: by)
       .call(
         description: modality_description,
-        started_on: started_on
+        started_on:
       )
 
     patient.reload # need to do this in order for current_modality to be set

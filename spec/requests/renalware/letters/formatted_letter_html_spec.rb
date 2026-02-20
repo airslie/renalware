@@ -2,15 +2,15 @@ describe "Get formatted letter HTML content" do
   include LettersSpecHelper
 
   let(:primary_care_physician) { create(:letter_primary_care_physician) }
-  let(:patient) { create(:letter_patient, primary_care_physician: primary_care_physician) }
-  let(:letter) { create_letter(to: :patient, patient: patient) }
+  let(:patient) { create(:letter_patient, primary_care_physician:) }
+  let(:letter) { create_letter(to: :patient, patient:) }
 
   context "with a draft letter" do
     describe "GET show" do
       let(:patient) {
         create(
           :letter_patient,
-          primary_care_physician: primary_care_physician,
+          primary_care_physician:,
           family_name: "RABBIT",
           local_patient_id: "57837"
         )
@@ -61,7 +61,7 @@ describe "Get formatted letter HTML content" do
 
   context "with an archived letter" do
     before do
-      create(:letter_archive, letter: letter, by: letter.created_by)
+      create(:letter_archive, letter:, by: letter.created_by)
     end
 
     describe "GET show" do
@@ -77,7 +77,7 @@ describe "Get formatted letter HTML content" do
     let(:patient) {
       create(
         :letter_patient,
-        primary_care_physician: primary_care_physician,
+        primary_care_physician:,
         practice: create(:practice, email: "test@example.com"),
         family_name: "RABBIT",
         local_patient_id: "7837"

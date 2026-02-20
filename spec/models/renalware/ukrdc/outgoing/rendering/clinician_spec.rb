@@ -14,7 +14,7 @@ module Renalware
             </Clinician>
           XML
 
-          xml = format_xml(described_class.new(user: user).xml)
+          xml = format_xml(described_class.new(user:).xml)
 
           expect(xml).to eq(expected_xml)
         end

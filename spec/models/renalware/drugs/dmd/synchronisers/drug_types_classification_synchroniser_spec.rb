@@ -39,9 +39,7 @@ module Renalware
 
           context "when classification row exists" do
             it "updates it" do
-              Drugs::DrugTypeClassification.create! \
-                drug: drug,
-                drug_type: drug_type
+              Drugs::DrugTypeClassification.create!(drug:, drug_type:)
 
               instance.call
 

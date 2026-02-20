@@ -12,12 +12,12 @@ module Renalware
           prac.build_address(attributes_for(:address, organisation_name: address_organisation_name))
         end
       end
-      let(:patient) { build(:letter_patient, practice: practice) }
+      let(:patient) { build(:letter_patient, practice:) }
       let(:recipient) { letter.main_recipient }
 
       describe "#address" do
         context "when the recipient's role is patient" do
-          let(:letter) { build_letter(to: :patient, patient: patient) }
+          let(:letter) { build_letter(to: :patient, patient:) }
 
           it "returns the address of the patient" do
             expect(presenter.address).to eq(letter.patient.current_address)
@@ -25,7 +25,7 @@ module Renalware
         end
 
         context "when the recipient's role is Primary Care Physician" do
-          let(:letter) { build_letter(to: :primary_care_physician, patient: patient) }
+          let(:letter) { build_letter(to: :primary_care_physician, patient:) }
 
           it "returns the address of the Practice" do
             expect(presenter.address).to eq(letter.patient.practice.address)
@@ -51,7 +51,7 @@ module Renalware
         end
 
         context "when the recipient's role is contact" do
-          let(:letter) { build_letter(to: :contact, patient: patient) }
+          let(:letter) { build_letter(to: :contact, patient:) }
 
           it "returns the recipient's address" do
             expect(presenter.address).to eq(recipient.current_address)

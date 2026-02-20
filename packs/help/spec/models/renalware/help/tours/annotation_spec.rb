@@ -6,7 +6,7 @@ module Renalware
     end
 
     describe "uniqueness" do
-      subject { described_class.new(attached_to_selector: "foo", page: page, text: "ABC") }
+      subject { described_class.new(attached_to_selector: "foo", page:, text: "ABC") }
 
       let(:page) { Help::Tours::Page.create!(route: "/") }
 

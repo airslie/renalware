@@ -1,6 +1,6 @@
 module Renalware::Prescriptions
   describe SummaryComponent do
-    subject(:component) { described_class.new(patient: patient) }
+    subject(:component) { described_class.new(patient:) }
 
     let(:user) { create(:user) }
     let(:patient) { create(:letter_patient, by: user) }
@@ -8,10 +8,10 @@ module Renalware::Prescriptions
 
     def terminated_prescription(terminated_on:, drug: default_drug)
       create(:prescription,
-             patient: patient,
-             drug: drug,
+             patient:,
+             drug:,
              prescribed_on: "2009-01-01",
-             termination: build(:prescription_termination, terminated_on: terminated_on),
+             termination: build(:prescription_termination, terminated_on:),
              by: user)
     end
 
@@ -21,12 +21,12 @@ module Renalware::Prescriptions
       administer_on_hd: false
     )
       create(:prescription,
-             patient: patient,
-             drug: drug,
-             prescribed_on: prescribed_on,
+             patient:,
+             drug:,
+             prescribed_on:,
              updated_at: prescribed_on,
              created_at: prescribed_on,
-             administer_on_hd: administer_on_hd,
+             administer_on_hd:,
              by: user)
     end
 

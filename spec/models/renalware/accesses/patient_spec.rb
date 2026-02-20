@@ -10,8 +10,8 @@ module Renalware::Accesses
     describe "current_plan" do
       it "returns the current plan" do
         patient = create(:accesses_patient)
-        current_plan = create(:access_plan, patient: patient)
-        create(:access_plan, patient: patient, terminated_at: Time.zone.now)
+        current_plan = create(:access_plan, patient:)
+        create(:access_plan, patient:, terminated_at: Time.zone.now)
 
         expect(patient.current_plan).to eq(current_plan)
       end

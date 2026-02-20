@@ -5,10 +5,10 @@ module Renalware::Medications::Delivery
     def create_home_del_prescription(patient, drug, next_delivery_date)
       create(
         :prescription,
-        patient: patient,
-        drug: drug,
+        patient:,
+        drug:,
         provider: :home_delivery,
-        next_delivery_date: next_delivery_date
+        next_delivery_date:
       )
     end
 
@@ -70,7 +70,7 @@ module Renalware::Medications::Delivery
           prescription = create_home_del_prescription(patient, drug, 2.weeks.from_now)
           create(
             :prescription_termination,
-            prescription: prescription,
+            prescription:,
             terminated_on: 1.day.ago
           )
 

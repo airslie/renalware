@@ -45,7 +45,7 @@ describe "Clinic Visits Management" do
 
   describe "GET edit" do
     before do
-      clinic_visit = create(:clinic_visit, patient: patient, by: user)
+      clinic_visit = create(:clinic_visit, patient:, by: user)
       get edit_patient_clinic_visit_path(patient_id: patient.to_param, id: clinic_visit.to_param)
     end
 
@@ -56,7 +56,7 @@ describe "Clinic Visits Management" do
 
   describe "PUT update" do
     before do
-      clinic_visit = create(:clinic_visit, patient: patient, by: user)
+      clinic_visit = create(:clinic_visit, patient:, by: user)
       put patient_clinic_visit_path(patient_id: patient.to_param, id: clinic_visit.to_param),
           params: {
             clinic_visit: {
@@ -79,7 +79,7 @@ describe "Clinic Visits Management" do
 
   describe "DELETE destroy" do
     it "deletes a clinic_visit" do
-      clinic_visit = create(:clinic_visit, patient: patient, by: user)
+      clinic_visit = create(:clinic_visit, patient:, by: user)
       expect {
         delete patient_clinic_visit_path(patient_id: patient.to_param, id: clinic_visit.to_param)
       }.to change(patient.clinic_visits, :count).by(-1)

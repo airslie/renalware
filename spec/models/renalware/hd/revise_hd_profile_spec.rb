@@ -3,7 +3,7 @@ module Renalware::HD
     let(:patient) { create(:hd_patient) }
 
     let(:original_profile) do
-      create(:hd_profile, patient: patient, other_schedule: nil, by: user)
+      create(:hd_profile, patient:, other_schedule: nil, by: user)
     end
 
     describe "#call" do
@@ -22,7 +22,7 @@ module Renalware::HD
 
         let(:new_params) do
           {
-            other_schedule: other_schedule,
+            other_schedule:,
             scheduled_time: "12:30",
             by: another_user
           }

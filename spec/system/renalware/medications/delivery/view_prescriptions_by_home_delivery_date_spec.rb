@@ -17,16 +17,16 @@ describe "View a list of home delivery prescriptions filtered by delivery dates"
   )
     create(
       :prescription,
-      drug: drug,
+      drug:,
       by: user,
       dose_amount: "100",
       dose_unit: "milligram",
-      patient: patient,
+      patient:,
       medication_route: create(:medication_route, :po),
       prescribed_on: "2020-01-01",
       provider: :home_delivery,
-      last_delivery_date: last_delivery_date,
-      next_delivery_date: next_delivery_date
+      last_delivery_date:,
+      next_delivery_date:
     )
   end
 

@@ -57,16 +57,16 @@ module Pages
       end
 
       def t_allergies(key, scope: "renalware.clinical.allergies.list", required: false)
-        translation = I18n.t(key, scope: scope)
+        translation = I18n.t(key, scope:)
         required ? "* #{translation}" : translation
       end
 
       def modal_t(key, required: false)
-        t_allergies(key, scope: "renalware.clinical.allergies.new", required: required)
+        t_allergies(key, scope: "renalware.clinical.allergies.new", required:)
       end
 
       def t_allergy_status(key, required: false)
-        t_allergies(key, scope: "renalware.clinical.allergy_statuses.form", required: required)
+        t_allergies(key, scope: "renalware.clinical.allergy_statuses.form", required:)
       end
     end
   end

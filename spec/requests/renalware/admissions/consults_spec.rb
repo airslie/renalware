@@ -4,7 +4,7 @@ module Renalware
     let(:time) { Time.zone.now }
     let(:consult_site) { create(:admissions_consult_site, name: "Site1") }
     let(:hospital_unit) { create(:hospital_unit, unit_code: "HospUnit1") }
-    let(:hospital_ward) { create(:hospital_ward, name: "Ward1", hospital_unit: hospital_unit) }
+    let(:hospital_ward) { create(:hospital_ward, name: "Ward1", hospital_unit:) }
     let(:specialty) { create(:admissions_specialty, name: "Other") }
 
     def convert_hash_dates_to_string_using_locale(hash)
@@ -16,8 +16,8 @@ module Renalware
              by: user,
              patient: create(:patient, :minimal, by: user),
              started_on: Time.zone.today,
-             consult_site: consult_site,
-             hospital_ward: hospital_ward,
+             consult_site:,
+             hospital_ward:,
              priority: 13,
              consult_type: "TBC",
              e_alert: false,
@@ -65,7 +65,7 @@ module Renalware
       context "with valid inputs" do
         it "creates the consult" do
           patient = create(:patient, :minimal, by: user)
-          create(:hospital_ward, name: "Ward1", hospital_unit: hospital_unit)
+          create(:hospital_ward, name: "Ward1", hospital_unit:)
           date = l(Time.zone.today)
 
           params = {

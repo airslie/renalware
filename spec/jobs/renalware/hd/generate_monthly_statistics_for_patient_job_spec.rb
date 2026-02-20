@@ -14,7 +14,7 @@ module Renalware
           expect_any_instance_of(GenerateMonthlyStatisticsForPatient)
             .to receive(:call).exactly(:once)
 
-          job.perform(patient: patient, month: month, year: year)
+          job.perform(patient:, month:, year:)
         end
       end
     end

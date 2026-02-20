@@ -2,7 +2,7 @@ describe Renalware::Pathology::Requests::PatientRule do
   subject(:patient_rule) do
     create(
       :pathology_requests_patient_rule,
-      patient: patient,
+      patient:,
       start_date: Date.parse("2016-04-19"),
       end_date: Date.parse("2016-04-21"),
       frequency_type: "Always"
@@ -43,7 +43,7 @@ describe Renalware::Pathology::Requests::PatientRule do
 
       context "when the patient was previously observed" do
         it "returns true" do
-          create_request(patient: patient, observed_on: "2016-04-19")
+          create_request(patient:, observed_on: "2016-04-19")
 
           expect(patient_rule).to be_required(date)
         end
@@ -52,7 +52,7 @@ describe Renalware::Pathology::Requests::PatientRule do
           create(
             :pathology_requests_request,
             clinic: create(:clinic),
-            patient: patient,
+            patient:,
             consultant: create(:consultant),
             created_at: observed_on
           )

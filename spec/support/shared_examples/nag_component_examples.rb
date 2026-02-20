@@ -3,7 +3,7 @@
 shared_examples_for "a nag" do
   describe "#cache_key" do
     it "changes when patient or definition is touched" do
-      component = described_class.new(definition: definition, patient: patient)
+      component = described_class.new(definition:, patient:)
 
       expect(component.cache_key).not_to be_nil
 
@@ -20,7 +20,7 @@ shared_examples_for "a nag" do
 
       allow(nag).to receive(:value).and_return("original-value")
 
-      component = described_class.new(definition: definition, patient: patient)
+      component = described_class.new(definition:, patient:)
 
       render_inline(component)
 
@@ -49,7 +49,7 @@ shared_examples_for "a nag" do
       allow(definition)
         .to receive(:execute_sql_function_for).with(patient)
         .and_return(nag)
-      component = described_class.new(definition: definition, patient: patient)
+      component = described_class.new(definition:, patient:)
 
       render_inline(component)
 
@@ -62,7 +62,7 @@ shared_examples_for "a nag" do
       nag = create_nag(severity: :high)
       allow(definition).to receive(:execute_sql_function_for).with(patient).and_return(nag)
       allow(definition).to receive(:enabled).and_return(false)
-      component = described_class.new(definition: definition, patient: patient)
+      component = described_class.new(definition:, patient:)
 
       expect(component.render?).to be(false)
     end
@@ -70,7 +70,7 @@ shared_examples_for "a nag" do
     context "when there was an error rendering the sql function" do
       it "returns true but will render as hidden" do
         # Passing a nil patient will cause an error formatting the SQL function call
-        component = described_class.new(definition: definition, patient: nil)
+        component = described_class.new(definition:, patient: nil)
 
         expect(component.sql_error).not_to be_nil
       end
@@ -92,7 +92,7 @@ shared_examples_for "a nag" do
       it "#{msg} when nag#attributes = #{opts.except(:render)}" do
         nag = create_nag(**opts.except(:render, :contains))
         allow(definition).to receive(:execute_sql_function_for).with(patient).and_return(nag)
-        component = described_class.new(definition: definition, patient: patient)
+        component = described_class.new(definition:, patient:)
 
         expect(component.render?).to eq(opts[:render])
 

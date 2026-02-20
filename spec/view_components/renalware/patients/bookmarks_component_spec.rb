@@ -3,7 +3,7 @@ describe Renalware::Patients::BookmarksComponent, type: :component do
     it "displays the user's bookmarks" do
       user = create(:patients_user)
       patient = create(:patient, by: user)
-      create(:patients_bookmark, user: user, patient: patient)
+      create(:patients_bookmark, user:, patient:)
 
       render_inline(described_class.new(current_user: user))
 

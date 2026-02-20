@@ -6,7 +6,7 @@ module Renalware::Medications
       subject(:query) { described_class.new(relation: patient.prescriptions) }
 
       let!(:current_prescription) do
-        create(:prescription, notes: ":current:", patient: patient, treatable: patient)
+        create(:prescription, notes: ":current:", patient:, treatable: patient)
       end
 
       it "returns prescriptions for a treatable target" do
@@ -30,7 +30,7 @@ module Renalware::Medications
         create(
           :prescription,
           notes: ":target:",
-          patient: patient,
+          patient:,
           treatable: patient,
           drug: target_drug
         )
@@ -42,7 +42,7 @@ module Renalware::Medications
         create(
           :prescription,
           notes: ":other:",
-          patient: patient,
+          patient:,
           treatable: patient,
           drug: other_drug
         )

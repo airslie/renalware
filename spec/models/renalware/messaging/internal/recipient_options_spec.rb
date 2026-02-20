@@ -22,7 +22,7 @@ module Renalware::Messaging::Internal
         recipient_ids: [to.id],
         urgent: false
       )
-      SendMessage.call(patient: patient, author: author, form: form)
+      SendMessage.call(patient:, author:, form:)
     end
 
     def unapprove_user(user)

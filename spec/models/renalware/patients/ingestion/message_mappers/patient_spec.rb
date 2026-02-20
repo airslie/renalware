@@ -65,11 +65,11 @@ module Renalware
             marital_status: "married",
             born_on: Time.zone.parse(message.patient_identification.born_on).to_date,
             died_on: Time.zone.parse(message.patient_identification.died_at).to_date,
-            primary_care_physician: primary_care_physician,
-            practice: practice,
-            religion: religion,
-            language: language,
-            ethnicity: ethnicity,
+            primary_care_physician:,
+            practice:,
+            religion:,
+            language:,
+            ethnicity:,
             country_of_birth: british_nationality,
             next_of_kin: message.next_of_kins
           )

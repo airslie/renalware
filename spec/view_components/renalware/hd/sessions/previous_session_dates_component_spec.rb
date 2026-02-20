@@ -1,6 +1,6 @@
 describe Renalware::HD::Sessions::PreviousSessionDatesComponent, type: :component do
   let(:patient) { create(:hd_patient) }
-  let(:instance) { described_class.new(patient: patient) }
+  let(:instance) { described_class.new(patient:) }
 
   describe "#previous_sessions" do
     let(:second_patient) { create(:hd_patient) }
@@ -8,8 +8,8 @@ describe Renalware::HD::Sessions::PreviousSessionDatesComponent, type: :componen
     context "when sessions exist" do
       it "returns last sessions in started at order" do
         _another_session = create(:hd_session, patient: second_patient, started_at: 1.day.ago)
-        older_session = create(:hd_session, patient: patient, started_at: 2.weeks.ago)
-        newer_session = create(:hd_session, patient: patient, started_at: 1.week.ago)
+        older_session = create(:hd_session, patient:, started_at: 2.weeks.ago)
+        newer_session = create(:hd_session, patient:, started_at: 1.week.ago)
 
         expect(instance.previous_sessions).to eq(
           [
@@ -32,7 +32,7 @@ describe Renalware::HD::Sessions::PreviousSessionDatesComponent, type: :componen
       let(:start_date) { 1.week.ago - 6.days }
 
       it "renders a list of previous sessions" do
-        session = create(:hd_session, patient: patient, started_at: start_date)
+        session = create(:hd_session, patient:, started_at: start_date)
 
         render_inline(instance)
 

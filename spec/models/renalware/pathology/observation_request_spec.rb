@@ -15,19 +15,19 @@ module Renalware
         patient = create(:pathology_patient)
         requested_at = "2019-01-01"
         updated_request = create_request_with_observations(
-          requested_at: requested_at,
+          requested_at:,
           requestor_order_number: "X1",
           obr_code: "OBR1",
           obx_codes: %w(OBX1 OBX2),
-          patient: patient,
+          patient:,
           created_at: 1.day.ago
         )
         _original_request = create_request_with_observations(
-          requested_at: requested_at,
+          requested_at:,
           requestor_order_number: "X1",
           obr_code: "OBR1",
           obx_codes: ["OBX1"],
-          patient: patient,
+          patient:,
           created_at: 2.days.ago
         )
 

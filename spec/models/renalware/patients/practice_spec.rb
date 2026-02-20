@@ -15,13 +15,13 @@ module Renalware::Patients
         other_physician1 = create(:primary_care_physician, name: "BBB")
         create(
           :practice_membership,
-          practice: practice,
+          practice:,
           primary_care_physician: other_physician1
           # default_gp defaults to false by default
         )
         create(
           :practice_membership,
-          practice: practice,
+          practice:,
           primary_care_physician: default_physician, # will be default de to name
           default_gp: true
         )

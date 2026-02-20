@@ -1,8 +1,8 @@
 module Renalware
   describe "AKI Alert printing" do
     let(:hospital_unit) { create(:hospital_unit, unit_code: "HospUnit1") }
-    let(:hospital_ward1) { create(:hospital_ward, name: "Ward1", hospital_unit: hospital_unit) }
-    let(:hospital_ward2) { create(:hospital_ward, name: "Ward2", hospital_unit: hospital_unit) }
+    let(:hospital_ward1) { create(:hospital_ward, name: "Ward1", hospital_unit:) }
+    let(:hospital_ward2) { create(:hospital_ward, name: "Ward2", hospital_unit:) }
     let(:aki_action) { create(:aki_alert_action) }
     let(:user) { create(:user, :clinical, hospital_centre_id: nil) }
 

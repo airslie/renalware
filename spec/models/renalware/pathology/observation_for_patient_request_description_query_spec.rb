@@ -8,11 +8,11 @@ describe Renalware::Pathology::ObservationForPatientRequestDescriptionQuery do
         :pathology_request_description,
         required_observation_description: description
       )
-      create_observation(patient: patient_b, description: description, observed_at: 2.weeks.ago)
-      create_observation(patient: patient_a, description: description, observed_at: 2.weeks.ago)
+      create_observation(patient: patient_b, description:, observed_at: 2.weeks.ago)
+      create_observation(patient: patient_a, description:, observed_at: 2.weeks.ago)
       create_observation(
         patient: patient_a,
-        description: description,
+        description:,
         observed_at: 1.week.ago,
         result: 999.9
       )
@@ -28,12 +28,12 @@ describe Renalware::Pathology::ObservationForPatientRequestDescriptionQuery do
 end
 
 def create_observation(patient:, description:, observed_at:, result: 1.0)
-  request = create(:pathology_observation_request, patient: patient)
+  request = create(:pathology_observation_request, patient:)
   create(
     :pathology_observation,
-    request: request,
-    description: description,
-    observed_at: observed_at,
-    result: result
+    request:,
+    description:,
+    observed_at:,
+    result:
   )
 end

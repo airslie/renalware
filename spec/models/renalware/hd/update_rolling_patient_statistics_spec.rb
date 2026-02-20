@@ -1,19 +1,20 @@
 module Renalware::HD
   describe UpdateRollingPatientStatistics do
-    subject(:command) { described_class.new(patient: patient) }
+    subject(:command) { described_class.new(patient:) }
 
-    let(:patient) { create(:hd_patient, by: user) }
+    let(:patient) { create(:hd_patient, by:) }
     let(:user) { create(:user) }
+    let(:by) { user }
     let(:hospital_unit) { create(:hospital_unit) }
     let(:hospital_unit2) { create(:hospital_unit) }
 
     it "creates a new rolling PatientStatistics row if one did not exist" do
       expect(PatientStatistics.count).to eq(0)
 
-      create(:hd_open_session, patient: patient, by: user, hospital_unit: hospital_unit)
-      create(:hd_closed_session, patient: patient, by: user, hospital_unit: hospital_unit)
-      create(:hd_closed_session, patient: patient, by: user, hospital_unit: hospital_unit)
-      create(:hd_dna_session, patient: patient, by: user, hospital_unit: hospital_unit)
+      create(:hd_open_session, patient:, by:, hospital_unit:)
+      create(:hd_closed_session, patient:, by:, hospital_unit:)
+      create(:hd_closed_session, patient:, by:, hospital_unit:)
+      create(:hd_dna_session, patient:, by:, hospital_unit:)
 
       command.call
 
@@ -31,10 +32,10 @@ module Renalware::HD
       it "assigns that to the stats record" do
         expect(PatientStatistics.count).to eq(0)
 
-        create(:hd_profile, patient: patient, hospital_unit: hospital_unit2, by: user)
+        create(:hd_profile, patient:, hospital_unit: hospital_unit2, by:)
 
         # Lets assume some migrated sessions have no hospital unit set
-        create(:hd_closed_session, patient: patient, by: user, hospital_unit: hospital_unit)
+        create(:hd_closed_session, patient:, by:, hospital_unit:)
 
         command.call
 
@@ -47,10 +48,10 @@ module Renalware::HD
       it "assigns that to the stats record" do
         expect(PatientStatistics.count).to eq(0)
 
-        create(:hd_profile, patient: patient, hospital_unit: nil, by: user)
+        create(:hd_profile, patient:, hospital_unit: nil, by:)
 
         # Lets assume some migrated sessions have no hospital unit set
-        create(:hd_closed_session, patient: patient, by: user, hospital_unit: hospital_unit2)
+        create(:hd_closed_session, patient:, by:, hospital_unit: hospital_unit2)
 
         command.call
 
@@ -63,10 +64,10 @@ module Renalware::HD
       it "don't save the stats" do
         expect(PatientStatistics.count).to eq(0)
 
-        create(:hd_profile, patient: patient, hospital_unit: nil, by: user)
+        create(:hd_profile, patient:, hospital_unit: nil, by:)
 
         # Lets assume some migrated sessions have no hospital unit set
-        build(:hd_closed_session, patient: patient, by: user, hospital_unit: nil)
+        build(:hd_closed_session, patient:, by:, hospital_unit: nil)
           .save(validate: false)
 
         command.call

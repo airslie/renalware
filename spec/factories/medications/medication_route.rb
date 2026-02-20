@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :medication_route, class: "Renalware::Medications::MedicationRoute" do
     initialize_with do
       Renalware::Medications::MedicationRoute
-        .find_or_create_by!(code: code, name: name) do |route|
+        .find_or_create_by!(code:, name:) do |route|
           route.rr_code = Renalware::Medications::MedicationRoute.rr22_code_for("Other")
         end
     end

@@ -18,7 +18,7 @@ module Renalware::HD::Scheduling
       context "when there is no arrival_time" do
         it "returns just the patient name" do
           patient = build(:hd_patient, family_name: "Cobb", given_name: "Jo")
-          slot = described_class.new(patient: patient)
+          slot = described_class.new(patient:)
 
           expect(slot.to_s).to eq("COBB, Jo")
         end
@@ -27,7 +27,7 @@ module Renalware::HD::Scheduling
       context "when there is an arrival_time" do
         it "returns just the patient name and arrival time" do
           patient = build(:hd_patient, family_name: "Cobb", given_name: "Jo")
-          slot = described_class.new(patient: patient, arrival_time: Time.zone.parse("11:21"))
+          slot = described_class.new(patient:, arrival_time: Time.zone.parse("11:21"))
 
           expect(slot.to_s).to eq("COBB, Jo (11:21)")
         end

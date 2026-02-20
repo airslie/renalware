@@ -7,7 +7,7 @@ module Renalware
 
       describe "policy methods" do
         context "when the patient has the LowClearance modality" do
-          subject { described_class.new(patient: patient) }
+          subject { described_class.new(patient:) }
 
           let(:patient) do
             build(:low_clearance_patient).tap do |pat|

@@ -9,10 +9,10 @@ module Renalware
         let(:hospital_unit) { create(:hospital_unit) }
         let(:options) do
           {
-            patient: patient,
+            patient:,
             by: user,
             signed_on_by: user,
-            hospital_unit: hospital_unit,
+            hospital_unit:,
             started_at: 1.week.ago
           }
         end
@@ -22,7 +22,7 @@ module Renalware
           create(:hd_dna_session, **options)    # will be included
           create(:hd_open_session, **options)   # will be excluded
 
-          sessions = query.new(patient: patient).call
+          sessions = query.new(patient:).call
 
           expect(sessions.count).to eq(2)
           types = sessions.map(&:type).uniq.sort
@@ -33,7 +33,7 @@ module Renalware
           expected_session = create(:hd_closed_session, **options, started_at: 3.weeks.ago)
           create(:hd_closed_session, **options, started_at: 5.weeks.ago) # unexpected
 
-          sessions = query.new(patient: patient).call
+          sessions = query.new(patient:).call
 
           expect(sessions.count).to eq(1)
           expect(sessions.first).to eq(expected_session)
@@ -41,7 +41,7 @@ module Renalware
 
         it "selects only the last 12 sessions" do
           create_list(:hd_closed_session, 13, **options, started_at: 3.weeks.ago)
-          sessions = query.new(patient: patient).call
+          sessions = query.new(patient:).call
           expect(sessions.count).to eq(12)
         end
       end

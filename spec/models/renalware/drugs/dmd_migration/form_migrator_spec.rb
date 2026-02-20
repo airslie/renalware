@@ -2,8 +2,8 @@ module Renalware::Drugs
   describe DMDMigration::FormMigrator do
     let(:form) { create(:drug_form, name: "Capsule") }
     let(:drug) { create(:drug) }
-    let(:prescription) { create(:prescription, drug: drug) }
-    let(:match) { DMDMatch.create!(drug: drug, form_name: "Capsule") }
+    let(:prescription) { create(:prescription, drug:) }
+    let(:match) { DMDMatch.create!(drug:, form_name: "Capsule") }
 
     before do
       form && prescription && match

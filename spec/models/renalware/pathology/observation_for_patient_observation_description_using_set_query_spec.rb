@@ -6,12 +6,12 @@ describe Renalware::Pathology::ObservationForPatientObservationDescriptionUsingS
       description = build(:pathology_observation_description)
       most_recent_observation = create_observation(
         patient: patient_a,
-        description: description,
+        description:,
         observed_at: 1.week.ago
       )
       # d = Date
-      create_observation(patient: patient_a, description: description, observed_at: "2016-01-01")
-      create_observation(patient: patient_b, description: description, observed_at: "2016-01-01")
+      create_observation(patient: patient_a, description:, observed_at: "2016-01-01")
+      create_observation(patient: patient_b, description:, observed_at: "2016-01-01")
 
       res = described_class.new(patient_a, description.code).call
 
@@ -23,11 +23,11 @@ describe Renalware::Pathology::ObservationForPatientObservationDescriptionUsingS
 end
 
 def create_observation(patient:, description:, observed_at:)
-  request = create(:pathology_observation_request, patient: patient)
+  request = create(:pathology_observation_request, patient:)
   create(
     :pathology_observation,
-    request: request,
-    description: description,
-    observed_at: observed_at
+    request:,
+    description:,
+    observed_at:
   )
 end

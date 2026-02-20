@@ -19,8 +19,8 @@ describe "New Visit from existing Appointment" do
         clinic = create(:clinic) # consultant: user)
         patient = create(:clinics_patient, by: user)
         appointment = create(:appointment,
-                             patient: patient,
-                             clinic: clinic,
+                             patient:,
+                             clinic:,
                              starts_at: Time.zone.now)
 
         visit new_patient_clinic_visit_path(patient, appointment_id: appointment.id)

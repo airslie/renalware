@@ -17,7 +17,7 @@ module Renalware
 
       context "when the patient has an hd_profile but no hd site specified" do
         before do
-          profile = build_stubbed(:hd_profile, patient: patient, hospital_unit: nil)
+          profile = build_stubbed(:hd_profile, patient:, hospital_unit: nil)
           allow(patient).to receive(:hd_profile).and_return(profile)
         end
 
@@ -27,7 +27,7 @@ module Renalware
       context "when the patient has an hd_profile with a site specified" do
         before do
           hospital_unit = build_stubbed(:hospital_unit, unit_code: "XYZ")
-          profile = build_stubbed(:hd_profile, patient: patient, hospital_unit: hospital_unit)
+          profile = build_stubbed(:hd_profile, patient:, hospital_unit:)
           allow(patient).to receive(:hd_profile).and_return(profile)
           allow(HD).to receive(:cast_patient).and_return(patient)
         end

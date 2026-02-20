@@ -30,7 +30,7 @@ module Renalware
             patient: create(:letter_patient, :minimal)
           )
           batch = described_class.create!(by: user)
-          batch.items.create(letter: letter)
+          batch.items.create(letter:)
 
           batch.reload
           expect(batch.letters.count).to eq(1)

@@ -3,7 +3,7 @@ module Renalware
     describe GenerateMonthlyStatisticsForPatient do
       include PathologySpecHelper
 
-      subject(:command) { described_class.new(patient: patient, period: period) }
+      subject(:command) { described_class.new(patient:, period:) }
 
       let(:patient) { create(:hd_patient) }
       let(:period) { MonthPeriod.new(month: 12, year: 2016) }
@@ -21,7 +21,7 @@ module Renalware
       it "creates a PatientStatistics for the patient with hd sessions in the specified month " \
          "including a pathology snapshot with a subset of codes" do
         travel_to Date.new(2016, 12, 3) do
-          create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+          create(:hd_closed_session, patient:, hospital_unit:)
           create_observations(
             Renalware::Pathology.cast_patient(patient),
             [hgb, phos, pthi, cre, ure, urr],
@@ -51,7 +51,7 @@ module Renalware
         # We are going to work in Dec 2016
         # Lets add some data:
         travel_to Date.new(2016, 12, 3) do
-          create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+          create(:hd_closed_session, patient:, hospital_unit:)
           create_observations(
             Renalware::Pathology.cast_patient(patient),
             [hgb, phos, pthi, cre, ure, urr],
@@ -67,7 +67,7 @@ module Renalware
         # We'll pretend we had forgot to add a session on the last day of Dec so we want to
         # re-run it:
         travel_to Date.new(2016, 12, 31) do
-          create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+          create(:hd_closed_session, patient:, hospital_unit:)
         end
 
         # No new row should be created..
@@ -79,7 +79,7 @@ module Renalware
 
       it "stores a pathology snapshot on the stats row, containing a subset of codes" do
         travel_to Date.new(2016, 12, 3) do
-          create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+          create(:hd_closed_session, patient:, hospital_unit:)
           create_observations(
             Renalware::Pathology.cast_patient(patient),
             [hgb, phos, pthi, cre, ure, urr],
@@ -100,9 +100,9 @@ module Renalware
 
       context "when the patient has an HD profile with a hospital unit" do
         it "uses that hospital unit for the stats row" do
-          create(:hd_profile, patient: patient, hospital_unit: hospital_unit2)
+          create(:hd_profile, patient:, hospital_unit: hospital_unit2)
           travel_to Date.new(2016, 12, 3) do
-            create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+            create(:hd_closed_session, patient:, hospital_unit:)
           end
 
           expect { command.call }.to change(PatientStatistics, :count).by(1)
@@ -114,9 +114,9 @@ module Renalware
 
       context "when the patient has an HD profile with no hospital unit" do
         it "uses that hospital unit for the stats row" do
-          create(:hd_profile, patient: patient, hospital_unit: nil)
+          create(:hd_profile, patient:, hospital_unit: nil)
           travel_to Date.new(2016, 12, 3) do
-            create(:hd_closed_session, patient: patient, hospital_unit: hospital_unit)
+            create(:hd_closed_session, patient:, hospital_unit:)
           end
 
           expect { command.call }.to change(PatientStatistics, :count).by(1)

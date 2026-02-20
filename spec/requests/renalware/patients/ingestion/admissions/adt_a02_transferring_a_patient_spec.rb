@@ -65,13 +65,13 @@ describe "HL7 ADT^A02 message handling: 'Patient Transfer'" do
     expect(admission).to have_attributes(
       updated_by: system_user,
       created_by: system_user,
-      visit_number: visit_number,
-      consultant_code: consultant_code,
+      visit_number:,
+      consultant_code:,
       consultant: [consultant_initial, consultant_family_name].join(" "),
-      room: room,
-      bed: bed,
-      building: building,
-      floor: floor
+      room:,
+      bed:,
+      building:,
+      floor:
     )
     verify_ward_and_unit(admission)
   end
@@ -129,7 +129,7 @@ describe "HL7 ADT^A02 message handling: 'Patient Transfer'" do
         }.to change(Renalware::Admissions::Admission, :count).by(1)
 
         admission = Renalware::Admissions::Admission.last
-        expect(admission).to have_attributes(visit_number: visit_number)
+        expect(admission).to have_attributes(visit_number:)
       end
     end
 
@@ -140,8 +140,8 @@ describe "HL7 ADT^A02 message handling: 'Patient Transfer'" do
         ward = create(:hospital_ward, code: "old ward", hospital_unit: unit)
         admission = create(
           :admissions_admission,
-          patient: patient,
-          visit_number: visit_number,
+          patient:,
+          visit_number:,
           hospital_ward: ward,
           consultant: "Dr C",
           consultant_code: "123",
@@ -159,12 +159,12 @@ describe "HL7 ADT^A02 message handling: 'Patient Transfer'" do
         admission.reload
         expect(admission).to have_attributes(
           patient_id: patient.id,
-          bed: bed,
-          room: room,
-          building: building,
-          floor: floor,
-          visit_number: visit_number,
-          consultant_code: consultant_code,
+          bed:,
+          room:,
+          building:,
+          floor:,
+          visit_number:,
+          consultant_code:,
           consultant: [consultant_initial, consultant_family_name].join(" ")
         )
         expect(admission.hospital_ward.code).to eq("new ward")

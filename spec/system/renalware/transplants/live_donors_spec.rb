@@ -6,7 +6,7 @@ module Renalware
       live_donor = create(:patient, family_name: "Quark")
       set_modality(patient: live_donor,
                    modality_description: create(:live_donor_modality_description),
-                   by: by)
+                   by:)
       live_donor
     end
 

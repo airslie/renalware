@@ -18,8 +18,8 @@ module Renalware
         before do
           bookmark = build_stubbed(
             :patients_bookmark,
-            user: user,
-            patient: patient,
+            user:,
+            patient:,
             notes: "XYZ"
           )
           allow(user).to receive(:bookmark_for_patient).and_return(bookmark)
@@ -45,7 +45,7 @@ module Renalware
       context "when the patient is on the worryboard" do
         before do
           worry = Renalware::Patients::Worry.new(
-            patient: patient,
+            patient:,
             by: user,
             notes: "Abc"
           )

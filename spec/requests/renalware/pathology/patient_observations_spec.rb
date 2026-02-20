@@ -2,7 +2,7 @@ describe "Patient's Observations" do
   let(:patient) { create(:pathology_patient) }
 
   describe "GET index" do
-    let(:observation_request) { create(:pathology_observation_request, patient: patient) }
+    let(:observation_request) { create(:pathology_observation_request, patient:) }
     let(:observation_description) { create(:pathology_observation_description) }
 
     before do

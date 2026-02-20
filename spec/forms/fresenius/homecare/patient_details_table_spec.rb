@@ -8,8 +8,8 @@ RSpec.describe Forms::Fresenius::Homecare::PatientDetailsTable do
   let(:args) do
     Forms::Homecare::Args.new(
       **default_homecare_args,
-      no_known_allergies: no_known_allergies,
-      allergies: allergies,
+      no_known_allergies:,
+      allergies:,
       title: "Mr",
       given_name: "Jack",
       family_name: "JONES",

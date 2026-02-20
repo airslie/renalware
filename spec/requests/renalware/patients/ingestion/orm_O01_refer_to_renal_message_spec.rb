@@ -71,10 +71,10 @@ describe "HL7 ORM^O01 message handling: 'Refer to Renal'" do
     it "does nothing" do
       patient = build(
         :patient,
-        family_name: family_name,
+        family_name:,
         given_name: "mismatched",
-        nhs_number: nhs_number,
-        local_patient_id: local_patient_id,
+        nhs_number:,
+        local_patient_id:,
         born_on: Date.parse(dob)
       )
       patient.document.admin_notes = "pre-existing notes to preserve"
@@ -103,13 +103,13 @@ describe "HL7 ORM^O01 message handling: 'Refer to Renal'" do
 
   def verify_patient_properties(patient)
     expect(patient).to have_attributes(
-      family_name: family_name,
-      given_name: given_name,
-      title: title,
+      family_name:,
+      given_name:,
+      title:,
       born_on: Date.parse(dob),
-      nhs_number: nhs_number,
-      primary_care_physician: primary_care_physician,
-      practice: practice
+      nhs_number:,
+      primary_care_physician:,
+      practice:
     )
     expect(patient.sex.code).to eq(sex)
     expect(patient.document.admin_notes).to eq(expected_notes)

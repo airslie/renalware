@@ -12,8 +12,8 @@ describe "Managing clinical study investigatorships" do
   let(:investigatorship) do
     create(
       :research_investigatorship,
-      study: study,
-      user: user,
+      study:,
+      user:,
       by: user,
       started_on: "01-01-2018"
     )

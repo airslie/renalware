@@ -3,7 +3,7 @@ module Renalware
     describe APISynchronisers::AmpTradeFamilySynchroniser do
       describe "#call" do
         let(:instance) {
-          described_class.new(snomed_amps_repository: snomed_amps_repository)
+          described_class.new(snomed_amps_repository:)
         }
 
         let(:snomed_amps_repository) {

@@ -47,7 +47,7 @@ module Renalware
             patient = create(:hd_patient)
 
             travel_to Date.new(2017, 01, 31) do
-              create(:hd_closed_session, patient: patient, signed_off_at: 1.month.ago)
+              create(:hd_closed_session, patient:, signed_off_at: 1.month.ago)
 
               allow(GenerateMonthlyStatisticsForPatientJob).to receive(:perform_later)
 
@@ -56,7 +56,7 @@ module Renalware
               expect(GenerateMonthlyStatisticsForPatientJob).to have_received(:perform_later)
                 .exactly(:once)
                 .with(
-                  patient: patient,
+                  patient:,
                   month: 12,
                   year: 2016
                 )

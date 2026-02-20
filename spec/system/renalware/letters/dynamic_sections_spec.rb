@@ -13,7 +13,7 @@ module Renalware
     let(:letterhead) { create(:letter_letterhead, name: "Letterhead") }
     let(:hospital_unit) { create(:hospital_unit, name: "UNITA", unit_code: "U_CODE") }
     let(:hd_profile) {
-      create(:hd_profile, hospital_unit: hospital_unit,
+      create(:hd_profile, hospital_unit:,
                           patient: Renalware::HD.cast_patient(patient),
                           prescribed_time: 300)
     }

@@ -4,8 +4,8 @@ describe "View global letters list", js: false do
   describe "GET #show" do
     it "returns a list of letters" do
       primary_care_physician = create(:letter_primary_care_physician)
-      patient = create(:letter_patient, primary_care_physician: primary_care_physician)
-      create_letter(to: :patient, patient: patient)
+      patient = create(:letter_patient, primary_care_physician:)
+      create_letter(to: :patient, patient:)
 
       login_as_clinical
 

@@ -1,7 +1,7 @@
 module Renalware
   module PD
     describe RegimesInDateRangeQuery do
-      subject(:regimes) { described_class.new(patient: patient, from: from, to: to).call }
+      subject(:regimes) { described_class.new(patient:, from:, to:).call }
 
       let(:patient) { create(:pd_patient) }
       let(:from) { 1.year.ago }
@@ -11,9 +11,9 @@ module Renalware
         create(
           :apd_regime,
           add_hd: false,
-          patient: patient,
-          start_date: start_date,
-          end_date: end_date,
+          patient:,
+          start_date:,
+          end_date:,
           bags: [build(:pd_regime_bag, :everyday)]
         )
       end

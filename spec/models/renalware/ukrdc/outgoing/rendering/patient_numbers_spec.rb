@@ -16,7 +16,7 @@ module Renalware
             </PatientNumbers>
           XML
 
-          actual_xml = format_xml(described_class.new(patient: patient).xml)
+          actual_xml = format_xml(described_class.new(patient:).xml)
 
           expect(actual_xml).to eq(expected_xml)
         end
@@ -34,7 +34,7 @@ module Renalware
             </PatientNumbers>
           XML
 
-          actual_xml = format_xml(described_class.new(patient: patient).xml)
+          actual_xml = format_xml(described_class.new(patient:).xml)
 
           expect(actual_xml).to eq(expected_xml)
         end

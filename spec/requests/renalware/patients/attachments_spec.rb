@@ -25,11 +25,11 @@ describe "Managing files attached to a patient" do
               name: "name",
               description: "desc",
               document_date: "31-01-2019",
-              file: file
+              file:
             }
           }
 
-          post(patient_attachments_path(patient), params: params)
+          post(patient_attachments_path(patient), params:)
           expect(response).to be_redirect
           follow_redirect!
           expect(response).to be_successful
@@ -37,7 +37,7 @@ describe "Managing files attached to a patient" do
 
           attachment = Renalware::Patients::Attachment.find_by(patient_id: patient.id)
           expect(attachment).to have_attributes(
-            attachment_type: attachment_type,
+            attachment_type:,
             name: "name",
             description: "desc",
             document_date: Date.parse("31-01-2019")
@@ -55,7 +55,7 @@ describe "Managing files attached to a patient" do
             }
           }
 
-          post(patient_attachments_path(patient), params: params)
+          post(patient_attachments_path(patient), params:)
 
           expect(response).to be_successful
           expect(response).to render_template(:new)
@@ -76,11 +76,11 @@ describe "Managing files attached to a patient" do
               description: "desc",
               document_date: "31-01-2019",
               external_location: "external path",
-              file: file # should not be stored
+              file: # should not be stored
             }
           }
 
-          post(patient_attachments_path(patient), params: params)
+          post(patient_attachments_path(patient), params:)
 
           expect(response).to be_redirect
           follow_redirect!
@@ -93,7 +93,7 @@ describe "Managing files attached to a patient" do
           expect(attachment.file).not_to be_attached
 
           expect(attachment).to have_attributes(
-            attachment_type: attachment_type,
+            attachment_type:,
             name: "name",
             description: "desc",
             external_location: "external path",
@@ -111,7 +111,7 @@ describe "Managing files attached to a patient" do
             }
           }
 
-          post(patient_attachments_path(patient), params: params)
+          post(patient_attachments_path(patient), params:)
 
           expect(response).to be_successful
           expect(response).to render_template(:new)
@@ -123,7 +123,7 @@ describe "Managing files attached to a patient" do
 
   describe "GET edit" do
     it "display a form to edit an attachment" do
-      attachment = create(:patient_attachment, by: user, patient: patient)
+      attachment = create(:patient_attachment, by: user, patient:)
 
       get edit_patient_attachment_path(patient, attachment)
 
@@ -135,7 +135,7 @@ describe "Managing files attached to a patient" do
   describe "PATCH update" do
     context "when there are no validation errors" do
       it "updates an attachment" do
-        attachment = create(:patient_attachment, by: user, patient: patient)
+        attachment = create(:patient_attachment, by: user, patient:)
         params = {
           patients_attachment: {
             attachment_type_id: attachment_type.id,
@@ -145,7 +145,7 @@ describe "Managing files attached to a patient" do
           }
         }
 
-        patch patient_attachment_path(patient, attachment, params: params)
+        patch patient_attachment_path(patient, attachment, params:)
 
         expect(response).to be_redirect
         follow_redirect!
@@ -156,14 +156,14 @@ describe "Managing files attached to a patient" do
 
     context "when there are validation errors" do
       it "re-renders the edit form" do
-        attachment = create(:patient_attachment, by: user, patient: patient)
+        attachment = create(:patient_attachment, by: user, patient:)
         params = {
           patients_attachment: {
             attachment_type_id: nil
           }
         }
 
-        patch patient_attachment_path(patient, attachment, params: params)
+        patch patient_attachment_path(patient, attachment, params:)
 
         expect(response).to be_successful
         expect(response).to render_template(:edit)
@@ -174,7 +174,7 @@ describe "Managing files attached to a patient" do
   describe "GET show" do
     it "displays an attachment by redirecting to ActiveStorage::BlobsController#show and thence " \
        "to another ActiveStorage url, rending the file directly in the browser" do
-      attachment = create(:patient_attachment, by: user, patient: patient)
+      attachment = create(:patient_attachment, by: user, patient:)
 
       get patient_attachment_path(patient, attachment)
 
@@ -188,7 +188,7 @@ describe "Managing files attached to a patient" do
 
   describe "DELETE destroy" do
     it "soft deletes the alert" do
-      attachment = create(:patient_attachment, patient: patient, by: user)
+      attachment = create(:patient_attachment, patient:, by: user)
 
       delete patient_attachment_path(patient, attachment)
 

@@ -6,7 +6,7 @@ module Renalware
           subject { described_class.call(modality) }
 
           let(:patient) { build_stubbed(:patient) }
-          let(:modality) { build_stubbed(:modality, description: description, patient: patient) }
+          let(:modality) { build_stubbed(:modality, description:, patient:) }
 
           context "when the supplied modality has no explicit type" do
             let(:description) { build_stubbed(:modality_description, name: "X", code: nil) }

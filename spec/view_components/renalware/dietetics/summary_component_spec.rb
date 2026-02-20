@@ -1,7 +1,7 @@
 module Renalware
   describe Dietetics::SummaryComponent, type: :component do
     let(:patient) { Patient.new }
-    let(:instance) { described_class.new(patient: patient) }
+    let(:instance) { described_class.new(patient:) }
 
     context "with no dietetic clinic visit" do
       it "renders nothing" do
@@ -14,9 +14,12 @@ module Renalware
 
     context "with a last dietetic clinic visit" do
       let(:instance) {
-        described_class.new(patient: patient, last_dietetic_visit_loader: proc {
-                                                                            dietetic_clinic
-                                                                          })
+        described_class.new(
+          patient:,
+          last_dietetic_visit_loader: proc {
+            dietetic_clinic
+          }
+        )
       }
 
       context "with full data" do

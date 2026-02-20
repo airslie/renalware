@@ -5,7 +5,7 @@ describe "HD Prescription Administrations" do
   def create_prescription_for(patient, drug_name: "Drug1")
     create(
       :prescription,
-      patient: patient,
+      patient:,
       administer_on_hd: true,
       drug: create(:drug, name: drug_name)
     )
@@ -18,7 +18,7 @@ describe "HD Prescription Administrations" do
       prescription = create_prescription_for(patient)
       pa = create(
         :hd_prescription_administration,
-        prescription: prescription,
+        prescription:,
         administered_by: user1,
         administered_by_password: "supersecret",
         witnessed_by: user2,

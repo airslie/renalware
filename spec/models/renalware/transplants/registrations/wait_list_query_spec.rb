@@ -7,7 +7,7 @@ module Renalware
 
           before do
             %w(active suspended working_up working_up_lrf).each do |status|
-              create(:transplant_registration, :in_status, status: status)
+              create(:transplant_registration, :in_status, status:)
             end
           end
 
@@ -106,7 +106,7 @@ module Renalware
         end
 
         def create_registration(status:, ukt_status:)
-          registration = create(:transplant_registration, :in_status, status: status)
+          registration = create(:transplant_registration, :in_status, status:)
           registration.document.uk_transplant_centre.status = ukt_status
           registration.save!
           registration

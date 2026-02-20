@@ -46,7 +46,7 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
       create_dependencies
       patient = create(
         :patient,
-        local_patient_id: local_patient_id,
+        local_patient_id:,
         born_on: Date.parse(dob)
       )
 
@@ -60,7 +60,7 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
       def create_living_patient
         create(
           :patient,
-          local_patient_id: local_patient_id,
+          local_patient_id:,
           born_on: Date.parse(dob),
           died_on: nil
         )
@@ -113,14 +113,14 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
         it "leaves practice as nil" do
           patient = create(
             :patient,
-            local_patient_id: local_patient_id,
+            local_patient_id:,
             born_on: Date.parse(dob)
           )
 
           FeedJob.new(message).perform
 
           expect(patient.reload).to have_attributes(
-            family_name: family_name,
+            family_name:,
             practice: nil
           )
         end
@@ -131,7 +131,7 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
           original_practice = create(:practice, code: "ABC")
           patient = create(
             :patient,
-            local_patient_id: local_patient_id,
+            local_patient_id:,
             practice_id: original_practice.id,
             born_on: Date.parse(dob)
           )
@@ -139,7 +139,7 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
           FeedJob.new(message).perform
 
           expect(patient.reload).to have_attributes(
-            family_name: family_name,
+            family_name:,
             practice_id: original_practice.id
           )
         end
@@ -151,14 +151,14 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
         it "leaves gp as nil" do
           patient = create(
             :patient,
-            local_patient_id: local_patient_id,
+            local_patient_id:,
             born_on: Date.parse(dob)
           )
 
           FeedJob.new(message).perform
 
           expect(patient.reload).to have_attributes(
-            family_name: family_name,
+            family_name:,
             primary_care_physician: nil
           )
         end
@@ -169,8 +169,8 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
           original_gp = create(:primary_care_physician, code: "MYGP")
           patient = create(
             :patient,
-            nhs_number: nhs_number,
-            local_patient_id: local_patient_id,
+            nhs_number:,
+            local_patient_id:,
             primary_care_physician: original_gp,
             born_on: Date.parse(dob)
           )
@@ -178,7 +178,7 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
           FeedJob.new(message).perform
 
           expect(patient.reload).to have_attributes(
-            family_name: family_name,
+            family_name:,
             primary_care_physician: original_gp
           )
         end
@@ -192,7 +192,7 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
       it "clears the died_on date and informs superadmins via eMsg that action mst be taken" do
         patient = create(
           :patient,
-          local_patient_id: local_patient_id,
+          local_patient_id:,
           born_on: Date.parse(dob),
           died_on: 1.day.ago.to_date
         )
@@ -207,14 +207,14 @@ describe "HL7 ADT^A31 message handling: 'Update person information'" do
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def verify_patient_properties(patient)
     expect(patient).to have_attributes(
-      family_name: family_name,
-      given_name: given_name,
-      title: title,
+      family_name:,
+      given_name:,
+      title:,
       born_on: Time.zone.parse(dob).to_date,
       died_on: died_on.presence && Time.zone.parse(died_on).to_date,
-      nhs_number: nhs_number,
-      primary_care_physician: primary_care_physician,
-      practice: practice,
+      nhs_number:,
+      primary_care_physician:,
+      practice:,
       email: "x@y.com",
       telephone1: "HOME: tel1",
       telephone2: "MOBILE"

@@ -12,8 +12,8 @@ module Renalware
         create(
           :pathology_observation,
           description: obx_desc_pre_urea,
-          observed_at: observed_at,
-          request: create(:pathology_observation_request, description: obr_desc, patient: patient),
+          observed_at:,
+          request: create(:pathology_observation_request, description: obr_desc, patient:),
           result: value
         )
       end
@@ -22,7 +22,7 @@ module Renalware
         create(
           :pathology_observation,
           description: obx_desc_post_urea,
-          observed_at: observed_at,
+          observed_at:,
           result: value,
           request: obr
         )
@@ -97,7 +97,7 @@ module Renalware
           }
         ].each do |test|
           it do
-            obr = create(:pathology_observation_request, description: obr_desc, patient: patient)
+            obr = create(:pathology_observation_request, description: obr_desc, patient:)
             create_post_urea(
               obr,
               test[:post_urea][:observed_at].call(datetime),

@@ -12,11 +12,11 @@ module Renalware::Letters
     let(:patient) do
       build(
         :letter_patient,
-        primary_care_physician: primary_care_physician,
-        practice: practice
+        primary_care_physician:,
+        practice:
       )
     end
-    let(:raw_letter) { build_letter(to: :patient, patient: patient) }
+    let(:raw_letter) { build_letter(to: :patient, patient:) }
 
     describe "#sign" do
       it "creates a signature" do
@@ -35,7 +35,7 @@ module Renalware::Letters
       let(:presenter) { double(:presenter, content: "hello world", pdf_content: "pdf") }
 
       it "archives the letter" do
-        archived_letter = letter.generate_archive(by: user, presenter: presenter)
+        archived_letter = letter.generate_archive(by: user, presenter:)
         expect(archived_letter).to be_archived
       end
 

@@ -3,11 +3,11 @@ describe Renalware::HD::VNDRiskAssessmentsComponent, type: :component do
   let(:patient) { create(:hd_patient, by: user) }
 
   it "displays the last 3 needling assessments" do
-    component = described_class.new(current_user: user, patient: patient)
+    component = described_class.new(current_user: user, patient:)
 
     assessment = create(
       :hd_vnd_risk_assessment,
-      patient: patient,
+      patient:,
       by: user,
       risk1: "0_very_low",
       risk2: "0_low",
@@ -29,7 +29,7 @@ describe Renalware::HD::VNDRiskAssessmentsComponent, type: :component do
   end
 
   it "renders nothing if the patient has no assessments" do
-    component = described_class.new(current_user: user, patient: patient)
+    component = described_class.new(current_user: user, patient:)
 
     render_inline(component)
 

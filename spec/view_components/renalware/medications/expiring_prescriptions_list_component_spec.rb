@@ -3,7 +3,7 @@ describe Renalware::Medications::ExpiringPrescriptionsListComponent, type: :comp
   let(:user)          { create(:user, consultant: false) }
   let(:component)     { described_class.new(current_user: user) }
   let(:patient)       { create(:hd_patient) }
-  let(:prescription)  { create(:prescription, patient: patient, drug: drug) }
+  let(:prescription)  { create(:prescription, patient:, drug:) }
   let(:drug)          { create(:drug, name: "Blue pill") }
 
   context "when the user is not a consultant" do

@@ -14,9 +14,9 @@ module Renalware
 
       describe "validation" do
         it "validates uniqueness of patient" do
-          described_class.create!(patient: patient, by: user)
+          described_class.create!(patient:, by: user)
 
-          expect { described_class.create!(patient: patient, by: user) }
+          expect { described_class.create!(patient:, by: user) }
             .to raise_error(ActiveRecord::RecordInvalid)
         end
       end
@@ -25,7 +25,7 @@ module Renalware
         with_versioning do
           it "stores a version on creation or deletion" do
             expect(PaperTrail).to be_enabled
-            worry = described_class.create!(patient: patient, by: user)
+            worry = described_class.create!(patient:, by: user)
 
             expect(worry.versions.count).to eq(1)
 
@@ -38,18 +38,18 @@ module Renalware
 
       describe "uniqueness" do
         it "can only have one undeleted row per patient" do
-          described_class.create!(patient: patient, by: user)
+          described_class.create!(patient:, by: user)
 
           expect {
-            described_class.create!(patient: patient, by: user)
+            described_class.create!(patient:, by: user)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "successfully adds when deleted rows exist for the same patient" do
-          described_class.create!(patient: patient, by: user, deleted_at: Time.zone.now)
-          described_class.create!(patient: patient, by: user, deleted_at: Time.zone.now)
+          described_class.create!(patient:, by: user, deleted_at: Time.zone.now)
+          described_class.create!(patient:, by: user, deleted_at: Time.zone.now)
 
-          described_class.create!(patient: patient, by: user)
+          described_class.create!(patient:, by: user)
         end
       end
     end

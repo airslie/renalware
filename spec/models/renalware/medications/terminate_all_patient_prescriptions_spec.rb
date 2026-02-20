@@ -5,13 +5,13 @@ module Renalware::Medications
       patient = create(:patient, :minimal, by: user)
 
       # Create two current prescriptions
-      create(:prescription, patient: patient)
-      create(:prescription, patient: patient)
+      create(:prescription, patient:)
+      create(:prescription, patient:)
 
       # This prescription is not current - it has already been terminated.
       previously_terminated_prescription = create(
         :prescription,
-        patient: patient,
+        patient:,
         prescribed_on: "2017-01-01"
       )
       create(:prescription_termination,
@@ -23,7 +23,7 @@ module Renalware::Medications
       # future stat drug
       future_terminated_prescription = create(
         :prescription,
-        patient: patient,
+        patient:,
         prescribed_on: 1.month.from_now
       )
       create(:prescription_termination,
@@ -34,14 +34,14 @@ module Renalware::Medications
       # This current one is to be prescribed in the future, no termination date.
       _future_unterminated_prescription = create(
         :prescription,
-        patient: patient,
+        patient:,
         prescribed_on: 1.year.from_now
       )
 
       expect(patient.prescriptions.current.count).to eq(4)
 
       expect {
-        described_class.call(patient: patient, by: user)
+        described_class.call(patient:, by: user)
       }.to change(patient.prescriptions.current, :count).by(-4)
 
       # The termination date of this one should be unchanged

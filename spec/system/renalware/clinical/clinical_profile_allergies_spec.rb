@@ -9,7 +9,7 @@ describe "Clinical Profile Allergies Display" do
     it "displays allergy section in clinical profile" do
       user = login_as_clinical
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
-      create(:allergy, patient: patient, description: "Peanuts")
+      create(:allergy, patient:, description: "Peanuts")
 
       visit renalware.patient_clinical_profile_path(patient)
 
@@ -20,7 +20,7 @@ describe "Clinical Profile Allergies Display" do
     it "shows allergy alert in patient banner" do
       user = login_as_clinical
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
-      create(:allergy, patient: patient, description: "Penicillin")
+      create(:allergy, patient:, description: "Penicillin")
 
       visit renalware.patient_path(patient)
 
@@ -36,7 +36,7 @@ describe "Clinical Profile Allergies Display" do
     it "does not display allergy section in clinical profile" do
       user = login_as_clinical
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
-      create(:allergy, patient: patient, description: "Peanuts")
+      create(:allergy, patient:, description: "Peanuts")
 
       visit renalware.patient_clinical_profile_path(patient)
 
@@ -48,7 +48,7 @@ describe "Clinical Profile Allergies Display" do
     it "does not show allergy alert in patient banner" do
       user = login_as_clinical
       patient = create(:clinical_patient, family_name: "Smith", given_name: "John", by: user)
-      create(:allergy, patient: patient, description: "Penicillin")
+      create(:allergy, patient:, description: "Penicillin")
 
       visit renalware.patient_path(patient)
 

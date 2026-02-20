@@ -27,9 +27,9 @@ module Renalware
           unit_of_measure = instance_double(Drugs::UnitOfMeasure, name: "mg")
           prescription = instance_double(
             Prescription,
-            drug: drug,
+            drug:,
             dose_amount: "10",
-            unit_of_measure: unit_of_measure,
+            unit_of_measure:,
             medication_route: instance_double(MedicationRoute, name: "PO", other?: false),
             frequency: "nocte",
             frequency_comment: "abc",
@@ -78,7 +78,7 @@ module Renalware
               prescribed_on: "2020-01-01"
             )
             HD::PrescriptionAdministration.create!(
-              prescription: prescription,
+              prescription:,
               administered: true,
               administered_by: user1,
               witnessed_by: user2,

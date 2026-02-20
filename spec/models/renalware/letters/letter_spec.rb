@@ -45,7 +45,7 @@ module Renalware
       end
 
       describe "#include_pathology_in_letter_body?" do
-        subject { described_class.new(letterhead: letterhead).include_pathology_in_letter_body? }
+        subject { described_class.new(letterhead:).include_pathology_in_letter_body? }
 
         let(:letterhead) do
           build_stubbed(:letter_letterhead, include_pathology_in_letter_body: true)

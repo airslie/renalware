@@ -24,7 +24,7 @@ describe "Managing patients" do
 
         allow(Renalware::Patients::BroadcastPatientAddedEvent).to receive(:call)
 
-        post patients_path, params: { patient: attributes.merge(document: document) }
+        post patients_path, params: { patient: attributes.merge(document:) }
 
         expect(response).to have_http_status(:redirect)
         created_patient = Renalware::Patient.find_by(nhs_number: attributes[:nhs_number])

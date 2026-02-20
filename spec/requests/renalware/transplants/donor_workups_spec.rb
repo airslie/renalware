@@ -15,7 +15,7 @@ describe "Donor stage management" do
     context "when the patient has a donor workup" do
       it "renders the show page" do
         Renalware::Transplants::DonorWorkup.create!(
-          patient: patient,
+          patient:,
           document: {
             comorbidities: {
               diabetes: {

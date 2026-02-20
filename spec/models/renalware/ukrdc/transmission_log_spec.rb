@@ -16,7 +16,7 @@ module Renalware
 
             expect {
               described_class.with_logging(
-                patient: patient,
+                patient:,
                 request_uuid: uuid,
                 status: :undefined
               ) do
@@ -34,7 +34,7 @@ module Renalware
         context "when processing succeeds" do
           it "saves the log" do
             patient = create(:patient)
-            described_class.with_logging(patient: patient, request_uuid: uuid) do |log|
+            described_class.with_logging(patient:, request_uuid: uuid) do |log|
               log.payload = "XYZ"
               log.payload_hash = "123"
               log.queued!
@@ -53,7 +53,7 @@ module Renalware
         context "when unsent because no changes in the xml are found since the last sent" do
           it "saves the log" do
             patient = create(:patient)
-            described_class.with_logging(patient: patient, request_uuid: uuid) do |log|
+            described_class.with_logging(patient:, request_uuid: uuid) do |log|
               log.payload = "XYZ"
               log.payload_hash = "123"
               log.skippped_no_change_since_last_send!

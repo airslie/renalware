@@ -2,7 +2,7 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
   it "renders the button title" do
     patient = Renalware::Patient.new
 
-    render_inline(described_class.new(patient: patient))
+    render_inline(described_class.new(patient:))
 
     expect(page).to have_content("Record HD Drugs")
   end
@@ -11,7 +11,7 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
     it "indicates no drugs are available" do
       patient = Renalware::Patient.new
 
-      render_inline(described_class.new(patient: patient))
+      render_inline(described_class.new(patient:))
 
       expect(page).to have_content("Patient has no drugs to be given on HD")
     end
@@ -23,13 +23,13 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
       prescriptions = { Drug1: true, Drug2: true, Drug3: false }.map do |drug_name, give_on_hd|
         create(
           :prescription,
-          patient: patient,
+          patient:,
           administer_on_hd: give_on_hd,
           drug: create(:drug, name: drug_name)
         )
       end
 
-      render_inline(described_class.new(patient: patient))
+      render_inline(described_class.new(patient:))
 
       expect(page).to have_no_content("Patient has no drugs to be given on HD")
 

@@ -3,7 +3,7 @@ module Renalware
     describe CalculateAge do
       subject { described_class.for(patient) }
 
-      let(:patient) { Patient.new(died_on: died_on, born_on: born_on) }
+      let(:patient) { Patient.new(died_on:, born_on:) }
       let(:born_on) { nil }
       let(:died_on) { nil }
       let(:today) { Time.zone.now.utc.to_date }

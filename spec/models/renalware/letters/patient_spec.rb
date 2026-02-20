@@ -8,13 +8,13 @@ module Renalware
       describe "#cc_on_letter?" do
         context "when the letter belongs to the patient" do
           context "when the patient is the main recipient" do
-            let(:letter) { build_letter(to: :patient, patient: patient) }
+            let(:letter) { build_letter(to: :patient, patient:) }
 
             it { expect(patient).not_to be_cc_on_letter(letter) }
           end
 
           context "when the Primary Care Physician is the main recipient" do
-            let(:letter) { build_letter(to: :primary_care_physician, patient: patient) }
+            let(:letter) { build_letter(to: :primary_care_physician, patient:) }
 
             context "when patient requested to be CCd on all letters" do
               before { patient.cc_on_all_letters = true }

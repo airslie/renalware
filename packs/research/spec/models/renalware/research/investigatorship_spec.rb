@@ -12,7 +12,7 @@ module Renalware
     describe "#to_s" do
       it "delegates to user" do
         user = build_stubbed(:user)
-        investigator = described_class.new(user: user)
+        investigator = described_class.new(user:)
 
         expect(investigator.to_s).to eq(user.to_s)
       end

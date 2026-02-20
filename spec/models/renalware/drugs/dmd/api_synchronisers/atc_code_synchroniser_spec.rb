@@ -3,7 +3,7 @@ module Renalware
     describe APISynchronisers::AtcCodeSynchroniser do
       describe "#call" do
         let(:instance) {
-          described_class.new(atc_vmp_mapping_repository: atc_vmp_mapping_repository)
+          described_class.new(atc_vmp_mapping_repository:)
         }
 
         let(:atc_vmp_mapping_repository) do

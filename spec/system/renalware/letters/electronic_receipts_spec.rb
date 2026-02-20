@@ -35,13 +35,13 @@ describe "View a user's read/unread electronic ccs" do
   def create_letter_with_state(state)
     patient = create(
       :letter_patient,
-      primary_care_physician: primary_care_physician,
+      primary_care_physician:,
       family_name: SecureRandom.hex(10).upcase
     )
     create_letter(
       to: :patient,
-      state: state,
-      patient: patient,
+      state:,
+      patient:,
       description: "xxx",
       body: SecureRandom.hex(10)
     )
@@ -50,7 +50,7 @@ describe "View a user's read/unread electronic ccs" do
   def create_receipt(letter:, read: false, to: me)
     create(
       :letter_electronic_receipt,
-      letter: letter,
+      letter:,
       recipient: to,
       read_at: read ? Time.zone.now : nil
     )

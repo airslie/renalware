@@ -13,7 +13,7 @@ module Renalware
             </EnteredAt>
           XML
 
-          xml = format_xml(described_class.new(hospital_unit: hospital_unit).xml)
+          xml = format_xml(described_class.new(hospital_unit:).xml)
 
           expect(xml).to eq(expected_xml)
         end

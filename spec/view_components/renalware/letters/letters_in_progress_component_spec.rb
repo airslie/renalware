@@ -14,7 +14,7 @@ describe Renalware::Letters::LettersInProgressComponent, type: :component do
     it "displays them - it also calls #policy so in specs exercises Warden" do
       user = login_as_clinical
       patient = create(:letter_patient, by: user)
-      create_letter(state: :draft, to: :patient, patient: patient, by: user)
+      create_letter(state: :draft, to: :patient, patient:, by: user)
 
       render_inline(described_class.new(current_user: user))
 

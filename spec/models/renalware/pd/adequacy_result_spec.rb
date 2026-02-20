@@ -14,7 +14,7 @@ module Renalware
 
         context "when there is no recent weight" do
           it "does not update the calculated columns" do
-            result = create(:pd_adequacy_result, patient: patient, weight: nil)
+            result = create(:pd_adequacy_result, patient:, weight: nil)
 
             expect(result.dietry_protein_intake).to be_nil
           end
@@ -22,7 +22,7 @@ module Renalware
 
         context "when weight is missing" do
           it "does not update the calculated columns" do
-            result = create(:pd_adequacy_result, patient: patient, weight: nil)
+            result = create(:pd_adequacy_result, patient:, weight: nil)
 
             expect(result.dietry_protein_intake).to be_nil
           end
@@ -30,7 +30,7 @@ module Renalware
 
         context "when there is a weight" do
           it "updates the calculated columns" do
-            result = create(:pd_adequacy_result, patient: patient, weight: 100)
+            result = create(:pd_adequacy_result, patient:, weight: 100)
 
             expect(result.dietry_protein_intake).to be > 0
           end
@@ -48,7 +48,7 @@ module Renalware
             # setting below and override them.
             result = create(
               :pd_adequacy_result,
-              patient: patient,
+              patient:,
               total_creatinine_clearance: 1,
               pertitoneal_creatinine_clearance: 1,
               renal_creatinine_clearance: 1,
@@ -67,7 +67,7 @@ module Renalware
           it "is complete" do
             result = create(
               :pd_adequacy_result,
-              patient: patient,
+              patient:,
               dial_24_missing: false,
               pertitoneal_creatinine_clearance: 1,
               pertitoneal_ktv: 1,
@@ -88,7 +88,7 @@ module Renalware
           it "is complete" do
             result = create(
               :pd_adequacy_result,
-              patient: patient,
+              patient:,
               dial_24_missing: false,
               pertitoneal_creatinine_clearance: 1,
               pertitoneal_ktv: 1,
@@ -110,7 +110,7 @@ module Renalware
           it "is is complete" do
             result = create(
               :pd_adequacy_result,
-              patient: patient,
+              patient:,
               dial_24_missing: true,                 # !!
               pertitoneal_creatinine_clearance: nil, # no dialysate so cannot be calced
               pertitoneal_ktv: nil,                  # no dialysate so cannot be calced

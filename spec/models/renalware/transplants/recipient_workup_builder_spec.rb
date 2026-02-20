@@ -21,7 +21,7 @@ module Renalware
         allow(workup).to receive(:new_record?).and_return(false)
 
         workup = described_class.new(
-          workup: workup,
+          workup:,
           default_consenter_name: consenter_name
         ).build
 

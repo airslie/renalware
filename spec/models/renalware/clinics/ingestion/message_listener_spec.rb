@@ -10,9 +10,9 @@ module Renalware
         }.each do |action, receiver|
           it "calls #{receiver} when HL7 message action is #{action}" do
             allow(receiver).to receive(:call)
-            hl7_message = instance_double(Feeds::HL7Message, action: action, adt?: true)
+            hl7_message = instance_double(Feeds::HL7Message, action:, adt?: true)
 
-            listener.adt_message_arrived(hl7_message: hl7_message, adt?: true)
+            listener.adt_message_arrived(hl7_message:, adt?: true)
 
             expect(receiver).to have_received(:call)
           end

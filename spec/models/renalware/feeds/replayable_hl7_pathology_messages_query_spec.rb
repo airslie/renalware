@@ -15,17 +15,17 @@ module Renalware
         **
       )
         Message.create!(
-          nhs_number: nhs_number,
+          nhs_number:,
           message_type: :ORU,
           event_type: :R01,
           orc_order_status: "CM",
           header_id: 1,
-          body: body,
-          orc_filler_order_number: orc_filler_order_number,
+          body:,
+          orc_filler_order_number:,
           sent_at: Time.zone.now,
-          created_at: created_at,
+          created_at:,
           updated_at: created_at,
-          processed: processed,
+          processed:,
           **
         )
       end
@@ -35,7 +35,7 @@ module Renalware
         patient = build(:patient)
 
         expect {
-          described_class.new(patient: patient).call
+          described_class.new(patient:).call
         }.to raise_error(ReplayableHL7PathologyMessagesQuery::PatientNotPersistedError)
       end
 
@@ -44,7 +44,7 @@ module Renalware
         allow(patient).to receive(:persisted?).and_return(true)
 
         expect {
-          described_class.new(patient: patient).call
+          described_class.new(patient:).call
         }.to raise_error(ReplayableHL7PathologyMessagesQuery::MissingDOBNumberError)
       end
 
@@ -61,7 +61,7 @@ module Renalware
         allow(patient).to receive(:persisted?).and_return(true)
 
         expect {
-          described_class.new(patient: patient).call
+          described_class.new(patient:).call
         }.to raise_error(ReplayableHL7PathologyMessagesQuery::MissingNHSNumberOrLocalIdError)
       end
 
@@ -88,7 +88,7 @@ module Renalware
         _msg_123_superseded = create_message(sent_at: 2.days.ago, **msg_common_args)
         msg_123_match = create_message(sent_at: 1.day.ago, **msg_common_args)
 
-        results = described_class.new(patient: patient).call
+        results = described_class.new(patient:).call
 
         expect(results.to_a.size).to eq(1)
         expect(results.to_a).to eq([msg_123_match])
@@ -111,7 +111,7 @@ module Renalware
           orc_filler_order_number: "C"
         )
 
-        results = described_class.new(patient: patient, orc_filler_order_numbers: %w(A C)).call
+        results = described_class.new(patient:, orc_filler_order_numbers: %w(A C)).call
 
         expect(results.to_a.size).to eq(2)
         expect(results.to_a).to eq([msg_a, msg_c])
@@ -130,16 +130,16 @@ module Renalware
 
         patient.save!(validate: false) # otherwise it wants at least one local_patient_id*)
         create_message(nhs_number: "nomatch")
-        msg_matched1 = create_message(nhs_number: nhs_num, created_at: 1.day.ago, dob: dob)
+        msg_matched1 = create_message(nhs_number: nhs_num, created_at: 1.day.ago, dob:)
         msg_matched2 = create_message(
           nhs_number: nhs_num,
           created_at: 2.days.ago,
-          dob: dob,
+          dob:,
           local_patient_id: "does not match patient's local_patient_id",
           local_patient_id_2: "does not match patient's local_patient_id_2"
         )
 
-        results = described_class.new(patient: patient).call
+        results = described_class.new(patient:).call
 
         expect(results.to_a.size).to eq(2)
         expect(results.to_a).to eq([msg_matched1, msg_matched2])
@@ -169,22 +169,22 @@ module Renalware
             created_at: 1.hour.from_now
           )
           # This message is for another patient and will never be found
-          create_message(local_id_attribute => "nomatch", dob: dob)
+          create_message(local_id_attribute => "nomatch", dob:)
           # These 2 messages will be returned, oldest first
           msg_matched2 = create_message(
             local_id_attribute => hospno,
             nhs_number: nil,
-            dob: dob,
+            dob:,
             created_at: 2.days.ago
           )
           msg_matched1 = create_message(
             local_id_attribute => hospno,
             nhs_number: nil,
-            dob: dob,
+            dob:,
             created_at: 1.day.ago
           )
 
-          results = described_class.call(patient: patient)
+          results = described_class.call(patient:)
 
           expect(results.to_a).to eq([msg_matched2, msg_matched1])
         end
@@ -193,14 +193,14 @@ module Renalware
       context "when there was a previous successful replay for a message" do
         it "excludes that message" do
           patient = create(:patient, nhs_number: nhs_num, born_on: dob, created_at: 1.hour.from_now)
-          opts = { nhs_number: nhs_num, dob: dob }
+          opts = { nhs_number: nhs_num, dob: }
           msg1 = create_message(**opts, orc_filler_order_number: "one")
           msg2 = create_message(**opts, orc_filler_order_number: "two")
-          replay_request = ReplayRequest.create!(started_at: Time.zone.now, patient: patient)
+          replay_request = ReplayRequest.create!(started_at: Time.zone.now, patient:)
           replay_request.message_replays.create!(message: msg1, success: true, urn: "one")
           replay_request.message_replays.create!(message: msg2, success: true, urn: "two")
 
-          results = described_class.new(patient: patient).call
+          results = described_class.new(patient:).call
 
           expect(results).to be_empty
         end
@@ -211,14 +211,14 @@ module Renalware
           patient = create(:patient, nhs_number: nhs_num, born_on: dob, created_at: 1.hour.from_now)
           msg = create_message(
             nhs_number: nhs_num,
-            dob: dob,
+            dob:,
             processed: false,
             orc_filler_order_number: "123"
           )
-          replay_request = ReplayRequest.create!(started_at: Time.zone.now, patient: patient)
+          replay_request = ReplayRequest.create!(started_at: Time.zone.now, patient:)
           replay_request.message_replays.create!(message: msg, success: true, urn: "123")
 
-          results = described_class.new(patient: patient).call
+          results = described_class.new(patient:).call
 
           expect(results).to be_empty
         end
@@ -235,7 +235,7 @@ module Renalware
                 born_on: dob,
                 created_at: patient_created_at
               )
-              msg_args = { nhs_number: nhs_num, dob: dob, processed: false }
+              msg_args = { nhs_number: nhs_num, dob:, processed: false }
               _msg_recv_after_patient_creation = create_message(
                 created_at: patient_created_at + 1.day, **msg_args
               )
@@ -243,7 +243,7 @@ module Renalware
                 created_at: patient_created_at - 1.day, **msg_args
               )
 
-              results = described_class.new(patient: patient, to: nil).call
+              results = described_class.new(patient:, to: nil).call
 
               expect(results.to_a).to eq([msg_recv_before_patient_creation])
             end
@@ -260,11 +260,11 @@ module Renalware
                 born_on: dob,
                 created_at: 1.year.ago
               )
-              msg_args = { nhs_number: nhs_num, dob: dob, processed: false }
+              msg_args = { nhs_number: nhs_num, dob:, processed: false }
               _msg_recv_after = create_message(created_at: to + 2.days, **msg_args)
               msg_recv_before = create_message(created_at: to - 2.days, **msg_args)
 
-              results = described_class.new(patient: patient, to: to).call
+              results = described_class.new(patient:, to:).call
 
               expect(results.to_a).to eq([msg_recv_before])
             end
@@ -282,12 +282,12 @@ module Renalware
                 born_on: dob,
                 created_at: 10.years.ago # NB
               )
-              msg_args = { nhs_number: nhs_num, dob: dob, processed: false }
+              msg_args = { nhs_number: nhs_num, dob:, processed: false }
               _msg_recvd_too_early = create_message(created_at: from - 1.week, **msg_args)
               msg_recvd_within_window = create_message(created_at: from + 1.week, **msg_args)
               _msg_recvd_too_late = create_message(created_at: to + 1.week, **msg_args)
 
-              results = described_class.new(patient: patient, from: from, to: to).call
+              results = described_class.new(patient:, from:, to:).call
 
               expect(results.to_a).to eq([msg_recvd_within_window])
             end

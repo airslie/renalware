@@ -1,7 +1,7 @@
 describe "Create remote monitoring registration event", :js do
   it "creates successfully" do
-    user = login_as_clinical
-    patient = create(:patient, family_name: "XXX", given_name: "Jon", by: user)
+    by = login_as_clinical
+    patient = create(:patient, family_name: "XXX", given_name: "Jon", by:)
 
     create(:remote_monitoring_registration_event_type)
     create(:remote_monitoring_frequency, :"4M")
@@ -37,7 +37,7 @@ describe "Create remote monitoring registration event", :js do
 
     expect(page).to have_current_path(renalware.patient_events_path(patient))
 
-    registration = Renalware::Events::Event.where(patient: patient).last
+    registration = Renalware::Events::Event.where(patient:).last
     expect(registration.document).to have_attributes(
       referral_reason: "ABC",
       frequency_iso8601: "P4M", # iso8601 format

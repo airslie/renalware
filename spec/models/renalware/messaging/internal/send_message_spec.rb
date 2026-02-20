@@ -22,9 +22,9 @@ module Renalware
           context "with valid params" do
             it "saves message and 'sends' it to the correct recipients" do
               expect do
-                service.call(patient: patient,
-                             author: author,
-                             form: form)
+                service.call(patient:,
+                             author:,
+                             form:)
               end.to change(Message, :count).by(1)
 
               expect(recipient1.reload.messages.count).to eq(1)

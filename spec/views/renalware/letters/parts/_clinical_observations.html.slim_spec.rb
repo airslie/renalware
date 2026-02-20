@@ -3,7 +3,7 @@ module Renalware
     helper(Renalware::LettersHelper)
     helper(Renalware::AttributeNameHelper)
 
-    subject { render partial: partial, locals: { clinical_observations: part } }
+    subject { render partial:, locals: { clinical_observations: part } }
 
     let(:partial) { "renalware/letters/parts/clinical_observations" }
     let(:letter) { Letters::Letter.new event: clinic_visit }

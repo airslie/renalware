@@ -5,8 +5,8 @@ module Renalware::Medications
 
     let(:instance) {
       described_class.new(
-        prescription: prescription,
-        selected_drug_id: selected_drug_id
+        prescription:,
+        selected_drug_id:
       )
     }
 
@@ -36,7 +36,7 @@ module Renalware::Medications
         let(:selected_drug_id) { drug.id }
         let(:prescription) do
           Prescription.new(
-            drug: drug
+            drug:
           )
         end
 
@@ -44,12 +44,12 @@ module Renalware::Medications
 
         let(:instance) {
           described_class.new \
-            prescription: prescription,
-            selected_drug_id: selected_drug_id
+            prescription:,
+            selected_drug_id:
         }
 
-        let(:active_vmp) { create(:drug_vmp_classification, drug: drug, inactive: false) }
-        let(:inactive_vmp) { create(:drug_vmp_classification, drug: drug, inactive: true) }
+        let(:active_vmp) { create(:drug_vmp_classification, drug:, inactive: false) }
+        let(:inactive_vmp) { create(:drug_vmp_classification, drug:, inactive: true) }
 
         before do
           active_vmp && inactive_vmp
@@ -65,7 +65,7 @@ module Renalware::Medications
         let(:selected_drug_id) { drug.id }
         let(:prescription) do
           Prescription.new(
-            drug: drug
+            drug:
           )
         end
 
@@ -73,16 +73,16 @@ module Renalware::Medications
 
         let(:instance) {
           described_class.new \
-            prescription: prescription,
-            selected_drug_id: selected_drug_id,
+            prescription:,
+            selected_drug_id:,
             selected_trade_family_id: "14"
         }
 
         let(:matching_trade_family) {
-          create(:drug_vmp_classification, drug: drug, trade_family_ids: %w(12 14))
+          create(:drug_vmp_classification, drug:, trade_family_ids: %w(12 14))
         }
         let(:not_matching_trade_family) {
-          create(:drug_vmp_classification, drug: drug, trade_family_ids: ["18"])
+          create(:drug_vmp_classification, drug:, trade_family_ids: ["18"])
         }
 
         before do

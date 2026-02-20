@@ -40,7 +40,7 @@ module Renalware::Events
                  params: {
                    patient_id: patient,
                    events_event: {
-                     patient: patient,
+                     patient:,
                      event_type: nil
                    }
                  }

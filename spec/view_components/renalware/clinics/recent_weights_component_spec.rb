@@ -1,7 +1,7 @@
 module Renalware
   describe Clinics::RecentWeightsComponent, type: :component do
     let(:patient) { Clinics::Patient.new }
-    let(:instance) { described_class.new(patient: patient) }
+    let(:instance) { described_class.new(patient:) }
 
     context "with no clinic visits" do
       it "renders empty table" do
@@ -14,7 +14,7 @@ module Renalware
     end
 
     context "with a last dietetic clinic visit" do
-      let(:instance) { described_class.new(patient: patient) }
+      let(:instance) { described_class.new(patient:) }
 
       context "with full data" do
         let(:dietetic_clinic) {

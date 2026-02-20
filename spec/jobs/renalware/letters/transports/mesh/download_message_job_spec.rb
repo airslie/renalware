@@ -38,18 +38,18 @@ module Renalware::Letters::Transports
         KEY
       }
 
-      let(:transmission) { Mesh::Transmission.create!(letter: letter) }
+      let(:transmission) { Mesh::Transmission.create!(letter:) }
       let(:user) { create(:user) }
       let(:send_operation_uuid) { "75155665-d300-4319-a7a4-3b6f3f38e739" }
       let(:letter) do
         create_mesh_letter(
-          patient: create_mesh_patient(user: user),
-          user: user
+          patient: create_mesh_patient(user:),
+          user:
         )
       end
       let(:send_operation) {
         Mesh::Operation.create!(
-          transmission: transmission,
+          transmission:,
           action: :send_message,
           uuid: send_operation_uuid
         )

@@ -20,14 +20,14 @@ FactoryBot.define do
           start_date = day.days.ago
           create(
             :transplant_registration_status,
-            registration: registration,
+            registration:,
             started_on: start_date,
             terminated_on: start_date + 1.day
           )
         end
         create(
           :transplant_registration_status,
-          registration: registration,
+          registration:,
           started_on: 7.days.ago
         )
       end
@@ -41,14 +41,14 @@ FactoryBot.define do
       after(:create) do |registration, evaluator|
         create(
           :transplant_registration_status,
-          registration: registration,
+          registration:,
           started_on: 7.days.ago,
           description: create(:transplant_registration_status_description,
                               name: evaluator.status.humanize, code: evaluator.status)
         )
         create(
           :transplant_registration_status,
-          registration: registration,
+          registration:,
           started_on: 10.days.ago,
           terminated_on: 7.days.ago
         )

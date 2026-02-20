@@ -9,9 +9,9 @@ module Renalware
 
         let(:instance) {
           described_class.new(
-            weight: weight,
+            weight:,
             document: {
-              previous_weight: previous_weight
+              previous_weight:
             }
           )
         }
@@ -48,7 +48,7 @@ module Renalware
         let(:instance) {
           described_class.new(
             document: {
-              next_review_in: next_review_in
+              next_review_in:
             }
           )
         }

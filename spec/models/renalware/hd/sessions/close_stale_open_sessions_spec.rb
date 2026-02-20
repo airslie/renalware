@@ -9,10 +9,10 @@ module Renalware
       let(:hospital_unit) { create(:hospital_unit) }
       let(:options) do
         {
-          patient: patient,
+          patient:,
           by: system_user,
           signed_on_by: system_user,
-          hospital_unit: hospital_unit,
+          hospital_unit:,
           started_at: 25.hours.ago,
           stopped_at: 23.hours.ago
         }
@@ -42,7 +42,7 @@ module Renalware
           )
 
           expect {
-            service.call(performed_before: performed_before)
+            service.call(performed_before:)
           }.not_to change(Session::Closed, :count)
         end
       end
@@ -64,7 +64,7 @@ module Renalware
 
               results = nil
               expect {
-                results = service.call(performed_before: performed_before)
+                results = service.call(performed_before:)
               }.to change(Session::Closed, :count).by(1)
                 .and change(Session::Open, :count).by(-1)
 
@@ -86,7 +86,7 @@ module Renalware
 
               results = nil
               expect {
-                results = service.call(performed_before: performed_before)
+                results = service.call(performed_before:)
               }.not_to change(Session::Closed, :count)
 
               expect(results.closed_ids).to be_empty

@@ -38,8 +38,8 @@ RSpec.describe "Sending a private message" do
     )
 
     message = Renalware::Messaging::Internal::SendMessage.call(
-      author: author,
-      patient: patient,
+      author:,
+      patient:,
       form: Renalware::Messaging::Internal::MessageForm.new(
         body: "Content",
         subject: "Subject",

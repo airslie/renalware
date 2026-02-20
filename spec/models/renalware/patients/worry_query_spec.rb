@@ -6,7 +6,7 @@ module Renalware
           it "returns Worries" do
             user = create(:user)
             patient = create(:patient, :minimal, by: user)
-            worry = Worry.create!(patient: patient, by: user)
+            worry = Worry.create!(patient:, by: user)
 
             result = described_class.new(query_params: {}).call.to_a
 

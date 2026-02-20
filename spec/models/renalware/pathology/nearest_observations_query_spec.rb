@@ -4,10 +4,10 @@ module Renalware::Pathology
 
     subject {
       described_class.new(
-        patient: patient,
-        date: date,
-        code_group: code_group,
-        look_behind_days: look_behind_days
+        patient:,
+        date:,
+        code_group:,
+        look_behind_days:
       ).call.sort_by { |hsh| hsh[:code] }
     }
 
@@ -21,7 +21,7 @@ module Renalware::Pathology
           create(
             :pathology_code_group_membership,
             code_group: grp,
-            observation_description: create(:pathology_observation_description, code: code),
+            observation_description: create(:pathology_observation_description, code:),
             by: user
           )
         end

@@ -1,7 +1,7 @@
 module Renalware
   describe Dietetics::VisitsComponent, type: :component do
     let(:patient) { Patient.new(id: 12) }
-    let(:instance) { described_class.new(patient: patient) }
+    let(:instance) { described_class.new(patient:) }
 
     context "with no clinic visits" do
       it "renders empty table" do

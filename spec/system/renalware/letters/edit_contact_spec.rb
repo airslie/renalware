@@ -10,9 +10,9 @@ RSpec.describe "Managing an existing letter contact", :js do
       person = create(:directory_person, by: user)
       contact = create(
         :letter_contact,
-        patient: patient,
+        patient:,
         description: description1,
-        person: person,
+        person:,
         default_cc: true
       )
 
@@ -63,7 +63,7 @@ RSpec.describe "Managing an existing letter contact", :js do
       patient = create(:letter_patient)
       create(
         :letter_contact,
-        patient: patient,
+        patient:,
         person: create(:directory_person, by: user),
         default_cc: true
       )

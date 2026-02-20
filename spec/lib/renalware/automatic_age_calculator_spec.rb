@@ -1,7 +1,7 @@
 module Renalware
   describe AutomaticAgeCalculator, type: :model do
     subject(:calculator) do
-      described_class.new(existing_age, born_on: born_on, age_on_date: age_on_date)
+      described_class.new(existing_age, born_on:, age_on_date:)
     end
 
     let(:existing_age) { nil }

@@ -8,7 +8,7 @@ describe "Prescriptions - from an exit site infection", :js do
   let(:route) { create(:medication_route, name: "Oral") }
   let(:unit_of_measure) { create(:drug_unit_of_measure, name: "Ampoule") }
 
-  let(:esi) { create(:exit_site_infection, patient: patient) }
+  let(:esi) { create(:exit_site_infection, patient:) }
 
   before do
     esi
@@ -17,9 +17,9 @@ describe "Prescriptions - from an exit site infection", :js do
 
     create(
       :drug_vmp_classification,
-      unit_of_measure: unit_of_measure,
-      route: route,
-      drug: drug
+      unit_of_measure:,
+      route:,
+      drug:
     )
 
     login_as user

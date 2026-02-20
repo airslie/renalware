@@ -12,7 +12,7 @@ describe "Patient's closest pathology to a date, filtered by code group" do
       create(
         :pathology_observation_request,
         :full_blood_count_with_observations,
-        patient: patient,
+        patient:,
         requested_at: "2019-01-01"
       )
 

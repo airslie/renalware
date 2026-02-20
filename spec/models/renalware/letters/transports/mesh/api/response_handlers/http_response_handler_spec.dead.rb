@@ -50,8 +50,8 @@ module Renalware::Letters::Transports::Mesh
       let(:message) do
         Message.create!(
           letter: create_mesh_letter(
-            patient: create_mesh_patient(user: user),
-            user: user
+            patient: create_mesh_patient(user:),
+            user:
           )
         )
       end
@@ -61,7 +61,7 @@ module Renalware::Letters::Transports::Mesh
           it "does nothing" do
             response = mock_faraday_response(status: http_status, body: "{}")
             expect {
-              described_class.new(message: message).call(response)
+              described_class.new(message:).call(response)
             }.not_to raise_error
 
             expect(message.reload).to have_attributes(
@@ -85,7 +85,7 @@ module Renalware::Letters::Transports::Mesh
           it "raises #{error} when http status is #{http_status}" do
             response = mock_faraday_response(status: http_status, body: "")
 
-            described_class.new(message: message).call(response)
+            described_class.new(message:).call(response)
 
             expect(message.reload).to have_attributes(
               http_response_code: http_status.to_s

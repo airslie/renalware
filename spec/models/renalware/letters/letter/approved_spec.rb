@@ -2,11 +2,11 @@ module Renalware::Letters
   describe Letter::Approved do
     include LettersSpecHelper
 
-    subject(:letter) { build(:approved_letter, patient: patient) }
+    subject(:letter) { build(:approved_letter, patient:) }
 
     let(:user) { build(:user) }
     let(:primary_care_physician) { build(:letter_primary_care_physician) }
-    let(:patient) { build(:letter_patient, primary_care_physician: primary_care_physician) }
+    let(:patient) { build(:letter_patient, primary_care_physician:) }
 
     describe "#complete" do
       it "completed the letter" do

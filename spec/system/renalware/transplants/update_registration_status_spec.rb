@@ -16,9 +16,9 @@ describe "Update wait list registration status" do
   describe "POST create" do
     it "creates a new wait list registration" do
       patient = create(:transplant_patient)
-      registration = create(:transplant_registration, patient: patient)
+      registration = create(:transplant_registration, patient:)
       create(:transplant_registration_status,
-             registration: registration,
+             registration:,
              started_on: Time.zone.now,
              notes: "Some notes")
 

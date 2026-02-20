@@ -6,8 +6,8 @@ describe "PD Dashboard" do
     bag_type = create(:bag_type)
 
     6.times do
-      build(:capd_regime, patient: patient).tap do |regime|
-        regime.bags << build(:pd_regime_bag, regime: regime, bag_type: bag_type)
+      build(:capd_regime, patient:).tap do |regime|
+        regime.bags << build(:pd_regime_bag, regime:, bag_type:)
         regime.save!
       end
     end
@@ -36,8 +36,8 @@ describe "PD Dashboard" do
     bag_type = create(:bag_type)
 
     6.times do
-      build(:apd_regime, patient: patient).tap do |regime|
-        regime.bags << build(:pd_regime_bag, regime: regime, bag_type: bag_type)
+      build(:apd_regime, patient:).tap do |regime|
+        regime.bags << build(:pd_regime_bag, regime:, bag_type:)
         regime.save!
       end
     end

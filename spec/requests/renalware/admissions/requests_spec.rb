@@ -6,10 +6,10 @@ describe "Admission Request (TCI) management" do
 
   def create_request
     create(:admissions_request,
-           reason: reason,
+           reason:,
            priority: :urgent,
            by: user,
-           patient: patient,
+           patient:,
            created_at: time,
            updated_at: time)
   end
@@ -50,7 +50,7 @@ describe "Admission Request (TCI) management" do
         }
 
         expect {
-          post(admissions_requests_path(format: :js), params: params)
+          post(admissions_requests_path(format: :js), params:)
         }.to change(Renalware::Admissions::Request, :count).by(1)
 
         expect(response).to be_successful
@@ -66,7 +66,7 @@ describe "Admission Request (TCI) management" do
         }
 
         expect {
-          post(admissions_requests_path, params: params)
+          post(admissions_requests_path, params:)
         }.not_to change(Renalware::Admissions::Request, :count)
 
         expect(response).to have_http_status(:ok)
@@ -98,7 +98,7 @@ describe "Admission Request (TCI) management" do
           }
         }
 
-        patch admissions_request_path(request, format: :js, params: params)
+        patch admissions_request_path(request, format: :js, params:)
 
         expect(response).to have_http_status(:ok)
         expect(response).to render_template(:update)
@@ -115,7 +115,7 @@ describe "Admission Request (TCI) management" do
           }
         }
 
-        patch admissions_request_path(request, format: :js, params: params)
+        patch admissions_request_path(request, format: :js, params:)
 
         expect(response).to have_http_status(:ok)
         expect(response).to render_template(:edit)

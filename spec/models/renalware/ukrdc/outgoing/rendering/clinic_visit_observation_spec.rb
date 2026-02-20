@@ -9,7 +9,7 @@ module Renalware
             it "renders nothing" do
               visit = instance_double(Clinics::ClinicVisit, height: nil)
 
-              xml = described_class.new(visit: visit, method: :height).xml
+              xml = described_class.new(visit:, method: :height).xml
 
               expect(xml).to be_nil
             end
@@ -19,7 +19,7 @@ module Renalware
             it "renders nothing" do
               visit = instance_double(Clinics::ClinicVisit, height: 0.0)
 
-              xml = described_class.new(visit: visit, method: :height).xml
+              xml = described_class.new(visit:, method: :height).xml
 
               expect(xml).to be_nil
             end
@@ -29,7 +29,7 @@ module Renalware
             it "renders nothing" do
               visit = instance_double(Clinics::ClinicVisit, height: "aaaaaaaaaaaaa")
 
-              xml = described_class.new(visit: visit, method: :height).xml
+              xml = described_class.new(visit:, method: :height).xml
 
               expect(xml).to be_nil
             end
@@ -44,7 +44,7 @@ module Renalware
                 updated_by: nil
               )
 
-              xml = format_xml(described_class.new(visit: visit, method: :height).xml)
+              xml = format_xml(described_class.new(visit:, method: :height).xml)
 
               expect(xml).to match("<ObservationValue>123</ObservationValue>")
             end

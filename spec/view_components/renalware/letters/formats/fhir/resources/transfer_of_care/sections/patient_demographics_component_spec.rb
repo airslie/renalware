@@ -21,7 +21,7 @@ module Renalware::Letters::Formats::FHIR
           postcode: "the_postcode"
         )
         allow(patient).to receive(:current_address).and_return(address)
-        letter = instance_double(Renalware::Letters::Letter, patient: patient)
+        letter = instance_double(Renalware::Letters::Letter, patient:)
 
         render_inline(described_class.new(letter))
 

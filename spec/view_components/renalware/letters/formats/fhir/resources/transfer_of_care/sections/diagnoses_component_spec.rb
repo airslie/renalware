@@ -3,14 +3,14 @@ module Renalware::Letters::Formats::FHIR
     describe Sections::DiagnosesComponent, type: :component do
       subject(:component) { described_class.new(letter) }
 
-      let(:letter) { instance_double(Renalware::Letters::Letter, patient: patient) }
+      let(:letter) { instance_double(Renalware::Letters::Letter, patient:) }
       let(:patient) { build_stubbed(:patient) }
 
       it "displays problems in a table" do
         allow(patient).to receive(:problems).and_return(
           [
-            build_stubbed(:problem, description: "new problem", patient: patient),
-            build_stubbed(:problem, description: "another problem", patient: patient)
+            build_stubbed(:problem, description: "new problem", patient:),
+            build_stubbed(:problem, description: "another problem", patient:)
           ]
         )
 

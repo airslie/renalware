@@ -1,9 +1,9 @@
 describe "Searching people" do
   describe "GET index" do
     before do
-      user = login_as_clinical
-      create(:directory_person, given_name: "Yosemite", family_name: "Sam", by: user)
-      create(:directory_person, family_name: "::another patient::", by: user)
+      by = login_as_clinical
+      create(:directory_person, given_name: "Yosemite", family_name: "Sam", by:)
+      create(:directory_person, family_name: "::another patient::", by:)
 
       visit directory.people_path
     end

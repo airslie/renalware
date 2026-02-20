@@ -7,7 +7,7 @@ module Renalware
         def change_patient_modality(patient, modality_description, user)
           create(:modality_change_type, :default)
           result = Modalities::ChangePatientModality
-            .new(patient: patient, user: user)
+            .new(patient:, user:)
             .call(description: modality_description, started_on: Time.zone.now)
           expect(result).to be_success
         end
@@ -27,7 +27,7 @@ module Renalware
         end
 
         def assign_esrf_on_date_to(patient, esrf_on)
-          Renal.cast_patient(patient).create_profile(esrf_on: esrf_on)
+          Renal.cast_patient(patient).create_profile(esrf_on:)
           patient
         end
 
@@ -79,7 +79,7 @@ module Renalware
               patient_w_late_esrf = create_death_patient(esrf_on: 1.year.from_now, first_cause: nil)
 
               query_params = { profile_esrf_on_gteq: Time.zone.today.to_s }
-              patients = described_class.new(query_params: query_params).call
+              patients = described_class.new(query_params:).call
 
               expect(patients).to eq([patient_w_late_esrf])
             end
@@ -91,12 +91,12 @@ module Renalware
               patient_w_late_esrf = create_death_patient(esrf_on: 1.year.from_now, first_cause: nil)
 
               query_params = { s: "profile_esrf_on asc" }
-              patients = described_class.new(query_params: query_params).call
+              patients = described_class.new(query_params:).call
 
               expect(patients).to eq([patient_w_early_esrf, patient_w_late_esrf])
 
               query_params = { s: "profile_esrf_on desc" }
-              patients = described_class.new(query_params: query_params).call
+              patients = described_class.new(query_params:).call
 
               expect(patients).to eq([patient_w_late_esrf, patient_w_early_esrf])
             end
@@ -106,12 +106,12 @@ module Renalware
               patient_w_late_died = create_death_patient(died_on: 1.year.from_now, first_cause: nil)
 
               query_params = { s: "died_on asc" }
-              patients = described_class.new(query_params: query_params).call
+              patients = described_class.new(query_params:).call
 
               expect(patients).to eq([patient_w_early_died, patient_w_late_died])
 
               query_params = { s: "died_on desc" }
-              patients = described_class.new(query_params: query_params).call
+              patients = described_class.new(query_params:).call
 
               expect(patients).to eq([patient_w_late_died, patient_w_early_died])
             end

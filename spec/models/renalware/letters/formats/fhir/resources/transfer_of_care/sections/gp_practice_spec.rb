@@ -6,10 +6,10 @@ module Renalware::Letters
 
         subject(:section) { described_class.new(arguments) }
 
-        let(:transmission) { instance_double(Transports::Mesh::Transmission, letter: letter) }
+        let(:transmission) { instance_double(Transports::Mesh::Transmission, letter:) }
         let(:arguments) do
           Arguments.new(
-            transmission: transmission,
+            transmission:,
             transaction_uuid: "123",
             organisation_uuid: "ORG1"
           )
@@ -19,8 +19,8 @@ module Renalware::Letters
         let(:letter) do
           build_stubbed(
             :letter,
-            patient: patient,
-            topic: topic,
+            patient:,
+            topic:,
             archive: build_stubbed(:letter_archive)
           ).tap do |lett|
             lett.build_main_recipient(person_role: :primary_care_physician)

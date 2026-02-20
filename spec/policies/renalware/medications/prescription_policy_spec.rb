@@ -4,11 +4,11 @@ module Renalware
       include PolicySpecHelper
 
       def enforce_prescriber_flag(enforce: true)
-        create(:role, :prescriber, enforce: enforce)
+        create(:role, :prescriber, enforce:)
       end
 
       def enforce_hd_prescriber_flag(enforce: true)
-        create(:role, :hd_prescriber, enforce: enforce)
+        create(:role, :hd_prescriber, enforce:)
       end
 
       subject { described_class }

@@ -5,8 +5,8 @@ RSpec.describe("Persisting the correct recipients when a letter is saved", :js) 
     create(
       :letter_patient,
       cc_on_all_letters: true,
-      primary_care_physician: primary_care_physician,
-      practice: practice
+      primary_care_physician:,
+      practice:
     )
   end
   let(:address) { build(:address, name: "::cc_name::") }
@@ -72,7 +72,7 @@ RSpec.describe("Persisting the correct recipients when a letter is saved", :js) 
       create(:letter_topic, text: "::description::")
       create(
         :letter_contact,
-        patient: patient,
+        patient:,
         person: create(:directory_person, family_name: "Smith", given_name: "John")
       )
 

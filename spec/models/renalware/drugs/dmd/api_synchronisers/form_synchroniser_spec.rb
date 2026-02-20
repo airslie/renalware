@@ -3,7 +3,7 @@ module Renalware
     describe DMD::APISynchronisers::FormSynchroniser do
       describe "#call" do
         let(:instance) {
-          described_class.new(form_repository: form_repository)
+          described_class.new(form_repository:)
         }
 
         let(:form_repository) {

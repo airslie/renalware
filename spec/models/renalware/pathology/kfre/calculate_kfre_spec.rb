@@ -5,10 +5,10 @@ module Renalware
       describe CalculateKFRE do
         subject(:svc) do
           described_class.new(
-            sex: sex,
-            age: age,
-            acr: acr,
-            egfr: egfr
+            sex:,
+            age:,
+            acr:,
+            egfr:
           )
         end
 
@@ -73,7 +73,7 @@ module Renalware
             let(:acr) { acr }
             let(:egfr) { egfr }
 
-            it { is_expected.to have_attributes(yr2: yr2, yr5: yr5) }
+            it { is_expected.to have_attributes(yr2:, yr5:) }
           end
         end
       end

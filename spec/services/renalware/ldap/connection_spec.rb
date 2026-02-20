@@ -2,7 +2,7 @@ module Renalware
   module Ldap
     describe Connection do
       subject(:connection) do
-        described_class.new(username: username, password: password)
+        described_class.new(username:, password:)
       end
 
       let(:username) { "testuser" }
@@ -41,7 +41,7 @@ module Renalware
         end
 
         it "accepts optional password" do
-          conn = described_class.new(username: username)
+          conn = described_class.new(username:)
           expect(conn.username).to eq(username)
         end
       end

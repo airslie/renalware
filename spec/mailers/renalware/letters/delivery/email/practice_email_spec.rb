@@ -5,8 +5,8 @@ module Renalware
 
       let(:user) { build_stubbed(:user) }
       let(:practice) { build_stubbed(:practice, email: "practice@example.com") }
-      let(:patient) { build_stubbed(:letter_patient, practice: practice) }
-      let(:letter) { build_stubbed(:letter, patient: patient, by: user) }
+      let(:patient) { build_stubbed(:letter_patient, practice:) }
+      let(:letter) { build_stubbed(:letter, patient:, by: user) }
 
       describe ".address" do
         subject { email.address }

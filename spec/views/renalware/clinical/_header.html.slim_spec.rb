@@ -14,7 +14,7 @@ describe "renalware/clinical/header" do
       systolic_bp: 123,
       diastolic_bp: 91
     )
-    render partial: "renalware/clinical/header", locals: { patient: patient }
+    render partial: "renalware/clinical/header", locals: { patient: }
 
     expect(rendered).to include my_t("blood_pressure")
     expect(rendered).to include my_t("weight")
@@ -40,7 +40,7 @@ describe "renalware/clinical/header" do
 
     presenter = Renalware::Clinical::HeaderPresenter.new(patient)
     allow(presenter).to receive(:current_pathology).and_return(current_pathology)
-    render partial: "renalware/clinical/header", locals: { patient: patient, header: presenter }
+    render partial: "renalware/clinical/header", locals: { patient:, header: presenter }
 
     path_codes.each do |code|
       expect(rendered).to include t(code, scope: "renalware.clinical.header")

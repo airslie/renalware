@@ -2,7 +2,7 @@
 module LettersSpecHelper
   def simple_stubbed_letter(patient)
     topic = build(:letter_topic, snomed_document_type: build(:snomed_document_type))
-    instance_double(Renalware::Letters::Letter, patient: patient, topic: topic)
+    instance_double(Renalware::Letters::Letter, patient:, topic:)
   end
 
   def build_letter(to:, patient:, state: :draft, **args)
@@ -41,8 +41,8 @@ module LettersSpecHelper
       address_attributes = attributes_for(:address)
       {
         person_role: "contact",
-        address_attributes: address_attributes,
-        addressee: build(:directory_person, address_attributes: address_attributes)
+        address_attributes:,
+        addressee: build(:directory_person, address_attributes:)
       }
     end
   end
@@ -70,8 +70,8 @@ module LettersSpecHelper
 
     patient ||= create(
       :letter_patient,
-      primary_care_physician: primary_care_physician,
-      practice: practice,
+      primary_care_physician:,
+      practice:,
       given_name: "John",
       family_name: "Smith",
       by: user
@@ -103,25 +103,25 @@ module LettersSpecHelper
     )
     contact = create(
       :letter_contact,
-      patient: patient,
-      person: person
+      patient:,
+      person:
     )
 
     letter = create_letter(
       to: :patient,
-      patient: patient,
+      patient:,
       state: :pending_review,
-      page_count: page_count,
-      body: body,
-      clinical: clinical,
-      author: author
+      page_count:,
+      body:,
+      clinical:,
+      author:
     )
 
     create(
       :letter_recipient,
       :cc,
       person_role: "contact",
-      letter: letter,
+      letter:,
       addressee: contact
     )
     Renalware::Letters::ApproveLetter.new(letter).call(by: user)

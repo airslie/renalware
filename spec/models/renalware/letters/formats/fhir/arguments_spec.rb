@@ -3,8 +3,8 @@ module Renalware::Letters
     describe Arguments do
       subject(:arguments) do
         described_class.new(
-          transmission: transmission,
-          transaction_uuid: transaction_uuid,
+          transmission:,
+          transaction_uuid:,
           organisation_uuid: "ORG1"
         )
       end
@@ -12,7 +12,7 @@ module Renalware::Letters
       let(:transmission) {
         build_stubbed(
           :letter_mesh_transmission,
-          letter: letter
+          letter:
         )
       }
       let(:transaction_uuid)    { SecureRandom.uuid }
@@ -37,8 +37,8 @@ module Renalware::Letters
         build_stubbed(
           :letter,
           uuid: letter_uuid,
-          patient: patient,
-          topic: topic,
+          patient:,
+          topic:,
           author: build_stubbed(:user, uuid: author_uuid),
           archive: build_stubbed(:letter_archive, uuid: letter_archive_uuid),
           event: build_stubbed(
@@ -148,7 +148,7 @@ module Renalware::Letters
 
       describe "#document_type_snomed_*" do
         context "when letter.topic has no letter_snomed_document_type" do
-          let(:letter) { build_stubbed(:letter, patient: patient) }
+          let(:letter) { build_stubbed(:letter, patient:) }
 
           context "when there is no row in letter_snomed_document_types with default_type: true" do
             it "raises an error" do

@@ -13,7 +13,7 @@ module Renalware
       let(:patient) { create(:patient) }
       let(:modality) do
         set_modality(
-          patient: patient,
+          patient:,
           modality_description: hd_mod_desc,
           by: user
         )
@@ -23,10 +23,10 @@ module Renalware
         create(
           :hd_profile,
           hd_type, # trait eg :hdf_pre
-          patient: patient,
+          patient:,
           created_at: start_date,
           deactivated_at: end_date,
-          active: active,
+          active:,
           **
         )
       end
@@ -95,7 +95,7 @@ module Renalware
 
             # this will be their current modality as it is the only one and has no ended_on
             modality1 = set_modality(
-              patient: patient,
+              patient:,
               modality_description: hd_mod_desc,
               by: user,
               started_on: "2017-01-01"
@@ -143,25 +143,25 @@ module Renalware
           # Based on 133651
           it "uses the first found hd profile in order to resolve the unit id" do
             modal1 = set_modality(
-              patient: patient,
+              patient:,
               modality_description: hd_mod_desc,
               by: user,
               started_on: "2017-06-21"
             )
             modal2 = set_modality(
-              patient: patient,
+              patient:,
               modality_description: hd_mod_desc,
               by: user,
               started_on: "2017-08-10"
             )
             modal3 = set_modality(
-              patient: patient,
+              patient:,
               modality_description: hd_mod_desc,
               by: user,
               started_on: "2017-11-14"
             )
             modal4 = set_modality(
-              patient: patient,
+              patient:,
               modality_description: hd_mod_desc,
               by: user,
               started_on: "2017-12-02"
@@ -223,7 +223,7 @@ module Renalware
 
             modalities = modality_start_dates.map do |date|
               set_modality(
-                patient: patient,
+                patient:,
                 modality_description: hd_mod_desc,
                 by: user,
                 started_on: date

@@ -4,7 +4,7 @@ module Renalware::Letters
       describe Sections::ProblemsAndIssues do
         subject(:section) { described_class.new(args) }
 
-        let(:args) { instance_double(Arguments, patient_urn: patient_urn, letter: nil) }
+        let(:args) { instance_double(Arguments, patient_urn:, letter: nil) }
         let(:patient_urn) { "urn:uuid:234" }
 
         it do

@@ -7,8 +7,8 @@ describe "Viewing patients merges" do
 
       create(
         :patient_merge,
-        major_patient: major_patient,
-        minor_patient: minor_patient
+        major_patient:,
+        minor_patient:
       )
 
       get patients_merges_path

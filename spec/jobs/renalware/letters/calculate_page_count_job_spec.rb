@@ -9,7 +9,7 @@ module Renalware
     let(:letter) do
       create_letter(
         to: :patient,
-        patient: patient,
+        patient:,
         state: :completed,
         body: "a line of text<br/>" * lines_of_body_text,
         by: user

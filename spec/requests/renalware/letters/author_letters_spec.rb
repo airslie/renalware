@@ -7,7 +7,7 @@ describe "An author viewing their letters" do
 
   describe "GET index" do
     it "responds with an HTML list of letters for the curreent user" do
-      create_letter(to: :patient, patient: patient, author: @current_user)
+      create_letter(to: :patient, patient:, author: @current_user)
       create_letter(to: :patient, patient: another_patient, author: another_user)
 
       get author_letters_path(@current_user.id)

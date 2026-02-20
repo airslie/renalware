@@ -28,7 +28,7 @@ describe Renalware::Clinics::ClinicVisit do
   end
 
   describe "bmi" do
-    subject(:visit) { create(:clinic_visit, height: 1.7, weight: 82.5, patient: patient) }
+    subject(:visit) { create(:clinic_visit, height: 1.7, weight: 82.5, patient:) }
 
     let(:patient) { create(:clinics_patient, :minimal) }
 
@@ -86,7 +86,7 @@ describe Renalware::Clinics::ClinicVisit do
     context "when the visit was not created from an appointment" do
       it "is deleted" do
         patient = create(:clinics_patient, :minimal)
-        visit = create(:clinic_visit, patient: patient)
+        visit = create(:clinic_visit, patient:)
 
         expect {
           visit.destroy
@@ -97,8 +97,8 @@ describe Renalware::Clinics::ClinicVisit do
     context "when the visit as created from an appointment" do
       it "is deleted and the appointment updated" do
         patient = create(:clinics_patient, :minimal)
-        visit = create(:clinic_visit, patient: patient)
-        appointment = create(:appointment, patient: patient, becomes_visit_id: visit.id)
+        visit = create(:clinic_visit, patient:)
+        appointment = create(:appointment, patient:, becomes_visit_id: visit.id)
 
         expect {
           visit.destroy

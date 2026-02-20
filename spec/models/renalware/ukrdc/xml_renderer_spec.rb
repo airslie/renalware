@@ -5,7 +5,7 @@ module Renalware
         practice = build_stubbed(:practice, code: "A12345")
         gp = build_stubbed(:primary_care_physician, code: "G1111111")
         patient = build_stubbed(:patient,
-                                practice: practice,
+                                practice:,
                                 primary_care_physician: gp,
                                 renal_registry_id: "123")
         patient_presenter = UKRDC::PatientPresenter.new(patient)
@@ -28,7 +28,7 @@ module Renalware
         practice = build_stubbed(:practice, code: "invalid_practice_code")
         gp = build_stubbed(:primary_care_physician, code: "invalid_gp_code")
         patient = build_stubbed(:patient,
-                                practice: practice,
+                                practice:,
                                 primary_care_physician: gp,
                                 renal_registry_id: "123")
         patient_presenter = UKRDC::PatientPresenter.new(patient)

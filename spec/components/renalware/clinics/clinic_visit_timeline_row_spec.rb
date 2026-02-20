@@ -9,7 +9,7 @@ module Renalware
     let(:record) do
       build(
         :clinic_visit,
-        location: location,
+        location:,
         notes: "Good progress with treatment",
         admin_notes: "Patient arrived on time"
       )

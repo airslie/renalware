@@ -4,7 +4,7 @@ module Renalware
     let(:weight) { 180.0 }
 
     describe ".to_f" do
-      subject { described_class.new(height: height, weight: weight).to_f }
+      subject { described_class.new(height:, weight:).to_f }
 
       context "when height and weight are present" do
         it { is_expected.to eq(55.6) }
@@ -36,7 +36,7 @@ module Renalware
     end
 
     describe ".to_s" do
-      subject { described_class.new(height: height, weight: weight).to_s }
+      subject { described_class.new(height:, weight:).to_s }
 
       it { is_expected.to eq("55.6") }
 

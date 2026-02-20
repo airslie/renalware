@@ -25,7 +25,7 @@ describe "Managing a patient's comorbidities", :js do
         description: malignancy_desc,
         recognised: "yes",
         recognised_at: "2010-02-01",
-        malignancy_site: malignancy_site,
+        malignancy_site:,
         by: user
       )
 

@@ -16,7 +16,7 @@ FactoryBot.define do
           create(
             :pathology_observation,
             description: desc,
-            request: request,
+            request:,
             observed_at: request.requested_at
           )
         end
@@ -31,7 +31,7 @@ FactoryBot.define do
           create(
             :pathology_observation,
             description: desc,
-            request: request,
+            request:,
             observed_at: request.requested_at,
             result: 1.0
           )

@@ -7,13 +7,13 @@ module Renalware
         create(
           :letter_patient,
           primary_care_physician: gp,
-          practice: practice,
+          practice:,
           cc_on_all_letters: true
         )
       end
       let(:user) { create(:user, :minimal) }
       let(:letter) do
-        build(:approved_letter, patient: patient, by: user).tap do |lett|
+        build(:approved_letter, patient:, by: user).tap do |lett|
           lett.type = lett.class.sti_name # TODO: remove hack caused by RSpec timing?
         end
       end
@@ -55,7 +55,7 @@ module Renalware
       def stub_practice_mailer(letter:, to:)
         message_delivery = instance_double(ActionMailer::MessageDelivery, deliver_later: nil)
         allow(PracticeMailer)
-          .to receive(:patient_letter).with(letter: letter.becomes(Letters::Letter), to: to)
+          .to receive(:patient_letter).with(letter: letter.becomes(Letters::Letter), to:)
           .and_return(message_delivery)
         message_delivery
       end
@@ -64,7 +64,7 @@ module Renalware
         context "when there are no recipients" do
           it "sends nothing out" do
             expect {
-              described_class.new(letter: letter).call
+              described_class.new(letter:).call
             }.not_to have_enqueued_job.on_queue("mailers")
           end
         end
@@ -74,7 +74,7 @@ module Renalware
             make_gp_the_main_recipient
 
             message_delivery = stub_practice_mailer(
-              letter: letter,
+              letter:,
               to: "practice@example.com"
             )
 
@@ -88,7 +88,7 @@ module Renalware
 
             date = Time.zone.parse("2017-11-24 01:04:44")
             travel_to(date) do
-              described_class.new(letter: letter).call
+              described_class.new(letter:).call
               expect(gp_recipient.reload.emailed_at).to eq(date)
             end
           end
@@ -101,7 +101,7 @@ module Renalware
 
             # Using a different way of testing the enqueueing here, to create extra coverage
             expect {
-              described_class.new(letter: letter).call
+              described_class.new(letter:).call
             }.to have_enqueued_job
           end
         end

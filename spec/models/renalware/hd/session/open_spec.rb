@@ -2,7 +2,7 @@ module Renalware
   module HD
     describe Session::Open do
       subject(:session) do
-        build(:hd_open_session, patient: patient, signed_on_by: nurse, by: nurse)
+        build(:hd_open_session, patient:, signed_on_by: nurse, by: nurse)
       end
 
       let(:nurse) { create(:user, :minimal) }
@@ -38,7 +38,7 @@ module Renalware
       end
 
       context "with a patient in a modality" do
-        let!(:modality) { create(:modality, patient: patient) }
+        let!(:modality) { create(:modality, patient:) }
 
         context "when creating the record" do
           it "associates the patient current modality" do

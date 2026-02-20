@@ -67,7 +67,7 @@ describe "Transplants MDM Patients" do
 
     def create_donor_patient(user)
       create(:transplant_patient).tap do |patient|
-        set_modality(patient: patient,
+        set_modality(patient:,
                      modality_description: create(:transplant_donor_modality_description),
                      by: user)
       end
@@ -77,13 +77,13 @@ describe "Transplants MDM Patients" do
                                        with_recent_operation: false,
                                        operation_performed_on: 2.months.ago)
       create(:transplant_patient).tap do |patient|
-        set_modality(patient: patient,
+        set_modality(patient:,
                      modality_description: create(:transplant_modality_description),
                      by: user)
 
         if with_recent_operation
           create(:transplant_recipient_operation,
-                 patient: patient,
+                 patient:,
                  performed_on: operation_performed_on)
         end
       end

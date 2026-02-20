@@ -1,7 +1,7 @@
 module Renalware
   describe UKRDC::Filename do
     describe "#to_s" do
-      subject { described_class.new(patient: patient, batch_number: batch_number).to_s }
+      subject { described_class.new(patient:, batch_number:).to_s }
 
       let(:batch_number) { instance_double(UKRDC::Batch, to_s: "000001") }
       let(:ukrdc_external_id) { nil }
@@ -12,10 +12,10 @@ module Renalware
       let(:patient) do
         build_stubbed(
           :patient,
-          ukrdc_external_id: ukrdc_external_id,
-          nhs_number: nhs_number,
-          local_patient_id: local_patient_id,
-          local_patient_id_2: local_patient_id_2
+          ukrdc_external_id:,
+          nhs_number:,
+          local_patient_id:,
+          local_patient_id_2:
         )
       end
 

@@ -27,15 +27,15 @@ module Renalware::HD
         it "returns the correct patient" do
           matching_patient = create(:hd_patient).tap do |patient|
             patient.hd_profile = create(:hd_profile,
-                                        patient: patient,
-                                        hospital_unit: hospital_unit,
+                                        patient:,
+                                        hospital_unit:,
                                         schedule_definition: matching_schedule_definition)
           end
 
           create(:hd_patient).tap do |other_patient|
             other_patient.hd_profile = create(:hd_profile,
                                               patient: other_patient,
-                                              hospital_unit: hospital_unit,
+                                              hospital_unit:,
                                               schedule_definition: other_schedule_definition)
           end
 

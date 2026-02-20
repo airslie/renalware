@@ -12,7 +12,7 @@ describe "Viewing historical HD Profiles" do
     context "with a (soft) deleted profile" do
       it "renders successfully" do
         patient = create(:hd_patient)
-        profile = create(:hd_profile, patient: patient)
+        profile = create(:hd_profile, patient:)
         profile.delete # soft delete ie updates deleted_at
 
         get patient_hd_historical_profile_path(patient, profile)
@@ -33,7 +33,7 @@ describe "Viewing historical HD Profiles" do
 
       it "raises an exception as the profile is not historical (deleted)" do
         patient = create(:hd_patient)
-        profile = create(:hd_profile, patient: patient)
+        profile = create(:hd_profile, patient:)
 
         get patient_hd_historical_profile_path(profile.patient, profile)
 

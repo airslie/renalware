@@ -6,9 +6,9 @@ describe "Appointments" do
       patient = create(:clinics_patient, by: user)
       create(
         :appointment,
-        patient: patient,
+        patient:,
         clinic: create(:clinic),
-        consultant: consultant,
+        consultant:,
         starts_at: Time.zone.now,
         by: user
       )

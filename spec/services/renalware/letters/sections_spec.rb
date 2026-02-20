@@ -14,7 +14,7 @@ RSpec.describe Renalware::Letters::Sections do
       patient: hd_patient,
       schedule_definition:,
       prescribed_time: 210,
-      hospital_unit: hospital_unit,
+      hospital_unit:,
       by: create(:user)
     )
   end
@@ -48,7 +48,7 @@ RSpec.describe Renalware::Letters::Sections do
           patient: hd_patient,
           schedule_definition: nil,
           prescribed_time: nil,
-          hospital_unit: hospital_unit,
+          hospital_unit:,
           by: create(:user)
         )
       end

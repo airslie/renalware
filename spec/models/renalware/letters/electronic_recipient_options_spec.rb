@@ -34,7 +34,7 @@ module Renalware
       describe "#to_a" do
         context "when a user has been a previous e-cc on a letter for a particular patient" do
           before do
-            letter = create_letter(to: :patient, patient: patient, by: author)
+            letter = create_letter(to: :patient, patient:, by: author)
             letter.electronic_cc_recipients << recipient1
             letter.save_by!(author)
           end

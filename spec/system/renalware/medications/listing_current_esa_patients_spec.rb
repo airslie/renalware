@@ -8,8 +8,8 @@ describe "/medications/esa_prescriptions" do
   let(:antibiotic_drug) { create(:drug, name: "Antibiotic Pill") }
   let(:antibiotic_drug_type) { create(:drug_type, :antibiotic) }
 
-  let(:esa_prescription) { create(:prescription, drug: esa_drug, patient: patient) }
-  let(:antibiotic_prescription) { create(:prescription, drug: antibiotic_drug, patient: patient) }
+  let(:esa_prescription) { create(:prescription, drug: esa_drug, patient:) }
+  let(:antibiotic_prescription) { create(:prescription, drug: antibiotic_drug, patient:) }
 
   before do
     esa_prescription && antibiotic_prescription

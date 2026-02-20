@@ -70,7 +70,7 @@ module Renalware
             </Document>
           XML
 
-          xml = format_xml(described_class.new(letter: letter).xml)
+          xml = format_xml(described_class.new(letter:).xml)
 
           expect(xml).to eq(expected_xml)
         end

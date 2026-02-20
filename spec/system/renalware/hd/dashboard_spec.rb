@@ -4,7 +4,7 @@ module Renalware
   RSpec.describe "HD Dashboard", :js do
     let(:clinician) { create(:user, :clinical) }
     let(:patient) { create(:hd_patient) }
-    let(:assessment) { create(:hd_acuity_assessment, patient: patient) }
+    let(:assessment) { create(:hd_acuity_assessment, patient:) }
     let(:pdf) { "renalware/hd_acuity_score_guide.pdf" }
 
     before do

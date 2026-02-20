@@ -4,7 +4,7 @@ describe "Managing event subtypes" do
     create(
       :event_subtype,
       name: "Subtype1",
-      event_type: event_type
+      event_type:
     )
   end
 

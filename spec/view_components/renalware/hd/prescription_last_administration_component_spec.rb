@@ -2,10 +2,10 @@ describe Renalware::HD::PrescriptionLastAdministrationComponent, type: :componen
   it "renders the last time the prescription was administered" do
     user = build_stubbed(:user)
     patient = build_stubbed(:patient, by: user)
-    prescription = build_stubbed(:prescription, patient: patient, by: user)
+    prescription = build_stubbed(:prescription, patient:, by: user)
     administration = build_stubbed(
       :hd_prescription_administration,
-      prescription: prescription,
+      prescription:,
       patient_id: patient.id,
       administered_by: user,
       recorded_on: Date.parse("01-01-2020"),
@@ -14,7 +14,7 @@ describe Renalware::HD::PrescriptionLastAdministrationComponent, type: :componen
     allow(Renalware::HD::PrescriptionAdministrationsQuery)
       .to receive(:call).and_return([administration])
 
-    render_inline(described_class.new(prescription: prescription))
+    render_inline(described_class.new(prescription:))
 
     expect(page).to have_content("Last given on Wed 01-Jan-2020 by #{user}")
     expect(page).to have_content("Notes: abc")

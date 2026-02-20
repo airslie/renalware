@@ -8,14 +8,14 @@ module Renalware
         create_observations(Renalware::Pathology.cast_patient(patient),
                             description,
                             observed_at: at,
-                            result: result)
+                            result:)
       end
 
       let(:user) { create(:user, :minimal) }
 
       def create_lcc_patient
         create(:patient, :minimal).tap do |patient|
-          set_modality(patient: patient,
+          set_modality(patient:,
                        modality_description: create(:low_clearance_modality_description),
                        by: user)
         end
@@ -23,7 +23,7 @@ module Renalware
 
       def create_lcc_patient_with_dialysis_plan(plan_enum)
         create_lcc_patient.becomes(LowClearance::Patient).tap do |patient|
-          profile = create(:low_clearance_profile, patient: patient, by: user)
+          profile = create(:low_clearance_profile, patient:, by: user)
           profile.document.dialysis_plan = plan_enum
           profile.save_by!(user)
         end

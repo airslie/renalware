@@ -4,7 +4,7 @@ describe "Displaying the patient worryboard" do
   describe "GET index" do
     it "views patients having a worry (who are on the worryboard)" do
       patient = create(:patient, :minimal, family_name: "Renaldo", by: user)
-      worry = Renalware::Patients::Worry.new(patient: patient, by: user)
+      worry = Renalware::Patients::Worry.new(patient:, by: user)
       worry.save!
 
       get worryboard_path

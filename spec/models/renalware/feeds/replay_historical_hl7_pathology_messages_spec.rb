@@ -32,7 +32,7 @@ module Renalware
             now = Time.zone.now
             # skip broadcasting_to_configured_subscribers which happens in class.call
             expect {
-              described_class.new(patient: patient).call
+              described_class.new(patient:).call
             }
               .to change(ReplayRequest, :count).by(1)
               .and change(MessageReplay, :count).by(1)
@@ -89,7 +89,7 @@ module Renalware
               replay_request = nil
               # skip broadcasting_to_configured_subscribers which happens in class.call
               expect {
-                replay_request = described_class.new(patient: patient).call
+                replay_request = described_class.new(patient:).call
               }
                 .to change(ReplayRequest, :count).by(1)
                 .and change(MessageReplay, :count).by(2)
@@ -149,7 +149,7 @@ module Renalware
             **shared_attrs
           )
           rr = ReplayRequest.create!(
-            patient: patient,
+            patient:,
             started_at: Time.zone.now,
             finished_at: Time.zone.now
           )
@@ -166,7 +166,7 @@ module Renalware
             success: false
           )
           expect {
-            described_class.new(patient: patient).call
+            described_class.new(patient:).call
           }.to change(ReplayRequest, :count).by(1)
             .and change(MessageReplay, :count).by(1)
 
@@ -200,7 +200,7 @@ module Renalware
           # a) 1 ReplayRequest for the whole operation
           # b) 1 MessageReplay for that single found message
           expect {
-            described_class.new(patient: patient).call
+            described_class.new(patient:).call
           }.to change(ReplayRequest, :count).by(1)
             .and change(MessageReplay, :count).by(1)
 
@@ -211,7 +211,7 @@ module Renalware
           # a) 1 ReplayRequest for the whole operation
           # b) 0 MessageReplays
           expect {
-            described_class.new(patient: patient).call
+            described_class.new(patient:).call
           }.to change(ReplayRequest, :count).by(1)
             .and not_change(MessageReplay, :count)
 
@@ -221,7 +221,7 @@ module Renalware
           _newer_feed_message = Message.create!(sent_at: 1.day.ago, **shared_attrs)
 
           expect {
-            described_class.new(patient: patient).call
+            described_class.new(patient:).call
           }.to change(ReplayRequest, :count).by(1)
             .and not_change(MessageReplay, :count)
 
@@ -233,7 +233,7 @@ module Renalware
             orc_filler_order_number: "456"
           )
           expect {
-            described_class.new(patient: patient).call
+            described_class.new(patient:).call
           }.to change(ReplayRequest, :count).by(1)
             .and change(MessageReplay, :count).by(1)
         end

@@ -9,7 +9,7 @@ module Renalware
 
       describe "#call" do
         context "when the recipient is the patient" do
-          let(:letter) { build_letter(to: :patient, patient: patient) }
+          let(:letter) { build_letter(to: :patient, patient:) }
 
           it "determines the primary_care_physician as a CC recipient" do
             cc_recipients = service.call
@@ -19,7 +19,7 @@ module Renalware
         end
 
         context "when the recipient is the Primary Care Physician" do
-          let(:letter) { build_letter(to: :primary_care_physician, patient: patient) }
+          let(:letter) { build_letter(to: :primary_care_physician, patient:) }
 
           context "when the patient opted to be CCd on all letters" do
             before do
@@ -48,7 +48,7 @@ module Renalware
         end
 
         context "when the recipient is someone else" do
-          let(:letter) { build_letter(to: :contact, patient: patient) }
+          let(:letter) { build_letter(to: :contact, patient:) }
 
           context "when the patient opted to be CCd on all letters" do
             before do

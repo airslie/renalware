@@ -3,7 +3,7 @@ FactoryBot.define do
     name { "unspecific modality description not set in factory" }
     hidden { false }
 
-    initialize_with { Renalware::Modalities::Description.find_or_create_by(name: name) }
+    initialize_with { Renalware::Modalities::Description.find_or_create_by(name:) }
 
     trait :transfer_out do
       name { "Transfer Out" }

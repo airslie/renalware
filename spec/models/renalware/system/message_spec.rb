@@ -22,7 +22,7 @@ module Renalware
 
     describe "#active?" do
       subject {
-        described_class.new(display_from: display_from, display_until: display_until).active?
+        described_class.new(display_from:, display_until:).active?
       }
 
       let(:display_from) { nil }

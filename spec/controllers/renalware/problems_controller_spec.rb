@@ -5,7 +5,7 @@ module Renalware::Problems
     routes { Renalware::Engine.routes }
     let(:user) { @current_user }
     let(:patient) { create(:patient, by: user) }
-    let(:problem) { create(:problem, patient: patient, by: user) }
+    let(:problem) { create(:problem, patient:, by: user) }
 
     describe "GET index" do
       it "responds with success" do

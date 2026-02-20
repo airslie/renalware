@@ -5,7 +5,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
 
   %i(feature system request component).each do |type|
-    config.include Warden::Test::Helpers, type: type
+    config.include Warden::Test::Helpers, type:
   end
 
   config.include Warden::Test::Helpers, type: :component
@@ -13,7 +13,7 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :system
 
   %i(controller system feature request component).each do |type|
-    config.include LoginMacros, type: type
+    config.include LoginMacros, type:
   end
 
   config.before(:each, type: :controller) do

@@ -17,7 +17,7 @@ module Renalware
           user = create(:user)
           patient = create(:hd_patient, by: user)
           assessment = described_class.create!(
-            patient: patient,
+            patient:,
             risk1: "0_very_low",
             risk2: "0_low",
             risk3: "1_low",
@@ -34,7 +34,7 @@ module Renalware
           user = create(:user)
           patient = create(:hd_patient, by: user)
           assessment = described_class.create!(
-            patient: patient,
+            patient:,
             risk1: "0_very_low",
             risk2: "0_low",
             risk3: "1_low",
@@ -66,7 +66,7 @@ module Renalware
           user = create(:user)
           patient = create(:hd_patient, by: user)
 
-          assessment = create(:hd_vnd_risk_assessment, patient: patient, by: user)
+          assessment = create(:hd_vnd_risk_assessment, patient:, by: user)
 
           expect(patient.vnd_risk_assessments.current).to eq(assessment)
         end
@@ -74,7 +74,7 @@ module Renalware
         it "return the latest if there are > 1" do
           user = create(:user)
           patient = create(:hd_patient, by: user)
-          args = { patient: patient, by: user }
+          args = { patient:, by: user }
           create(:hd_vnd_risk_assessment, updated_at: "2023-01-01", **args)
           target_assessment = create(:hd_vnd_risk_assessment, updated_at: "2023-03-01", **args)
           create(:hd_vnd_risk_assessment, updated_at: "2023-02-01", **args)

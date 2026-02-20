@@ -4,7 +4,7 @@ module Renalware
       subject(:presenter) { described_class.new(letter) }
 
       let(:patient) { instance_double(Patient, local_patient_id: "A123", family_name: "Jones") }
-      let(:letter) { instance_double(Letter, patient: patient, id: 111, state: :draft) }
+      let(:letter) { instance_double(Letter, patient:, id: 111, state: :draft) }
 
       describe "#pdf_filename" do
         it "returns a formatted filename inclusing the letter state" do
@@ -22,9 +22,9 @@ module Renalware
         let(:letter) {
           Letter.new \
             patient: Patient.new,
-            topic: topic,
+            topic:,
             letterhead: Letterhead.new,
-            clinical: clinical
+            clinical:
         }
         let(:topic) { nil }
         let(:clinical) { false }

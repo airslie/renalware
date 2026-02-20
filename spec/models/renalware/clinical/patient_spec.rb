@@ -11,8 +11,8 @@ describe Renalware::Clinical::Patient do
   describe "#latest_dry_weight" do
     it "returns the latest dry weight" do
       patient = create(:clinical_patient)
-      create(:dry_weight, patient: patient, weight: 123, assessed_on: 1.year.ago)
-      newer = create(:dry_weight, patient: patient, weight: 234, assessed_on: 1.day.ago)
+      create(:dry_weight, patient:, weight: 123, assessed_on: 1.year.ago)
+      newer = create(:dry_weight, patient:, weight: 234, assessed_on: 1.day.ago)
 
       expect(patient.latest_dry_weight).to eq(newer)
     end

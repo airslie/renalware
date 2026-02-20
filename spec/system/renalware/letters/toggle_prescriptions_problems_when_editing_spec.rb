@@ -8,8 +8,8 @@ module Renalware
       it "they can toggle open the patient's prescriptions and problems to get context" do
         user = login_as_clinical
         patient = create(:letter_patient, by: user)
-        problem = create(:problem, patient: patient, description: "Problem1", by: user)
-        prescription = create(:prescription, patient: patient, by: user)
+        problem = create(:problem, patient:, description: "Problem1", by: user)
+        prescription = create(:prescription, patient:, by: user)
 
         visit new_patient_letters_letter_path(patient)
 

@@ -57,10 +57,10 @@ describe "SIU^S15 - Notification of Appointment Cancellation" do
       patient = create_patient
 
       Renalware::Clinics::Appointment.create!(
-        visit_number: visit_number,
+        visit_number:,
         starts_at: Time.zone.parse("20241105101500"),
         ends_at: Time.zone.parse("20241105104500"),
-        patient: patient,
+        patient:,
         consultant: create(:consultant, code: "CONSULTANT1", name: "Dr A B"),
         clinic: create(:clinic, code: "CLINIC1")
       )

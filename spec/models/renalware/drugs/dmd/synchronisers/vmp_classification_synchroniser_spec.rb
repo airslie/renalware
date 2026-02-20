@@ -58,7 +58,7 @@ module Renalware
               it "updates it" do
                 Drugs::VMPClassification.create!(
                   code: "VMP_CODE",
-                  drug: drug,
+                  drug:,
                   inactive: false
                 )
 

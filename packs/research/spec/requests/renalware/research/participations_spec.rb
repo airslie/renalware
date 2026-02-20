@@ -1,5 +1,5 @@
 describe "Managing clinical study participation" do
-  let(:user) { @current_user }
+  let(:by) { @current_user }
 
   def create_study
     create(
@@ -7,7 +7,7 @@ describe "Managing clinical study participation" do
       code: "Study1",
       description: "Study 1",
       leader: "Jack Jones",
-      by: user
+      by:
     )
   end
 
@@ -26,7 +26,7 @@ describe "Managing clinical study participation" do
   describe "GET new" do
     it "renders new participation form provided the the current user is an investigator" do
       study = create_study
-      create(:research_investigatorship, study: study, user: user)
+      create(:research_investigatorship, study:, user: by)
 
       get research.new_study_participation_path(study)
 
@@ -38,9 +38,9 @@ describe "Managing clinical study participation" do
   describe "DELETE JS destroy" do
     it "soft deletes the participation provided the the current user is an investigator" do
       study = create_study
-      create(:research_investigatorship, study: study, user: user)
-      patient = create(:patient, :minimal, by: user, family_name: "ZZ")
-      participation = create(:research_participation, study: study, patient: patient, by: user)
+      create(:research_investigatorship, study:, user: by)
+      patient = create(:patient, :minimal, by:, family_name: "ZZ")
+      participation = create(:research_participation, study:, patient:, by:)
 
       expect do
         delete research.study_participation_path(study, participation, format: :js)
@@ -59,8 +59,8 @@ describe "Managing clinical study participation" do
     context "with valid inputs" do
       it "add the participant to the study provided the the current user is an investigator" do
         study = create_study
-        create(:research_investigatorship, study: study, user: user)
-        patient = create(:patient, :minimal, by: user)
+        create(:research_investigatorship, study:, user: by)
+        patient = create(:patient, :minimal, by:)
         params = {
           patient_id: patient.id,
           joined_on: "01-Oct-2017",
@@ -92,7 +92,7 @@ describe "Managing clinical study participation" do
     context "with invalid inputs" do
       it "re-renders the form with validation errors" do
         study = create_study
-        create(:research_investigatorship, study: study, user: user)
+        create(:research_investigatorship, study:, user: by)
         params = { patient_id: nil }
 
         post(
@@ -107,8 +107,8 @@ describe "Managing clinical study participation" do
 
     describe "GET html edit" do
       it "renders the form" do
-        participant = create(:research_participation, by: user)
-        create(:research_investigatorship, study: participant.study, user: user)
+        participant = create(:research_participation, by:)
+        create(:research_investigatorship, study: participant.study, user: by)
 
         get research.edit_study_participation_path(participant.study, participant)
 
@@ -119,8 +119,8 @@ describe "Managing clinical study participation" do
 
     describe "PATCH html update" do
       it "updates the participant" do
-        participant = create(:research_participation, by: user)
-        create(:research_investigatorship, study: participant.study, user: user)
+        participant = create(:research_participation, by:)
+        create(:research_investigatorship, study: participant.study, user: by)
 
         params = { joined_on: 1.year.ago.to_date }
         url = research.study_participation_path(participant.study, participant)

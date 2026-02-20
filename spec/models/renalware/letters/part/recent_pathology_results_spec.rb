@@ -1,10 +1,10 @@
 module Renalware::Letters
   describe Part::RecentPathologyResults do
-    subject(:part) { described_class.new(letter: letter) }
+    subject(:part) { described_class.new(letter:) }
 
     let(:user) { create(:user) }
     let(:patient) { create(:letter_patient, :minimal, by: user) }
-    let(:letter) { Letter.new(patient: patient) }
+    let(:letter) { Letter.new(patient:) }
 
     it { is_expected.to respond_to(:results) }
 
@@ -12,13 +12,13 @@ module Renalware::Letters
       subject(:results) { part.results }
 
       context "when there is pathology_snapshot is nil" do
-        let(:letter) { instance_double(Letter, patient: patient, pathology_snapshot: nil) }
+        let(:letter) { instance_double(Letter, patient:, pathology_snapshot: nil) }
 
         it { is_expected.to be_nil }
       end
 
       context "when there is pathology_snapshot is an empty hash" do
-        let(:letter) { instance_double(Letter, patient: patient, pathology_snapshot: {}) }
+        let(:letter) { instance_double(Letter, patient:, pathology_snapshot: {}) }
 
         it { is_expected.to be_nil }
       end
@@ -31,7 +31,7 @@ module Renalware::Letters
       # The order in the jsonb is unlikely to match the required order for display in the letter.
       context "when we have a pathology snapshot stored on the letter" do
         let(:letter) {
-          instance_double(Letter, patient: patient, pathology_snapshot: pathology_snapshot)
+          instance_double(Letter, patient:, pathology_snapshot:)
         }
         # These are dates we will assign to various OBX results. Note that certain OBX results will
         # arrive together (the were part of the same request, e.g. HG PLT and WBC always
@@ -100,7 +100,7 @@ module Renalware::Letters
           }
         end
         let(:letter) {
-          instance_double(Letter, patient: patient, pathology_snapshot: pathology_snapshot)
+          instance_double(Letter, patient:, pathology_snapshot:)
         }
 
         it "displays those results and nothing for the others" do
@@ -121,7 +121,7 @@ module Renalware::Letters
           }
         end
         let(:letter) {
-          instance_double(Letter, patient: patient, pathology_snapshot: pathology_snapshot)
+          instance_double(Letter, patient:, pathology_snapshot:)
         }
 
         it "displays those results and nothing for the others" do
