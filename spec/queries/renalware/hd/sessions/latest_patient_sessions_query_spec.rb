@@ -39,11 +39,13 @@ module Renalware
           expect(sessions.first).to eq(expected_session)
         end
 
+        # rubocop:disable FactoryBot/ExcessiveCreateList
         it "selects only the last 12 sessions" do
           create_list(:hd_closed_session, 13, **options, started_at: 3.weeks.ago)
           sessions = query.new(patient:).call
           expect(sessions.count).to eq(12)
         end
+        # rubocop:enable FactoryBot/ExcessiveCreateList
       end
     end
   end

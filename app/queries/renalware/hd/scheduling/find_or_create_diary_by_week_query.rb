@@ -39,7 +39,7 @@ module Renalware
         # Add in DiaryPeriods for each currently defined diurnal period eg am pm eve
         def build_diary(attrs)
           master_diary = FindOrCreateMasterDiary.for_unit(unit_id, by)
-          diary = WeeklyDiary.create!(**attrs, by: by, master_diary: master_diary)
+          diary = WeeklyDiary.create!(**attrs, by:, master_diary:)
           # Reload the diary using the supplied relation (might be eager_loads etc)
           relation.find(diary.id)
         end

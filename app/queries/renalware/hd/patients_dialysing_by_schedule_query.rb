@@ -16,7 +16,7 @@ module Renalware
           .where(
             hd_profiles: {
               schedule_definition_id: schedule_definition_ids,
-              hospital_unit_id: hospital_unit_id
+              hospital_unit_id:
             }
           )
           .order(:family_name, :given_name)

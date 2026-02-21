@@ -23,7 +23,7 @@ module Renalware
 
         module Scopes
           def for_patient(patient)
-            where(patient: patient)
+            where(patient:)
           end
 
           def not_dna

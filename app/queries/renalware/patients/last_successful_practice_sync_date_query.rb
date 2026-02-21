@@ -12,7 +12,7 @@ module Renalware
       def max_created_at
         System::APILog
           .where(
-            identifier: identifier,
+            identifier:,
             dry_run: false,
             status: Renalware::System::APILog::STATUS_DONE
           )

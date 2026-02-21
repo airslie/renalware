@@ -16,7 +16,7 @@ module Renalware
         # Be sure not to reselect profiles we have already used in a previous treatment otherwise
         # we will have duplicate Treatments with odd state/end date ordering
         used_profiles_ids = UKRDC::Treatment
-          .where(patient: patient)
+          .where(patient:)
           .where.not(hd_profile_id: nil)
           .pluck(:hd_profile_id)
         HD::Profile
