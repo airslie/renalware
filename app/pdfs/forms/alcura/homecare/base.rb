@@ -10,7 +10,7 @@ class Forms::Alcura::Homecare::Base < Forms::Base
   def green_heading_cell(text, background_color: GREEN, **options)
     {
       content: text,
-      background_color: background_color,
+      background_color:,
       align: :left,
       font_style: :bold,
       **options
@@ -57,7 +57,7 @@ class Forms::Alcura::Homecare::Base < Forms::Base
     ]
     options.each_with_index do |option, index|
       checked = selected_option == option
-      row << cell_with_leading_checkbox(option, checked: checked, borders: [:top, :bottom])
+      row << cell_with_leading_checkbox(option, checked:, borders: [:top, :bottom])
       last_col_width = if index + 1 == count
                          TABLE_WIDTH - title_col_width - (col_width * (count - 1))
                        else
@@ -66,7 +66,7 @@ class Forms::Alcura::Homecare::Base < Forms::Base
       column_widths[index + 1] = last_col_width
     end
 
-    table([row], **table_styles, column_widths: column_widths) do
+    table([row], **table_styles, column_widths:) do
       # Only the last cell has a right border as well as top and bottom
       row = row(0)
       last_cell = row.columns(count)

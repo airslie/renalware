@@ -7,7 +7,7 @@ class Forms::Generic::Homecare::DeliveryFrequencies < Forms::Base
     row = [heading("Frequency of deliveries:")]
     args.delivery_frequencies.each do |freq|
       checked = freq == args.selected_delivery_frequency
-      row.concat << cell_with_leading_checkbox(freq, checked: checked)
+      row.concat << cell_with_leading_checkbox(freq, checked:)
     end
 
     table(
