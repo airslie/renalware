@@ -9,7 +9,7 @@ class Forms::Generic::Homecare::PrescriptionDurations < Forms::Base
     row = [heading("Repeat prescription for:")]
     args.prescription_durations.each do |duration|
       checked = duration == args.selected_prescription_duration
-      row.concat << cell_with_leading_checkbox(duration, checked: checked)
+      row.concat << cell_with_leading_checkbox(duration, checked:)
     end
 
     table(

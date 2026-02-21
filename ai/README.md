@@ -20,8 +20,9 @@ Some non-standard folders:
 - app/components - Phlex components
 - app/view_components - ViewComponents
 - app/services - service objects
+- app/forms - form objects
 - app/queries - query objects
-- app/forms - Prawn PDF forms
+- app/pdfs/forms - Prawn PDF forms
 - app/drops - templates in the Liquid templating language
 - app/policies - Pundit policies
 - app/values - Value objects
@@ -39,7 +40,7 @@ working, possibly because our project is itself and engine and the tooling expec
 ## Conventions
 - Service objects (in `app/services`)
 - Query objects (in `app/queries`)
-- Form objects for backing complex HTML forms (in `app/models`)
+- Form objects for backing complex HTML forms (in `app/forms`)
 - Use Phlex for low level components, and slim for high level views
 - Prefer Phlex over ViewComponent for new components
 - Prefer Stimulus and Turbo when adding functionality using JavaScript

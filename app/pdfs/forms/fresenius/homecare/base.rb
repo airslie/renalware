@@ -20,7 +20,7 @@ class Forms::Fresenius::Homecare::Base < Forms::Base
   def light_blue_heading_cell(text, background_color: LIGHT_BLUE, **options)
     {
       content: text,
-      background_color: background_color,
+      background_color:,
       align: :left,
       font_style: :bold,
       **options
