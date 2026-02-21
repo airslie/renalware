@@ -19,7 +19,7 @@ module Renalware::Medications
 
       expect {
         described_class.call(
-          prescription: prescription,
+          prescription:,
           auto_terminate_after: 3.months,
           by: nil
         )
@@ -41,7 +41,7 @@ module Renalware::Medications
 
       expect {
         described_class.call(
-          prescription: prescription,
+          prescription:,
           auto_terminate_after: nil,
           by: user
         )
@@ -55,7 +55,7 @@ module Renalware::Medications
 
       expect {
         described_class.call(
-          prescription: prescription,
+          prescription:,
           auto_terminate_after: 3.months,
           by: user
         )
@@ -73,15 +73,15 @@ module Renalware::Medications
 
         prescription = create(
           :prescription,
-          patient: patient,
-          drug: drug,
+          patient:,
+          drug:,
           administer_on_hd: true,
           prescribed_on: 1.day.ago
         )
 
         expect {
           described_class.call(
-            prescription: prescription,
+            prescription:,
             auto_terminate_after: period,
             by: user
           )
@@ -125,8 +125,8 @@ module Renalware::Medications
         # Create an unterminated HD prescription way back
         prescription = create(
           :prescription,
-          patient: patient,
-          drug: drug,
+          patient:,
+          drug:,
           administer_on_hd: true,
           prescribed_on: 6.months.ago
         )
@@ -134,7 +134,7 @@ module Renalware::Medications
         # Now attempt to renew it which will terminate it (ignoring the validation)
         expect {
           described_class.call(
-            prescription: prescription,
+            prescription:,
             auto_terminate_after: period,
             by: user
           )
@@ -172,20 +172,20 @@ module Renalware::Medications
 
         prescription = create(
           :prescription,
-          patient: patient,
-          drug: drug,
+          patient:,
+          drug:,
           administer_on_hd: true,
           prescribed_on: 1.day.ago
         )
         create(
           :prescription_termination,
-          prescription: prescription,
+          prescription:,
           terminated_on: 1.week.from_now
         )
 
         expect {
           described_class.call(
-            prescription: prescription,
+            prescription:,
             auto_terminate_after: period,
             by: user
           )

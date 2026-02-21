@@ -7,7 +7,7 @@ module Renalware
       let(:klass) { Renalware::HD::Profile }
 
       def create_an_hd_profile
-        create(:hd_profile, patient: patient, by: user)
+        create(:hd_profile, patient:, by: user)
       end
 
       it "only allows certain processes to use it" do

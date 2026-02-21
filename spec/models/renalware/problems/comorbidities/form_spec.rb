@@ -31,7 +31,7 @@ module Renalware::Problems
           recognised_at: "2010-01-01"
         )
 
-        form = described_class.new(patient: patient, by: user)
+        form = described_class.new(patient:, by: user)
 
         expect(form.comorbidities.map(&:id)).to eq([comorb1.id, nil])
         expect(form.comorbidities.map(&:description_id)).to eq([desc1.id, desc2.id])
@@ -59,7 +59,7 @@ module Renalware::Problems
 
           patient.comorbidities.reload # otherwise updated_at changes not reflected
 
-          form = described_class.new(patient: patient, by: user, params: params)
+          form = described_class.new(patient:, by: user, params:)
 
           expect {
             form.save
@@ -91,7 +91,7 @@ module Renalware::Problems
 
           patient.comorbidities.reload # otherwise updated_at changes not reflected
 
-          form = described_class.new(patient: patient, by: user, params: params)
+          form = described_class.new(patient:, by: user, params:)
 
           form.save
 
@@ -119,7 +119,7 @@ module Renalware::Problems
             id: comorb1.id
           )
 
-          form = described_class.new(patient: patient, by: user, params: params)
+          form = described_class.new(patient:, by: user, params:)
           form.save
 
           expect(patient.comorbidities.reload).to eq([])
@@ -136,7 +136,7 @@ module Renalware::Problems
             id: "" # never saved
           )
 
-          form = described_class.new(patient: patient, by: user, params: params)
+          form = described_class.new(patient:, by: user, params:)
           form.save
 
           expect(patient.comorbidities.reload).to eq([])

@@ -5,7 +5,7 @@ describe "Simple events" do
 
     context "with valid attributes" do
       it "updates and redirects to the patient's events list" do
-        event = create(:simple_event, event_type: event_type, patient: patient)
+        event = create(:simple_event, event_type:, patient:)
 
         params = {
           events_event: {
@@ -15,7 +15,7 @@ describe "Simple events" do
           }
         }
 
-        patch patient_event_path(patient, event), params: params
+        patch(patient_event_path(patient, event), params:)
 
         expect(response).to have_http_status(:redirect)
         expect(Renalware::Events::Event).to exist(params[:events_event])
@@ -28,7 +28,7 @@ describe "Simple events" do
 
     context "with invalid attributes" do
       it "responds with a form" do
-        event = create(:simple_event, event_type: event_type, patient: patient)
+        event = create(:simple_event, event_type:, patient:)
 
         params = {
           events_event: {
@@ -37,7 +37,7 @@ describe "Simple events" do
             event_type_id: event_type.id
           }
         }
-        patch patient_event_path(patient, event), params: params
+        patch(patient_event_path(patient, event), params:)
 
         expect(response).to be_successful
       end

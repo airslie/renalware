@@ -27,7 +27,7 @@ module Renalware
         let(:patient) { create(:transplant_patient) }
         let(:modality) do
           set_modality(
-            patient: patient,
+            patient:,
             modality_description: tx_mod_desc,
             by: user
           )
@@ -162,8 +162,8 @@ module Renalware
       )
         create(
           :transplant_recipient_operation,
-          patient: patient,
-          performed_on: performed_on
+          patient:,
+          performed_on:
         ).tap do |op|
           op.document.donor.type = type
           op.document.donor.relationship = relationship

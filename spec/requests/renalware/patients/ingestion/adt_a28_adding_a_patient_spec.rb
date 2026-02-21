@@ -52,7 +52,7 @@ describe "HL7 ADT^A28 message handling: 'Add person information'" do
       patient = create(
         :patient,
         :minimal,
-        local_patient_id: local_patient_id,
+        local_patient_id:,
         born_on: Date.parse(dob)
       )
 
@@ -74,13 +74,13 @@ describe "HL7 ADT^A28 message handling: 'Add person information'" do
 
   def verify_patient_properties(patient)
     expect(patient).to have_attributes(
-      family_name: family_name,
-      given_name: given_name,
-      title: title,
+      family_name:,
+      given_name:,
+      title:,
       born_on: Date.parse(dob),
-      nhs_number: nhs_number,
-      primary_care_physician: primary_care_physician,
-      practice: practice
+      nhs_number:,
+      primary_care_physician:,
+      practice:
     )
     expect(patient.sex.code).to eq(sex)
   end

@@ -44,7 +44,7 @@ describe "Create Duke Activity Status Index (DASI) event", :js do
 
     expect(page).to have_current_path(renalware.patient_events_path(patient))
 
-    registration = Renalware::Events::Event.where(patient: patient).last
+    registration = Renalware::Events::Event.where(patient:).last
     expect(registration.document).to have_attributes(
       score: 23.45
     )

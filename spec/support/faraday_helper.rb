@@ -12,10 +12,10 @@ module FaradayHelper
                 end
     instance_double(
       Faraday::Response,
-      status: status,
-      body: body,
-      headers: headers,
-      env: { raw_body: raw_body }
+      status:,
+      body:,
+      headers:,
+      env: { raw_body: }
     )
   end
 end

@@ -14,13 +14,13 @@ module Renalware
           create(
             :modality,
             description: pd_modality_description,
-            patient: patient,
+            patient:,
             started_on: modality_started_on
           )
         end
 
         def create_apd_regime(start_date:, end_date:)
-          regime = build(:apd_regime, patient: patient, start_date: start_date, end_date: end_date)
+          regime = build(:apd_regime, patient:, start_date:, end_date:)
           regime.bags << build(:pd_regime_bag, sunday: false)
           regime.save!
           regime

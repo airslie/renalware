@@ -34,7 +34,7 @@ module Renalware
       private
 
       def create_letter_in_state(state)
-        create_letter(state: state, to: :patient, patient:, created_at: DateTime.now)
+        create_letter(state:, to: :patient, patient:, created_at: DateTime.now)
       end
     end
   end

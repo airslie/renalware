@@ -16,7 +16,7 @@ module Renalware
           address_attributes = attributes_for(:address)
           primary_care_physician_attributes = attributes_for(:primary_care_physician)
           primary_care_physician_address_attributes =
-            primary_care_physician_attributes.merge(address_attributes: address_attributes)
+            primary_care_physician_attributes.merge(address_attributes:)
 
           post patients_primary_care_physicians_path,
                params: {

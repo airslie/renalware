@@ -8,8 +8,8 @@ module Renalware
           subject(:section) { described_class.new(arguments) }
 
           let(:letter) { simple_stubbed_letter(patient) }
-          let(:transmission) { instance_double(Transports::Mesh::Transmission, letter: letter) }
-          let(:arguments) { Arguments.new(transmission: transmission, transaction_uuid: "123") }
+          let(:transmission) { instance_double(Transports::Mesh::Transmission, letter:) }
+          let(:arguments) { Arguments.new(transmission:, transaction_uuid: "123") }
           let(:patient) { Renalware::Patient.new(secure_id: "123") }
 
           it { expect(section.snomed_code).to eq("886921000000105") }

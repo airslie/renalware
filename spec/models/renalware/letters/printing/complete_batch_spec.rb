@@ -17,7 +17,7 @@ module Renalware
       it do
         batch = create_batch
 
-        described_class.new(user: user, batch: batch).call
+        described_class.new(user:, batch:).call
 
         batch.reload
         expect(batch.status).to eq("success")

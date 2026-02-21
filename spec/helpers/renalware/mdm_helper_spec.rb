@@ -3,7 +3,7 @@ module Renalware
     def patient_with_modality(modality_trait: :pd)
       patient = Patient.new(id: 1)
       description = build(:modality_description, modality_trait)
-      modality = Modalities::Modality.new(description: description)
+      modality = Modalities::Modality.new(description:)
       allow(patient).to receive(:current_modality).and_return(modality)
       patient
     end

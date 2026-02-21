@@ -7,11 +7,11 @@ describe "Batch printing letters", :js do
       user = login_as_clinical
       letter1 = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
         page_count: 1,
-        user: user
+        user:
       )
       letter2 = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
         page_count: 1,
-        user: user
+        user:
       )
 
       visit letters_list_path

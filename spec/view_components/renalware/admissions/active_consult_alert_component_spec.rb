@@ -4,12 +4,12 @@ describe Renalware::Admissions::ActiveConsultAlertComponent, type: :component do
       patient = create(:patient)
       create(
         :admissions_consult,
-        patient: patient,
+        patient:,
         started_on: 2.days.ago,
         ended_on: 1.day.ago
       )
 
-      component = described_class.new(patient: patient)
+      component = described_class.new(patient:)
       expect(component.render?).to be(false)
     end
   end
@@ -19,19 +19,19 @@ describe Renalware::Admissions::ActiveConsultAlertComponent, type: :component do
       patient = create(:patient)
       admission = create(
         :admissions_consult,
-        patient: patient,
+        patient:,
         started_on: 1.day.ago,
         ended_on: nil
       )
       create(
         :admissions_consult,
-        patient: patient,
+        patient:,
         started_on: 10.days.ago,
         ended_on: nil
       )
 
-      component = described_class.new(patient: patient)
-      render_inline(described_class.new(patient: patient))
+      component = described_class.new(patient:)
+      render_inline(described_class.new(patient:))
 
       expect(component.render?).to be(true)
       expect(page).to have_content("Active Consult")

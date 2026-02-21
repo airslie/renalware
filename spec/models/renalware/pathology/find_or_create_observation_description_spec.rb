@@ -19,7 +19,7 @@ module Renalware
           it "creates it" do
             observation_desc = nil
             sender = create(:pathology_sender)
-            svc = described_class.new(observation: observation, sender: sender)
+            svc = described_class.new(observation:, sender:)
 
             expect {
               observation_desc = svc.call
@@ -43,7 +43,7 @@ module Renalware
 
             found = nil
             sender = create(:pathology_sender)
-            svc = described_class.new(observation: observation, sender: sender)
+            svc = described_class.new(observation:, sender:)
 
             expect {
               found = svc.call
@@ -64,13 +64,13 @@ module Renalware
               )
               create(
                 :pathology_obx_mapping,
-                sender: sender,
+                sender:,
                 code_alias: "HB",
                 observation_description: target_obs_desc
               )
 
               found_obs_desc = nil
-              svc = described_class.new(observation: observation, sender: sender)
+              svc = described_class.new(observation:, sender:)
 
               expect {
                 found_obs_desc = svc.call

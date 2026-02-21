@@ -9,7 +9,7 @@ module Renalware::HD
     describe "#to_s" do
       it "formats definition in eg Mon, Wed, Thur AM" do
         diurnal_period = DiurnalPeriodCode.new(code: "am")
-        definition = described_class.new(days: [1, 3, 5], diurnal_period: diurnal_period)
+        definition = described_class.new(days: [1, 3, 5], diurnal_period:)
 
         expect(definition.to_s).to eq("Mon Wed Fri AM")
       end

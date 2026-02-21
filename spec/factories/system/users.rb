@@ -154,7 +154,7 @@ FactoryBot.define do
     end
 
     trait :find_or_create do
-      initialize_with { Renalware::User.find_or_create_by(username: username) }
+      initialize_with { Renalware::User.find_or_create_by(username:) }
     end
   end
 end

@@ -4,7 +4,7 @@ module Renalware
 
     it "duplicate an existing bag" do
       patient = create(:patient)
-      set_modality(patient: patient,
+      set_modality(patient:,
                    modality_description: create(:pd_modality_description),
                    by: User.first)
 

@@ -4,7 +4,7 @@ describe "Managing HD Stations for a Hospital Unit" do
   end
 
   def create_station(name, unit, by)
-    create(:hd_station, name: name, hospital_unit_id: unit.id, by: by)
+    create(:hd_station, name:, hospital_unit_id: unit.id, by:)
   end
 
   it "Listing existing stations" do

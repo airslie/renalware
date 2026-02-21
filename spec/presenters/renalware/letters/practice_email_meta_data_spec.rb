@@ -28,7 +28,7 @@ module Renalware
 
     let(:letter) {
       build_letter(
-        patient: patient,
+        patient:,
         to: primary_care_physician,
         approved_at: "01-Jan-2018 11:00:01",
         author: user,
@@ -45,9 +45,9 @@ module Renalware
 
           # care_group_name and letter_system_name are not supplied so config values will be used
           metadata = described_class.new(
-            letter: letter,
-            primary_care_physician: primary_care_physician,
-            practice: practice
+            letter:,
+            primary_care_physician:,
+            practice:
           )
 
           Renalware.configure do |config|
@@ -86,9 +86,9 @@ module Renalware
           allow(letter).to receive(:id).and_return(111)
 
           metadata = described_class.new(
-            letter: letter,
-            primary_care_physician: primary_care_physician,
-            practice: practice,
+            letter:,
+            primary_care_physician:,
+            practice:,
             hospital_name: "MyHospital",
             care_group_name: "MyCareGroup",
             letter_system_name: "MySystem"
@@ -124,9 +124,9 @@ module Renalware
           allow(letter).to receive(:id).and_return(111)
 
           metadata = described_class.new(
-            letter: letter,
+            letter:,
             primary_care_physician: nil,
-            practice: practice,
+            practice:,
             hospital_name: "MyHospital",
             care_group_name: "MyCareGroup",
             letter_system_name: "MySystem"
@@ -162,7 +162,7 @@ module Renalware
           allow(letter).to receive(:id).and_return(111)
 
           metadata = described_class.new(
-            letter: letter,
+            letter:,
             primary_care_physician: nil,
             practice: nil,
             hospital_name: "MyHospital",
@@ -204,9 +204,9 @@ module Renalware
           letter.event = Letters::Event::ClinicVisit.new(clinic_visit, clinical: true)
 
           metadata = described_class.new(
-            letter: letter,
-            primary_care_physician: primary_care_physician,
-            practice: practice
+            letter:,
+            primary_care_physician:,
+            practice:
           )
 
           Renalware.configure do |config|

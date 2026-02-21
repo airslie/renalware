@@ -9,12 +9,12 @@ describe "Managing a list of HD Slot Requests" do
     patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
 
     create(:hd_slot_request,
-           patient: patient,
+           patient:,
            created_at: "2023-10-01 03:03:03",
            allocated_at: "2023-10-01 03:03:04",
            urgency: "highly_urgent",
-           access_state: access_state,
-           location: location)
+           access_state:,
+           location:)
 
     visit renalware.historical_hd_slot_requests_path
 
@@ -33,13 +33,13 @@ describe "Managing a list of HD Slot Requests" do
     user = login_as_admin
     patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
     create(:hd_slot_request,
-           patient: patient,
+           patient:,
            created_at: "2023-10-01 03:03:03",
            deleted_at: "2023-10-01 03:03:04",
            deletion_reason: create(:hd_slot_request_deletion_reason, reason: "Something"),
            urgency: "highly_urgent",
-           access_state: access_state,
-           location: location)
+           access_state:,
+           location:)
 
     visit renalware.historical_hd_slot_requests_path
 
@@ -53,10 +53,10 @@ describe "Managing a list of HD Slot Requests" do
     user = login_as_admin
     patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
     create(:hd_slot_request,
-           patient: patient,
+           patient:,
            urgency: "highly_urgent",
-           access_state: access_state,
-           location: location)
+           access_state:,
+           location:)
 
     visit renalware.historical_hd_slot_requests_path
 

@@ -10,7 +10,7 @@ module Renalware
 
     it "filters by name" do
       patient = create(:patient, :minimal, family_name: "Jones", given_name: "Tom")
-      admission = create(:admissions_admission, patient: patient)
+      admission = create(:admissions_admission, patient:)
       create(:admissions_admission) # other admission
 
       admissions = described_class.call(identity_match: "JOn to")

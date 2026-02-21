@@ -30,7 +30,7 @@ module Renalware::Clinics
     end
 
     describe "#height_in_cm" do
-      subject { described_class.new(ClinicVisit.new(height: height)).height_in_cm }
+      subject { described_class.new(ClinicVisit.new(height:)).height_in_cm }
 
       [
         [1.2, 120],

@@ -10,7 +10,7 @@ module Renalware
         context "when the date is after prescribed on" do
           let(:termination) do
             build(:prescription_termination,
-                  terminated_on: "2012-01-01", prescription: prescription)
+                  terminated_on: "2012-01-01", prescription:)
           end
 
           it { expect(termination).to be_valid }
@@ -19,7 +19,7 @@ module Renalware
         context "when the date is before prescribed on" do
           let(:termination) do
             build(:prescription_termination,
-                  terminated_on: "2010-01-10", prescription: prescription)
+                  terminated_on: "2010-01-10", prescription:)
           end
 
           before { termination.valid? }
@@ -48,7 +48,7 @@ module Renalware
               termination = build(
                 :prescription_termination,
                 terminated_on: prescription.prescribed_on + 20.years,
-                prescription: prescription
+                prescription:
               )
 
               expect(termination).to be_valid
@@ -62,7 +62,7 @@ module Renalware
               build(
                 :prescription_termination,
                 terminated_on: prescription.prescribed_on + 2.years, # 2013-01-01
-                prescription: prescription
+                prescription:
               )
             end
 
@@ -79,7 +79,7 @@ module Renalware
               build(
                 :prescription_termination,
                 terminated_on: prescription.prescribed_on + 11.months,
-                prescription: prescription
+                prescription:
               )
             end
 

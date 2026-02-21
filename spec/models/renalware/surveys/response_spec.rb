@@ -12,8 +12,8 @@ module Renalware
       describe "validation" do
         subject(:response) do
           described_class.new(
-            question: question,
-            value: value,
+            question:,
+            value:,
             answered_on: 1.day.ago,
             patient_id: 1
           )
@@ -22,7 +22,7 @@ module Renalware
         let(:question) do
           Question.new(
             code: "Q1",
-            validation_regex: validation_regex
+            validation_regex:
           )
         end
 

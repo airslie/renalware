@@ -12,7 +12,7 @@ describe "Managing bookmarks" do
           }
         }
 
-        post(patient_bookmarks_path(patient), params: params)
+        post(patient_bookmarks_path(patient), params:)
         expect(response).to have_http_status(:redirect)
 
         bookmark = Renalware::Patients::Bookmark.find_by(patient_id: patient.id)
@@ -36,7 +36,7 @@ describe "Managing bookmarks" do
         attributes = params[:patients_bookmark].merge!(patient_id: patient.id)
         extant_bookmark = Renalware::Patients::Bookmark.create(attributes)
 
-        post(patient_bookmarks_path(patient), params: params)
+        post(patient_bookmarks_path(patient), params:)
         expect(response).to have_http_status(:redirect)
 
         bookmark = Renalware::Patients::Bookmark.find_by(attributes)
@@ -52,7 +52,7 @@ describe "Managing bookmarks" do
     let(:bookmark) do
       create(:patients_bookmark,
              user: Renalware::Patients.cast_user(user),
-             patient: patient)
+             patient:)
     end
 
     it "soft deletes the bookmark" do
@@ -74,7 +74,7 @@ describe "Managing bookmarks" do
     let(:bookmark) do
       create(:patients_bookmark,
              user: Renalware::Patients.cast_user(user),
-             patient: patient)
+             patient:)
     end
 
     it "lists the user's bookmarks" do
@@ -107,7 +107,7 @@ describe "Managing bookmarks" do
     let(:bookmark) do
       create(:patients_bookmark,
              user: Renalware::Patients.cast_user(user),
-             patient: patient)
+             patient:)
     end
 
     it do
@@ -121,7 +121,7 @@ describe "Managing bookmarks" do
     let(:bookmark) do
       create(:patients_bookmark,
              user: Renalware::Patients.cast_user(user),
-             patient: patient,
+             patient:,
              urgent: false,
              notes: "ABC")
     end

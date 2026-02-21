@@ -4,12 +4,12 @@ RSpec.describe "Manage electronic CCs" do
   it "Marks an Electronic CC as `read` for an approved letter", :js do
     user = login_as_clinical
     primary_care_physician = create(:letter_primary_care_physician)
-    patient = create(:letter_patient, primary_care_physician: primary_care_physician)
+    patient = create(:letter_patient, primary_care_physician:)
 
     approved_letter = create_letter(
       to: :patient,
       state: :approved,
-      patient: patient,
+      patient:,
       description: "xxx"
     )
     create(:letter_electronic_receipt, letter: approved_letter, recipient: user)
@@ -17,7 +17,7 @@ RSpec.describe "Manage electronic CCs" do
     draft_letter = create_letter(
       to: :patient,
       state: :draft,
-      patient: patient,
+      patient:,
       description: "yyy"
     )
     create(:letter_electronic_receipt, letter: draft_letter, recipient: user)

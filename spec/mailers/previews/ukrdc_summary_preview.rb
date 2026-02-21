@@ -9,7 +9,7 @@ module Renalware
           milliseconds_taken: 123.0,
           results: { sent: 1, unsent: 2 }
         )
-        UKRDC::SummaryMailer.export_summary(summary: summary)
+        UKRDC::SummaryMailer.export_summary(summary:)
       end
     end
   end

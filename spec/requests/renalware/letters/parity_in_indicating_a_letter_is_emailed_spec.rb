@@ -15,19 +15,19 @@ module Renalware
 
       let(:email) { "x@y.com" }
 
-      let(:practice) { create(:practice, email: email) }
+      let(:practice) { create(:practice, email:) }
       let(:primary_care_physician) { create(:letter_primary_care_physician) }
       let(:patient) do
         create(
           :letter_patient,
-          primary_care_physician: primary_care_physician,
-          practice: practice
+          primary_care_physician:,
+          practice:
         )
       end
 
       context "when the gp is the main recipient" do
         let(:letter) do
-          create_letter(state: :pending_review, to: :primary_care_physician, patient: patient)
+          create_letter(state: :pending_review, to: :primary_care_physician, patient:)
         end
 
         it "sanity checks" do
@@ -56,13 +56,13 @@ module Renalware
 
       context "when the gp is a cc" do
         let(:letter) do
-          create_letter(state: :pending_review, to: :patient, patient: patient).tap do |letter|
+          create_letter(state: :pending_review, to: :patient, patient:).tap do |letter|
             create(
               :letter_recipient,
               :cc,
               person_role: :primary_care_physician,
               addressee: primary_care_physician,
-              letter: letter
+              letter:
             )
           end
         end
@@ -89,7 +89,7 @@ module Renalware
       context "when approved" do
         let(:user) { create(:user, :minimal) }
         let(:letter) do
-          let = create_letter(state: :pending_review, to: :primary_care_physician, patient: patient)
+          let = create_letter(state: :pending_review, to: :primary_care_physician, patient:)
           ApproveLetter.new(let).call(by: user)
           Letter::Approved.find(let.id)
         end
@@ -120,7 +120,7 @@ module Renalware
             let = create_letter(
               state: :pending_review,
               to: :primary_care_physician,
-              patient: patient
+              patient:
             )
             ApproveLetter.new(let).call(by: user)
             Letter::Approved.find(let.id)

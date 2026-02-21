@@ -4,23 +4,24 @@ module Renalware
 
     let(:patient) { create(:letter_patient) }
     let(:user) { create(:user) }
+    let(:by) { user }
 
     def create_a_letter_outgoing_document(state: :processed, deleted_at: nil)
       letter = create_letter(
         to: :patient,
         state: :approved,
-        patient: patient,
+        patient:,
         description: "xxx",
-        deleted_at: deleted_at,
-        by: user
+        deleted_at:,
+        by:
       )
 
-      Feeds::OutgoingDocument.create!(renderable: letter, state: state, by: user)
+      Feeds::OutgoingDocument.create!(renderable: letter, state:, by:)
     end
 
     def create_an_event_outgoing_document(state: :processed, deleted_at: nil)
-      event = create(:swab, by: user, patient: patient, deleted_at: deleted_at)
-      Feeds::OutgoingDocument.create!(renderable: event, state: state, by: user)
+      event = create(:swab, by:, patient:, deleted_at:)
+      Feeds::OutgoingDocument.create!(renderable: event, state:, by:)
     end
 
     describe "#call" do
@@ -31,7 +32,7 @@ module Renalware
           expect(outgoing_document.renderable).to be_a(Renalware::Letters::Letter)
 
           freeze_time do
-            described_class.call(renderable: outgoing_document.renderable, by: user)
+            described_class.call(renderable: outgoing_document.renderable, by:)
 
             expect(outgoing_document.reload).to have_attributes(
               state: "queued",
@@ -52,7 +53,7 @@ module Renalware
           expect(outgoing_document).to be_queued
 
           freeze_time do
-            described_class.call(renderable: outgoing_document.renderable, by: user)
+            described_class.call(renderable: outgoing_document.renderable, by:)
 
             expect(outgoing_document.reload).to have_attributes(
               state: "queued",
@@ -73,7 +74,7 @@ module Renalware
           expect(outgoing_document.renderable).to be_a(Renalware::Events::Event)
 
           freeze_time do
-            described_class.call(renderable: outgoing_document.renderable, by: user)
+            described_class.call(renderable: outgoing_document.renderable, by:)
 
             expect(outgoing_document.reload).to have_attributes(
               state: "queued",

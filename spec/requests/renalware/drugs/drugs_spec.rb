@@ -123,8 +123,8 @@ describe "Configuring Drugs" do
       let(:trade_family) { create(:drug_trade_family) }
       let(:trade_family_classification) {
         create(:drug_trade_family_classification,
-               drug: drug,
-               trade_family: trade_family,
+               drug:,
+               trade_family:,
                enabled: false)
       }
 

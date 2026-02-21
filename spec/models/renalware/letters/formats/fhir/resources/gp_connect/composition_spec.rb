@@ -5,11 +5,11 @@ module Renalware
         subject(:composition) { described_class.call(arguments) }
 
         let(:transmission) do
-          instance_double(Transports::Mesh::Transmission, letter: letter, uuid: "TRANS1")
+          instance_double(Transports::Mesh::Transmission, letter:, uuid: "TRANS1")
         end
         let(:arguments) {
           Arguments.new(
-            transmission: transmission,
+            transmission:,
             transaction_uuid: "123"
           )
         }
@@ -27,9 +27,9 @@ module Renalware
             updated_at: Time.zone.parse("2022-01-01 01:01:01"),
             approved_at: Time.zone.parse("2022-01-01 01:01:01"),
             event: clinic_visit,
-            topic: topic,
+            topic:,
             event_id: 99,
-            author: author
+            author:
           ).tap do |let|
             let.build_main_recipient(person_role: :primary_care_physician)
           end

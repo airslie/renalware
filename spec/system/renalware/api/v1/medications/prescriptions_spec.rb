@@ -35,8 +35,8 @@ describe "API request for a patient's prescriptions as JSON" do
       it "renders json array" do
         prescription = create(
           :prescription,
-          patient: patient,
-          drug: drug,
+          patient:,
+          drug:,
           by: user,
           dose_amount: "20",
           frequency: "daily",

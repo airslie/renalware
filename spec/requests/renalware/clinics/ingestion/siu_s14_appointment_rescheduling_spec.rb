@@ -53,12 +53,12 @@ describe "HL7 SIU^S14 - Notification of Appointment Modification" do
 
   def create_appointment(patient, consultant, clinic, starts_at, ends_at)
     Renalware::Clinics::Appointment.create!(
-      visit_number: visit_number,
-      starts_at: starts_at,
-      ends_at: ends_at,
-      patient: patient,
-      consultant: consultant,
-      clinic: clinic,
+      visit_number:,
+      starts_at:,
+      ends_at:,
+      patient:,
+      consultant:,
+      clinic:,
       source_clinic_name: clinic_name
     )
   end
@@ -141,8 +141,8 @@ describe "HL7 SIU^S14 - Notification of Appointment Modification" do
       expect(patient.appointments.last).to have_attributes(
         starts_at: Time.zone.parse(starts_at),
         ends_at: Time.zone.parse(ends_at),
-        clinic: clinic,
-        consultant: consultant
+        clinic:,
+        consultant:
       )
     end
   end

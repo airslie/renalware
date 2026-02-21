@@ -12,9 +12,9 @@ describe Renalware::Clinics::Patient do
       # visits[1] is the target. It is on the same date as visits[0] but has a
       # more recent created_at so should be the most recent
       visits = [
-        create(:clinic_visit, date: 1.day.ago, patient: patient),
-        create(:clinic_visit, date: 1.day.ago, patient: patient),
-        create(:clinic_visit, date: 2.days.ago, patient: patient)
+        create(:clinic_visit, date: 1.day.ago, patient:),
+        create(:clinic_visit, date: 1.day.ago, patient:),
+        create(:clinic_visit, date: 2.days.ago, patient:)
       ]
 
       expect(patient.most_recent_clinic_visit).to eq(visits[1])

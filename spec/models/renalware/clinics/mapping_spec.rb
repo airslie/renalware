@@ -7,7 +7,7 @@ module Renalware::Clinics
 
     describe "uniqueness" do
       subject {
-        described_class.new(name_in_feed: "Clinic A", default_clinic: false, clinic: clinic)
+        described_class.new(name_in_feed: "Clinic A", default_clinic: false, clinic:)
       }
 
       let(:clinic) { create(:clinic) }

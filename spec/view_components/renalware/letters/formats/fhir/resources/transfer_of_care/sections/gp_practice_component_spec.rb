@@ -4,8 +4,8 @@ module Renalware::Letters::Formats::FHIR
       it do
         practice = build_stubbed(:practice, name: "PracticeX")
         gp = build_stubbed(:letter_primary_care_physician, name: "GP, X")
-        patient = build_stubbed(:letter_patient, practice: practice, primary_care_physician: gp)
-        letter = build_stubbed(:letter, patient: patient)
+        patient = build_stubbed(:letter_patient, practice:, primary_care_physician: gp)
+        letter = build_stubbed(:letter, patient:)
 
         render_inline(described_class.new(letter))
 

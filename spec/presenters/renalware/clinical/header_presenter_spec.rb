@@ -99,7 +99,7 @@ describe Renalware::Clinical::HeaderPresenter do
     end
 
     def create_clinic_visit(date, **)
-      create(:clinic_visit, patient_id: patient.id, date: date, clinic: clinic, by: user, **)
+      create(:clinic_visit, patient_id: patient.id, date:, clinic:, by: user, **)
     end
   end
 end

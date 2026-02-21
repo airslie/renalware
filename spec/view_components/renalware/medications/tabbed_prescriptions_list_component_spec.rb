@@ -20,11 +20,11 @@ describe Renalware::Medications::TabbedPrescriptionsListComponent, type: :compon
     groups = [
       {
         title: "Current",
-        prescriptions: [build_stubbed(:prescription, by: user, drug: drug1, patient: patient)]
+        prescriptions: [build_stubbed(:prescription, by: user, drug: drug1, patient:)]
       },
       {
         title: "Other",
-        prescriptions: [build_stubbed(:prescription, by: user, drug: drug2, patient: patient)]
+        prescriptions: [build_stubbed(:prescription, by: user, drug: drug2, patient:)]
       }
     ]
 

@@ -28,12 +28,12 @@ module Renalware
             user = create(:user)
             patient = create(:transplant_patient)
             terminated_status = create(:donor_stage,
-                                       patient: patient,
+                                       patient:,
                                        started_on: 1.week.ago,
                                        terminated_on: 1.day.ago,
                                        by: user)
             current_status = create(:donor_stage,
-                                    patient: patient,
+                                    patient:,
                                     started_on: terminated_status.terminated_on,
                                     terminated_on: nil,
                                     by: user)

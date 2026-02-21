@@ -5,7 +5,7 @@ module Renalware
     let(:patient) { create(:pathology_patient) }
 
     describe "#call" do
-      subject(:query) { described_class.new(patient_id: patient.id, changes_since: changes_since) }
+      subject(:query) { described_class.new(patient_id: patient.id, changes_since:) }
 
       let(:changes_since) { "2018-01-01" }
 
@@ -22,12 +22,12 @@ module Renalware
           _old_request = create_request_with_observations(
             requested_at: 4.days.ago,
             created_at: 3.days.ago,
-            patient: patient
+            patient:
           )
           recent_request = create_request_with_observations(
             requested_at: 1.day.ago,
             created_at: 1.day.ago,
-            patient: patient
+            patient:
           )
 
           expect(query.call).to eq [recent_request]
@@ -38,7 +38,7 @@ module Renalware
         let(:changes_since) { 1.day.ago }
 
         it "ignores these" do
-          create_request_with_observations(created_at: 2.days.ago, patient: patient)
+          create_request_with_observations(created_at: 2.days.ago, patient:)
           expect(query.call).to eq []
         end
       end
@@ -66,15 +66,15 @@ module Renalware
 
           recent_request = create_request_with_observations(
             created_at: 1.day.ago,
-            patient: patient
+            patient:
           )
           old_request = create_request_with_observations(
             created_at: 3.days.ago,
-            patient: patient
+            patient:
           )
           _ancient_request = create_request_with_observations(
             created_at: 200.years.ago,
-            patient: patient
+            patient:
           )
 
           expect(query.call).to eq [recent_request, old_request]

@@ -47,10 +47,10 @@ module Renalware
         subject(:errors) do
           PrescriptionAdministration.new(
             administered: true,
-            administered_by: administered_by,
-            witnessed_by: witnessed_by,
-            administered_by_password: administered_by_password,
-            witnessed_by_password: witnessed_by_password
+            administered_by:,
+            witnessed_by:,
+            administered_by_password:,
+            witnessed_by_password:
           ).tap(&:valid?).errors
         end
 
@@ -305,7 +305,7 @@ module Renalware
         it "terminates if not already terminated" do
           expect {
             PrescriptionAdministration.create!(
-              prescription: prescription,
+              prescription:,
               administered: true,
               administered_by: user1,
               witnessed_by: user2,
@@ -325,11 +325,11 @@ module Renalware
 
         it "does not try to terminate if already terminated in the past" do
           terminated_on = 1.day.ago.to_date
-          prescription.build_termination(terminated_on: terminated_on, by: user1).save!
+          prescription.build_termination(terminated_on:, by: user1).save!
 
           expect {
             PrescriptionAdministration.create!(
-              prescription: prescription,
+              prescription:,
               administered: true,
               administered_by: user1,
               witnessed_by: user2,
@@ -344,11 +344,11 @@ module Renalware
 
         it "does not try to terminate if already terminated today" do
           terminated_on = Time.zone.today
-          prescription.build_termination(terminated_on: terminated_on, by: user1).save!
+          prescription.build_termination(terminated_on:, by: user1).save!
 
           expect {
             PrescriptionAdministration.create!(
-              prescription: prescription,
+              prescription:,
               administered: true,
               administered_by: user1,
               witnessed_by: user2,
@@ -360,7 +360,7 @@ module Renalware
           }.not_to change(Medications::PrescriptionTermination, :count)
 
           expect(prescription.reload.termination).to have_attributes(
-            terminated_on: terminated_on,
+            terminated_on:,
             updated_by: user1 # ie not system user
           )
         end
@@ -379,13 +379,13 @@ module Renalware
 
           expect {
             PrescriptionAdministration.create!(
-              prescription: prescription,
+              prescription:,
               administered: true,
               administered_by: user1,
               witnessed_by: user2,
               administered_by_password: pwd,
               witnessed_by_password: pwd,
-              recorded_on: recorded_on,
+              recorded_on:,
               by: user1
             )
           }.not_to change(Medications::PrescriptionTermination, :count)

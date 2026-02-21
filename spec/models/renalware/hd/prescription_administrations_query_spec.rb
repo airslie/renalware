@@ -13,13 +13,13 @@ describe Renalware::HD::PrescriptionAdministrationsQuery do
       prescription = instance_double(Renalware::Medications::Prescription, patient: nil)
 
       expect {
-        described_class.new(prescription: prescription).call
+        described_class.new(prescription:).call
       }.to raise_error(ArgumentError)
     end
   end
 
   describe "#call" do
-    subject { described_class.new(prescription: prescription).call(limit: 10) }
+    subject { described_class.new(prescription:).call(limit: 10) }
 
     context "when the prescription has never been administered on HD" do
       let(:prescription) { create(:prescription) }
@@ -89,7 +89,7 @@ describe Renalware::HD::PrescriptionAdministrationsQuery do
   def create_prescription_administration_for(prescription, **)
     create(
       :hd_prescription_administration,
-      prescription: prescription,
+      prescription:,
       patient_id: prescription.patient.id,
       administered_by: administrator,
       witnessed_by: witness,

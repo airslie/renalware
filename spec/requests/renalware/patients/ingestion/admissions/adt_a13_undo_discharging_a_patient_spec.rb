@@ -68,14 +68,14 @@ describe "HL7 ADT^A13 message handling: 'Undo Discharging a Patient'" do
     expect(admission).to have_attributes(
       updated_by: system_user,
       created_by: system_user,
-      visit_number: visit_number,
-      consultant_code: consultant_code,
+      visit_number:,
+      consultant_code:,
       reason_for_admission: "via HL7",
       consultant: [consultant_initial, consultant_family_name].join(" "),
-      room: room,
-      bed: bed,
-      building: building,
-      floor: floor
+      room:,
+      bed:,
+      building:,
+      floor:
     )
     verify_ward_and_unit(admission)
   end
@@ -143,8 +143,8 @@ describe "HL7 ADT^A13 message handling: 'Undo Discharging a Patient'" do
       unit = create(:hospital_unit)
       discharged_admission = create(
         :admissions_admission,
-        patient: patient,
-        visit_number: visit_number,
+        patient:,
+        visit_number:,
         reason_for_admission: "via HL7",
         by: system_user,
         hospital_ward: create(:hospital_ward, hospital_unit: unit),

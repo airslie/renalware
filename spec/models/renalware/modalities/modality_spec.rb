@@ -23,7 +23,7 @@ module Renalware
         it "raises a validation error if one is missing" do
           change_type = create(:modality_change_type, require_source_hospital_centre: true)
 
-          modality = build(:modality, change_type: change_type, by: user)
+          modality = build(:modality, change_type:, by: user)
 
           expect(modality.save).to be(false)
           expect(modality.errors[:source_hospital_centre_id]).to be_present
@@ -34,7 +34,7 @@ module Renalware
 
           modality = build(
             :modality,
-            change_type: change_type,
+            change_type:,
             source_hospital_centre: hospital,
             by: user
           )
@@ -47,7 +47,7 @@ module Renalware
         it "raises a validation error if one is missing" do
           change_type = create(:modality_change_type, require_destination_hospital_centre: true)
 
-          modality = build(:modality, change_type: change_type, by: user)
+          modality = build(:modality, change_type:, by: user)
 
           expect(modality.save).to be(false)
           expect(modality.errors[:destination_hospital_centre_id]).to be_present
@@ -58,7 +58,7 @@ module Renalware
 
           modality = build(
             :modality,
-            change_type: change_type,
+            change_type:,
             destination_hospital_centre: hospital,
             by: user
           )
@@ -92,7 +92,7 @@ module Renalware
             )
             modality = create(
               :modality,
-              change_type: change_type,
+              change_type:,
               source_hospital_centre: hospital,
               by: user
             )
@@ -111,7 +111,7 @@ module Renalware
             )
             modality = build(
               :modality,
-              change_type: change_type,
+              change_type:,
               by: user
             )
             # Save w/o validation to prevent the missing source_hospital_centre validation error
@@ -132,7 +132,7 @@ module Renalware
               )
               modality = create(
                 :modality,
-                change_type: change_type,
+                change_type:,
                 destination_hospital_centre: hospital,
                 by: user
               )
@@ -151,7 +151,7 @@ module Renalware
               )
               modality = build(
                 :modality,
-                change_type: change_type,
+                change_type:,
                 by: user
               )
               # Save w/o validation to prevent missing destination_hospital_centre validation error

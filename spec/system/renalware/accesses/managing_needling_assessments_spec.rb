@@ -27,7 +27,7 @@ describe "Managing needling assessments" do
     patient = create(:accesses_patient, by: user)
     assessment = create(
       :access_needling_assessment,
-      patient: patient,
+      patient:,
       by: user,
       created_at: "12-Apr-2021"
     )

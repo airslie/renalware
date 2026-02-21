@@ -5,7 +5,7 @@ RSpec.describe "Editing an investigation", :js do
     user = login_as_clinical
     patient = create(:patient, by: user)
     set_modality(
-      patient: patient,
+      patient:,
       modality_description: create(:modality_description, :transplant),
       by: user
     )
@@ -13,7 +13,7 @@ RSpec.describe "Editing an investigation", :js do
     investigation = create(
       :investigation,
       :transplant_recipient,
-      patient: patient,
+      patient:,
       by: user
     )
     investigation.document.result = "initial_result"

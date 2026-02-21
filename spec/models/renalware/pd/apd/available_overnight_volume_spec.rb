@@ -17,7 +17,7 @@ module Renalware
         describe "#value" do
           context "when all days when the patient has PD have the same volume" do
             it "returns the available overnight volume" do
-              expect(described_class.new(regime: regime).value).to eq 3000
+              expect(described_class.new(regime:).value).to eq 3000
             end
           end
 
@@ -27,7 +27,7 @@ module Renalware
               # and 2000 litres on Sat and Sun
               regime.bags << build(:pd_regime_bag, :weekend_only, volume: 2000)
 
-              expect { described_class.new(regime: regime).value }
+              expect { described_class.new(regime:).value }
                 .to raise_error(Renalware::PD::APD::NonUniqueOvernightVolumeError)
             end
           end

@@ -3,7 +3,7 @@ describe "Peritonitis episodes" do
     it "responds successfully with a pdf form for the nurse to print out and use to " \
        "gather information about the infection" do
       patient = create(:pd_patient, family_name: "Rabbit", local_patient_id: "12345")
-      episode = create(:peritonitis_episode, patient: patient)
+      episode = create(:peritonitis_episode, patient:)
       create(:peritonitis_episode_printable_form_template)
 
       get patient_pd_peritonitis_episode_path(patient, episode, format: :pdf)

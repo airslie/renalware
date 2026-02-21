@@ -5,7 +5,7 @@ module Renalware
         subject(:factory) { described_class.new }
 
         def message_returning_action(action)
-          instance_double(Renalware::Feeds::HL7Message, action: action)
+          instance_double(Renalware::Feeds::HL7Message, action:)
         end
 
         # For the moment all ADT messages do is update the patient's details if they exist in RW,

@@ -71,14 +71,14 @@ describe "HL7 ADT^A01 message handling: 'Inpatient admission'" do
     expect(admission).to have_attributes(
       updated_by: system_user,
       created_by: system_user,
-      visit_number: visit_number,
-      consultant_code: consultant_code,
+      visit_number:,
+      consultant_code:,
       reason_for_admission: "via HL7",
       consultant: [consultant_initial, consultant_family_name].join(" "),
-      room: room,
-      bed: bed,
-      building: building,
-      floor: floor
+      room:,
+      bed:,
+      building:,
+      floor:
     )
     verify_ward_and_unit(admission)
   end

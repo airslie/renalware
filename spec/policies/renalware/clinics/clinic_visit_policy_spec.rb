@@ -12,7 +12,7 @@ module Renalware
       let(:clinic_visit) do
         instance_double(
           Renalware::Clinics::ClinicVisit,
-          created_at: created_at,
+          created_at:,
           created_by_id: user.id,
           persisted?: persisted
         )

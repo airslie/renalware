@@ -8,7 +8,7 @@ module Renalware::System
         view_metadata = create(:view_metadata)
         user = create(:user)
 
-        described_class.create!(user: user, view_metadata: view_metadata, called_at: Time.zone.now)
+        described_class.create!(user:, view_metadata:, called_at: Time.zone.now)
 
         expect(view_metadata.reload).to have_attributes(
           calls_count: 1,

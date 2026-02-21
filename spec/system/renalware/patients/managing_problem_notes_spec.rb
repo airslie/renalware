@@ -2,7 +2,7 @@ describe "Problem notes management", :js do
   it "adding a problem note" do
     user = login_as_clinical
     patient = create(:patient, by: user)
-    problem = create(:problem, patient: patient, by: user)
+    problem = create(:problem, patient:, by: user)
 
     visit patient_problem_path(patient, problem)
 
@@ -23,7 +23,7 @@ describe "Problem notes management", :js do
   it "editing a problem note" do
     user = login_as_clinical
     patient = create(:patient, by: user)
-    problem = create(:problem, patient: patient, by: user)
+    problem = create(:problem, patient:, by: user)
     note = problem.notes.create!(description: "Z123", by: user)
 
     visit patient_problem_path(patient, problem)
@@ -41,7 +41,7 @@ describe "Problem notes management", :js do
   it "deleting a problem note" do
     user = login_as_clinical
     patient = create(:patient, by: user)
-    problem = create(:problem, patient: patient, by: user)
+    problem = create(:problem, patient:, by: user)
     note = problem.notes.create!(description: "Z123", by: user)
 
     visit patient_problem_path(patient, problem)

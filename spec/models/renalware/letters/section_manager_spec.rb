@@ -7,9 +7,9 @@ module Renalware
         let(:letter) {
           Letter.new(
             patient: Patient.new,
-            topic: topic,
+            topic:,
             letterhead: Letterhead.new,
-            clinical: clinical
+            clinical:
           )
         }
         let(:topic) { nil }

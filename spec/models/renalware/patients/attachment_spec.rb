@@ -45,7 +45,7 @@ module Renalware
           let(:attachment_type) { create(:patient_attachment_type, store_file_externally: false) }
 
           it "validates the presence of #file" do
-            attachment = build(:patient_attachment, attachment_type: attachment_type, file: nil)
+            attachment = build(:patient_attachment, attachment_type:, file: nil)
 
             expect(attachment).not_to be_valid
             expect(attachment.errors.full_messages)
@@ -59,7 +59,7 @@ module Renalware
           it "validates the presence of #external_location" do
             attachment = build(
               :patient_attachment,
-              attachment_type: attachment_type,
+              attachment_type:,
               file: nil,
               external_location: nil
             )
@@ -71,7 +71,7 @@ module Renalware
           it "does not validate the presence of #file" do
             attachment = build(
               :patient_attachment,
-              attachment_type: attachment_type,
+              attachment_type:,
               file: nil,
               external_location: "some path"
             )

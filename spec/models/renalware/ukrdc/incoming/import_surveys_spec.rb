@@ -3,7 +3,7 @@ module Renalware
     describe Incoming::ImportSurveys do
       include UKRDCSpecHelper
 
-      subject(:service) { described_class.new(logger: logger) }
+      subject(:service) { described_class.new(logger:) }
 
       let(:paths) { Incoming::Paths.new }
       let(:logger) do
@@ -25,7 +25,7 @@ module Renalware
             YSQ1 YSQ2 YSQ3 YSQ4 YSQ5 YSQ6 YSQ7 YSQ8 YSQ9 YSQ10 YSQ11 YSQ12
             YSQ13 YSQ14 YSQ15 YSQ16 YSQ17 YSQ18 YSQ19 YSQ20 YSQ21 YSQ22
           ).each do |code|
-            create(:survey_question, survey: survey, code: code)
+            create(:survey_question, survey:, code:)
           end
         end
       end
@@ -33,7 +33,7 @@ module Renalware
       def create_eq5d_survey_with_questions
         create(:eq5d_survey).tap do |survey|
           %w(YOHQ1 YOHQ2 YOHQ3 YOHQ4 YOHQ5 YOHQ6).each do |code|
-            create(:survey_question, survey: survey, code: code)
+            create(:survey_question, survey:, code:)
           end
         end
       end
@@ -46,7 +46,7 @@ module Renalware
             create_pos_s_survey_with_questions
             create_eq5d_survey_with_questions
 
-            copy_test_files_into_incoming_folder(paths: paths)
+            copy_test_files_into_incoming_folder(paths:)
 
             expect {
               service.call
@@ -72,7 +72,7 @@ module Renalware
         context "when an erorr occurs" do
           context "when the patient is not found" do
             it "logs the error to the transmission logs" do
-              copy_test_files_into_incoming_folder(paths: paths)
+              copy_test_files_into_incoming_folder(paths:)
 
               expect {
                 service.call
@@ -97,7 +97,7 @@ module Renalware
           context "when the survey is not found" do
             it "logs the error to the transmission logs" do
               patient = create(:patient, nhs_number: "9999999999")
-              copy_test_files_into_incoming_folder(paths: paths)
+              copy_test_files_into_incoming_folder(paths:)
 
               expect {
                 service.call
@@ -122,7 +122,7 @@ module Renalware
           context "when a question is not found" do
             it "logs the error to the transmission logs" do
               patient = create(:patient, nhs_number: "9999999999")
-              copy_test_files_into_incoming_folder(paths: paths)
+              copy_test_files_into_incoming_folder(paths:)
               create(:pos_s_survey) # no questions
               create(:eq5d_survey) # no questions
 

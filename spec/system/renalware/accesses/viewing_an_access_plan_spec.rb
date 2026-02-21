@@ -4,7 +4,7 @@ describe "Viewing an Access Plan" do
   it "A clinician views a patient's Access Plan" do
     user = login_as_clinical
     patient = create(:accesses_patient, by: user)
-    plan = create(:access_plan, patient: patient, by: user)
+    plan = create(:access_plan, patient:, by: user)
 
     visit patient_accesses_dashboard_path(patient)
 

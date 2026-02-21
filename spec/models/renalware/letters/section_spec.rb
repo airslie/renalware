@@ -2,14 +2,14 @@ module Renalware
   module Letters
     describe Section do
       let(:letter) { instance_double(Letter, patient: double) }
-      let(:instance) { described_class.new(letter: letter) }
+      let(:instance) { described_class.new(letter:) }
 
       describe "#content_with_diffs" do
         let(:build_snapshot) { "<b>new</b> snapshot" }
 
         before do
           allow(described_class)
-            .to receive(:content_from_snapshot).with(letter: letter).and_return("snapshotted")
+            .to receive(:content_from_snapshot).with(letter:).and_return("snapshotted")
           allow(instance)
             .to receive(:build_snapshot).and_return(build_snapshot)
         end

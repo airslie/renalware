@@ -29,7 +29,7 @@ module Renalware
               by: user
             }
 
-            described_class.new(patient: patient, options: options).call
+            described_class.new(patient:, options:).call
 
             stages = DonorStage.for_patient(patient).all
             expect(stages.length).to eq(1)
@@ -46,7 +46,7 @@ module Renalware
             status = create(:donor_stage_status, name: "S")
             position1 = create(:donor_stage_position, name: "A")
             position2 = create(:donor_stage_position, name: "B")
-            existing_status = DonorStage.new(patient: patient,
+            existing_status = DonorStage.new(patient:,
                                              stage_position: position1,
                                              stage_status: status,
                                              started_on: 1.day.ago,
@@ -61,7 +61,7 @@ module Renalware
               notes: "Some notes",
               by: user
             }
-            result = described_class.new(patient: patient, options: options).call
+            result = described_class.new(patient:, options:).call
 
             expect(result).to be_success
 

@@ -6,8 +6,8 @@ RSpec.describe "Add a patient to a study (creating a participation)" do
       study = create_study(by: user)
       create(
         :research_investigatorship,
-        user: user,
-        study: study,
+        user:,
+        study:,
         by: user,
         started_on: "2018-01-01"
       )
@@ -45,7 +45,7 @@ RSpec.describe "Add a patient to a study (creating a participation)" do
       code: "Study1",
       description: "Study 1",
       leader: "Jack Jones",
-      by: by
+      by:
     )
   end
 end

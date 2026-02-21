@@ -1,10 +1,10 @@
 describe Renalware::Problems::Comorbidities::SummaryComponent, type: :component do
   subject(:component) do
     described_class.new(
-      patient: patient,
+      patient:,
       current_user: user,
-      at_date: at_date,
-      display_blank: display_blank
+      at_date:,
+      display_blank:
     )
   end
 
@@ -15,7 +15,7 @@ describe Renalware::Problems::Comorbidities::SummaryComponent, type: :component 
 
   def create_comorbidity(name: "xx", pos: 1, **)
     patient.comorbidities.create!(
-      description: create(:comorbidity_description, name: name, position: pos),
+      description: create(:comorbidity_description, name:, position: pos),
       by: user,
       **
     )

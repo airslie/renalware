@@ -11,18 +11,18 @@ describe Renalware::Pathology::Requests::RequestQuery do
     let!(:request_new) do
       create(
         :pathology_requests_request,
-        clinic: clinic,
-        patient: patient,
-        consultant: consultant,
+        clinic:,
+        patient:,
+        consultant:,
         created_at: 1.day.ago
       )
     end
     let!(:request_old) do
       create(
         :pathology_requests_request,
-        clinic: clinic,
-        patient: patient,
-        consultant: consultant,
+        clinic:,
+        patient:,
+        consultant:,
         created_at: 2.days.ago
       )
     end

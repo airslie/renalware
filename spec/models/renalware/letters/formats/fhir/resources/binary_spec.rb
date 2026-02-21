@@ -5,10 +5,10 @@ module Renalware
         subject(:binary) { described_class.call(arguments) }
 
         let(:transmission) do
-          instance_double(Transports::Mesh::Transmission, letter: letter, uuid: "TRANS1")
+          instance_double(Transports::Mesh::Transmission, letter:, uuid: "TRANS1")
         end
         let(:binary_uuid) { SecureRandom.uuid }
-        let(:arguments) { Arguments.new(transmission: transmission, transaction_uuid: "123") }
+        let(:arguments) { Arguments.new(transmission:, transaction_uuid: "123") }
         let(:patient) { build_stubbed(:patient) }
         let(:letters_patient) { patient.becomes(Letters::Patient) }
         let(:author) { build_stubbed(:user, uuid: "abc") }
@@ -20,8 +20,8 @@ module Renalware
             patient: letters_patient,
             updated_at: Time.zone.parse("2022-01-01 01:01:01"),
             event_id: 99,
-            topic: topic,
-            author: author,
+            topic:,
+            author:,
             archive: build_stubbed(:letter_archive, uuid: binary_uuid, pdf_content: "123")
           ).tap do |let|
             let.build_main_recipient(person_role: :primary_care_physician)

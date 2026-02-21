@@ -9,7 +9,7 @@ describe "Viewing letter batches" do
       patient: create(:letter_patient)
     )
     batch = Renalware::Letters::Batch.create!(by: user)
-    batch.items.create(letter: letter)
+    batch.items.create(letter:)
     batch.reload
   end
 

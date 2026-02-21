@@ -33,34 +33,34 @@ module Renalware
           it "calculates the mean from a number of values" do
             sessions = [{ x: 1.1 }, { x: 1.2 }, { x: 1.3 }]
             selector = ->(session) { session[:x] }
-            result = strategy.new(sessions: sessions, selector: selector).call
+            result = strategy.new(sessions:, selector:).call
             expect(result).to eq(1.2)
           end
 
           it "returns the only value if there is just one" do
             sessions = [{ x: 1.99999 }]
             selector = ->(session) { session[:x] }
-            result = strategy.new(sessions: sessions, selector: selector).call
+            result = strategy.new(sessions:, selector:).call
             expect(result).to eq(2.0) # 1.9999 rounded up to 2.0
           end
 
           it "excludes nil values from the mean calculation" do
             sessions = [{ x: 1.1 }, { x: 1.2 }, { x: nil }, { x: 1.3 }]
             selector = ->(session) { session[:x] }
-            result = strategy.new(sessions: sessions, selector: selector).call
+            result = strategy.new(sessions:, selector:).call
             expect(result).to eq(1.2)
           end
 
           it "returns 0 if there are sessions" do
             selector = ->(session) { session[:x] }
-            result = strategy.new(sessions: [], selector: selector).call
+            result = strategy.new(sessions: [], selector:).call
             expect(result).to eq(0)
           end
 
           it "returns 0 if there are only nil values" do
             sessions = [{ x: nil }, { x: nil }]
             selector = ->(session) { session[:x] }
-            result = strategy.new(sessions: sessions, selector: selector).call
+            result = strategy.new(sessions:, selector:).call
             expect(result).to eq(0)
           end
         end
@@ -249,9 +249,9 @@ module Renalware
 
         describe "Missed HD time methods" do
           before do
-            profile1 = build_stubbed(:hd_profile, patient: patient, prescribed_time: nil)
-            profile2 = build_stubbed(:hd_profile, patient: patient, prescribed_time: 100)
-            profile3 = build_stubbed(:hd_profile, patient: patient, prescribed_time: 200)
+            profile1 = build_stubbed(:hd_profile, patient:, prescribed_time: nil)
+            profile2 = build_stubbed(:hd_profile, patient:, prescribed_time: 100)
+            profile3 = build_stubbed(:hd_profile, patient:, prescribed_time: 200)
 
             sessions_with_no_profile = [
               Session::Closed.new(duration: 100, profile: nil)

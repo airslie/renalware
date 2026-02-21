@@ -13,11 +13,11 @@ describe "Managing a list of HD Slot Requests" do
     user = login_as_admin
     patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
     create(:hd_slot_request,
-           patient: patient,
+           patient:,
            created_at: "2023-10-01 03:03:03",
            urgency: "highly_urgent",
-           access_state: access_state,
-           location: location)
+           access_state:,
+           location:)
 
     visit renalware.hd_slot_requests_path
 
@@ -128,9 +128,9 @@ describe "Managing a list of HD Slot Requests" do
 
       slot_request = create(
         :hd_slot_request,
-        patient: patient,
-        location: location,
-        access_state: access_state,
+        patient:,
+        location:,
+        access_state:,
         created_at: "2023-10-01 03:03:03",
         urgency: "highly_urgent"
       )
@@ -166,9 +166,9 @@ describe "Managing a list of HD Slot Requests" do
 
       slot_request = create(
         :hd_slot_request,
-        patient: patient,
-        location: location,
-        access_state: access_state,
+        patient:,
+        location:,
+        access_state:,
         created_at: "2023-10-01 03:03:03",
         urgency: "highly_urgent"
       )
@@ -209,9 +209,9 @@ describe "Managing a list of HD Slot Requests" do
 
           create(
             :hd_slot_request,
-            patient: patient,
-            location: location,
-            access_state: access_state,
+            patient:,
+            location:,
+            access_state:,
             medically_fit_for_discharge: false,
             created_at: "2023-10-01 03:03:03",
             urgency: "highly_urgent",
@@ -249,10 +249,10 @@ describe "Managing a list of HD Slot Requests" do
 
             create(
               :hd_slot_request,
-              patient: patient,
+              patient:,
               created_at: "2023-10-01 03:03:03",
-              location: location,
-              access_state: access_state,
+              location:,
+              access_state:,
               medically_fit_for_discharge: true,
               medically_fit_for_discharge_at: Time.zone.now,
               medically_fit_for_discharge_by_id: user.id

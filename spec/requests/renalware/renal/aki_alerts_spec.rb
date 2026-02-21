@@ -8,13 +8,13 @@ describe "AKI alert management" do
       :aki_alert,
       notes: SecureRandom.uuid,
       patient: create(:renal_patient, by: user),
-      hospital_ward: hospital_ward,
+      hospital_ward:,
       max_aki: 2,
       aki_date: at,
       action: action || default_action,
       by: user,
       created_at: at,
-      hotlist: hotlist
+      hotlist:
     )
   end
 
@@ -125,7 +125,7 @@ describe "AKI alert management" do
   describe "GET edit" do
     it "renders the edit form" do
       patient = create(:renal_patient)
-      alert = create(:aki_alert, notes: "abc", patient: patient, by: user)
+      alert = create(:aki_alert, notes: "abc", patient:, by: user)
 
       get edit_renal_aki_alert_path(alert, format: :html)
 

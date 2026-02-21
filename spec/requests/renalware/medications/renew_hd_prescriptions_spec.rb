@@ -5,7 +5,7 @@ describe "Renew HD prescription" do
     create(
       :prescription,
       drug: create(:drug, name: drug_name),
-      patient: patient,
+      patient:,
       administer_on_hd: hd
     )
   end
@@ -39,7 +39,7 @@ describe "Renew HD prescription" do
 
       post(
         patient_medications_prescription_batch_renewals_path(patient),
-        params: params
+        params:
       )
 
       expect(Renalware::Medications::RenewPrescription).to have_received(:call).twice
@@ -56,7 +56,7 @@ describe "Renew HD prescription" do
 
       post(
         patient_medications_prescription_batch_renewals_path(patient),
-        params: params
+        params:
       )
 
       expect(Renalware::Medications::RenewPrescription).not_to have_received(:call)
@@ -73,7 +73,7 @@ describe "Renew HD prescription" do
 
       post(
         patient_medications_prescription_batch_renewals_path(patient),
-        params: params
+        params:
       )
 
       expect(Renalware::Medications::RenewPrescription).not_to have_received(:call)

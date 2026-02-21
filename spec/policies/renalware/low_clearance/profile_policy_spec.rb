@@ -9,13 +9,13 @@ module Renalware
       let(:clinician) { user_double_with_role(:clinical) }
       let(:user) { create(:user) }
       let(:patient) { create(:low_clearance_patient) }
-      let(:profile) { create(:low_clearance_profile, patient: patient, by: user) }
+      let(:profile) { create(:low_clearance_profile, patient:, by: user) }
 
       permissions :edit? do
         context "when the patient has the LowClearance modality" do
           before do
             set_modality(
-              patient: patient,
+              patient:,
               modality_description: create(:low_clearance_modality_description),
               by: user
             )

@@ -93,7 +93,7 @@ describe "Clinical Studies management" do
             code: nil
           }
         }
-        post research.studies_path, params: params
+        post(research.studies_path, params:)
 
         expect(response).to be_successful
         expect(response).to render_template(:new)
@@ -120,7 +120,7 @@ describe "Clinical Studies management" do
 
         params = { study: { code: "Study1a" } }
 
-        patch research.study_path(study), params: params
+        patch(research.study_path(study), params:)
 
         follow_redirect!
         expect(response).to be_successful
@@ -140,7 +140,7 @@ describe "Clinical Studies management" do
             document: {}
           }
         }
-        post research.studies_path, params: params
+        post(research.studies_path, params:)
 
         expect(response).to be_successful
         expect(response.body).to match(/error/)
@@ -151,7 +151,7 @@ describe "Clinical Studies management" do
   describe "DELETE destroy" do
     it "soft-deletes the study" do
       study = create_study
-      create(:research_participation, study: study)
+      create(:research_participation, study:)
 
       expect {
         delete research.study_path(study)

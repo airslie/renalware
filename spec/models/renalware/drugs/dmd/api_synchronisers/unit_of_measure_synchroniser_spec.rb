@@ -3,7 +3,7 @@ module Renalware::Drugs
     describe APISynchronisers::UnitOfMeasureSynchroniser do
       describe "#call" do
         let(:instance) {
-          described_class.new(unit_of_measure_repository: unit_of_measure_repository)
+          described_class.new(unit_of_measure_repository:)
         }
 
         let(:unit_of_measure_repository) {

@@ -11,7 +11,7 @@ module Renalware::Letters::Transports::Mesh
       # Note you can run a meshapi sandbox on localhost:8700 using docker
       # https://github.com/NHSDigital/mesh-sandbox
       allow(Renalware.config).to receive_messages(
-        mesh_mailbox_id: mesh_mailbox_id,
+        mesh_mailbox_id:,
         mesh_api_base_url: base_url,
         mesh_path_to_client_cert: Renalware::Engine.root.join("spec/support/dummy_mesh_cert.txt"),
         mesh_path_to_client_key: Renalware::Engine.root.join("spec/support/dummy_mesh_key.txt")

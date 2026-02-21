@@ -1,7 +1,7 @@
 module DrugsSpecHelper
   def load_drugs(*names)
     names.each do |name|
-      drug = create(:drug, name: name)
+      drug = create(:drug, name:)
       instance_variable_set(:"@#{name.downcase}", drug)
     end
   end
@@ -24,7 +24,7 @@ module DrugsSpecHelper
     }
 
     medication_routes.map do |code, name|
-      route = create(:medication_route, code: code, name: name)
+      route = create(:medication_route, code:, name:)
       instance_variable_set(:"@#{code.downcase}", route)
     end
   end
@@ -40,7 +40,7 @@ module DrugsSpecHelper
   private
 
   def assign_drug(name)
-    drug = create(:drug, name: name)
+    drug = create(:drug, name:)
     instance_variable_set(:"@#{name.downcase}", drug)
   end
 
@@ -48,7 +48,7 @@ module DrugsSpecHelper
     drug_type = Renalware::Drugs::Type.find_by(code: name.downcase)
 
     if drug_type.blank?
-      drug_type = create(:drug_type, code: name.downcase, name: name)
+      drug_type = create(:drug_type, code: name.downcase, name:)
       instance_variable_set(:"@#{name.downcase}", drug_type)
     end
 

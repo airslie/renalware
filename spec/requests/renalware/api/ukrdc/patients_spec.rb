@@ -51,7 +51,7 @@ describe "API request for a single UKRDC patient XML document" do
       sess.save!
 
       # So medications elements are triggered
-      create(:prescription, patient: patient, by: user)
+      create(:prescription, patient:, by: user)
 
       get renalware.api_ukrdc_patient_path(patient)
 
@@ -65,7 +65,7 @@ describe "API request for a single UKRDC patient XML document" do
     context "when the patient has died" do
       it "includes first cause of death elements" do
         set_modality(
-          patient: patient,
+          patient:,
           modality_description: create(:modality_description, :death),
           by: user
         )

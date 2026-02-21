@@ -13,7 +13,7 @@ describe "Batch printing Pathology request forms (for monthly bloods) from the H
   end
 
   def create_hd_patient(family_name, user)
-    create(:hd_patient, family_name: family_name, by: user).tap do |pat|
+    create(:hd_patient, family_name:, by: user).tap do |pat|
       set_modality(
         patient: pat,
         modality_description: hd_modality_description,

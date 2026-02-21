@@ -2,7 +2,7 @@ module Renalware
   module Letters
     describe Lists::Form do
       context "when named_filter is :all" do
-        subject(:form) { described_class.new(named_filter: :all, params: params) }
+        subject(:form) { described_class.new(named_filter: :all, params:) }
 
         let(:params) { {} }
 

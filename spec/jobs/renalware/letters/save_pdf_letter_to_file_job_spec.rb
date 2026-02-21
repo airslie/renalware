@@ -15,7 +15,7 @@ describe Renalware::Letters::SavePdfLetterToFileJob do
     create_letter(
       state: :approved,
       to: :patient,
-      patient: patient
+      patient:
     )
   end
 
@@ -26,7 +26,7 @@ describe Renalware::Letters::SavePdfLetterToFileJob do
       allow_any_instance_of(Renalware::Letters::LetterPresenter)
         .to receive(:to_html).and_return("test")
 
-      job.perform(letter: letter, file_path: file_path)
+      job.perform(letter:, file_path:)
 
       expect(File.exist?(file_path)).to be(true)
     end

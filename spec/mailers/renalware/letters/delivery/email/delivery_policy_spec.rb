@@ -4,7 +4,7 @@ module Renalware
       subject(:policy) { described_class.new(letter) }
 
       let(:user) { build_stubbed(:user) }
-      let(:letter) { build_stubbed(:letter, patient: patient, by: user) }
+      let(:letter) { build_stubbed(:letter, patient:, by: user) }
       let(:patient) { build_stubbed(:letter_patient) }
       let(:gp) { build_stubbed(:letter_primary_care_physician) }
 
@@ -43,14 +43,14 @@ module Renalware
 
           context "when the patient has a practice without an email address" do
             let(:practice) { build_stubbed(:practice, email: "") }
-            let(:patient) { build_stubbed(:letter_patient, practice: practice) }
+            let(:patient) { build_stubbed(:letter_patient, practice:) }
 
             it { is_expected.to be_falsey }
           end
 
           context "when the patient has a practice with an email address" do
             let(:practice) { build_stubbed(:practice, email: "practice@example.com") }
-            let(:patient) { build_stubbed(:letter_patient, practice: practice) }
+            let(:patient) { build_stubbed(:letter_patient, practice:) }
 
             it { is_expected.to be(true) }
 

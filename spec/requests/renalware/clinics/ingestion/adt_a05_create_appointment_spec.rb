@@ -20,10 +20,10 @@ describe "HL7 ADT^A05 create appointment" do
 
   let(:data) do
     OpenStruct.new(
-      visit_number: visit_number,
-      starts_at: starts_at,
+      visit_number:,
+      starts_at:,
       patient: OpenStruct.new(
-        nhs_number: nhs_number,
+        nhs_number:,
         hospital_number: local_patient_id,
         family_name: "Smith",
         given_name: "John",
@@ -46,8 +46,8 @@ describe "HL7 ADT^A05 create appointment" do
   def create_matching_patient
     create(
       :patient,
-      nhs_number: nhs_number,
-      local_patient_id: local_patient_id,
+      nhs_number:,
+      local_patient_id:,
       born_on: Date.parse("19440922")
     ).tap do |pat|
       pat.current_address.update!(postcode: "OLD POSTCODE")
@@ -103,10 +103,10 @@ describe "HL7 ADT^A05 create appointment" do
           .and change(Renalware::Clinics::Consultant, :count).by(1)
 
         appointment = Renalware::Clinics::Appointment.last
-        expect(appointment).to have_attributes(clinic: clinic, visit_number: visit_number)
+        expect(appointment).to have_attributes(clinic:, visit_number:)
         expect(appointment.consultant).to have_attributes(code: consultant_code)
         patient = appointment.patient
-        expect(patient).to have_attributes(nhs_number: nhs_number)
+        expect(patient).to have_attributes(nhs_number:)
         expect(patient.reload.current_modality).to be_nil
       end
 
@@ -141,7 +141,7 @@ describe "HL7 ADT^A05 create appointment" do
           patient_id: patient.id,
           clinic_id: clinic.id,
           starts_at: Time.zone.parse(starts_at),
-          visit_number: visit_number
+          visit_number:
         )
 
         expect(appointment.consultant).to have_attributes(
@@ -169,7 +169,7 @@ describe "HL7 ADT^A05 create appointment" do
           patient_id: patient.id,
           clinic_id: clinic.id,
           starts_at: Time.zone.parse(starts_at),
-          visit_number: visit_number
+          visit_number:
         )
       end
 
@@ -182,7 +182,7 @@ describe "HL7 ADT^A05 create appointment" do
           create(:consultant, code: consultant_code)
           patient = create_matching_patient
           set_modality(
-            patient: patient,
+            patient:,
             modality_description: create(:modality_description, :hd),
             by: patient.created_by
           )

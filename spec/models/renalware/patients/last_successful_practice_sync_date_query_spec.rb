@@ -16,10 +16,10 @@ module Renalware
 
         context "when there are DONE APILog rows matching the identifer" do
           it "returns the latest created_at date of that row" do
-            create(:api_log, :done, identifier: identifier, created_at: "2019-01-01")
-            create(:api_log, :done, identifier: identifier, created_at: "2019-02-01")
-            create(:api_log, :error, identifier: identifier, created_at: "2019-03-01")
-            create(:api_log, :working, identifier: identifier, created_at: "2019-04-01")
+            create(:api_log, :done, identifier:, created_at: "2019-01-01")
+            create(:api_log, :done, identifier:, created_at: "2019-02-01")
+            create(:api_log, :error, identifier:, created_at: "2019-03-01")
+            create(:api_log, :working, identifier:, created_at: "2019-04-01")
 
             expect(date).to eq("2019-02-01")
           end

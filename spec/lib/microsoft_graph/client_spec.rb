@@ -1,9 +1,9 @@
 describe MicrosoftGraph::Client do
   subject(:client) do
     described_class.new(
-      tenant_id: tenant_id,
-      client_id: client_id,
-      client_secret: client_secret
+      tenant_id:,
+      client_id:,
+      client_secret:
     )
   end
 

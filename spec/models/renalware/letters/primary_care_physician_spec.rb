@@ -9,22 +9,22 @@ module Renalware
 
       describe "#cc_on_letter?" do
         context "when the Primary Care Physician is assigned to the patient" do
-          let(:patient) { build(:letter_patient, primary_care_physician: primary_care_physician) }
+          let(:patient) { build(:letter_patient, primary_care_physician:) }
 
           context "when the patient is the main recipient" do
-            let(:letter) { build_letter(to: :patient, patient: patient) }
+            let(:letter) { build_letter(to: :patient, patient:) }
 
             it { expect(primary_care_physician).to be_cc_on_letter(letter) }
           end
 
           context "when the Primary Care Physician is the main recipient" do
-            let(:letter) { build_letter(to: :primary_care_physician, patient: patient) }
+            let(:letter) { build_letter(to: :primary_care_physician, patient:) }
 
             it { expect(primary_care_physician).not_to be_cc_on_letter(letter) }
           end
 
           context "when someone else is the main recipient" do
-            let(:letter) { build_letter(to: :contact, patient: patient) }
+            let(:letter) { build_letter(to: :contact, patient:) }
 
             it { expect(primary_care_physician).to be_cc_on_letter(letter) }
           end
@@ -35,7 +35,7 @@ module Renalware
           let(:patient) do
             build(:letter_patient, primary_care_physician: other_primary_care_physician)
           end
-          let(:letter) { build_letter(to: :patient, patient: patient) }
+          let(:letter) { build_letter(to: :patient, patient:) }
 
           it { expect(primary_care_physician).not_to be_cc_on_letter(letter) }
         end

@@ -11,16 +11,16 @@ module Renalware
           patient = create(:hd_patient)
           profile = create(
             :hd_profile,
-            patient: patient,
+            patient:,
             by: user,
             prescriber: user,
             hospital_unit: unit,
-            schedule_definition: schedule_definition
+            schedule_definition:
           )
 
           freeze_time do
             listener.patient_modality_changed_to_death(
-              patient: patient,
+              patient:,
               modality: Object.new,
               actor: user
             )

@@ -5,7 +5,7 @@ module Renalware
         include ConfigHelper
 
         subject(:mail) do
-          described_class.patient_letter(letter: letter, to: recipient_email)
+          described_class.patient_letter(letter:, to: recipient_email)
         end
 
         let(:recipient_email) { "practice@example.com" }
@@ -23,7 +23,7 @@ module Renalware
             create(
               :letter_patient,
               primary_care_physician: gp,
-              practice: practice,
+              practice:,
               local_patient_id: 123123 # HOSP1
             )
           end
@@ -31,7 +31,7 @@ module Renalware
           let(:letter_factory_name) { :approved_letter }
           let(:letter) do
             build(letter_factory_name,
-                  patient: patient,
+                  patient:,
                   description: "LetterDescription",
                   by: user).tap do |letter|
               letter.build_main_recipient(person_role: :primary_care_physician, addressee: gp)

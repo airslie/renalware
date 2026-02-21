@@ -12,7 +12,7 @@ module Renalware
       let(:observation_datetime) { "200911111841" }
       let(:patient) do
         create(:pathology_patient,
-               local_patient_id: local_patient_id,
+               local_patient_id:,
                born_on: Time.zone.today - 34.years) do |pat|
           create(
             :modality,
@@ -31,7 +31,7 @@ module Renalware
 
       def give_patient_an_egfr(patient, value)
         create_request_with_observations(
-          patient: patient,
+          patient:,
           obx_codes: ["EGFR"],
           requested_at: 1.month.ago,
           result: value
@@ -42,7 +42,7 @@ module Renalware
         describe "#after_observation_request_persisted" do
           context "when the obr does not contain an ACR result" do
             it "does not create a KFRE" do
-              obr = create(:pathology_observation_request, patient: patient)
+              obr = create(:pathology_observation_request, patient:)
               expect(obr.observations.count).to eq(0)
 
               expect {
@@ -55,7 +55,7 @@ module Renalware
             context "when the patient has no recent egfr" do
               it "does not create a KFRE" do
                 obr = create_request_with_observations(
-                  patient: patient,
+                  patient:,
                   obx_codes: ["ACR"],
                   result: acr.to_s
                 )
@@ -79,7 +79,7 @@ module Renalware
                 expected_date_time = Time.zone.parse(observation_datetime)
 
                 obr = create_request_with_observations(
-                  patient: patient,
+                  patient:,
                   obx_codes: ["ACR"],
                   requested_at: expected_date_time,
                   result: "10.0",
@@ -102,7 +102,7 @@ module Renalware
                 # Check the KFRE calc service was called with expected args
                 expect(KFRE::CalculateKFRE)
                   .to have_received(:call)
-                  .with(acr: 10.0, age: 34, egfr: egfr, sex: "M")
+                  .with(acr: 10.0, age: 34, egfr:, sex: "M")
 
                 patient.reload
 

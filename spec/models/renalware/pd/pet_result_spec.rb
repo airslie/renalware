@@ -13,8 +13,8 @@ module Renalware
         describe "calculated_d_pcr" do
           subject do
             described_class.new(
-              sample_4hr_creatinine: sample_4hr_creatinine,
-              serum_creatinine: serum_creatinine
+              sample_4hr_creatinine:,
+              serum_creatinine:
             ).calculated_d_pcr
           end
 
@@ -57,8 +57,8 @@ module Renalware
       describe "calculated_net_uf" do
         subject do
           described_class.new(
-            volume_in: volume_in,
-            volume_out: volume_out
+            volume_in:,
+            volume_out:
           ).calculated_net_uf
         end
 

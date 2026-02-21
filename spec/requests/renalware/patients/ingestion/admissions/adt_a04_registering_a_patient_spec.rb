@@ -51,8 +51,8 @@ describe "HL7 ADT^A04 message handling: 'Emergency Department Registration'" do
     create(
       :patient,
       local_patient_id: mrn,
-      given_name: given_name,
-      family_name: family_name,
+      given_name:,
+      family_name:,
       born_on: Date.parse(dob)
     ).tap do |pat|
       pat.current_address.update!(postcode: "RG7 0JB")
@@ -61,12 +61,12 @@ describe "HL7 ADT^A04 message handling: 'Emergency Department Registration'" do
 
   def updated_attributes
     {
-      bed: bed,
-      room: room,
-      building: building,
-      floor: floor,
-      visit_number: visit_number,
-      consultant_code: consultant_code,
+      bed:,
+      room:,
+      building:,
+      floor:,
+      visit_number:,
+      consultant_code:,
       consultant: [consultant_initial, consultant_family_name].join(" "),
       admitted_on: Time.zone.parse(admitted_at).to_date,
       discharged_on: Time.zone.parse(discharged_at).to_date
@@ -115,8 +115,8 @@ describe "HL7 ADT^A04 message handling: 'Emergency Department Registration'" do
         admission = create(
           :admissions_admission,
           admission_type: "emergency",
-          patient: patient,
-          visit_number: visit_number,
+          patient:,
+          visit_number:,
           hospital_ward: ward,
           consultant: "Dr C",
           consultant_code: "123",

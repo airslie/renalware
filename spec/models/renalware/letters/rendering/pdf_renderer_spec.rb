@@ -7,7 +7,7 @@ module Renalware
         primary_care_physician = create(:letter_primary_care_physician)
         patient = create(
           :patient,
-          primary_care_physician: primary_care_physician,
+          primary_care_physician:,
           by: user
         )
         create(

@@ -57,21 +57,21 @@ describe "HL7 ADT^A11 message handling: 'Cancel admission'" do
       hospital_centre = create(:hospital_centre, host_site: true)
       hospital_unit = create(
         :hospital_unit,
-        hospital_centre: hospital_centre,
+        hospital_centre:,
         unit_code: unit
       )
       hospital_ward = create(
         :hospital_ward,
         code: ward,
-        hospital_unit: hospital_unit
+        hospital_unit:
       )
 
       # Create an existing admission with the visit number from the A11 message
       create(
         :admissions_admission,
-        patient: patient,
-        hospital_ward: hospital_ward,
-        visit_number: visit_number,
+        patient:,
+        hospital_ward:,
+        visit_number:,
         admitted_on: Date.parse("20250915")
       )
 
@@ -89,20 +89,20 @@ describe "HL7 ADT^A11 message handling: 'Cancel admission'" do
       hospital_centre = create(:hospital_centre, host_site: true)
       hospital_unit = create(
         :hospital_unit,
-        hospital_centre: hospital_centre,
+        hospital_centre:,
         unit_code: unit
       )
       hospital_ward = create(
         :hospital_ward,
         code: ward,
-        hospital_unit: hospital_unit
+        hospital_unit:
       )
 
       # Create an admission with a different visit number
       other_admission = create(
         :admissions_admission,
-        patient: patient,
-        hospital_ward: hospital_ward,
+        patient:,
+        hospital_ward:,
         visit_number: "different_visit_number",
         admitted_on: Date.parse("20250915")
       )

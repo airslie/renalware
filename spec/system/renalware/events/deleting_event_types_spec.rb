@@ -16,7 +16,7 @@ describe "Deleting event types" do
 
     # 2. Add an event for a patient, using this event event type
     patient = create(:patient, by: user)
-    event = create(:simple_event, by: user, patient: patient, event_type: type)
+    event = create(:simple_event, by: user, patient:, event_type: type)
 
     # 3. Check the event is displayed in the patient's event list with its type
     visit patient_events_path(patient)

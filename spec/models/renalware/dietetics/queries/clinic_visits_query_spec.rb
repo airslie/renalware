@@ -6,9 +6,9 @@ module Renalware
 
       context "with dietetic clinic visits for patient" do
         it "returns them" do
-          create(:clinic_visit, type: "Renalware::Dietetics::ClinicVisit", patient: patient)
+          create(:clinic_visit, type: "Renalware::Dietetics::ClinicVisit", patient:)
 
-          result = instance.call(patient: patient)
+          result = instance.call(patient:)
           expect(result.size).to eq 1
           expect(result.first).to be_a Dietetics::ClinicVisit
         end

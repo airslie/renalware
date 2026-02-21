@@ -19,7 +19,7 @@ module Renalware
 
         it "does not allow a duplicate value among any active profile" do
           active_profile = described_class.create!(
-            patient: patient,
+            patient:,
             prescriber: user,
             by: user,
             deactivated_at: nil,
@@ -37,7 +37,7 @@ module Renalware
 
         it "allows duplicate values among soft-deleted HD Profiles" do
           active_profile = described_class.create!(
-            patient: patient,
+            patient:,
             prescriber: user,
             by: user,
             deactivated_at: nil,
@@ -53,7 +53,7 @@ module Renalware
 
         it "allows duplicate blank values" do
           active_profile = described_class.create!(
-            patient: patient,
+            patient:,
             prescriber: user,
             by: user,
             deactivated_at: nil,
@@ -68,7 +68,7 @@ module Renalware
 
         it "disallows case-variable duplicates" do
           active_profile = described_class.create!(
-            patient: patient,
+            patient:,
             prescriber: user,
             by: user,
             deactivated_at: nil,

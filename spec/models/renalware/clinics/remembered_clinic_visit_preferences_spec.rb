@@ -18,12 +18,12 @@ module Renalware
         it "copies any previously remembered session data to the visit" do
           date = Time.zone.now
           clinic_id = 1
-          session = { clinic_visit_preferences: { date: date, clinic_id: clinic_id } }
+          session = { clinic_visit_preferences: { date:, clinic_id: } }
           visit = OpenStruct.new(date: nil, clinic_id: nil)
 
           described_class.new(session).apply_to(visit)
 
-          expect(visit).to have_attributes(date: date, clinic_id: clinic_id)
+          expect(visit).to have_attributes(date:, clinic_id:)
         end
       end
     end

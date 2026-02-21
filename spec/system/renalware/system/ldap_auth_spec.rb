@@ -47,7 +47,7 @@ module Renalware
           email: ldap_user.email,
           given_name: ldap_user.given_name,
           family_name: ldap_user.family_name,
-          hospital_centre: hospital_centre,
+          hospital_centre:,
           approved: true
         )
       end

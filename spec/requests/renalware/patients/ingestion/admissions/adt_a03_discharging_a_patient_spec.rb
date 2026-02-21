@@ -59,12 +59,12 @@ describe "HL7 ADT^A03 message handling: 'Patient Discharge'" do
 
   def updated_attributes
     {
-      bed: bed,
-      room: room,
-      building: building,
-      floor: floor,
-      visit_number: visit_number,
-      consultant_code: consultant_code,
+      bed:,
+      room:,
+      building:,
+      floor:,
+      visit_number:,
+      consultant_code:,
       consultant: [consultant_initial, consultant_family_name].join(" "),
       admitted_on: Time.zone.parse(admitted_at).to_date,
       discharged_on: Time.zone.parse(discharged_at).to_date
@@ -103,8 +103,8 @@ describe "HL7 ADT^A03 message handling: 'Patient Discharge'" do
         unit = create(:hospital_unit)
         admission = create(
           :admissions_admission,
-          patient: patient,
-          visit_number: visit_number,
+          patient:,
+          visit_number:,
           hospital_ward: create(:hospital_ward, hospital_unit: unit)
         )
         msg = hl7_message_from_raw_string(raw_hl7)

@@ -7,7 +7,7 @@ describe "Clinic Visits" do
 
   describe "Global Clinic Visits list" do
     it "responds successfully" do
-      create(:clinic_visit, patient: patient, by: clinician)
+      create(:clinic_visit, patient:, by: clinician)
 
       visit clinic_visits_path
 

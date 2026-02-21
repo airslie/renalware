@@ -11,11 +11,11 @@ RSpec.describe "Print a patient's ESA drug list", :js do
   def create_prescription(user, patient, drug, home_delivery: true)
     create(
       :prescription,
-      drug: drug,
+      drug:,
       by: user,
       dose_amount: "100",
       dose_unit: "milligram",
-      patient: patient,
+      patient:,
       medication_route: create(:medication_route, :po),
       prescribed_on: "2020-01-01",
       provider: home_delivery ? :home_delivery : :gp
@@ -25,8 +25,8 @@ RSpec.describe "Print a patient's ESA drug list", :js do
   def create_homecare_form_definintion_for(drug_type, prescription_durations: [3, 6, 9], **)
     create(
       :homecare_form,
-      drug_type: drug_type,
-      prescription_durations: prescription_durations,
+      drug_type:,
+      prescription_durations:,
       prescription_duration_default: 6,
       prescription_duration_unit: "week",
       form_name: "generic",
@@ -57,7 +57,7 @@ RSpec.describe "Print a patient's ESA drug list", :js do
       create_prescription(user, patient, esa_drug, home_delivery: false)
       create_homecare_form_definintion_for(esa_drug_type)
 
-      dialog = Pages::Medications::HomeDeliveryDialog.new(patient: patient)
+      dialog = Pages::Medications::HomeDeliveryDialog.new(patient:)
       dialog.open
 
       expect(dialog.drug_type).to eq("ESA") # first, so will be selected
@@ -82,7 +82,7 @@ RSpec.describe "Print a patient's ESA drug list", :js do
         prescription_durations: [2, 9, 111]
       )
 
-      dialog = Pages::Medications::HomeDeliveryDialog.new(patient: patient)
+      dialog = Pages::Medications::HomeDeliveryDialog.new(patient:)
       dialog.open
 
       expect(dialog.drug_type).to eq("ESA") # first, so will be selected

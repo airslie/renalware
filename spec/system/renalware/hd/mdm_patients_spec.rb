@@ -7,15 +7,15 @@ describe "HD MDM Patients" do
   let(:unit2) { create(:hd_hospital_unit, name: "Unit2", hospital_centre: hospital) }
 
   def create_hd_patient(unit:, family_name:, schedule_definition: nil, by: user)
-    create(:hd_patient, :with_hd_modality, family_name: family_name, by: user).tap do |patient|
+    create(:hd_patient, :with_hd_modality, family_name:, by: user).tap do |patient|
       patient.hd_profile = create(:hd_profile,
-                                  patient: patient,
+                                  patient:,
                                   hospital_unit: unit,
-                                  schedule_definition: schedule_definition,
-                                  by: by)
+                                  schedule_definition:,
+                                  by:)
 
-      create(:prescription, patient: patient, by: user)
-      pres = create(:prescription, patient: patient, prescribed_on: 1.day.ago, by: user)
+      create(:prescription, patient:, by: user)
+      pres = create(:prescription, patient:, prescribed_on: 1.day.ago, by: user)
       create(:prescription_termination,
              prescription: pres,
              terminated_on: Time.zone.now,
@@ -29,7 +29,7 @@ describe "HD MDM Patients" do
                        local_patient_id: "12345",
                        by: user)
 
-      set_modality(patient: patient,
+      set_modality(patient:,
                    modality_description: create(:hd_modality_description),
                    by: user)
 

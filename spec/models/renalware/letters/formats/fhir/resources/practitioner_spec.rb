@@ -33,10 +33,10 @@ module Renalware::Letters
         )
       }
       let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
-      let(:letter) { instance_double(Letter, patient: patient, author: author, topic: topic) }
+      let(:letter) { instance_double(Letter, patient:, author:, topic:) }
       let(:arguments) do
         Arguments.new(
-          transmission: instance_double(Transports::Mesh::Transmission, letter: letter),
+          transmission: instance_double(Transports::Mesh::Transmission, letter:),
           transaction_uuid: "123"
         )
       end

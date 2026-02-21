@@ -25,8 +25,8 @@ module Renalware
           .each do |status|
           it "includes the gp when gp_send_status = #{status}" do
             letter = Letter::Approved.new(gp_send_status: status)
-            patient = build(:letter_recipient, person_role: :patient, letter: letter)
-            gp = build(:letter_recipient, person_role: :primary_care_physician, letter: letter)
+            patient = build(:letter_recipient, person_role: :patient, letter:)
+            gp = build(:letter_recipient, person_role: :primary_care_physician, letter:)
             letter.main_recipient = patient
             letter.cc_recipients = [gp]
 

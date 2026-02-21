@@ -12,7 +12,7 @@ module Renalware::HD
       )
       created_diary = create(
         :hd_weekly_diary,
-        master_diary: master_diary,
+        master_diary:,
         hospital_unit_id: unit.id,
         week_number: week_period.week_number,
         year: week_period.year,
@@ -21,7 +21,7 @@ module Renalware::HD
 
       found_diary = described_class.new(by: user,
                                         unit_id: unit.id,
-                                        week_period: week_period).call
+                                        week_period:).call
 
       expect(found_diary.id).to eq(created_diary.id)
     end
@@ -29,7 +29,7 @@ module Renalware::HD
     it "creates a new diary if one does not exists for the given week period" do
       diary = described_class.new(by: user,
                                   unit_id: unit.id,
-                                  week_period: week_period).call
+                                  week_period:).call
 
       expect(diary.week_number).to eq(week_period.week_number)
       expect(diary.year).to eq(week_period.year)

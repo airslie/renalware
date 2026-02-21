@@ -8,7 +8,7 @@ describe "Prescriptions from a peritonitis episode, matches exit site infection 
   let(:route) { create(:medication_route, name: "Oral") }
   let(:unit_of_measure) { create(:drug_unit_of_measure, name: "Ampoule") }
 
-  let(:episode) { create(:peritonitis_episode, patient: patient) }
+  let(:episode) { create(:peritonitis_episode, patient:) }
 
   before do
     episode
@@ -17,9 +17,9 @@ describe "Prescriptions from a peritonitis episode, matches exit site infection 
 
     create(
       :drug_vmp_classification,
-      unit_of_measure: unit_of_measure,
-      route: route,
-      drug: drug
+      unit_of_measure:,
+      route:,
+      drug:
     )
 
     login_as user

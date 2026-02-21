@@ -2,7 +2,7 @@ describe "Patient's Protocol PDF" do
   include PathologySpecHelper
 
   let(:password) { "(&*G986111" }
-  let(:user) { create(:user, password: password) }
+  let(:user) { create(:user, password:) }
   let(:patient) do
     create(:hd_patient, family_name: "Rabbit", local_patient_id: "12345", by: user)
   end
@@ -85,8 +85,8 @@ describe "Patient's Protocol PDF" do
       it "displays only 'give on hd' prescription" do
         drug1 = create(:drug, name: "Drug1")
         drug2 = create(:drug, name: "Drug2")
-        create(:prescription, drug: drug1, administer_on_hd: true, patient: patient)
-        create(:prescription, drug: drug2, administer_on_hd: false, patient: patient)
+        create(:prescription, drug: drug1, administer_on_hd: true, patient:)
+        create(:prescription, drug: drug2, administer_on_hd: false, patient:)
 
         get patient_hd_protocol_path(patient_id: patient, disposition: :attachment, debug: 1)
 
@@ -99,7 +99,7 @@ describe "Patient's Protocol PDF" do
         given_prescription = create(
           :prescription,
           administer_on_hd: true,
-          patient: patient
+          patient:
         )
         create(
           :hd_prescription_administration,

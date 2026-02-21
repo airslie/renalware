@@ -5,9 +5,9 @@ module Renalware
         subject(:bundle) { described_class.call(arguments) }
 
         let(:transmission) do
-          instance_double(Transports::Mesh::Transmission, letter: letter, uuid: "TRANS1")
+          instance_double(Transports::Mesh::Transmission, letter:, uuid: "TRANS1")
         end
-        let(:arguments) { Arguments.new(transmission: transmission, transaction_uuid: "123") }
+        let(:arguments) { Arguments.new(transmission:, transaction_uuid: "123") }
         let(:patient) { build_stubbed(:patient) }
         let(:resource) { bundle[:resource] }
         let(:letters_patient) { patient.becomes(Letters::Patient) }
@@ -20,8 +20,8 @@ module Renalware
             patient: letters_patient,
             approved_at: Time.zone.parse("2022-01-01 01:01:01"),
             event_id: 99,
-            author: author,
-            topic: topic
+            author:,
+            topic:
           ).tap do |let|
             let.build_main_recipient(person_role: :primary_care_physician)
           end
@@ -32,7 +32,7 @@ module Renalware
           allow(patient).to receive(:secure_id_dashed).and_return("PAT1")
           allow(letter)
             .to receive(:archive)
-            .and_return(build_stubbed(:letter_archive, letter: letter))
+            .and_return(build_stubbed(:letter_archive, letter:))
         end
 
         it do

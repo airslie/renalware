@@ -10,7 +10,7 @@ module Renalware
           )
 
           expect(patient.renal_registry_id).to be_nil
-          described_class.new(patient: patient).xml
+          described_class.new(patient:).xml
           expect(patient.reload.renal_registry_id).not_to be_nil
         end
 
@@ -20,7 +20,7 @@ module Renalware
           )
 
           expect(patient.renal_registry_id).to be_present
-          described_class.new(patient: patient).xml
+          described_class.new(patient:).xml
           expect(patient.reload.renal_registry_id).to eq("123")
         end
       end

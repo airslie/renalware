@@ -3,8 +3,8 @@ describe Renalware::Clinics::BuildVisitFromAppointment do
     let(:clinic) { build_stubbed(:clinic) }
     let(:appointment) {
       build_stubbed(:appointment,
-                    patient: patient,
-                    clinic: clinic,
+                    patient:,
+                    clinic:,
                     starts_at: Time.zone.now)
     }
 

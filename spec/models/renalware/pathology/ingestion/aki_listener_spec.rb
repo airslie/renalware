@@ -28,7 +28,7 @@ module Renalware
         )
         create(
           :pathology_observation,
-          request: request,
+          request:,
           description: cre,
           result: cre_result,
           observed_at: cre_date
@@ -61,7 +61,7 @@ module Renalware
 
             allow(Patients::Ingestion::Commands::AddPatient).to receive(:call)
 
-            described_class.new.oru_message_arrived(hl7_message: hl7_message)
+            described_class.new.oru_message_arrived(hl7_message:)
 
             expect(Patients::Ingestion::Commands::AddPatient).not_to have_received(:call)
           end
@@ -181,7 +181,7 @@ module Renalware
                 max_aki: 1,
                 aki_date: Date.parse("201801251249"),
                 max_cre: cre_result,
-                cre_date: cre_date
+                cre_date:
               )
             end
 

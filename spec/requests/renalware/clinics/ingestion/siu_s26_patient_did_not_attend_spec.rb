@@ -61,12 +61,12 @@ describe "SIU^S26 - Notification that patient did not show up for schedule appoi
       patient = create_patient
 
       Renalware::Clinics::Appointment.create!(
-        visit_number: visit_number,
+        visit_number:,
         starts_at: Time.zone.parse("20241105101500"),
         ends_at: Time.zone.parse("20241105104500"),
-        patient: patient,
-        consultant: consultant,
-        clinic: clinic
+        patient:,
+        consultant:,
+        clinic:
       )
 
       msg = hl7_message_from_raw_string(raw_hl7)

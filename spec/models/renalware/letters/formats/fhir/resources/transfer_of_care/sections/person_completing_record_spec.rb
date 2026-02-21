@@ -4,7 +4,7 @@ module Renalware::Letters
       describe Sections::PersonCompletingRecord do
         subject(:section) { described_class.new(args) }
 
-        let(:args) { instance_double(Arguments, author_urn: author_urn, letter: nil) }
+        let(:args) { instance_double(Arguments, author_urn:, letter: nil) }
         let(:author_urn) { "urn:uuid:456" }
 
         it { expect(section.snomed_code).to eq("887231000000104") }

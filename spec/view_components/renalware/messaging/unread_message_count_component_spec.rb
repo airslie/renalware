@@ -12,7 +12,7 @@ describe Renalware::Messaging::UnreadMessageCountComponent, type: :component do
     Renalware::Messaging::Internal::SendMessage.call(
       author: internal_author,
       patient: messaging_patient,
-      form: form
+      form:
     )
     Renalware::Messaging::Internal::Message.first
   end

@@ -1,7 +1,7 @@
 module Renalware
   module Accesses
     describe AssessmentFactory do
-      subject(:assessment) { described_class.new(patient: patient).build }
+      subject(:assessment) { described_class.new(patient:).build }
 
       let(:patient) { create(:accesses_patient) }
 
@@ -13,7 +13,7 @@ module Renalware
         end
 
         context "with a current access profile" do
-          let!(:profile) { create(:access_profile, :current, patient: patient) }
+          let!(:profile) { create(:access_profile, :current, patient:) }
 
           it "applies the access details from the current access" do
             expect(assessment).to have_attributes(

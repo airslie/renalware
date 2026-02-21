@@ -43,9 +43,9 @@ module Renalware
 
       def create_observation(result:)
         observation = described_class.new(
-          description: description,
-          request: request,
-          result: result,
+          description:,
+          request:,
+          result:,
           observed_at: Time.current
         )
         observation.save!(validate: false)
@@ -57,7 +57,7 @@ module Renalware
           expectations.each do |arr|
             result, nresult = arr
 
-            observation = create_observation(result: result)
+            observation = create_observation(result:)
 
             expect(observation.reload.nresult).to eq(nresult)
           end

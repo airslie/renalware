@@ -3,7 +3,7 @@ module Renalware
     describe APISynchronisers::ActualMedicalProductSynchroniser do
       describe "#call" do
         let(:instance) {
-          described_class.new(actual_medical_product_repository: actual_medical_product_repository)
+          described_class.new(actual_medical_product_repository:)
         }
 
         let(:actual_medical_product_repository) {
@@ -26,7 +26,7 @@ module Renalware
               Repositories::ActualMedicalProductRepository::Entry,
               code: "code",
               name: "name",
-              virtual_medical_product_code: virtual_medical_product_code
+              virtual_medical_product_code:
             )
           end
 

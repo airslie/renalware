@@ -3,35 +3,35 @@ module Renalware
     include PatientsSpecHelper
 
     let(:uom) { create(:pathology_measurement_unit) }
-    let(:user) { create(:user) }
+    let(:by) { create(:user) }
 
     def create_observation_description(code)
-      create(:pathology_observation_description, code: code, measurement_unit: uom)
+      create(:pathology_observation_description, code:, measurement_unit: uom)
     end
 
     def create_observation(patient:, description:, result:)
-      request = create(:pathology_observation_request, patient: patient)
+      request = create(:pathology_observation_request, patient:)
       create(
         :pathology_observation,
-        request: request,
-        description: description,
-        result: result
+        request:,
+        description:,
+        result:
       )
     end
 
     def create_hd_patient
-      create(:pathology_patient, by: user).tap do |patient|
-        set_modality(patient: patient,
+      create(:pathology_patient, by:).tap do |patient|
+        set_modality(patient:,
                      modality_description: create(:hd_modality_description),
-                     by: user)
+                     by:)
       end
     end
 
     def create_pd_patient
-      create(:pathology_patient, by: user).tap do |patient|
-        set_modality(patient: patient,
+      create(:pathology_patient, by:).tap do |patient|
+        set_modality(patient:,
                      modality_description: create(:pd_modality_description),
-                     by: user)
+                     by:)
       end
     end
 

@@ -24,8 +24,8 @@ module Renalware
             test_class
               .new
               .ods_urn(
-                practice_code: practice_code,
-                gmc_number: gmc_number
+                practice_code:,
+                gmc_number:
               )
           ).to eq(expected)
         }
@@ -45,7 +45,7 @@ module Renalware
           ]
         ].each do |hosp_ods_code, model, expected|
           allow(Renalware.config).to receive(:ukrdc_site_code).and_return(hosp_ods_code)
-          expect(test_class.new.renalware_urn(model: model)).to eq(expected)
+          expect(test_class.new.renalware_urn(model:)).to eq(expected)
         end
       end
     end

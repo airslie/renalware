@@ -28,9 +28,9 @@ module Renalware
 
       def create_observations_with_descriptions(patient, *description_codes)
         description_codes.map do |code|
-          description = create(:pathology_observation_description, code: code)
-          request = create(:pathology_observation_request, patient: patient)
-          create(:pathology_observation, request: request, description: description)
+          description = create(:pathology_observation_description, code:)
+          request = create(:pathology_observation_request, patient:)
+          create(:pathology_observation, request:, description:)
 
           description
         end

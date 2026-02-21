@@ -3,7 +3,7 @@ module Renalware
     let(:view_metadata) do
       create(
         :view_metadata,
-        materialized: materialized,
+        materialized:,
         view_name: "test",
         schema_name: "xxx",
         refresh_concurrently: true

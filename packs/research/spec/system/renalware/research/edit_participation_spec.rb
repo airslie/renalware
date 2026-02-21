@@ -5,7 +5,7 @@ RSpec.describe "Edit a patient's participation in a study" do
       participation = create(:research_participation, by: user)
       create(
         :research_investigatorship,
-        user: user,
+        user:,
         study: participation.study,
         by: user,
         started_on: "2018-01-01"

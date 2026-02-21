@@ -19,7 +19,7 @@ module Renalware::Pathology
         obx_desc = create(:pathology_observation_description, name: "MyOBX")
         obr = create(
           :pathology_observation_request,
-          patient: patient,
+          patient:,
           description: obr_desc,
           requested_at: "2019-01-01"
         )
@@ -57,8 +57,8 @@ module Renalware::Pathology
           patient = create(:pathology_patient, by: user)
           obr_desc1 = create(:pathology_request_description, name: "MyOBR1", code: "OBR1")
           obr_desc2 = create(:pathology_request_description, name: "MyOBR2", code: "OBR2")
-          create(:pathology_observation_request, patient: patient, description: obr_desc1)
-          create(:pathology_observation_request, patient: patient, description: obr_desc2)
+          create(:pathology_observation_request, patient:, description: obr_desc1)
+          create(:pathology_observation_request, patient:, description: obr_desc2)
 
           visit patient_pathology_observation_requests_path(patient)
 

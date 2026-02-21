@@ -7,14 +7,14 @@ module Renalware::Letters::Transports::Mesh
     let(:gp) { create(:letter_primary_care_physician, practices: [practice]) }
     let(:patient) do
       create(:letter_patient, :minimal,
-             practice: practice,
+             practice:,
              primary_care_physician: gp,
              by: user)
     end
     let(:letter) do
       create_letter(state: :approved,
                     to: :primary_care_physician,
-                    patient: patient,
+                    patient:,
                     author: user,
                     by: user)
     end
@@ -27,7 +27,7 @@ module Renalware::Letters::Transports::Mesh
     it { is_expected.to have_db_index(:active_job_id) }
 
     it "sanity check object creation" do
-      transmission = create(:letter_mesh_transmission, letter: letter)
+      transmission = create(:letter_mesh_transmission, letter:)
 
       expect(transmission).to have_attributes(
         letter_id: letter.id,
@@ -41,14 +41,14 @@ module Renalware::Letters::Transports::Mesh
     describe "#cancellable scope" do
       it "returns only status: pending transmissions" do
         %w(pending success failure).each do |status| # TODO: add cancelled
-          create(:letter_mesh_transmission, letter: letter, status: status)
+          create(:letter_mesh_transmission, letter:, status:)
         end
 
         expect(described_class.cancellable.map(&:status)).to eq(["pending"])
       end
 
       it "ignores pending transmissions that have operations - ie they might be in progress" do
-        transmission = create(:letter_mesh_transmission, letter: letter, status: "pending")
+        transmission = create(:letter_mesh_transmission, letter:, status: "pending")
         transmission.operations.create!(action: :endpointlookup, direction: :outbound)
 
         expect(described_class.cancellable.size).to eq(0)
@@ -59,7 +59,7 @@ module Renalware::Letters::Transports::Mesh
       it "Uses the #cancellable scope" do
         allow(described_class).to receive(:cancellable).and_return(described_class.all)
 
-        described_class.cancel_pending(letter: letter)
+        described_class.cancel_pending(letter:)
 
         expect(described_class).to have_received(:cancellable)
       end
@@ -67,10 +67,10 @@ module Renalware::Letters::Transports::Mesh
       context "when the transmission status is not pending" do
         %w(success failure).each do |status| # TODO: add cancelled
           it status do
-            transmission = create(:letter_mesh_transmission, letter: letter, status: status)
+            transmission = create(:letter_mesh_transmission, letter:, status:)
 
             expect {
-              described_class.cancel_pending(letter: letter)
+              described_class.cancel_pending(letter:)
             }.not_to change(transmission, :status)
           end
         end
@@ -78,10 +78,10 @@ module Renalware::Letters::Transports::Mesh
 
       context "when the transmission status is pending" do
         it "marks the transmission as cancelled" do
-          transmission = create(:letter_mesh_transmission, letter: letter, status: "pending")
+          transmission = create(:letter_mesh_transmission, letter:, status: "pending")
 
           freeze_time do
-            described_class.cancel_pending(letter: letter)
+            described_class.cancel_pending(letter:)
             pending
             expect(transmission.reload).to have_attributes(
               status: "cancelled",
@@ -91,10 +91,10 @@ module Renalware::Letters::Transports::Mesh
         end
 
         it "marks the transmissions as cancelled if more than one for this letter" do
-          transmission1 = create(:letter_mesh_transmission, letter: letter, status: "pending")
-          transmission2 = create(:letter_mesh_transmission, letter: letter, status: "pending")
+          transmission1 = create(:letter_mesh_transmission, letter:, status: "pending")
+          transmission2 = create(:letter_mesh_transmission, letter:, status: "pending")
 
-          described_class.cancel_pending(letter: letter)
+          described_class.cancel_pending(letter:)
           pending "todo"
           expect(transmission1.reload.status).to eq("cancelled")
           expect(transmission2.reload.status).to eq("cancelled")
@@ -103,16 +103,16 @@ module Renalware::Letters::Transports::Mesh
         it "ignores pending transmission for other letters" do
           letter2 = create_letter(state: :approved,
                                   to: :primary_care_physician,
-                                  patient: patient,
+                                  patient:,
                                   author: user,
                                   by: user)
           transmission2 = create(:letter_mesh_transmission, letter: letter2, status: "pending")
-          transmission = create(:letter_mesh_transmission, letter: letter, status: "pending")
+          transmission = create(:letter_mesh_transmission, letter:, status: "pending")
 
           pending "todo"
 
           expect {
-            described_class.cancel_pending(letter: letter)
+            described_class.cancel_pending(letter:)
             transmission.reload
             transmission2.reload
           }.to change(transmission, :status).to("cancelled")

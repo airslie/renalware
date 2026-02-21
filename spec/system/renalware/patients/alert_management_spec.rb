@@ -23,7 +23,7 @@ RSpec.describe "Alert management" do
     user = login_as_clinical
     patient = create(:patient, by: user)
     create(:patient_alert,
-           patient: patient,
+           patient:,
            by: user,
            notes: "Abc")
 

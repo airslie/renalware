@@ -5,7 +5,7 @@ describe Renalware::Events::AlertableEventsQuery do
       user = create(:user, :minimal)
       event_type = create(:vaccination_event_type)
       Renalware::Events::EventTypeAlertTrigger.create!(
-        event_type: event_type,
+        event_type:,
         when_event_document_contains: "covid"
       )
 
@@ -17,7 +17,7 @@ describe Renalware::Events::AlertableEventsQuery do
       ].map do |arr|
         create(
           :vaccination,
-          patient: patient,
+          patient:,
           date_time: arr[0],
           document: { type: arr[1], drug: "xxx" },
           created_at: arr[0],
@@ -25,7 +25,7 @@ describe Renalware::Events::AlertableEventsQuery do
         )
       end
 
-      results = described_class.call(patient: patient)
+      results = described_class.call(patient:)
 
       expect(results.map(&:id).sort).to eq([events[1].id])
     end

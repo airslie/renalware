@@ -3,7 +3,7 @@ module Renalware
     describe APISynchronisers::RouteSynchroniser do
       describe "#call" do
         let(:instance) {
-          described_class.new(route_repository: route_repository)
+          described_class.new(route_repository:)
         }
 
         let(:route_repository) {

@@ -12,7 +12,7 @@ describe "Viewing the Recipient Summary (Dashboard)" do
       default_cg.memberships.create!(observation_description: cmvd)
       create(:modality_change_type, :default)
       Renalware::Modalities::ChangePatientModality
-        .new(patient: patient, user: user)
+        .new(patient:, user:)
         .call(description: modality_description, started_on: Time.zone.now)
 
       visit patient_transplants_recipient_dashboard_path(patient)

@@ -38,6 +38,7 @@ module Renalware
       let(:user) do
         create(:user, family_name: "Smith", given_name: "Jo", gmc_code: "MyGmcCode")
       end
+      let(:by) { user }
 
       def stub_rendering(format, content)
         if format == :pdf
@@ -66,12 +67,12 @@ module Renalware
                 stub_rendering(:pdf, "A")
 
                 letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-                  patient: patient,
+                  patient:,
                   clinical: true,
                   author: user
                 )
 
-                document = OutgoingDocument.create!(renderable: letter, by: user)
+                document = OutgoingDocument.create!(renderable: letter, by:)
                 msg = described_class.call(renderable: letter, document:)
                 expected_filename = "HOSP1_111_HOSP2_222_HOSP3_333_JONES_19700101_CL_#{letter.id}"
                 msh_identifier = ["RW", document.id.to_s.rjust(10, "0")].join
@@ -108,11 +109,11 @@ module Renalware
                 stub_rendering(:pdf, "A")
 
                 letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-                  patient: patient,
+                  patient:,
                   clinical: true,
                   author: user
                 )
-                document = OutgoingDocument.create!(renderable: letter, by: user)
+                document = OutgoingDocument.create!(renderable: letter, by:)
 
                 msg = described_class.call(renderable: letter, document:)
 
@@ -134,7 +135,7 @@ module Renalware
 
             it "rendered letters as RTF" do
               letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-                patient: patient,
+                patient:,
                 clinical: true,
                 author: user
               )
@@ -142,7 +143,7 @@ module Renalware
               rtf_content = "ABC"
               stub_rendering(:rtf, rtf_content)
               base64_encoded_rtf = Base64.strict_encode64(rtf_content)
-              document = OutgoingDocument.create!(renderable: letter, by: user)
+              document = OutgoingDocument.create!(renderable: letter, by:)
 
               msg = described_class.call(renderable: letter, document:)
               expect(msg[:OBX].to_s).to include("^TEXT^RTF^Base64^#{base64_encoded_rtf}")
@@ -152,11 +153,11 @@ module Renalware
           context "when a custom LetterFilename class is defined" do
             it "supports a custom filename" do
               letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-                patient: patient,
+                patient:,
                 clinical: true,
                 author: user
               )
-              document = OutgoingDocument.create!(renderable: letter, by: user)
+              document = OutgoingDocument.create!(renderable: letter, by:)
 
               stub_const(
                 "::Renalware::Feeds::LetterFilename",
@@ -192,12 +193,12 @@ module Renalware
                 # allow(Letters::RendererFactory).to receive(:renderer_for).and_return(renderer)
 
                 letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-                  patient: patient,
+                  patient:,
                   clinical: true,
                   author: user
                 )
                 expect(letter.archive.pdf_content).to be_present
-                document = OutgoingDocument.create!(renderable: letter, by: user)
+                document = OutgoingDocument.create!(renderable: letter, by:)
 
                 # User a known value for pdf_content - normally its '%PDF..' etc) but we will return
                 # 'A' because we know it is 'QQ==' in base64
@@ -238,26 +239,26 @@ module Renalware
               )
               cv = create(
                 :clinic_visit,
-                clinic: clinic,
+                clinic:,
                 patient_id: patient.id,
                 date: "2021-12-01",
                 time: "09:01:01"
               )
               create(
                 :appointment,
-                clinic: clinic,
+                clinic:,
                 patient_id: patient.id,
                 becomes_visit_id: cv.id,
                 visit_number: "V1"
               )
               letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-                patient: patient,
+                patient:,
                 clinical: true,
                 author: create(:user, family_name: "Smith", given_name: "Jo")
               )
               letter.event = cv
               letter.save_by!(user)
-              document = Feeds::OutgoingDocument.create!(renderable: letter, by: user)
+              document = Feeds::OutgoingDocument.create!(renderable: letter, by:)
 
               msg = described_class.call(renderable: letter, document:)
 
@@ -287,12 +288,12 @@ module Renalware
               event = Events::EventPdfPresenter.new(
                 create(
                   :swab,
-                  patient: patient,
-                  by: user
+                  patient:,
+                  by:
                 )
               )
 
-              document = Feeds::OutgoingDocument.create!(renderable: event.__getobj__, by: user)
+              document = Feeds::OutgoingDocument.create!(renderable: event.__getobj__, by:)
               create(:hospital_centre, code: "RJZ")
               msg = described_class.call(renderable: event, document:)
 
@@ -328,14 +329,14 @@ module Renalware
               it "Sets TXA.19 = 'CA' (deleted) and adds a blank #{format.upcase} document" do
                 stub_rendering(format, "A") # stub letter rendering as its expensive
                 letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
-                  patient: patient,
+                  patient:,
                   clinical: true,
                   author: user
                 )
                 # Simulate letter deletion
                 letter.update_column(:deleted_at, Time.zone.now)
                 letter.reload
-                document = Feeds::OutgoingDocument.create!(renderable: letter, by: user)
+                document = Feeds::OutgoingDocument.create!(renderable: letter, by:)
 
                 msg = described_class.call(renderable: letter, document:)
 

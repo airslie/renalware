@@ -14,10 +14,10 @@ module Renalware
       describe "scopes" do
         let(:patient) { create(:patient, :minimal) }
         let!(:donor_investig) do
-          create(:investigation, :transplant_donor, patient: patient)
+          create(:investigation, :transplant_donor, patient:)
         end
         let!(:recip_investig) do
-          create(:investigation, :transplant_recipient, patient: patient)
+          create(:investigation, :transplant_recipient, patient:)
         end
 
         describe ".transplant_donors" do

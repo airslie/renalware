@@ -26,7 +26,7 @@ module Renalware
 
           prescription_one = create(
             :prescription,
-            patient: patient,
+            patient:,
             drug: @cephradine,
             treatable: esi,
             medication_route: @im,
@@ -39,7 +39,7 @@ module Renalware
 
           prescription_two = create(
             :prescription,
-            patient: patient,
+            patient:,
             drug: @dicloxacillin,
             treatable: esi,
             medication_route: @sc,

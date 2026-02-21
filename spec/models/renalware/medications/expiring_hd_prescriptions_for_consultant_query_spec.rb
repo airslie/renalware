@@ -10,7 +10,7 @@ describe Renalware::Medications::ExpiringHDPrescriptionsForConsultantQuery do
   def create_prescription(patient:, user:, terminated_on: 1.day.from_now, **)
     create(
       :prescription,
-      patient: patient,
+      patient:,
       administer_on_hd: true,
       stat: nil,
       prescribed_on: 2.weeks.ago,
@@ -18,7 +18,7 @@ describe Renalware::Medications::ExpiringHDPrescriptionsForConsultantQuery do
       **
     ) do |prescription|
       prescription.build_termination(
-        terminated_on: terminated_on,
+        terminated_on:,
         terminated_on_set_by_user: false, # important
         notes: "HD prescription scheduled to terminate 182 days from start",
         by: user

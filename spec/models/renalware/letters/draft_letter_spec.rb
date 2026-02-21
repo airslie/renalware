@@ -9,9 +9,9 @@ module Renalware
       let(:description) { nil }
       let(:params) do
         {
-          description: description,
-          topic: topic,
-          letterhead: letterhead,
+          description:,
+          topic:,
+          letterhead:,
           author: user,
           created_by: user
         }

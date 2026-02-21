@@ -8,8 +8,8 @@ describe Renalware::Clinics::AppointmentSearchForm do
     context "when there is no from_date" do
       it "returns all appointments" do
         patient = create(:clinics_patient, :minimal)
-        app1 = create(:appointment, patient: patient, starts_at: 1.year.ago)
-        app2 = create(:appointment, patient: patient, starts_at: 1.year.from_now)
+        app1 = create(:appointment, patient:, starts_at: 1.year.ago)
+        app2 = create(:appointment, patient:, starts_at: 1.year.from_now)
 
         appointments = described_class.new(from_date: nil).query.call
 
@@ -21,9 +21,9 @@ describe Renalware::Clinics::AppointmentSearchForm do
       it "finds appointments starting from that day" do
         patient = create(:clinics_patient, :minimal)
         date = Time.zone.today
-        app1 = create(:appointment, patient: patient, starts_at: date + 3.hours)
-        app2 = create(:appointment, patient: patient, starts_at: date + 3.days)
-        create(:appointment, patient: patient, starts_at: date - 3.hours)
+        app1 = create(:appointment, patient:, starts_at: date + 3.hours)
+        app2 = create(:appointment, patient:, starts_at: date + 3.days)
+        create(:appointment, patient:, starts_at: date - 3.hours)
 
         appointments = described_class.new(from_date: date).query.call
 
@@ -39,9 +39,9 @@ describe Renalware::Clinics::AppointmentSearchForm do
       it "finds appointments just on that day" do
         patient = create(:clinics_patient, :minimal)
         date = Time.zone.today
-        create(:appointment, patient: patient, starts_at: date + 1.day + 1.hour)
-        app2 = create(:appointment, patient: patient, starts_at: date + 3.hours)
-        create(:appointment, patient: patient, starts_at: date - 3.hours)
+        create(:appointment, patient:, starts_at: date + 1.day + 1.hour)
+        app2 = create(:appointment, patient:, starts_at: date + 3.hours)
+        create(:appointment, patient:, starts_at: date - 3.hours)
 
         appointments = described_class.new(
           from_date: date,

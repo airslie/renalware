@@ -1,15 +1,15 @@
 describe Renalware::Patients::MessagesComponent, type: :component do
   def send_message_about(patient:, to:, subject: "subject1", body: "body1")
     form = Renalware::Messaging::Internal::MessageForm.new(
-      body: body,
-      subject: subject,
+      body:,
+      subject:,
       recipient_ids: [to.id]
     )
 
     Renalware::Messaging::Internal::SendMessage.call(
       author: to,
-      patient: patient,
-      form: form
+      patient:,
+      form:
     )
     Renalware::Messaging::Internal::Message.first
   end
@@ -19,13 +19,13 @@ describe Renalware::Patients::MessagesComponent, type: :component do
       user = create(:internal_author)
       patient = create(:messaging_patient, by: user)
       send_message_about(
-        patient: patient,
+        patient:,
         to: user,
         body: "B1"
       )
 
       component = described_class.new(
-        patient: patient,
+        patient:,
         current_user: user
       )
 
@@ -41,7 +41,7 @@ describe Renalware::Patients::MessagesComponent, type: :component do
       user = create(:patients_user)
       patient = create(:patient, by: user)
 
-      render_inline(described_class.new(patient: patient, current_user: user))
+      render_inline(described_class.new(patient:, current_user: user))
 
       expect(page).to have_content("Messages")
       expect(page).to have_content("No messages")

@@ -15,7 +15,7 @@ module Renalware
       let(:patient) { create(:patient) }
       let(:modality) do
         set_modality(
-          patient: patient,
+          patient:,
           modality_description: pd_mod_desc,
           by: user
         )
@@ -25,9 +25,9 @@ module Renalware
         create(
           type,
           add_hd: false,
-          patient: patient,
-          start_date: start_date,
-          end_date: end_date,
+          patient:,
+          start_date:,
+          end_date:,
           bags: [build(:pd_regime_bag, :everyday)]
         )
       end

@@ -11,7 +11,7 @@ describe "Managing alerts" do
           }
         }
 
-        post(patient_alerts_path(patient, format: :js), params: params)
+        post(patient_alerts_path(patient, format: :js), params:)
         expect(response).to be_successful
 
         alert = Renalware::Patients::Alert.find_by(patient_id: patient.id)
@@ -36,7 +36,7 @@ describe "Managing alerts" do
           }
         }
 
-        post(patient_alerts_path(patient), params: params, headers: headers)
+        post(patient_alerts_path(patient), params:, headers:)
         expect(response).to be_successful
 
         alert = Renalware::Patients::Alert.find_by(patient_id: patient.id)
@@ -59,7 +59,7 @@ describe "Managing alerts" do
           }
         }
 
-        post(patient_alerts_path(patient), params: params, headers: headers)
+        post(patient_alerts_path(patient), params:, headers:)
         expect(response).to be_successful
 
         alert = Renalware::Patients::Alert.find_by(patient_id: patient.id)
@@ -78,7 +78,7 @@ describe "Managing alerts" do
           }
         }
 
-        post(patient_alerts_path(patient, format: :js), params: params)
+        post(patient_alerts_path(patient, format: :js), params:)
 
         expect(response).to have_http_status(:unprocessable_content)
         alert = Renalware::Patients::Alert.find_by(patient_id: patient.id)
@@ -90,7 +90,7 @@ describe "Managing alerts" do
   describe "DELETE destroy" do
     let(:alert) do
       create(:patient_alert,
-             patient: patient,
+             patient:,
              by: Renalware::Patients.cast_user(user))
     end
 

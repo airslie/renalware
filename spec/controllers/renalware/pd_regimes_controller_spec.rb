@@ -11,7 +11,7 @@ module Renalware
       create(
         :capd_regime,
         bags_attributes: [
-          bag_type: bag_type,
+          bag_type:,
           role: :additional_manual_exchange,
           volume: 600,
           sunday: true,

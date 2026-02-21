@@ -24,21 +24,21 @@ module Renalware
           create(
             :pathology_observation_request,
             :full_blood_count_with_observations,
-            patient: patient,
+            patient:,
             requested_at: dates[0]
           )
 
           create(
             :pathology_observation_request,
             :full_blood_count_with_observations,
-            patient: patient,
+            patient:,
             requested_at: dates[1]
           )
 
           create(
             :pathology_observation_request,
             :renal_live_urea_with_observations,
-            patient: patient,
+            patient:,
             requested_at: dates[2]
           )
 
@@ -46,7 +46,7 @@ module Renalware
           create(
             :pathology_observation_request,
             :renal_live_urea_with_observations,
-            patient: patient,
+            patient:,
             requested_at: dates[3]
           )
 
@@ -68,7 +68,7 @@ module Renalware
           expect(descriptions.map(&:code).sort).to match_array(%w(HGB NA PLT POT URE WBC))
 
           service = described_class.new(
-            patient: patient,
+            patient:,
             observation_descriptions: descriptions,
             per_page: 3,
             page: 1
@@ -112,7 +112,7 @@ module Renalware
           # Note the OBR requested_at should not bmake a difference so we have set in the far past
           request = create(
             :pathology_observation_request,
-            patient: patient,
+            patient:,
             requested_at: 100.years.ago,
             filler_order_number: "A"
           )
@@ -125,9 +125,9 @@ module Renalware
           observations = dates.each_with_index.map do |observed_at, value|
             create(
               :pathology_observation,
-              request: request,
+              request:,
               description: hgb,
-              observed_at: observed_at,
+              observed_at:,
               result: value
             )
           end
@@ -140,7 +140,7 @@ module Renalware
           expect(descriptions.map(&:code).sort).to eq(["HGB"])
 
           service = described_class.new(
-            patient: patient,
+            patient:,
             observation_descriptions: descriptions,
             per_page: 3,
             page: 1
@@ -160,7 +160,7 @@ module Renalware
           troublesome_datetime = Time.zone.parse("2025-04-10 00:00:00") # stored UTC as 23:00:00
           request = create(
             :pathology_observation_request,
-            patient: patient,
+            patient:,
             filler_order_number: "A"
           )
           hgb = create(:pathology_observation_description, :hgb)
@@ -168,7 +168,7 @@ module Renalware
 
           obx = create(
             :pathology_observation,
-            request: request,
+            request:,
             description: hgb,
             observed_at: troublesome_datetime,
             result: 123
@@ -182,7 +182,7 @@ module Renalware
 
           # OK, now we exercise the view, and expect to see the correct BST date
           service = described_class.new(
-            patient: patient,
+            patient:,
             observation_descriptions: descriptions,
             per_page: 3,
             page: 1

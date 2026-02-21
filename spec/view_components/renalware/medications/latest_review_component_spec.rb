@@ -2,7 +2,7 @@ describe Renalware::Medications::LatestReviewComponent, type: :component do
   it "renders nothing if the patient has no medication reviews" do
     user = create(:user)
     patient = create(:patient, by: user)
-    component = described_class.new(patient: patient)
+    component = described_class.new(patient:)
 
     render_inline(component)
 
@@ -21,7 +21,7 @@ describe Renalware::Medications::LatestReviewComponent, type: :component do
           patient = create(:patient, by: user)
           create(
             :medication_review,
-            patient: patient,
+            patient:,
             date_time: "2021-01-01 11:01:01",
             by: user
           )
@@ -34,8 +34,8 @@ describe Renalware::Medications::LatestReviewComponent, type: :component do
 
           render_inline(
             described_class.new(
-              patient: patient,
-              compact: compact
+              patient:,
+              compact:
             )
           )
 

@@ -18,11 +18,11 @@ module Renalware
             msg = nil
             expect do
               msg = service.call(
-                patient: patient,
-                author: author,
-                role_name: role_name,
+                patient:,
+                author:,
+                role_name:,
                 subject: msg_subject,
-                body: body
+                body:
               )
             end.to change(Message, :count).by(1)
               .and change(Recipient, :count).by(2)
@@ -31,7 +31,7 @@ module Renalware
               patient_id: patient.id,
               author_id: author.id,
               subject: msg_subject,
-              body: body
+              body:
             )
             expect(msg.recipient_ids).to contain_exactly(super_admin1.id, super_admin2.id)
           end

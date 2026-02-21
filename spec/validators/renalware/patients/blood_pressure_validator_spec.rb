@@ -62,7 +62,7 @@ module Renalware
       end
 
       def build_model(systolic:, diastolic:)
-        model_class.new(systolic: systolic, diastolic: diastolic)
+        model_class.new(systolic:, diastolic:)
       end
 
       def expect_model_to_be_invalid_with_messages(model, attribute, *expected_messages)

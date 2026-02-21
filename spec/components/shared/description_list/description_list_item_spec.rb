@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Shared::DescriptionListItem do
-  subject(:component) { described_class.new(key, value, title: title) }
+  subject(:component) { described_class.new(key, value, title:) }
 
   let(:key) { "Label" }
   let(:value) { "value" }

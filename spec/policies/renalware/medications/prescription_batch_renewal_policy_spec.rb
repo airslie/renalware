@@ -10,7 +10,7 @@ module Renalware
       let(:super_admin_hd_prescriber) { user_double_with_role(%i(superadmin hd_prescriber)) }
 
       def enforce_hd_prescriber_flag(enforce: true)
-        create(:role, :hd_prescriber, enforce: enforce)
+        create(:role, :hd_prescriber, enforce:)
       end
 
       subject { described_class }

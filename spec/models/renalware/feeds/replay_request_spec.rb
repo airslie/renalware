@@ -17,7 +17,7 @@ module Renalware::Feeds
           _ongoing_replay = described_class.create!(
             started_at: 1.hour.ago,
             finished_at: nil,
-            patient: patient
+            patient:
           )
 
           expect do |block|
@@ -29,7 +29,7 @@ module Renalware::Feeds
           _ongoing_replay = described_class.create!(
             started_at: 1.hour.ago,
             finished_at: nil,
-            patient: patient
+            patient:
           )
 
           freeze_time do
@@ -37,7 +37,7 @@ module Renalware::Feeds
 
             replay_request = described_class.last
             expect(replay_request).to have_attributes(
-              patient: patient,
+              patient:,
               started_at: Time.zone.now,
               finished_at: Time.zone.now
             )

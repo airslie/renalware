@@ -5,7 +5,7 @@ describe "HD DNA nag", :caching, type: :component do # rubocop:disable RSpec/Des
   include PatientsSpecHelper
   include NagHelpers
 
-  subject(:component) { described_class.new(definition: definition, patient: patient) }
+  subject(:component) { described_class.new(definition:, patient:) }
 
   let(:described_class) { Renalware::Patients::NagComponent }
   let(:patient) { create(:hd_patient) }
@@ -16,9 +16,9 @@ describe "HD DNA nag", :caching, type: :component do # rubocop:disable RSpec/Des
   context "when the patient has an HD DNA Session in the last 30 days" do
     it "has severity: medium and date: session date" do
       sessions = [
-        create(:hd_dna_session, patient: patient, started_at: 29.days.ago),
-        create(:hd_dna_session, patient: patient, started_at: 31.days.ago),
-        create(:hd_session, patient: patient, started_at: 2.days.ago)
+        create(:hd_dna_session, patient:, started_at: 29.days.ago),
+        create(:hd_dna_session, patient:, started_at: 31.days.ago),
+        create(:hd_session, patient:, started_at: 2.days.ago)
       ]
 
       nag = definition.execute_sql_function_for(patient)
@@ -35,7 +35,7 @@ describe "HD DNA nag", :caching, type: :component do # rubocop:disable RSpec/Des
     it "has severity: none and date: nil" do
       create(
         :hd_dna_session,
-        patient: patient,
+        patient:,
         started_at: 33.days.ago
       )
       nag = definition.execute_sql_function_for(patient)

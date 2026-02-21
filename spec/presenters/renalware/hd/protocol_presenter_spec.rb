@@ -31,30 +31,30 @@ describe Renalware::HD::ProtocolPresenter do
       prescriptions = {
         hd_current: create(
           :prescription,
-          patient: patient,
+          patient:,
           administer_on_hd: true,
           prescribed_on: 1.day.ago
         ),
         non_hd_current: create(
           :prescription,
-          patient: patient,
+          patient:,
           administer_on_hd: false
         ),
         hd_starting_7d_hence: create(
           :prescription,
-          patient: patient,
+          patient:,
           administer_on_hd: true,
           prescribed_on: 7.days.since
         ),
         hd_starting_9d_hence: create(
           :prescription,
-          patient: patient,
+          patient:,
           administer_on_hd: true,
           prescribed_on: 9.days.since
         ),
         hd_terminated: create(
           :prescription,
-          patient: patient,
+          patient:,
           administer_on_hd: true,
           prescribed_on: 2.days.ago
         ).tap { it.build_termination(terminated_on: 1.day.ago, by: user).save! }
@@ -74,8 +74,8 @@ describe Renalware::HD::ProtocolPresenter do
   describe "#latest_dry_weight" do
     it "returns the latest dry weight" do
       patient = create(:clinical_patient)
-      create(:dry_weight, patient: patient, weight: 123, assessed_on: 1.year.ago)
-      newer = create(:dry_weight, patient: patient, weight: 234, assessed_on: 1.day.ago)
+      create(:dry_weight, patient:, weight: 123, assessed_on: 1.year.ago)
+      newer = create(:dry_weight, patient:, weight: 234, assessed_on: 1.day.ago)
       presenter = described_class.new(patient, nil)
 
       expect(presenter.latest_dry_weight).to eq(newer)

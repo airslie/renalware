@@ -67,13 +67,13 @@ describe "HL7 ADT^A12 message handling: 'Undo transfer'" do
     expect(admission).to have_attributes(
       updated_by: system_user,
       created_by: system_user,
-      visit_number: visit_number,
-      consultant_code: consultant_code,
+      visit_number:,
+      consultant_code:,
       consultant: [consultant_initial, consultant_family_name].join(" "),
-      room: room,
-      bed: bed,
-      building: building,
-      floor: floor
+      room:,
+      bed:,
+      building:,
+      floor:
     )
     verify_ward_and_unit(admission)
   end
@@ -140,8 +140,8 @@ describe "HL7 ADT^A12 message handling: 'Undo transfer'" do
       ward = create(:hospital_ward, code: "old ward", hospital_unit: unit)
       admission = create(
         :admissions_admission,
-        patient: patient,
-        visit_number: visit_number,
+        patient:,
+        visit_number:,
         hospital_ward: ward,
         consultant: "Dr C",
         consultant_code: "123",

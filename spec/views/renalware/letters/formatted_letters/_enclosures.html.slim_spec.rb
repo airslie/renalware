@@ -6,7 +6,7 @@ module Renalware
       it "outputs them" do
         letter = instance_double(Renalware::Letters::Letter, enclosures: "ABC, 123")
 
-        render partial: partial, locals: { letter: letter }
+        render partial:, locals: { letter: }
 
         expect(rendered).to include("Enc: ABC, 123")
       end
@@ -16,7 +16,7 @@ module Renalware
       it "no enclosures are output" do
         letter = instance_double(Renalware::Letters::Letter, enclosures: "")
 
-        render partial: partial, locals: { letter: letter }
+        render partial:, locals: { letter: }
 
         expect(rendered).not_to include("Enc:")
       end

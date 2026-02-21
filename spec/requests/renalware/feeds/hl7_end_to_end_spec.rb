@@ -27,11 +27,11 @@ describe "HL7 message handling end to end" do
     end
 
     def create_observation_descriptions_for(codes)
-      Array(codes).each { |code| create(:pathology_observation_description, code: code) }
+      Array(codes).each { |code| create(:pathology_observation_description, code:) }
     end
 
     def create_request_descriptions_for(codes)
-      Array(codes).each { |code| create(:pathology_request_description, code: code) }
+      Array(codes).each { |code| create(:pathology_request_description, code:) }
     end
 
     # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength

@@ -18,7 +18,7 @@ module Renalware
       subject(:presenter) { described_class.new(patient).language }
 
       let(:patient) do
-        build_stubbed(:patient, language: language, sent_to_ukrdc_at: 1.year.ago)
+        build_stubbed(:patient, language:, sent_to_ukrdc_at: 1.year.ago)
       end
 
       context "when the patient has the language Unknown which is not in ISO 639" do
@@ -54,7 +54,7 @@ module Renalware
 
         # Create 3 modalities in this chronological order: PD, HD, Transplant
         # but insert them non-chronologically
-        svc = Modalities::ChangePatientModality.new(patient: patient, user: user)
+        svc = Modalities::ChangePatientModality.new(patient:, user:)
 
         # 1 Create an HD modality starting 2 weeks ago, ending 1 week ago
         expect(
@@ -135,8 +135,8 @@ module Renalware
       let(:user) { create(:user) }
 
       it "returns a patients Tx operations in date ascending order" do
-        op1 = create(:transplant_recipient_operation, patient: patient, performed_on: 1.month.ago)
-        op2 = create(:transplant_recipient_operation, patient: patient, performed_on: 1.year.ago)
+        op1 = create(:transplant_recipient_operation, patient:, performed_on: 1.month.ago)
+        op2 = create(:transplant_recipient_operation, patient:, performed_on: 1.year.ago)
 
         expect(presenter.transplant_operations).to eq([op2, op1])
       end
@@ -149,12 +149,12 @@ module Renalware
       let(:user) { create(:user) }
 
       it "returns those with a numeric dose_amount" do
-        pre1 = create(:prescription, patient: patient, dose_amount: "  2222.22  ")
-        pre2 = create(:prescription, patient: patient, dose_amount: "2")
-        create(:prescription, patient: patient, dose_amount: "10,000")
-        create(:prescription, patient: patient, dose_amount: "1-2")
-        create(:prescription, patient: patient, dose_amount: "10%")
-        create(:prescription, patient: patient, dose_amount: "UNSPEC")
+        pre1 = create(:prescription, patient:, dose_amount: "  2222.22  ")
+        pre2 = create(:prescription, patient:, dose_amount: "2")
+        create(:prescription, patient:, dose_amount: "10,000")
+        create(:prescription, patient:, dose_amount: "1-2")
+        create(:prescription, patient:, dose_amount: "10%")
+        create(:prescription, patient:, dose_amount: "UNSPEC")
 
         expect(presenter.prescriptions_with_numeric_dose_amount).to contain_exactly(pre1, pre2)
       end

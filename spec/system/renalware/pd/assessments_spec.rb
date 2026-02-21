@@ -40,7 +40,7 @@ module Renalware
     it "Edit a PD Assessment" do
       patient = create(:pd_patient)
       user = login_as_clinical
-      create(:pd_assessment, patient: patient, by: user)
+      create(:pd_assessment, patient:, by: user)
 
       visit patient_pd_dashboard_path(patient)
 
@@ -67,7 +67,7 @@ module Renalware
     it "View a PD Assessment" do
       patient = create(:pd_patient)
       user = login_as_clinical
-      assessment = create(:pd_assessment, patient: patient, by: user)
+      assessment = create(:pd_assessment, patient:, by: user)
 
       visit patient_pd_dashboard_path(patient)
 

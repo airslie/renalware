@@ -15,7 +15,7 @@ module Renalware
 
       describe "#perform" do
         def prescription_administration(witnessed:, administered:, stat:)
-          prescription = create(:prescription, administer_on_hd: true, stat: stat)
+          prescription = create(:prescription, administer_on_hd: true, stat:)
           pa = new_prescription_administration(prescription, administered, user1, pwd)
           if witnessed
             pa.witnessed_by = user2
@@ -31,9 +31,9 @@ module Renalware
 
         def new_prescription_administration(prescription, administered, administered_by, pwd)
           PrescriptionAdministration.new(
-            prescription: prescription,
-            administered: administered,
-            administered_by: administered_by,
+            prescription:,
+            administered:,
+            administered_by:,
             administered_by_password: pwd,
             recorded_on: Time.zone.now,
             by: administered_by

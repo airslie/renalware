@@ -52,7 +52,7 @@ describe Renalware::Pathology::Requests::GlobalRule::PrescriptionDrugCategory do
     end
 
     context "when then the patient has a drug not in the required category" do
-      before { create(:prescription, drug: other_drug, patient: patient) }
+      before { create(:prescription, drug: other_drug, patient:) }
 
       it { is_expected.to be(false) }
     end
@@ -60,7 +60,7 @@ describe Renalware::Pathology::Requests::GlobalRule::PrescriptionDrugCategory do
     context "when then the patient has a drug in the required category" do
       before {
         drug_category.drugs << required_drug
-        create(:prescription, drug: required_drug, patient: patient)
+        create(:prescription, drug: required_drug, patient:)
       }
 
       it { is_expected.to be(true) }
@@ -69,8 +69,8 @@ describe Renalware::Pathology::Requests::GlobalRule::PrescriptionDrugCategory do
     context "when then the patient has the required drug but it has been terminated" do
       before do
         drug_category.drugs << required_drug
-        create(:prescription, drug: required_drug, patient: patient).tap do |prescription|
-          create(:prescription_termination, prescription: prescription, terminated_on: 1.day.ago)
+        create(:prescription, drug: required_drug, patient:).tap do |prescription|
+          create(:prescription_termination, prescription:, terminated_on: 1.day.ago)
         end
       end
 

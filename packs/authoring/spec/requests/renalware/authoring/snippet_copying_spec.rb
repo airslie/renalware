@@ -2,7 +2,7 @@ describe "Copying a snippet" do
   let(:user) { Renalware::Authoring.cast_user(@current_user) }
 
   def find_and_validate_cloned_snippet_for(author, title:)
-    cloned_snippet = author.snippets.find_by(title: title)
+    cloned_snippet = author.snippets.find_by(title:)
     expect(cloned_snippet).not_to be_nil
     expect(cloned_snippet.times_used).to eq(0)
     expect(cloned_snippet.last_used_on).to be_nil

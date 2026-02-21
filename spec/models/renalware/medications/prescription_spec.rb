@@ -136,7 +136,7 @@ module Renalware
             let(:terminated_on) { Date.parse("2010-10-10") }
 
             it "records the termination" do
-              termination = active_prescription.terminate(by: user, terminated_on: terminated_on)
+              termination = active_prescription.terminate(by: user, terminated_on:)
 
               expect(termination.terminated_on).to eq(terminated_on)
               expect(termination).to be_valid
@@ -151,7 +151,7 @@ module Renalware
           prescribed_on: "2024-01-01",
           termination: build(
             :prescription_termination,
-            terminated_on: terminated_on
+            terminated_on:
           )
         )
       end
@@ -164,10 +164,10 @@ module Renalware
       )
         create(
           :prescription,
-          prescribed_on: prescribed_on,
-          notes: notes,
-          administer_on_hd: administer_on_hd,
-          termination: build(:prescription_termination, terminated_on: terminated_on)
+          prescribed_on:,
+          notes:,
+          administer_on_hd:,
+          termination: build(:prescription_termination, terminated_on:)
         )
       end
     end

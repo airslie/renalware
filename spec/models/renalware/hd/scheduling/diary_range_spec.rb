@@ -14,7 +14,7 @@ module Renalware
               range = described_class.new(
                 from_week_period: WeekPeriod.from_date(1.year.ago),
                 to_week_period: WeekPeriod.from_date(1.day.ago),
-                unit: unit
+                unit:
               )
 
               expect(Scheduling::WeeklyDiary.count).to eq(0)
@@ -39,7 +39,7 @@ module Renalware
               range = described_class.new(
                 from_week_period: WeekPeriod.from_date(4.weeks.ago),
                 to_week_period: WeekPeriod.from_date(1.day.ago), # Monday, week 5
-                unit: unit
+                unit:
               )
 
               range.create_missing_weekly_diaries(by: user)
@@ -63,7 +63,7 @@ module Renalware
             Array(week_numbers).each do |cweek|
               Scheduling::WeeklyDiary.create!(
                 hospital_unit_id: unit.id,
-                year: year,
+                year:,
                 week_number: cweek,
                 created_by_id: user.id,
                 updated_by_id: user.id,

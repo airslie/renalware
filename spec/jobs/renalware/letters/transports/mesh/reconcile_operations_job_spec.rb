@@ -4,10 +4,10 @@ module Renalware::Letters::Transports::Mesh
     include MeshSpecHelper
 
     let(:user) { create(:user) }
-    let(:letter) { create_mesh_letter_to_gp(create_mesh_patient(user: user), user) }
+    let(:letter) { create_mesh_letter_to_gp(create_mesh_patient(user:), user) }
 
     it "ignores Transmissions with no operations" do
-      transmission = Transmission.create!(letter: letter)
+      transmission = Transmission.create!(letter:)
 
       expect {
         described_class.perform_now
@@ -18,7 +18,7 @@ module Renalware::Letters::Transports::Mesh
       it "does not touch Transmissions having non-download/send operation errors" do
         # Note this test scenario using 'handshake' is very unlikely (this operation should not be
         # associated with a transmission) but bolt and braces anyway.
-        transmission = Transmission.create!(letter: letter)
+        transmission = Transmission.create!(letter:)
         transmission.operations.create!(action: "handshake", http_error: true)
 
         expect {
@@ -33,7 +33,7 @@ module Renalware::Letters::Transports::Mesh
           itk3_error
         ).each do |attr_name|
           letter.update!(gp_send_status: :pending)
-          transmission = Transmission.create!(letter: letter)
+          transmission = Transmission.create!(letter:)
           transmission.operations.create!(action: "download_message", attr_name => true)
 
           expect {
@@ -50,7 +50,7 @@ module Renalware::Letters::Transports::Mesh
           mesh_error
           itk3_error
         ).each do |attr_name|
-          transmission = Transmission.create!(letter: letter)
+          transmission = Transmission.create!(letter:)
           transmission.operations.create!(action: "send_message", attr_name => true)
 
           expect {
@@ -63,7 +63,7 @@ module Renalware::Letters::Transports::Mesh
     context "when a pending transmission has success inf and bus download operations" do
       # rubocop:disable Metrics/MethodLength
       def create_pending_transmission_with_successful_inf_and_bus_operations
-        Transmission.create!(letter: letter, status: :pending).tap do |transmission|
+        Transmission.create!(letter:, status: :pending).tap do |transmission|
           transmission.operations.create!(
             action: "download_message",
             itk3_response_type: "bus",
@@ -113,7 +113,7 @@ module Renalware::Letters::Transports::Mesh
       it "flags transmission as failed when x hours have elapsed and no response forthcoming" do
         # Create transmission with single send operation, no info or bus responses
         transmission = Transmission.create!(
-          letter: letter,
+          letter:,
           status: :pending,
           created_at: Time.zone.now
         )

@@ -3,7 +3,7 @@ module Renalware
     let(:consult_site1) { create(:admissions_consult_site, name: "Site1") }
     let(:consult_site2) { create(:admissions_consult_site, name: "Site2") }
     let(:hospital_unit) { create(:hospital_unit, unit_code: "HospUnit1") }
-    let(:hospital_ward) { create(:hospital_ward, name: "Ward1", hospital_unit: hospital_unit) }
+    let(:hospital_ward) { create(:hospital_ward, name: "Ward1", hospital_unit:) }
 
     context "when filtered by Active: Yes" do
       it "contains only active consults and the correct filter summary" do
@@ -17,7 +17,7 @@ module Renalware
           by: user,
           patient: create(:patient, by: user, family_name: "Activia", born_on: "2001-01-01"),
           consult_site: consult_site1,
-          hospital_ward: hospital_ward
+          hospital_ward:
         )
 
         inactive_consult = create(
@@ -26,7 +26,7 @@ module Renalware
           by: user,
           patient: create(:patient, by: user, family_name: "Inactivia", born_on: "1990-01-01"),
           consult_site: consult_site2,
-          hospital_ward: hospital_ward
+          hospital_ward:
         )
 
         # Simulate going to Admission Consults, filtering and clicking Print

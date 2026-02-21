@@ -23,8 +23,8 @@ describe "V1 HD Session API" do
 
   def url_with_credentials(user: system_user, mrn: patient.local_patient_id_2, date: adate)
     renalware.api_v1_hd_session_path(
-      mrn: mrn,
-      date: date,
+      mrn:,
+      date:,
       username: user&.username,
       token: user&.authentication_token
     )
@@ -87,9 +87,9 @@ describe "V1 HD Session API" do
       session = Renalware::HD::Session.find(session_id)
 
       expect(session).to have_attributes(
-        patient: patient,
-        provider: provider,
-        hospital_unit: hospital_unit,
+        patient:,
+        provider:,
+        hospital_unit:,
         started_at: Time.zone.parse(valid_session_json[:started_at]),
         machine_ip_address: valid_session_json[:machine_ip_address],
         signed_on_by_id: system_user.id,
@@ -220,7 +220,7 @@ describe "V1 HD Session API" do
 
   describe "when the session already exists for the current mrn and date" do
     it "updates the existing session" do
-      session = create(:hd_session, patient: patient, started_at: adate)
+      session = create(:hd_session, patient:, started_at: adate)
 
       put url_with_credentials,
           params: { session: valid_session_json.update(dialysate_flow_rate: 165) }

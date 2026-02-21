@@ -45,7 +45,7 @@ module Renalware
             started_at: "2018-11-01 11:00",
             stopped_at: "2018-11-01 13:00",
             duration: 120,
-            dialysate: dialysate,
+            dialysate:,
             updated_by: build_stubbed(:user, family_name: "F", given_name: "G", username: "U"),
             hospital_unit: build_stubbed(:hospital_unit, unit_code: "U")
           )

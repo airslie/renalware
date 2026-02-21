@@ -62,7 +62,7 @@ module Renalware::Clinics
           create(
             :clinics_mapping,
             name_in_feed: "HL7 Clinic Name",
-            clinic: clinic,
+            clinic:,
             default_clinic: false
           )
 

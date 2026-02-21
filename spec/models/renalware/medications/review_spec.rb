@@ -14,17 +14,17 @@ module Renalware::Medications
         patient = create(:patient, :minimal, by: user)
 
         target_review = described_class.create!(
-          patient: patient,
+          patient:,
           by: user,
           date_time: 1.day.ago,
-          event_type: event_type
+          event_type:
         )
 
         described_class.create!(
-          patient: patient,
+          patient:,
           by: user,
           date_time: 2.days.ago,
-          event_type: event_type
+          event_type:
         )
 
         expect(patient.medication_reviews.latest).to eq(target_review)
@@ -68,7 +68,7 @@ module Renalware::Medications
             patient = create(:patient, :minimal, by: user)
             create(
               :medication_review,
-              patient: patient,
+              patient:,
               date_time: opts[:review_date],
               by: user
             )

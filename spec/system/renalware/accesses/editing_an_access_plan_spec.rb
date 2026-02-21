@@ -8,7 +8,7 @@ describe "Editing an Access Plan" do
     user = login_as_clinical
     patient = create(:accesses_patient, by: user)
     create(:access_plan,
-           patient: patient,
+           patient:,
            notes: "Original notes",
            by: user)
 
@@ -45,7 +45,7 @@ describe "Editing an Access Plan" do
     user = login_as_clinical
     patient = create(:accesses_patient, by: user)
     create(:access_plan,
-           patient: patient,
+           patient:,
            notes: "Original notes",
            by: user)
 

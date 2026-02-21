@@ -4,7 +4,7 @@ module Renalware
       it_behaves_like "a Paranoid model"
 
       describe "validation" do
-        subject { described_class.new(patient: patient, user: user) }
+        subject { described_class.new(patient:, user:) }
 
         let(:patient) { build(:patient, by: user) }
         let(:user) { build(:patients_user) }

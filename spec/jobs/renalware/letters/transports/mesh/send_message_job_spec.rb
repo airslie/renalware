@@ -5,12 +5,12 @@ module Renalware::Letters
       include LettersSpecHelper
       include MeshSpecHelper
 
-      let(:transmission) { Transmission.create!(letter: letter) }
+      let(:transmission) { Transmission.create!(letter:) }
       let(:user) { create(:user) }
       let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
       let(:letter) do
         create_mesh_letter_to_gp(
-          create_mesh_patient(user: user),
+          create_mesh_patient(user:),
           user
         )
       end
@@ -44,11 +44,11 @@ module Renalware::Letters
       context "when the gp is not a recipient" do
         it "does not send anything" do
           letter = create_mesh_letter(
-            patient: create_mesh_patient(user: user),
-            user: user,
+            patient: create_mesh_patient(user:),
+            user:,
             to: :patient
           )
-          transmission = Transmission.create!(letter: letter)
+          transmission = Transmission.create!(letter:)
 
           # recipients sanity check
           expect(letter.recipients.length).to eq(1)
@@ -63,7 +63,7 @@ module Renalware::Letters
       context "when the gp is a recipient but the practice is nil" do
         it "does not send anything" do
           letter.patient.update!(practice_id: nil, by: user)
-          transmission = Transmission.create!(letter: letter)
+          transmission = Transmission.create!(letter:)
 
           expect {
             described_class.new.perform(transmission)
@@ -74,7 +74,7 @@ module Renalware::Letters
       context "when the gp is a recipient but practice mesh mailbox is missing" do
         it "does not send anything" do
           letter.patient.practice.update!(mesh_mailbox_id: "")
-          transmission = Transmission.create!(letter: letter)
+          transmission = Transmission.create!(letter:)
 
           pending "FIXME"
 

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :modality_change_type, class: "Renalware::Modalities::ChangeType" do
-    initialize_with { Renalware::Modalities::ChangeType.find_or_create_by(code: code) }
+    initialize_with { Renalware::Modalities::ChangeType.find_or_create_by(code:) }
 
     accountable
     code { "code" }

@@ -3,7 +3,7 @@ describe "Transplant Recipient Operation" do
 
   describe "GET show" do
     it "responds successfully" do
-      operation = create(:transplant_recipient_operation, patient: patient)
+      operation = create(:transplant_recipient_operation, patient:)
 
       get patient_transplants_recipient_operation_path(patient, operation)
 

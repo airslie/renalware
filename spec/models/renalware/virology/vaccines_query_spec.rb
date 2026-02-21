@@ -6,9 +6,9 @@ module Renalware
     let(:other_drug_type) { create(:drug_type, code: :other, name: "Other") }
 
     def create_drug(name:, type:, atc_code: [])
-      drug = create(:drug, name: name, code: name)
+      drug = create(:drug, name:, code: name)
       create(:dmd_virtual_medical_product,
-             atc_code: atc_code,
+             atc_code:,
              virtual_therapeutic_moiety_code: name)
       drug.drug_types << type
       drug
@@ -22,7 +22,7 @@ module Renalware
         refresh_prescribable_drugs_materialized_view
 
         expect(
-          described_class.new(vaccination_type: vaccination_type).call.pluck(:drug_id)
+          described_class.new(vaccination_type:).call.pluck(:drug_id)
         ).to eq([vaccine_drug.id])
       end
     end
@@ -35,7 +35,7 @@ module Renalware
         refresh_prescribable_drugs_materialized_view
 
         expect(
-          described_class.new(vaccination_type: vaccination_type).call.pluck(:drug_id)
+          described_class.new(vaccination_type:).call.pluck(:drug_id)
         ).to eq([abc_drug.id])
       end
     end
@@ -49,7 +49,7 @@ module Renalware
         refresh_prescribable_drugs_materialized_view
 
         expect(
-          described_class.new(vaccination_type: vaccination_type).call.pluck(:drug_id)
+          described_class.new(vaccination_type:).call.pluck(:drug_id)
         ).to eq([abc_drug.id, xyz_drug.id])
       end
     end

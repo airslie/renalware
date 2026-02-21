@@ -2,7 +2,7 @@ describe "patient_rules Requests" do
   let(:patient) { create(:pathology_patient) }
   let(:lab) { create(:pathology_lab) }
   let(:patient_rule) do
-    create(:pathology_requests_patient_rule, patient: patient, lab: lab)
+    create(:pathology_requests_patient_rule, patient:, lab:)
   end
   let(:clinic) { create(:clinic) }
 

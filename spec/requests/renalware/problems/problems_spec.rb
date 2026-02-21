@@ -4,7 +4,7 @@ describe "Problems" do
   describe "GET show" do
     context "when viewing a current problem" do
       it "responds with the problem" do
-        problem = create(:problem, patient: patient)
+        problem = create(:problem, patient:)
 
         get patient_problem_path(patient_id: patient, id: problem.id)
 
@@ -14,7 +14,7 @@ describe "Problems" do
 
     context "when viewing an archived problem" do
       it "responds with the problem" do
-        archived_problem = create(:problem, patient: patient, deleted_at: Date.current)
+        archived_problem = create(:problem, patient:, deleted_at: Date.current)
 
         get patient_problem_path(patient_id: patient, id: archived_problem.id)
 
@@ -66,7 +66,7 @@ describe "Problems" do
 
         # Patient has 2 problems with positions 1 2. We will add new problem and it should have
         # position 3
-        problems = create_list(:problem, 2, patient: patient)
+        problems = create_list(:problem, 2, patient:)
         expect(problems.map(&:position)).to eq([1, 2])
 
         # Another patient has a problem with position 99. It should be unaffected.
@@ -111,7 +111,7 @@ describe "Problems" do
         # Patient has 3 problems with positions 1 2 3.  We will delete the second problem.
         # it should change the position of problem 3 to be 2
         # Note the act of creation sets the position incrementally
-        problems = create_list(:problem, 3, patient: patient)
+        problems = create_list(:problem, 3, patient:)
         expect(problems.map(&:position)).to eq([1, 2, 3])
 
         # Another patient has a problem with position 99. It should be unaffected.
@@ -154,7 +154,7 @@ describe "Problems" do
         # pushed down ie
         #   [problem1, problem2, problem3] => [problem3, problem1,problem2]
         # Note the act of creation sets the position incrementally
-        problems = create_list(:problem, 3, patient: patient)
+        problems = create_list(:problem, 3, patient:)
         expect(problems.map(&:position)).to eq([1, 2, 3])
         new_problem_id_order = [problems[2].id, problems[0].id, problems[1].id]
 

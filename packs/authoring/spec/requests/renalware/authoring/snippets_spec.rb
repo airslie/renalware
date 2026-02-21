@@ -24,7 +24,7 @@ describe "Snippet management" do
       it "successfully and creates a new snippet" do
         params = { snippet: { title: "title", body: "Body" } }
 
-        post(authoring.snippets_path, params: params)
+        post(authoring.snippets_path, params:)
 
         follow_redirect!
 
@@ -40,7 +40,7 @@ describe "Snippet management" do
       it "responds with a form" do
         params = { snippet: { title: "", body: "" } }
 
-        post(authoring.snippets_path, params: params)
+        post(authoring.snippets_path, params:)
 
         expect(response).to be_successful
         expect(response).to render_template(:new)
@@ -65,7 +65,7 @@ describe "Snippet management" do
 
         params = { snippet: { title: "title1", body: "Body1" } }
 
-        patch authoring.snippet_path(snippet, params: params)
+        patch authoring.snippet_path(snippet, params:)
 
         follow_redirect!
 
@@ -82,7 +82,7 @@ describe "Snippet management" do
 
         params = { snippet: { title: "", body: "" } }
 
-        patch authoring.snippet_path(snippet, params: params)
+        patch authoring.snippet_path(snippet, params:)
 
         expect(response).to be_successful
         expect(response).to render_template(:edit)

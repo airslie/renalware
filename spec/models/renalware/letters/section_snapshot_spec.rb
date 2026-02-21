@@ -4,8 +4,8 @@ module Renalware
     let(:patient) { build(:letter_patient) }
     let(:letter) {
       create(:draft_letter,
-             topic: topic,
-             patient: patient,
+             topic:,
+             patient:,
              main_recipient: build(:letter_recipient, :main),
              by: user)
     }
@@ -22,7 +22,7 @@ module Renalware
         :hd_profile,
         patient: hd_patient,
         prescribed_time: 210,
-        hospital_unit: hospital_unit
+        hospital_unit:
       )
     end
 
@@ -46,7 +46,7 @@ module Renalware
 
       context "when a snapshot already exists" do
         let(:snapshot) do
-          create(:section_snapshot, letter: letter, content: "xy", section_identifier: :hd)
+          create(:section_snapshot, letter:, content: "xy", section_identifier: :hd)
         end
 
         before { snapshot }

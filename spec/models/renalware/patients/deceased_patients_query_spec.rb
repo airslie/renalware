@@ -25,7 +25,7 @@ module Renalware
         it "returns that patient" do
           patient = create(:patient, :minimal, died_on: nil)
           set_modality(
-            patient: patient,
+            patient:,
             modality_description: create(:death_modality_description)
           )
 

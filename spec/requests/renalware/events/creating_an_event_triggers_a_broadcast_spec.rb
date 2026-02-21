@@ -20,7 +20,7 @@ describe "Creating a Event triggers an event_created broadcast" do
           event_type_id: event_type.id
         }
       }
-      post patient_events_path(patient, params: params)
+      post patient_events_path(patient, params:)
 
       expect(response).to be_redirect # ie success
       expect(listener).to have_received(:event_created)

@@ -10,7 +10,7 @@ module Renalware
 
     let(:patient) { create(:letter_patient, :minimal) }
     let(:user) { create(:user, :minimal) }
-    let(:letter) { create_letter(state: :pending_review, to: :patient, patient: patient) }
+    let(:letter) { create_letter(state: :pending_review, to: :patient, patient:) }
     let(:approved_letter) { letter.becomes(Letters::Letter::Approved) }
 
     before do

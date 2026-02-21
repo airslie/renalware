@@ -57,13 +57,13 @@ module Renalware
 
               membership1 = create(
                 :practice_membership,
-                practice: practice,
+                practice:,
                 primary_care_physician: gp1
               )
 
               membership2 = create(
                 :practice_membership,
-                practice: practice,
+                practice:,
                 primary_care_physician: gp2
               )
 

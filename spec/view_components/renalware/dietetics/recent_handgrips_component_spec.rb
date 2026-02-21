@@ -1,7 +1,7 @@
 module Renalware
   describe Dietetics::RecentHandgripsComponent, type: :component do
     let(:patient) { Patient.new }
-    let(:instance) { described_class.new(patient: patient) }
+    let(:instance) { described_class.new(patient:) }
 
     context "with no clinic visits" do
       it "renders empty table" do
@@ -15,9 +15,10 @@ module Renalware
 
     context "with a last dietetic clinic visit" do
       let(:instance) {
-        described_class.new(patient: patient, dietetic_clinic_visits_loader: proc {
-                                                                               [dietetic_clinic]
-                                                                             })
+        described_class.new(
+          patient:,
+          dietetic_clinic_visits_loader: proc { [dietetic_clinic] }
+        )
       }
 
       context "with full data" do

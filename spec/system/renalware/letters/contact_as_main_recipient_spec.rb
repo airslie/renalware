@@ -4,16 +4,16 @@ RSpec.describe "Assign a person as a main recipient" do
   end
 
   let(:primary_care_physician) { create(:letter_primary_care_physician) }
-  let(:patient) { create(:letter_patient, primary_care_physician: primary_care_physician) }
+  let(:patient) { create(:letter_patient, primary_care_physician:) }
   let(:address) { build(:address) }
-  let!(:person) { create(:directory_person, address: address, by: create(:user)) }
+  let!(:person) { create(:directory_person, address:, by: create(:user)) }
   let(:user) { create(:user) }
   let!(:contact_description) { create(:letter_contact_description) }
 
   describe "assigning a new person as a main recipient", :js do
     before do
       create(:letter_letterhead)
-      create(:letter_contact, patient: patient, person: create(:directory_person, by: user))
+      create(:letter_contact, patient:, person: create(:directory_person, by: user))
       create(:letter_topic, text: "::description::")
     end
 

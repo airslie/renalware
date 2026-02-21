@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :drug_type, class: "Renalware::Drugs::Type" do
     initialize_with do
-      Renalware::Drugs::Type.find_or_create_by!(code: code, name: name)
+      Renalware::Drugs::Type.find_or_create_by!(code:, name:)
     end
 
     code { "immuno" }

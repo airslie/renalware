@@ -39,7 +39,7 @@ describe "Creating an Access Plan" do
     plan_type1 = create(:access_plan_type, name: "Continue dialysis line")
     plan_type2 = create(:access_plan_type, name: "Continue with fistula/graft -- line in situ")
     create(:access_plan,
-           patient: patient,
+           patient:,
            plan_type: plan_type1,
            by: user)
     notes = "Lorem ipsum delor.."

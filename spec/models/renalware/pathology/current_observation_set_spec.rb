@@ -60,7 +60,7 @@ module Renalware
             time = Time.zone.now
             patient = create(:pathology_patient)
             expect {
-              create_hgb_observation(patient: patient, observed_at: time, result: 123.1)
+              create_hgb_observation(patient:, observed_at: time, result: 123.1)
             }.to change(described_class, :count).by(1)
             # trigger has now updated the current_observation_set
 
@@ -75,7 +75,7 @@ module Renalware
             time = Time.zone.parse("2025-05-10 00:00:00")
             patient = create(:pathology_patient)
             expect {
-              create_hgb_observation(patient: patient, observed_at: time, result: 123.1)
+              create_hgb_observation(patient:, observed_at: time, result: 123.1)
             }.to change(described_class, :count).by(1)
             # trigger has now updated the current_observation_set
 
@@ -90,7 +90,7 @@ module Renalware
             it "updates the values hash with the new result and time" do
               time = Time.zone.now
               patient = create(:pathology_patient)
-              obs = create_hgb_observation(patient: patient, observed_at: time, result: 111.1)
+              obs = create_hgb_observation(patient:, observed_at: time, result: 111.1)
 
               obs_set = described_class.find_by(patient_id: patient.id)
               hgb = obs_set.values[:HGB]
@@ -98,7 +98,7 @@ module Renalware
 
               new_time = time + 1.hour
               expect {
-                obs = create_hgb_observation(patient: patient, observed_at: new_time, result: 222.2)
+                obs = create_hgb_observation(patient:, observed_at: new_time, result: 222.2)
               }.not_to change(described_class, :count)
               # trigger has now updated the current_observation_set
 
@@ -112,7 +112,7 @@ module Renalware
             it "does not update the values hash" do
               time = Time.zone.now
               patient = create(:pathology_patient)
-              obs = create_hgb_observation(patient: patient, observed_at: time, result: 111.1)
+              obs = create_hgb_observation(patient:, observed_at: time, result: 111.1)
               # trigger has now updated the current_observation_set
 
               obs_set = described_class.find_by(patient_id: patient.id)
@@ -121,7 +121,7 @@ module Renalware
 
               expect {
                 obs = create_hgb_observation(
-                  patient: patient,
+                  patient:,
                   observed_at: time - 1.hour, # an older date,
                   result: 222.2
                 )
@@ -135,7 +135,7 @@ module Renalware
             it "updates the values hash with the new result and time" do
               time = Time.zone.now
               patient = create(:pathology_patient)
-              obs = create_hgb_observation(patient: patient, observed_at: time, result: 111.1)
+              obs = create_hgb_observation(patient:, observed_at: time, result: 111.1)
               # trigger has now updated the current_observation_set
 
               new_time = time + 1.hour
@@ -152,7 +152,7 @@ module Renalware
             it "updates the values hash with the new result and time" do
               time = Time.zone.now
               patient = create(:pathology_patient)
-              obs = create_hgb_observation(patient: patient, observed_at: time, result: 111.1)
+              obs = create_hgb_observation(patient:, observed_at: time, result: 111.1)
               # trigger has now updated the current_observation_set
 
               obs.update!(result: 222.2)
@@ -173,7 +173,7 @@ module Renalware
                 old_time = 1.day.ago
                 travel_to(old_time) do
                   create_hgb_observation(
-                    patient: patient,
+                    patient:,
                     observed_at: Time.zone.now,
                     result: 111.1
                   )
@@ -185,7 +185,7 @@ module Renalware
 
                 expect(obs_set.updated_at).to eq(old_time)
 
-                create_hgb_observation(patient: patient, observed_at: Time.zone.now, result: 111.2)
+                create_hgb_observation(patient:, observed_at: Time.zone.now, result: 111.2)
 
                 expect(obs_set.reload.updated_at.strftime(time_format))
                   .to eq(Time.zone.now.strftime(time_format))
@@ -197,7 +197,7 @@ module Renalware
                 newer_time = 1.day.from_now
                 travel_to(newer_time) do
                   create_hgb_observation(
-                    patient: patient,
+                    patient:,
                     observed_at: Time.zone.now,
                     result: 111.1
                   )
@@ -209,7 +209,7 @@ module Renalware
 
                 expect(obs_set.updated_at).to eq(newer_time)
 
-                create_hgb_observation(patient: patient, observed_at: Time.zone.now, result: 111.2)
+                create_hgb_observation(patient:, observed_at: Time.zone.now, result: 111.2)
 
                 expect(obs_set.updated_at).to eq(newer_time)
               end
@@ -219,10 +219,10 @@ module Renalware
       end
 
       def create_hgb_observation(patient:, **)
-        request = create(:pathology_observation_request, patient: patient)
+        request = create(:pathology_observation_request, patient:)
         create(
           :pathology_observation,
-          request: request,
+          request:,
           description: create(:pathology_observation_description, code: "HGB"),
           **
         )

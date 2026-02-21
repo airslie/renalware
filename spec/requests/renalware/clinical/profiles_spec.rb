@@ -33,7 +33,7 @@ describe "Viewing clinical profile" do
         }
       }
 
-      put(url, params: params)
+      put(url, params:)
 
       expect(response).to have_http_status(:redirect)
       follow_redirect!
@@ -50,7 +50,7 @@ describe "Viewing clinical profile" do
         diagnosed_on: Date.parse("12-12-2017")
       )
       expect(patient).to have_attributes(
-        hospital_centre: hospital_centre,
+        hospital_centre:,
         preferred_death_location: death_location,
         preferred_death_location_notes: "ABC"
       )

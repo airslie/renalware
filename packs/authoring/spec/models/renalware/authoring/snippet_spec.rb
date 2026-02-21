@@ -21,10 +21,10 @@ module Renalware
 
         it "has a unique title within the scope of a user" do
           author = create(:snippets_user)
-          create(:snippet, author: author, title: "X")
+          create(:snippet, author:, title: "X")
 
           expect {
-            create(:snippet, author: author, title: "X")
+            create(:snippet, author:, title: "X")
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end

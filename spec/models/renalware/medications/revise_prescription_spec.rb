@@ -6,7 +6,7 @@ module Renalware::Medications
     let(:original_prescription) do
       create(
         :prescription,
-        patient: patient,
+        patient:,
         dose_amount: original_dose_amount,
         dose_unit: "milligram"
       )
@@ -78,7 +78,7 @@ module Renalware::Medications
         let(:original_prescription) do
           create(
             :prescription,
-            patient: patient,
+            patient:,
             dose_amount: original_dose_amount,
             dose_unit: "milligram",
             prescribed_on: original_prescribed_on
@@ -119,7 +119,7 @@ module Renalware::Medications
         let(:original_prescription) do
           create(
             :prescription,
-            patient: patient,
+            patient:,
             dose_amount: original_dose_amount,
             dose_unit: "milligram",
             prescribed_on: original_prescribed_on

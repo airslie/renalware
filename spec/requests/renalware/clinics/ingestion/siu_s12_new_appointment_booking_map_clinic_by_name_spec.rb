@@ -78,7 +78,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
         clinic = create_clinic
         consultant = create_consultant
         # Map clinic_name to clinic
-        create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
+        create(:clinics_mapping, name_in_feed: clinic_name, clinic:)
 
         expect {
           Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
@@ -104,7 +104,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
         it "creates the patient and consultant and schedules the appointment" do
           msg = hl7_message_from_raw_string(raw_hl7)
           clinic = create_clinic
-          create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
+          create(:clinics_mapping, name_in_feed: clinic_name, clinic:)
 
           expect {
             Renalware::Clinics::Ingestion::Commands::CreateOrUpdateAppointment.call(msg)
@@ -189,7 +189,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
     it "schedules the appointment against the existing patient" do
       msg = hl7_message_from_raw_string(raw_hl7)
       clinic = create_clinic
-      create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
+      create(:clinics_mapping, name_in_feed: clinic_name, clinic:)
       consultant = create_consultant
       patient = create_patient
 
@@ -208,7 +208,7 @@ describe "HL7 SIU^S12 - Notification of New Appointment Booking" do
       it "creates the consultant using PV1.7 Attending Consultant" do
         msg = hl7_message_from_raw_string(raw_hl7)
         clinic = create_clinic
-        create(:clinics_mapping, name_in_feed: clinic_name, clinic: clinic)
+        create(:clinics_mapping, name_in_feed: clinic_name, clinic:)
         patient = create_patient
 
         expect {

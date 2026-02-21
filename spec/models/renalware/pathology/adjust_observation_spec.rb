@@ -2,7 +2,7 @@ module Renalware
   describe Pathology::AdjustObservation do
     subject(:service) {
       described_class.new(
-        observation_request: observation_request,
+        observation_request:,
         code: obs_desc.code,
         policy: ->(patient, _observation) { patient.ethnicity&.cfh_name&.casecmp?("Time Lord") }
       )
@@ -12,7 +12,7 @@ module Renalware
     let(:target_ethnicity) { "Time Lord" }
     let(:obs_desc) { create(:pathology_observation_description, code: "MyEGFR") }
     let(:patient) { create(:pathology_patient, ethnicity: nil) }
-    let(:observation_request) { create(:pathology_observation_request, patient: patient) }
+    let(:observation_request) { create(:pathology_observation_request, patient:) }
 
     let(:test_adjusted_egfr_observation_class) do
       Class.new(SimpleDelegator) do

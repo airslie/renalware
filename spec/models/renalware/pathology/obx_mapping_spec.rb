@@ -118,7 +118,7 @@ module Renalware
 
             expect(
               described_class.observation_description_for(
-                sender: sender,
+                sender:,
                 code: testcase[:incoming_code]
               )
             ).to eq(resolved_observation_description)

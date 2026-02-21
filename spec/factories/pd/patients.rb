@@ -7,7 +7,7 @@ FactoryBot.define do
 
       def call(patient)
         set_modality(
-          patient: patient,
+          patient:,
           modality_description: FactoryBot.create(:pd_modality_description),
           by: patient.created_by
         )

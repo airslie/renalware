@@ -14,7 +14,7 @@ describe "Managing PD Adequacy Results" do
 
   describe "GET edit" do
     it "responds with a form" do
-      result = create(:pd_adequacy_result, patient: patient)
+      result = create(:pd_adequacy_result, patient:)
       get edit_patient_pd_adequacy_result_path(patient, result)
 
       expect(response).to be_successful
@@ -25,7 +25,7 @@ describe "Managing PD Adequacy Results" do
 
   describe "DELETE destroy" do
     it "soft deletes a pet result" do
-      result = create(:pd_adequacy_result, patient: patient)
+      result = create(:pd_adequacy_result, patient:)
       delete patient_pd_adequacy_result_path(patient, result)
 
       expect(response).to be_redirect

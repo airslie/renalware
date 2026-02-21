@@ -20,7 +20,7 @@ module Renalware
           drug.drug_types << drug_type
         end
       end
-      let(:prescription) { create(:prescription, drug: drug, patient: patient, by: user) }
+      let(:prescription) { create(:prescription, drug:, patient:, by: user) }
 
       context "when a prescription associated with the patient is altered" do
         it "changes" do

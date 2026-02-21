@@ -11,14 +11,14 @@ module Renalware
           allow(TerminateAllPatientPrescriptions).to receive(:call)
 
           listener.patient_modality_changed_to_death(
-            patient: patient,
+            patient:,
             modality: Object.new,
             actor: user
           )
 
           expect(TerminateAllPatientPrescriptions)
             .to have_received(:call)
-            .with(patient: patient, by: user)
+            .with(patient:, by: user)
         end
       end
     end

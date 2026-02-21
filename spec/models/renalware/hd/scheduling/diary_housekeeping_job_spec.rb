@@ -28,7 +28,7 @@ module Renalware::HD::Scheduling
     def create_weekly_diary(week_period:)
       create(
         :hd_weekly_diary,
-        master_diary: master_diary,
+        master_diary:,
         hospital_unit_id: unit.id,
         week_number: week_period.week_number,
         year: week_period.year,
@@ -38,10 +38,10 @@ module Renalware::HD::Scheduling
 
     def create_slot(diary:, day_of_week:)
       create(:hd_diary_slot,
-             diary: diary,
-             patient: patient,
-             station: station,
-             day_of_week: day_of_week,
+             diary:,
+             patient:,
+             station:,
+             day_of_week:,
              diurnal_period_code_id: diurnal_period_code.id,
              by: user)
     end
@@ -71,8 +71,8 @@ module Renalware::HD::Scheduling
             expect(week_period.week_number).to eq(5)
             expect(day_of_week).to eq(4)
 
-            diary = create_weekly_diary(week_period: week_period)
-            create_slot(diary: diary, day_of_week: day_of_week)
+            diary = create_weekly_diary(week_period:)
+            create_slot(diary:, day_of_week:)
           end
 
           # now travel to the day after (Wednesday)
@@ -85,7 +85,7 @@ module Renalware::HD::Scheduling
             expect(todays_day_of_week).to eq(5)
 
             slot_that_should_not_be_archived = create_slot(
-              diary: diary,
+              diary:,
               day_of_week: todays_day_of_week
             )
 

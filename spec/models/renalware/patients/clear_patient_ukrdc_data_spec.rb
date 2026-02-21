@@ -7,7 +7,7 @@ module Renalware
             patient = create(:patient, :minimal, send_to_rpv: true, rpv_decision_on: 1.year.ago)
             user = create(:user)
 
-            described_class.call(patient: patient, by: user)
+            described_class.call(patient:, by: user)
 
             patient.reload
             expect(patient.send_to_rpv).to be(false)
@@ -30,7 +30,7 @@ module Renalware
 
             # calling the service object should not raise an error!
             expect {
-              described_class.call(patient: patient, by: user)
+              described_class.call(patient:, by: user)
             }.not_to raise_error
 
             patient.reload

@@ -3,13 +3,13 @@ module Renalware
     include LettersSpecHelper
 
     subject(:service) do
-      described_class.new(letter: letter, by: user).broadcasting_to_configured_subscribers
+      described_class.new(letter:, by: user).broadcasting_to_configured_subscribers
     end
 
     let(:patient) { create(:letter_patient, :minimal) }
     let(:user) { create(:user, :minimal) }
     let(:unapproved_letter) {
-      create_letter(state: :pending_review, to: :patient, patient: patient)
+      create_letter(state: :pending_review, to: :patient, patient:)
     }
     let(:approved_letter) { unapproved_letter.becomes(Letters::Letter::Approved) }
     let(:completed_letter) { approved_letter.becomes(Letters::Letter::Completed) }

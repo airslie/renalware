@@ -8,7 +8,7 @@ module Renalware
           it "renders nothing" do
             patient = build(:patient, send_to_renalreg: true)
 
-            expect(described_class.new(patient: patient).xml).to be_nil
+            expect(described_class.new(patient:).xml).to be_nil
           end
         end
 
@@ -27,7 +27,7 @@ module Renalware
                 </OptOut>
               XML
 
-              xml = format_xml(described_class.new(patient: patient).xml)
+              xml = format_xml(described_class.new(patient:).xml)
 
               expect(xml).to eq(expected_xml)
             end
@@ -46,7 +46,7 @@ module Renalware
               </OptOut>
             XML
 
-            xml = format_xml(described_class.new(patient: patient).xml)
+            xml = format_xml(described_class.new(patient:).xml)
 
             expect(xml).to eq(expected_xml)
           end

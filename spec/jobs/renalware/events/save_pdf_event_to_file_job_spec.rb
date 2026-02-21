@@ -13,7 +13,7 @@ describe Renalware::Events::SavePdfEventToFileJob do
     create(
       :simple_event,
       date_time: Time.zone.parse("2017-12-01 09:00:00"),
-      patient: patient
+      patient:
     )
   end
 
@@ -22,7 +22,7 @@ describe Renalware::Events::SavePdfEventToFileJob do
       file_path = Renalware::Engine.root.join("tmp", "test.pdf")
       create(:hospital_centre, code: Renalware.config.ukrdc_site_code)
 
-      job.perform(event: event, file_path: file_path)
+      job.perform(event:, file_path:)
 
       expect(File.exist?(file_path)).to be(true)
     end

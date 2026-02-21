@@ -5,13 +5,13 @@ module Renalware
         describe Resources::MessageHeader do
           subject(:message_header) { described_class.call(arguments) }
 
-          let(:transmission) { instance_double(Transports::Mesh::Transmission, letter: letter) }
+          let(:transmission) { instance_double(Transports::Mesh::Transmission, letter:) }
           let(:patient) { Renalware::Patient.new(secure_id: "456") }
           let(:topic) { build(:letter_topic, snomed_document_type: build(:snomed_document_type)) }
-          let(:letter) { instance_double(Letter, patient: patient, uuid: "789", topic: topic) }
+          let(:letter) { instance_double(Letter, patient:, uuid: "789", topic:) }
           let(:arguments) do
             Arguments.new(
-              transmission: transmission,
+              transmission:,
               transaction_uuid: "123",
               organisation_uuid: "ORG1",
               itk_organisation_uuid: "ITKORG1"

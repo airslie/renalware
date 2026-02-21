@@ -3,7 +3,7 @@ describe Renalware::PD::AdequacyResultsComponent, type: :component do
     it "renders nothing" do
       patient = build_stubbed(:pd_patient)
       user = build_stubbed(:user)
-      component = described_class.new(patient: patient, current_user: user)
+      component = described_class.new(patient:, current_user: user)
       allow(component).to receive(:results).and_return([])
 
       html = render_inline(component).to_html
@@ -16,9 +16,9 @@ describe Renalware::PD::AdequacyResultsComponent, type: :component do
     it "renders nothing" do
       patient = build_stubbed(:pd_patient)
       user = build_stubbed(:user)
-      component = described_class.new(patient: patient, current_user: user)
+      component = described_class.new(patient:, current_user: user)
 
-      result = build_stubbed(:pd_adequacy_result, patient: patient, performed_on: "2020-01-01")
+      result = build_stubbed(:pd_adequacy_result, patient:, performed_on: "2020-01-01")
       allow(component).to receive_messages(
         results: [result],
         pagination: Renalware::NullObject.instance

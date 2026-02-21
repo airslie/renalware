@@ -10,13 +10,13 @@ module Renalware
 
       it "validates that the postcode only contains alphanumeric characters and spaces" do
         ["ABC/123", "ABC.123", "TW20 8AR\\n", "\\tTW20 8AR"].each do |postcode|
-          (address = Address.new(postcode: postcode)).valid?
+          (address = Address.new(postcode:)).valid?
 
           expect(address.errors[:postcode]).to include("contains unexpected characters")
         end
 
         [nil, "", "TW20 8AR", "SW1A 1AA", "SA63", "IM9 4EB", "IV274EG"].each do |postcode|
-          (address = Address.new(postcode: postcode)).valid?
+          (address = Address.new(postcode:)).valid?
 
           expect(address.errors[:postcode]).to eq([])
         end

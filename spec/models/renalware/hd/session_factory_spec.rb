@@ -5,7 +5,7 @@ module Renalware
       let(:patient) { create(:hd_patient) }
 
       describe "building a new ongoing session" do
-        subject(:factory) { described_class.new(patient: patient, user: user) }
+        subject(:factory) { described_class.new(patient:, user:) }
 
         describe "#build" do
           it "applies defaults to the session" do
@@ -22,7 +22,7 @@ module Renalware
           end
 
           context "with HD profile" do
-            let!(:profile) { create(:hd_profile, patient: patient) }
+            let!(:profile) { create(:hd_profile, patient:) }
 
             it "applies defaults from HD profile" do
               session = factory.build
@@ -47,7 +47,7 @@ module Renalware
       end
 
       describe "building a dna session" do
-        subject(:factory) { described_class.new(patient: patient, user: user, type: "dna") }
+        subject(:factory) { described_class.new(patient:, user:, type: "dna") }
 
         describe "#build" do
           it "applies defaults to the session" do
@@ -62,7 +62,7 @@ module Renalware
           end
 
           context "with HD profile" do
-            let!(:profile) { create(:hd_profile, patient: patient) }
+            let!(:profile) { create(:hd_profile, patient:) }
 
             it "applies defaults from HD profile" do
               session = factory.build

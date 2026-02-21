@@ -115,9 +115,9 @@ describe "Editing a patient's current HD profile", js: false do
       expect(patient.named_nurse).to eq(nurse)
 
       expect(profile).to have_attributes(
-        hospital_unit: hospital_unit,
+        hospital_unit:,
         prescriber: user,
-        schedule_definition: schedule_definition,
+        schedule_definition:,
         home_machine_identifier: "ABC123"
       )
 
@@ -164,7 +164,7 @@ describe "Editing a patient's current HD profile", js: false do
 
   context "when the patient already has an HD Profile" do
     it "creates a new current profile" do
-      current_profile = create(:hd_profile, patient: patient)
+      current_profile = create(:hd_profile, patient:)
       expect(patient.hd_profile).to eq(current_profile)
 
       user = login_as_clinical

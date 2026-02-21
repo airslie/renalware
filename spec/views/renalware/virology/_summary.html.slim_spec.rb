@@ -10,7 +10,7 @@ describe "renalware/virology/profiles/summary" do
   context "when the patient has no HIV, HepB or HEPC in their clinical profile" do
     it "displays an empty Virology section" do
       profile
-      render partial: partial, locals: { patient: patient, positive_results_only: true }
+      render partial:, locals: { patient:, positive_results_only: true }
 
       virology_attributes.each do |virology_attribute|
         expect(rendered).not_to include(human_virology_attribute_name_for(virology_attribute))
@@ -31,7 +31,7 @@ describe "renalware/virology/profiles/summary" do
       end
 
       it "displays only #{virology_attr}, including the year" do
-        render partial: partial, locals: { patient: patient, positive_results_only: true }
+        render partial:, locals: { patient:, positive_results_only: true }
 
         expect(rendered).to include(human_virology_attribute_name_for(virology_attr))
         expect(rendered).to include("Yes (2011)")

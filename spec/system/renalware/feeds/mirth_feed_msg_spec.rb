@@ -6,8 +6,8 @@ describe "Mirth HL7 feed processing simulation" do
   )
     Renalware::Feeds::Msg.create!(
       sent_at: Time.zone.parse(sent_at),
-      message_control_id: message_control_id,
-      orc_filler_order_number: orc_filler_order_number,
+      message_control_id:,
+      orc_filler_order_number:,
       message_type: "ORU",
       event_type: "R01",
       body: ""

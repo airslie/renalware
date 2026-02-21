@@ -32,8 +32,8 @@ module Renalware
         let(:delivery_event) {
           create(
             :medication_delivery_event,
-            homecare_form: homecare_form,
-            patient: patient,
+            homecare_form:,
+            patient:,
             prescription_duration: "3"
           )
         }
@@ -41,7 +41,7 @@ module Renalware
         describe "#call" do
           it "delegates to Forms::Homecare::Pdf" do
             allow(Forms::Homecare::Pdf).to receive(:generate)
-            adapter = described_class.new(delivery_event: delivery_event)
+            adapter = described_class.new(delivery_event:)
             adapter.call
             expect(Forms::Homecare::Pdf).to have_received(:generate)
           end
@@ -56,12 +56,12 @@ module Renalware
               )
 
             set_modality(
-              patient: patient,
+              patient:,
               modality_description: create(:hd_modality_description),
               by: patient.created_by
             )
 
-            adapter = described_class.new(delivery_event: delivery_event)
+            adapter = described_class.new(delivery_event:)
 
             args = adapter.build_args
 
@@ -114,7 +114,7 @@ module Renalware
                 by: user,
                 dose_amount: "100",
                 dose_unit: "milligram",
-                patient: patient,
+                patient:,
                 medication_route: create(:medication_route, :po),
                 prescribed_on: "2020-01-01",
                 provider: :home_delivery
@@ -123,14 +123,14 @@ module Renalware
                 :prescription,
                 drug: immuno_drug,
                 by: user,
-                patient: patient,
+                patient:,
                 provider: :gp
               )
               create(
                 :prescription,
                 drug: immuno_drug,
                 by: user,
-                patient: patient,
+                patient:,
                 provider: :home_delivery
               )
 
@@ -138,13 +138,13 @@ module Renalware
 
               delivery_event = create(
                 :medication_delivery_event,
-                homecare_form: homecare_form,
-                patient: patient,
+                homecare_form:,
+                patient:,
                 drug_type: esa_drug_type,
                 prescription_duration: "3"
               )
 
-              adapter = described_class.new(delivery_event: delivery_event)
+              adapter = described_class.new(delivery_event:)
               args = adapter.build_args
 
               expect(patient.prescriptions.current.count).to eq(3)
@@ -177,13 +177,13 @@ module Renalware
 
               delivery_event = create(
                 :medication_delivery_event,
-                homecare_form: homecare_form,
-                patient: patient,
+                homecare_form:,
+                patient:,
                 drug_type: esa_drug_type,
                 prescription_duration: "3"
               )
 
-              adapter = described_class.new(delivery_event: delivery_event)
+              adapter = described_class.new(delivery_event:)
 
               args = adapter.build_args
 
@@ -197,13 +197,13 @@ module Renalware
 
               delivery_event = create(
                 :medication_delivery_event,
-                homecare_form: homecare_form,
+                homecare_form:,
                 patient: Renalware::Patient.find(patient.id),
                 drug_type: esa_drug_type,
                 prescription_duration: "3"
               )
 
-              adapter = described_class.new(delivery_event: delivery_event)
+              adapter = described_class.new(delivery_event:)
 
               args = adapter.build_args
 
@@ -217,12 +217,12 @@ module Renalware
 
               delivery_event = create(
                 :medication_delivery_event,
-                homecare_form: homecare_form,
-                patient: patient,
+                homecare_form:,
+                patient:,
                 prescription_duration: "3"
               )
 
-              adapter = described_class.new(delivery_event: delivery_event)
+              adapter = described_class.new(delivery_event:)
 
               args = adapter.build_args
 

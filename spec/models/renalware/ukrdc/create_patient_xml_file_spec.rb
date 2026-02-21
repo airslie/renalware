@@ -28,7 +28,7 @@ module Renalware
     }
 
     let(:success_result) do
-      instance_double(UKRDC::XmlRenderer::Success, xml: xml, success?: true, failure?: false)
+      instance_double(UKRDC::XmlRenderer::Success, xml:, success?: true, failure?: false)
     end
     let(:success_renderer) { instance_double(UKRDC::XmlRenderer, call: success_result) }
 
@@ -61,9 +61,9 @@ module Renalware
 
         Dir.mktmpdir(nil, Rails.root.join("tmp").to_s) do |dir|
           service = described_class.new(
-            patient: patient,
-            batch: batch,
-            dir: dir,
+            patient:,
+            batch:,
+            dir:,
             renderer: success_renderer,
             schema: UKRDC::XsdSchema.new,
             changes_since: "2017-01-01" # required if sent_to_ukrdc_at is nil!
@@ -71,7 +71,7 @@ module Renalware
 
           expect { service.call }.to change(patient, :sent_to_ukrdc_at)
 
-          log = UKRDC::TransmissionLog.where(patient: patient).last
+          log = UKRDC::TransmissionLog.where(patient:).last
           expect(log.error).to eq([])
           expect(log.payload_hash).to eq(xml_md5_hash)
 
@@ -87,7 +87,7 @@ module Renalware
             "cause the XML content to differ" do
       let(:prevous_transmission_log) {
         UKRDC::TransmissionLog.create!(
-          patient: patient,
+          patient:,
           batch: UKRDC::Batch.next,
           status: :queued,
           created_at: 1.week.ago,
@@ -102,16 +102,16 @@ module Renalware
 
         Dir.mktmpdir(nil, Rails.root.join("tmp").to_s) do |dir|
           service = described_class.new(
-            batch: batch,
+            batch:,
             renderer: success_renderer,
             schema: UKRDC::XsdSchema.new,
-            patient: patient,
-            dir: dir
+            patient:,
+            dir:
           )
 
           expect { service.call }.to change(patient, :sent_to_ukrdc_at)
 
-          log = UKRDC::TransmissionLog.where(patient: patient).last
+          log = UKRDC::TransmissionLog.where(patient:).last
           expect(log.error).to eq([])
           expect(log.payload_hash).to eq(xml_md5_hash)
 
@@ -128,7 +128,7 @@ module Renalware
       let(:prevous_transmission_log) {
         UKRDC::TransmissionLog.create!(
           batch: UKRDC::Batch.next,
-          patient: patient,
+          patient:,
           status: :queued,
           created_at: 1.week.ago,
           payload: xml,
@@ -143,14 +143,14 @@ module Renalware
           service = described_class.new(
             batch: UKRDC::Batch.next,
             renderer: success_renderer,
-            patient: patient,
+            patient:,
             schema: UKRDC::XsdSchema.new,
-            dir: dir
+            dir:
           )
 
           expect { service.call }.not_to change(patient, :sent_to_ukrdc_at)
 
-          log = UKRDC::TransmissionLog.where(patient: patient).last
+          log = UKRDC::TransmissionLog.where(patient:).last
           expect(log.error).to eq([])
           expect(log.payload_hash).to eq(xml_md5_hash)
           expect(log.file_path).to be_nil
@@ -165,13 +165,13 @@ module Renalware
             batch: UKRDC::Batch.next,
             renderer: failure_renderer,
             schema: UKRDC::XsdSchema.new,
-            patient: patient,
-            dir: dir
+            patient:,
+            dir:
           )
 
           expect { service.call }.not_to change(patient, :sent_to_ukrdc_at)
 
-          log = UKRDC::TransmissionLog.where(patient: patient).last
+          log = UKRDC::TransmissionLog.where(patient:).last
           expect(log.error).to eq(%w(error1 error2))
           expect(log.status).to eq("error")
           expect(log.payload).to be_nil

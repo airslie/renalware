@@ -3,14 +3,14 @@ module MessageSpecHelper
   def create_mesh_letter(patient:, user:, to: :primary_care_physician)
     create_letter(
       state: :approved,
-      to: to,
-      patient: patient,
+      to:,
+      patient:,
       author: user,
       by: user
     ).reload.tap do |letter|
       letter.archive = create(
         :letter_archive,
-        letter: letter,
+        letter:,
         by: user,
         content: <<~HTML)
           <div id="main">
@@ -27,8 +27,8 @@ module MessageSpecHelper
     user || create(:user, :minimal)
     create(
       :letter_patient,
-      given_name: given_name,
-      practice: practice,
+      given_name:,
+      practice:,
       primary_care_physician: create(:letter_primary_care_physician, practices: [practice]),
       by: user
     )

@@ -1,7 +1,7 @@
 module Renalware
   module PD
     describe CreateRegime do
-      subject(:service) { described_class.new(patient: patient).call(by: user, params: params) }
+      subject(:service) { described_class.new(patient:).call(by: user, params:) }
 
       let(:user) { create(:user) }
       let(:patient) { create(:patient, :minimal, by: user) }
@@ -9,7 +9,7 @@ module Renalware
       let(:pre_existing_regime) do
         regime = build(:apd_regime,
                        add_hd: false,
-                       patient: patient,
+                       patient:,
                        end_date: nil,
                        start_date: "01-01-2012")
         regime.bags << build(:pd_regime_bag, sunday: false)

@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :pathology_observation_description,
           class: "Renalware::Pathology::ObservationDescription" do
     initialize_with do
-      Renalware::Pathology::ObservationDescription.find_or_create_by!(code: code)
+      Renalware::Pathology::ObservationDescription.find_or_create_by!(code:)
     end
 
     before(:create) { |desc| desc.loinc_code ||= desc.code.downcase }

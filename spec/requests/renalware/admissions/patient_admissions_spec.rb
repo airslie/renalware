@@ -9,11 +9,11 @@ module Renalware
       it "lists the patient's inpatient admissions" do
         create(:admissions_admission,
                by: user,
-               patient: patient,
+               patient:,
                admitted_on: Time.zone.today,
                admission_type: :unknown,
                reason_for_admission: "Reason1",
-               hospital_ward: hospital_ward)
+               hospital_ward:)
 
         get patient_admissions_path(patient)
 

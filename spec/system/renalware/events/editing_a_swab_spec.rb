@@ -5,7 +5,7 @@ RSpec.describe "Editing a swab", :js do
 
     swab_site = "The site"
     swab_result = Renalware::Events::Swab::Document.result.values.first.text
-    swab = build(:swab, patient: patient, by: user)
+    swab = build(:swab, patient:, by: user)
     swab.document.result = nil
     swab.document.location = nil
     swab.save!

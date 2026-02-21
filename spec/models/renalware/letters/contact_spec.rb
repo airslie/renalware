@@ -47,7 +47,7 @@ module Renalware
       end
 
       def build_contact(person, patient)
-        build(:letter_contact, person: person, patient: patient)
+        build(:letter_contact, person:, patient:)
       end
     end
   end

@@ -15,10 +15,10 @@ describe "Prescriptions - create / edit / terminate", :js do
 
     create(
       :drug_vmp_classification,
-      unit_of_measure: unit_of_measure,
-      route: route,
-      form: form,
-      drug: drug
+      unit_of_measure:,
+      route:,
+      form:,
+      drug:
     )
 
     login_as user
@@ -173,8 +173,8 @@ describe "Prescriptions - create / edit / terminate", :js do
 
     before do
       create(:drug_trade_family_classification,
-             trade_family: trade_family,
-             drug: drug,
+             trade_family:,
+             drug:,
              enabled: true)
       refresh_prescribable_drugs_materialized_view
     end
@@ -218,11 +218,11 @@ describe "Prescriptions - create / edit / terminate", :js do
       create(
         :prescription,
         treatable: patient,
-        patient: patient,
-        drug: drug,
+        patient:,
+        drug:,
         medication_route: route,
-        unit_of_measure: unit_of_measure,
-        form: form,
+        unit_of_measure:,
+        form:,
         by: user,
         prescribed_on: Date.parse("2022-10-09")
       )

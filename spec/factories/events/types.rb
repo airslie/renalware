@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :event_type, class: "Renalware::Events::Type" do
     initialize_with do
       Renalware::Events::Type.find_or_create_by(
-        name: name,
-        category: category
+        name:,
+        category:
       )
     end
 

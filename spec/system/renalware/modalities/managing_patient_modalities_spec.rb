@@ -6,8 +6,8 @@ describe "Managing a patient's modalities", js: false do
 
   def change_patient_modality(patient, modality_description, user, started_on: Time.zone.now)
     result = Renalware::Modalities::ChangePatientModality
-      .new(patient: patient, user: user)
-      .call(description: modality_description, started_on: started_on)
+      .new(patient:, user:)
+      .call(description: modality_description, started_on:)
     expect(result).to be_success
     patient.reload
     result.object

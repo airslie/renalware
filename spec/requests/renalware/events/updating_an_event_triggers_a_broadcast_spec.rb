@@ -25,7 +25,7 @@ describe "Updating a Event triggers an event_updated broadcast" do
 
       patient = create(:patient, :minimal)
       event_type = create(:event_type, name: "Simple")
-      event = create(:simple_event, event_type: event_type, patient: patient)
+      event = create(:simple_event, event_type:, patient:)
       listener = test_event_listener_class.new
       allow(test_event_listener_class).to receive(:new).and_return(listener)
       allow(listener).to receive(:event_updated)
@@ -37,7 +37,7 @@ describe "Updating a Event triggers an event_updated broadcast" do
           event_type_id: event_type.id
         }
       }
-      post patient_event_path(patient, event, params: params)
+      post patient_event_path(patient, event, params:)
 
       expect(response).to be_redirect # ie success
       expect(listener).to have_received(:event_updated)

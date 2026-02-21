@@ -17,10 +17,10 @@ describe "HL7 ADT^A38 cancel appointment" do
 
   let(:data) do
     OpenStruct.new(
-      visit_number: visit_number,
-      starts_at: starts_at,
+      visit_number:,
+      starts_at:,
       patient: OpenStruct.new(
-        nhs_number: nhs_number,
+        nhs_number:,
         hospital_number: local_patient_id,
         family_name: "Smith",
         given_name: "John",
@@ -43,8 +43,8 @@ describe "HL7 ADT^A38 cancel appointment" do
   def create_matching_patient
     create(
       :patient,
-      nhs_number: nhs_number,
-      local_patient_id: local_patient_id,
+      nhs_number:,
+      local_patient_id:,
       born_on: Date.parse("19440922")
     ).tap do |pat|
       pat.current_address.update!(postcode: "OLD POSTCODE")
@@ -90,7 +90,7 @@ describe "HL7 ADT^A38 cancel appointment" do
       it "deletes the appointment" do
         msg = hl7_message_from_file("clinics/ADT_A38_cancel_appointment", data)
         clinic_patient = Renalware::Clinics.cast_patient(create_matching_patient)
-        create(:appointment, patient: clinic_patient, visit_number: visit_number)
+        create(:appointment, patient: clinic_patient, visit_number:)
 
         expect {
           Renalware::Clinics::Ingestion::Commands::DeleteAppointment.call(msg)
