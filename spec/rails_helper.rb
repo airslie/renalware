@@ -148,6 +148,10 @@ RSpec.configure do |config|
     metadata[:type] = :component
   end
 
+  config.define_derived_metadata(file_path: %r{/spec/forms/}) do |metadata|
+    metadata[:type] = :model
+  end
+
   config.define_derived_metadata(file_path: %r{/spec/pdfs/forms/}) do |metadata|
     metadata[:type] = :form
   end

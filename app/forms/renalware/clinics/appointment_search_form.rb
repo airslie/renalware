@@ -20,7 +20,7 @@ module Renalware
         {
           clinic_id_eq: clinic_id,
           consultant_id_eq: consultant_id,
-          s: s
+          s:
         }.merge(date_options)
       end
 

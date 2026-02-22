@@ -78,7 +78,7 @@ module Renalware
             action_id_eq: action,
             hotlist_eq: on_hotlist,
             max_aki_eq: max_aki,
-            s: s
+            s:
           }.merge(date_query)
           AKIAlertQuery.new(options)
         end
