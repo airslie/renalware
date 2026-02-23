@@ -6,7 +6,7 @@ module Renalware
       module Rendering
         module V4
           class Patient < Rendering::Base
-            pattr_initialize [:patient!]
+            pattr_initialize [:patient!, :batch_number]
 
             # Renal Registry requires a 'IDN07' id:
             #  "Unique identifier not attributable to patient, Site code plus internal record
@@ -79,6 +79,7 @@ module Renalware
                 fac[:channelName] = "Renalware #{Renalware::VERSION}"
                 fac[:schemaVersion] = Renalware.config.ukrdc_schema_version
                 fac[:time] = Time.zone.now.to_datetime.change(sec: 0)
+                fac[:batchNo] = batch_number&.to_i
               end
             end
 
