@@ -69,4 +69,44 @@ describe Renalware::Configuration do
       )
     end
   end
+
+  describe "#hl7_pid_sex_map" do
+    context "when ENV variable is not set" do
+      it "defaults to the expected map" do
+        ENV["HL7_PID_SEX_MAP"] = ""
+
+        expect(config.hl7_pid_sex_map).to eq(
+          "MALE" => "M",
+          "FEMALE" => "F",
+          "OTHER" => "NS",
+          "UNKNOWN" => "NK",
+          "NOTKNOWN" => "NK",
+          "INDETERMINATE" => "NK",
+          "AMBIGUOUS" => "NS",
+          "NOT APPLICABLE" => "NS",
+          "BOTH" => "NS",
+          "0" => "NK",
+          "1" => "M",
+          "2" => "F",
+          "9" => "NS"
+        )
+      end
+    end
+
+    # rubocop:disable Lint/SymbolConversion
+    context "when ENV variable is set" do
+      it "uses the JSON-parsed ENV var" do
+        ENV["HL7_PID_SEX_MAP"] = { "MALE": "M", "FEMALE": "F" }.to_json
+
+        expect(config.hl7_pid_sex_map).to eq("MALE" => "M", "FEMALE" => "F")
+      end
+
+      it "handles double encoded JSON" do
+        ENV["HL7_PID_SEX_MAP"] = "{\"MALE\": \"M\", \"FEMALE\": \"F\" }".to_json
+
+        expect(config.hl7_pid_sex_map).to eq("MALE" => "M", "FEMALE" => "F")
+      end
+    end
+    # rubocop:enable Lint/SymbolConversion
+  end
 end
