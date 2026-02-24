@@ -13,7 +13,7 @@ module Renalware
     end
 
     it "renders component" do
-      expect(fragment.text).to include("Timeline (1)")
+      expect(fragment.text).to include("Activity Summary (1)")
       expect(fragment.text).to include("09-Jul-2025AdmissionUnknown")
       expect(fragment.text).to include("Ward A")
     end

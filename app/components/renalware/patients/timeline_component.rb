@@ -60,7 +60,7 @@ module Renalware
       header do
         h1 do
           a(href: patient_timeline_path(@patient)) do
-            "Timeline (#{count})"
+            "Activity Summary (#{count})"
           end
         end
       end
