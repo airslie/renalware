@@ -228,10 +228,8 @@ module Renalware
       ENV.fetch("MESH_RECIPIENT_MAILBOX", "X26OT112") # X26OT112 is in the NHS INT env
     }
     config_accessor(:mesh_workflow_id) {
-      {
-        gp_connect: "GPCONNECT_SEND_DOCUMENT", # GPFED_CONSULT_REPORT
-        transfer_of_care: "TOC_FHIR_OP_ATTEN"
-      }[letters_mesh_workflow]
+      ENV.fetch("MESH_WORKFLOW_ID", "GPCONNECT_SEND_DOCUMENT")
+      # transfer_of_care: "TOC_FHIR_OP_ATTEN"
     }
     config_accessor(:mesh_path_to_nhs_ca_file)    { ENV.fetch("MESH_PATH_TO_NHS_CA_FILE", "MESH_NHS_CA_FILE") }
     config_accessor(:mesh_nhs_ca_cert)            { ENV.fetch("MESH_NHS_CA_CERT", "MESH_NHS_CA_CERT") }
@@ -453,7 +451,7 @@ module Renalware
     # - NS = Not Stated
     # - NK = Not Known
     config_accessor(:hl7_pid_sex_map) do
-      {
+      default_sex_map = {
         "MALE" => "M",
         "FEMALE" => "F",
         "OTHER" => "NS",
@@ -467,7 +465,14 @@ module Renalware
         "1" => "M",
         "2" => "F",
         "9" => "NS"
-      }.freeze
+      }.to_json
+
+      raw = ENV.fetch("HL7_PID_SEX_MAP", default_sex_map)
+      raw = default_sex_map if raw.strip.empty?
+
+      parsed = JSON.parse(raw)
+      parsed = JSON.parse(parsed) if parsed.is_a?(String) # Handle double-encoded JSON in ENV.
+      parsed
     end
     config_accessor(:max_file_upload_size) { ENV.fetch("MAX_FILE_UPLOAD_SIZE", "10_000_000").to_i }
 
