@@ -8,7 +8,7 @@ class Views::Patients::Timeline::Show < Views::Base
   end
 
   def view_template
-    within_patient_layout(title: "Timeline") do
+    within_patient_layout(title: "Activity Summary") do
       render Renalware::Patients::TimelineComponent
         .new(patient:, page:, full_view: true)
     end
