@@ -25,6 +25,19 @@ module Renalware
       it { is_expected.to validate_uniqueness_of(:patient_id).scoped_to(:study_id) }
     end
 
+    describe "#left_on" do
+      it "can be blank" do
+        expect(build(:research_participation, left_on: nil)).to be_valid
+      end
+
+      it "cannot be in the future" do
+        participation = build(:research_participation, left_on: 2.days.from_now)
+        participation.valid?
+
+        expect(participation.errors[:left_on]).to include("must be on or before today")
+      end
+    end
+
     describe ".external_application_participation_url" do
       subject do
         build_stubbed(:research_participation, study:, external_id: "123")

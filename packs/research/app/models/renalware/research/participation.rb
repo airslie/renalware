@@ -18,6 +18,14 @@ module Renalware
       validates :study, presence: true
       validates :external_id, uniqueness: true # added by a trigger
       validates :external_reference, uniqueness: { scope: :study_id, allow_blank: true }
+      validates :left_on,
+                timeliness: {
+                  type: :date,
+                  on_or_before: -> { Date.current },
+                  allow_blank: true,
+                  message: I18n.t("renalware.research.participation.left_on.on_or_before")
+                }
+
       belongs_to :study, touch: true
       belongs_to :patient,
                  class_name: "Renalware::Patient",
