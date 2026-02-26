@@ -17,7 +17,7 @@
                     label: "Drug type"
         .w-full.sm:min-w-md.pr-3
           = f.input :provider_eq,
-                    collection: Renalware::Medications::Provider.codes.map.each_with_index { |z, i| [Renalware::Medications::ProviderCodePresenter.new(z).to_label, i] },
+                    collection: Renalware::Medications::Provider.names.map.each_with_index { |z, i| [z, i] },
                     include_blank: "Any",
                     label: "Provider"
         .w-full.pr-3
@@ -28,3 +28,5 @@
 
         .flex-shrink-0.pt-4
           .mb-px= filter_or_reset(form: f, reset_path: patient_prescriptions_path(presenter.patient))
+
+/Renalware::Medications::Provider.codes.map.each_with_index { |z, i| [Renalware::Medications::ProviderCodePresenter.new(z).to_label, i] },
