@@ -3,25 +3,38 @@
       as: :q,
       url: research.study_participations_path(study),
       method: :get,
+      html: { class: "rw-form" },
       data: { turbo_frame: "participants-turbo-frame",
               turbo: true,
               turbo_advance: true,
               controller: "form",
               action: "input->form#submit" } do |f|
-    .flex.flex-row.gap-2
-      div
-        = f.input :identity_match, label: "Search by Hosp/NHS no or name"
-      .basis-1/4
+
+    .grid.grid-cols-10.gap-2.items-end.pb-5
+      div.col-span-2
+        div
+
+          = f.label :identity_match, "Patient name/NHS/MRN"
+          = f.text_field :identity_match, class: ""
+
+      div.col-span-2
         = f.input :patient_hospital_centre_id_eq,
                   collection: Renalware::Hospitals::Centre.ordered.pluck(:name, :id),
                   label: "At site",
                   input_html: { data: { controller: "slimselect", action: "change->form#submit" } }
       div
-        = f.label :patient_worry_id_not_null, "On Worryboard"
-        .text-center.pt-3
-          = f.check_box :patient_worry_id_not_null, {}, 1, nil
-
-      div.w-1/4.pt-6
+        = f.input :left_on_null,
+                  collection: [["Any", ""], ["Yes", true], ["No", false]],
+                  label: "Active",
+                  include_blank: false,
+                  input_html: { data: { controller: "slimselect", action: "change->form#submit" } }
+      div.col-span-2.lg:col-span-1
+        = f.input :patient_worry_id_not_null,
+                  collection: [["Any", ""], ["Yes", true], ["No", false]],
+                  label: "On worryboard",
+                  include_blank: false,
+                  input_html: { data: { controller: "slimselect", action: "change->form#submit" } }
+      div
         = link_to(research.study_participations_path(study), class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
           .flex.items-center
             .mr-1= inline_icon(:cross, size: :md)

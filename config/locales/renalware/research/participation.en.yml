@@ -10,3 +10,11 @@ en:
         renalware/research/participation:
           patient_id:
             taken: is already in this study
+          left_on:
+            on_or_before: must be on or before today
+
+  renalware:
+    research:
+      participation:
+        left_on:
+          on_or_before: must be on or before today

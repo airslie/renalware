@@ -6,12 +6,17 @@
 }
 
 .form-control {
-  @apply px-5 py-2 rounded-md;
+  @apply px-2 py-2 rounded-md;
+}
+
+.rw-form input[type="text"] {
+  @apply px-2 py-2 rounded-md block w-full border border-slate-300 bg-white text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20;
 }
 
 .disabled-input input[type=checkbox]:disabled {
   @apply border-gray-400;
 }
+
 .disabled-input label {
   @apply text-gray-400;
 }
