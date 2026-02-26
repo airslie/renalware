@@ -10,6 +10,7 @@ en:
         access_site_status: Access Site Status
         blown_fistula_arterial: Blown Fistula / Graft - arterial
         blown_fistula_venous: Blown Fistula / Graft - venous
+        line_cuff_visible: Line cuff visible (inform Team)
         circuit_loss: Circuit loss?
         had_alteplase_urokinase: Had alteplase urokinase?
         had_blood_transfusion: Had blood transfusion?
