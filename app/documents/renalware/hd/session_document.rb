@@ -116,6 +116,7 @@ module Renalware
         attribute :had_alteplase_urokinase, Document::Enum, enums: %i(yes no), default: :no
         attribute :had_blood_transfusion, Document::Enum, enums: %i(yes no), default: :no
         attribute :circuit_loss, Document::Enum, enums: %i(yes no), default: :no
+        attribute :line_cuff_visible, Document::Enum, enums: %i(yes no), default: :no
         attribute :blown_fistula_venous, Document::Enum, enums: %i(yes no), default: :no
         attribute :blown_fistula_arterial, Document::Enum, enums: %i(yes no), default: :no
         attribute :multiple_cannulation_attempts, Document::Enum, enums: %i(yes no), default: :no
