@@ -10,7 +10,7 @@
 }
 
 .rw-form input[type="text"] {
-  @apply px-2 py-2 rounded-md block w-full border border-slate-300 bg-white text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20;
+  @apply px-2 py-2 rounded-md block border border-slate-300 bg-white text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20;
 }
 
 .disabled-input input[type=checkbox]:disabled {
@@ -38,6 +38,110 @@
   textarea,
   select {
     @apply form-control;
+  }
+}
+
+@layer components {
+  .rw-form {
+    @apply space-y-4;
+  }
+
+  .rw-field-row {
+    @apply grid grid-cols-1 gap-2 md:grid-cols-12 md:items-start pb-0;
+  }
+
+  .rw-label {
+    @apply md:col-span-3;
+  }
+
+  .rw-label__text {
+    @apply block font-normal text-slate-700 md:pt-2;
+  }
+
+  .rw-control {
+    @apply md:col-span-9;
+  }
+
+  .rw-input {
+    @apply m-0 block w-full rounded-md border border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20;
+  }
+
+  .rw-date-input {
+    @apply relative inline-block max-w-full;
+  }
+
+  .rw-input--with-icon {
+    @apply pl-10;
+  }
+
+  .rw-form input[type="text"].rw-input--with-icon {
+    @apply pl-10;
+  }
+
+  .rw-date-input__icon {
+    @apply pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500;
+  }
+
+  .rw-date-input__icon-svg {
+    @apply h-5 w-5;
+  }
+
+  .rw-input:disabled + .rw-date-input__icon {
+    @apply text-slate-400;
+  }
+
+  .rw-input:disabled,
+  .rw-input--disabled {
+    @apply cursor-not-allowed border-slate-200 bg-slate-100 text-slate-500 opacity-100;
+  }
+
+  .rw-input--xs {
+    @apply w-full md:max-w-[12rem];
+  }
+
+  .rw-input--sm {
+    @apply w-full md:max-w-xs;
+  }
+
+  .rw-input--md {
+    @apply w-full md:max-w-md;
+  }
+
+  .rw-input--lg {
+    @apply w-full md:max-w-2xl;
+  }
+
+  .rw-input--full {
+    @apply w-full max-w-none;
+  }
+
+  .rw-input--date {
+    width: 18ch;
+    max-width: 100%;
+  }
+
+  .rw-hint {
+    @apply mt-1 block text-xs text-slate-500;
+  }
+
+  .rw-error {
+    @apply mt-1 block text-xs text-red-600;
+  }
+
+  .rw-actions {
+    @apply flex items-center gap-3 pt-2;
+  }
+
+  .rw-error-summary {
+    @apply rounded border border-red-200 bg-red-50 pt-1 pb-3 px-3 text-sm text-red-800;
+  }
+
+  .rw-error-summary__title {
+    @apply text-lg mb-1 font-semibold;
+  }
+
+  .rw-error-summary__list {
+    @apply list-disc pl-4;
   }
 }
 
