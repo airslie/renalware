@@ -55,6 +55,7 @@ describe "Prescriptions - create / edit / terminate", :js do
     expect(page).to have_no_field("Stat")
     check("Give on HD")
     expect(page).to have_field("Stat")
+    expect(page).to have_checked_field("Hospital") # auto-selected
     check("Stat")
     uncheck("Give on HD")
 
