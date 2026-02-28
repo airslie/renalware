@@ -1,0 +1,21 @@
+forms:
+  done_when:
+    - "No references remain to horizontal_* wrappers in app/views"
+    - "simple_form_foundation.rb and simple_form_datepicker.rb can be removed"
+layout:
+  done_when:
+    - "No foundation grid tokens remain in app/views (*.slim, *.erb)"
+    - "No selectors remain for .row/.columns/.small-* in renalware partial SCSS"
+modals:
+  done_when:
+    - "No .foundation('reveal', ...) calls remain"
+    - "No .reveal-modal markup remains"
+navigation_dropdowns:
+  done_when:
+    - "No .sub-nav/.top-bar/.f-dropdown markup remains"
+    - "No foundation dropdown/tab scripts remain"
+removal:
+  done_when:
+    - "No foundation component imports remain in stylesheets"
+    - "No foundation JS requires remain in core.js"
+    - "foundation:guard baseline metrics are all zero"

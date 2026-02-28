@@ -50,6 +50,30 @@ module.exports = {
     ],
   },
   safelist: [
+    // Form builder generated classes (emitted from Ruby code in lib/, not directly in templates)
+    "rw-form",
+    "rw-field-row",
+    "rw-label",
+    "rw-label__text",
+    "rw-control",
+    "rw-input",
+    "rw-date-input",
+    "rw-date-input__icon",
+    "rw-date-input__icon-svg",
+    "rw-input--with-icon",
+    "rw-hint",
+    "rw-error",
+    "rw-actions",
+    "rw-error-summary",
+    "rw-error-summary__title",
+    "rw-error-summary__list",
+    "rw-input--xs",
+    "rw-input--sm",
+    "rw-input--md",
+    "rw-input--lg",
+    "rw-input--full",
+    "rw-input--date",
+    "rw-input--disabled",
     {
       /*
       We need to whitelist these classes as are they are used dynamically from the database eg in

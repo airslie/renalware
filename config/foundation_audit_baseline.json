@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-02-27T11:23:56Z",
+  "totals": {
+    "foundation_wrapper_refs": 0,
+    "foundation_grid_tokens": 1688,
+    "foundation_js_calls": 10,
+    "foundation_reveal_markers": 111,
+    "foundation_dropdown_markers": 96,
+    "foundation_imports": 25
+  }
+}

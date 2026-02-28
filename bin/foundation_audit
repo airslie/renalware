@@ -1,0 +1,126 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "json"
+require "open3"
+require "pathname"
+require "time"
+
+ROOT = Pathname.new(__dir__).join("..").expand_path
+BASELINE_FILE = ROOT.join("config/foundation_audit_baseline.json")
+
+PATTERNS = {
+  foundation_wrapper_refs: /wrapper:\s*[:\"](?:horizontal_form|horizontal_tiny|horizontal_small|horizontal_medium|horizontal_large|horizontal_datepicker|horizontal_clockpicker|vertical_form|bare|bare_datepicker|zilch)\b/,
+  foundation_grid_tokens: /\b(?:row|columns|small-\d+|medium-\d+|large-\d+|xlarge-\d+|small-offset-\d+|medium-offset-\d+|large-offset-\d+|collapse)\b/,
+  foundation_js_calls: /\.foundation\(/,
+  foundation_reveal_markers: /reveal-modal|data-reveal|opened\.fndtn\.reveal|foundation\(['\"]reveal/,
+  foundation_dropdown_markers: /f-dropdown|data-dropdown|button\.dropdown|dropdown\.with-icon/,
+  foundation_imports: /foundation\/foundation|foundation\/components|@import\s+[\"']foundation\//
+}.freeze
+
+TARGET_GLOBS = [
+  "app/**/*.{rb,slim,erb,js,scss,css}",
+  "config/**/*.{rb,slim,erb,js,scss,css}",
+  "lib/**/*.{rb,slim,erb,js,scss,css}"
+].freeze
+
+EXCLUDED_FILES = [
+  "app/assets/javascripts/renalware/built.js"
+].freeze
+
+def changed_files
+  out, status = Open3.capture2("git", "diff", "--name-only", "--diff-filter=ACMR", "HEAD")
+  return [] unless status.success?
+
+  out.split("\n").reject(&:empty?)
+end
+
+def audit_files(changed_only: false)
+  files = TARGET_GLOBS.flat_map { |glob| Dir.glob(ROOT.join(glob).to_s) }
+  files.reject! { |path| File.directory?(path) }
+  files.map! { |path| Pathname.new(path).relative_path_from(ROOT).to_s }
+  files -= EXCLUDED_FILES
+
+  if changed_only
+    changed = changed_files
+    files.select! { |path| changed.include?(path) }
+  end
+
+  files.sort
+end
+
+def build_report(files)
+  per_file = {}
+  totals = Hash.new(0)
+
+  files.each do |relative_path|
+    absolute_path = ROOT.join(relative_path)
+    content = File.read(absolute_path)
+
+    matches = PATTERNS.transform_values { |regex| content.scan(regex).size }
+    next if matches.values.sum.zero?
+
+    per_file[relative_path] = matches
+    matches.each { |key, value| totals[key] += value }
+  end
+
+  {
+    generated_at: Time.now.utc.iso8601,
+    scope: files.empty? ? "none" : "repository",
+    files_scanned: files.size,
+    totals: PATTERNS.keys.to_h { |key| [key, totals[key]] },
+    per_file: per_file
+  }
+end
+
+def load_baseline
+  return nil unless BASELINE_FILE.exist?
+
+  JSON.parse(BASELINE_FILE.read, symbolize_names: true)
+end
+
+def guard!(report)
+  baseline = load_baseline
+  unless baseline
+    warn "Missing baseline file: #{BASELINE_FILE}"
+    exit 2
+  end
+
+  failures = []
+  baseline_totals = baseline.fetch(:totals)
+  report.fetch(:totals).each do |metric, count|
+    baseline_count = baseline_totals.fetch(metric, 0)
+    next if count <= baseline_count
+
+    failures << "#{metric}: #{count} > baseline #{baseline_count}"
+  end
+
+  if failures.any?
+    warn "Foundation guard failed:\n- #{failures.join("\n- ")}"
+    exit 1
+  end
+
+  puts "Foundation guard passed"
+end
+
+mode = ARGV.include?("--guard") ? :guard : :audit
+changed_only = ARGV.include?("--changed")
+write_baseline = ARGV.include?("--write-baseline")
+
+files = audit_files(changed_only: changed_only)
+report = build_report(files)
+
+if write_baseline
+  baseline_payload = {
+    generated_at: report.fetch(:generated_at),
+    totals: report.fetch(:totals)
+  }
+  BASELINE_FILE.write(JSON.pretty_generate(baseline_payload))
+  puts "Wrote baseline to #{BASELINE_FILE}"
+end
+
+if mode == :guard
+  guard!(report)
+else
+  puts JSON.pretty_generate(report)
+end
