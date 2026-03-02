@@ -2,6 +2,7 @@ describe Renalware::Users::LastSigninComponent, type: :component do
   let(:one_month_ago) { 1.month.ago }
   let(:current_time) { Time.current }
   let(:two_days_ago) { 2.days.ago }
+  let(:ten_days_ago) { 10.days.ago }
 
   let(:success_message) { "You last signed in" }
   let(:failed_message) { "Your account had a failed sign-in attempt" }
@@ -36,14 +37,14 @@ describe Renalware::Users::LastSigninComponent, type: :component do
     it "renders the last signin date" do
       user = build_stubbed(
         :user,
-        last_sign_in_at: one_month_ago,
+        last_sign_in_at: ten_days_ago,
         current_sign_in_at: current_time
       )
       component = described_class.new(current_user: user)
 
       render_inline(component).to_html
       expect(page).to have_content success_message
-      expect(page).to have_content "1 month ago"
+      expect(page).to have_content "10 days ago"
     end
   end
 
@@ -67,7 +68,7 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       it "renders the failed signin attempt" do
         user = build_stubbed(
           :user,
-          last_failed_sign_in_at: one_month_ago,
+          last_failed_sign_in_at: ten_days_ago,
           last_sign_in_at: current_time,
           current_sign_in_at: current_time
         )
@@ -75,7 +76,7 @@ describe Renalware::Users::LastSigninComponent, type: :component do
 
         render_inline(component).to_html
         expect(page).to have_content failed_message
-        expect(page).to have_content "1 month ago"
+        expect(page).to have_content "10 days ago"
       end
     end
 
