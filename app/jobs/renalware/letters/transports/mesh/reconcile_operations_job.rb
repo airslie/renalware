@@ -39,7 +39,10 @@ module Renalware
         def complete_letter_if_gp_is_the_only_recipient_so_no_printing_required(letter)
           recipients = letter.recipients
           if recipients.size == 1 && recipients.first.person_role == :primary_care_physician
-            Letters::CompleteLetter.build(letter).call(by: letter.approved_by)
+            Letters::CompleteLetter
+              .build(letter)
+              .broadcasting_to_configured_subscribers
+              .call(by: letter.approved_by)
           end
         end
 

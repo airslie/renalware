@@ -97,7 +97,9 @@ module Renalware::Letters::Transports::Mesh
           expect(letter.completed_at).to be_nil
 
           freeze_time do
-            described_class.perform_now
+            expect {
+              described_class.perform_now
+            }.to broadcast(:letter_completed)
 
             completed_letter = Renalware::Letters::Letter::Completed.find(letter.id)
             expect(completed_letter).to have_attributes(
