@@ -13,7 +13,10 @@ module Renalware
       end
 
       def create
-        CompleteLetter.build(letter).call(by: current_user)
+        CompleteLetter
+          .build(letter)
+          .broadcasting_to_configured_subscribers
+          .call(by: current_user)
 
         respond_to do |format|
           format.html do
