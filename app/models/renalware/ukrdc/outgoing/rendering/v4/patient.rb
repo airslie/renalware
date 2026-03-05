@@ -79,7 +79,9 @@ module Renalware
                 fac[:channelName] = "Renalware #{Renalware::VERSION}"
                 fac[:schemaVersion] = Renalware.config.ukrdc_schema_version
                 fac[:time] = Time.zone.now.to_datetime.change(sec: 0)
-                fac[:batchNo] = batch_number&.to_i
+                if batch_number.present?
+                  fac[:batchNo] = batch_number&.to_i
+                end
               end
             end
 
