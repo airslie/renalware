@@ -248,3 +248,6 @@ Style/RedundantLineContinuation:
     Exclude:
       - 'app/views/**/*'
       - 'app/components/**/*'
+
+Style/RedundantStructKeywordInit:
+  Enabled: false
