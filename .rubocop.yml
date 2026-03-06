@@ -17,10 +17,6 @@ plugins:
   - rubocop-rspec_rails
   - rubocop-capybara
 
-# Skip standard for now.
-# inherit_gem:
-#   standard: config/base.yml
-
 inherit_from:
   - https://raw.githubusercontent.com/airslie/styleguide/main/rubocop.yml
   - .rubocop_todo.yml
@@ -47,9 +43,8 @@ AllCops:
     - "features/support/env.xaction_view.rb"
     - "db/schema.rb"
 
-Style/HashSyntax:
-  Enabled: true
-  EnforcedShorthandSyntax: always
+# Keep this disabled via .rubocop_todo.yml baseline for incremental cleanup.
+# When ready, remove the todo entry and re-enable with your preferred settings.
 
 Rails/ResponseParsedBody:
   Enabled: false
@@ -65,6 +60,11 @@ Rails/EnumHash:
   Enabled: true
 
 Lint/LiteralAsCondition:
+  Enabled: false
+
+# This cop is useful, but currently too noisy for the existing baseline.
+# Re-enable once redundant disable comments have been reduced.
+Lint/RedundantCopDisableDirective:
   Enabled: false
 
 Rails/EnumSyntax:
