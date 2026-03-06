@@ -93,7 +93,7 @@ FROM base
 # RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections
 # ttf-mscorefonts-installer
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y ldap-utils locales telnet curl wget ghostscript file tzdata nano unzip && \
+    apt-get install --no-install-recommends -y ldap-utils locales telnet curl wget ghostscript file tzdata nano unzip postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Uncomment to install network troubleshooting tools
