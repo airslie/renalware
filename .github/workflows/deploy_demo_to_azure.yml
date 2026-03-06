@@ -50,16 +50,16 @@ jobs:
       - name: Login to ACR
         run: az acr login --name "${ACR_NAME}"
 
-      - name: Build and push Docker image
-        run: |
-          FULL_IMAGE="${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}"
-          SHA_TAG="${FULL_IMAGE}:${{ steps.meta.outputs.image_tag }}"
-          BRANCH_TAG="${FULL_IMAGE}:feature-de-engine-latest"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-          docker build \
-            --tag "${SHA_TAG}" \
-            --tag "${BRANCH_TAG}" \
-            .
-
-          docker push "${SHA_TAG}"
-          docker push "${BRANCH_TAG}"
+      - name: Build and push Docker image (with registry cache)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}
+            ${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:feature-de-engine-latest
+          cache-from: type=registry,ref=${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:buildcache
+          cache-to: type=registry,ref=${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:buildcache,mode=max
