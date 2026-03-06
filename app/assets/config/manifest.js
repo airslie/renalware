@@ -7,4 +7,4 @@
 //= link_directory ../javascripts/renalware .js
 //= link_directory ../stylesheets .css
 //= link_directory ../stylesheets/renalware .css
-//= link tailwind.css
+//= link_tree ../builds
