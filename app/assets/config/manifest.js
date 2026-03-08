@@ -1,4 +1,9 @@
-//= link renalware/core/manifest.js
+//= link renalware/modernizr
+//= link renalware/iframeResizer.contentWindow.js
+//= link renalware/print-button-example.png
+//= link renalware/VND-Risk-Assessment.pdf
+//= link renalware/hd_acuity_score_guide.pdf
+//= link renalware/clinical_frailty_score.pdf
 //= link_tree ../images
 //= link_tree ../pdf
 //= link_tree ../rtf
