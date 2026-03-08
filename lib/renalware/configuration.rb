@@ -215,7 +215,7 @@ module Renalware
     # any human errors to be resolved (letter rescinded etc)
     #
     config_accessor(:send_gp_letters_over_mesh) do
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SEND_GP_LETTERS_OVER_MESH", "true"))
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SEND_GP_LETTERS_OVER_MESH", "false"))
     end
     config_accessor(:mesh_timeout_transmissions_with_no_response_after) do
       # Duration#parse uses the ISO8601 duration format
