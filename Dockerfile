@@ -149,6 +149,8 @@ ENV BUNDLE_USER_HOME=/tmp/bundle
 COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --chown=rails:rails --from=build /rails /rails
 
+ENV RAILS_ENV="production"
+
 EXPOSE 3000
 
 # chmod/chown is cleanest as root
