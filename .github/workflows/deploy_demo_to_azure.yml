@@ -74,7 +74,7 @@ jobs:
           az webapp config container set \
             --name "${APP_SERVICE_NAME}" \
             --resource-group "${APP_RG}" \
-            --docker-custom-image-name "${FULL_IMAGE}"
+            --container-image-name "${FULL_IMAGE}"
 
       - name: Restart App Service
         run: |
