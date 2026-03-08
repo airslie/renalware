@@ -82,9 +82,11 @@ COPY . .
 # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 ENV RAILS_ENV="production"
+ARG ASSET_CACHE_BUSTER=1
 # Precompile assets from a clean slate so stale manifest files cannot leak into the image.
 # This also ensures tailwind.css is generated before Sprockets compiles and fingerprints assets.
 RUN rm -rf public/assets tmp/cache/assets && \
+    echo "ASSET_CACHE_BUSTER=${ASSET_CACHE_BUSTER}" && \
     SECRET_KEY_BASE_DUMMY=1 ./bin/rails tailwindcss:build assets:precompile
 
 
