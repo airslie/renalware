@@ -1,3 +1,5 @@
+require "benchmark"
+
 module Renalware
   module System
     class APILog < ApplicationRecord
