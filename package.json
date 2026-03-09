@@ -32,7 +32,7 @@
     "rollup": "^4.22.4",
     "select2": "4.1.0-rc.0",
     "semver": "^7.6.3",
-    "serialize-javascript": "^6.0",
+    "serialize-javascript": "^7.0",
     "shepherd.js": "^14.5.0",
     "slim-select": "2.10.0",
     "sortablejs": "^1.13.0",
