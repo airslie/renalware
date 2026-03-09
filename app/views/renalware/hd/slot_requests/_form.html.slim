@@ -6,7 +6,7 @@
   .mt-4
       .max-w-xl
         .grid.grid-cols-1.gap-1
-          ##person-id-select
+          #person-id-select
             - if slot_request.patient.present? && slot_request.persisted?
               /&& params[:redirect_to_patient_on_success] == "true"
               .bold.text-md.mb-2 = slot_request.patient
@@ -19,9 +19,8 @@
                         selected: 1,
                         error: false,
                         input_html: { \
-                          class: "patient-ajax-search",
-                          data: { "ajax--url" => search_patients_path(format: :json),
-                                  controller: "patient-search",
+                          data: { controller: "patient-search",
+                                  "ajax--url" => search_patients_path(term: "REPLACEME", format: :json),
                                   placeholder: "Search by patient name or hospital/NHS no." } \
                         }
 

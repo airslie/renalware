@@ -101,7 +101,7 @@ module World
         within("#add-patient-contact-modal") do
           select2(
             person.family_name,
-            css: "##person-id-select",
+            css: "#person-id-select",
             search: true
           )
 
