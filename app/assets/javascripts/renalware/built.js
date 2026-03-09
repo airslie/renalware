@@ -10706,7 +10706,7 @@ class i extends Controller {
 }
 i.targets = ["menu"];
 
-const $$6 = window.$;
+const $$3 = window.$;
 
 // Used when a table has toggleable rows (initially hidden rows that can be toggled open
 // to see e.g. notes or extended details) and each master row and its toggleable sibling are
@@ -10722,7 +10722,7 @@ class ToggleController extends Controller {
     const tbody = event.target.closest("tbody");
     tbody.classList.toggle("toggleable--open");
     // Update masonry - TODO: move to a module
-    $$6(".mgrid > .row").masonry("layout");
+    $$3(".mgrid > .row").masonry("layout");
   }
 
   // Toggle the last tr in each tbody in the current table.
@@ -10738,7 +10738,7 @@ class ToggleController extends Controller {
     thead.classList.toggle("toggleable--open");
     tbodies.forEach(function(tbody) { tbody.classList.toggle("toggleable--open", !hide); });
     // Update masonry - TODO: move to a module
-    $$6(".mgrid > .row").masonry("layout");
+    $$3(".mgrid > .row").masonry("layout");
   }
 }
 
@@ -10860,7 +10860,7 @@ class DietaryProteinCalculatorController extends Controller {
   }
 }
 
-const $$5 = window.$;
+const $$2 = window.$;
 
 class HDPrescriptionController extends Controller {
   static targets = ["container", "radio"]
@@ -10871,13 +10871,13 @@ class HDPrescriptionController extends Controller {
     this.containerTarget.classList.toggle("not-administered", !checked);
     this.containerTarget.classList.remove("undecided");
     // The rest of this actions are using jQuery for now.
-    $$5(".authentication", this.containerTarget).toggle(checked);
-    $$5(".authentication", this.containerTarget).toggleClass(
+    $$2(".authentication", this.containerTarget).toggle(checked);
+    $$2(".authentication", this.containerTarget).toggleClass(
       "disabled-with-faded-overlay",
       !checked
     );
-    $$5(".reason-why-not-administered", this.containerTarget).toggle(!checked);
-    $$5("#btn_save_and_witness_later").toggle(checked);
+    $$2(".reason-why-not-administered", this.containerTarget).toggle(!checked);
+    $$2("#btn_save_and_witness_later").toggle(checked);
   }
 }
 
@@ -10959,14 +10959,12 @@ class SnippetController extends Controller {
   }
 }
 
-const $$4 = window.$;
-
 class LettersFormController extends Controller {
   static targets = [ "trix" ]
 
   initInsertEventNotesIntoTrixEditor(event) {
     event.preventDefault();
-    let notes = $$4(event.target).data("notes");
+    let notes = event.currentTarget.dataset.notes;
 
     if (notes && this.trix) {
       this.trix.insertHTML(notes);
@@ -11920,12 +11918,12 @@ var More = /*@__PURE__*/getDefaultExportFromCjs(highchartsMoreExports);
 
 // NB: importing Highcharts rather than the Chart module as could not quite get
 // highcharts-more working using Chart or when both Chart + Highcharts loaded.
-const $$3 = window.$;
+const $$1 = window.$;
 More(Highcharts$1);
 
 class PDPetChartsController extends Controller {
   connect() {
-    $$3.getJSON(
+    $$1.getJSON(
       this.data.get("url"),
       (data) => {
         Highcharts$1.chart(this.element, {
@@ -24870,28 +24868,43 @@ class GridRowAutoSpanController extends Controller {
   }
 }
 
-const $$2 = window.$;
-
 /*
 When this is controller is added to a table, if the table uses colgroups (eg historical pathology)
 then as the mouse enters and leaves
 */
 class TableColumnHoverController extends Controller {
   connect() {
-    this.element.addEventListener('mouseenter', e => { this.highlight_colgroup(e); }, true);
-    this.element.addEventListener('mouseleave', e => { this.unhighlight_colgroup(e); }, true);
+    this.handleMouseEnter = this.highlightColgroup.bind(this);
+    this.handleMouseLeave = this.unhighlightColgroup.bind(this);
+
+    this.element.addEventListener("mouseenter", this.handleMouseEnter, true);
+    this.element.addEventListener("mouseleave", this.handleMouseLeave, true);
   }
 
-  highlight_colgroup(e) {
-    if (e.target.tagName == "TD") {
-      $$2("colgroup").eq($$2(e.target).index()).addClass("hover");
+  disconnect() {
+    this.element.removeEventListener("mouseenter", this.handleMouseEnter, true);
+    this.element.removeEventListener("mouseleave", this.handleMouseLeave, true);
+  }
+
+  highlightColgroup(event) {
+    const colgroup = this.colgroupForEvent(event);
+    if (colgroup) {
+      colgroup.classList.add("hover");
     }
   }
 
-  unhighlight_colgroup(e) {
-    if (e.target.tagName == "TD") {
-      $$2("colgroup").eq($$2(e.target).index()).removeClass("hover");
+  unhighlightColgroup(event) {
+    const colgroup = this.colgroupForEvent(event);
+    if (colgroup) {
+      colgroup.classList.remove("hover");
     }
+  }
+
+  colgroupForEvent(event) {
+    const cell = event.target.closest("td");
+    if (!cell || !this.element.contains(cell)) return null
+
+    return this.element.querySelectorAll("colgroup")[cell.cellIndex] || null
   }
 }
 
@@ -24920,14 +24933,14 @@ class NavbarController extends Controller {
   }
 }
 
-const $$1 = window.$;
-
 class TabbedNavigationController extends Controller {
   connect() {
-    $$1(".sub-nav:not('.no-js-selection') dd").each(function(){
-      let href = $$1(this).find("a").attr('href');
+    if (this.element.classList.contains("no-js-selection")) return
+
+    this.element.querySelectorAll("dd").forEach((tab) => {
+      const href = tab.querySelector("a")?.getAttribute("href");
       if (href === window.location.pathname) {
-        $$1(this).addClass('active');
+        tab.classList.add("active");
       }
     });
   }

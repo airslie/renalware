@@ -1,4 +1,3 @@
-const $ = window.$
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
@@ -6,7 +5,7 @@ export default class extends Controller {
 
   initInsertEventNotesIntoTrixEditor(event) {
     event.preventDefault()
-    let notes = $(event.target).data("notes")
+    let notes = event.currentTarget.dataset.notes
 
     if (notes && this.trix) {
       this.trix.insertHTML(notes)
