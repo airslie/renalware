@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-const $ = window.$
 
 /*
 When this is controller is added to a table, if the table uses colgroups (eg historical pathology)
@@ -7,19 +6,36 @@ then as the mouse enters and leaves
 */
 export default class extends Controller {
   connect() {
-    this.element.addEventListener('mouseenter', e => { this.highlight_colgroup(e) }, true)
-    this.element.addEventListener('mouseleave', e => { this.unhighlight_colgroup(e) }, true)
+    this.handleMouseEnter = this.highlightColgroup.bind(this)
+    this.handleMouseLeave = this.unhighlightColgroup.bind(this)
+
+    this.element.addEventListener("mouseenter", this.handleMouseEnter, true)
+    this.element.addEventListener("mouseleave", this.handleMouseLeave, true)
   }
 
-  highlight_colgroup(e) {
-    if (e.target.tagName == "TD") {
-      $("colgroup").eq($(e.target).index()).addClass("hover");
+  disconnect() {
+    this.element.removeEventListener("mouseenter", this.handleMouseEnter, true)
+    this.element.removeEventListener("mouseleave", this.handleMouseLeave, true)
+  }
+
+  highlightColgroup(event) {
+    const colgroup = this.colgroupForEvent(event)
+    if (colgroup) {
+      colgroup.classList.add("hover")
     }
   }
 
-  unhighlight_colgroup(e) {
-    if (e.target.tagName == "TD") {
-      $("colgroup").eq($(e.target).index()).removeClass("hover")
+  unhighlightColgroup(event) {
+    const colgroup = this.colgroupForEvent(event)
+    if (colgroup) {
+      colgroup.classList.remove("hover")
     }
+  }
+
+  colgroupForEvent(event) {
+    const cell = event.target.closest("td")
+    if (!cell || !this.element.contains(cell)) return null
+
+    return this.element.querySelectorAll("colgroup")[cell.cellIndex] || null
   }
 }
