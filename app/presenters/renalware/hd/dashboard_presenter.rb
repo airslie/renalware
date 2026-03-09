@@ -74,6 +74,14 @@ module Renalware
           .limit(10).ordered
       end
 
+      def pgds
+        @pgds ||= begin
+          SessionPatientGroupDirectionsQuery
+            .new(patient:)
+            .call(page: view_context.params[:pgd_page], per: 10)
+        end
+      end
+
       def can_add_hd_profile?
         profile.new_record? && policy_for(profile).edit? && has_ever_been_on_hd?
       end

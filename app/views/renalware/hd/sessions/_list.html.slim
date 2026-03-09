@@ -1,4 +1,6 @@
 article.hd-sessions
+  - active_tab_index = params[:pgd_page].present? ? 2 : 0
+
   header
     h2= t(".title")
     ul
@@ -19,19 +21,26 @@ article.hd-sessions
                     new_patient_hd_session_path(@patient),
                     class: "button"
 
-  .sub-nav.with-tabs
-    dl
-      dd.active
-        = link_to t("btn.details"), "#hd-sessions", data: { "trigger-masonry-refresh" => true }
-      dd
-        = link_to "Drugs given", "#hd-session-drugs", data: { "trigger-masonry-refresh" => true }
+  div(data-controller="tabs" data-tabs-active-tab="active" data-tabs-index=active_tab_index)
+    .tabs-container.border-b.ml-0
+      ul.list-reset.tabs-nav.flex
+        li(data-tabs-target="tab" data-action="click->tabs#change")
+          = link_to t("btn.details"), "#", data: { "trigger-masonry-refresh" => true }
+        li(data-tabs-target="tab" data-action="click->tabs#change")
+          = link_to "Drugs given", "#", data: { "trigger-masonry-refresh" => true }
+        li(data-tabs-target="tab" data-action="click->tabs#change")
+          = link_to "PGDs", "#", data: { "trigger-masonry-refresh" => true }
 
-    hr.tab-bottom-border
+    #hd-sessions-panel(data-tabs-target="panel")
+      = render "renalware/hd/sessions/table",
+               sessions: sessions,
+               initially_visible: true
 
-  = render "renalware/hd/sessions/table",
-           sessions: sessions,
-           prescription_administrations: prescription_administrations
+    #hd-session-drugs-panel.hidden(data-tabs-target="panel")
+      = render "renalware/hd/prescription_administrations/table",
+               prescription_administrations: prescription_administrations,
+               initially_visible: true
 
-  = render "renalware/hd/prescription_administrations/table",
-           prescription_administrations: prescription_administrations,
-           initially_visible: false
+    #hd-session-pgds.hidden(data-tabs-target="panel")
+      = render "renalware/hd/sessions/pgds",
+               pgds: pgds
