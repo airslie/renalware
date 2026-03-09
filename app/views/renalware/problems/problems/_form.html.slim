@@ -27,7 +27,7 @@
                   collection: [problem.description],
                   selected: problem.description,
                   input_html: { \
-                    class: "patient-id-select2 problem-ajax-search",
+                    class: "problem-ajax-search",
                     data: { "ajax--url" => search_patient_problems_path(patient, format: :json),
                             placeholder: "Search by problem name." } \
                   }

@@ -43,7 +43,7 @@ describe "Managing a list of HD Slot Requests" do
       within(".page-actions") do
         click_on "Add"
       end
-      select2(patient.to_s(:long), css: "#person-id-select2", search: true)
+      select2(patient.to_s(:long), css: "##person-id-select", search: true)
       select "urgent", from: "Urgency"
       select "Yes", from: "Requires BBV Slot (hep B+)"
 
@@ -97,7 +97,7 @@ describe "Managing a list of HD Slot Requests" do
       end
 
       within("#modal") do
-        # select2(patient.to_s(:long), css: "#person-id-select2", search: true)
+        # select2(patient.to_s(:long), css: "##person-id-select", search: true)
         select "urgent", from: "Urgency"
         select location.name, from: "Location"
         select access_state.name, from: "Current Access"

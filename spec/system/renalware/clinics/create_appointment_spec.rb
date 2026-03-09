@@ -23,7 +23,7 @@ describe "Create new appointment manually (not via HL7 message)", :js do
       within(".new_clinics_appointment") do
         select2(
           patient.to_s(:long),
-          css: "#patient-select2",
+          css: "#patient-select",
           search: true
         )
 
