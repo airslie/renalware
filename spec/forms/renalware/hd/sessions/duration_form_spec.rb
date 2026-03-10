@@ -89,6 +89,15 @@ describe Renalware::HD::Sessions::DurationForm do
       it { is_expected.to be_valid }
     end
 
+    context "when start_date is in the future" do
+      subject(:form) { described_class.new(start_date: Date.current + 1.day) }
+
+      it "is invalid" do
+        expect(form).not_to be_valid
+        expect(form.errors[:start_date]).to include("must be on or before #{Date.current}")
+      end
+    end
+
     context "when require_all_fields is true and all fields are no supplied" do
       subject {
         described_class.new(
