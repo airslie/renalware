@@ -1,4 +1,4 @@
-RSpec.describe "Add a patient to a study (creating a participation)" do
+RSpec.describe "Add a patient to a study (creating a participation)", :js do
   context "when the user is an investigator in the study", :js do
     it "they can add patient to a research study" do
       user = login_as_clinical
@@ -16,7 +16,7 @@ RSpec.describe "Add a patient to a study (creating a participation)" do
       click_on "Add"
 
       expect(page).to have_current_path(research.new_study_participation_path(study))
-      select2(patient.to_s(:long), css: "#patient-select", search: true)
+      slim_select(patient.to_s(:long), from: "Patient", wait_for: "Enter at least 3 characters")
 
       fill_in "Joined on", with: "2019-01-01"
       fill_in "Reference within study", with: "123xx"

@@ -21,10 +21,10 @@ describe "Create new appointment manually (not via HL7 message)", :js do
       expect(patient.hospital_centre.host_site).to be(true)
 
       within(".new_clinics_appointment") do
-        select2(
+        slim_select(
           patient.to_s(:long),
-          css: "#patient-select",
-          search: true
+          from: "Patient",
+          wait_for: "Enter at least 3 characters"
         )
 
         select clinic.name, from: "Clinic"
