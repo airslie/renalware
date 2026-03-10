@@ -61,6 +61,7 @@ ul.side-nav.side-nav--admin(data-controller="collapsible-DISABLED" data-collapsi
   ul.collapsible(data-collapsible-target="section")
     = super_admin_menu_item "Outgoing Documents", renalware.feeds_outgoing_documents_path, %r{outgoing_documents}
     = super_admin_menu_item "Logs", renalware.feeds_logs_path, %r{feeds/logs}
+    = super_admin_menu_item "HL7 Raw Message Errors", renalware.feeds_raw_hl7_message_errors_path, %r{feeds/raw_hl7_message_errors}
     = super_admin_menu_item "Replay Requests", renalware.feeds_replay_requests_path, %r{feeds/replay_requests}
     = super_admin_menu_item "Patient Merges", renalware.patients_merges_path, %r{patients/merges}
 

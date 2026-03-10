@@ -1,0 +1,22 @@
+= within_new_admin_layout(title: "HL7 Raw Message Errors") do
+  table
+    thead
+      tr
+        th.actions
+        th.col-width-small Id
+        th.col-width-date-time Sent At
+        th.col-width-large Error Message
+        th Backtrace
+        th Body
+
+    tbody
+      - errors.each do |error|
+        tr
+          td.actions= link_to "View", renalware.feeds_raw_hl7_message_error_path(error)
+          td= error.id
+          td= l(error.sent_at)
+          td= error.error_message.to_s.lines.first.to_s.squish.truncate(140)
+          td= error.error_message_backtrace.to_s.lines.first.to_s.squish.truncate(140)
+          td= error.body.to_s.lines.first.to_s.squish.truncate(140)
+
+  == pagy_nav(pagy) if pagy.pages > 1
