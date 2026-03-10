@@ -43,20 +43,20 @@ describe "Managing a list of HD Slot Requests" do
       within(".page-actions") do
         click_on "Add"
       end
-      select2(patient.to_s(:long), css: "#person-id-select2", search: true)
-      select "urgent", from: "Urgency"
-      select "Yes", from: "Requires BBV Slot (hep B+)"
-
-      select location.name, from: "Location"
-      select access_state.name, from: "Current Access"
-
-      check "MFFD"
-
-      check "Late presenter"
-      check "Suitable for twilight slots"
-      check "External referral"
-      fill_in "Notes", with: "some notes"
-      click_on "Create"
+      within("#new_hd_slot_request") do
+        expect(page).to have_css(".hd_slot_request_patient_id .ss-main .ss-arrow")
+        slim_select(patient.to_s(:long), from: "Patient", wait_for: "Enter at least 3 characters")
+        select "urgent", from: "Urgency"
+        select "Yes", from: "Requires BBV Slot (hep B+)"
+        select location.name, from: "Location"
+        select access_state.name, from: "Current Access"
+        check "MFFD"
+        check "Late presenter"
+        check "Suitable for twilight slots"
+        check "External referral"
+        fill_in "Notes", with: "some notes"
+        click_on "Create"
+      end
 
       expect(page).to have_current_path(renalware.hd_slot_requests_path)
 
@@ -97,7 +97,6 @@ describe "Managing a list of HD Slot Requests" do
       end
 
       within("#modal") do
-        # select2(patient.to_s(:long), css: "#person-id-select2", search: true)
         select "urgent", from: "Urgency"
         select location.name, from: "Location"
         select access_state.name, from: "Current Access"

@@ -3,4 +3,3 @@
 var modal = $("#add-patient-to-diary-modal .modal__body")
 $(modal).html("<%= j(render 'form', slot: slot) %>");
 $('.searchable_select', modal).select2();
-Renalware.PatientSearch.init();

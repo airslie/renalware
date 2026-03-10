@@ -12,12 +12,15 @@
              value_method: :id,
              input_html: { class: "searchable_select" }
   - else
-    = f.input :patient_id,
-              collection: [],
-              input_html: { \
-                id: "patient-ajax-search",
-                data: { "ajax--url" => search_patients_path(format: :json) } \
-              }
+    .pb-3
+      = f.input :patient_id,
+                collection: [],
+                input_html: { \
+                  id: "patient-ajax-search",
+                  data: { controller: "patient-search",
+                          "ajax--url" => search_patients_path(term: "REPLACEME", format: :json),
+                          placeholder: "Search by patient name or hospital/NHS no." } \
+                }
 
   = f.submit "Select", class: :button
   = blank_separator

@@ -32,7 +32,7 @@ RSpec.describe "Assign a contact to a patient", :js do
       within("#add-patient-contact-modal") do
         select2(
           person.family_name,
-          css: "#person-id-select2",
+          css: "#person-id-select",
           search: true
         )
         select contact_description.to_s, from: "Description"
