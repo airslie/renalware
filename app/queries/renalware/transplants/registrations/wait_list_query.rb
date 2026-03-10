@@ -26,7 +26,7 @@ module Renalware
               .merge(HD::Patient.with_profile)
               .merge(Renal::Patient.with_profile)
               .ransack(query).tap do |s|
-              s.sorts = ["patient_family_name, patient_given_name"]
+              s.sorts = ["patient_family_name, patient_given_name"] if s.sorts.empty?
             end
           end
         end
@@ -141,6 +141,10 @@ module Renalware
             end
 
             private_class_method :ransackable_scopes
+
+            def self.ransackable_attributes(auth_object = nil)
+              super + _ransackers.keys
+            end
 
             def self.ransackable_scopes(_auth_object = nil)
               %i(current_status_in ukt_recipient_number_eq)

@@ -14,7 +14,7 @@ ruby:
               wrapper: :horizontal_datepicker
     = f.input :operation_type, wrapper: :horizontal_small
     = f.association :hospital_centre,
-        collection: Renalware::Hospitals::Centre.performing_transplant.ordered,
+        collection: Renalware::Hospitals::Centre.performing_transplant,
         label_method: :to_s,
         wrapper: :horizontal_medium
     = f.input :cold_ischaemic_time_formatted, as: :string, wrapper: :horizontal_small

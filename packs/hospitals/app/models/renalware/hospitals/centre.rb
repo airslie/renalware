@@ -19,7 +19,11 @@ module Renalware
       scope :host_site, -> { where(host_site: true) }
       scope :default, -> { where(default_site: true) }
 
-      scope :performing_transplant, -> { active.where(is_transplant_site: true) }
+      scope :performing_transplant, -> {
+        active
+          .where(is_transplant_site: true)
+          .order(default_site: :desc, host_site: :desc, name: :asc)
+      }
 
       # rubocop:disable Rails/PluckInWhere
       scope :with_hd_sites, -> { where(id: Unit.hd_sites.pluck(:hospital_centre_id)) }
