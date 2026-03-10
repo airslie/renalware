@@ -8,3 +8,9 @@
 - If full replacement is not safe within the current task, preserve behavior but explicitly note the remaining jQuery dependency and the smallest sensible follow-up step to remove it.
 - Prefer incremental vertical-slice migrations over broad rewrites.
 - Prioritize replacing simple event handling, DOM toggling, AJAX form flows, and modal lifecycle glue before attempting plugin-heavy or cross-cutting rewrites.
+
+## Verification
+
+- After making code changes, run `bundle exec rubocop` on the touched files where feasible.
+- Fix any RuboCop offenses introduced by the change before finishing.
+- If RuboCop cannot be run or a clean result is blocked by pre-existing offenses outside the change, report that clearly in the final response.
