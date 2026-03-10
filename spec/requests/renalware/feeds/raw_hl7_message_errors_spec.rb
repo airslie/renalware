@@ -28,8 +28,12 @@ describe "Viewing HL7 raw message errors" do
         get feeds_raw_hl7_message_errors_path
 
         expect(response).to be_successful
-        expect(response.body.index(error_two.id.to_s))
-          .to be < response.body.index(error_one.id.to_s)
+
+        row_ids = Nokogiri::HTML5(response.body)
+          .css("tbody tr")
+          .map { |row| row.css("td")[1].text.strip.to_i }
+
+        expect(row_ids).to eq([error_two.id, error_one.id])
         expect(response.body).to include("Second error")
         expect(response.body).to include("First error")
         expect(response.body).not_to include("more detail")
