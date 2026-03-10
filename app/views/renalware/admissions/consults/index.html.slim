@@ -13,11 +13,5 @@
 = within_admin_layout(title: "Admission Consults") do
   = render "renalware/shared/please_print_using_print_button_warning"
   = render "renalware/admissions/requests/modal_dialog_placeholder"
-
-  .panel.radius.compact
-    ' If the patient is not on Renalware yet, please
-    = link_to("add them", new_patient_path)
-    |  first
-
   = render "table", consults: consults, query: query
   == pagy_nav(pagy) if pagy.pages > 1
