@@ -27,7 +27,13 @@ module Renalware
         attribute :overnight_dialysis, :boolean
         attribute :require_all_fields, :boolean # will be true when signing-off the session
 
-        validates :start_date, presence: true, timeliness: { type: :date, allow_blank: true }
+        validates :start_date,
+                  presence: true,
+                  timeliness: {
+                    type: :date,
+                    allow_blank: true,
+                    on_or_before: -> { Date.current }
+                  }
         validates :start_time,
                   timeliness: {
                     type: :time,
