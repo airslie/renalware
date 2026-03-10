@@ -1,0 +1,33 @@
+ruby:
+  title = "HL7 Raw Message Error ##{error.id}"
+  breadcrumbs = breadcrumb_for(
+    "HL7 Raw Message Errors",
+    renalware.feeds_raw_hl7_message_errors_path
+  )
+
+= within_new_admin_layout(title:, breadcrumbs:) do
+  table
+    tr
+      th.col-width-large Id
+      td= error.id
+    tr
+      th Created
+      td= l(error.created_at)
+    tr
+      th Updated
+      td= l(error.updated_at)
+    tr
+      th Sent At
+      td= l(error.sent_at)
+    tr
+      th.align-top Error Message
+      td
+        pre.whitespace-pre-wrap.break-words= error.error_message
+    tr
+      th.align-top Body
+      td
+        pre.whitespace-pre-wrap.break-words= error.body
+    tr
+      th.align-top Error Backtrace
+      td
+        pre.whitespace-pre-wrap.break-words= error.error_message_backtrace
