@@ -23,6 +23,3 @@ table.auto-layout
     - else
       tr
         td(colspan="5") No PGDs recorded
-
-/ - if pgds.respond_to?(:total_pages) && pgds.total_pages > 1
-/   = paginate pgds, param_name: :pgd_page, anchor: "hd-session-pgds"

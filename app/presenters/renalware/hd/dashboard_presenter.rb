@@ -60,26 +60,43 @@ module Renalware
       end
       # rubocop:enable Metrics/MethodLength
 
+      def sessions_total_count
+        @sessions_total_count ||= Session.for_patient(patient).count
+      end
+
+      def sessions_summary
+        recent_activity_summary(displayed: sessions.size, total: sessions_total_count)
+      end
+
       def prescription_administrations
-        patient
-          .prescription_administrations
-          .includes(
-            [
-              :administered_by,
-              :witnessed_by,
-              :reason,
-              prescription: [:medication_route, :drug]
-            ]
-          )
-          .limit(10).ordered
+        @prescription_administrations ||= begin
+          prescription_administrations_scope.limit(10)
+        end
+      end
+
+      def prescription_administrations_total_count
+        @prescription_administrations_total_count ||= prescription_administrations_scope.count
+      end
+
+      def prescription_administrations_summary
+        recent_activity_summary(
+          displayed: prescription_administrations.size,
+          total: prescription_administrations_total_count
+        )
       end
 
       def pgds
         @pgds ||= begin
-          SessionPatientGroupDirectionsQuery
-            .new(patient:)
-            .call(page: view_context.params[:pgd_page], per: 10)
+          pgds_scope.limit(10)
         end
+      end
+
+      def pgds_total_count
+        @pgds_total_count ||= pgds_scope.count
+      end
+
+      def pgds_summary
+        recent_activity_summary(displayed: pgds.size, total: pgds_total_count)
       end
 
       def can_add_hd_profile?
@@ -107,6 +124,28 @@ module Renalware
 
       def policy_for(thing)
         Pundit.policy!(current_user, thing)
+      end
+
+      def pgds_scope
+        @pgds_scope ||= SessionPatientGroupDirectionsQuery.new(patient:).call
+      end
+
+      def prescription_administrations_scope
+        @prescription_administrations_scope ||= patient
+          .prescription_administrations
+          .includes(
+            [
+              :administered_by,
+              :witnessed_by,
+              :reason,
+              prescription: [:medication_route, :drug]
+            ]
+          )
+          .ordered
+      end
+
+      def recent_activity_summary(displayed:, total:)
+        I18n.t("renalware.hd.dashboards.recent_activity.summary", displayed:, total:)
       end
 
       attr_accessor :view_context, :current_user

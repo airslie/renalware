@@ -6,7 +6,7 @@ RSpec.describe "HD dashboard PGDs", :js do
     login_as nurse
   end
 
-  it "lists recently given PGDs in reverse chronological order and paginates them" do
+  it "lists recent PGDs in reverse chronological order and links to the full list" do
     created_pgds = Array.new(11) do |index|
       pgd = create(
         :patient_group_direction,
@@ -31,20 +31,20 @@ RSpec.describe "HD dashboard PGDs", :js do
 
     visit patient_hd_dashboard_path(patient)
 
-    within_article "Latest HD Sessions" do
+    within_article "Recent Activity" do
       click_on "PGDs"
 
       expect(page).to have_css("#hd-session-pgds", visible: :visible)
       within "#hd-session-pgds" do
+        expect(page).to have_link(
+          "View All PGDs",
+          href: patient_hd_patient_group_directions_path(patient)
+        )
+        expect(page).to have_content("Showing 10 of 11")
         expect(first("tbody tr")).to have_content(newest_pgd.name)
         expect(page).to have_content(created_pgds.second.name)
         expect(page).to have_no_content(oldest_pgd.name)
       end
-      # click_on "Next"
-      # within "#hd-session-pgds" do
-      #   expect(first("tbody tr")).to have_content(oldest_pgd.name)
-      #   expect(page).to have_no_content(newest_pgd.name)
-      # end
     end
   end
 end

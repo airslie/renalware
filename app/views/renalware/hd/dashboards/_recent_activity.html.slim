@@ -1,0 +1,46 @@
+article.hd-sessions
+  - active_tab_index = params[:pgd_page].present? ? 2 : 0
+
+  header
+    h2= t(".title")
+
+  div(data-controller="tabs" data-tabs-active-tab="active" data-tabs-index=active_tab_index)
+    .tabs-container.border-b.ml-0
+      ul.list-reset.tabs-nav.flex
+        li(data-tabs-target="tab" data-action="click->tabs#change")
+          = link_to t(".hd_sessions"), "#", data: { "trigger-masonry-refresh" => true }
+        li(data-tabs-target="tab" data-action="click->tabs#change")
+          = link_to t(".drugs_given_on_hd"), "#", data: { "trigger-masonry-refresh" => true }
+        li(data-tabs-target="tab" data-action="click->tabs#change")
+          = link_to t(".pgds"), "#", data: { "trigger-masonry-refresh" => true }
+
+    #hd-sessions-panel(data-tabs-target="panel")
+      = render "renalware/hd/sessions/table",
+               sessions: dashboard.sessions,
+               initially_visible: true
+      - if dashboard.sessions.any?
+        = render "renalware/hd/dashboards/recent_activity_footer",
+                 summary: dashboard.sessions_summary do
+          = link_to t("renalware.hd.dashboards.recent_activity.view_all_sessions"),
+                    patient_hd_sessions_path(dashboard.patient),
+                    class: "btn btn-primary btn-compact"
+
+    #hd-session-drugs-panel.hidden(data-tabs-target="panel")
+      = render "renalware/hd/prescription_administrations/table",
+               prescription_administrations: dashboard.prescription_administrations,
+               initially_visible: true
+      - if dashboard.prescription_administrations.any?
+        = render "renalware/hd/dashboards/recent_activity_footer",
+                 summary: dashboard.prescription_administrations_summary do
+          = svg_btn(t("renalware.hd.dashboards.recent_activity.view_all_drugs_given"),
+                    :drugs, patient_hd_prescription_administrations_path(dashboard.patient),
+                    class: "btn btn-primary btn-compact right fill-white")
+
+    #hd-session-pgds.hidden(data-tabs-target="panel")
+      = render "renalware/hd/sessions/pgds", pgds: dashboard.pgds
+      - if dashboard.pgds.any?
+        = render "renalware/hd/dashboards/recent_activity_footer",
+                 summary: dashboard.pgds_summary do
+          = link_to t("renalware.hd.dashboards.recent_activity.view_all_pgds"),
+                    patient_hd_patient_group_directions_path(dashboard.patient),
+                    class: "btn btn-primary btn-compact"

@@ -47,8 +47,4 @@
   - if dashboard.sessions.any?
     .row
       .small-12.columns
-        = render "renalware/hd/sessions/list",
-                 sessions: dashboard.sessions,
-                 prescription_administrations: dashboard.prescription_administrations,
-                 pgds: dashboard.pgds,
-                 policy: dashboard
+      = render "renalware/hd/dashboards/recent_activity", dashboard: dashboard

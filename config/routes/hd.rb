@@ -16,6 +16,7 @@ resources :patients, only: [] do
     resources :sessions
     resources :session_clipboards, only: :show, defaults: { format: :text }
     resources :prescription_administrations, only: :index
+    resources :patient_group_directions, only: :index
     resources :vnd_risk_assessments
     resources :acuity_assessments
   end
