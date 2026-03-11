@@ -50,6 +50,7 @@ module Renalware
                 ukrdc_patient_elem << observations_element
                 ukrdc_patient_elem << diagnoses_element
                 ukrdc_patient_elem << medications_element
+                ukrdc_patient_elem << dialysis_prescriptions_element
                 ukrdc_patient_elem << procedures_element
                 ukrdc_patient_elem << documents_element
                 ukrdc_patient_elem << encounters_element
@@ -123,13 +124,14 @@ module Renalware
               end
             end
 
-            def family_doctor_element     = FamilyDoctor.new(patient:).xml
-            def primary_language_element  = PrimaryLanguage.new(patient:).xml
-            def lab_orders_element        = LabOrders.new(patient:).xml
-            def observations_element      = Observations.new(patient:).xml
-            def procedures_element        = Procedures.new(patient:).xml
-            def diagnoses_element         = Diagnoses.new(patient:).xml
-            def assessments_element       = Assessments.new(patient:).xml
+            def family_doctor_element           = FamilyDoctor.new(patient:).xml
+            def primary_language_element        = PrimaryLanguage.new(patient:).xml
+            def lab_orders_element              = LabOrders.new(patient:).xml
+            def observations_element            = Observations.new(patient:).xml
+            def procedures_element              = Procedures.new(patient:).xml
+            def diagnoses_element               = Diagnoses.new(patient:).xml
+            def assessments_element             = Assessments.new(patient:).xml
+            def dialysis_prescriptions_element  = DialysisPrescriptions.new(patient:).xml
 
             def death_element
               create_node("Death", true) if patient.dead?

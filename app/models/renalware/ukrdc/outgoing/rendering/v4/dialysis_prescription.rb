@@ -27,13 +27,35 @@ module Renalware
               end
             end
 
-            def entered_on_element = create_node("EnteredOn", hd_profile.created_at.to_date.iso8601)
-            def from_time_element = create_node("FromTime", hd_profile.prescribed_on.iso8601)
-            def to_time_element = create_node("ToTime", hd_profile.deactivated_at&.to_date&.iso8601)
+            def entered_on_element = create_node("EnteredOn", hd_profile.created_at.iso8601)
+
+            def from_time_element
+              return if hd_profile.prescribed_on.blank?
+
+              create_node("FromTime", hd_profile.prescribed_on.to_datetime.iso8601)
+            end
+
+            def to_time_element
+              return if hd_profile.deactivated_at.blank?
+
+              create_node("ToTime", hd_profile.deactivated_at.iso8601)
+            end
+
             def session_type_element = create_node("SessionType", "HD")
-            def sessions_per_week_element = create_node("SessionsPerWeek", sessions_per_week)
-            def time_dialysed_element = create_node("TimeDialysed", formatted_prescribed_time)
+
+            def time_dialysed_element
+              return if hd_profile.prescribed_time.blank?
+
+              create_node("TimeDialysed", hd_profile.prescribed_time)
+            end
+
             def sessions_per_week = hd_profile.schedule_definition&.days_per_week
+
+            def sessions_per_week_element
+              return unless sessions_per_week
+
+              create_node("SessionsPerWeek", sessions_per_week)
+            end
 
             def vascular_access_element
               create_node("VascularAccess", access_profile&.type&.rr02_code)

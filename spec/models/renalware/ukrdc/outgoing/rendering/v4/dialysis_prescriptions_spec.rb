@@ -58,21 +58,20 @@ module Renalware
             expected_xml = <<~XML.squish.gsub("> <", "><")
               <DialysisPrescriptions start=\"2021-01-01\" stop=\"2021-02-01\">
                 <DialysisPrescription>
-                  <EnteredOn>2021-01-09</EnteredOn>
-                  <FromTime>2021-01-10</FromTime>
-                  <ToTime>2021-01-12</ToTime>
+                  <EnteredOn>2021-01-09T00:00:01+00:00</EnteredOn>
+                  <FromTime>2021-01-10T00:00:00+00:00</FromTime>
+                  <ToTime>2021-01-12T09:02:02+00:00</ToTime>
                   <SessionType>HD</SessionType>
                   <SessionsPerWeek>3</SessionsPerWeek>
-                  <TimeDialysed>4:00</TimeDialysed>
+                  <TimeDialysed>240</TimeDialysed>
                   <VascularAccess>AVF</VascularAccess>
                 </DialysisPrescription>
                 <DialysisPrescription>
-                  <EnteredOn>2021-01-11</EnteredOn>
-                  <FromTime>2021-01-12</FromTime>
-                  <ToTime></ToTime>
+                  <EnteredOn>2021-01-11T00:00:01+00:00</EnteredOn>
+                  <FromTime>2021-01-12T00:00:00+00:00</FromTime>
                   <SessionType>HD</SessionType>
                   <SessionsPerWeek>2</SessionsPerWeek>
-                  <TimeDialysed>4:30</TimeDialysed>
+                  <TimeDialysed>270</TimeDialysed>
                   <VascularAccess>AVF</VascularAccess>
                 </DialysisPrescription>
               </DialysisPrescriptions>
