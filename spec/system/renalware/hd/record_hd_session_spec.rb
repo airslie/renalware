@@ -74,7 +74,7 @@ RSpec.describe "Recording an HD session", :js do
 
     visit patient_hd_dashboard_path(patient)
 
-    within_article "Latest HD Sessions" do
+    within_article "Recent Activity" do
       expect(all(:css, "#hd-sessions tbody").count).to eq(1)
       label = I18n.t(".edit", scope: "renalware.hd.sessions.open")
       click_on label

@@ -170,6 +170,10 @@ en:
   renalware:
     hd:
       dashboards:
+        recent_activity:
+          add_dna: Add DNA Session
+          add_dna_session: Add DNA Session
+          add_session: Add Session
         page_actions:
           add_access_profile: Access Profile
           add_dna_session: DNA Session
@@ -183,6 +187,35 @@ en:
         administered_drugs_thead:
           date: Date
           site: Site
+        thead:
+          access: Access used
+          arterial_pressure: AP
+          blood_flow: Blood flow
+          blood_pressure: BP
+          bm_stix: BM
+          duration: Dur
+          end_time: 'Off'
+          fluid_removed: Fluid rem
+          hd_drugs_administered: Drugs given?
+          litres_processed: Litres proc
+          machine: Machine
+          machine_ktv: KTv
+          machine_no: 'No'
+          machine_urr: URR
+          post: Post
+          post_with_changed: Post (chg)
+          pre: Pre
+          pulse: Pulse
+          put_on_by: Putting on
+          respiratory_rate: RR
+          site: Site
+          start_time: 'On'
+          station: Station
+          taken_off_by: Taking off
+          temperature: Temp
+          user: User
+          venous_pressure: VP
+          weight: Weight
         closed:
           edit: Edit
           view: View
@@ -213,12 +246,14 @@ en:
           add_session: Add a Session
           btn:
             add: Add Session
+          hd_sessions: HD Sessions
           missing_profile_message: 'Please enter the HD Profile before creating sessions
 
             '
-          title: Latest HD Sessions
+          title: Recent Activity
           view_all: View All Sessions
           view_all_drugs_given: View All Drugs Given
+          view_all_pgds: View All PGDs
         new:
           closed:
             title: New Session
@@ -285,6 +320,10 @@ en:
           closed: Session
           dna: DNA Session
           open: Session
+      patient_group_directions:
+        index:
+          title: Patient Group Directions
+        summary: Showing %{displayed} of %{total}
   simple_form:
     hints:
       hd_session:

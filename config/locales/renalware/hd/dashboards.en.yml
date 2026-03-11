@@ -3,6 +3,15 @@ en:
   renalware:
     hd:
       dashboards:
+        recent_activity:
+          title: Recent Activity
+          hd_sessions: HD Sessions
+          drugs_given_on_hd: Drugs given on HD
+          pgds: PGDs
+          summary: Showing %{displayed} of %{total}
+          view_all_drugs_given: View All Drugs Given on HD
+          view_all_pgds: View All PGDs
+          view_all_sessions: View All Sessions
         page_actions:
           mdm: MDM
           protocol: Print HD Session Form

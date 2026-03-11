@@ -19,7 +19,6 @@
     .small-12.medium-12.large-6.xlarge-4.columns
       = render Renalware::Accesses::NeedlingAssessmentsComponent.new(patient: dashboard.patient, current_user: current_user)
       = render Renalware::HD::VNDRiskAssessmentsComponent.new(patient: dashboard.patient, current_user: current_user)
-
       = render Renalware::HD::AcuityAssessments::Summary.new(assessments:, patient: dashboard.patient, current_user:)
 
     - if dashboard.access.present?
@@ -44,10 +43,6 @@
                patient: dashboard.patient,
                limit: 5
 
-  - if dashboard.sessions.any?
-    .row
-      .small-12.columns
-        = render "renalware/hd/sessions/list",
-                 sessions: dashboard.sessions,
-                 prescription_administrations: dashboard.prescription_administrations,
-                 policy: dashboard
+  .row
+    .small-12.columns
+      = render "renalware/hd/dashboards/recent_activity", dashboard: dashboard

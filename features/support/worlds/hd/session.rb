@@ -241,7 +241,7 @@ module World
 
         visit patient_hd_dashboard_path(patient)
 
-        within_article "Latest HD Sessions" do
+        within_article "Recent Activity" do
           expect(all(:css, "#hd-sessions tbody").count).to eq(1)
           label = t_sessions(".edit", scope: "renalware.hd.sessions.open")
           click_on label

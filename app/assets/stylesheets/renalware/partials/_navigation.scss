@@ -254,7 +254,8 @@ dd.patient-name {
 }
 
 .sub-nav dd,
-.sub-nav li {
+.sub-nav li,
+.tabs-nav li {
   margin: 0 0.25rem 0 0;
 }
 
@@ -264,7 +265,7 @@ dd.patient-name {
 .tabs-container {
   border-bottom: 1px solid var(--tab-border-color);
   clear: both;
-  float: left;
+  // float: left;
   margin-bottom: 1rem;
   width: 100%;
 
@@ -273,10 +274,17 @@ dd.patient-name {
     position: relative;
     top: 1px;
   }
+
+  .tabs-nav {
+    margin: 0;
+    position: relative;
+    top: 1px;
+  }
 }
 
 .sub-nav dd a,
-.sub-nav li a {
+.sub-nav li a,
+.tabs-nav li a {
   background-color: transparent;
   border: solid transparent;
   border-radius: 3px 3px 0 0;
@@ -289,12 +297,14 @@ dd.patient-name {
 }
 
 .sub-nav dd a:hover,
-.sub-nav li a:hover {
+.sub-nav li a:hover,
+.tabs-nav li a:hover {
   color: $dark-grey;
 }
 
 .sub-nav dd.active a,
-.sub-nav li.active a {
+.sub-nav li.active a,
+.tabs-nav li.active a {
   background-color: var(--white);
   border-color: var(--nhs-orange) var(--tab-border-color) transparent;
   color: $dark-grey;
@@ -302,12 +312,14 @@ dd.patient-name {
 }
 
 .sub-nav dd.active,
-.sub-nav li.active {
+.sub-nav li.active,
+.tabs-nav li.active {
   font-weight: bold;
 }
 
 .sub-nav dd.active a:hover,
-.sub-nav li.active a:hover {
+.sub-nav li.active a:hover,
+.tabs-nav li.active a:hover {
   background-color: var(--white);
   color: $dark-grey;
 }

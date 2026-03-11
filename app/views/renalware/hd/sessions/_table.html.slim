@@ -1,5 +1,9 @@
+- # locals: (sessions:, initially_visible: true)
 / .column_hover
-table.toggleable.auto-layout.hd-sessions#hd-sessions(data-controller="toggle")
+table.toggleable.auto-layout.hd-sessions#hd-sessions(
+  data-controller="toggle"
+  style="display: #{initially_visible ? 'table' : 'none'}"
+)
   = render "renalware/hd/sessions/thead"
 
   - sessions.each_with_index do |session, index|

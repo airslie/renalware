@@ -19,7 +19,7 @@ RSpec.describe "Copy HD session to clipboard", :js do
     it "displays a copy icon in the sessions list with the correct data attributes" do
       visit patient_hd_dashboard_path(patient)
 
-      within_article "Latest HD Sessions" do
+      within_article "Recent Activity" do
         # Verify the copy link exists with correct Stimulus attributes
         copy_link = find('a[data-controller="clipboard-async"]')
         expect(copy_link).to be_present

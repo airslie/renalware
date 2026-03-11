@@ -1,0 +1,25 @@
+- # locals: (pgds:)
+
+table.auto-layout
+  thead
+    tr
+      th.col-width-date Date
+      th.col-width-small Time
+      th Patient Group Direction
+      th.col-width-small Code
+      th.col-width-small Unit
+
+  tbody
+    - if pgds.any?
+      - pgds.each do |session_pgd|
+        - session = session_pgd.session
+        - pgd = session_pgd.patient_group_direction
+        tr
+          td= link_to l(session.started_at.to_date), patient_hd_session_path(session.patient, session)
+          td= session.started_at.strftime("%H:%M")
+          td= pgd&.name
+          td= pgd&.code
+          td= session.hospital_unit&.unit_code
+    - else
+      tr
+        td(colspan="5") No PGDs recorded

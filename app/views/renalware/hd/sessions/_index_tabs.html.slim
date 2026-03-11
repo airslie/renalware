@@ -1,11 +1,4 @@
 .sub-nav
-  /with-tabs
   dl
-    dd
-      = link_to t("btn.details"),
-                patient_hd_sessions_path(patient)
-                /,data: { "trigger-masonry-refresh" => true }
-    dd
-      = link_to "Drugs given",
-                  patient_hd_prescription_administrations_path(patient)
-                  /,data: { "trigger-masonry-refresh" => true }
+    dd= link_to t("renalware.hd.sessions.list.hd_sessions"), patient_hd_sessions_path(patient)
+    dd= link_to "Drugs given on HD", patient_hd_prescription_administrations_path(patient)
