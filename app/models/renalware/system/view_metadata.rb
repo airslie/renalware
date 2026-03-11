@@ -36,6 +36,10 @@ module Renalware
       def fully_qualified_view_name
         [schema_name, view_name].compact_blank.join(".")
       end
+
+      def selection_key
+        slug.presence || view_name
+      end
     end
   end
 end

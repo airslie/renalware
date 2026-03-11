@@ -17,6 +17,15 @@ module Renalware::System
       end
     end
 
+    describe "#selection_key" do
+      it "prefers slug and falls back to view_name" do
+        expect(described_class.new(slug: "all", view_name: "hd_mdm_patients").selection_key)
+          .to eq("all")
+        expect(described_class.new(slug: nil, view_name: "my_view").selection_key)
+          .to eq("my_view")
+      end
+    end
+
     describe "scope refreshable_materialised_views" do
       it "returns only rows where materialised is true and refresh_schedule is not blank" do
         create(:view_metadata, refresh_schedule: nil)
