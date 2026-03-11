@@ -100,15 +100,8 @@ group :development do
   gem "rubocop-rspec", require: false
   gem "rubocop-rspec_rails", require: false
   gem "ruby-lsp", "~> 0.24", require: false
-  gem "web-console"
-
-  # For sentry error reporting and metrics - load stackprof first
-  # rubocop:disable Bundler/OrderedGems
   gem "stackprof"
-  gem "sentry-opentelemetry"
-  gem "sentry-ruby"
-  gem "sentry-rails"
-  # rubocop:enable Bundler/OrderedGems
+  gem "web-console"
 end
 
 group :development, :test do
