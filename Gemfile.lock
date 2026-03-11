@@ -922,16 +922,6 @@ GEM
     securerandom (0.4.1)
     sendgrid-ruby (6.7.0)
       ruby_http_client (~> 3.4)
-    sentry-opentelemetry (6.4.1)
-      opentelemetry-sdk (~> 1.0)
-      sentry-ruby (~> 6.4.1)
-    sentry-rails (6.4.1)
-      railties (>= 5.2.0)
-      sentry-ruby (~> 6.4.1)
-    sentry-ruby (6.4.1)
-      bigdecimal
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      logger
     shellany (0.0.1)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
@@ -1134,9 +1124,6 @@ DEPENDENCIES
   rubocop-rspec_rails
   ruby-lsp (~> 0.24)
   ruby-prof
-  sentry-opentelemetry
-  sentry-rails
-  sentry-ruby
   shoulda-matchers (~> 7.0)
   simplecov
   simplecov-cobertura (~> 3.1)

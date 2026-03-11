@@ -476,16 +476,6 @@ module Renalware
     end
     config_accessor(:max_file_upload_size) { ENV.fetch("MAX_FILE_UPLOAD_SIZE", "10_000_000").to_i }
 
-    # Sentry configuration
-    config_accessor(:sentry_dsn) { ENV.fetch("SENTRY_DSN", "") }
-    config_accessor(:sentry_for_js_enabled) { false }
-    config_accessor(:sentry_profiles_sample_rate) do
-      ActiveModel::Type::Integer.new.cast(ENV.fetch("SENTRY_PROFILES_SAMPLE_RATE", 1.0))
-    end
-    config_accessor(:sentry_traces_sample_rate) do
-      ActiveModel::Type::Integer.new.cast(ENV.fetch("SENTRY_TRACES_SAMPLE_RATE", 1.0))
-    end
-
     # :simple or :dob_and_any_nhs_or_assigning_auth_number or nhs_or_any_assigning_auth_number
     config_accessor(:hl7_patient_locator_strategy) {
       {

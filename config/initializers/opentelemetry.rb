@@ -20,8 +20,5 @@ if !Rails.env.test? && ENV.fetch("ENABLE_OPENTELEMETRY", 0).to_i == 1
         max_export_batch_size: 512
       )
     )
-    # if defined?(Sentry)
-    #   c.add_span_processor(Sentry::OpenTelemetry::SpanProcessor.instance)
-    # end
   end
 end
