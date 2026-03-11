@@ -3,6 +3,15 @@ article.hd-sessions
 
   header
     h2= t(".title")
+    ul
+      - if dashboard.can_add_dna_session?
+        li= link_to t(".add_dna"),
+                    new_patient_hd_session_path(@patient, type: :dna),
+                    class: :button
+      - if dashboard.can_add_session?
+        li= link_to t(".add_session"),
+                    new_patient_hd_session_path(@patient),
+                    class: "button"
 
   div(data-controller="tabs" data-tabs-active-tab="active" data-tabs-index=active_tab_index)
     .tabs-container.border-b.ml-0

@@ -170,6 +170,10 @@ en:
   renalware:
     hd:
       dashboards:
+        recent_activity:
+          add_dna: Add DNA Session
+          add_dna_session: Add DNA Session
+          add_session: Add Session
         page_actions:
           add_access_profile: Access Profile
           add_dna_session: DNA Session
