@@ -14,6 +14,7 @@
           thead
             tr
               th.col-width-small
+              th.col-width-tiny ID
               th Name
               th Dm+d Virtual Product ID
               th Active
@@ -27,6 +28,7 @@
                     method: :delete,
                     data: { confirm: I18n.t("prompts.confirm_delete") },
                     target: "_top"
+                td= drug.id
                 td= drug
                 td= drug.code
                 td= inline_check_icon(!drug.inactive)
