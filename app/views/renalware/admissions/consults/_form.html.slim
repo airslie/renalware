@@ -21,10 +21,10 @@
             include_blank: "Select local site (or enter other site below)",
             label: "Site"
 
-  = ward_dropdown_grouped_by_hospital_unit(f,
-    :hospital_ward_id,
-    include_blank: "Select local ward (or enter other ward below)",
-    wrapper: :hz_md)
+  .mb-3= ward_dropdown_grouped_by_hospital_unit(f,
+      :hospital_ward_id,
+      include_blank: "Select local ward (or enter other ward below)",
+      wrapper: :hz_md)
 
   = f.input :other_site_or_ward, wrapper: :hz_md
   = f.input :started_on, as: :flatpickr, wrapper: :horizontal_datepicker

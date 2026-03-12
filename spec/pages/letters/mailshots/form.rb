@@ -1,11 +1,9 @@
 require_relative "../../page_object"
-require "capybara-select-2"
 
 module Pages
   module Letters
     module Mailshots
       class Form < PageObject
-        include CapybaraSelect2
         include TextEditorHelpers
         include SlimSelectHelper
 

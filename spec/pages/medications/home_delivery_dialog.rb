@@ -1,11 +1,8 @@
 require_relative "../page_object"
-require "capybara-select-2"
 
 module Pages
   module Medications
     class HomeDeliveryDialog < PageObject
-      include CapybaraSelect2
-
       pattr_initialize [:patient!]
 
       def path

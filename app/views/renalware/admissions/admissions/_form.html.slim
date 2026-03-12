@@ -16,7 +16,7 @@
                         "ajax--url" => search_patients_path(term: "REPLACEME", format: :json),
                         placeholder: "Search by patient name or hospital/NHS no." } \
                 }
-    = ward_dropdown_grouped_by_hospital_unit(f, :hospital_ward_id)
+    .mb-3= ward_dropdown_grouped_by_hospital_unit(f, :hospital_ward_id)
     = f.input :room, wrapper: :horizontal_medium
     = f.input :bed, wrapper: :horizontal_small
     = f.input :floor, wrapper: :horizontal_small

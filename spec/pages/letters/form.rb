@@ -1,10 +1,8 @@
 require_relative "../page_object"
-require "capybara-select-2"
 
 module Pages
   module Letters
     class Form < PageObject
-      include CapybaraSelect2
       include SlimSelectHelper
 
       PERSON_ROLE_TO_RADIO_ID_MAP = {
