@@ -25,7 +25,12 @@ module Renalware
       def save_episode(episode, params)
         PeritonitisEpisode.transaction do
           episode.assign_attributes(params.except(:episode_types))
-          episode.save && save_episode_types(episode.episode_types, params)
+          if episode.save
+            save_episode_types(episode.episode_types, params)
+          else
+            assign_episode_types_for_redisplay(episode, params)
+            false
+          end
         end
       end
 
@@ -36,6 +41,19 @@ module Renalware
           episode_types.create!(peritonitis_episode_type_description_id: desc_id)
         end
         true
+      end
+
+      def assign_episode_types_for_redisplay(episode, params)
+        episode.association(:episode_types).target = episode_type_descriptions_from(params, episode)
+      end
+
+      def episode_type_descriptions_from(params, episode)
+        params.fetch(:episode_types, []).compact_blank.map do |desc_id|
+          PeritonitisEpisodeType.new(
+            peritonitis_episode: episode,
+            peritonitis_episode_type_description_id: desc_id
+          )
+        end
       end
     end
   end
