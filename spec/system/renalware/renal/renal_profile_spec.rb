@@ -29,7 +29,7 @@ describe "Renal Profile", :js do
 
       updated_esrf_date = "25-Mar-2016"
       fill_in "ESRF Date", with: updated_esrf_date
-      select prd.term, from: "Primary Renal Diagnosis (PRD)"
+      slim_select prd.term, from: "Primary Renal Diagnosis (PRD)"
 
       # Change something in the profile.document so we can test the document is persisting
       within ".year-dated-confirmation--ischaemic_heart_dis" do
