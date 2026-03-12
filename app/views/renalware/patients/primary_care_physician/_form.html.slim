@@ -9,7 +9,10 @@
             collection: available_primary_care_physicians,
             include_blank: false,
             label: "Now choose a GP",
-            input_html: { class: "searchable_select", required: :required, tabindex: 2001 }
+            input_html: { \
+              required: :required,
+              tabindex: 2001,
+              data: { controller: "slimselect" }}
   br
   = f.submit class: "btn btn-primary", data: { disable_with: "Saving.." }
   | &nbsp;
