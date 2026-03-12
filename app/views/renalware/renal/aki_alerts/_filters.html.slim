@@ -62,12 +62,5 @@ scss:
                   collection: Renalware::Renal::AKIAlertAction.pluck(:name, :id)
       .columns.medium-3
         = ward_dropdown_grouped_by_hospital_unit(f, :hospital_ward_id, label: "Ward", wrapper: nil)
-        / = f.input :hospital_ward_id,
-        /           as: :grouped_select,
-        /           group_method: :wards,
-        /           collection: Renalware::Hospitals::Unit.joins(:wards).includes(:wards).ordered,
-        /           label_method: :name,
-        /           input_html: { class: "searchable_select" },
-        /           label: "Ward"
 
         a.link_to_right_of_input_label(href="javascript:$('#q_hospital_ward_id').val(null).trigger('change');javascript:void(0); ") Clear
