@@ -49,6 +49,9 @@ Style/HashSyntax:
   Enabled: true
   EnforcedShorthandSyntax: always
 
+Rails/ResponseParsedBody:
+  Enabled: false
+
 Rails/FindByOrAssignmentMemoization:
   Enabled: false
 

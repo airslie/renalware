@@ -66,8 +66,9 @@ module World
         #
         def view_appointments(clinician, params = {})
           login_as clinician
-
           visit appointments_path(params)
+          expect(page)
+            .to have_selector("table#appointments tr", wait: Capybara.default_max_wait_time)
 
           html_table_to_array("appointments")
         end

@@ -32,7 +32,7 @@ html lang="en"
     meta(name="google" content="notranslate")
 
   body(class="#{ content_for?(:body_class) ? yield(:body_class) : "page--" + controller_path&.tr("/", "-")&.sub("renalware-", "")} #{Rails.env}"
-       *Renalware::UserSessionPresenter.session_controller_data_attributes)
+       *Renalware::UserSessionPresenter.session_controller_data_attributes(user_session: controller.request.session))
 
     #modals-wrapper
 

@@ -238,11 +238,9 @@ module Renalware
         require "lograge"
         app.config.lograge.enabled = true
 
-        # Ignore session expiry JS polling as these calls fill up the log and we don't
-        # need to see them. 100 users with an active session polling every minute will add
-        # up to fair number of log entries.
+        # Ignore session keepalive requests as these calls can be noisy and not useful in
+        # production logs.
         app.config.lograge.ignore_actions = [
-          "Renalware::SessionTimeoutController#check_session_expired",
           "Renalware::SessionTimeoutController#keep_session_alive"
         ]
       end
@@ -309,11 +307,6 @@ module Renalware
       # load from the demo/.env
       require "renalware/config_accessors"
       require "renalware/configuration"
-
-      # In development don't ajax poll so often for a timeout as it can upset our byebug sessions.
-      Renalware.configure do |config|
-        config.session_timeout_polling_frequency = 1.hour
-      end
     end
 
     config.to_prepare do
