@@ -110,7 +110,7 @@ module Renalware
           host: config.ldap_host,
           port: config.ldap_port,
           base: config.ldap_base,
-          encryption: config.ldap_ssl ? :simple_tls : nil
+          encryption: :simple_tls
         )
       end
 

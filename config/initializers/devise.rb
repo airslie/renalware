@@ -275,7 +275,7 @@ Devise.setup do |config|
     port: Integer(ENV.fetch("LDAP_PORT", "636")),
     base: ENV["LDAP_BASE"] || "dc=renalware,dc=app",
     uid: Renalware.config.ldap_attribute_mappings["username"] || "uid",
-    bind_dn: ENV.fetch('LDAP_ADMIN_USER'), # # "#{ENV.fetch('LDAP_ADMIN_USER')},#{ENV.fetch('LDAP_BASE')}"
+    bind_dn: ENV["LDAP_ADMIN_USER"], # # "#{ENV.fetch('LDAP_ADMIN_USER')},#{ENV.fetch('LDAP_BASE')}"
     password: ENV.fetch("LDAP_ADMIN_PASSWORD", nil),
     name_proc: proc { |n| n.split("@").first },
     password_policy: true,

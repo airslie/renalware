@@ -11,7 +11,8 @@ html lang="en"
     - if defined?(page_title)
       title= page_title
 
-    = stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
+    - unless Rails.env.test?
+      = stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
     = stylesheet_link_tag "renalware/core", media: :all
     = stylesheet_link_tag "application", media: :all
     = yield(:css) if content_for?(:css)

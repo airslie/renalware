@@ -406,10 +406,6 @@ module Renalware
 
       describe "SSL configuration" do
         context "when SSL is enabled" do
-          before do
-            allow(Renalware.config).to receive(:ldap_ssl).and_return(true)
-          end
-
           it "creates LDAP connection with simple_tls encryption" do
             allow(Net::LDAP).to receive(:new).with(
               hash_including(encryption: :simple_tls)
@@ -421,25 +417,6 @@ module Renalware
             connection.search_for_user
             expect(Net::LDAP).to have_received(:new)
               .with(hash_including(encryption: :simple_tls)).at_least(:once)
-          end
-        end
-
-        context "when SSL is disabled" do
-          before do
-            allow(Renalware.config).to receive(:ldap_ssl).and_return(false)
-          end
-
-          it "creates LDAP connection without encryption" do
-            allow(Net::LDAP).to receive(:new).with(
-              hash_including(encryption: nil)
-            ).and_return(ldap_mock, admin_ldap_mock)
-            allow(admin_ldap_mock).to receive(:search).with(any_args)
-            allow(admin_ldap_mock).to receive(:get_operation_result)
-              .and_return(Struct.new(:code).new(0))
-
-            connection.search_for_user
-            expect(Net::LDAP).to have_received(:new)
-              .with(hash_including(encryption: nil)).at_least(:once)
           end
         end
       end

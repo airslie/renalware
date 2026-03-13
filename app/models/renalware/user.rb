@@ -105,58 +105,12 @@ module Renalware
     end
     # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-    # Experimental - create or update a user from an Entra ID (Azure AD) OmniAuth hash
     def self.from_ldap_omniauth(auth, password)
-      # auth is OmniAuth::AuthHash
-      username = auth.uid
-      info = auth.info
-      email = info.email&.downcase
-
-      # Pick your own mapping rules here
-      user = find_or_initialize_by(username: username)
-
-      if user.new_record?
-        # Fallback: match on email if you already have users
-        user = find_or_initialize_by(email: email) if email.present?
-        # For username we want to use the sAMAccountName synced from on-prem AD.
-        # eg sAMAccountName -> onPremisesSamAccountName in Entra.
-        # Then we need to add a claim mapping in Entra ID app registration
-        # to include this in the token.
-        # or now use the uid directly.
-        user.username ||= username
-        user.email ||= email
-        user.family_name ||= info.last_name
-        user.given_name  ||= info.first_name
-
-        # Optionally set random password if you still need Devise validations:
-        user.password ||= password.presence || SecureRandom.hex(32)
-        user.approved = Renalware.config.ldap_auto_approve_users
-        user.hospital_centre = Renalware::Hospitals::Centre.site_default
-      end
-
-      sync_roles(user, auth.extra.raw_info["memberof"])
-
-      user.save! if user.changed?
-      user
+      Users::LdapOmniauthUser.new(auth:, password:).call
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
-    # Look up all roles in the database that have an ad_role_name, and sync them to the user.
-    # Note roles are always downcased for matching.
     def self.sync_roles(user, ad_roles)
-      # Normalize ad_roles to an array of downcased role names, removing any LDAP path info
-      ad_roles = Array(ad_roles).map { |role| role.downcase.split(",").first.sub("cn=", "") }
-
-      Role.where.not(ad_role_name: nil).find_each do |role|
-        # If the user's AD roles include this role's ad_role_name, ensure the user has the role
-        # Otherwise ensure the user does not have the role
-        if ad_roles.include?(role.ad_role_name.downcase)
-          user.roles << role unless user.roles.include?(role)
-        else
-          user.roles.delete(role) # user may not have the role but delete is safe
-        end
-      end
+      Users::ActiveDirectoryRoleSync.new(user:, ad_roles:).call
     end
 
     # So we can uses these scopes as Ransack predicates eg. { expired: true }

@@ -9,16 +9,8 @@ module Renalware
 
     included do
       class_eval do
-        # Both database_authenticatable and ldap_authenticatable modules are
-        # always loaded to provide model methods. Each has a corresponding
-        # Warden strategy that checks Renalware.config.ldap_authentication
-        # to determine which authentication method to use at runtime.
-        # See:
-        # - lib/devise/strategies/renalware_database_authenticatable.rb
-        # - lib/devise/strategies/ldap_authenticatable.rb
         devise(
           :database_authenticatable,
-          # :ldap_authenticatable,
           :expirable,
           :lockable,
           :rememberable,
@@ -51,12 +43,34 @@ module Renalware
         if banned?
           :banned
         elsif !new_record? && !approved?
-          ldap_requires_manual_approval? ? :not_approved_ldap : :not_approved
+          manual_ldap_approval_required? ? :not_approved_ldap : :not_approved
         elsif approved?
           super
         else
           :not_approved
         end
+      end
+
+      def valid_password?(password)
+        if ldap_authentication_enabled?
+          ldap_connection(password).valid_credentials?
+        else
+          super
+        end
+      end
+
+      private
+
+      def ldap_authentication_enabled?
+        Renalware.config.ldap_authentication
+      end
+
+      def ldap_connection(password = nil)
+        Renalware::Ldap::Connection.new(username:, password:)
+      end
+
+      def manual_ldap_approval_required?
+        ldap_authentication_enabled? && !Renalware.config.ldap_auto_approve_users
       end
     end
   end

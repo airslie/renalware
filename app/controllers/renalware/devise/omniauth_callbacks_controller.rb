@@ -81,7 +81,7 @@ module Renalware
         filter = Net::LDAP::Filter.eq("sAMAccountName", username)
         entry = ldap.search(
           base: ENV.fetch("LDAP_BASE"),
-          filter: filter,
+          filter:,
           attributes: %w(userAccountControl lockoutTime pwdLastSet)
         ).first
         return nil unless entry

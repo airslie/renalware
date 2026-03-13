@@ -44,11 +44,11 @@ div class="bg-gray-50 w-full overflow-y-auto"
       = form_with url: user_ldap_omniauth_callback_path, method: :post, local: true, html: { autocomplete: "off" }, data: { turbo: false } do |f|
         div
           = render Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: false)
-
+        h1 LDAP
 
         .flex.flex-col
           div
-            = f.label :username, "Username"
+            = f.label :username, "Username1"
             = f.text_field :username, input_html: { autofocus: true, autocomplete: "username" }, label_html: { class: "!hidden" }, required: true
           div
             = f.label :username, "Password"
