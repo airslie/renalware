@@ -64,7 +64,7 @@ jobs:
             asset-cache-${{ runner.os }}-
 
       - name: Assets precompile
-        run: bin/rails assets:precompile --trace
+        run: bin/yarn build && bin/yarn build:css && bin/rails assets:precompile --trace
 
   linters:
     name: Linters
