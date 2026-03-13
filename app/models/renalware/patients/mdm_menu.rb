@@ -9,6 +9,8 @@ module Renalware
     # way as a changes are rare and we want to avoid running this query too many times.
     # I think it will run once per process thread
     class MDMMenu
+      MenuItem = Data.define(:scope, :title, :filter)
+
       thread_cattr_accessor :cached_items
 
       def self.items
@@ -21,11 +23,9 @@ module Renalware
       def self.menu_definitions
         Rails.logger.info "#### Loading MDM scope names! ####"
         menu_items = Renalware::System::ViewMetadata
-          .distinct("scope")
           .where(category: :mdm)
           .order(:title)
-          .pluck(:scope, :title)
-          .each_with_object({}) { |row, hash| hash[row[0]] = row[1] }
+          .select(:scope, :title, :slug, :view_name)
 
         sanitize_menu_definitions(menu_items)
       end
@@ -34,19 +34,27 @@ module Renalware
       # For the menu title use #title if present and is not0 "All" otherwise use the scope.
       def self.sanitize_menu_definitions(definitions)
         definitions
-          .select { |scope, _title| scope.match(/^[a-z0-9_]*$/) }
-          .each_with_object({}) do |key_and_value, new_hash|
-            scope, title = key_and_value
-            new_hash[scope] = if title.present? && title&.downcase != "all"
-                                title
-                              else
-                                scope.humanize
-                              end
+          .select { |definition| definition.scope.match(/^[a-z0-9_]*$/) }
+          .map do |definition|
+            MenuItem.new(
+              scope: definition.scope,
+              title: normalize_title(definition.scope, definition.title),
+              filter: definition.selection_key
+            )
           end
+      end
+
+      def self.normalize_title(scope, title)
+        if title.present? && title.downcase != "all"
+          title
+        else
+          scope.humanize
+        end
       end
 
       private_class_method :menu_definitions
       private_class_method :cached_items
+      private_class_method :normalize_title
     end
   end
 end
