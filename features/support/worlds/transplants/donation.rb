@@ -129,6 +129,7 @@ module World
         page.execute_script(
           %"$('#transplants_donation_recipient_id').html('<option value=\"#{recipient.id}\">Patty</option>')"
         )
+        slim_select recipient.to_s(:long), from: "Recipient", wait_for: "Enter at least 3 characters"
 
         # within ".form-actions", match: :first do
         #   click_on t("btn.update")

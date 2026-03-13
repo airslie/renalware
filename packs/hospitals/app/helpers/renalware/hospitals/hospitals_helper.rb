@@ -11,7 +11,7 @@ module Renalware
             Renalware::Hospitals::WardPresenter.new(ward).title_including_unit
           },
           wrapper: :horizontal_medium,
-          input_html: { class: "searchable_select" },
+          input_html: { data: { controller: "slimselect" } },
           **
         )
       end

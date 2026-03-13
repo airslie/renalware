@@ -36,6 +36,16 @@ module Renalware
             params = { diagnosis_date: nil }
             expect { service.call(params:) }.to broadcast(:save_failure)
           end
+
+          it "keeps submitted episode_types on the in-memory episode for redisplay" do
+            expected_description_ids = episode_type_descriptions.map(&:id)
+            params = { diagnosis_date: nil, episode_types: expected_description_ids }
+
+            service.call(params:)
+
+            description_ids = episode.episode_types.map(&:peritonitis_episode_type_description_id)
+            expect(description_ids.sort).to eq(expected_description_ids.sort)
+          end
         end
 
         context "when updating an existing episode" do
@@ -77,6 +87,19 @@ module Renalware
             expect(episodes.count).to eq(1)
             episode = episodes.first
             expect(episode.episode_types).to eq []
+          end
+
+          it "keeps changed episode_types on the in-memory episode when validation fails" do
+            episode.episode_types.create(
+              peritonitis_episode_type_description_id: episode_type_descriptions.first.id
+            )
+            expected_description_ids = [episode_type_descriptions.second.id]
+            params = { diagnosis_date: nil, episode_types: expected_description_ids }
+
+            service.call(params:)
+
+            description_ids = episode.episode_types.map(&:peritonitis_episode_type_description_id)
+            expect(description_ids).to eq(expected_description_ids)
           end
         end
       end

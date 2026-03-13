@@ -1,10 +1,8 @@
 require_relative "../page_object"
-require "capybara-select-2"
 
 module Pages
   module HD
     class PrescriptionAdministrationDialog < PageObject
-      include CapybaraSelect2
       include SlimSelectHelper
 
       pattr_initialize [:prescription!]

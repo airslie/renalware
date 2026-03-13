@@ -23,13 +23,10 @@ module World
       end
 
       def update_renal_profile(_user, patient)
-        select2 "Cystinuria", css: ".renal_profile_prd_description"
+        slim_select "Cystinuria", from: "Primary Renal Diagnosis (PRD)"
         fill_in "ESRF Date", with: fake_date.to_s
 
         submit_form
-        # within page.first(".form-actions") do
-        #   click_on t("btn.save")
-        # end
 
         expect(page).to have_current_path(patient_renal_profile_path(patient))
       end

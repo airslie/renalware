@@ -10,22 +10,22 @@ ruby:
       locals: { legend: "Recipient", name: "recipient" } do
     = f.input :relationship_with_recipient, wrapper: :horizontal_medium
     = f.input :relationship_with_recipient_other, wrapper: :horizontal_medium
-    br
 
     ruby:
       recipient = f.object.recipient
       default_value = { id: recipient.id, text: recipient.to_s(:long) } if recipient.present?
 
-    = f.input :recipient_id,
-              collection: [],
-              include_blank: false,
-              wrapper: :horizontal_medium,
-              input_html: { \
-                 class: "select2-ajax-search",
-                 data: { "ajax--url" => search_patients_path(format: :json),
-                         "default-value" => default_value,
-                         "placeholder" => "Start entering the last name (min. 3 characters)" } \
-              }
+    .mb-3
+      = f.input :recipient_id,
+                collection: [[recipient&.to_s(:long), recipient&.id]],
+                include_blank: false,
+                wrapper: :horizontal_medium,
+                selected: 1,
+                input_html: { \
+                  data: { controller: "patient-search",
+                        "ajax--url" => search_patients_path(term: "REPLACEME", format: :json),
+                        placeholder: "Search by patient name or hospital/NHS no." } \
+                }
 
     = f.input :blood_group_compatibility,
               as: :inline_radio_buttons,

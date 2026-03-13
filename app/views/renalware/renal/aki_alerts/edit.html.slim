@@ -4,7 +4,7 @@
   = simple_form_for(alert, wrapper: :horizontal_form) do |f|
     = f.association :action, wrapper: :horizontal_small
     = f.association :hospital_centre, wrapper: :horizontal_small
-    = ward_dropdown_grouped_by_hospital_unit(f, :hospital_ward_id)
+    .mb-3= ward_dropdown_grouped_by_hospital_unit(f, :hospital_ward_id)
     = f.input :hotlist, wrapper: :horizontal_small, as: :inline_radio_buttons
     = f.input :max_cre, wrapper: :horizontal_small
     = f.input :cre_date, as: :flatpickr, wrapper: :horizontal_datepicker

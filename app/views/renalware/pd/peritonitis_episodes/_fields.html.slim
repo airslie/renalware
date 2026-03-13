@@ -6,7 +6,7 @@
 .row
   .large-12.columns
     = field_set_tag t(".fieldsets.outcomes") do
-      #peritonitis_episode_types
+      #peritonitis_episode_types.mb-3
         = f.input :episode_types,
                   collection: Renalware::PD::PeritonitisEpisodeTypeDescription.pluck(:term, :id),
                   input_html: { \

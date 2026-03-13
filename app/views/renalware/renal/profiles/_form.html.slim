@@ -13,13 +13,16 @@
               include_blank: "Select modality",
               wrapper: :horizontal_small
     = f.input :first_seen_on, as: :flatpickr, wrapper: :horizontal_datepicker
-    = f.association :prd_description,
-                    collection: Renalware::Renal::PRDDescription.all.order(:term),
-                    input_html: { \
-                      class: "searchable_select", \
-                      data: { \
-                        placeholder: "",
-                        "allow-clear" => "true" } }
+    .mb-3
+      = f.association :prd_description,
+                      collection: Renalware::Renal::PRDDescription.all.order(:term),
+                      input_html: { \
+                        data: { \
+                          placeholder: "",
+                          controller: "slimselect",
+                          "allow-clear" => "true" \
+                        } \
+                      }
 
     = f.input :comorbidities_updated_on, as: :flatpickr, wrapper: :horizontal_datepicker
 
