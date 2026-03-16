@@ -22,12 +22,8 @@ module Renalware
           omniauth_providers: [:entra_id, :ldap]
         )
 
-        # Password recovery (forgot password) is only enabled for database auth,
-        # since LDAP users manage their passwords via LDAP.
-        # Advise we enable this statically to a) make it easier to test and b)
-        # to allow for future scenarios where database auth needs to be used fro
-        # certain users even when LDAP is enabled.
-        devise(:recoverable) unless Renalware.config.ldap_authentication
+        # Password recovery is only needed when local database authentication is enabled.
+        devise(:recoverable) if Renalware.config.database_authentication_enabled?
 
         # We also add any hospital-specific modules that have been configured
         devise(*Renalware.config.devise_extra_modules) if Renalware.config.devise_extra_modules.any?
@@ -55,14 +51,18 @@ module Renalware
         if ldap_authentication_enabled?
           ldap_connection(password).valid_credentials?
         else
-          super
+          database_valid_password?(password)
         end
+      end
+
+      def database_valid_password?(password)
+        ::Devise::Encryptor.compare(self.class, encrypted_password, password)
       end
 
       private
 
       def ldap_authentication_enabled?
-        Renalware.config.ldap_authentication
+        Renalware.config.ldap_authentication_enabled?
       end
 
       def ldap_connection(password = nil)

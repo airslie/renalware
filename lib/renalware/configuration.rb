@@ -51,8 +51,14 @@ module Renalware
     config_accessor(:enable_allergies)                      { ENV.fetch("ENABLE_ALLERGIES", "true") == "true" }
 
     # Authentication settings
-    config_accessor(:entra_omniauth_enabled)                { ENV.fetch("ENTRA_OMNIAUTH_ENABLED", "false") == "true" }
-    config_accessor(:ldap_authentication)                   { ENV.fetch("LDAP_ENABLE", "false") == "true" }
+    config_accessor(:authentication_providers) do
+      ENV.fetch("AUTHENTICATION_PROVIDERS", "database")
+        .split(",")
+        .filter_map do |provider|
+          provider.strip.presence&.to_sym
+        end
+        .uniq
+    end
     # if true, LDAP queries will be logged (may expose sensitive info, use only for debugging)
     config_accessor(:ldap_logger) { ENV.fetch("LDAP_LOGGER", "false") == "true" }
     config_accessor(:ldap_auto_approve_users) { ENV.fetch("LDAP_AUTO_APPROVE_USERS", "true") == "true" }
@@ -590,6 +596,22 @@ module Renalware
 
     def restrict_patient_visibility_by_research_study?
       patient_visibility_restrictions == :by_site_and_research_study
+    end
+
+    def authentication_provider_enabled?(provider)
+      authentication_providers.include?(provider.to_sym)
+    end
+
+    def database_authentication_enabled?
+      authentication_provider_enabled?(:database)
+    end
+
+    def ldap_authentication_enabled?
+      authentication_provider_enabled?(:ldap)
+    end
+
+    def entra_authentication_enabled?
+      authentication_provider_enabled?(:entra_id)
     end
   end
 

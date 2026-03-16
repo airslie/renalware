@@ -220,7 +220,7 @@ module Renalware
 
       context "when LDAP authentication is disabled" do
         before do
-          allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+          allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(false)
         end
 
         it "assigns clinical role by default" do
@@ -373,7 +373,7 @@ module Renalware
 
       context "when LDAP is disabled" do
         it "uses database authentication" do
-          allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+          allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(false)
           user = create(:user, password: "password123")
 
           expect(user.valid_password?("password123")).to be true
@@ -383,7 +383,7 @@ module Renalware
 
       context "when LDAP is enabled" do
         before do
-          allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+          allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(true)
           allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
         end
 

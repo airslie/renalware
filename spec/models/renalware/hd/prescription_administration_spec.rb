@@ -118,7 +118,7 @@ module Renalware
           let(:witness_ldap_connection) { instance_double(Ldap::Connection) }
 
           before do
-            allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+            allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(true)
             allow(Ldap::Connection).to receive(:new)
               .with(username: "admin_user", password: anything)
               .and_return(admin_ldap_connection)

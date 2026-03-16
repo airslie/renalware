@@ -72,7 +72,7 @@ module Renalware
             let(:ldap_adapter) { instance_double(Ldap::Connection) }
 
             before do
-              allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
+              allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(true)
               allow(Ldap::Connection).to receive(:new).and_return(ldap_adapter)
             end
 

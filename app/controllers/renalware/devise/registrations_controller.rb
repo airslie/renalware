@@ -3,18 +3,14 @@ class Renalware::Devise::RegistrationsController < Devise::RegistrationsControll
   include Renalware::Concerns::DeviseControllerMethods
 
   def new
-    if Renalware.config.ldap_authentication
-      raise ActionController::RoutingError, "User registration is not available."
-    else
-      super
-    end
+    return super if Renalware.config.database_authentication_enabled?
+
+    raise ActionController::RoutingError, "User registration is not available."
   end
 
   def create
-    if Renalware.config.ldap_authentication
-      raise ActionController::RoutingError, "User registration is not available."
-    else
-      super
-    end
+    return super if Renalware.config.database_authentication_enabled?
+
+    raise ActionController::RoutingError, "User registration is not available."
   end
 end

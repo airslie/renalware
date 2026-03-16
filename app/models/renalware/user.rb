@@ -183,11 +183,11 @@ module Renalware
     def assign_default_role_if_needed
       return if roles.exists?
 
-      default = if Renalware.config.ldap_authentication && Renalware.config.ldap_auto_approve_users
-                  :read_only
-                else
-                  :clinical
-                end
+      ldap_auto_approval_enabled =
+        Renalware.config.ldap_authentication_enabled? &&
+        Renalware.config.ldap_auto_approve_users
+
+      default = ldap_auto_approval_enabled ? :read_only : :clinical
 
       begin
         roles << Role.find_by!(name: default)

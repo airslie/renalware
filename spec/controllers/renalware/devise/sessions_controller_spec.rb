@@ -13,7 +13,10 @@ module Renalware
       let!(:user) { create(:user, password: "password123") }
 
       before do
-        allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+        allow(Renalware.config).to receive_messages(
+          ldap_authentication_enabled?: false,
+          database_authentication_enabled?: true
+        )
       end
 
       it "updates last_failed_sign_in_at on invalid credentials" do
