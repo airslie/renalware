@@ -7,8 +7,11 @@
 
     h5 UKRDC
     .border.rounded.px-4.py-2.mb-2
-      = f.input :rr_outcome_code
-      = f.input :rr_outcome_text
+      = f.association :ukrdc_assessment_outcome,
+        collection: Renalware::UKRDC::Assessments::Outcome.includes(:assessment_type).where(assessment_type: {code: "PPDassess" }).order(:code),
+        label_method: :description,
+        value_method: :code,
+        include_blank: true
 
     .mt-5
       = save_or_cancel(form: f, back_path: renalware.deaths_locations_path)

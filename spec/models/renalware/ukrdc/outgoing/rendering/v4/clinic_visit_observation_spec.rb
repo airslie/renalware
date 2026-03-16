@@ -35,11 +35,11 @@ module Renalware
             end
           end
 
-          context "when the value evaluates as a number but is actually longer than 20 chars" do
+          context "when the value evaluates as a number but is actually longer than 30 chars" do
             it "renders nothing" do
               visit = instance_double(
                 Clinics::ClinicVisit,
-                height: "123                 123",
+                height: "123                           123",
                 datetime: Time.zone.parse("2019-01-01 00:00:01"),
                 updated_by: nil
               )
