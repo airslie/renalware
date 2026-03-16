@@ -37,7 +37,7 @@ class RenameLowClearanceDialysisPlansUKRDCRr51OutcomeCode < ActiveRecord::Migrat
           no_current_plan: 5
         }.each do |code, rr51_code|
           Renalware::LowClearance::DialysisPlan.transaction do
-            plan = Renalware::LowClearance::DialysisPlan.find_by(code: code)
+            plan = Renalware::LowClearance::DialysisPlan.find_by(code:)
             plan.presence&.update!(ukrdc_assessment_outcome_code: rr51_code)
           end
         end

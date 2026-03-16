@@ -4,17 +4,9 @@ module Renalware
       describe Rendering::V4::CauseOfDeath do
         include XmlSpecHelper
 
-        def patient_presenter(deceased:, add_cause:)
-          cause = Deaths::Cause.new(code: 1, created_at: Time.zone.parse("2019-01-01")) if add_cause
-          patient = instance_double(Renalware::Patient, first_cause: cause, sent_to_ukrdc_at: nil)
-          presenter = UKRDC::PatientPresenter.new(patient)
-          allow(presenter).to receive(:dead?).and_return(deceased)
-          presenter
-        end
-
-        context "when the patient is deceased and has a first cause of death" do
+        context "when there is a primary cause of death" do
           it "renders a CauseOfDeath element" do
-            patient = patient_presenter(deceased: true, add_cause: true)
+            cause = Deaths::Cause.new(code: 1, created_at: Time.zone.parse("2019-01-01"))
 
             expected_xml = <<~XML.squish.gsub("> <", "><")
               <CauseOfDeath>
@@ -27,25 +19,30 @@ module Renalware
               </CauseOfDeath>
             XML
 
-            xml = format_xml(described_class.new(patient:).xml)
+            xml = format_xml(described_class.new(cause:).xml)
 
             expect(xml).to match_xml(expected_xml)
           end
         end
 
-        context "when the patient is deceased but has no first cause of death" do
-          it "renders nothing" do
-            patient = patient_presenter(deceased: true, add_cause: false)
+        context "when there is a secondary cause of death" do
+          it "renders a secondary DiagnosisType" do
+            cause = Deaths::Cause.new(code: 12, created_at: Time.zone.parse("2019-01-01"))
 
-            expect(described_class.new(patient:).xml).to be_nil
-          end
-        end
+            expected_xml = <<~XML.squish.gsub("> <", "><")
+              <CauseOfDeath>
+                <DiagnosisType>SECONDARY</DiagnosisType>
+                <Diagnosis>
+                  <CodingStandard>EDTA_COD</CodingStandard>
+                  <Code>12</Code>
+                </Diagnosis>
+                <EnteredOn>2019-01-01T00:00:00+00:00</EnteredOn>
+              </CauseOfDeath>
+            XML
 
-        context "when the patient is not deceased" do
-          it "renders nothing" do
-            patient = patient_presenter(deceased: false, add_cause: false)
+            xml = format_xml(described_class.new(cause:, diagnosis_type: "SECONDARY").xml)
 
-            expect(described_class.new(patient:).xml).to be_nil
+            expect(xml).to match_xml(expected_xml)
           end
         end
       end

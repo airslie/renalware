@@ -7,7 +7,7 @@ module Renalware
         module V3
           # Handles rendering a PD Treatment (aka modality). We defer to the base Treatment
           # class but pass in some extra arguments to the ctor.
-          class PDTreatment < Rendering::Treatment
+          class PDTreatment < Treatment
             def initialize(treatment:)
               encounter_number = [
                 treatment.modality_id,

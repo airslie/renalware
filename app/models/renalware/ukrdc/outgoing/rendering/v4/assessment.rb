@@ -21,8 +21,8 @@ module Renalware
               end
             end
 
-            def start_element = create_node("AssessmentStart", start_date.iso8601)
-            def end_element   = create_node("AssessmentEnd", end_date.iso8601)
+            def start_element = create_node("AssessmentStart", start_date.to_datetime.iso8601)
+            def end_element   = create_node("AssessmentEnd", end_date.to_datetime.iso8601)
 
             def type_element
               type = outcome.assessment_type

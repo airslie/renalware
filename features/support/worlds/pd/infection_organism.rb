@@ -51,9 +51,8 @@ module World
 
           fill_in "Sensitivity", with: sensitivity
           fill_in "Resistance", with: resistance
+          click_on t("btn.save")
         end
-
-        click_on t("btn.save")
 
         within "#infection-organisms table" do
           expect(page).to have_content(sensitivity)

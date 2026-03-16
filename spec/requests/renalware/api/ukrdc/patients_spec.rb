@@ -63,7 +63,7 @@ describe "API request for a single UKRDC patient XML document" do
     end
 
     context "when the patient has died" do
-      it "includes first cause of death elements" do
+      it "includes cause of death elements" do
         set_modality(
           patient:,
           modality_description: create(:modality_description, :death),
@@ -86,7 +86,45 @@ describe "API request for a single UKRDC patient XML document" do
         end
 
         matches = response.body.scan("<CauseOfDeath>")
-        expect(matches.length).to eq(1)
+        expected_count = Renalware::UKRDC::XsdSchema.new.major_version.to_i >= 4 ? 2 : 1
+
+        expect(matches.length).to eq(expected_count)
+      end
+    end
+
+    context "when configured for UKRDC v4" do
+      around do |example|
+        previous_version = Renalware.config.ukrdc_schema_version
+        Renalware.config.ukrdc_schema_version = "4.2.0"
+        example.run
+      ensure
+        Renalware.config.ukrdc_schema_version = previous_version
+      end
+
+      it "includes both first and second cause of death elements" do
+        set_modality(
+          patient:,
+          modality_description: create(:modality_description, :death),
+          by: user
+        )
+
+        patient.first_cause = create(:cause_of_death, code: 11, description: "Abc")
+        patient.second_cause = create(:cause_of_death, code: 12, description: "Xyz")
+        patient.died_on = Time.zone.now
+        patient.save_by!(user)
+
+        get renalware.api_ukrdc_patient_path(patient)
+
+        expect(response).to be_successful
+
+        validate(response.body) do |error|
+          raise error.message
+        end
+
+        matches = response.body.scan("<CauseOfDeath>")
+        expect(matches.length).to eq(2)
+        expect(response.body).to include("<DiagnosisType>PRIMARY</DiagnosisType>")
+        expect(response.body).to include("<DiagnosisType>SECONDARY</DiagnosisType>")
       end
     end
   end

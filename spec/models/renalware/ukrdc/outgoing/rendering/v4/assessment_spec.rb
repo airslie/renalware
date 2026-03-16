@@ -6,12 +6,14 @@ module Renalware
 
         let(:start_date) { 1.day.ago.to_date }
         let(:end_date) { Time.zone.today }
+        let(:start_datetime) { start_date.to_datetime.iso8601 }
+        let(:end_datetime) { end_date.to_datetime.iso8601 }
 
         it "renders a single Assessment XML fragment" do
           expected_xml = <<~XML.squish.gsub("> <", "><")
             <Assessment>
-              <AssessmentStart>#{start_date.iso8601}</AssessmentStart>
-              <AssessmentEnd>#{end_date.iso8601}</AssessmentEnd>
+              <AssessmentStart>#{start_datetime}</AssessmentStart>
+              <AssessmentEnd>#{end_datetime}</AssessmentEnd>
               <AssessmentType>
                 <CodingStandard>RR50</CodingStandard>
                 <Code>TPLTassess</Code>

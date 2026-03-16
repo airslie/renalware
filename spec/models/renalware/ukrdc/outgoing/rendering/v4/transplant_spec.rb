@@ -8,6 +8,7 @@ module Renalware
           operation = Transplants::RecipientOperation.new(
             operation_type: :kidney,
             performed_on: "2017-02-23",
+            cold_ischaemic_time: 45.minutes,
             hospital_centre: Hospitals::Centre.new(code: "X", name: "Y")
           )
           operation.document.donor.type = :live_related
@@ -26,6 +27,8 @@ module Renalware
                 <Code>X</Code>
                 <Description>Y</Description>
               </EnteredAt>
+              <DonorType>LIVE</DonorType>
+              <ColdIschaemicTime>45</ColdIschaemicTime>
             </Transplant>
           XML
 

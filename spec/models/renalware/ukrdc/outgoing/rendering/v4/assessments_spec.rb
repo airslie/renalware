@@ -76,7 +76,7 @@ module Renalware
             expected_xml = <<~XML.squish.gsub("> <", "><")
               <Assessments>
                 <Assessment>
-                  <AssessmentStart>#{dialysis_plan.created_at.to_date.iso8601}</AssessmentStart>
+                  <AssessmentStart>#{dialysis_plan.created_at.to_date.to_datetime.iso8601}</AssessmentStart>
                   <AssessmentType>
                     <CodingStandard>RR50</CodingStandard>
                     <Code>RRTassess</Code>
@@ -145,7 +145,7 @@ module Renalware
             expected_xml = <<~XML.squish.gsub("> <", "><")
               <Assessments>
                 <Assessment>
-                  <AssessmentStart>#{status_unsuitable.started_on.iso8601}</AssessmentStart>
+                  <AssessmentStart>#{status_unsuitable.started_on.to_datetime.iso8601}</AssessmentStart>
                   <AssessmentType>
                     <CodingStandard>RR50</CodingStandard>
                     <Code>TPLTassess</Code>
@@ -158,7 +158,7 @@ module Renalware
                   </AssessmentOutcome>
                 </Assessment>
                 <Assessment>
-                  <AssessmentStart>#{status_suitable.started_on.iso8601}</AssessmentStart>
+                  <AssessmentStart>#{status_suitable.started_on.to_datetime.iso8601}</AssessmentStart>
                   <AssessmentType>
                     <CodingStandard>RR50</CodingStandard>
                     <Code>TPLTassess</Code>

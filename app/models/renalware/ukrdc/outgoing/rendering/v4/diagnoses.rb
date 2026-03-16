@@ -18,7 +18,7 @@ module Renalware
               create_node("Diagnoses") do |elem|
                 create_comorbidity_diagnoses_inside(elem)
                 elem << smoking_diagnosis_element
-                elem << cause_of_death_element
+                create_causes_of_death_inside(elem)
                 elem << renal_diagnosis_element
               end
             end
@@ -50,8 +50,17 @@ module Renalware
               diagnosis.xml
             end
 
-            def cause_of_death_element
-              CauseOfDeath.new(patient:).xml
+            def create_causes_of_death_inside(elem)
+              return unless patient.dead?
+
+              [
+                [patient.first_cause, "PRIMARY"],
+                [patient.second_cause, "SECONDARY"]
+              ].each do |cause, diagnosis_type|
+                next if cause.blank?
+
+                elem << CauseOfDeath.new(cause:, diagnosis_type:).xml
+              end
             end
 
             def renal_diagnosis_element

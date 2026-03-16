@@ -14,6 +14,46 @@ module Renalware
 
           expect(xml).to match_xml(expected_xml)
         end
+
+        it "renders both first and second causes of death for deceased patients" do
+          first_cause = Deaths::Cause.new(code: 11, created_at: Time.zone.parse("2019-01-01"))
+          second_cause = Deaths::Cause.new(code: 12, created_at: Time.zone.parse("2019-01-02"))
+          patient = UKRDC::PatientPresenter.new(
+            build_stubbed(:patient, first_cause:, second_cause:, sent_to_ukrdc_at: 1.day.ago)
+          )
+          allow(patient).to receive_messages(
+            yes_comorbidities: [],
+            smoking_cormbidity: nil,
+            esrf_on: nil,
+            dead?: true,
+            prd_description_code: nil
+          )
+
+          expected_xml = <<~XML.squish.gsub("> <", "><")
+            <Diagnoses>
+              <CauseOfDeath>
+                <DiagnosisType>PRIMARY</DiagnosisType>
+                <Diagnosis>
+                  <CodingStandard>EDTA_COD</CodingStandard>
+                  <Code>11</Code>
+                </Diagnosis>
+                <EnteredOn>2019-01-01T00:00:00+00:00</EnteredOn>
+              </CauseOfDeath>
+              <CauseOfDeath>
+                <DiagnosisType>SECONDARY</DiagnosisType>
+                <Diagnosis>
+                  <CodingStandard>EDTA_COD</CodingStandard>
+                  <Code>12</Code>
+                </Diagnosis>
+                <EnteredOn>2019-01-02T00:00:00+00:00</EnteredOn>
+              </CauseOfDeath>
+            </Diagnoses>
+          XML
+
+          xml = format_xml(described_class.new(patient:).xml)
+
+          expect(xml).to match_xml(expected_xml)
+        end
       end
     end
   end

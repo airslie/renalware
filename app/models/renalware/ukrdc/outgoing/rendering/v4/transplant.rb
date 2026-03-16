@@ -19,7 +19,8 @@ module Renalware
                 elem << procedure_type_element
                 elem << procedure_time_element
                 elem << entered_at_element
-                # elem << attributes_element
+                elem << donor_type_element
+                elem << cold_ischaemic_time_element
               end
             end
 
@@ -47,12 +48,16 @@ module Renalware
               end
             end
 
-            def attributes_element
-              create_node("Attributes") do |elem|
-                if operation.nhsbt_type.present?
-                  elem << create_node("TRA77", operation.nhsbt_type)
-                end
-              end
+            def donor_type_element
+              return if operation.nhsbt_type.blank?
+
+              create_node("DonorType", operation.nhsbt_type) # TRA77
+            end
+
+            def cold_ischaemic_time_element
+              return if operation.cold_ischaemic_time_minutes.blank?
+
+              create_node("ColdIschaemicTime", operation.cold_ischaemic_time_minutes)
             end
 
             # Not sending TRA76 yet as defined as datetime in XSD and needs changing there.
