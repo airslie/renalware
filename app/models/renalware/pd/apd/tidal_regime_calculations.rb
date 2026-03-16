@@ -28,7 +28,7 @@ module Renalware
         def volume_when_1st_and_then_every_3rd_exchange_is_full_and_the_remainder_are_tidal
           complete_fills = number_of_complete_fills_if_draining_every_three_cycles
           partial_fills = cycles - complete_fills
-          volume_when(complete_fills: complete_fills, partial_fills: partial_fills)
+          volume_when(complete_fills:, partial_fills:)
         end
 
         def volume_when_first_exchange_is_full_and_the_remainder_are_tidal

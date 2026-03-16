@@ -10,7 +10,7 @@ module Renalware
         end
 
         def previous_sessions
-          @previous_sessions ||= Session.where(patient: patient)
+          @previous_sessions ||= Session.where(patient:)
             .limit(3).order(started_at: :desc)
         end
 

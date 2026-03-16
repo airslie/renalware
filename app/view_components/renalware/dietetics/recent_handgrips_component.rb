@@ -25,7 +25,7 @@ module Renalware
         @patient = Clinical.cast_patient(patient)
 
         @clinic_visits = dietetic_clinic_visits_loader.call(
-          patient: patient,
+          patient:,
           limit: display_count
         )
         super

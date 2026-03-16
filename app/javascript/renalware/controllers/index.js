@@ -17,14 +17,12 @@ import SimpleToggleController from "./simple_toggle_controller"
 import ShowOnSelectedController from "./show_on_selected_controller"
 import TabsController from "./tabs_controller"
 import PDPetChartsController from "./pd/pet_charts_controller"
-import PathologySparklinesController from "./pathology/sparklines_controller"
 import CollapsibleController from "./collapsible_controller"
 import DependentSelectController from "./dependent_select_controller"
 import PatientAttachmentsController from "./patients/attachments_controller"
 import PatientSearchController from "./patients/search_controller"
 import SortableController from "./sortable_controller"
 import SelectController from "./select_controller"
-import RadioResetController from "./radio_reset_controller"
 import SelectResetController from "./select_reset_controller"
 import ConditionalDisplayController from "./conditional_display_controller"
 import SlimselectController from "./slimselect_controller"
@@ -49,7 +47,6 @@ import PopoverController from "./popover_controller"
 import LettersBatchCompileController from "./letters/batch_compile_controller"
 import ClipboardController from "./clipboard_controller"
 import TableHighlightRowController from "./table_highlight_row_controller"
-import TourController from "./help/tour_controller"
 import ClipboardAsyncController from "./clipboard_async_controller"
 
 application.register("toggle", ToggleController)
@@ -68,14 +65,12 @@ application.register("simple-toggle", SimpleToggleController)
 application.register("show-on-selected", ShowOnSelectedController)
 application.register("tabs", TabsController)
 application.register("pd-pet-chart", PDPetChartsController)
-application.register("pathology-sparklines", PathologySparklinesController)
 application.register("collapsible", CollapsibleController)
 application.register("dependent-select", DependentSelectController)
 application.register("patient-attachments", PatientAttachmentsController)
 application.register("patient-search", PatientSearchController)
 application.register("sortable", SortableController)
 application.register("select", SelectController)
-application.register("radio-reset", RadioResetController)
 application.register("select-reset", SelectResetController)
 application.register("conditional-display", ConditionalDisplayController)
 application.register("slimselect", SlimselectController)
@@ -116,5 +111,4 @@ application.register("popover", PopoverController)
 application.register("letters-batch-compile", LettersBatchCompileController)
 application.register("clipboard", ClipboardController)
 application.register("table-row-highlight", TableHighlightRowController)
-application.register("tour", TourController)
 application.register("clipboard-async", ClipboardAsyncController)
