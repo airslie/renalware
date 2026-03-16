@@ -18,39 +18,35 @@ module Renalware
         !bind.nil?
       end
 
-      def param(attribute)
-        entry = search_for_user
-        return unless entry
+      private
 
-        # entry[attribute] may return an array so take the first element
-        value = Array(entry[attribute]).first
-        value.presence
+      attr_reader :password
+
+      def config
+        @config ||= Renalware.config
       end
 
-      # group_dn: Full DN of the group (e.g., "cn=clinical,ou=groups,dc=renalware,dc=app")
-      #           Note we escape this because names like 'Group1 (Clinicians)' are not valid DN
-      #           syntax ie parentheses etc need to be escaped.
-      # group_attribute: Attribute that contains group members (default: "member")
-      def in_group?(group_dn, group_attribute = "member")
-        in_group = false
-
-        admin_ldap.search(
-          base: Net::LDAP::Filter.escape(group_dn),
-          scope: Net::LDAP::SearchScope_BaseObject
-        ) do |entry|
-          in_group = true if entry[group_attribute].include?(user_dn)
-        end
-
-        log_failure(admin_ldap, raise_on_error: true)
-
-        info("User #{user_dn} is #{'not ' unless in_group}in group: #{group_dn}")
-
-        in_group
+      def ldap
+        @ldap ||= Net::LDAP.new(
+          host: config.ldap_host,
+          port: config.ldap_port,
+          base: config.ldap_base,
+          encryption: :simple_tls
+        )
       end
 
-      # This can probably be removed. Use in_group? directly
-      def user_in_group?(group_dn)
-        in_group?(group_dn, "member")
+      def admin_ldap
+        return @admin_ldap if @admin_ldap
+
+        connection = self.class.new(
+          username: config.ldap_admin_user,
+          password: config.ldap_admin_password
+        )
+        @admin_ldap = connection.send(:bind, use_user_dn: false)
+
+        return @admin_ldap if @admin_ldap
+
+        raise Error, "Cannot bind to LDAP server with admin credentials"
       end
 
       def user_dn
@@ -95,36 +91,6 @@ module Renalware
           log_failure(ldap)
           nil
         end
-      end
-
-      private
-
-      attr_reader :password
-
-      def config
-        @config ||= Renalware.config
-      end
-
-      def ldap
-        @ldap ||= Net::LDAP.new(
-          host: config.ldap_host,
-          port: config.ldap_port,
-          base: config.ldap_base,
-          encryption: :simple_tls
-        )
-      end
-
-      def admin_ldap
-        return @admin_ldap if @admin_ldap
-
-        @admin_ldap = self.class.new(
-          username: config.ldap_admin_user,
-          password: config.ldap_admin_password
-        ).bind(use_user_dn: false)
-
-        return @admin_ldap if @admin_ldap
-
-        raise Error, "Cannot bind to LDAP server with admin credentials"
       end
 
       def log_failure(ldap_connection, raise_on_error: false)

@@ -10,21 +10,4 @@ Devise.setup do |config|
       scope: "openid profile email"
     }
   )
-
-  # config.omniauth(
-  #   :ldap,
-  #   title: "Renalware LDAP",
-  #   encryption: "ssl",
-  #   host: ENV["LDAP_HOST"] || "localhost",
-  #   port: (ENV["LDAP_PORT"] || 389).to_i,
-  #   base: ENV["LDAP_BASE"] || "dc=renalware,dc=app",
-  #   uid: ENV.dig("LDAP_ATTRIBUTE_MAPPINGS", "username") || "uid",
-  #   bind_dn: "#{ENV.fetch('LDAP_ADMIN_USER')},#{ENV.fetch('LDAP_BASE')}",
-  #   password: ENV.fetch("LDAP_ADMIN_PASSWORD", nil),
-  #   name_proc: proc { |n| n.split("@").first },
-  #   tls_options: {
-  #     ssl_version: "TLSv1_2",
-  #     ciphers: %w(AES-128-CBC AES-128-CBC-HMAC-SHA1 AES-128-CBC-HMAC-SHA256)
-  #   }
-  # )
 end

@@ -48,9 +48,20 @@ module Renalware
     describe "class" do
       it "includes Deviseable to authenticate using Devise" do
         expect(described_class.ancestors).to include(Deviseable)
-        arr = %i(expirable rememberable registerable validatable trackable timeoutable
-                 recoverable lockable database_authenticatable)
-        expect(described_class.devise_modules).to include(*arr)
+        expected_modules = %i(
+          expirable
+          rememberable
+          registerable
+          validatable
+          trackable
+          timeoutable
+          lockable
+          database_authenticatable
+        )
+
+        expect(described_class.devise_modules).to include(*expected_modules)
+        expect(described_class.devise_modules.include?(:recoverable))
+          .to eq(Renalware.config.database_authentication_enabled?)
       end
     end
 

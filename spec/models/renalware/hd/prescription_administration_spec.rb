@@ -9,6 +9,10 @@ module Renalware
         allow(Renalware.config)
           .to receive(:hd_session_prescriptions_require_signoff)
           .and_return(true)
+        allow(Renalware.config).to receive_messages(
+          database_authentication_enabled?: true,
+          ldap_authentication_enabled?: false
+        )
       end
 
       it_behaves_like "an Accountable model"
@@ -118,15 +122,16 @@ module Renalware
           let(:witness_ldap_connection) { instance_double(Ldap::Connection) }
 
           before do
-            allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(true)
+            allow(Renalware.config).to receive_messages(
+              database_authentication_enabled?: false,
+              ldap_authentication_enabled?: true
+            )
             allow(Ldap::Connection).to receive(:new)
               .with(username: "admin_user", password: anything)
               .and_return(admin_ldap_connection)
             allow(Ldap::Connection).to receive(:new)
               .with(username: "witness_user", password: anything)
               .and_return(witness_ldap_connection)
-            allow(admin_ldap_connection).to receive(:user_in_group?).and_return(true)
-            allow(witness_ldap_connection).to receive(:user_in_group?).and_return(true)
           end
 
           it "validates administrator password against LDAP" do

@@ -25,6 +25,10 @@ module Renalware
       }
 
       before do
+        allow(Renalware.config).to receive_messages(
+          database_authentication_enabled?: true,
+          ldap_authentication_enabled?: false
+        )
         allow(User).to receive(:find).with(witness.id).and_return(witness)
         allow(User).to receive(:find).with(administrating_user.id).and_return(administrating_user)
         allow(PrescriptionAdministration)
