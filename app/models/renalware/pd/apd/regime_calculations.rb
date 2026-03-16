@@ -23,7 +23,7 @@ module Renalware
         def volume_of_glucose_at_strength(strength)
           raise "Overnight volume must be calculated first" if overnight_volume.blank?
 
-          GlucoseCalculator.new(regime: self, strength: strength).glucose_content
+          GlucoseCalculator.new(regime: self, strength:).glucose_content
         end
 
         private

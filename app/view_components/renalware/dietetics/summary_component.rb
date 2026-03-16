@@ -18,7 +18,7 @@ module Renalware
         last_dietetic_visit_loader: Queries::LastDieteticClinicVisitQuery.new
       )
         @patient = Clinical.cast_patient(patient)
-        @last_dietetic_clinic_visit = last_dietetic_visit_loader.call(patient: patient)
+        @last_dietetic_clinic_visit = last_dietetic_visit_loader.call(patient:)
         super
       end
 

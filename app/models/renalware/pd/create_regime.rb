@@ -26,7 +26,7 @@ module Renalware
           if update_old_regime_end_date?(current_regime, new_regime)
             current_regime.end_date ||= new_regime.start_date
           end
-          current_regime.terminate(by: by).save && new_regime.save_by(by)
+          current_regime.terminate(by:).save && new_regime.save_by(by)
         end
       end
 

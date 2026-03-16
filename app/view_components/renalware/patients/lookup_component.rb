@@ -13,7 +13,7 @@ module Renalware
       def call
         form.input(
           field_id,
-          collection: collection,
+          collection:,
           input_html: { data: data_options },
           include_blank: options_url.blank?
         )

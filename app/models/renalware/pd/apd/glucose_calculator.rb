@@ -48,7 +48,7 @@ module Renalware
         # rubocop:enable Layout/LineLength
 
         def available_overnight_volume
-          @available_overnight_volume ||= AvailableOvernightVolume.new(regime: regime).value
+          @available_overnight_volume ||= AvailableOvernightVolume.new(regime:).value
         end
 
         def overnight_bags

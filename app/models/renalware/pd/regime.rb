@@ -96,7 +96,7 @@ module Renalware
       end
 
       def terminate(by:, terminated_on: Date.current)
-        build_termination(by: by, terminated_on: terminated_on)
+        build_termination(by:, terminated_on:)
         self
       end
 

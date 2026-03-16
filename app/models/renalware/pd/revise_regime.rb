@@ -16,7 +16,7 @@ module Renalware
             return ::Failure.new(regime.with_bag_destruction_marks_removed)
           end
 
-          new_regime = revise_regime(by: by)
+          new_regime = revise_regime(by:)
           ::Success.new(new_regime)
         end
       end
@@ -26,8 +26,8 @@ module Renalware
       attr_reader :regime
 
       def revise_regime(by:)
-        new_regime = duplicate_original_regime(by: by)
-        terminate_original_regime(by: by, new_regime: new_regime)
+        new_regime = duplicate_original_regime(by:)
+        terminate_original_regime(by:, new_regime:)
         new_regime
       end
 
@@ -47,7 +47,7 @@ module Renalware
           # could be stuck at Pending.
           regime.end_date ||= new_regime.start_date
         end
-        regime.terminate(by: by)
+        regime.terminate(by:)
         regime.updated_by = by
         regime.save!
       end
