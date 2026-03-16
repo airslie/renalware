@@ -17072,29 +17072,6 @@ class SelectController extends Controller {
   }
 }
 
-// Set all radio inputs within the controller's element to checked if their
-// value = matchValue (eg "no" in the case of tristate Yes No Unknown radio
-// groups).
-// Example usage:
-// div(data-controller="radio-reset" data-radio-reset-match-value="no")
-//   input(type="radio" value="yes" ..)
-//   input(type="radio" value="no" ..)
-//   ...
-
-class RadioResetController extends Controller {
-  static values = { match: String }
-
-  reset_all(event) {
-    const that = this;
-    const radioInputs = Array.prototype.slice.call(
-      this.element.querySelectorAll("input[type='radio']")
-    );
-    radioInputs.forEach(function(a){
-      if (a.value == that.matchValue) { a.checked = true; }
-    });
-  }
-}
-
 // Set all select inputs options within the controller's element to selected if their
 // value = matchValue (eg "no" in the case of tristate Yes No Unknown dropdown.)
 // Example usage:
@@ -30824,7 +30801,6 @@ application.register("patient-attachments", PatientAttachmentsController);
 application.register("patient-search", PatientSearchController);
 application.register("sortable", SortableController);
 application.register("select", SelectController);
-application.register("radio-reset", RadioResetController);
 application.register("select-reset", SelectResetController);
 application.register("conditional-display", ConditionalDisplayController);
 application.register("slimselect", SlimselectController);
