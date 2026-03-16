@@ -17,9 +17,11 @@ module Renalware
 
       # aka desired managed roles
       def desired_roles
-        @desired_roles ||= managed_roles.select do |role|
-          normalized_ad_roles.include?(normalize_role_name(role.ad_role_name))
-        end
+        @desired_roles ||= prioritize_access_levels(
+          managed_roles.select do |role|
+            normalized_ad_roles.include?(normalize_role_name(role.ad_role_name))
+          end
+        )
       end
 
       # aka current managed roles
@@ -49,6 +51,12 @@ module Renalware
 
       def add_roles(roles)
         roles.each { |role| user.roles << role }
+      end
+
+      def prioritize_access_levels(roles)
+        return roles unless roles.any? { |role| role.name == "clinical" }
+
+        roles.reject { |role| role.name == "read_only" }
       end
 
       def remove_roles(roles)

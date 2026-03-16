@@ -352,6 +352,20 @@ module Renalware
         described_class.sync_roles(user, "RENALWARE-READONLY")
         expect(user.roles.reload).to contain_exactly(readonly_role, prescriber_role)
       end
+
+      it "prefers clinical over readonly when both access levels are present" do
+        user = create(:user, :minimal, roles: [prescriber_role])
+
+        described_class.sync_roles(
+          user,
+          [
+            "CN=Renalware-Clinical,OU=Groups,DC=example,DC=com",
+            "CN=Renalware-Readonly,OU=Groups,DC=example,DC=com"
+          ]
+        )
+
+        expect(user.roles.reload).to contain_exactly(clinical_role, prescriber_role)
+      end
     end
 
     describe "#valid_password?" do

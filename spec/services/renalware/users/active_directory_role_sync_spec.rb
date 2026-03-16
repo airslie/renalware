@@ -31,6 +31,20 @@ module Renalware
 
         expect(user.roles.reload).to contain_exactly(prescriber_role)
       end
+
+      it "keeps only the clinical access role when both clinical and readonly are present" do
+        user = create(:user, :minimal, roles: [prescriber_role])
+
+        described_class.new(
+          user:,
+          ad_roles: [
+            "CN=Renalware-Clinical,OU=Groups,DC=example,DC=com",
+            "CN=Renalware-Readonly,OU=Groups,DC=example,DC=com"
+          ]
+        ).call
+
+        expect(user.roles.reload).to contain_exactly(clinical_role, prescriber_role)
+      end
     end
   end
 end
