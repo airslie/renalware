@@ -58,7 +58,7 @@ module Renalware
             end
 
             def observation_value_element
-              create_node("ObservationValue", measurement.to_s[0, 19].strip)
+              create_node("ObservationValue", measurement.to_s[0, 29].strip)
             end
 
             def pre_post_element

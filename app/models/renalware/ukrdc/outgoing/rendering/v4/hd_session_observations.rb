@@ -13,7 +13,7 @@ module Renalware
                 measurements_for(observations).each do |i18n_key, value|
                   parent_element << Observation.new(
                     observed_at: observation_times[pre_or_post]&.iso8601,
-                    measurement: value.to_s[0, 19].strip,
+                    measurement: value.to_s[0, 29].strip,
                     i18n_key:,
                     pre_post: pre_or_post.to_s.upcase # eg PRE or POST
                   ).xml
