@@ -308,6 +308,7 @@ GEM
       net-http (~> 0.5)
     faraday-retry (2.4.0)
       faraday (~> 2.0)
+    ffi (1.17.3-aarch64-linux-gnu)
     ffi (1.17.3-arm64-darwin)
     ffi (1.17.3-x86_64-linux-gnu)
     fhir_models (5.0.0)
@@ -627,6 +628,8 @@ GEM
     pg (1.6.3-aarch64-linux)
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-linux)
+    pghero (3.7.0)
+      activerecord (>= 7.1)
     phlex (2.4.1)
       refract (~> 1.0)
       zeitwerk (~> 2.7)
@@ -1084,6 +1087,7 @@ DEPENDENCIES
   paranoia (~> 3.0)
   pdf-reader (~> 2.9)
   pg (~> 1.1)
+  pghero
   phlex-rails
   prawn (~> 2.5.0)
   prawn-table (~> 0.2)
