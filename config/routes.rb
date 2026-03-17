@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   end
 
   constraints super_admin_constraint do
+    mount PgHero::Engine, at: "pghero"
     mount GoodJob::Engine => "good_job"
+    # For pg_extras work like this we need to set the env var
+    # RAILS_PG_EXTRAS_PUBLIC_DASHBOARD=true or
+    # set RailsPgExtras.configuration.public_dashboard to true
+    # mount RailsPgExtras::Web::Engine, at: "pg_extras"
   end
 
   mount Renalware::Directory::Engine => "directory", as: :directory

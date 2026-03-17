@@ -13,3 +13,9 @@ amazon:
   secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
   region: eu-west-1
   bucket: <%= ENV["AWS_BUCKET"] %>
+
+# We use Azure mapped paths in the App Service to map /uploads to a /storage folder
+# in the FileStorage resource.
+azure:
+  service: Disk
+  root: /uploads
