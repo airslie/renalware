@@ -21,6 +21,12 @@ module Renalware
       let(:study) { instance_double(Study, investigatorships: investigatorships) }
       let(:participation) { instance_double(Participation, study: study) }
 
+      before do
+        allow(Renalware.config)
+          .to receive(:research_anyone_can_manage_participations)
+          .and_return(false)
+      end
+
       context "when the participation has a study" do
         %i(create? edit? new?).each do |permission|
           permissions permission do
@@ -41,6 +47,26 @@ module Renalware
             is_expected.not_to permit(investigator, participation)
             is_expected.to permit(manager, participation)
             is_expected.not_to permit(other_user, participation)
+          end
+        end
+      end
+
+      context "when anyone can manage participations" do
+        before do
+          allow(Renalware.config)
+            .to receive(:research_anyone_can_manage_participations)
+            .and_return(true)
+        end
+
+        %i(create? edit? new? destroy?).each do |permission|
+          permissions permission do
+            it do
+              is_expected.to permit(super_admin, participation)
+              is_expected.to permit(admin, participation)
+              is_expected.to permit(investigator, participation)
+              is_expected.to permit(manager, participation)
+              is_expected.to permit(other_user, participation)
+            end
           end
         end
       end

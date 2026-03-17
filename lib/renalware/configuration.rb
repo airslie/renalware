@@ -144,6 +144,11 @@ module Renalware
     }
     config_accessor(:clinical_summary_max_events_to_display) { 10 }
     config_accessor(:clinical_summary_max_letters_to_display) { 10 }
+    config_accessor(:research_anyone_can_manage_participations) do
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("RESEARCH_ANYONE_CAN_MANAGE_PARTICIPATIONS", "false")
+      )
+    end
     config_accessor(:max_batch_print_size) { ENV.fetch("MAX_BATCH_PRINT_SIZE", 100).to_i }
     # These settings are used in the construction of the IDENT metadata in letters
     config_accessor(:letter_system_name) { "Renalware" }
