@@ -8,6 +8,7 @@ module Renalware
 
       private
 
+      # rubocop:disable Metrics/AbcSize
       def displayable_settings
         (Renalware.config.methods - Object.methods)
           .flatten
@@ -16,9 +17,11 @@ module Renalware
           .reject { |name| name.to_s.include?("key") }
           .reject { |name| name.to_s.include?("password") }
           .reject { |name| name.to_s.include?("pwd") }
+          .reject { |name| name.to_s.include?("provider_enabled") }
           .reject { |name| name == :config }
           .sort
       end
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end
