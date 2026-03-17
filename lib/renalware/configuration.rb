@@ -12,6 +12,8 @@
 # To access configuration settings use e.g.
 #   Renalware.config.x
 #
+require_relative "configuration/hl7_patient_locator_strategy"
+
 # rubocop:disable Layout/LineLength
 module Renalware
   class Configuration # rubocop:disable Metrics/ClassLength
@@ -492,13 +494,15 @@ module Renalware
     end
     config_accessor(:max_file_upload_size) { ENV.fetch("MAX_FILE_UPLOAD_SIZE", "10_000_000").to_i }
 
-    # :simple or :dob_and_any_nhs_or_assigning_auth_number or nhs_or_any_assigning_auth_number
-    config_accessor(:hl7_patient_locator_strategy) {
-      {
-        oru: :simple,
-        adt: :simple
-      }
-    }
+    # Options are:
+    #   :simple
+    #   :dob_and_any_nhs_or_assigning_auth_number
+    #   :nhs_or_any_assigning_auth_number
+    #   :dynamic
+    #   :dynamic2
+    config_accessor(:hl7_patient_locator_strategy) do
+      Configuration::Hl7PatientLocatorStrategy.load_from_env
+    end
     config_accessor(:demo_password) { "renalware" }
     config_accessor(:password_policy_description) {
       ENV.fetch(
