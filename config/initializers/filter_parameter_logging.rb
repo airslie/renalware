@@ -13,6 +13,13 @@ Rails.application.config.filter_parameters += %i(
   local_patient_id_5
   family_name
   given_name
+  born_on
   telephone
   email
+  secret
+  token
+  crypt
+  salt
+  certificate
+  otp
 )

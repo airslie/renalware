@@ -1,69 +1,82 @@
-# Puma can serve each request in a thread from an internal thread pool.
-# The `threads` method setting takes two numbers a minimum and maximum.
-# Any libraries that use thread pools should be configured to match
-# the maximum value specified for Puma. Default is set to 5 threads for minimum
-# and maximum, this matches the default thread size of Active Record.
+# This configuration file will be evaluated by Puma. The top-level methods that
+# are invoked here are part of Puma's configuration DSL. For more information
+# about methods provided by the DSL, see https://puma.io/puma/Puma/DSL.html.
 #
-threads_count = ENV.fetch("RAILS_MAX_THREADS", 5).to_i
+# Puma starts a configurable number of processes (workers) and each process
+# serves each request in a thread from an internal thread pool.
+#
+# You can control the number of workers using ENV["WEB_CONCURRENCY"]. You
+# should only set this value when you want to run 2 or more workers. The
+# default is already 1.
+#
+# The ideal number of threads per worker depends both on how much time the
+# application spends waiting for IO operations and on how much you wish to
+# prioritize throughput over latency.
+#
+# As a rule of thumb, increasing the number of threads will increase how much
+# traffic a given process can handle (throughput), but due to CRuby's
+# Global VM Lock (GVL) it has diminishing returns and will degrade the
+# response time (latency) of the application.
+#
+# The default is set to 3 threads as it's deemed a decent compromise between
+# throughput and latency for the average Rails application.
+#
+# Any libraries that use a connection pool or another resource pool should
+# be configured to provide at least as many connections as the number of
+# threads. This includes Active Record's `pool` parameter in `database.yml`.
+threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
-
-worker_timeout 3600
-
-# Specifies the `port` that Puma will listen on to receive requests, default is 3000.
+# Specifies the `worker_timeout` threshold that Puma will use to wait before
+# terminating a worker in development environments.
 #
-port ENV.fetch("PORT", 3000)
-
-# Specifies the `environment` that Puma will run in.
-#
-environment ENV.fetch("RAILS_ENV", "development")
+worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
 # Specifies the number of `workers` to boot in clustered mode.
-# Workers are forked webserver processes. If using threads and workers together
+# Workers are forked web server processes. If using threads and workers together
 # the concurrency of the application would be max `threads` * `workers`.
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
 #
-# workers ENV.fetch("WEB_CONCURRENCY", 2)
+workers ENV.fetch("WEB_CONCURRENCY", 2)
 
-# Use the `preload_app!` method when specifying a `workers` number.
-# This directive tells Puma to first boot the application and load code
-# before forking the application. This takes advantage of Copy On Write
-# process behavior so workers use less memory. If you use this option
-# you need to make sure to reconnect any threads in the `on_worker_boot`
-# block.
-#
-# preload_app!
+# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
+port ENV.fetch("PORT", 3000)
 
-# The code in the `on_worker_boot` will be called if you are using
-# clustered mode by specifying a number of `workers`. After each worker
-# process is booted this block will be run, if you are using `preload_app!`
-# option you will want to use this block to reconnect to any threads
-# or connections that may have been created at application boot, Ruby
-# cannot share connections between processes.
-#
-# on_worker_boot do
-#   ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
-# end
+# Allow puma to be restarted by `bin/rails restart` command.
+plugin :tmp_restart
+
+# Run the Solid Queue supervisor inside of Puma for single-server deployments
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
 
-silence_fork_callback_warning
+# Run the Solid Queue supervisor inside of Puma for single-server deployments
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 
-# GoodJob puma config - see https://github.com/bensheldon/good_job#execute-jobs-async--in-process
-before_fork do
-  GoodJob.shutdown
-end
+# silence_fork_callback_warning
 
-before_worker_boot do
-  GoodJob.restart
-end
+# config/puma.rb
+# https://github.com/bensheldon/good_job?tab=readme-ov-file#execute-jobs-async--in-process
+if ENV.fetch("WEB_CONCURRENCY", 0).to_i > 0
+  before_fork do
+    GoodJob.shutdown
+  end
 
-before_worker_shutdown do
-  GoodJob.shutdown
+  before_worker_boot do
+    GoodJob.restart
+  end
+
+  before_worker_shutdown do
+    GoodJob.shutdown
+  end
 end
 
 MAIN_PID = Process.pid
 at_exit do
   GoodJob.shutdown if Process.pid == MAIN_PID
 end
+
+# Specify the PID file. Defaults to tmp/pids/server.pid in development.
+# In other environments, only set the PID file if requested.
+pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
