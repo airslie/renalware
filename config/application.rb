@@ -103,12 +103,12 @@ module RenalwareApp
 
     config.to_prepare do
       # Register custom LDAP module with Devise for devise() usage.
-      #::Devise.add_module(:ldap_authenticatable, strategy: true, model: true)
+      # ::Devise.add_module(:ldap_authenticatable, strategy: true, model: true)
 
       # These files register Warden strategies and must be loaded during init.
-      require "devise/models/ldap_authenticatable"
-      require "devise/strategies/renalware_database_authenticatable"
-      #require "devise/strategies/ldap_authenticatable"
+      # require "devise/models/ldap_authenticatable"
+      # require "devise/strategies/renalware_database_authenticatable"
+      # require "devise/strategies/ldap_authenticatable"
 
       Rails
         .application

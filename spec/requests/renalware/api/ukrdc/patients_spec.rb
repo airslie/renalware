@@ -113,7 +113,7 @@ describe "API request for a single UKRDC patient XML document" do
         patient.died_on = Time.zone.now
         patient.save_by!(user)
 
-        get renalware.api_ukrdc_patient_path(patient)
+        get api_ukrdc_patient_path(patient)
 
         expect(response).to be_successful
 

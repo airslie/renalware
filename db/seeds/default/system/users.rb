@@ -8,7 +8,6 @@ module Renalware
 
     FactoryBot.create(
       :user,
-      :with_ldap_enabled,
       :find_or_create,
       given_name: "System",
       family_name: "User",

@@ -1066,6 +1066,7 @@ DEPENDENCIES
   nokogiri (~> 1.9)
   omniauth
   omniauth-entra-id
+  omniauth-ldap
   omniauth-rails_csrf_protection
   opentelemetry-exporter-otlp
   opentelemetry-instrumentation-active_job

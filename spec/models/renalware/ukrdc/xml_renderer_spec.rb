@@ -2,6 +2,7 @@ module Renalware
   describe UKRDC::XmlRenderer do
     context "when data is valid" do
       it "returns the XML as string" do
+        allow(Renalware.config).to receive(:ukrdc_sending_facility_name).and_return("TEST")
         practice = build_stubbed(:practice, code: "A12345")
         gp = build_stubbed(:primary_care_physician, code: "G1111111")
         patient = build_stubbed(:patient,

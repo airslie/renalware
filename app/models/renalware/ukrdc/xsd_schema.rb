@@ -16,8 +16,8 @@ module Renalware
 
       def schema
         @schema ||= begin
-          xsd_path = File.join(Renalware::Engine.root, schema_path)
-          xsddoc = Nokogiri::XML(File.read(xsd_path), xsd_path)
+          xsd_path = Rails.root.join(schema_path)
+          xsddoc = Nokogiri::XML(File.read(xsd_path), xsd_path.to_s)
           Nokogiri::XML::Schema.from_document(xsddoc)
         end
       end
