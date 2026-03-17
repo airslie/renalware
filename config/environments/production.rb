@@ -2,19 +2,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.good_job.execution_mode = :async
-
-  # On production then this is the demo site e.g.
-  #   HEROKU_APP_URL=renalware-demo.herokuapp.com
-  #   HEROKU_CUSTOM_DOMAIN=demo.renalware.app
-  # so redirect requests on renalware-demo.herokuapp.com to demo.renalware.app
-  # because even though we have added a custom domain to Heroku, the original herokuapp
-  # url remains available and this can be confusing. Also, mailgun email will probably
-  # only work on the custom domain.
-  if ENV.fetch("HEROKU_APP_URL", nil) && ENV.fetch("HEROKU_CUSTOM_DOMAIN", nil)
-    config.middleware.use Rack::HostRedirect, {
-      ENV.fetch("HEROKU_APP_URL", nil) => ENV.fetch("HEROKU_CUSTOM_DOMAIN", nil)
-    }
-  end
+  config.active_record.action_on_strict_loading_violation = :log
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :terser
@@ -24,6 +12,8 @@ Rails.application.configure do
   # The sassc-rails gem is automatically used for CSS compression if included in
   # the Gemfile and no config.assets.css_compressor option is set.
   config.assets.css_compressor = nil
+  config.sass.line_comments = false
+  config.active_storage.service = :azure
 
   config.action_mailer.smtp_settings = {
     port: ENV.fetch("MAILGUN_SMTP_PORT", nil),
@@ -58,6 +48,10 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  config.public_file_server.headers = {
+    "Cache-Control" => "public, s-maxage=31536000, max-age=15552000",
+    "Expires" => 1.year.from_now.to_fs(:rfc822).to_s
+  }
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
@@ -104,6 +98,10 @@ Rails.application.configure do
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
+  # Log disallowed deprecations.
+  config.active_support.disallowed_deprecation = :log
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = Logger::Formatter.new
@@ -112,12 +110,18 @@ Rails.application.configure do
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
-  end
+  logger           = ActiveSupport::Logger.new($stdout)
+  logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch("HOST", "localhost"),
+    protocol: "https"
+  }
+
+  config.action_mailer.delivery_method = :microsoft_graph_api
+  config.active_job.log_arguments = false
 end

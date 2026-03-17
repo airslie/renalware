@@ -38,6 +38,8 @@ module RenalwareApp
     config.eager_load_paths << Rails.root.join("app/forms")
     config.eager_load_paths << Rails.root.join("app/queries")
 
+    config.assets.js_compressor = nil
+
     config.generators do |gens|
       gens.test_framework :rspec
       gens.fixture_replacement :factory_bot, dir: "spec/factories", suffix: "factory"
