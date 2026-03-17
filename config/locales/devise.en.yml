@@ -22,6 +22,8 @@ en:
       send_instructions: You will receive an email with instructions about how to confirm your account in a few minutes.
       send_paranoid_instructions: If your email exists on our database, you will receive an email with instructions about how to confirm your account in a few minutes.
     failure:
+      account_locked: Your account is locked.
+      account_disabled: Your account is disabled.
       already_authenticated: You are already signed in.
       banned: You have been actively blocked from logging in. Please contact an administrator to ascertain the reason.
       inactive: Your account was not activated yet.
@@ -63,7 +65,10 @@ en:
         subject: Unlock Instructions
     omniauth_callbacks:
       failure: Could not authenticate you from %{kind} because "%{reason}".
-      success: Successfully authenticated from %{kind} account.
+      success: ""
+      invalid: Invalid %{authentication_keys} or password.
+      user:
+        invalid: Invalid %{authentication_keys} or password.
     passwords:
       edit:
         change_my_password: Change my password

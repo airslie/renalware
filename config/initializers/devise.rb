@@ -255,7 +255,7 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
-config.omniauth_path_prefix = '/users/auth'
+  config.omniauth_path_prefix = '/users/auth'
 
   config.omniauth(
     :entra_id,
@@ -264,6 +264,29 @@ config.omniauth_path_prefix = '/users/auth'
     tenant_id:     ENV['ENTRA_TENANT_ID'],
     authorize_params: {
       scope: 'openid profile email'
+    }
+  )
+
+  config.omniauth(
+    :ldap,
+    title: "Renalware LDAP",
+    method: :ssl,
+    host: ENV["LDAP_HOST"] || "localhost",
+    port: Integer(ENV.fetch("LDAP_PORT", "636")),
+    base: ENV["LDAP_BASE"] || "dc=renalware,dc=app",
+    uid: Renalware.config.ldap_attribute_mappings["username"] || "uid",
+    bind_dn: ENV["LDAP_ADMIN_USER"], # # "#{ENV.fetch('LDAP_ADMIN_USER')},#{ENV.fetch('LDAP_BASE')}"
+    password: ENV.fetch("LDAP_ADMIN_PASSWORD", nil),
+    name_proc: proc { |n| n.split("@").first },
+    password_policy: true,
+    tls_options: {
+      verify_mode: OpenSSL::SSL::VERIFY_NONE # OpenSSL::SSL::VERIFY_PEER,
+      #ca_file: ENV.fetch("LDAP_CA_FILE") # e.g. /etc/ssl/certs/ad-ca.pem
+    },
+    mapping: {
+      "name" => "cn;lang-en",
+      "email" => ["preferredEmail", "mail"],
+      "uid" => ["sAMAccountName"],
     }
   )
 end

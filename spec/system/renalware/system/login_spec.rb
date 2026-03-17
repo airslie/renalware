@@ -14,7 +14,7 @@ module Renalware
 
         fill_in "Username", with: user.username
         fill_in "Password", with: user.password
-        click_on "Log in"
+        click_on "Sign in"
 
         expect(page).to have_content "You last signed in 1 day ago."
       end
@@ -23,7 +23,7 @@ module Renalware
     it "attempts to sign in with no credentials" do
       visit root_path
 
-      click_on "Log in"
+      click_on "Sign in"
 
       expect(page).to have_current_path new_user_session_path
       expect(page).to have_text "Invalid username or password"
@@ -34,7 +34,7 @@ module Renalware
 
       fill_in "Username", with: "nonexistentuser123"
       fill_in "Password", with: "anypassword"
-      click_on "Log in"
+      click_on "Sign in"
 
       expect(page).to have_current_path new_user_session_path
       expect(page).to have_text "Invalid username or password"
@@ -46,7 +46,7 @@ module Renalware
 
         fill_in "Username", with: user.username
         fill_in "Password", with: "wuhfweilubfwlf"
-        click_on "Log in"
+        click_on "Sign in"
 
         expect(page).to have_current_path new_user_session_path
         expect(page).to have_text "Invalid username or password"
@@ -55,7 +55,7 @@ module Renalware
 
         fill_in "Username", with: user.username
         fill_in "Password", with: user.password
-        click_on "Log in"
+        click_on "Sign in"
 
         expect(page).to have_current_path root_path
         expect(page).to have_content(
@@ -69,7 +69,7 @@ module Renalware
 
       fill_in "Username", with: unapproved_user.username
       fill_in "Password", with: unapproved_user.password
-      click_on "Log in"
+      click_on "Sign in"
 
       expect(page).to have_current_path new_user_session_path
       expect(page).to have_text "Your account needs approval"
@@ -83,7 +83,7 @@ module Renalware
 
         fill_in "Username", with: user.username
         fill_in "Password", with: user.password
-        click_on "Log in"
+        click_on "Sign in"
 
         expect(page).to have_current_path root_path
 
@@ -106,7 +106,7 @@ module Renalware
 
         fill_in "Username", with: user.username
         fill_in "Password", with: user.password
-        click_on "Log in"
+        click_on "Sign in"
 
         # Note since Devise 4.4.o a redirect to dashboard will only occur if user.valid?
         # Our conditional update validation in User means by default many users are not valid
@@ -137,7 +137,7 @@ module Renalware
 
         fill_in "Username", with: banned_user.username
         fill_in "Password", with: banned_user.password
-        click_on "Log in"
+        click_on "Sign in"
 
         expect(page).to have_current_path new_user_session_path
         expect(page).to have_text "You have been actively blocked from logging in"
@@ -152,7 +152,7 @@ module Renalware
 
         fill_in "Username", with: inactive.username
         fill_in "Password", with: inactive.password
-        click_on "Log in"
+        click_on "Sign in"
 
         expect(page).to have_current_path new_user_session_path
         expect(page).to have_text "Your account has expired due to inactivity"
@@ -167,7 +167,7 @@ module Renalware
 
         fill_in "Username", with: inactive.username
         fill_in "Password", with: inactive.password
-        click_on "Log in"
+        click_on "Sign in"
 
         expect(page).to have_current_path root_path
       end

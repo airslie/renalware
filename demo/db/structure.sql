@@ -14399,7 +14399,8 @@ CREATE TABLE renalware.roles (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     hidden boolean DEFAULT false NOT NULL,
-    enforce boolean DEFAULT false NOT NULL
+    enforce boolean DEFAULT false NOT NULL,
+    ad_role_name character varying
 );
 
 
@@ -32292,6 +32293,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20260205172045'),
 ('20260202160254'),
 ('20260112190854'),
+('20260103171336'),
 ('20251223084129'),
 ('20251221131016'),
 ('20251219110251'),

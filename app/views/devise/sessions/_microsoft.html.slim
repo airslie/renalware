@@ -1,0 +1,17 @@
+.mt-10
+  .relative
+    .absolute.inset-0.flex.items-center[aria-hidden="true"]
+      .w-full.border-t.border-gray-200.dark:border-gray-700
+    .relative.flex.justify-center.text-sm/6.font-medium
+      span.px-6.text-gray-900.bg-gray-50.dark:bg-gray-900.dark:text-gray-300
+        | Or
+  .mt-6.grid.grid-cols-1.gap-4.px-8
+    = link_to user_entra_id_omniauth_authorize_path,
+              method: :post,
+              class: "flex w-full items-center justify-center gap-3 rounded-md border border-[#8c8c8c] bg-white px-4 py-3 text-sm font-semibold text-[#1b1b1b] shadow-sm transition hover:bg-[#f5f5f5] focus:outline-none focus:ring-2 focus:ring-[#0067b8] focus:ring-offset-2" do
+      svg aria-hidden="true" class="h-5 w-5 flex-none" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg"
+        rect fill="#f25022" height="10.5" width="10.5" x="1" y="1"
+        rect fill="#00a4ef" height="10.5" width="10.5" x="11.5" y="1"
+        rect fill="#7fba00" height="10.5" width="10.5" x="1" y="11.5"
+        rect fill="#ffb900" height="10.5" width="10.5" x="11.5" y="11.5"
+      span Sign in with Microsoft

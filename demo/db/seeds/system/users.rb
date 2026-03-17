@@ -12,7 +12,6 @@ module Renalware
       username = "super#{site_code}"
       FactoryBot.create(
         :user,
-        :with_ldap_enabled,
         :find_or_create,
         username: username,
         given_name: site,
@@ -31,7 +30,6 @@ module Renalware
       username = "#{site_code}admin"
       FactoryBot.create(
         :user,
-        :with_ldap_enabled,
         :find_or_create,
         username: username,
         given_name: site,
@@ -50,7 +48,6 @@ module Renalware
       username = "#{site_code}doc"
       FactoryBot.create(
         :user,
-        :with_ldap_enabled,
         :find_or_create,
         username: username,
         given_name: "Doctor",
@@ -70,7 +67,6 @@ module Renalware
       username = "#{site_code}nurse"
       FactoryBot.create(
         :user,
-        :with_ldap_enabled,
         :find_or_create,
         username: username,
         given_name: site,
@@ -88,7 +84,6 @@ module Renalware
       username = "#{site_code}guest"
       FactoryBot.create(
         :user,
-        :with_ldap_enabled,
         :find_or_create,
         username: username,
         given_name: site,
@@ -107,7 +102,6 @@ module Renalware
     username = "rwdev"
     FactoryBot.create(
       :user,
-      :with_ldap_enabled,
       :find_or_create,
       username: username,
       given_name: "Renalware",

@@ -92,8 +92,9 @@ module Renalware
 
       def witness_cannot_be_administrator
         return unless authorised?
+        return if administered_by_id.blank? || witnessed_by_id.blank?
 
-        if administered_by_id.present? && administered_by_id == witnessed_by_id
+        if administered_by_id == witnessed_by_id
           errors.add(:witnessed_by_id, "Must be a different user")
         end
       end

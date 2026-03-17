@@ -4,6 +4,7 @@ describe Renalware::Configuration do
   around do |example|
     # Ensure ENV vars in .env and demo/.env do not upset testing the defaults
     env_keys_that_override_defaults = %w(
+      AUTHENTICATION_PROVIDERS
       DELAY_AFTER_WHICH_A_FINISHED_SESSION_BECOMES_IMMUTABLE_HOURS
       AUTO_TERMINATE_HD_PRESCRIPTIONS_AFTER_PERIOD
       AUTO_TERMINATE_HD_STAT_PRESCRIPTIONS_AFTER_PERIOD
@@ -48,6 +49,24 @@ describe Renalware::Configuration do
     it "can be set via ENV" do
       ENV["DEVISE_EXTRA_MODULES"] = "module1,module2"
       expect(config.devise_extra_modules).to eq([:module1, :module2])
+    end
+  end
+
+  describe "#authentication_providers" do
+    it "defaults to database authentication when no auth ENV is set" do
+      expect(config.authentication_providers).to eq([:database])
+      expect(config.database_authentication_enabled?).to be(true)
+      expect(config.ldap_authentication_enabled?).to be(false)
+      expect(config.entra_authentication_enabled?).to be(false)
+    end
+
+    it "allows multiple providers to be configured explicitly" do
+      ENV["AUTHENTICATION_PROVIDERS"] = "database, ldap, entra_id"
+
+      expect(config.authentication_providers).to eq([:database, :ldap, :entra_id])
+      expect(config.database_authentication_enabled?).to be(true)
+      expect(config.ldap_authentication_enabled?).to be(true)
+      expect(config.entra_authentication_enabled?).to be(true)
     end
   end
 

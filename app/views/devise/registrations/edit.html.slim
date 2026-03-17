@@ -45,7 +45,7 @@
       /   = f.label :language
       /   = f.collection_select(:language, [["English", "en-GB"]], :last, :first, prompt: true)
 
-      - unless Renalware.config.ldap_authentication || Renalware.config.entra_omniauth_enabled
+      - if Renalware.config.database_authentication_enabled?
         div.bg-gray-50.p-4.rounded.border.mb-4
           div.font-bold.mb-2 Change your password
           .field.large-8.small-6

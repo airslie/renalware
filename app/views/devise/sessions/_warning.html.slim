@@ -1,4 +1,6 @@
-- if Renalware.config.ldap_authentication && !Renalware.config.ldap_auto_approve_users
+- ldap_requires_manual_approval = Renalware.config.ldap_authentication_enabled? && !Renalware.config.ldap_auto_approve_users
+
+- if ldap_requires_manual_approval
   .alert-box.alert.m-1.rounded.shadow-sm(class="!py-3 !border-0 mt-1 mx-1")
     = t("devise.sessions.pre_production_notice")
 

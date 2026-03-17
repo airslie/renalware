@@ -7,8 +7,7 @@ module Renalware
 
       user&.touch(:last_failed_sign_in_at) unless user_valid?(user)
 
-      super do |resource|
-        resource.synchronize_ldap_roles if resource.respond_to?(:synchronize_ldap_roles)
+      super do
         track_signin
       end
     end

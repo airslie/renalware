@@ -13,31 +13,56 @@ div class="bg-gray-50 w-full overflow-y-auto"
   = render "renalware/system/messages/list"
   = render "warning"
 
+  - database_authentication_enabled = Renalware.config.database_authentication_enabled?
+  - ldap_authentication_enabled = Renalware.config.ldap_authentication_enabled?
+  - entra_authentication_enabled = Renalware.config.entra_authentication_enabled?
+  - password_provider_count = [database_authentication_enabled, ldap_authentication_enabled].count(true)
   div class="max-w-md w-full space-y-8 mx-auto px-4 mt-12"
     h2 class="text-3xl font-bold tracking-tight text-center" Sign in
 
-    = simple_form_for(resource,
-                      as: resource_name,
-                      url: session_path(resource_name),
-                      html: { autocomplete: "off" }) do |f|
-      div
-        = render Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: false)
+    div= render Renalware::FlashMessagesComponent.new(flash_messages: flash_messages, toast: false)
 
-      = f.input :username, input_html: { autofocus: true, autocomplete: "email" }, label_html: { class: "!hidden" }, required: true
-      = f.input :password, input_html: { autocomplete: "current-password" }, label_html: { class: "!hidden" }, required: true, placeholder: true
+    - if database_authentication_enabled
+      - if password_provider_count > 1
+        h3 class="mb-4 text-lg font-semibold text-center" Sign in with a local account
 
-      / = f.input(:remember_me, as: :boolean, boolean_style: :inline) if devise_mapping.rememberable?
+      .bg-white.p-8.rounded-lg
+        = simple_form_for(resource,
+                          as: resource_name,
+                          url: session_path(resource_name),
+                          html: { autocomplete: "off", style: "margin-top: 0;"}) do |f|
 
-      .actions.mt-6
-        = f.submit "Log in", class: "btn btn-primary w-full"
+          = render "username", f: f
+          = render "password", f: f
 
-      .mt-8.flex.flex-col
-        - Renalware.config.external_links.each do |title, url|
-          .flex.items-center.justify-center.pb-1
-            = external_link_to(title, url, gap: 2, class: "font-bold")
+          .actions.mt-6
+            = f.submit "Sign in", class: "btn btn-primary w-full"
+
+    - if ldap_authentication_enabled
+      - if password_provider_count > 1
+        h3 class="mb-4 text-lg font-semibold text-center" Sign in with LDAP
+
+      = form_with url: user_ldap_omniauth_callback_path,
+                  method: :post,
+                  local: true,
+                  html: { autocomplete: "off", style: "margin-top: 0;" },
+                  data: { turbo: false } do |f|
+        .flex.flex-col.gap-4.bg-white.p-8.rounded-lg
+          = render "username", f: f
+          = render "password", f: f
+
+          .actions.mt-6
+            = f.submit "Sign in", class: "btn btn-primary w-full"
+
+    - if devise_mapping.omniauthable? && entra_authentication_enabled
+      = render "microsoft"
+
+    .mt-8.flex.flex-col
+      - Renalware.config.external_links.each do |title, url|
+        .flex.items-center.justify-center.pb-1
+          = external_link_to(title, url, gap: 2, class: "font-bold")
+
+    - if database_authentication_enabled
       .mt-6
         = render "signup_help"
         = render "devise/shared/links"
-      - if devise_mapping.omniauthable? && Renalware.config.entra_omniauth_enabled
-        .mt-6
-          = link_to "Sign in with Microsoft", user_entra_id_omniauth_authorize_path, class: "btn btn-primary", method: :post

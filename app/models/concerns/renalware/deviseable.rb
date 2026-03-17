@@ -9,16 +9,8 @@ module Renalware
 
     included do
       class_eval do
-        # Both database_authenticatable and ldap_authenticatable modules are
-        # always loaded to provide model methods. Each has a corresponding
-        # Warden strategy that checks Renalware.config.ldap_authentication
-        # to determine which authentication method to use at runtime.
-        # See:
-        # - lib/devise/strategies/renalware_database_authenticatable.rb
-        # - lib/devise/strategies/ldap_authenticatable.rb
         devise(
           :database_authenticatable,
-          :ldap_authenticatable,
           :expirable,
           :lockable,
           :rememberable,
@@ -27,15 +19,11 @@ module Renalware
           :registerable,
           :timeoutable,
           :omniauthable,
-          omniauth_providers: [:entra_id]
+          omniauth_providers: [:entra_id, :ldap]
         )
 
-        # Password recovery (forgot password) is only enabled for database auth,
-        # since LDAP users manage their passwords via LDAP.
-        # Advise we enable this statically to a) make it easier to test and b)
-        # to allow for future scenarios where database auth needs to be used fro
-        # certain users even when LDAP is enabled.
-        devise(:recoverable) unless Renalware.config.ldap_authentication
+        # Password recovery is only needed when local database authentication is enabled.
+        devise(:recoverable) if Renalware.config.database_authentication_enabled?
 
         # We also add any hospital-specific modules that have been configured
         devise(*Renalware.config.devise_extra_modules) if Renalware.config.devise_extra_modules.any?
@@ -51,12 +39,38 @@ module Renalware
         if banned?
           :banned
         elsif !new_record? && !approved?
-          ldap_requires_manual_approval? ? :not_approved_ldap : :not_approved
+          manual_ldap_approval_required? ? :not_approved_ldap : :not_approved
         elsif approved?
           super
         else
           :not_approved
         end
+      end
+
+      def valid_password?(password)
+        if ldap_authentication_enabled?
+          ldap_connection(password).valid_credentials?
+        else
+          database_valid_password?(password)
+        end
+      end
+
+      def database_valid_password?(password)
+        ::Devise::Encryptor.compare(self.class, encrypted_password, password)
+      end
+
+      private
+
+      def ldap_authentication_enabled?
+        Renalware.config.ldap_authentication_enabled?
+      end
+
+      def ldap_connection(password = nil)
+        Renalware::Ldap::Connection.new(username:, password:)
+      end
+
+      def manual_ldap_approval_required?
+        ldap_authentication_enabled? && !Renalware.config.ldap_auto_approve_users
       end
     end
   end

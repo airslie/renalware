@@ -69,15 +69,13 @@ module Renalware
 
     def self.policy_class = UserPolicy
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
     # Experimental - create or update a user from an Entra ID (Azure AD) OmniAuth hash
     def self.from_entra_id_omniauth(auth)
       # auth is OmniAuth::AuthHash
       uid  = auth.uid
       info = auth.info
-
       email = info.email&.downcase
-      _name  = info.name || info.nickname
 
       # Pick your own mapping rules here
       user = find_or_initialize_by(azure_uid: uid)
@@ -97,24 +95,22 @@ module Renalware
         user.given_name  ||= info.first_name
         # Optionally set random password if you still need Devise validations:
         user.password ||= SecureRandom.hex(32)
-        user.approved = true
+        user.approved = Renalware.config.ldap_auto_approve_users
+        user.hospital_centre = Renalware::Hospitals::Centre.site_default
       end
 
-      entra_roles = Array(auth.extra.raw_info["roles"]).map(&:downcase)
-      sync_entra_role(user, "clinical", entra_roles)
-      sync_entra_role(user, "read_only", entra_roles)
+      sync_roles(user, auth.extra.raw_info["roles"])
       user.save! if user.changed?
       user
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
 
-    def self.sync_entra_role(user, role_name, entra_roles)
-      role = Role.find_by!(name: role_name)
-      if entra_roles.include?(role.name) && user.roles.exclude?(role)
-        user.roles << role
-      else
-        user.roles.delete(role)
-      end
+    def self.from_ldap_omniauth(auth, password)
+      Users::LdapOmniauthUser.new(auth:, password:).call
+    end
+
+    def self.sync_roles(user, ad_roles)
+      Users::ActiveDirectoryRoleSync.new(user:, ad_roles:).call
     end
 
     # So we can uses these scopes as Ransack predicates eg. { expired: true }
@@ -186,10 +182,15 @@ module Renalware
 
     def assign_default_role_if_needed
       return if roles.exists?
-      return assign_ldap_role if ldap_enabled?
+
+      ldap_auto_approval_enabled =
+        Renalware.config.ldap_authentication_enabled? &&
+        Renalware.config.ldap_auto_approve_users
+
+      default = ldap_auto_approval_enabled ? :read_only : :clinical
 
       begin
-        roles << Role.find_by!(name: :clinical)
+        roles << Role.find_by!(name: default)
       rescue ActiveRecord::RecordNotFound => e
         raise e unless Rails.env.test?
       end

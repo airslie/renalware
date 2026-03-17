@@ -5502,6 +5502,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_170537) do
   end
 
   create_table "renalware.roles", id: :serial, force: :cascade do |t|
+    t.string "ad_role_name"
     t.datetime "created_at", precision: nil, null: false
     t.boolean "enforce", default: false, null: false
     t.boolean "hidden", default: false, null: false

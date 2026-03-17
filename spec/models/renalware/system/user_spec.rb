@@ -48,9 +48,20 @@ module Renalware
     describe "class" do
       it "includes Deviseable to authenticate using Devise" do
         expect(described_class.ancestors).to include(Deviseable)
-        arr = %i(expirable rememberable registerable validatable trackable timeoutable
-                 recoverable lockable database_authenticatable ldap_authenticatable)
-        expect(described_class.devise_modules).to include(*arr)
+        expected_modules = %i(
+          expirable
+          rememberable
+          registerable
+          validatable
+          trackable
+          timeoutable
+          lockable
+          database_authenticatable
+        )
+
+        expect(described_class.devise_modules).to include(*expected_modules)
+        expect(described_class.devise_modules.include?(:recoverable))
+          .to eq(Renalware.config.database_authentication_enabled?)
       end
     end
 
@@ -220,7 +231,7 @@ module Renalware
 
       context "when LDAP authentication is disabled" do
         before do
-          allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+          allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(false)
         end
 
         it "assigns clinical role by default" do
@@ -231,309 +242,149 @@ module Renalware
           expect(user.roles).to contain_exactly(clinical_role)
         end
       end
-
-      context "when LDAP is enabled" do
-        context "when user is not in a valid LDAP group" do
-          let(:ldap_connection) { instance_double(Ldap::Connection) }
-
-          before do
-            allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-            allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
-          end
-
-          it "prevents user creation with validation error" do
-            user = build(:user, :minimal, username: "testuser")
-            user.roles = []
-            allow(ldap_connection).to receive(:param)
-              .with("mail").and_return("test@example.com")
-            allow(ldap_connection).to receive(:param)
-              .with("givenName").and_return("Test")
-            allow(ldap_connection).to receive(:param)
-              .with("sn").and_return("User")
-            allow(ldap_connection).to receive(:user_in_group?).and_return(false)
-
-            result = user.save
-
-            expect(result).to be false
-            expect(user.persisted?).to be(false)
-            expect(user.errors[:base])
-              .to include("You are not authorised to access this system")
-          end
-        end
-      end
     end
 
-    describe "#ldap_before_save" do
-      let(:user) { build(:user, :minimal, username: "testuser") }
-      let(:ldap_connection) { instance_double(Ldap::Connection) }
+    describe ".from_ldap_omniauth" do
+      let!(:clinical_role) { create(:role, :clinical, ad_role_name: "renalware-clinical") }
+      let!(:readonly_role) { create(:role, :read_only, ad_role_name: "renalware-readonly") }
+      let(:hospital_centre) { create(:hospital_centre, :default) }
+      let(:password) { "ldap-password" }
+      let(:auth) do
+        OmniAuth::AuthHash.new(
+          uid: "jbloggs",
+          info: {
+            email: "JOE.BLOGGS@EXAMPLE.COM",
+            first_name: "Joe",
+            last_name: "Bloggs"
+          },
+          extra: {
+            raw_info: {
+              "memberof" => [
+                "CN=Renalware-Clinical,OU=Groups,DC=example,DC=com"
+              ]
+            }
+          }
+        )
+      end
 
       before do
-        allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
-        allow(ldap_connection).to receive(:param)
-          .with("sn")
-          .and_return("Doe")
-        allow(ldap_connection).to receive(:param)
-          .with("mail")
-          .and_return("john.doe@example.com")
-        allow(user).to receive(:in_valid_ldap_group?).and_return(true)
+        hospital_centre
+        allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(true)
       end
 
-      context "when givenName is present" do
-        it "sets given_name from givenName attribute" do
-          allow(ldap_connection).to receive(:param)
-            .with("givenName")
-            .and_return("John")
-          allow(user).to receive(:in_valid_ldap_group?).and_return(true)
+      it "creates a user from the LDAP auth hash and syncs managed roles" do
+        user = described_class.from_ldap_omniauth(auth, password)
 
-          user.ldap_before_save
-
-          expect(user.given_name).to eq("John")
-        end
+        expect(user).to be_persisted
+        expect(user).to have_attributes(
+          username: "jbloggs",
+          email: "joe.bloggs@example.com",
+          given_name: "Joe",
+          family_name: "Bloggs",
+          approved: true,
+          hospital_centre:
+        )
+        expect(user.encrypted_password).to be_present
+        expect(user.roles.reload).to contain_exactly(clinical_role)
       end
 
-      context "when ldap_auto_approve_users is enabled" do
-        it "sets approved to true" do
-          allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(true)
-          allow(ldap_connection).to receive(:param)
-            .with("givenName")
-            .and_return("John")
-          allow(user).to receive(:in_valid_ldap_group?).and_return(true)
+      it "reuses an existing user matched by email and fills in the LDAP username" do
+        user = create(
+          :user,
+          :minimal,
+          username: "legacy-username",
+          email: "joe.bloggs@example.com",
+          given_name: "Legacy",
+          family_name: "Existing"
+        )
 
-          user.ldap_before_save
+        described_class.from_ldap_omniauth(auth, password)
 
-          expect(user.approved).to be(true)
-        end
+        expect(user.reload).to have_attributes(
+          username: "legacy-username",
+          email: "joe.bloggs@example.com",
+          given_name: "Legacy",
+          family_name: "Existing",
+          approved: true,
+          hospital_centre:
+        )
+        expect(user.roles.reload).to contain_exactly(clinical_role)
       end
 
-      context "when ldap_auto_approve_users is disabled" do
-        it "sets approved to false" do
-          allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(false)
-          allow(ldap_connection).to receive(:param)
-            .with("givenName")
-            .and_return("John")
-          allow(user).to receive(:in_valid_ldap_group?).and_return(true)
+      it "does not overwrite an existing user matched by username" do
+        encrypted_password = ::Devise::Encryptor.digest(described_class, "existing-password")
+        user = create(
+          :user,
+          :minimal,
+          username: "jbloggs",
+          email: "existing@example.com",
+          given_name: "Existing",
+          family_name: "Person",
+          encrypted_password:,
+          roles: [readonly_role]
+        )
 
-          user.ldap_before_save
+        described_class.from_ldap_omniauth(auth, password)
 
-          expect(user.approved).to be(false)
-        end
-      end
-
-      context "when user is not in a valid LDAP group" do
-        it "does not set approved status" do
-          allow(ldap_connection).to receive(:param)
-            .with("givenName")
-            .and_return("John")
-          allow(user).to receive(:in_valid_ldap_group?).and_return(false)
-
-          approved_before = user.approved
-          user.ldap_before_save
-
-          expect(user.approved).to eq(approved_before)
-        end
+        expect(user.reload).to have_attributes(
+          email: "existing@example.com",
+          given_name: "Existing",
+          family_name: "Person"
+        )
+        expect(user.encrypted_password).to eq(encrypted_password)
+        expect(user.roles.reload).to contain_exactly(clinical_role)
       end
     end
 
-    describe "#synchronize_ldap_roles" do
-      let!(:clinical_role) { create(:role, :clinical) }
-      let!(:readonly_role) { create(:role, :read_only) }
+    describe ".sync_roles" do
+      let!(:clinical_role) { create(:role, :clinical, ad_role_name: "renalware-clinical") }
+      let!(:readonly_role) { create(:role, :read_only, ad_role_name: "renalware-readonly") }
       let!(:prescriber_role) { create(:role, :prescriber) }
-      let!(:hd_prescriber_role) { create(:role, :hd_prescriber) }
-      let!(:admin_role) { create(:role, :admin) }
-      let!(:super_admin_role) { create(:role, :super_admin) }
-      let!(:devops_role) { create(:role, :devops) }
-      let(:ldap_connection) { instance_double(Ldap::Connection) }
 
-      before do
-        allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
+      it "reconciles managed roles and preserves unmanaged roles" do
+        user = create(:user, :minimal, roles: [readonly_role, prescriber_role])
+
+        described_class.sync_roles(
+          user,
+          [
+            "CN=Renalware-Clinical,OU=Groups,DC=example,DC=com"
+          ]
+        )
+
+        expect(user.roles.reload).to contain_exactly(clinical_role, prescriber_role)
       end
 
-      context "when LDAP is disabled" do
-        it "does not modify roles" do
-          allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
-          user = create(:user, role: nil, roles: [clinical_role])
+      it "accepts nil or plain role names and removes missing managed roles" do
+        user = create(:user, :minimal, roles: [clinical_role, prescriber_role])
 
-          expect { user.synchronize_ldap_roles }.not_to change { user.roles.reload.to_a }
-        end
+        described_class.sync_roles(user, nil)
+        expect(user.roles.reload).to contain_exactly(prescriber_role)
+
+        described_class.sync_roles(user, "RENALWARE-READONLY")
+        expect(user.roles.reload).to contain_exactly(readonly_role, prescriber_role)
       end
 
-      context "when user is in renalware LDAP group" do
-        before do
-          allow(ldap_connection).to receive(:user_in_group?) do |group|
-            group == Renalware.config.ldap_clinical_group
-          end
-        end
+      it "prefers clinical over readonly when both access levels are present" do
+        user = create(:user, :minimal, roles: [prescriber_role])
 
-        context "when user currently has read_only role" do
-          it "upgrades to clinical role" do
-            user = create(:user, role: nil, roles: [readonly_role])
+        described_class.sync_roles(
+          user,
+          [
+            "CN=Renalware-Clinical,OU=Groups,DC=example,DC=com",
+            "CN=Renalware-Readonly,OU=Groups,DC=example,DC=com"
+          ]
+        )
 
-            user.synchronize_ldap_roles
-
-            expect(user.roles.reload).to contain_exactly(clinical_role)
-          end
-
-          it "preserves prescriber roles during upgrade" do
-            user = create(:user, role: nil,
-                                 roles: [readonly_role, prescriber_role, hd_prescriber_role])
-
-            user.synchronize_ldap_roles
-
-            expect(user.roles.reload).to contain_exactly(
-              clinical_role,
-              prescriber_role,
-              hd_prescriber_role
-            )
-          end
-        end
-
-        context "when user already has clinical role" do
-          it "does not modify roles" do
-            user = create(:user, role: nil, roles: [clinical_role, prescriber_role],
-                                 updated_at: 2.minutes.ago)
-            initial_updated_at = user.reload.updated_at
-
-            user.synchronize_ldap_roles
-
-            expect(user.roles.reload).to contain_exactly(clinical_role, prescriber_role)
-            expect(user.reload.updated_at).to eq(initial_updated_at)
-          end
-        end
-      end
-
-      context "when user is in renalware-readonly LDAP group" do
-        before do
-          allow(ldap_connection).to receive(:user_in_group?) do |group|
-            group == Renalware.config.ldap_readonly_group
-          end
-        end
-
-        context "when user currently has clinical role" do
-          it "downgrades to read_only role" do
-            user = create(:user, role: nil, roles: [clinical_role])
-
-            user.synchronize_ldap_roles
-
-            expect(user.roles.reload).to contain_exactly(readonly_role)
-          end
-
-          it "preserves prescriber roles during downgrade" do
-            user = create(:user, role: nil,
-                                 roles: [clinical_role, prescriber_role, hd_prescriber_role])
-
-            user.synchronize_ldap_roles
-
-            expect(user.roles.reload).to contain_exactly(
-              readonly_role,
-              prescriber_role,
-              hd_prescriber_role
-            )
-          end
-        end
-
-        context "when user already has read_only role" do
-          it "does not modify roles" do
-            user = create(:user, role: nil, roles: [readonly_role, prescriber_role],
-                                 updated_at: 2.minutes.ago)
-            initial_updated_at = user.reload.updated_at
-
-            user.synchronize_ldap_roles
-
-            expect(user.roles.reload).to contain_exactly(readonly_role, prescriber_role)
-            expect(user.reload.updated_at).to eq(initial_updated_at)
-          end
-        end
-      end
-
-      context "when user is not in a valid LDAP group" do
-        let(:username) { "renalwareuser-1" }
-        let(:roles) { [clinical_role] }
-        let(:user) do
-          create(:user, role: nil, roles:, approved: true, username:, updated_at: 2.minutes.ago)
-        end
-
-        before do
-          allow(ldap_connection).to receive(:user_in_group?).and_return(true, false)
-        end
-
-        it "removes LDAP roles but keeps user approved" do
-          pending "need to think about logic here as validation says approved user must have a role"
-          user.roles = []
-          user.save!
-
-          user.synchronize_ldap_roles
-
-          expect(user.reload).to be_approved
-          expect(user.roles).to be_empty
-        end
-      end
-
-      context "when user has admin-level roles" do
-        it "does not modify super_admin role" do
-          allow(ldap_connection).to receive(:user_in_group?) do |group|
-            group == Renalware.config.ldap_clinical_group
-          end
-          user = create(:user, role: nil, roles: [super_admin_role], username: "superadmin-1")
-
-          user.synchronize_ldap_roles
-
-          expect(user.roles.reload).to contain_exactly(super_admin_role)
-        end
-
-        it "does not modify admin role" do
-          allow(ldap_connection).to receive(:user_in_group?) do |group|
-            group == Renalware.config.ldap_clinical_group
-          end
-          user = create(:user, role: nil, roles: [admin_role], username: "admin-1")
-
-          user.synchronize_ldap_roles
-
-          expect(user.roles.reload).to contain_exactly(admin_role)
-        end
-
-        it "does not modify devops role" do
-          allow(ldap_connection).to receive(:user_in_group?) do |group|
-            group == Renalware.config.ldap_clinical_group
-          end
-          user = create(:user, role: nil, roles: [devops_role], username: "devops-1")
-
-          user.synchronize_ldap_roles
-
-          expect(user.roles.reload).to contain_exactly(devops_role)
-        end
-      end
-
-      context "when LDAP group check fails" do
-        it "raises the LDAP error" do
-          allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-
-          user = create(:user, role: nil, roles: [clinical_role], approved: true)
-
-          allow(ldap_connection).to receive(:user_in_group?)
-            .and_raise(Renalware::Ldap::Error.new("LDAP error"))
-
-          expect { user.synchronize_ldap_roles }.to raise_error(Renalware::Ldap::Error)
-        end
+        expect(user.roles.reload).to contain_exactly(clinical_role, prescriber_role)
       end
     end
 
     describe "#valid_password?" do
       let(:ldap_connection) { instance_double(Ldap::Connection) }
-      let(:user) { create(:user, username: "testuser", approved: true) }
-
-      before do
-        create(:role, :clinical)
-        allow(Renalware.config).to receive(:ldap_authentication).and_return(true)
-        allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
-        # Stub group membership for user creation - we need the user to be in a group initially
-        allow(ldap_connection).to receive(:user_in_group?).and_return(true)
-      end
 
       context "when LDAP is disabled" do
         it "uses database authentication" do
-          allow(Renalware.config).to receive(:ldap_authentication).and_return(false)
+          allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(false)
           user = create(:user, password: "password123")
 
           expect(user.valid_password?("password123")).to be true
@@ -542,22 +393,25 @@ module Renalware
       end
 
       context "when LDAP is enabled" do
-        context "when user has valid LDAP credentials" do
-          it "returns true regardless of group membership" do
-            allow(ldap_connection).to receive(:valid_credentials?)
-              .and_return(true)
-
-            expect(user.valid_password?("correct_password")).to be true
-          end
+        before do
+          allow(Renalware.config).to receive(:ldap_authentication_enabled?).and_return(true)
+          allow(Ldap::Connection).to receive(:new).and_return(ldap_connection)
         end
 
-        context "when user has invalid LDAP credentials" do
-          it "returns false" do
-            allow(ldap_connection).to receive(:valid_credentials?)
-              .and_return(false)
+        it "validates the password against LDAP" do
+          user = create(:user, username: "testuser", password: "password123")
+          allow(ldap_connection).to receive(:valid_credentials?).and_return(true)
 
-            expect(user.valid_password?("wrong_password")).to be false
-          end
+          expect(user.valid_password?("correct_password")).to be true
+          expect(Ldap::Connection).to have_received(:new)
+            .with(username: "testuser", password: "correct_password")
+        end
+
+        it "returns false when LDAP rejects the password" do
+          user = create(:user, username: "testuser", password: "password123")
+          allow(ldap_connection).to receive(:valid_credentials?).and_return(false)
+
+          expect(user.valid_password?("wrongpassword")).to be false
         end
       end
     end

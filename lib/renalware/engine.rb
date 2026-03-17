@@ -36,6 +36,7 @@ require "nokogiri"
 require "ox"
 require "omniauth"
 require "omniauth-entra-id"
+require "omniauth-ldap"
 require "omniauth/rails_csrf_protection"
 require "pagy"
 require "paper_trail"
@@ -310,16 +311,6 @@ module Renalware
     end
 
     config.to_prepare do
-      # Register custom LDAP authenticatable module with Devise so it can be used in devise() calls
-      ::Devise.add_module(:ldap_authenticatable, strategy: true, model: true)
-
-      # Eagerly load Devise strategies so they register with Warden during boot
-      # These files contain Warden::Strategies.add calls that need to execute before authentication
-      # Cannot be lazy-loaded by Zeitwerk as they need to run during initialization
-      require "devise/models/ldap_authenticatable"
-      require "devise/strategies/renalware_database_authenticatable"
-      require "devise/strategies/ldap_authenticatable"
-
       Rails
         .application
         .config
