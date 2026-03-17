@@ -5,6 +5,17 @@ module Renalware
     class MeasurementUnit < ApplicationRecord
       validates :name, presence: true
 
+      # Map our dm+d unit of measure to an equivalent one if there is one.
+      # Given a dmd uom like 'litre', try to match against UKRDC UOM attributes
+      # - name eg L => no match
+      # - description eg "litres" => no match
+      # - alias array eg ["litre"] => match
+      def self.for_dmd_name(name)
+        where(name:)
+          .or(where(description: name)
+            .or(where("? = ANY(alias)", name))).first
+      end
+
       # A friendly string containing the name followed by the description (if present)
       # in parentheses e.g. "l (litres)"
       def title

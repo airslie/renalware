@@ -7,5 +7,10 @@ FactoryBot.define do
       code { "capd_la" }
       name { "CAPD LA" }
     end
+
+    trait :hd do
+      code { "hd" }
+      name { "HD" }
+    end
   end
 end

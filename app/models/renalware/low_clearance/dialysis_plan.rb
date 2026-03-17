@@ -5,6 +5,11 @@ module Renalware
   module LowClearance
     class DialysisPlan < ApplicationRecord
       acts_as_paranoid
+      belongs_to :ukrdc_assessment_outcome,
+                 class_name: "Renalware::UKRDC::Assessments::Outcome",
+                 foreign_key: :ukrdc_assessment_outcome_code,
+                 primary_key: :code,
+                 optional: true
       validates :code, presence: true
       validates :name, presence: true
     end

@@ -58,6 +58,19 @@ module Renalware
         performed_on && Time.zone.parse(performed_on.to_s)
       end
 
+      def cold_ischaemic_time_minutes
+        return if cold_ischaemic_time.blank?
+
+        seconds =
+          if cold_ischaemic_time.is_a?(String)
+            Duration.from_string(cold_ischaemic_time).seconds
+          else
+            cold_ischaemic_time.to_i
+          end
+
+        (seconds / 60).to_s
+      end
+
       # TRA76 is the type of donor. For us it is a combination of donor type and donor relationship
       # (if live related).
       # Unhandled options:

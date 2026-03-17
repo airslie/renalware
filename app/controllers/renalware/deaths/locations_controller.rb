@@ -51,7 +51,7 @@ module Renalware
       def location_params
         params
           .require(:location)
-          .permit(:name, :rr_outcome_code, :rr_outcome_text)
+          .permit(:name, :ukrdc_assessment_outcome_code, :rr_outcome_text)
       end
     end
   end

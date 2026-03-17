@@ -15,29 +15,29 @@ en:
         code: "dm+d code"
       renalware/medications/prescription_termination:
         notes: Termination notes
-  enumerize:
-    renalware:
-      medications:
-        prescription:
-          dose_unit:
-            ampoule: ampoule
-            capsule: capsule
-            drop: drop
-            gram: g
-            international_unit: iu
-            microgram: microgram
-            milligram: mg
-            millilitre: ml
-            millimole: mmol
-            nanogram: ng
-            patch: patch
-            puff: puff
-            sachet: sachet
-            tab: tab
-            tablespoon: tbsp
-            tablet: tablet
-            teaspoon: tsp
-            unit: unit
+  # enumerize:
+  #   renalware:
+  #     medications:
+  #       prescription:
+  #         dose_unit:
+  #           ampoule: ampoule
+  #           capsule: capsule
+  #           drop: drop
+  #           gram: g
+  #           international_unit: iu
+  #           microgram: microgram
+  #           milligram: mg
+  #           millilitre: ml
+  #           millimole: mmol
+  #           nanogram: ng
+  #           patch: patch
+  #           puff: puff
+  #           sachet: sachet
+  #           tab: tab
+  #           tablespoon: tbsp
+  #           tablet: tablet
+  #           teaspoon: tsp
+  #           unit: unit
   renalware:
     medications:
       prescriptions:

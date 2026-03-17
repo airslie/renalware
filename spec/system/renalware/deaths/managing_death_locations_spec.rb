@@ -16,6 +16,7 @@ describe "Death location management" do
   end
 
   it "enables me to add a location" do
+    hospice = create(:ukrdc_assessment_outcome, :hospice)
     login_as_super_admin
 
     visit deaths_locations_path
@@ -25,15 +26,13 @@ describe "Death location management" do
     end
 
     fill_in "Name", with: "New Location"
-    fill_in "Renal Registry Outcome Code", with: "123"
-    fill_in "Renal Registry Outcome Text", with: "Current Home1"
+    select "Hospice", from: "Renal Registry Outcome Code"
     click_on "Create"
 
     expect(Renalware::Deaths::Location.count).to eq(1)
     expect(Renalware::Deaths::Location.first).to have_attributes(
       name: "New Location",
-      rr_outcome_code: 123,
-      rr_outcome_text: "Current Home1"
+      ukrdc_assessment_outcome_code: hospice.code
     )
   end
 
@@ -41,6 +40,7 @@ describe "Death location management" do
     login_as_super_admin
 
     location = create(:death_location, :home)
+    hospice = create(:ukrdc_assessment_outcome, :hospice)
 
     visit deaths_locations_path
 
@@ -49,14 +49,12 @@ describe "Death location management" do
     end
 
     fill_in "Name", with: "Home1"
-    fill_in "Renal Registry Outcome Code", with: "123"
-    fill_in "Renal Registry Outcome Text", with: "Current Home1"
+    select "Hospice", from: "Renal Registry Outcome Code"
     click_on "Save"
 
     expect(location.reload).to have_attributes(
       name: "Home1",
-      rr_outcome_code: 123,
-      rr_outcome_text: "Current Home1"
+      ukrdc_assessment_outcome_code: hospice.code
     )
   end
 

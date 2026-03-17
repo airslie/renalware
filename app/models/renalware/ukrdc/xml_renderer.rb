@@ -35,7 +35,7 @@ module Renalware
           Ox.default_options = { no_empty: false, encoding: "UTF-8" }
           doc = Ox::Document.new
           doc << instruct_element
-          doc << UKRDC::Outgoing::Rendering::Patient.new(locals).xml
+          doc << patient_class_for_current_schema_version.new(locals).xml
           Ox.dump(doc)
         end
       end
@@ -52,6 +52,16 @@ module Renalware
           instruct[:version] = "1.0"
           instruct[:encoding] = "UTF-8"
         end
+      end
+
+      # We support multiple UKRDC implementations - eg v3, v4
+      # (Note UKRDC v4 corresponds to Renal Registry dataset v5).
+      # The starting point for rendering a UKRDC patient to XML is the top-level
+      # Outgoing::[ukrdc schema version]::Patient class, so here we return the relevant class.
+      # A specific schema version can be specified via ctor on the UKRDC::XsdSchema object
+      # which is injected into this renderer class.
+      def patient_class_for_current_schema_version
+        Renalware::UKRDC::Outgoing::Rendering.const_get("V#{schema.major_version}")::Patient
       end
     end
   end

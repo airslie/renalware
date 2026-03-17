@@ -1,7 +1,14 @@
 module Renalware::Drugs::DMDMigration
   describe UnitOfMeasureMigrator do
     let(:unit_of_measure) { create(:drug_unit_of_measure, name: "capsule") }
-    let(:prescription) { create(:prescription, dose_unit: "capsule") }
+    let(:prescription) do
+      create(
+        :prescription,
+        dose_unit: "capsule",
+        unit_of_measure: nil,
+        allow_deprecated_dose_unit_to_be_set: true
+      )
+    end
 
     before do
       unit_of_measure && prescription

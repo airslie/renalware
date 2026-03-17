@@ -98,7 +98,7 @@ module Renalware
       def default_renderer
         Renalware::UKRDC::XmlRenderer.new(
           schema: schema,
-          locals: { patient: presenter_for(patient) }
+          locals: { patient: presenter_for(patient), batch_number: batch.number }
         )
       end
 

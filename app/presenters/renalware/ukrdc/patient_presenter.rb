@@ -1,5 +1,6 @@
 module Renalware
   module UKRDC
+    # rubocop:disable Metrics/ClassLength
     class PatientPresenter < SimpleDelegator
       UKRDC_MAX_PHONE_LEN = 80
 
@@ -185,6 +186,13 @@ module Renalware
         Transplants::RecipientOperation.for_patient(id).order(performed_on: :asc)
       end
 
+      def assessments
+        [
+          NullObject.instance,
+          NullObject.instance
+        ]
+      end
+
       private
 
       def comorbidity_date_time_from_year(year)
@@ -227,5 +235,6 @@ module Renalware
         @hd_patient ||= Renalware::HD::PatientPresenter.new(self)
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end

@@ -48,5 +48,5 @@
           td= location.patients_actual_count
           td= l(location.created_at)
           td= l(location.deleted_at)
-          td.bg-pink-50= location.rr_outcome_code
-          td.bg-pink-50= location.rr_outcome_text
+          td.bg-pink-50= location.ukrdc_assessment_outcome&.code
+          td.bg-pink-50= location.ukrdc_assessment_outcome&.description

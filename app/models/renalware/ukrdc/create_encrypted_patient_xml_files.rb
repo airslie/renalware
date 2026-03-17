@@ -1,4 +1,5 @@
 require "gpg_encrypt_folder"
+require "benchmark"
 
 module Renalware
   module UKRDC

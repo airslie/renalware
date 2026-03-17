@@ -44,11 +44,12 @@ Given /^Patty is currently prescribed Ephedrine Tablet (yes|no)$/ do |prescribed
   if prescribed == "yes"
     drug = Renalware::Drugs::Drug.find_by(name: "Ephedrine Tablet")
     route = Renalware::Medications::MedicationRoute.find_by(name: "Oral")
+    mg = create(:drug_unit_of_measure, :mg)
     @patty.prescriptions.create!(
       drug: drug,
       medication_route: route,
       dose_amount: "20",
-      dose_unit: "milligram",
+      unit_of_measure: mg,
       frequency: "daily",
       prescribed_on: 1.week.ago,
       provider: 0,

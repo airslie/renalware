@@ -1,4 +1,5 @@
 describe "View a list of home delivery prescriptions filtered by delivery dates" do
+  let(:mg) { create(:drug_unit_of_measure, :mg) }
   let(:esa_drug_type) { create(:drug_type, :esa) }
   let(:esa_drug) do
     create(:drug, name: "esa drug").tap { it.drug_types << esa_drug_type }
@@ -20,7 +21,7 @@ describe "View a list of home delivery prescriptions filtered by delivery dates"
       drug:,
       by: user,
       dose_amount: "100",
-      dose_unit: "milligram",
+      unit_of_measure: mg,
       patient:,
       medication_route: create(:medication_route, :po),
       prescribed_on: "2020-01-01",

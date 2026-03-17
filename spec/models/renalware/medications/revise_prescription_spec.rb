@@ -2,13 +2,14 @@ module Renalware::Medications
   describe RevisePrescription do
     let(:patient) { create(:patient, :minimal) }
     let(:user) { create(:user, :minimal) }
+    let(:mg) { create(:drug_unit_of_measure, :mg) }
     let(:original_dose_amount) { "100" }
     let(:original_prescription) do
       create(
         :prescription,
         patient:,
-        dose_amount: original_dose_amount,
-        dose_unit: "milligram"
+        unit_of_measure: mg,
+        dose_amount: original_dose_amount
       )
     end
 
@@ -41,7 +42,7 @@ module Renalware::Medications
         end
 
         it "discards the original (legacy) dose_unit" do
-          expect(original_prescription.dose_unit).to eq("milligram")
+          expect(original_prescription.dose_unit).to be_nil
           expect(patient.prescriptions.current.first.dose_unit).to be_nil
         end
       end
@@ -79,8 +80,8 @@ module Renalware::Medications
           create(
             :prescription,
             patient:,
+            unit_of_measure: mg,
             dose_amount: original_dose_amount,
-            dose_unit: "milligram",
             prescribed_on: original_prescribed_on
           )
         end
@@ -120,8 +121,8 @@ module Renalware::Medications
           create(
             :prescription,
             patient:,
+            unit_of_measure: mg,
             dose_amount: original_dose_amount,
-            dose_unit: "milligram",
             prescribed_on: original_prescribed_on
           ).tap { |pres| pres.terminate(by: user, terminated_on: original_terminated_on).save! }
         end

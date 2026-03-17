@@ -68,6 +68,7 @@ search:
     - "app/presenters"
     - "app/views"
     - "app/services"
+    - "app/queries"
     - "app/view_components"
   paths: *relative_paths
   relative_roots: *relative_paths

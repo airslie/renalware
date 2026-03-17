@@ -4,6 +4,13 @@ module Renalware
       include RansackAll
       extend Enumerize
 
+      UNIT_TYPE_RR8_MAP = {
+        hospital: "HOSP",
+        satellite: "SATL",
+        home: "HOME",
+        incentre: "INCENTRE"
+      }.freeze
+
       belongs_to :hospital_centre,
                  class_name: "Hospitals::Centre",
                  touch: true,
@@ -29,6 +36,11 @@ module Renalware
 
       def to_s
         "#{name} (#{unit_code})"
+      end
+
+      # Map unit_type to its equivalent Renal Registry RR8 code.
+      def unit_type_rr8
+        UNIT_TYPE_RR8_MAP.fetch(unit_type.to_sym, "INCENTRE")
       end
     end
   end
