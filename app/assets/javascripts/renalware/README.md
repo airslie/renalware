@@ -11,12 +11,13 @@ See https://github.com/rails/sprockets#link_directory
 
 ## rollupjs
 
-We use rollupjs to compile js and css assets.
+We use rollupjs to compile the modern JS entrypoint into `app/assets/builds`,
+which is then served by Sprockets alongside the legacy bundle during the migration.
 
-### rollup_compiled.js
+### renalware.js
 
-This is the js output from ruinning `rollup --config rollup.config.js`
-and is the compiled output from app/javascripts/renalware/application.js.
+This is the JS output from running `rollup --config rollup.config.js`
+and is compiled from `app/javascript/renalware/application.js`.
 
 You need to have run `yarn install` before running rollup.
 

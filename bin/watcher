@@ -5,7 +5,7 @@
 # have been implemented. This seems to be more common on Linux than MacOS.
 
 WATCHED_DIR="app"
-EXCLUDE_REGEX="built.js"
+EXCLUDE_REGEX="(built|renalware)\\.js"
 DEBOUNCE_TIME=2   # seconds to wait for event quiet period
 COMMAND=$1
 

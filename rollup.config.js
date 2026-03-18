@@ -16,7 +16,7 @@ export default {
   context: "window",
   input: "app/javascript/renalware/application.js",
   output: {
-    file: pkg.main,
+    file: "app/assets/builds/renalware.js",
     format: "esm",
     //format: "es",
     inlineDynamicImports: true,

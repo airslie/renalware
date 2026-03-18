@@ -1,7 +1,7 @@
 {
   "name": "renalware-core",
   "version": "2.2.11",
-  "main": "app/assets/javascripts/renalware/built.js",
+  "main": "app/assets/builds/renalware.js",
   "repository": "https://github.com/airslie/renalware-core.git",
   "author": "Airslie Ltd",
   "license": "MIT",

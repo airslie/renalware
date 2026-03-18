@@ -8,6 +8,13 @@ import "whatwg-fetch"
 import "./controllers"
 import { Turbo } from "@hotwired/turbo-rails"
 
+if (window.Renalware && Renalware.Configuration) {
+  Renalware.Configuration.init({
+    disable_inputs_controlled_by_tissue_typing_feed: false,
+    disable_inputs_controlled_by_demographics_feed: false
+  })
+}
+
 Turbo.session.drive = false // By default disable Turbo on all pages
 
 // Handle the situation where a modal has created an object and the controller wants to
