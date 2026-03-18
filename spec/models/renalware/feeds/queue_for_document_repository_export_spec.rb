@@ -1,5 +1,5 @@
 module Renalware
-  describe Letters::QueueForDocumentRepositoryExport do
+  describe Feeds::QueueForDocumentRepositoryExport do
     include LettersSpecHelper
 
     let(:patient) { create(:letter_patient, :minimal) }
@@ -19,7 +19,7 @@ module Renalware
       allow(Renalware.config).to receive(:feeds_outgoing_documents_enabled).and_return(true)
 
       expect {
-        described_class.call(letter: approved_letter)
+        described_class.call(renderable: approved_letter, by: user)
       }.to change(Renalware::Feeds::OutgoingDocument, :count).by(1)
 
       outgoing_document = Renalware::Feeds::OutgoingDocument.last
@@ -32,8 +32,23 @@ module Renalware
       allow(Renalware.config).to receive(:feeds_outgoing_documents_enabled).and_return(false)
 
       expect {
-        described_class.call(letter: approved_letter)
+        described_class.call(renderable: approved_letter, by: user)
       }.not_to change(Renalware::Feeds::OutgoingDocument, :count)
+    end
+
+    it "creates an outgoing document for an event renderable" do
+      event = create(:simple_event, by: user)
+
+      allow(Renalware.config).to receive(:feeds_outgoing_documents_enabled).and_return(true)
+
+      expect {
+        described_class.call(renderable: event, by: user)
+      }.to change(Renalware::Feeds::OutgoingDocument, :count).by(1)
+
+      outgoing_document = Renalware::Feeds::OutgoingDocument.last
+
+      expect(outgoing_document.renderable).to eq(event)
+      expect(outgoing_document.created_by).to eq(user)
     end
   end
 end

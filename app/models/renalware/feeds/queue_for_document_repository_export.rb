@@ -1,10 +1,13 @@
 module Renalware
-  module Letters
+  module Feeds
     class QueueForDocumentRepositoryExport
-      include Callable
+      def self.call(...)
+        new(...).call
+      end
 
-      def initialize(letter:)
-        @letter = letter
+      def initialize(renderable:, by:)
+        @renderable = renderable
+        @by = by
       end
 
       def call
@@ -16,12 +19,12 @@ module Renalware
         # HL7 message with a base64-encoded PDF, and send this HL7 message to the
         # MSE TIE before making a PUT call to update RW to say the message was sent
         # successfully.
-        Renalware::Feeds::OutgoingDocument.create!(renderable: letter, by: letter.approved_by)
+        OutgoingDocument.create!(renderable:, by:)
       end
 
       private
 
-      attr_reader :letter
+      attr_reader :renderable, :by
     end
   end
 end

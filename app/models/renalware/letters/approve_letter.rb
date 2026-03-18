@@ -21,7 +21,7 @@ module Renalware
           store_page_count
           archive_content(by: by)
           set_gp_send_status
-          QueueForDocumentRepositoryExport.call(letter: letter)
+          Feeds::QueueForDocumentRepositoryExport.call(renderable: letter, by: letter.approved_by)
           Transports::Mesh::QueueLetterDelivery.call(
             letter: letter,
             register_after_commit: method(:after_commit)
