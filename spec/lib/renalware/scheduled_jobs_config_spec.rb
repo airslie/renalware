@@ -1,5 +1,18 @@
 module Renalware
   describe "Renalware::ScheduledJobs.config", type: :model do
+    around do |example|
+      original_value = ENV.fetch("CUSTOM_SCHEDULED_JOBS", nil)
+      ENV.delete("CUSTOM_SCHEDULED_JOBS")
+
+      example.run
+    ensure
+      if original_value.nil?
+        ENV.delete("CUSTOM_SCHEDULED_JOBS")
+      else
+        ENV["CUSTOM_SCHEDULED_JOBS"] = original_value
+      end
+    end
+
     before do
       allow(Renalware.config).to receive_messages(
         monitoring_mirth_enabled: true,
@@ -35,6 +48,42 @@ module Renalware
           :ukrdc_export,
           :ukrdc_sftp_transfer
         ]
+      )
+    end
+
+    it "merges in custom jobs from JSON in ENV" do
+      ENV["CUSTOM_SCHEDULED_JOBS"] = {
+        generate_missing_urr: {
+          cron: "1 5-23/1 * * *",
+          args: ["bundle exec rake pathology:generate_missing_urr"],
+          class: "Renalware::InvokeCommandJob",
+          description: "Generate a URR value if we find a P_URE result"
+        }
+      }.to_json
+
+      expect(jobs_config.fetch(:generate_missing_urr)).to eq(
+        cron: "1 5-23/1 * * *",
+        args: ["bundle exec rake pathology:generate_missing_urr"],
+        class: "Renalware::InvokeCommandJob",
+        description: "Generate a URR value if we find a P_URE result"
+      )
+    end
+
+    it "handles double-encoded JSON in ENV" do
+      ENV["CUSTOM_SCHEDULED_JOBS"] = {
+        ukrdc_cohort_housekeeping: {
+          cron: "every day at 4am",
+          class: "Renalware::System::SqlFunctionJob",
+          args: ["renalware_mse.ukrdc_update_send_to_renalreg()"],
+          description: "Mark patients as send to the Renal Registry. See function for logic"
+        }
+      }.to_json.to_json
+
+      expect(jobs_config.fetch(:ukrdc_cohort_housekeeping)).to eq(
+        cron: "every day at 4am",
+        class: "Renalware::System::SqlFunctionJob",
+        args: ["renalware_mse.ukrdc_update_send_to_renalreg()"],
+        description: "Mark patients as send to the Renal Registry. See function for logic"
       )
     end
   end

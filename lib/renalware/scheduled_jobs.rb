@@ -10,6 +10,7 @@ module Renalware
         .merge(gp_connect_jobs)
         .merge(ukrdc_jobs)
         .merge(housekeeping_jobs)
+        .merge(custom_jobs)
     end
 
     # TODO: below
@@ -20,6 +21,7 @@ module Renalware
     #   args: ["renalware.ukrdc_update_send_to_renalreg()"],
     #   description: "Demo-only scheduled SQL function execution."
     # }
+    # - allow hospitals to define additional jobs via CUSTOM_SCHEDULED_JOBS JSON env var
     def base_jobs
       {
         ods_sync: {
@@ -156,6 +158,22 @@ module Renalware
           description: "SFTP files generated earlier to the UKRDC"
         }
       }
+    end
+
+    def custom_jobs
+      raw = ENV.fetch("CUSTOM_SCHEDULED_JOBS", "").strip
+      return {} if raw.blank?
+
+      parsed = JSON.parse(raw)
+      parsed = JSON.parse(parsed) if parsed.is_a?(String)
+
+      unless parsed.is_a?(Hash)
+        raise ArgumentError, "CUSTOM_SCHEDULED_JOBS must decode to a JSON object"
+      end
+
+      parsed.deep_symbolize_keys
+    rescue JSON::ParserError => e
+      raise ArgumentError, "CUSTOM_SCHEDULED_JOBS contains invalid JSON: #{e.message}"
     end
   end
   # rubocop:enable Metrics/MethodLength
