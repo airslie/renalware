@@ -32,16 +32,12 @@ module Renalware
       rescue Feeds::DuplicateMessageError => e
         Rails.logger.warn("Rejected duplicate HL7 message: #{e.message}")
       rescue StandardError => e
-        notify_exception(e)
+        Rails.error.report(e, handled: false, source: "application")
         raise e
       end
       # rubocop:enable Metrics/MethodLength
 
       private
-
-      def notify_exception(exception)
-        Renalware::ExceptionNotifier.notify(exception)
-      end
 
       def allow_listeners_to_process_the_message
         message_to_broadcast = "#{hl7_message.message_type.downcase}_message_arrived"

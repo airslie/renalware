@@ -1,12 +1,16 @@
 class ApplicationJob < ActiveJob::Base
   rescue_from StandardError do |exception|
-    span = OpenTelemetry::Trace.current_span
+    Rails.error.report(
+      exception,
+      handled: false,
+      source: "application.active_job",
+      context: {
+        job: self.class.name || self.class.to_s,
+        queue_name: queue_name,
+        job_id: job_id
+      }
+    )
 
-    if span&.recording?
-      span.record_exception(exception)
-      span.status = OpenTelemetry::Trace::Status.error("job failed")
-    end
-
-    raise exception
+    raise
   end
 end

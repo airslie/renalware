@@ -21,4 +21,6 @@ if !Rails.env.test? && ENV.fetch("ENABLE_OPENTELEMETRY", 0).to_i == 1
       )
     )
   end
+
+  Rails.error.subscribe(OpenTelemetryErrorSubscriber.new)
 end

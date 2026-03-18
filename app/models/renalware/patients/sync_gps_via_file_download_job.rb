@@ -14,7 +14,7 @@ module Renalware
 
       # Do not retry this job
       discard_on(StandardError) do |_job, exception|
-        Renalware::ExceptionNotifier.notify(exception)
+        Rails.error.report(exception, handled: false, source: "application.active_job")
         Rails.logger.error exception
       end
 
