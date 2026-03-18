@@ -166,6 +166,9 @@ module Renalware
     config_accessor(:fallback_email_address_for_test_messages) do
       ENV.fetch("FALLBACK_EMAIL_ADDRESS_FOR_TEST_MESSAGES", nil)
     end
+    config_accessor(:ukrdc_enabled) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("UKRDC_ENABLED", "true"))
+    end
     config_accessor(:ukrdc_include_letters) do
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("UKRDC_INCLUDE_LETTERS", "true"))
     end
@@ -606,6 +609,12 @@ module Renalware
     config_accessor(:messaging_recipient_warn_if_not_signed_in_for_days) {
       ActiveModel::Type::Integer.new.cast(
         ENV.fetch("MESSAGING_RECIPIENT_WARN_IF_NOT_SIGNED_IN_FOR_DAYS", 5)
+      )
+    }
+
+    config_accessor(:housekeeping_jobs_enabled) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("HOUSEKEEPING_JOBS_ENABLED", "true")
       )
     }
 

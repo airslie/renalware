@@ -5,7 +5,9 @@ module Renalware
         monitoring_mirth_enabled: true,
         users_expire_after: 1,
         send_gp_letters_over_mesh: true,
-        process_hl7_via_raw_messages_table: true
+        process_hl7_via_raw_messages_table: true,
+        housekeeping_jobs_enabled: true,
+        ukrdc_enabled: true
       )
     end
 
@@ -17,6 +19,7 @@ module Renalware
       expect(jobs_config.keys.sort).to eq(
         [
           :audit_patient_hd_statistics,
+          :database_housekeeping,
           :dmd_sync,
           :expire_inactive_users,
           :hd_scheduling_diary_housekeeping,
@@ -29,7 +32,8 @@ module Renalware
           :reporting_send_daily_summary_email,
           :schedule_refresh_of_materialized_views,
           :terminate_given_but_unwitnessed_hd_stat_prescriptions,
-          :ukrdc_export
+          :ukrdc_export,
+          :ukrdc_sftp_transfer
         ]
       )
     end

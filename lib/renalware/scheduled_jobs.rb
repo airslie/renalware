@@ -5,9 +5,11 @@ module Renalware
 
     def config
       base_jobs
-        .merge(feed_import_jobs_if_enabled)
-        .merge(mirth_monitoring_jobs_if_enabled)
-        .merge(gp_connect_jobs_if_enabled)
+        .merge(feed_import_jobs)
+        .merge(mirth_monitoring_jobs)
+        .merge(gp_connect_jobs)
+        .merge(ukrdc_jobs)
+        .merge(housekeeping_jobs)
     end
 
     # TODO: below
@@ -18,12 +20,6 @@ module Renalware
     #   args: ["renalware.ukrdc_update_send_to_renalreg()"],
     #   description: "Demo-only scheduled SQL function execution."
     # }
-    # - in dev test disable certain ones eg
-    # ).except(
-    #   :ods_sync,
-    #   :ukrdc_export,
-    #   :reporting_send_daily_summary_email
-    # )
     def base_jobs
       {
         ods_sync: {
@@ -63,13 +59,6 @@ module Renalware
                        "to configured recipients"
         },
 
-        ukrdc_export: {
-          cron: "Mon-Fri 1am",
-          class: "Renalware::InvokeCommandJob",
-          args: ["bundle exec rake ukrdc:export"],
-          description: "Export UKRDC xml - initially to /apps/current/"
-        },
-
         dmd_sync: {
           cron: "every day at 3am",
           class: "Renalware::Drugs::DMD::SynchroniserJob",
@@ -81,18 +70,11 @@ module Renalware
           cron: "every day at 2am",
           class: "Renalware::HD::TerminateAdministeredUnwitnessedStatPrescriptionsJob",
           description: "Does what it says on the tin :)"
-        },
-
-        schedule_refresh_of_materialized_views: {
-          cron: "every day at 10:00pm",
-          class: "Renalware::System::RefreshMaterializedViewsJob",
-          description: "Inspects system_view_metadata and schedules view refresh jobs " \
-                       "without creating duplicates."
         }
       }
     end
 
-    def feed_import_jobs_if_enabled
+    def feed_import_jobs
       return {} unless Renalware.config.process_hl7_via_raw_messages_table
 
       {
@@ -104,7 +86,7 @@ module Renalware
       }
     end
 
-    def mirth_monitoring_jobs_if_enabled
+    def mirth_monitoring_jobs
       return {} unless Renalware.config.monitoring_mirth_enabled
 
       {
@@ -116,7 +98,7 @@ module Renalware
       }
     end
 
-    def gp_connect_jobs_if_enabled
+    def gp_connect_jobs
       return {} unless Renalware.config.send_gp_letters_over_mesh == true
 
       {
@@ -136,6 +118,42 @@ module Renalware
           cron: "every 2 minutes",
           class: "Renalware::Letters::Transports::Mesh::ReconcileOperationsJob",
           description: ""
+        }
+      }
+    end
+
+    def housekeeping_jobs
+      return {} unless Renalware.config.housekeeping_jobs_enabled
+
+      {
+        schedule_refresh_of_materialized_views: {
+          cron: "every day at 10:00pm",
+          class: "Renalware::System::RefreshMaterializedViewsJob",
+          description: "Inspects system_view_metadata and schedules view refresh jobs " \
+                       "without creating duplicates."
+        },
+        database_housekeeping: {
+          cron: "every day at 11:00pm",
+          args: ["bundle exec rake housekeeping"],
+          class: "Renalware::InvokeCommandJob"
+        }
+      }
+    end
+
+    def ukrdc_jobs
+      return {} unless Renalware.config.ukrdc_enabled
+
+      {
+        ukrdc_export: {
+          cron: "Mon-Fri 1am",
+          class: "Renalware::InvokeCommandJob",
+          args: ["bundle exec rake ukrdc:export"],
+          description: "Export UKRDC xml - initially to /apps/current/"
+        },
+        ukrdc_sftp_transfer: {
+          cron: "every day at 5:30am",
+          class: "Renalware::UKRDC::Outgoing::TransferFilesJob",
+          description: "SFTP files generated earlier to the UKRDC"
         }
       }
     end
