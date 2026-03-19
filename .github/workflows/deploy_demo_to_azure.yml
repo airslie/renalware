@@ -1,9 +1,9 @@
-name: Build and Push Image to ACR (feature/de-engine merge)
+name: Build and Push Image to ACR (main merge)
 
 on:
   pull_request:
     branches:
-      - feature/de-engine
+      - main
     types:
       - closed
 
@@ -65,7 +65,7 @@ jobs:
             ASSET_CACHE_BUSTER=${{ github.sha }}
           tags: |
             ${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}
-            ${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:feature-de-engine-latest
+            ${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:demo-latest
           # cache-from: type=registry,ref=${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:buildcache-v2
           # cache-to: type=registry,ref=${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:buildcache-v2,mode=max
 
