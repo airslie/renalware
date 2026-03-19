@@ -87,8 +87,11 @@ ARG ASSET_CACHE_BUSTER=1
 # This also ensures tailwind.css is generated before Sprockets compiles and fingerprints assets.
 RUN rm -rf public/assets tmp/cache/assets && \
     echo "ASSET_CACHE_BUSTER=${ASSET_CACHE_BUSTER}" && \
-    SECRET_KEY_BASE_DUMMY=1 ./bin/rails tailwindcss:build assets:precompile && \
-    ruby -rjson -e 'manifest = Dir["public/assets/.sprockets-manifest-*.json"].max or abort("missing sprockets manifest"); assets = JSON.parse(File.read(manifest)).fetch("assets"); abort("tailwind.css missing from asset manifest") unless assets.key?("tailwind.css")'
+    SECRET_KEY_BASE_DUMMY=1 ./bin/rails tailwindcss:build --trace && \
+    test -f app/assets/builds/tailwind.css && \
+    SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile --trace && \
+    ls -la public/assets && \
+    ruby -rjson -e 'manifest = Dir["public/assets/.sprockets-manifest-*.json"].max or abort("missing sprockets manifest"); assets = JSON.parse(File.read(manifest)).fetch("assets"); abort("tailwind.css missing from asset manifest") unless assets.key?("tailwind.css"); puts "tailwind asset => #{assets.fetch("tailwind.css")}"'
 
 
 # Final stage for app image
