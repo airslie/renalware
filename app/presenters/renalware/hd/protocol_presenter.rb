@@ -14,7 +14,7 @@ module Renalware
 
       def latest_dry_weight
         @latest_dry_weight ||= begin
-          Clinical::DryWeight.for_patient(patient).order(assessed_on: :desc).first
+          Clinical::DryWeight.for_patient(patient).ordered.first
         end
       end
 
