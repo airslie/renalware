@@ -10,6 +10,7 @@ module Renalware
       def call
         search.result.includes(
           :clinic,
+          :clinic_visit,
           :consultant,
           patient: [current_modality: [:description]]
         )

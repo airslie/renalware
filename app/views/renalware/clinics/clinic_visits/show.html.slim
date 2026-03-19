@@ -1,0 +1,14 @@
+= content_for(:actions) do
+  - if policy(clinic_visit).edit?
+    = link_to t("btn.edit"),
+              edit_patient_clinic_visit_path(patient, clinic_visit),
+              class: "button"
+
+= within_patient_layout( \
+    title: "Clinic Visit",
+    breadcrumbs: breadcrumb_for("Clinic Visits", patient_clinic_visits_path(patient)) \
+  ) do
+
+  .document
+    = render partial: clinic_visit.to_partial_path,
+             locals: { event: clinic_visit }

@@ -54,6 +54,17 @@ describe "Clinic Visits Management" do
     end
   end
 
+  describe "GET show" do
+    before do
+      clinic_visit = create(:clinic_visit, patient:, by: user)
+      get patient_clinic_visit_path(patient_id: patient.to_param, id: clinic_visit.to_param)
+    end
+
+    it "responds successfully" do
+      expect(response).to be_successful
+    end
+  end
+
   describe "PUT update" do
     before do
       clinic_visit = create(:clinic_visit, patient:, by: user)

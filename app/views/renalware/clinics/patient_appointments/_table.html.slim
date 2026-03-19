@@ -34,11 +34,13 @@
           tbody(class=("bg-green-100" if appointment.becomes_visit_id.present?))
             tr
               td= row_toggler
-              td.nowrap.text-center
-                - if appointment.becomes_visit_id.present?
-                  = link_to "View",
-                            edit_patient_clinic_visit_path(appointment.patient,
-                                                          id: appointment.becomes_visit_id)
+              td.nowrap.text-center.actions
+                - if (clinic_visit = appointment.clinic_visit).present?
+                  = link_to "View", patient_clinic_visit_path(appointment.patient, clinic_visit), data: { turbo_frame: "_top" }
+                  - if policy(clinic_visit).edit?
+                    = link_to "Edit", edit_patient_clinic_visit_path(appointment.patient, clinic_visit), data: { turbo_frame: "_top" }
+                  - else
+                    span.no-permission Edit
                 - else
                   = link_to "Create",
                             new_patient_clinic_visit_path(appointment.patient,
