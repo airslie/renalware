@@ -1,6 +1,6 @@
 = content_for(:actions) do
   = link_to t("btn.add"),
-            renalware.new_drugs_patient_group_direction_path,
+            new_drugs_patient_group_direction_path,
             class: "button"
 
 = within_new_admin_layout(title: "Patient Group Directions") do
@@ -20,11 +20,11 @@
                 td.actions
                   - if policy(pgd).edit?
                     = link_to t("btn.edit"),
-                              renalware.edit_drugs_patient_group_direction_path(pgd),
+                              edit_drugs_patient_group_direction_path(pgd),
                               target: "_top"
                   - if policy(pgd).destroy?
                     = link_to t("btn.delete"),
-                              renalware.drugs_patient_group_direction_path(pgd),
+                              drugs_patient_group_direction_path(pgd),
                               method: :delete,
                               data: { confirm: I18n.t("prompts.confirm_delete") },
                               target: "_top"

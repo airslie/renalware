@@ -17,9 +17,9 @@
                            input_html: { autocomplete: "off" }
 
         .w-1/4.pt-6
-          = link_to(renalware.users_path, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
+          = link_to(users_path, class: "btn btn-secondary text-gray-500 pl-2 font-normal leading-5 border-none shadow-none", target: "_top") do
             .flex.items-center
               .mr-1= inline_icon(:cross, size: :md)
               | Reset
           noscript
-            .pt-1= filter_or_reset(form: f, reset_path: renalware.users_path)
+            .pt-1= filter_or_reset(form: f, reset_path: users_path)

@@ -12,9 +12,7 @@ table.admissions_requests
     th Created by
     th.col-width-small
     th
-  = content_tag(:tbody,
-                class: "sortables",
-                data: { rel: sort_admissions_requests_path }) do
+  = content_tag :tbody, class: "sortables", data: { controller: "sortable", sortable_rel_value: sort_admissions_requests_path } do
     = render requests
 
 = render "modal_dialog_placeholder"

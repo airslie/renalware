@@ -20,8 +20,7 @@ bundle exec rake ods:sync
 > This rake task kicks of a background job to do the actual work. If you have deployed Renalware
 with capistrano then it will have started a background worker for you and there is nothing else to
 do. If you are running locally in development mode you will need to start a worker with
-`bundle exec rake jobs:work` (`or bundle exec rake app:jobs:work if you are developing the
-renalware-core gem and not a host app)
+`bundle exec rake jobs:work`
 
 See
 - https://digital.nhs.uk/services/organisation-data-service/data-downloads/gp-and-gp-practice-related-data

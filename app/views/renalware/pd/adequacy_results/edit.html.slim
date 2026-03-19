@@ -2,7 +2,7 @@
 = within_patient_layout(breadcrumbs: pd_summary_breadcrumb(patient),
                         title: "Edit Adequacy result") do
 
-  = simple_form_for(adequacy, url: renalware.patient_pd_adequacy_result_path(patient, adequacy), wrapper: :horizontal_form) do |f|
+  = simple_form_for(adequacy, url: patient_pd_adequacy_result_path(patient, adequacy), wrapper: :horizontal_form) do |f|
 
     .panel style="max-width: 600px; padding: 1rem 1.2rem 0"
       table.adequacy-path-table(style="max-width: 600px;")
@@ -82,4 +82,4 @@
             td= f.text_field :urine_na
             td= f.text_field :urine_k
 
-    = save_or_cancel(form: f, back_path: renalware.patient_pd_dashboard_path)
+    = save_or_cancel(form: f, back_path: patient_pd_dashboard_path)

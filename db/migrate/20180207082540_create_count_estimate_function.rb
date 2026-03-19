@@ -7,7 +7,7 @@ class CreateCountEstimateFunction < ActiveRecord::Migration[5.1]
 
   def down
     within_renalware_schema do
-      connection.execute("DROP FUNCTION count_estimate(text);")
+      connection.execute("DROP FUNCTION IF EXISTS count_estimate(text);")
     end
   end
 end

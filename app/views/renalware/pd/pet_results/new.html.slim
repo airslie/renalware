@@ -1,6 +1,6 @@
 = within_patient_layout(breadcrumbs: pd_summary_breadcrumb(pet.patient),
                         title: "New PET result") do
 
-  = simple_form_for(pet, url: renalware.patient_pd_pet_results_path(pet.patient), wrapper: :horizontal_form) do |f|
+  = simple_form_for(pet, url: patient_pd_pet_results_path(pet.patient), wrapper: :horizontal_form) do |f|
     = render "form_fields", form: f
-    = save_or_cancel(form: f, back_path: renalware.patient_pd_dashboard_path(pet.patient))
+    = save_or_cancel(form: f, back_path: patient_pd_dashboard_path(pet.patient))

@@ -55,8 +55,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            demo/public/assets
-            demo/tmp/cache/assets/sprockets
+            public/assets
+            tmp/cache/assets/sprockets
           key: asset-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             asset-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
@@ -64,7 +64,7 @@ jobs:
             asset-cache-${{ runner.os }}-
 
       - name: Assets precompile
-        run: bin/rails assets:precompile --trace
+        run: bin/yarn build && bin/yarn build:css && bin/rails assets:precompile --trace
 
   linters:
     name: Linters
@@ -153,8 +153,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            demo/public/assets
-            demo/tmp/cache/assets/sprockets
+            public/assets
+            tmp/cache/assets/sprockets
           key: asset-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
 
       - name: Setup test database
@@ -164,7 +164,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           RAILS_ENV: test
           PGHOST: localhost
-        run: bin/rails db:create app:db:schema:load
+        run: bin/rails db:create db:schema:load
 
       - name: Update packages
         run: sudo apt update
@@ -188,7 +188,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-failure-screenshots
-          path: demo/tmp/capybara
+          path: tmp/capybara
           if-no-files-found: ignore
 
       - name: Upload coverage artifacts

@@ -25,4 +25,4 @@
     = fdoc.input :outcome, as: :inline_radio_buttons, wrapper: :horizontal_medium
     = fdoc.input :training_comments, as: :text, input_html: { rows: 5 }
 
-  = save_or_cancel(form: f, back_path: renalware.patient_pd_dashboard_path(patient))
+  = save_or_cancel(form: f, back_path: patient_pd_dashboard_path(patient))

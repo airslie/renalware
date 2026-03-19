@@ -9,7 +9,7 @@ end
 
 require_relative "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
-require_relative "../demo/config/environment"
+require_relative "../config/environment"
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
@@ -47,9 +47,9 @@ end
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Renalware::Engine.root.join("spec/support/**/*.rb")].each { require it }
+Rails.root.glob("spec/support/**/*.rb").each { require it }
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { require it }
-Dir[Renalware::Engine.root.join("spec/pages/**/*.rb")].each { require it }
+Rails.root.glob("spec/pages/**/*.rb").each { require it }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -160,7 +160,7 @@ RSpec.configure do |config|
     metadata[:type] = :form
   end
 
-  config.include Renalware::Engine.routes.url_helpers
+  config.include Rails.application.routes.url_helpers
   config.include Wisper::RSpec::BroadcastMatcher
   config.include CapybaraHelper, type: :system
   config.include SelectDateSpecHelper, type: :system

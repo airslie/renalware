@@ -10,7 +10,7 @@ table#archived_problems.manual-stripes.auto-layout
       th.col-width-date Updated on
       th.nowrap Recorded by
 
-  = content_tag(:tbody, class: "sortables", data: { rel: sort_patient_problems_path(@patient) }) do
+  = content_tag :tbody, class: "sortables", data: { controller: "sortable", sortable_rel_value: sort_patient_problems_path(@patient) } do
     - problems.each do |problem|
       tr(id=dom_id(problem) class="problems_problem sortable #{'snomed-problem' if problem.snomed_id.present?}")
         td

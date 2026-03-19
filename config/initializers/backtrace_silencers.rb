@@ -6,5 +6,4 @@ Rails.backtrace_cleaner.add_silencer do |line|
   RENALWARE_NOISE.any? { |dir| line.include?(dir) }
 end
 
-# When debugging, uncomment the next line.
-# Rails.backtrace_cleaner.remove_silencers!
+Rails.backtrace_cleaner.remove_silencers! if ENV["BACKTRACE"]

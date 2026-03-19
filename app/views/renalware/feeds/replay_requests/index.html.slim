@@ -22,7 +22,7 @@
         tr
           td.actions
             / = link_to 'Edit', "#"
-            = link_to 'View Msgs', renalware.feeds_replay_request_message_replays_path(rr)
+            = link_to 'View Msgs', feeds_replay_request_message_replays_path(rr)
           td= l(rr.started_at)
           td= l(rr.finished_at)
           td= default_patient_link(rr.patient)

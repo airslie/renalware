@@ -39,7 +39,7 @@ module Renalware
         # Use windows line endings (CRLF) rather than linux (LF).
         # This solves a problem at Barts exporting RTFs to send to GPs
         def rtf_content_converted_from(html_temp_file)
-          rtf_template = File.join(Engine.root, "lib", "pandoc", "templates", "default.rtf")
+          rtf_template = Rails.root.join("lib/pandoc/templates/default.rtf").to_s
           options = { template: rtf_template }
           PandocRuby.html([html_temp_file.path], options, :standalone).to_rtf("--eol=crlf")
         end

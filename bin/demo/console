@@ -1,4 +1,0 @@
-#!/bin/sh
-pushd demo
-bundle exec rails c
-popd

@@ -2,7 +2,7 @@ ruby:
   qr_url = params[:qr_url] || reference.url
   svg = qr_url.present? && Renalware::Letters::GenerateQRCodeFromUrl.new(qr_url).call
 
-- url = reference.persisted? ? renalware.edit_system_online_reference_link_url(reference) : renalware.new_system_online_reference_link_url
+- url = reference.persisted? ? edit_system_online_reference_link_url(reference) : new_system_online_reference_link_url
 
 = within_new_admin_layout(title: "New",
   breadcrumbs: breadcrumb_for("Online References / QR Codes", system_online_reference_links_path)) do

@@ -12,7 +12,7 @@
     tbody
       - errors.each do |error|
         tr
-          td.actions= link_to "View", renalware.feeds_raw_hl7_message_error_path(error)
+          td.actions= link_to "View", feeds_raw_hl7_message_error_path(error)
           td= error.id
           td= l(error.sent_at)
           td= error.error_message.to_s.lines.first.to_s.squish.truncate(140)

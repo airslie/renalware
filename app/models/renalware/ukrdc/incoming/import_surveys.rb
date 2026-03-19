@@ -22,7 +22,7 @@ module Renalware
             import_surveys_from_file(filepath)
           end
         rescue StandardError => e
-          Renalware::Engine.exception_notifier.notify(e)
+          Rails.error.report(e, handled: false, source: "application")
           raise e
         end
 

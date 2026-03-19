@@ -13,8 +13,8 @@ module Renalware::Letters::Transports::Mesh
       allow(Renalware.config).to receive_messages(
         mesh_mailbox_id:,
         mesh_api_base_url: base_url,
-        mesh_path_to_client_cert: Renalware::Engine.root.join("spec/support/dummy_mesh_cert.txt"),
-        mesh_path_to_client_key: Renalware::Engine.root.join("spec/support/dummy_mesh_key.txt")
+        mesh_path_to_client_cert: Rails.root.join("spec/support/dummy_mesh_cert.txt"),
+        mesh_path_to_client_key: Rails.root.join("spec/support/dummy_mesh_key.txt")
       )
     end
 

@@ -99,6 +99,6 @@ class GpgCommand
   end
 
   def gpg_config_folder
-    Renalware::Engine.root.join("config/gpg")
+    Rails.root.join("config/gpg")
   end
 end

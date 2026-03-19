@@ -11,7 +11,7 @@ module Renalware
     subject(:policy) do
       described_class.new(
         model,
-        Renalware::Engine.root.join("spec", "fixtures", "permissions.yml")
+        Rails.root.join("spec/fixtures/permissions.yml")
       )
     end
 

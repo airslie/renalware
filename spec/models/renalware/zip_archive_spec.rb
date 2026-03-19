@@ -1,7 +1,7 @@
 module Renalware
   describe ZipArchive do
     def path_to_zipfile(filename)
-      Renalware::Engine.root.join("spec", "fixtures", "files", filename)
+      Rails.root.join("spec", "fixtures", "files", filename)
     end
 
     describe "#unzip" do

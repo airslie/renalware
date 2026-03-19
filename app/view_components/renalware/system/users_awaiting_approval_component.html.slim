@@ -2,4 +2,4 @@
   article.admin--users
     header
       h2= t(".title")
-    = link_to t(".waiting_for_approval", count: users_needing_approval_count), renalware.admin_users_path(q: { unapproved: true })
+    = link_to t(".waiting_for_approval", count: users_needing_approval_count), admin_users_path(q: { unapproved: true })

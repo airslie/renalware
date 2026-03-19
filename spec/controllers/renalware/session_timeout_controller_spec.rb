@@ -2,7 +2,7 @@ require "rails-controller-testing"
 
 module Renalware
   describe SessionTimeoutController do
-    routes { Renalware::Engine.routes }
+    routes { Rails.application.routes }
 
     describe "GET #keep_session_alive" do
       it "returns a server-calculated expires_at_epoch_ms JSON value" do

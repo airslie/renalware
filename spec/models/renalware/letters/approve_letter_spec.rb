@@ -16,7 +16,10 @@ module Renalware
     before do
       ActiveJob::Base.queue_adapter = :test
       ActiveJob::Base.queue_adapter.enqueued_jobs.clear
-      allow(Renalware.config).to receive(:send_gp_letters_over_mesh).and_return(true)
+      allow(Renalware.config).to receive_messages(
+        send_gp_letters_over_mesh: true,
+        feeds_outgoing_documents_enabled: false
+      )
     end
 
     it "updates when and by who the letter was approved" do
@@ -70,6 +73,55 @@ module Renalware
       expect(
         letter.becomes(Renalware::Letters::Letter).reload.gp_send_status
       ).to eq("not_applicable")
+    end
+
+    describe "document repository export" do
+      it "creates an outgoing document when document repository integration is enabled" do
+        allow(Renalware.config)
+          .to receive(:feeds_outgoing_documents_enabled)
+          .and_return(true)
+
+        expect {
+          service.call(by: user)
+        }.to change(Renalware::Feeds::OutgoingDocument, :count).by(1)
+
+        outgoing_document = Renalware::Feeds::OutgoingDocument.last
+
+        expect(outgoing_document.renderable).to eq(approved_letter.reload)
+        expect(outgoing_document.created_by).to eq(user)
+      end
+
+      it "does not create an outgoing document when document repository integration is disabled" do
+        allow(Renalware.config)
+          .to receive(:feeds_outgoing_documents_enabled)
+          .and_return(false)
+
+        expect {
+          service.call(by: user)
+        }.not_to change(Renalware::Feeds::OutgoingDocument, :count)
+      end
+    end
+
+    describe "electronic delivery to gp" do
+      it "creates a transmission after approval when a gp should receive it" do
+        expect {
+          service.call(by: user)
+        }.to change(Renalware::Letters::Transports::Mesh::Transmission, :count).by(1)
+
+        transmission = Renalware::Letters::Transports::Mesh::Transmission.last
+
+        expect(transmission.letter).to eq(approved_letter.reload)
+        expect(transmission.active_job_id).to be_present
+      end
+
+      it "does not create a transmission or enqueue a mesh send job " \
+         "when a gp should not receive it" do
+        patient.update_column(:confidentiality, :restricted)
+
+        expect {
+          service.call(by: user)
+        }.not_to change(Renalware::Letters::Transports::Mesh::Transmission, :count)
+      end
     end
 
     describe "broadcasting" do

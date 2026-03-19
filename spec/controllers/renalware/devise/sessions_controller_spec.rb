@@ -2,7 +2,8 @@ require "rails-controller-testing"
 
 module Renalware
   describe Devise::SessionsController do
-    routes { Renalware::Engine.routes }
+    let(:user) { create(:user, :clinical) }
+    let(:ldap_adapter) { instance_double(Renalware::Ldap::Connection) }
 
     before do
       @request.env["devise.mapping"] = ::Devise.mappings[:user]

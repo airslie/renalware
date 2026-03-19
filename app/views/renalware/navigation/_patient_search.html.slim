@@ -2,7 +2,7 @@
   ul.left
     li.has-form
       = search_form_for the_patient_search,
-                        url: renalware.patients_path,
+                        url: main_app.patients_path,
                         as: :patient_search,
                         html: { autocomplete: "off" },
                         class: "fn-form patient-search-form" do |f|

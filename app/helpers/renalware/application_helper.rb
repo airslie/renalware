@@ -4,7 +4,7 @@ require "breadcrumb"
 
 module Renalware
   module ApplicationHelper
-    include Renalware::Engine.routes.url_helpers
+    include Rails.application.routes.url_helpers
     include Pagy::Frontend
 
     # If a consumer (eg a report) wants to generate a link to a patient page in a certain module/
@@ -18,14 +18,14 @@ module Renalware
       landing_page ||= :clinical_summary
       landing_page = "" if landing_page.to_sym == :demographics
       route_name = "patient_#{landing_page.downcase}_path".gsub("__", "_")
-      url = renalware.public_send(route_name, patient)
+      url = public_send(route_name, patient)
       link_to(patient.to_s(:default), url, "data-turbo-frame": "_top")
     end
 
     def default_patient_link(patient)
       link_to(
         patient.to_s(:default),
-        renalware.patient_clinical_summary_path(patient),
+        patient_clinical_summary_path(patient),
         data: { turbo_frame: "_top" }
       )
     end
@@ -33,7 +33,7 @@ module Renalware
     def default_patient_link_with_nhs_number(patient)
       link_to(
         patient&.to_s(:long),
-        renalware.patient_clinical_summary_path(patient),
+        patient_clinical_summary_path(patient),
         "data-turbo-frame": "_top"
       )
     end
@@ -117,3 +117,27 @@ module Renalware
     end
   end
 end
+
+# From demo - keep in case needed?
+# module ApplicationHelper
+#   # Can search for named routes directly in the main app, omitting
+#   # the "main_app." prefix
+#   def method_missing(method, *, &)
+#     if main_app_url_helper?(method)
+#       main_app.send(method, *)
+#     else
+#       super
+#     end
+#   end
+
+#   def respond_to?(method, include_private_methods = false)
+#     main_app_url_helper?(method) || super
+#   end
+
+#   private
+
+#   def main_app_url_helper?(method)
+#     method.to_s.end_with?("_path", "_url") &&
+#       main_app.respond_to?(method)
+#   end
+# end

@@ -5,7 +5,7 @@ module Renalware
         describe "#call" do
           it "saves an uploaded practices zip file to a Feeds::File" do
             path_to_zipfile = Pathname.new(
-              Renalware::Engine.root.join("spec", "fixtures", "files", "simple.zip")
+              Rails.root.join("spec/fixtures/files/simple.zip")
             )
             file_type = create(:feed_file_type, :primary_care_physicians)
             user = create(:user)

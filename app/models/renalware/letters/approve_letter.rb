@@ -21,6 +21,11 @@ module Renalware
           store_page_count
           archive_content(by: by)
           set_gp_send_status
+          Feeds::QueueForDocumentRepositoryExport.call(renderable: letter, by: letter.approved_by)
+          Transports::Mesh::QueueLetterDelivery.call(
+            letter: letter,
+            register_after_commit: method(:after_commit)
+          )
           # before_letter_approved event
           # - lets listeners clobber the txn by raising an error
           # - lets listeners make other db changes inside the txn eg create a active job

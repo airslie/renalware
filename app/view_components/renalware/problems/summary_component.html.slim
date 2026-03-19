@@ -14,10 +14,10 @@
     article
       header
         h1
-          = link_to "#{t('titles.problems')} (#{problems.length})", renalware.patient_problems_path(patient)
+          = link_to "#{t('titles.problems')} (#{problems.length})", patient_problems_path(patient)
 
         = link_to t("btn.add"),
-                  renalware.patient_problems_path(patient),
+                  patient_problems_path(patient),
                   class: "button"
 
       / The add modal dialog

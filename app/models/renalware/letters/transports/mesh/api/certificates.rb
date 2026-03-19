@@ -35,7 +35,7 @@ module Renalware
         # - In Azure docker deployments, the file might be in the image, or the cert contents in ENV
         # - On Heroku the cert contents will be an ENV var.
         # - In development, the CA cert file likely be an existing file path setup by the developer.
-        #   For example we have the location demo/config/certificates/mesh in which I currently have
+        #   For example we have the location config/certificates/mesh in which I currently have
         #   MESH and CA certs (ignored by git), so this seems like a good location to put them.
         #
         def absolute_ca_file_path

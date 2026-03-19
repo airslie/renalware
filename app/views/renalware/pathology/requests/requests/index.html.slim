@@ -11,7 +11,7 @@
             .large-4.columns
               = f.input :created_on_eq, as: :flatpickr, label: "Printed on"
             .large-8.columns.actions
-              .mt-3= filter_or_reset(form: f, reset_path: renalware.pathology_requests_requests_path)
+              .mt-3= filter_or_reset(form: f, reset_path: pathology_requests_requests_path)
   .row
     - if requests.empty?
       p No requests forms have been printed yet.

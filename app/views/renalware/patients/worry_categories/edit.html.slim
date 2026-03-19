@@ -1,9 +1,9 @@
 = within_new_admin_layout(title: "Edit Worry Category") do
 
   = simple_form_for(category,
-                    url: renalware.worry_category_path(category),
+                    url: worry_category_path(category),
                     as: :category,
                     wrapper: :horizontal_form) do |f|
     = f.input :name, wrapper: :horizontal_large
 
-    = save_or_cancel(form: f, back_path: renalware.worry_categories_path)
+    = save_or_cancel(form: f, back_path: worry_categories_path)

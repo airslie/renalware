@@ -6,7 +6,7 @@
   .search-form.filters
     = simple_form_for query,
         as: :q,
-        url: renalware.feeds_logs_path,
+        url: feeds_logs_path,
         method: :get do |f|
       .flex.flex-wrap.-mx-3.mb-6
         .w-full.md:w-1/5.px-3.mb-6.md:mb-0
@@ -19,7 +19,7 @@
                     label: "Reason",
                     collection: Renalware::Feeds::Log.log_reasons.values
         .w-full.md:w-1/5.px-3.mb-6.md:mb-0
-          .mt-6= filter_or_reset(form: f, reset_path: renalware.feeds_logs_path)
+          .mt-6= filter_or_reset(form: f, reset_path: feeds_logs_path)
 
 = within_new_admin_layout(title: "Feed Log Messages") do
   table

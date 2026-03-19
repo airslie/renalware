@@ -1,5 +1,3 @@
-require "benchmark"
-
 module Renalware
   module UKRDC
     module TreatmentTimeline

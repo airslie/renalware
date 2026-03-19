@@ -13,7 +13,7 @@ ruby:
 
     = f.association :letterhead, autofocus: true
 
-    - frame_url = renalware.url_for(request.params.merge(preview_topic_id: "REPLACE_ID"))
+    - frame_url = url_for(request.params.merge(preview_topic_id: "REPLACE_ID"))
 
     .mb-3
       = f.association :topic,

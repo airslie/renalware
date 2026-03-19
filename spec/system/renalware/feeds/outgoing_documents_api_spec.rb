@@ -79,7 +79,8 @@ describe "Outgoing Documents API" do
               url: feeds_queued_outgoing_document_url(
                 queued_ev2,
                 protocol: :http,
-                host: "www.example.com"
+                host: "www.example.com",
+                port: nil
               )
             },
             {
@@ -88,7 +89,8 @@ describe "Outgoing Documents API" do
               url: feeds_queued_outgoing_document_url(
                 queued_ev1,
                 protocol: :http,
-                host: "www.example.com"
+                host: "www.example.com",
+                port: nil
               )
             }
           ]

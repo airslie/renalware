@@ -1,5 +1,17 @@
-Renalware::Engine.routes.draw do
-  root to: "dashboard/dashboards#show"
+Rails.application.routes.draw do
+  super_admin_constraint = lambda do |request|
+    current_user = request.env["warden"].user || Renalware::NullUser.new
+    current_user.has_role?(:super_admin)
+  end
+
+  constraints super_admin_constraint do
+    mount PgHero::Engine, at: "pghero"
+    mount GoodJob::Engine => "good_job"
+    # For pg_extras work like this we need to set the env var
+    # RAILS_PG_EXTRAS_PUBLIC_DASHBOARD=true or
+    # set RailsPgExtras.configuration.public_dashboard to true
+    # mount RailsPgExtras::Web::Engine, at: "pg_extras"
+  end
 
   mount Renalware::Directory::Engine => "directory", as: :directory
   mount Renalware::Hospitals::Engine => "hospitals", as: :hospitals
@@ -10,36 +22,40 @@ Renalware::Engine.routes.draw do
   mount Renalware::Geography::Engine => "geography", as: :geography
   mount Renalware::RemoteMonitoring::Engine => "remote_monitoring", as: :remote_monitoring
 
-  draw :accesses
-  draw :admin
-  draw :admissions
-  draw :api
-  draw :clinical
-  draw :clinics
-  draw :deaths
-  draw :dietetics
-  draw :drugs
-  draw :events
-  draw :feeds
-  draw :hd
-  draw :letters
-  draw :low_clearance
-  draw :medications
-  draw :messaging
-  draw :modalities
-  draw :pathology
-  draw :patients
-  draw :pd
-  draw :problems
-  draw :renal
-  draw :system
-  draw :transplants
-  draw :ukrdc
-  draw :users
-  draw :virology
+  scope module: :renalware do
+    root to: "dashboard/dashboards#show"
 
-  # Last
-  draw :fallbacks
+    draw :accesses
+    draw :admin
+    draw :admissions
+    draw :api
+    draw :clinical
+    draw :clinics
+    draw :deaths
+    draw :dietetics
+    draw :drugs
+    draw :events
+    draw :feeds
+    draw :hd
+    draw :letters
+    draw :low_clearance
+    draw :medications
+    draw :messaging
+    draw :modalities
+    draw :pathology
+    draw :patients
+    draw :pd
+    draw :problems
+    draw :renal
+    draw :system
+    draw :transplants
+    draw :ukrdc
+    draw :users
+    draw :virology
 
-  resources :protouis
+    # Last
+    draw :fallbacks
+
+    resources :protouis
+  end
 end

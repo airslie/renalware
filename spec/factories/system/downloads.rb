@@ -6,7 +6,7 @@ FactoryBot.define do
 
     after(:build) do |download|
       download.file.attach(
-        io: File.open(Renalware::Engine.root.join("spec", "fixtures", "files", "dog.jpg")),
+        io: Rails.root.join("spec/fixtures/files/dog.jpg").open,
         filename: "dog.jpg",
         content_type: "image./jpg"
       )

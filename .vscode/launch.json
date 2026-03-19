@@ -24,7 +24,7 @@
       "type": "rdbg",
       "name": "Run rails",
       "request": "launch",
-      "command": "./demo/bin/rails",
+      "command": "./bin/rails",
       "script": "server",
       "args": [],
       "askParameters": false
@@ -33,7 +33,7 @@
       "type": "rdbg",
       "name": "Run console",
       "request": "launch",
-      "command": "./demo/bin/rails",
+      "command": "./bin/rails",
       "script": "console",
       "args": [],
       "askParameters": false,

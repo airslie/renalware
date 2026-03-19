@@ -44,7 +44,7 @@ module Renalware
         end
       rescue StandardError => e
         # TODO: if fails before copying to outgoing then we should roll back Batch
-        Engine.exception_notifier.notify(e)
+        Rails.error.report(e, handled: false, source: "application")
         raise e
       end
 

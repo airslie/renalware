@@ -4,7 +4,7 @@ describe "Searching for a patient from the menu bar search area" do
     user = login_as_clinical
     create(:patient, by: user, family_name: "RABBIT", given_name: "Roger")
     create(:patient, by: user, family_name: "MOUSE", given_name: "Minnie")
-    visit renalware.patients_path
+    visit patients_path
 
     expect(page).to have_content("RABBIT, Roger")
     expect(page).to have_content("MOUSE, Minnie")

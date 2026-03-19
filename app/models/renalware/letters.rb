@@ -1,4 +1,11 @@
+require "./lib/renalware/config_loader"
+
 module Renalware::Letters
+  LETTER_SECTIONS_YAML = (
+    Renalware::ConfigLoader.config_for(:letter_sections) || {}
+  ).deep_symbolize_keys
+  LETTER_SECTION_IDENTIFIERS = LETTER_SECTIONS_YAML.keys
+
   def self.table_name_prefix = "letter_"
   def self.cast_author(user) = user.becomes(Author)
   def self.cast_typist(user) = user.becomes(Typist)

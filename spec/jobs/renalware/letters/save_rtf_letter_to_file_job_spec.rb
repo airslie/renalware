@@ -23,7 +23,7 @@ describe Renalware::Letters::SaveRTFLetterToFileJob do
     # removing this test for now as it is failing with a Broken Pipe error on GH 50% of the time
     pending "creates the specific file with the RTF letter content"
     # it "creates the specific file with the RTF letter content" do
-    #   file_path = Renalware::Engine.root.join("tmp", "test.rtf")
+    #   file_path = Rails.root.join("tmp", "test.rtf")
 
     #   allow_any_instance_of(Renalware::Letters::LetterPresenter)
     #     .to receive(:to_html).and_return("test")

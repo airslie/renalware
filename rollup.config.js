@@ -8,7 +8,7 @@ const watchDirectories = [
   pkg.main,
   "app/views",
   "app/view_components",
-  "demo/app/assets/builds", // Output from Tailwindcss and JS
+  "app/assets/builds", // Output from Tailwindcss and JS
 ]
 
 // Had to add context window to avoid rollup converting self to undefined in stimulus
@@ -16,7 +16,7 @@ export default {
   context: "window",
   input: "app/javascript/renalware/application.js",
   output: {
-    file: pkg.main,
+    file: "app/assets/builds/renalware.js",
     format: "esm",
     //format: "es",
     inlineDynamicImports: true,

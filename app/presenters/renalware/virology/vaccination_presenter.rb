@@ -1,7 +1,7 @@
 module Renalware
   module Virology
     class VaccinationPresenter < ApplicationPresenter
-      include Renalware::Engine.routes.url_helpers
+      include Rails.application.routes.url_helpers
 
       # Return an array to be loaded into an html select, where each option has a data attribute
       # pointing to the current url with a vaccination_type_id appended.

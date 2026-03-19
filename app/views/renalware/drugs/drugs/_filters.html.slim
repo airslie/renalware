@@ -33,6 +33,6 @@
                      [%w(No false), %w(Yes true)], :last, :first, drug_search.inactive_eq),
                      data: { action: "change->form#submit" })
         .small-8.large-2.columns.actions.end
-          .pt-px= link_to("Reset", renalware.drugs_drugs_path, class: "btn btn-secondary")
+          .pt-px= link_to("Reset", drugs_drugs_path, class: "btn btn-secondary")
           noscript
-            .mt-px= filter_or_reset(form: f, reset_path: renalware.drugs_drugs_path)
+            .mt-px= filter_or_reset(form: f, reset_path: drugs_drugs_path)

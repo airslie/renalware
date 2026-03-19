@@ -6,6 +6,8 @@ PaperTrail.enabled = false
 # TODO: Move this
 include SeedsHelper # rubocop:disable Style/MixinUsage
 
-# Seed the database with data common to all installations.
-# Site specific data should be seeded from the host application.
-require_relative "seeds/default/seeds"
+Rails.logger = Logger.new($stdout)
+Rails.benchmark "Seeding Database" do
+  require_relative "seeds/default/seeds"
+  require_relative "seeds/demo/seeds"
+end

@@ -19,7 +19,7 @@ describe "Managing a list of HD Slot Requests" do
            access_state:,
            location:)
 
-    visit renalware.hd_slot_requests_path
+    visit hd_slot_requests_path
 
     expect(page).to have_content("HD Slot Requests")
 
@@ -38,7 +38,7 @@ describe "Managing a list of HD Slot Requests" do
       user = login_as_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
 
-      visit renalware.hd_slot_requests_path
+      visit hd_slot_requests_path
 
       within(".page-actions") do
         click_on "Add"
@@ -58,7 +58,7 @@ describe "Managing a list of HD Slot Requests" do
         click_on "Create"
       end
 
-      expect(page).to have_current_path(renalware.hd_slot_requests_path)
+      expect(page).to have_current_path(hd_slot_requests_path)
 
       within("table#slot-requests") do
         expect(page).to have_content("01-Oct-2023")
@@ -90,7 +90,7 @@ describe "Managing a list of HD Slot Requests" do
       user = login_as_super_admin
       patient = create(:hd_patient, by: user, local_patient_id: "MRN1")
 
-      visit renalware.patient_path(patient)
+      visit patient_path(patient)
 
       within(".patient-side-nav") do
         click_on "Request HD Slot"
@@ -134,7 +134,7 @@ describe "Managing a list of HD Slot Requests" do
         urgency: "highly_urgent"
       )
 
-      visit renalware.hd_slot_requests_path
+      visit hd_slot_requests_path
 
       # Allocate the slot request
       within("table#slot-requests") do
@@ -144,7 +144,7 @@ describe "Managing a list of HD Slot Requests" do
       end
       # alert pops up but this is skipped in this test
       # The #allocate action on the controller has now been called and the page.
-      expect(page).to have_current_path(renalware.hd_slot_requests_path)
+      expect(page).to have_current_path(hd_slot_requests_path)
 
       # Check the patient has been removed
       within("table#slot-requests") do
@@ -173,7 +173,7 @@ describe "Managing a list of HD Slot Requests" do
       )
       reason = create(:hd_slot_request_deletion_reason, reason: "Some Reason")
 
-      visit renalware.hd_slot_requests_path
+      visit hd_slot_requests_path
 
       # Allocate the slot request
       within("table#slot-requests") do
@@ -183,7 +183,7 @@ describe "Managing a list of HD Slot Requests" do
       end
       # alert pops up but this is skipped in this test
       # The #allocate action on the controller has now been called and the page.
-      expect(page).to have_current_path(renalware.hd_slot_requests_path)
+      expect(page).to have_current_path(hd_slot_requests_path)
 
       # Check the patient has been removed
       within("table#slot-requests") do
@@ -217,7 +217,7 @@ describe "Managing a list of HD Slot Requests" do
             notes: "ABC"
           )
 
-          visit renalware.hd_slot_requests_path
+          visit hd_slot_requests_path
 
           within("table#slot-requests") do
             expect(page).to have_content(patient.to_s)
@@ -257,7 +257,7 @@ describe "Managing a list of HD Slot Requests" do
               medically_fit_for_discharge_by_id: user.id
             )
 
-            visit renalware.hd_slot_requests_path
+            visit hd_slot_requests_path
 
             within("table#slot-requests") do
               expect(page).to have_content(patient.to_s)

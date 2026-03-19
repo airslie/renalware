@@ -13,12 +13,12 @@
 p.my-3 Look at the GoodJob admin cron schedule to see how often the handshake job runs
 
 / = link_to "Run test cases",
-/           renalware.letters_transports_mesh_testcase_invocations_path,
+/           letters_transports_mesh_testcase_invocations_path,
 /           class: "btn btn-secondary",
 /           method: :post
 
 - if Rails.env.development?
   = link_to "Send 260 test letters to get 520 responses (INF and BUS)",
-            renalware.letters_transports_mesh_bulk_tests_path,
+            letters_transports_mesh_bulk_tests_path,
             class: "btn btn-secondary",
             method: :post

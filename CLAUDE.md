@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### JavaScript/Frontend
 - `yarn build` - Build JavaScript assets using Rollup
-- `yarn build:css` - Build CSS assets (delegated to demo app)
+- `yarn build:css` - Build CSS assets
 
 ### Database
 - `rails db:migrate` - Run database migrations
@@ -29,12 +29,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-Renalware is a Ruby on Rails engine designed for renal unit management. Key architectural components:
+Renalware is a Ruby on Rails application for renal unit management. Key architectural components:
 
-### Engine Structure
-- **Core Engine**: `lib/renalware/engine.rb` - Main Rails engine configuration
-- **Demo Application**: `demo/` directory contains a standalone Rails app for development
-- **Host App Pattern**: Designed to be embedded in host Rails applications via gem
+### Application Structure
+- **Main Application**: `config/application.rb` and `config/routes.rb` define the Rails app
+- **Pack Engines**: `packs/*/lib/**/engine.rb` contain modular domain packs mounted by the app
+- **Single App Runtime**: local development and deployment run this application directly
 
 ### Domain Organization
 The application is organized into medical/clinical domains under `app/models/renalware/`:
@@ -47,7 +47,7 @@ The application is organized into medical/clinical domains under `app/models/ren
 
 ### Key Technologies
 - Rails 8.0+ with PostgreSQL database
-- LDAP authentication via `devise_ldap_authenticatable`
+- Authentication via Devise with OmniAuth strategies for LDAP and Entra ID
 - Background jobs with Good Job
 - Frontend: Stimulus, Turbo, Rollup for JS bundling
 - Testing: RSpec with Playwright driver
@@ -65,7 +65,7 @@ The application is organized into medical/clinical domains under `app/models/ren
 
 ### Development Environment
 Uses Devbox/Nix for reproducible development environments. Infrastructure services (PostgreSQL) are managed via `devbox services up`, while application processes are managed by Foreman via `bin/dev` (see `Procfile.dev`). Local development runs on port 3000 with demo users (superkch, kchdoc, kchnurse, kchguest) using password "renalware".
-- You can use demo/db/schema.rb to check the database/model structure
+- Use `db/schema.rb` to inspect the database/model structure
 
 ### Testing
 
@@ -91,4 +91,3 @@ SimpleCov is configured to track code coverage for both RSpec and Cucumber tests
 ### Rules
 - Follow existing code style, conventions and patterns
 - Add planning documents to plans/ starting with today's date and short description (using lowercase & underscrores)
-

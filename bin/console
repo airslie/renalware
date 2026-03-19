@@ -1,2 +1,2 @@
 #!/bin/sh
-bundle exec ./demo/bin/rails console
+bundle exec ./bin/rails console

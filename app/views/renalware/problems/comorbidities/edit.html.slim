@@ -1,6 +1,6 @@
 = within_patient_layout(title: "Comorbidities") do
   = simple_form_for(form,
-                    url: renalware.patient_comorbidities_path,
+                    url: patient_comorbidities_path,
                     method: :patch,
                     as: :comorbidity_form,
                     html: { autocomplete: "off", id: "comorbidities-form" }) do |f|

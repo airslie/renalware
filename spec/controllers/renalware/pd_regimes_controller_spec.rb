@@ -2,7 +2,6 @@ require "rails-controller-testing"
 
 module Renalware
   describe PD::RegimesController do
-    routes { Engine.routes }
     let(:user) { @current_user }
     let(:patient) { create(:patient, by: user) }
     let(:bag_type) { create(:bag_type) }

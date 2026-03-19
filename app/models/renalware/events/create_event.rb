@@ -16,9 +16,25 @@ module Renalware
 
       def call
         event.save_by(by).tap do |success|
-          broadcast(:event_created, event) if success
+          if success
+            queue_event_for_document_repository_export
+            broadcast(:event_created, event)
+          end
         end
       end
+
+      private
+
+      def queue_event_for_document_repository_export
+        return unless exportable?(event)
+
+        Renalware::Feeds::QueueForDocumentRepositoryExport.call(
+          renderable: event,
+          by: event.created_by
+        )
+      end
+
+      def exportable?(event) = event.event_type&.save_pdf_to_electronic_public_register?
     end
   end
 end

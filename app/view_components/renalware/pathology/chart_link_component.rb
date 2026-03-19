@@ -8,10 +8,21 @@ module Renalware
       def call
         link_to(
           chartable.code,
-          renalware.polymorphic_path([patient, chartable], format: :html),
+          chartable_path(format: :html),
           data: { "reveal-id" => "pathology-chart-modal", "reveal-ajax" => "true" },
           class: "path-chart-link"
         )
+      end
+
+      private
+
+      def chartable_path(format:)
+        # In app mode route helpers are not prefixed with "renalware_".
+        helper_name =
+          "patient_#{chartable.model_name.singular_route_key.delete_prefix('renalware_')}_path"
+        public_send(helper_name, patient, chartable, format: format)
+      rescue NoMethodError
+        polymorphic_path([patient, chartable], format: format)
       end
     end
   end

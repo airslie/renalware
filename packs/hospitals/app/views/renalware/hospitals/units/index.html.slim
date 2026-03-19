@@ -36,8 +36,8 @@
           td= Renalware::HD::Station.where(hospital_unit_id: unit.id).count
           td.actions
             - if pundit_policy_for(Renalware::HD::Station).index?
-              = link_to("HD Stations", renalware.hd_unit_stations_path(unit))
+              = link_to("HD Stations", main_app.hd_unit_stations_path(unit))
             - if pundit_policy_for(Renalware::HD::Scheduling::Diary).index?
-              = link_to("HD Diaries", renalware.hd_scheduling_unit_diaries_path(unit))
+              = link_to("HD Diaries", hd_scheduling_unit_diaries_path(unit))
             - if pundit_policy_for(Renalware::Hospitals::Ward).index?
               = link_to("Wards", hospitals.unit_wards_path(unit))

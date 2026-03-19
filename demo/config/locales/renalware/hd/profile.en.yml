@@ -1,9 +1,0 @@
----
-en:
-  enumerize:
-    renalware/hd/profile_document/anticoagulant:
-      type:
-        heparin: Heparin
-        enoxyparin: Enoxaparin
-        warfarin: Warfarin
-        none: None

@@ -12,13 +12,20 @@
 # To access configuration settings use e.g.
 #   Renalware.config.x
 #
+require_relative "configuration/hl7_patient_locator_strategy"
+
 # rubocop:disable Layout/LineLength
 module Renalware
   class Configuration # rubocop:disable Metrics/ClassLength
     include Renalware::ConfigAccessors
 
-    # Force dotenv to load the .env file at this stage so we can read in the config defaults
-    Dotenv::Rails.load
+    # Force dotenv to load the .env file at this stage so we can read in the config defaults.
+    # Dotenv 3.x no longer provides Dotenv::Rails, so support both APIs.
+    if defined?(Dotenv::Rails)
+      Dotenv::Rails.load
+    elsif defined?(Dotenv)
+      Dotenv.load
+    end
 
     # Hospital-specific devise modules to load (comma-separated list, e.g., "module1,module2")
     config_accessor(:devise_extra_modules) do
@@ -137,6 +144,11 @@ module Renalware
     }
     config_accessor(:clinical_summary_max_events_to_display) { 10 }
     config_accessor(:clinical_summary_max_letters_to_display) { 10 }
+    config_accessor(:research_anyone_can_manage_participations) do
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("RESEARCH_ANYONE_CAN_MANAGE_PARTICIPATIONS", "false")
+      )
+    end
     config_accessor(:max_batch_print_size) { ENV.fetch("MAX_BATCH_PRINT_SIZE", 100).to_i }
     # These settings are used in the construction of the IDENT metadata in letters
     config_accessor(:letter_system_name) { "Renalware" }
@@ -153,6 +165,9 @@ module Renalware
     config_accessor(:allow_external_mail) { ENV.key?("ALLOW_EXTERNAL_MAIL") }
     config_accessor(:fallback_email_address_for_test_messages) do
       ENV.fetch("FALLBACK_EMAIL_ADDRESS_FOR_TEST_MESSAGES", nil)
+    end
+    config_accessor(:ukrdc_enabled) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("UKRDC_ENABLED", "true"))
     end
     config_accessor(:ukrdc_include_letters) do
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("UKRDC_INCLUDE_LETTERS", "true"))
@@ -210,7 +225,7 @@ module Renalware
     # any human errors to be resolved (letter rescinded etc)
     #
     config_accessor(:send_gp_letters_over_mesh) do
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SEND_GP_LETTERS_OVER_MESH", "true"))
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SEND_GP_LETTERS_OVER_MESH", "false"))
     end
     config_accessor(:mesh_timeout_transmissions_with_no_response_after) do
       # Duration#parse uses the ISO8601 duration format
@@ -297,6 +312,11 @@ module Renalware
     # See ResolveClinic for details of the strategies
     config_accessor(:feeds_outpatient_clinic_resolution_strategy) {
       ENV.fetch("FEEDS_OUTPATIENT_CLINIC_RESOLUTION_STRATEGY", "by_code").to_sym
+    }
+    config_accessor(:feeds_outgoing_documents_enabled) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_ENABLED", "true")
+      )
     }
     config_accessor(:feeds_outgoing_documents_hospital_service) {
       ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_HOSPITAL_SERVICE", "") # eg. "361^Nephrology"
@@ -487,13 +507,15 @@ module Renalware
     end
     config_accessor(:max_file_upload_size) { ENV.fetch("MAX_FILE_UPLOAD_SIZE", "10_000_000").to_i }
 
-    # :simple or :dob_and_any_nhs_or_assigning_auth_number or nhs_or_any_assigning_auth_number
-    config_accessor(:hl7_patient_locator_strategy) {
-      {
-        oru: :simple,
-        adt: :simple
-      }
-    }
+    # Options are:
+    #   :simple
+    #   :dob_and_any_nhs_or_assigning_auth_number
+    #   :nhs_or_any_assigning_auth_number
+    #   :dynamic
+    #   :dynamic2
+    config_accessor(:hl7_patient_locator_strategy) do
+      Configuration::Hl7PatientLocatorStrategy.load_from_env
+    end
     config_accessor(:demo_password) { "renalware" }
     config_accessor(:password_policy_description) {
       ENV.fetch(
@@ -587,6 +609,12 @@ module Renalware
     config_accessor(:messaging_recipient_warn_if_not_signed_in_for_days) {
       ActiveModel::Type::Integer.new.cast(
         ENV.fetch("MESSAGING_RECIPIENT_WARN_IF_NOT_SIGNED_IN_FOR_DAYS", 5)
+      )
+    }
+
+    config_accessor(:housekeeping_jobs_enabled) {
+      ActiveModel::Type::Boolean.new.cast(
+        ENV.fetch("HOUSEKEEPING_JOBS_ENABLED", "true")
       )
     }
 

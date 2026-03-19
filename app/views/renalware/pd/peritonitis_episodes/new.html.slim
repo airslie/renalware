@@ -7,4 +7,4 @@
   = simple_form_for [patient, peritonitis_episode], wrapper: :horizontal_form do |f|
 
     = render "renalware/pd/peritonitis_episodes/fields", local_assigns.merge!(f: f)
-    = save_or_cancel(form: f, back_path: renalware.patient_pd_dashboard_path(patient))
+    = save_or_cancel(form: f, back_path: patient_pd_dashboard_path(patient))

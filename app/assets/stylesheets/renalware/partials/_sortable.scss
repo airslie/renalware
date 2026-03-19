@@ -5,10 +5,10 @@
   }
 }
 
-.ui-sortable-placeholder {
-  visibility: visible !important;
+.sortable-ghost {
+  opacity: 0.15;
+}
 
-  td {
-    border-top: 3px solid var(--black) !important;
-  }
+.sortable-chosen td {
+  border-top: 3px solid var(--black) !important;
 }

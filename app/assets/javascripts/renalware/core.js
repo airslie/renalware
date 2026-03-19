@@ -14,9 +14,6 @@
 //= require jquery2
 //= require jquery-readyselector
 //= require rails-ujs
-//= require jquery-ui/core
-//= require jquery-ui/widgets/sortable
-//= require jquery-ui/effects/effect-highlight
 //= require foundation/foundation
 //= require foundation/foundation.alert
 //= require foundation/foundation.dropdown
@@ -36,7 +33,6 @@
 //= require moment/moment
 //= require trix/dist/trix
 //= require_directory ./components
-//= require ./built
 
 // Define a console.log if one does not yet exist - e.g. we in IE11
 window.console = window.console || { log: function () {} }

@@ -27,7 +27,7 @@ describe "Soft-deleted letter administration" do
         click_on "Deleted"
       end
 
-      expect(page).to have_current_path(renalware.letters_deleted_path)
+      expect(page).to have_current_path(letters_deleted_path)
       expect(page).to have_content(patient2.family_name)
       expect(page).to have_no_content(patient1.family_name)
       expect(page).to have_content(deleted_letter.deleted_by)

@@ -11,7 +11,7 @@
         | Download CSV
 
     - if current_user_is_super_admin?
-      = link_to renalware.edit_system_view_metadatum_path(options.current_view, format: :html),
+      = link_to main_app.edit_system_view_metadatum_path(options.current_view, format: :html),
                 data: { "reveal-id" => "system-view-metadata-modal", "reveal-ajax" => "true" },
                 class: "button secondary" do
           .flex.items-center.gap-2

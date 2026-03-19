@@ -13,7 +13,7 @@ ul.f-dropdown#hd-prescription-options(data-dropdown-content aria-hidden="true")
   - else
     - prescriptions_to_give_on_hd.each do |prescription|
       = dropdown_btn_item title: prescription.drug_name,
-                          url: renalware.new_hd_prescription_administration_path(prescription, format: :html),
+                          url: new_hd_prescription_administration_path(prescription, format: :html),
                           data: { "reveal-id" => "hd-prescription-administration-modal",
                           "reveal-ajax" => "true" }
 

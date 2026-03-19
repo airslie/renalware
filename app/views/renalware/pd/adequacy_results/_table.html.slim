@@ -39,14 +39,14 @@ table.toggleable(data-controller="toggle")
             .flex.items-center
               - if Pundit.policy(current_user, result).edit?
                 - if display_patient
-                  = external_link_to("Edit", renalware.edit_patient_pd_adequacy_result_path(result.patient, result), gap: 1)
+                  = external_link_to("Edit", edit_patient_pd_adequacy_result_path(result.patient, result), gap: 1)
                 - else
                   = link_to t("btn.edit"),
-                            renalware.edit_patient_pd_adequacy_result_path(result.patient, result)
+                            edit_patient_pd_adequacy_result_path(result.patient, result)
 
               - if Pundit.policy(current_user, result).destroy?
                 = link_to t("btn.delete"),
-                          renalware.patient_pd_adequacy_result_path(result.patient, result),
+                          patient_pd_adequacy_result_path(result.patient, result),
                           data: { method: :delete, confirm: "Are you sure?" }
         - if display_patient
           td= result.patient

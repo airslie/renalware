@@ -7,7 +7,7 @@ class CreateDaysBetweenFunction < ActiveRecord::Migration[5.2]
 
   def down
     within_renalware_schema do
-      connection.execute("DROP FUNCTION days_between(timestamp, timestamp)")
+      connection.execute("DROP FUNCTION IF EXISTS days_between(timestamp, timestamp)")
     end
   end
 end

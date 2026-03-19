@@ -1,10 +1,10 @@
 # We need to include the engine url_helpers early on as a helper introduced by another World
 # might override a url (eg patient_prescriptions_path in MedicationsHelper) in order to ammend it
 # so the order of inclusion is important
-World(Renalware::Engine.routes.url_helpers)
+World(Rails.application.routes.url_helpers)
 
 # rubocop:disable Style/GlobalVars
-Dir[Renalware::Engine.root.join("features/support/worlds/*.rb")].each { |f| require f }
+Rails.root.glob("features/support/worlds/*.rb").each { |f| require f }
 
 $world_methods = []
 

@@ -2,7 +2,6 @@ require "rails-controller-testing"
 
 module Renalware
   describe Patients::DeathsController do
-    routes { Engine.routes }
     let(:user) { @current_user }
     let(:patient) do
       create(:patient, by: user).tap do |pat|

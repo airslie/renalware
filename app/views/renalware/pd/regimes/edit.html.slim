@@ -11,4 +11,4 @@
                           method: :put do |f|
 
     = render partial: "renalware/pd/regimes/form", locals: local_assigns.merge!(f: f)
-    = save_or_cancel(form: f, back_path: renalware.patient_pd_dashboard_path(patient))
+    = save_or_cancel(form: f, back_path: patient_pd_dashboard_path(patient))

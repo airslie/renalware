@@ -2,7 +2,7 @@
   - options = path_params.to_h.symbolize_keys
   = simple_form_for form,
             as: :form,
-            url: Renalware::Engine.routes.url_for(options.merge!(only_path: true)),
+            url: Rails.application.routes.url_helpers.url_for(options.merge!(only_path: true)),
             method: :get do |f|
 
     .row.collapse
@@ -35,7 +35,7 @@
   dl.sub-nav
     - filters.each do |key, label|
       - options = path_params.merge(named_filter: key).to_h.symbolize_keys
-      - path = Renalware::Engine.routes.url_for(options.merge!(only_path: true))
+      - path = Rails.application.routes.url_helpers.url_for(options.merge!(only_path: true))
       = sub_nav_item(label, path)
 
 = within_admin_layout(title: "Transplant Wait List Registrations") do

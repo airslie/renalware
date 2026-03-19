@@ -13,12 +13,11 @@ html lang="en"
 
     = stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
     = stylesheet_link_tag "renalware/core", media: :all
-    = stylesheet_link_tag "application", media: :all
     = yield(:css) if content_for?(:css)
 
     = javascript_include_tag "renalware/modernizr"
     = javascript_include_tag "renalware/core", defer: true
-    = javascript_include_tag "application", defer: true
+    = javascript_include_tag "renalware", type: "module", "data-turbo-track": "reload"
     = yield(:javascript) if content_for?(:javascript)
 
     = render_if_exists "head_additions"

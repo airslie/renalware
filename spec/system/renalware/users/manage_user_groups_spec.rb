@@ -19,7 +19,7 @@ describe "A superadmin lists groups", :js do
     Renalware::Users::Group.create!(name: "G1", description: "abc", by: user)
     Renalware::Users::Group.create!(name: "G2", description: "xyz", by: user)
 
-    visit renalware.user_groups_path
+    visit user_groups_path
 
     expect(page).to have_content("User Groups")
     expect(page).to have_content("G1")
@@ -29,7 +29,7 @@ describe "A superadmin lists groups", :js do
   it "add a group" do
     login_as_super_admin
     another_user = create(:user, :clinical)
-    visit renalware.user_groups_path
+    visit user_groups_path
     within ".page-actions" do
       click_on "Add"
     end
@@ -39,7 +39,7 @@ describe "A superadmin lists groups", :js do
     slim_select another_user.to_s, from: "Users", multi: true
     click_on "Create"
 
-    expect(page).to have_current_path(renalware.user_groups_path)
+    expect(page).to have_current_path(user_groups_path)
     expect(page).to have_content("Group1")
     expect(page).to have_content(another_user.to_s)
 
@@ -50,7 +50,7 @@ describe "A superadmin lists groups", :js do
     user = login_as_super_admin
     another_user = create(:user)
     group = Renalware::Users::Group.create!(name: "Group1", by: user)
-    visit renalware.user_groups_path
+    visit user_groups_path
 
     within("##{dom_id(group)}") do
       click_on "Edit"
@@ -60,7 +60,7 @@ describe "A superadmin lists groups", :js do
     slim_select another_user.to_s, from: "Users", multi: true
     click_on "Save"
 
-    expect(page).to have_current_path(renalware.user_groups_path)
+    expect(page).to have_current_path(user_groups_path)
     expect(page).to have_content("GroupX")
     expect(page).to have_content(another_user.to_s)
 

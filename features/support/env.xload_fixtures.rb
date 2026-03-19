@@ -56,7 +56,7 @@ class Fixtures
   end
 
   def fixtures_folder
-    @fixtures_folder ||= Renalware::Engine.root.join("features", "support", "fixtures")
+    @fixtures_folder ||= Rails.root.join("features/support/fixtures")
   end
 
   def fixtures

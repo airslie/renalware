@@ -1,6 +1,6 @@
 = render "renalware/shared/errors", model: layout
 = simple_form_for layout,
-                  url: layout.new_record? ? renalware.events_type_subtypes_path(layout.event_type) : renalware.events_type_subtype_path(layout.event_type, layout),
+                  url: layout.new_record? ? events_type_subtypes_path(layout.event_type) : events_type_subtype_path(layout.event_type, layout),
                   as: :layout,
                   html: { autocomplete: "off" },
                   wrapper: "horizontal_form" do |form|

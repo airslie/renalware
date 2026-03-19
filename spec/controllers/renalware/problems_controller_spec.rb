@@ -2,7 +2,6 @@ require "rails-controller-testing"
 
 module Renalware::Problems
   describe ProblemsController do
-    routes { Renalware::Engine.routes }
     let(:user) { @current_user }
     let(:patient) { create(:patient, by: user) }
     let(:problem) { create(:problem, patient:, by: user) }

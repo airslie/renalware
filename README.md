@@ -1,23 +1,13 @@
 # Renalware
 
-Renalware uses demographic, clinical, pathology, and nephrology datasets to 
-improve patient care, undertake clinical and administrative audits and share 
+Renalware uses demographic, clinical, pathology, and nephrology datasets to
+improve patient care, undertake clinical and administrative audits and share
 data with external systems.
 
 ## Technical Overview
 
-`renalware-core` is an open-source Ruby On Rails [engine](http://guides.rubyonrails.org/engines.html)
-that encapsulates Renalware's features in a re-usable [gem](http://guides.rubygems.org/what-is-a-gem/).
-
-In order to deploy an instance of Renalware that is tailored to a
-renal unit's needs, it is necessary to create a new host Rails application that 
-includes the `renalware-core` gem, adds configuration and HTML/JavaScript/CSS 
-overrides, and optionally augments or replaces core behaviour with custom Ruby 
-code.
-
-While `renalware-core` is intended to be deployed inside a host application in 
-production, it can be run stand-alone in a local development environment using 
-the _demo_ host application (`./demo`) that ships inside the engine.
+`renalware-core` is an open-source Ruby on Rails application for renal unit
+management.
 
 Renalware is built using open source projects including:
 - Ruby on Rails framework
@@ -115,5 +105,3 @@ SimpleCov is integrated to track code coverage across both test suites:
 - **Thresholds**: Minimum 80% overall coverage, 70% per file
 
 Coverage reports include both line and branch coverage metrics, with detailed breakdowns by file and directory.
-
-

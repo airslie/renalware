@@ -25,8 +25,8 @@ module Renalware
 
         # BatchCompilePdfs works in the context of the current working folder
         # So here we create an OS temp folder inside the Rails tmp folder.
-        # In this project you can find this in demo/tmp/{tmp folder name} e.g.
-        # demo/tmp/d20210307-88904-1iul2n7/
+        # In this project you can find this in tmp/{tmp folder name} e.g.
+        # tmp/d20210307-88904-1iul2n7/
 
         # These are the filenames that should be created during the compilation of the PDF.
         letter1_filename = "compiled_letter_#{letter1.id}.pdf"
@@ -61,7 +61,7 @@ module Renalware
         end
 
         # OK, Compilation is complete, and the combined batch PDF filepath stored in the batch model
-        # Path is eg demo/tmp/batches/{batchid}.pdf  and should have the correct number
+        # Path is eg tmp/batches/{batchid}.pdf  and should have the correct number
         # of pages (12 + 8)
         expect(PDF::Reader.new(batch.filepath).page_count).to eq(20)
       end

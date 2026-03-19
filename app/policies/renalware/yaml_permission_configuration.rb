@@ -59,7 +59,7 @@ module Renalware
     end
 
     def default_filename
-      Renalware::Engine.root.join("config", "permissions.yml")
+      Rails.root.join("config/permissions.yml")
     end
   end
 end

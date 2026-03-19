@@ -2,7 +2,7 @@ require "rails-controller-testing"
 
 module Renalware
   describe Devise::OmniauthCallbacksController do
-    routes { Renalware::Engine.routes }
+    routes { Rails.application.routes }
 
     let(:auth) do
       OmniAuth::AuthHash.new(

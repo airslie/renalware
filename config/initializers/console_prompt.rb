@@ -4,7 +4,7 @@
 #
 # Enable in the host applications's config/application.rb:
 #  console do
-#    ARGV.push "-r", Renalware::Engine.root.join("config/initializers/console_prompt.rb")
+#    ARGV.push "-r", Rails.root.join("config/initializers/console_prompt.rb")
 #  end
 
 require "irb"

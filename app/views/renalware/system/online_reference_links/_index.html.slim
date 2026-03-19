@@ -38,7 +38,7 @@
       - references.each do |reference|
         tr(id=dom_id(reference))
           td.actions
-            = link_to "Edit", renalware.edit_system_online_reference_link_path(reference), target: "_top"
+            = link_to "Edit", edit_system_online_reference_link_path(reference), target: "_top"
           td= reference.title
           td
             = external_link_to reference.url,

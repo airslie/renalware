@@ -5,4 +5,4 @@
 
   = simple_form_for [patient, exit_site_infection] do |f|
     = render "renalware/pd/exit_site_infections/fields", f: f
-    = save_or_cancel(form: f, back_path: renalware.patient_pd_dashboard_path(patient))
+    = save_or_cancel(form: f, back_path: patient_pd_dashboard_path(patient))

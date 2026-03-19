@@ -1,6 +1,0 @@
-//= link renalware/core/manifest.js
-//= link_tree ../images
-//= link_directory ../javascripts .js
-//= link_directory ../stylesheets .css
-//= link_tree ../builds
-//= link tailwind.css

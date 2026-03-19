@@ -35,7 +35,7 @@ ruby:
   - if subtype.blank?
     = help_panel do
         | This event type must have sub-types, so please set them up first&nbsp;
-        = link_to 'here', renalware.events_type_subtypes_path(event_type)
+        = link_to 'here', events_type_subtypes_path(event_type)
   - else
     - definition = subtype.definition
     - labels_hash = subtype.definition.each_with_object(ActiveSupport::OrderedHash.new) { |k, h| h[k.keys[0]] = k.values[0]["label"] }
@@ -49,14 +49,14 @@ ruby:
     /   .mx-2
     /     = link_to_if current_user_is_super_admin?,
     /               "Edit this subtype",
-    /               renalware.edit_events_type_subtype_path(event_type, subtype),
+    /               edit_events_type_subtype_path(event_type, subtype),
     /               target: "_blank",
     /               rel: "noopener",
     /               class: "bg-green-100 button compact"
     /   .mx-2
     /     = link_to_if current_user_is_super_admin?,
     /               "Add a subtype",
-    /               renalware.events_type_subtypes_path(event_type),
+    /               events_type_subtypes_path(event_type),
     /               target: "_blank",
     /               rel: "noopener",
     /               class: "bg-green-100 button compact"

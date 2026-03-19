@@ -1,7 +1,7 @@
 = content_for(:actions) do
   - if policy(locations).create?
     = link_to t("btn.add"),
-                renalware.new_deaths_location_path,
+                new_deaths_location_path,
                 class: "button"
 
 = within_new_admin_layout(title: "Death Locations") do

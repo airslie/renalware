@@ -346,7 +346,7 @@ module Renalware
 
                 # This tests to see if the base64-encoded binary content of the
                 # app/assets/pdf/deleted_document.(pdf|rtf) file has been added to the message
-                file_path = Renalware::Engine.root
+                file_path = Rails.root
                   .join("app/assets/#{format}/deleted_document.#{format}")
                 content = Base64.strict_encode64(::File.binread(file_path))
 

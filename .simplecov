@@ -7,7 +7,7 @@ SimpleCov.start "rails" do
 
   # Additional filters beyond the default rails profile
   add_filter "/bin/"
-  add_filter "/demo/"
+  add_filter "/demo-old/"
   add_filter "/spec/"
   add_filter "/features/"
   add_filter "/vendor/"

@@ -1,5 +1,2 @@
 #!/bin/sh
-bundle exec rake app:yarn:install
-pushd demo
-bundle exec ./bin/rails server $@
-popd
+bundle exec ./bin/rails server "$@"

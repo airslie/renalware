@@ -4,7 +4,7 @@ See https://wiki.postgresql.org/wiki/Count_estimate
 Normal count(*) can be slow where that are millions of rows.
 This is a faster way to count filtered rows by parsing the output of an explain query.
 */
-CREATE FUNCTION count_estimate(query text) RETURNS INTEGER AS
+CREATE OR REPLACE FUNCTION count_estimate(query text) RETURNS INTEGER AS
 $func$
 DECLARE
     rec   record;

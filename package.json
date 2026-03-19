@@ -1,7 +1,7 @@
 {
   "name": "renalware-core",
   "version": "2.2.11",
-  "main": "app/assets/javascripts/renalware/built.js",
+  "main": "app/assets/builds/renalware.js",
   "repository": "https://github.com/airslie/renalware-core.git",
   "author": "Airslie Ltd",
   "license": "MIT",
@@ -43,7 +43,7 @@
   },
   "scripts": {
     "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
-    "build:css": "./demo/bin/yarn build:css"
+    "build:css": "bundle exec tailwindcss -c ./config/tailwind.config.js -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css"
   },
   "devDependencies": {
     "eslint": "^9.9",

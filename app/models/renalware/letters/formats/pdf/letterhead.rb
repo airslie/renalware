@@ -11,7 +11,7 @@ module Renalware
             float do
               bounding_box([230, 775], width: 300, height: 200) do
                 image_path = "app/assets/images/renalware/nhs_a4_letter_logo_blue.png"
-                image Renalware::Engine.root.join(image_path), position: :right, width: 45
+                image Rails.root.join(image_path), position: :right, width: 45
                 move_down 4
                 font_size(11) do
                   text "King’s College Hospital", align: :right, style: :bold

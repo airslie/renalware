@@ -51,7 +51,7 @@ module Renalware
         doc.xpath("//fhir:Bundle", fhir: "http://hl7.org/fhir").remove
         doc.add_child(document_bundle)
 
-        xslt_path = Renalware::Engine.root.join("vendor/xslt/transfer_of_care/DocumentToHTML.xslt")
+        xslt_path = Rails.root.join("vendor/xslt/transfer_of_care/DocumentToHTML.xslt")
         xslt = Nokogiri::XSLT(File.read(xslt_path))
         html = xslt.transform(doc)
         render locals: { html: html }, layout: nil

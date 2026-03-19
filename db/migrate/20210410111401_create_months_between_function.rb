@@ -7,7 +7,7 @@ class CreateMonthsBetweenFunction < ActiveRecord::Migration[5.2]
 
   def down
     within_renalware_schema do
-      connection.execute("DROP FUNCTION months_between(timestamp, timestamp)")
+      connection.execute("DROP FUNCTION IF EXISTS months_between(timestamp, timestamp)")
     end
   end
 end

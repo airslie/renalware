@@ -75,9 +75,9 @@ describe "API request for a single patient JSON document" do
           "email" => "email@example.com"
         },
         "prescriptions_url" =>
-          renalware.api_v1_patient_prescriptions_path(patient_id: patient),
+          api_v1_patient_prescriptions_path(patient_id: patient),
         "hd_profile_url" =>
-          renalware.api_v1_patient_hd_current_profile_path(patient_id: patient)
+          api_v1_patient_hd_current_profile_path(patient_id: patient)
       )
     end
   end

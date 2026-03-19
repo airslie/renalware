@@ -49,6 +49,10 @@ en:
     renalware/hd/profile_document/anticoagulant:
       type:
         none: None
+        heparin: Heparin
+        enoxyparin: Enoxaparin
+        warfarin: Warfarin
+        tinzaparin: Tinzaparin
     renalware/hd/profile_document/care_level:
       level:
         level0: 0 - Fully self-caring
