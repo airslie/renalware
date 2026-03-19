@@ -80,6 +80,16 @@ describe Renalware::HD::ProtocolPresenter do
 
       expect(presenter.latest_dry_weight).to eq(newer)
     end
+
+    it "returns the most recently created dry weight when multiple were assessed on the same day" do
+      patient = create(:clinical_patient)
+      assessed_on = Date.current
+      create(:dry_weight, patient:, weight: 123, assessed_on:, created_at: 2.hours.ago)
+      newer = create(:dry_weight, patient:, weight: 234, assessed_on:, created_at: 1.hour.ago)
+      presenter = described_class.new(patient, nil)
+
+      expect(presenter.latest_dry_weight).to eq(newer)
+    end
   end
 
   describe "#recent_pathology" do
