@@ -31,12 +31,13 @@ module RenalwareApp
 
     # Not loading all files in lib until we resolve the issue
     # uninitialized constant CoreExtensions::DumbDelegator (NameError)
-    # config.eager_load_paths << Rails.root.join("lib")
+    config.eager_load_paths << Rails.root.join("lib")
     config.eager_load_paths << Rails.root.join("app/view_components")
     config.eager_load_paths << Rails.root.join("app/validators/concerns")
     config.eager_load_paths << Rails.root.join("app/services")
     config.eager_load_paths << Rails.root.join("app/forms")
     config.eager_load_paths << Rails.root.join("app/queries")
+    Rails.autoloaders.main.ignore(Rails.root.join("lib/rails/commands"))
 
     config.assets.js_compressor = nil
 

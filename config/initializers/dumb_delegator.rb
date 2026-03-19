@@ -1,4 +1,7 @@
+require "dumb_delegator"
+
 # Used in app/models/renalware/ukrdc/outgoing/rendering/clinic_visit_observation.rb:11
+# rubocop:disable Naming/MethodParameterName
 class DumbDelegator < BasicObject
   # Handle public_send correctly when ActionView calls this method
   # Reference: https://github.com/stevenharman/dumb_delegator/issues/9
@@ -27,3 +30,4 @@ class DumbDelegator < BasicObject
     "DumbDelegator(#{__getobj__.inspect})"
   end
 end
+# rubocop:enable Naming/MethodParameterName

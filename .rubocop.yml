@@ -30,7 +30,6 @@ AllCops:
   # Defining the Exclude or Include keys here overwrites the settings in styleguide/rubocop.yml
   # so we have to redefine the entire set.
   Exclude:
-    - "lib/renalware/engine_no.rb"
     - "config/environment.rb"
     - "db/migrate/**/*"
     - "demo-old/**/*"

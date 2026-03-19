@@ -1,5 +1,4 @@
-# Class for configuring the Renalware::Core engine
-# http://stackoverflow.com/questions/24104246/how-to-use-activesupportconfigurable-with-rails-engine
+# Class for configuring the Renalware app
 #
 # To override default config values, create an initializer in the host application
 # e.g. config/initializers/renalware_core.rb, and use e.g.:
@@ -299,15 +298,6 @@ module Renalware
     # the assigning authority code for the NHS number so we can extract it.
     config_accessor(:nhs_number_assigning_authority) { :NHSNBR }
 
-    # If true, we use a cron-scheduled good_job to poll the renalware.feed_raw_hl7_messages table
-    # for new incoming messages (most likely inserted by Mirth) and spin each off as a new
-    # active job. Because we currently load the good_job cron config in engine.rb,
-    # the host app cannot seem to override this config setting in eg a renalware_core.rb initializer
-    # and instead we use an ENV var here. This might be solvable by using an after
-    # hook during initialisation etc; it is likely I do not understand the nuances of initialisation
-    # order sufficiently, but I been unable so far to get GoodJob to honour cron config
-    # unless it is set in the early stagings of app initialisation.
-    # We default to false because this is an opt-in approach we want sites to migrate to.
     config_accessor(:process_hl7_via_raw_messages_table) {
       ENV.fetch("PROCESS_HL7_VIA_RAW_MESSAGES_TABLE", "false") == "true"
     }
@@ -517,7 +507,7 @@ module Renalware
     #   :dynamic
     #   :dynamic2
     config_accessor(:hl7_patient_locator_strategy) do
-      Configuration::Hl7PatientLocatorStrategy.load_from_env
+      Configuration::HL7PatientLocatorStrategy.load_from_env
     end
     config_accessor(:demo_password) { "renalware" }
     config_accessor(:password_policy_description) {

@@ -10,13 +10,6 @@ module Renalware
     # 3. Practice memberships
     #
     class SyncODSJob < ApplicationJob
-      # Do not retry this job as we do not want to keep hitting the ODS API.
-      # If it fails this job will be removed form the queue, but make sure we report the error.
-      # discard_on(StandardError) do |_job, exception|
-      #   Renalware::Engine.exception_notifier.notify(exception)
-      #   Rails.logger.error exception
-      # end
-
       # If dry_run: true when we should not save any changes.
       def perform(args)
         dry_run = args[:dry_run]

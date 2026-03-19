@@ -1,7 +1,7 @@
 module Renalware
   module System
     # A component is the description in data of an ActionView::Component
-    # in the app/view_components folder inside this engine.
+    # in the app/view_components folder.
     # Components encapsulate reusable elements of the UI.
     # Dashboard-compatible components must have a current_user arg in their
     # ctor.

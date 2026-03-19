@@ -3,4 +3,4 @@
 module Forms
 end
 
-Rails.autoloaders.main.push_dir(ENGINE.join("app/pdfs/forms"), namespace: Forms)
+Rails.autoloaders.main.push_dir(Rails.root.join("app/pdfs/forms"), namespace: Forms)
