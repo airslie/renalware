@@ -52,11 +52,11 @@ Renalware.configure do |config|
     ],
     "Renalware::Feeds::MessageProcessor" => [
       "Renalware::Patients::Ingestion::MessageListener",
-      "Renalware::Pathology::Ingestion::AKIListener",
+      ("Renalware::Pathology::Ingestion::AKIListener" if config.aki_alerts_enabled),
       "Renalware::Pathology::Ingestion::MessageListener",
       "Renalware::Clinics::Ingestion::MessageListener",
       "Renalware::Pathology::KFRE::Listener"
-    ],
+    ].compact,
     "Renalware::Pathology::CreateObservationRequests" => [
       "Renalware::Pathology::KFRE::Listener"
     ]

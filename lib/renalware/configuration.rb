@@ -138,6 +138,9 @@ module Renalware
     }
     config_accessor(:duration_of_last_url_memory_after_session_expiry) { 30.minutes }
     config_accessor(:broadcast_subscription_map) { {} }
+    config_accessor(:aki_alerts_enabled) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("AKI_ALERTS_ENABLED", "true"))
+    end
     config_accessor(:include_sunday_on_hd_diaries) { false }
     config_accessor(:clinical_duke_activity_status_index_url) {
       "https://www.mdcalc.com/calc/3910/duke-activity-status-index-dasi#next-steps"
