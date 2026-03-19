@@ -19,6 +19,10 @@ module Renalware
       belongs_to :patient, touch: true
       belongs_to :consultant, -> { with_deleted }, counter_cache: true
       belongs_to :clinic, -> { with_deleted }, counter_cache: true
+      belongs_to :clinic_visit,
+                 class_name: "Renalware::Clinics::ClinicVisit",
+                 foreign_key: :becomes_visit_id,
+                 optional: true
 
       validates :starts_at, presence: true
       validates :patient_id, presence: true

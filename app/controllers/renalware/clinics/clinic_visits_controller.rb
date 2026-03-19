@@ -28,6 +28,10 @@ module Renalware
         render_edit(find_and_authorize_visit)
       end
 
+      def show
+        render_show(find_and_authorize_visit)
+      end
+
       def create
         authorize ClinicVisit, :create?
         result = CreateClinicVisit.call(clinics_patient, visit_params)
@@ -69,6 +73,13 @@ module Renalware
 
       def render_edit(visit)
         render_template(:edit, visit)
+      end
+
+      def render_show(visit)
+        render :show, locals: {
+          patient: clinics_patient,
+          clinic_visit: visit
+        }
       end
 
       def render_template(template, visit, appointment = nil)
