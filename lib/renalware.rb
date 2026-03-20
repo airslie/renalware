@@ -1,11 +1,12 @@
 require "rubygems"
 require "tailwindcss-rails" if Rails.env.local?
 require "debug" if ENV.fetch("RAILS_ENV", nil) == "development"
-
-require "renalware/version"
 require "renalware/pack_engines"
+Renalware::PackEngines.load!
 
 module Renalware
+  VERSION = "2.4.5.6".freeze
+
   # Keep table names unchanged (do not prefix with renalware_).
   def self.table_name_prefix = nil
 

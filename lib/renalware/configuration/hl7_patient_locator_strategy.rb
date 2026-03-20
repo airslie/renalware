@@ -1,6 +1,6 @@
 module Renalware
   class Configuration
-    class Hl7PatientLocatorStrategy
+    class HL7PatientLocatorStrategy
       DEFAULTS = {
         oru: :simple,
         adt: :simple

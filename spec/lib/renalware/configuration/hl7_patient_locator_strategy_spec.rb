@@ -1,4 +1,4 @@
-describe Renalware::Configuration::Hl7PatientLocatorStrategy do
+describe Renalware::Configuration::HL7PatientLocatorStrategy do
   subject(:strategy) { described_class.load_from_env }
 
   around do |example|

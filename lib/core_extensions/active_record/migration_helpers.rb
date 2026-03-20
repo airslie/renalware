@@ -88,14 +88,12 @@ module CoreExtensions
         class << self
           def triggers
             [
-              Rails.root.join("db/triggers"),
               Rails.root.join("db/triggers")
             ]
           end
 
           def functions
             [
-              Rails.root.join("db/functions"),
               Rails.root.join("db/functions")
             ]
           end
