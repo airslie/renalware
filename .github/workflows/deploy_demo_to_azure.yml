@@ -69,15 +69,20 @@ jobs:
           # cache-from: type=registry,ref=${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:buildcache-v2
           # cache-to: type=registry,ref=${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:buildcache-v2,mode=max
 
-      - name: Deploy image to App Service (deterministic)
+      - name: Deploy image to App Service sidecar (deterministic)
         run: |
           APP_RG="${APP_SERVICE_RESOURCE_GROUP:-${RESOURCE_GROUP}}"
           FULL_IMAGE="${{ steps.meta.outputs.acr_login_server }}/${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}"
-
-          az webapp config container set \
+          SITE_ID="$(az webapp show \
             --name "${APP_SERVICE_NAME}" \
             --resource-group "${APP_RG}" \
-            --container-image-name "${FULL_IMAGE}"
+            --query id \
+            --output tsv)"
+
+          az resource update \
+            --ids "${SITE_ID}/sitecontainers/main" \
+            --api-version 2025-03-01 \
+            --set properties.image="${FULL_IMAGE}"
 
       - name: Restart App Service
         run: |
