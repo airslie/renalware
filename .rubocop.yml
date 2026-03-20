@@ -32,6 +32,7 @@ AllCops:
   Exclude:
     - "config/environment.rb"
     - "db/migrate/**/*"
+    - "db/cache_migrate/**/*"
     - "demo-old/**/*"
     - "*.gemspec"
     - "vendor/**/*"

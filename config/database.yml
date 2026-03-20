@@ -2,7 +2,7 @@ default: &default
   adapter: postgresql
   encoding: unicode
   # See comments re schema_search_path in 20171116103230_move_objects_to_renalware_schema.rb
-  schema_search_path: "renalware,public,heroku_ext"
+  schema_search_path: "renalware,public,renalware_mse,renalware_blt,renalware_ich"
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV["DB_POOL"] || ENV['RAILS_MAX_THREADS'] || 5 %>
@@ -12,25 +12,45 @@ default_credentials: &default_credentials
   password: <%= ENV["POSTGRES_PASSWORD"] || "renalware" %>
 
 development:
-  <<: *default
-  <<: *default_credentials
-
-  # To use another database, pass MYDB=xxx as an argument, e.g. MYDB=xxx bin/web
-  database: <%= ENV.fetch("MYDB", "renalware_development") %>
-
-  # Minimum log levels, in increasing order:
-  #   debug5, debug4, debug3, debug2, debug1,
-  #   log, notice, warning, error, fatal, and panic
-  # Defaults to warning.
-  min_messages: notice
+  primary:
+    <<: *default
+    <<: *default_credentials
+    database: <%= ENV.fetch("MYDB", "renalware_development") %>
+    # Minimum log levels, in increasing order:
+    #   debug5, debug4, debug3, debug2, debug1,
+    #   log, notice, warning, error, fatal, and panic
+    # Defaults to warning.
+    min_messages: notice
+  cache:
+    <<: *default
+    <<: *default_credentials
+    database: <%= ENV.fetch("MYCACHEDB", "renalware_cache_development") %>
+    migrations_paths: db/cache_migrate
+    schema_search_path: "public"
 
 test:
-  <<: *default
-  <<: *default_credentials
-  database: renalware_test
-  pool: 100
+  primary:
+    <<: *default
+    <<: *default_credentials
+    database: <%= ENV.fetch("MYDB", "renalware_test") %>
+    pool: 100
+  cache:
+    <<: *default
+    <<: *default_credentials
+    database: <%= ENV.fetch("MYCACHEDB", "renalware_cache_test") %>
+    migrations_paths: db/cache_migrate
+    schema_search_path: "public"
+
 
 # Used by renalware-demo Heroku site
 production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+  cache:
+    <<: *default
+    url: <%= ENV["CACHE_DATABASE_URL"] %>
+    migrations_paths: db/cache_migrate
+    schema_search_path: "public"
+    schema_dump: false
+    structure_dump: false

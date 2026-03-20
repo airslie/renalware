@@ -14485,39 +14485,6 @@ ALTER SEQUENCE renalware.snippets_snippets_id_seq OWNED BY renalware.snippets_sn
 
 
 --
--- Name: solid_cache_entries; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.solid_cache_entries (
-    id bigint NOT NULL,
-    key bytea NOT NULL,
-    value bytea NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    key_hash bigint NOT NULL,
-    byte_size integer NOT NULL
-);
-
-
---
--- Name: solid_cache_entries_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.solid_cache_entries_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: solid_cache_entries_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.solid_cache_entries_id_seq OWNED BY renalware.solid_cache_entries.id;
-
-
---
 -- Name: supportive_care_mdm_patients; Type: VIEW; Schema: renalware; Owner: -
 --
 
@@ -18669,13 +18636,6 @@ ALTER TABLE ONLY renalware.snippets_snippets ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- Name: solid_cache_entries id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.solid_cache_entries ALTER COLUMN id SET DEFAULT nextval('renalware.solid_cache_entries_id_seq'::regclass);
-
-
---
 -- Name: survey_questions id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -21059,14 +21019,6 @@ ALTER TABLE ONLY renalware.roles_users
 
 ALTER TABLE ONLY renalware.snippets_snippets
     ADD CONSTRAINT snippets_snippets_pkey PRIMARY KEY (id);
-
-
---
--- Name: solid_cache_entries solid_cache_entries_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.solid_cache_entries
-    ADD CONSTRAINT solid_cache_entries_pkey PRIMARY KEY (id);
 
 
 --
@@ -27235,27 +27187,6 @@ CREATE INDEX index_snippets_snippets_on_title ON renalware.snippets_snippets USI
 
 
 --
--- Name: index_solid_cache_entries_on_byte_size; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_solid_cache_entries_on_byte_size ON renalware.solid_cache_entries USING btree (byte_size);
-
-
---
--- Name: index_solid_cache_entries_on_key_hash; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_solid_cache_entries_on_key_hash ON renalware.solid_cache_entries USING btree (key_hash);
-
-
---
--- Name: index_solid_cache_entries_on_key_hash_and_byte_size; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_solid_cache_entries_on_key_hash_and_byte_size ON renalware.solid_cache_entries USING btree (key_hash, byte_size);
-
-
---
 -- Name: index_survey_questions_on_code_and_survey_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -32268,7 +32199,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware, public, heroku_ext;
+SET search_path TO renalware,public,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20260216170537'),
@@ -32277,7 +32208,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20260211061047'),
 ('20260210185453'),
 ('20260210155641'),
-('20260209121300'),
 ('20260205172045'),
 ('20260202160254'),
 ('20260112190854'),
