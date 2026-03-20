@@ -102,6 +102,9 @@ module RenalwareApp
     config.before_initialize do
       require "renalware/config_accessors"
       require "renalware/configuration"
+      require "renalware/required_env"
+
+      Renalware::RequiredEnv.validate!
     end
 
     config.to_prepare do
