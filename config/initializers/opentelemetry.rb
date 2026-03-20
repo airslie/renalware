@@ -3,6 +3,7 @@
 # (opentelemetry-instrumentation-rails, opentelemetry-instrumentation-pg etc) that we need.
 if !Rails.env.test? && ENV.fetch("ENABLE_OPENTELEMETRY", 0).to_i == 1
   Bundler.require(:opentelemetry)
+  require Rails.root.join("app/services/open_telemetry_error_subscriber")
 
   OpenTelemetry::SDK.configure do |c|
     c.service_name = ENV.fetch("OTEL_SERVICE_NAME", "renalware")
