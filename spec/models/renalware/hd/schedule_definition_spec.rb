@@ -14,5 +14,21 @@ module Renalware::HD
         expect(definition.to_s).to eq("Mon Wed Fri AM")
       end
     end
+
+    describe "generated days_text" do
+      it "derives days_text from days when creating a record" do
+        definition = create(:schedule_definition, days: [1, 3, 5])
+
+        expect(definition.reload.days_text).to eq("Mon Wed Fri")
+      end
+
+      it "keeps days_text in sync when days is updated in SQL" do
+        definition = create(:schedule_definition, days: [1, 3, 5])
+
+        described_class.where(id: definition.id).update_all("days = '{2,4,6}'")
+
+        expect(definition.reload.days_text).to eq("Tue Thu Sat")
+      end
+    end
   end
 end

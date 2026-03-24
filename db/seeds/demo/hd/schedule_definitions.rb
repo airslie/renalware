@@ -9,8 +9,7 @@ module Renalware
 
       HD::ScheduleDefinition.find_or_create_by!(
         diurnal_period: period,
-        days: definition[:days],
-        days_text: definition[:days_text]
+        days: definition[:days]
       )
     end
   end
