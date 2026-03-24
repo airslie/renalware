@@ -8,24 +8,20 @@ FactoryBot.define do
     end
 
     days { [1, 3, 5] }
-    days_text { "Mon Wed Fri" }
     diurnal_period factory: %i(hd_diurnal_period_code am)
 
     trait :mon_wed_fri_am do
       days { [1, 3, 5] }
-      days_text { "Mon Wed Fri" }
       diurnal_period factory: %i(hd_diurnal_period_code am)
     end
 
     trait :mon_wed_fri_pm do
       days { [1, 3, 5] }
-      days_text { "Mon Wed Fri" }
       diurnal_period factory: %i(hd_diurnal_period_code pm)
     end
 
     trait :tue_sat_pm do
       days { [2, 6] }
-      days_text { "Tue Sat" }
       diurnal_period factory: %i(hd_diurnal_period_code pm)
     end
   end

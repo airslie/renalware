@@ -1358,6 +1358,15 @@ $$;
 
 
 --
+-- Name: hd_schedule_definition_days_text(integer[]); Type: FUNCTION; Schema: renalware; Owner: -
+--
+
+CREATE FUNCTION renalware.hd_schedule_definition_days_text(days integer[]) RETURNS text
+    LANGUAGE sql IMMUTABLE STRICT
+    AS $$ SELECT string_agg( CASE day_number WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue' WHEN 3 THEN 'Wed' WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' WHEN 6 THEN 'Sat' WHEN 7 THEN 'Sun' END, ' ' ORDER BY day_number ) FROM ( SELECT DISTINCT unnest(days) AS day_number ) days WHERE day_number BETWEEN 1 AND 7 $$;
+
+
+--
 -- Name: import_feed_gps(); Type: FUNCTION; Schema: renalware; Owner: -
 --
 
@@ -7559,8 +7568,8 @@ CREATE TABLE renalware.hd_schedule_definitions (
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    days_text text,
-    sort_order integer DEFAULT 0 NOT NULL
+    sort_order integer DEFAULT 0 NOT NULL,
+    days_text text GENERATED ALWAYS AS (renalware.hd_schedule_definition_days_text(days)) STORED
 );
 
 
@@ -32202,6 +32211,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,public,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260324112837'),
 ('20260216170537'),
 ('20260216090421'),
 ('20260211063527'),
