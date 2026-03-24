@@ -22,6 +22,7 @@ end
 
 gem "autoprefixer-rails"
 gem "aws-sdk-s3", require: false # for active storage when using Heroku for test environments
+gem "benchmark"
 gem "bootsnap", require: false # speeds up rspec and rails server boot time in development
 gem "faker"
 gem "i18n-tasks", require: false
