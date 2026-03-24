@@ -1,6 +1,8 @@
 module Renalware
   module Users
     class LdapOmniauthUser
+      class NotAuthorisedError < StandardError; end
+
       def initialize(auth:, password:)
         @auth = auth
         @password = password
@@ -9,6 +11,10 @@ module Renalware
       def call
         user = User.find_by(username:) || build_user_from_fallback_identity
         User.sync_roles(user, member_of_groups)
+        unless authorised?(user)
+          raise NotAuthorisedError, "User is not in an authorised Active Directory group"
+        end
+
         user.save! if user.changed?
         user
       end
@@ -46,7 +52,21 @@ module Renalware
       end
 
       def member_of_groups
-        auth.extra.raw_info["memberof"]
+        ldap_managed_groups.presence || auth.extra.raw_info["memberof"]
+      end
+
+      def ldap_managed_groups
+        @ldap_managed_groups ||= Ldap::Connection.new(username:).nested_group_names(
+          group_names: managed_ad_role_names
+        )
+      end
+
+      def managed_ad_role_names
+        @managed_ad_role_names ||= Role.where.not(ad_role_name: nil).pluck(:ad_role_name)
+      end
+
+      def authorised?(user)
+        user.roles.any? { |role| role.ad_role_name.present? }
       end
     end
   end

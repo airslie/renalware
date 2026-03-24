@@ -53,6 +53,18 @@ module Renalware
         expect(flash[:alert]).to eq("LDAP sign-in failed.")
         expect(Rails.logger).to have_received(:warn).with(/LDAP login failed: Renalware::Ldap::Error/)
       end
+
+      it "redirects with a not authorised message when LDAP auth succeeds but no AD role applies" do
+        allow(User).to receive(:from_ldap_omniauth)
+          .and_raise(Users::LdapOmniauthUser::NotAuthorisedError, "no matching AD group")
+        allow(Rails.logger).to receive(:info)
+
+        post :ldap, params: { password: "ldap-password" }
+
+        expect(response).to redirect_to(new_user_session_path)
+        expect(flash[:alert]).to eq("You are not authorised to sign in.")
+        expect(Rails.logger).to have_received(:info).with(/LDAP login denied: no matching AD group/)
+      end
     end
   end
 end
