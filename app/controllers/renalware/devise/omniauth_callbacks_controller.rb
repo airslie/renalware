@@ -21,13 +21,12 @@ module Renalware
         auth = request.env["omniauth.auth"]
         @user = User.from_ldap_omniauth(auth, request.params["password"])
 
-        if @user.persisted?
-          sign_in_and_redirect @user, event: :authentication
-          set_flash_message(:notice, :success, kind: "LDAP") if is_navigational_format?
-        else
-          session["devise.ldap_data"] = auth.except("extra")
-          redirect_to new_user_session_path, alert: "Could not sign in with LDAP."
-        end
+        return sign_in_ldap_user if @user.persisted?
+
+        reject_ldap_sign_in(auth)
+      rescue Users::LdapOmniauthUser::NotAuthorisedError => e
+        Rails.logger.info("LDAP login denied: #{e.message}")
+        redirect_to new_user_session_path, alert: "You are not authorised to sign in."
       rescue => e # rubocop:disable Style/RescueStandardError
         Rails.logger.warn("LDAP login failed: #{e.class}: #{e.message}")
         redirect_to new_user_session_path, alert: "LDAP sign-in failed."
@@ -62,6 +61,16 @@ module Renalware
       end
 
       private
+
+      def sign_in_ldap_user
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: "LDAP") if is_navigational_format?
+      end
+
+      def reject_ldap_sign_in(auth)
+        session["devise.ldap_data"] = auth.except("extra")
+        redirect_to new_user_session_path, alert: "Could not sign in with LDAP."
+      end
 
       def enrich_ldap_invalid_credentials(username) # rubocop:disable Metrics/MethodLength
         ldap = Net::LDAP.new(

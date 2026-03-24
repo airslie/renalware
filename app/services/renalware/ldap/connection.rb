@@ -18,6 +18,22 @@ module Renalware
         !bind.nil?
       end
 
+      def nested_group_names(group_names:)
+        return [] if group_names.blank?
+
+        dn = search_for_user&.dn
+        return [] if dn.blank?
+
+        entries = []
+        admin_ldap.search(filter: nested_groups_filter(user_dn: dn, group_names:)) do |found_entry|
+          entries << found_entry
+        end
+
+        log_failure(admin_ldap, raise_on_error: true)
+
+        entries.filter_map { |entry| entry["cn"]&.first || entry[:cn]&.first }
+      end
+
       private
 
       attr_reader :password
@@ -100,6 +116,25 @@ module Renalware
         message = "operation failed: #{result.code} - #{result.message}"
         error(message)
         raise Error, message if raise_on_error
+      end
+
+      def nested_groups_filter(user_dn:, group_names:)
+        group_filter = case group_names.length
+                       when 1
+                         "(cn=#{escape_filter_value(group_names.first)})"
+                       else
+                         "(|#{group_names.map { |name| "(cn=#{escape_filter_value(name)})" }.join})"
+                       end
+
+        Net::LDAP::Filter.construct(
+          "(&(objectClass=group)" \
+          "(member:1.2.840.113556.1.4.1941:=#{escape_filter_value(user_dn)})" \
+          "#{group_filter})"
+        )
+      end
+
+      def escape_filter_value(value)
+        Net::LDAP::Filter.escape(value.to_s)
       end
     end
   end

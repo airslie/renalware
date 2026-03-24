@@ -23,6 +23,7 @@ documentation/.docusaurus
 ## Environment normalisation:
 /.bundle
 /vendor/bundle
+/demo
 
 # # Ignore all logfiles and tempfiles.
 /log/*.log.*

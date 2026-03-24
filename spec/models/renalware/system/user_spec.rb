@@ -249,6 +249,8 @@ module Renalware
       let!(:readonly_role) { create(:role, :read_only, ad_role_name: "renalware-readonly") }
       let(:hospital_centre) { create(:hospital_centre, :default) }
       let(:password) { "ldap-password" }
+      let(:ldap_connection) { instance_double(Ldap::Connection, nested_group_names: nested_group_names) }
+      let(:nested_group_names) { ["renalware-clinical"] }
       let(:auth) do
         OmniAuth::AuthHash.new(
           uid: "jbloggs",
@@ -270,6 +272,10 @@ module Renalware
       before do
         hospital_centre
         allow(Renalware.config).to receive(:ldap_auto_approve_users).and_return(true)
+        allow(Ldap::Connection)
+          .to receive(:new)
+          .with(username: "jbloggs")
+          .and_return(ldap_connection)
       end
 
       it "creates a user from the LDAP auth hash and syncs managed roles" do
@@ -333,6 +339,31 @@ module Renalware
         )
         expect(user.encrypted_password).to eq(encrypted_password)
         expect(user.roles.reload).to contain_exactly(clinical_role)
+      end
+
+      it "assigns roles from nested AD group membership" do
+        nested_group_names.replace(["renalware-readonly"])
+
+        user = described_class.from_ldap_omniauth(auth, password)
+
+        expect(user.roles.reload).to contain_exactly(readonly_role)
+      end
+
+      it "falls back to raw memberof groups if the targeted LDAP lookup returns nothing" do
+        nested_group_names.clear
+
+        user = described_class.from_ldap_omniauth(auth, password)
+
+        expect(user.roles.reload).to contain_exactly(clinical_role)
+      end
+
+      it "rejects sign-in when LDAP returns no authorised groups" do
+        nested_group_names.clear
+        auth.extra.raw_info["memberof"] = nil
+
+        expect {
+          described_class.from_ldap_omniauth(auth, password)
+        }.to raise_error(Users::LdapOmniauthUser::NotAuthorisedError)
       end
     end
 
