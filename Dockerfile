@@ -101,7 +101,7 @@ FROM base
 # RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections
 # ttf-mscorefonts-installer
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y ldap-utils locales telnet curl wget ghostscript file tzdata nano unzip postgresql-client && \
+    apt-get install --no-install-recommends -y ldap-utils locales telnet curl wget ghostscript file tzdata nano unzip postgresql-client openssh-server gosu && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Uncomment to install network troubleshooting tools
@@ -161,12 +161,13 @@ ENV RAILS_ENV="production"
 ENV RAILS_SERVE_STATIC_FILES="1"
 
 EXPOSE 3000
+EXPOSE 2222
 
 # chmod/chown is cleanest as root
 USER root
 COPY --chown=rails:rails docker_entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY sshd_config.azure /etc/ssh/sshd_config.d/azure-app-service.conf
 RUN chmod 0755 /usr/local/bin/entrypoint.sh
 
-USER rails
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]
