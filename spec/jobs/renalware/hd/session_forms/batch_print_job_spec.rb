@@ -11,7 +11,7 @@ module Renalware
 
           described_class.perform_now(batch.id, user.id)
 
-          expect(BatchCompilePdfs).to have_received(:call).with(batch, user)
+          expect(BatchCompilePdfs).to have_received(:call).with(batch, user, dir: kind_of(Pathname))
         end
       end
     end

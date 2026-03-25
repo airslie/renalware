@@ -11,10 +11,10 @@ module Renalware
         include Callable
         include PdfCompilation
 
-        def initialize(batch, user)
+        def initialize(batch, user, dir: nil)
           @batch = batch
           @user = user
-          @dir = Pathname(Dir.pwd)
+          @dir = Pathname(dir || Dir.pwd)
         end
 
         def call
@@ -33,7 +33,7 @@ module Renalware
         attr_reader :batch, :dir, :user
 
         def process_batch_items
-          filename = "batch_#{batch.id}.pdf"
+          filename = dir.join("batch_#{batch.id}.pdf")
           File.binwrite(filename, PdfRenderer.new(patients: patients).call)
           batch.items.each { |item| item.update(status: :compiled) }
         end

@@ -7,11 +7,9 @@ module Renalware
         # Returns the name of a temp file containing the pdf data
         def perform(batch_id, user_id)
           in_a_temporary_folder do |dir|
-            Dir.chdir(dir) do
-              batch = Batch.find(batch_id)
-              user = User.find(user_id)
-              BatchCompilePdfs.call(batch, user)
-            end
+            batch = Batch.find(batch_id)
+            user = User.find(user_id)
+            BatchCompilePdfs.call(batch, user, dir: dir)
           end
         end
 
