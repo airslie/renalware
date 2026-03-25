@@ -3,7 +3,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby file: ".ruby-version"
 
-gem "activesupport_cache_database", github: "airslie/activesupport-cache-database"
 gem "sprockets-rails"
 
 # https://opentelemetry.io/docs/instrumentation/ruby/getting-started/

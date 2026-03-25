@@ -3651,19 +3651,6 @@ ALTER SEQUENCE renalware.active_storage_variant_records_id_seq OWNED BY renalwar
 
 
 --
--- Name: activesupport_cache_entries; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.activesupport_cache_entries (
-    key bytea NOT NULL,
-    value bytea NOT NULL,
-    version character varying,
-    created_at timestamp without time zone NOT NULL,
-    expires_at timestamp without time zone
-);
-
-
---
 -- Name: address_versions; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -13941,7 +13928,7 @@ CREATE VIEW renalware.reporting_anaemia_audit AS
           WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
           WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text, ('nephrology'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -14021,7 +14008,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
+  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
   GROUP BY e1.modality_desc;
 
 
@@ -19143,14 +19130,6 @@ ALTER TABLE ONLY renalware.active_storage_variant_records
 
 
 --
--- Name: activesupport_cache_entries activesupport_cache_entries_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.activesupport_cache_entries
-    ADD CONSTRAINT activesupport_cache_entries_pkey PRIMARY KEY (key);
-
-
---
 -- Name: address_versions address_versions_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -21908,27 +21887,6 @@ CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON renalware.active_storag
 --
 
 CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON renalware.active_storage_variant_records USING btree (blob_id, variation_digest);
-
-
---
--- Name: index_activesupport_cache_entries_on_created_at; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_created_at ON renalware.activesupport_cache_entries USING btree (created_at);
-
-
---
--- Name: index_activesupport_cache_entries_on_expires_at; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_expires_at ON renalware.activesupport_cache_entries USING btree (expires_at);
-
-
---
--- Name: index_activesupport_cache_entries_on_version; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_version ON renalware.activesupport_cache_entries USING btree (version);
 
 
 --
@@ -32211,6 +32169,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,public,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260325113000'),
 ('20260324112837'),
 ('20260216170537'),
 ('20260216090421'),

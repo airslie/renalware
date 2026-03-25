@@ -14,13 +14,9 @@
 # of rendering the entire HTML letter to get its MD5 hash, which is then used in trying to find a
 # PDF file cache hit for that filename).
 #
-# Note that PDF Letters are stored in the rails cache, which is currently Filestore. If we move
-# to a multi-server environment we would need to switch to Memcached or Redis, and the PDF files
-# would be poked into that - using quite a lot of memory I am sure (avg 25k per PDF), so would be
-# unable to keep PDFs in the cache for as long as we can in the FileStore implementation, which is
-# only limited by disc space. However PDFs can be regenerated on demand so there is no need to be
-# bothered about not keeping them other than as mentioned the wasted resources in creating the
-# same file several times.
+# Note that PDF letters are stored in Rails.cache. In this application that is backed by Solid
+# Cache in the separate cache database. PDF cache keys are prefixed with `letter_pdf` so they can
+# be identified easily in solid_cache_entries when needed.
 #
 # Example usage which stores the PDF in the rails cache if not found
 #
@@ -34,10 +30,8 @@ module Renalware
   module Letters
     class PdfLetterCache
       class << self
-        delegate :clear, :cleanup, to: :store
-
         def fetch(letter, **, &)
-          store.fetch(
+          Rails.cache.fetch(
             cache_key_for(letter),
             version: cache_version_for(letter, **),
             expires_in: 4.weeks,
@@ -47,20 +41,6 @@ module Renalware
 
         private
 
-        def store
-          @store ||= begin
-            if ActiveSupport::Cache.const_defined?(:DatabaseStore)
-              ActiveSupport::Cache::DatabaseStore.new namespace: "letter_pdf"
-            else
-              ActiveSupport::Cache::FileStore.new(file_store_cache_path)
-            end
-          end
-        end
-
-        def file_store_cache_path
-          Rails.root.join("tmp/pdf_letter_cache")
-        end
-
         # Note the letter must be a LetterPresenter which has a #to_html method
         # The to_html method should (and does on the LetterPresenter class) render the complete
         # html including surrounding layout with inline css and images. This way if the
@@ -68,6 +48,7 @@ module Renalware
         # valid and a new key and cache entry will be created.
         def cache_key_for(letter)
           [
+            "letter_pdf",
             "patient",
             letter.patient.id,
             "letter",
