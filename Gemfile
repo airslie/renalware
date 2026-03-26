@@ -73,12 +73,6 @@ group :test do
   gem "wisper-rspec", "~> 1.1.0"
 end
 
-group :production do
-  # For redirecting renalware-demo.herokuapp.com => demo.renalware.app
-  gem "rack-host-redirect", github: "airslie/rack-host-redirect"
-  gem "wkhtmltopdf-heroku", "~> 3.0.0"
-end
-
 group :development do
   # gem "meta_request" # useful for https://github.com/dejan/rails_panel
   # gem "traceroute" # for finding unused routes

@@ -24,13 +24,6 @@ GIT
       rails
 
 GIT
-  remote: https://github.com/airslie/rack-host-redirect.git
-  revision: a74796367ecc084d8feeb0bfc35e0e99d15045ec
-  specs:
-    rack-host-redirect (1.3.0)
-      rack
-
-GIT
   remote: https://github.com/cucumber/cucumber-ruby.git
   revision: ce92606c6e3d952e6b76fef85e8cae36e7666632
   specs:
@@ -975,7 +968,6 @@ GEM
       wisper
     wisper-rspec (1.1.0)
     wkhtmltopdf-binary (0.12.6.8)
-    wkhtmltopdf-heroku (3.0.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.38)
@@ -1091,7 +1083,6 @@ DEPENDENCIES
   query_count
   rack
   rack-attack
-  rack-host-redirect!
   rack-mini-profiler
   rails (~> 8.1.2)
   rails-controller-testing (~> 1.0.4)
@@ -1145,7 +1136,6 @@ DEPENDENCIES
   wisper-activejob (~> 1.0.0)
   wisper-rspec (~> 1.1.0)
   wkhtmltopdf-binary (= 0.12.6.8)
-  wkhtmltopdf-heroku (~> 3.0.0)
   yard (>= 0.9.35)
 
 RUBY VERSION
