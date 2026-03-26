@@ -32,7 +32,6 @@ namespace :letters do
     get :status, constraints: { format: :json }, defaults: { format: :json }
     resources :completions, only: %i(new create), controller: "completed_batches"
   end
-  resource :pdf_letter_cache, only: [:destroy], controller: "pdf_letter_cache"
 
   # Letters::ListsController displays pre-defined lists of letters. The default list is :all
   # We want to support dynamic urls with letters_list_path(named_parameter: :all)

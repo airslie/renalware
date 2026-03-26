@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/airslie/activesupport-cache-database.git
-  revision: 15094428f7c805a796f16be7c20a2934ee3deaf7
-  specs:
-    activesupport_cache_database (0.2.1)
-      activerecord (>= 5.0)
-      activesupport (>= 5.0)
-
-GIT
   remote: https://github.com/airslie/capybara_select2.git
   revision: ca80ca08ad3a3abe8c70e23f01fd701140405666
   branch: playwright
@@ -997,7 +989,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord-import (~> 1.0)
   activerecord-postgres_enum (~> 2.0)
-  activesupport_cache_database!
   acts_as_list (~> 1.1)
   after_commit_everywhere
   ahoy_matey

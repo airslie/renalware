@@ -2,14 +2,13 @@
   .panel
     h2 Application Cache
     p
-      | The cache (backed by Redis) stores some queries and html fragments in order to make
+      | The cache is backed by Solid Cache and stores some queries and html fragments in order to make
       |  the rendering of pages faster and less resource intensive. Cached elements are invalidated
       |  when the underlying database data changes (but it only examines the updated_at column and
       |  count of records, in order to catch edits, inserts and deletions) or the html template
       |  changes (changes are only reflected after am app restart in this latter case).
     p
-      | You can check the size and number of keys in the Redis cache by running&nbsp;
-      code redis-cli --stat
+      | The cache entries live in the cache database configured for Solid Cache.
     p There are certain cases where you might need to clear the cache:
     ol
       li
@@ -20,25 +19,4 @@
             admin_cache_path,
             method: :delete,
             data: { confirm: "Are you sure you want to clear the application cache?\n" },
-            class: "button alert"
-
-  .panel
-    h2 PDF Letter Cache
-    p
-      | The PDF letter cache stores generated PDFs so they do not need to be regenerated if
-      |  unless their content has changed. It is a FileStore cache and the files are stored
-      |  in&nbsp;
-      code shared/tmp/pdf_letter_cache
-      |  - though in a folder layout that a little tricky to navigate
-      |  and search if you are looking for something; however it is NOT meant to be the canonical
-      |  source for PDF letters, rather a volatile cache to aid performance. EPR should be the place
-      |  to look for letter content - or just view the PDF through the UI.
-    p
-      | You may wish to clear the PDF Letter Cache if you notice any anomalies in the PDFs.
-      |  Please raise a GitHub issue after clearing the cache so we can look into it.
-
-  = link_to "Clear the PDF Letter Cache",
-            letters_pdf_letter_cache_path,
-            method: :delete,
-            data: { confirm: "Are you sure you want to clear the PDF letter cache?\n" },
             class: "button alert"

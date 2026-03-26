@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_24_112837) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_25_113000) do
   create_schema "renalware"
 
   # These are extensions that must be enabled in order to support this database
@@ -1876,16 +1876,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_112837) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
-
-  create_table "renalware.activesupport_cache_entries", primary_key: "key", id: :binary, force: :cascade do |t|
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "expires_at", precision: nil
-    t.binary "value", null: false
-    t.string "version"
-    t.index ["created_at"], name: "index_activesupport_cache_entries_on_created_at"
-    t.index ["expires_at"], name: "index_activesupport_cache_entries_on_expires_at"
-    t.index ["version"], name: "index_activesupport_cache_entries_on_version"
   end
 
   create_table "renalware.address_versions", force: :cascade do |t|
