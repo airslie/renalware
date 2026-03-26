@@ -11,12 +11,13 @@
 WickedPdf.configure do |config|
   # Path to the wkhtmltopdf executable: This usually isn't needed if using
   # one of the wkhtmltopdf-binary family of gems.
+  system_wkhtmltopdf_path = ENV["WKHTMLTOPDF_PATH"].presence ||
+                            ["/usr/local/bin/wkhtmltopdf", "/usr/bin/wkhtmltopdf"].find do |path|
+                              File.exist?(path)
+                            end
 
-  # 2025-06-04
-  # Use devbox wkhtmltopdf on NixOS
-  # Hacky workaround until out-of-support wkhtmltopdf is replaced.
-  if File.exist?("/etc/os-release") && File.read("/etc/os-release").include?("NAME=NixOS")
-    config.exe_path = Rails.root.join(ENV.fetch("DEVBOX_PACKAGES_DIR"), "bin", "wkhtmltopdf").to_s
+  if system_wkhtmltopdf_path.present?
+    config.exe_path = system_wkhtmltopdf_path
   end
 
   #   or
