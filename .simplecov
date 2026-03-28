@@ -12,7 +12,6 @@ SimpleCov.start "rails" do
   add_filter "/features/"
   add_filter "/vendor/"
   add_filter "/rubocop/"
-  add_filter "/.devbox/"
 
   # Groups for better organization in the HTML report
   add_group "Models", "app/models"
