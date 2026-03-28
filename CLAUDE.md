@@ -5,9 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Setup and Environment
-- `devbox run setup` - Initial setup including database creation and seeding
-- `devbox run reset` - Delete PostgreSQL database and re-run setup
-- `devbox services up` - Start infrastructure services (PostgreSQL)
+- `bin/setup` - Install dependencies, prepare the database, build assets, and start local processes
+- Install PostgreSQL locally and create the `renalware` role unless `POSTGRES_USER`/`POSTGRES_PASSWORD` are overridden
 - `bin/dev` - Start application processes (web server, worker, JS/CSS watchers)
 
 ### Testing
@@ -64,7 +63,7 @@ The application is organized into medical/clinical domains under `app/models/ren
 - Pathology result ingestion from external systems
 
 ### Development Environment
-Uses Devbox/Nix for reproducible development environments. Infrastructure services (PostgreSQL) are managed via `devbox services up`, while application processes are managed by Foreman via `bin/dev` (see `Procfile.dev`). Local development runs on port 3000 with demo users (superkch, kchdoc, kchnurse, kchguest) using password "renalware".
+Uses native local tooling. Infrastructure services such as PostgreSQL are managed on the host machine, while application processes are managed by Foreman via `bin/dev` (see `Procfile.dev`). Local development runs on port 3000 with demo users (superkch, kchdoc, kchnurse, kchguest) using password "renalware".
 - Use `db/schema.rb` to inspect the database/model structure
 
 ### Testing

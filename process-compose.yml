@@ -1,8 +1,0 @@
-version: "0.5"
-
-# Infrastructure services only
-# Application processes (web, worker, js, css) are managed by Foreman via bin/dev
-
-# PostgreSQL is loaded by it's own devbox service
-
-processes:
