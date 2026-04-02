@@ -1,4 +1,5 @@
 .git*
+!.gitmodules
 log/*
 tmp/*
 Dockerfile

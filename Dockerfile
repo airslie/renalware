@@ -47,13 +47,36 @@ RUN apt-get update && apt-get install -y --no-install-recommends nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Install application gems
-COPY Gemfile Gemfile.lock yarn.lock package.json .gemrc .ruby-version ./
+COPY Gemfile Gemfile.lock yarn.lock package.json .gemrc .ruby-version .gitmodules ./
 
 ARG BUNDLE_GITHUB__COM
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
     bundle exec bootsnap precompile -j 1 --gemfile
+
+# Copy the UKRDC schema directories separately so schema updates can be cached
+# independently of broader application code changes.
+COPY ./vendor/xsd ./vendor/xsd
+
+# Populate the UKRDC schema directories when the build context does not include
+# initialized git submodules. This keeps image builds working from plain clones,
+# CI source archives, and other contexts where vendor/xsd/* may be empty.
+RUN ruby <<'RUBY'
+require "fileutils"
+
+gitmodules = File.read(".gitmodules")
+modules = gitmodules.scan(/\[submodule "(.*?)"\]\s+path = (.*?)\s+url = (.*?)\s+branch = (.*?)(?:\s|\z)/m)
+
+modules.each do |_name, path, url, branch|
+  schema = File.join(path, "schema/ukrdc/UKRDC.xsd")
+  next if File.exist?(schema)
+
+  FileUtils.rm_rf(path)
+  system("git", "clone", "--depth", "1", "--branch", branch, url, path) or
+    abort("Failed to clone #{url}##{branch} into #{path}")
+end
+RUBY
 
 # Copy into the build image only the files that are required to install gems and precompile assets.
 # We could just do `COPY . $RAILS_ROOT/` to copy all files across but then if, say, only a ruby file
