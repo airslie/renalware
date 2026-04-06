@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: https://github.com/cucumber/cucumber-ruby.git
-  revision: ce92606c6e3d952e6b76fef85e8cae36e7666632
+  revision: 9728f57e2071188fdfd0c0f5fbd63db17d2d25f0
   specs:
     cucumber (10.2.0)
       base64 (~> 0.2)
@@ -33,12 +33,12 @@ GIT
       cucumber-ci-environment (> 9, < 12)
       cucumber-core (>= 16.2.0, < 17)
       cucumber-cucumber-expressions (> 17, < 20)
-      cucumber-html-formatter (> 21, < 23)
+      cucumber-html-formatter (> 21, < 24)
       diff-lcs (~> 1.5)
       logger (~> 1.6)
       mini_mime (~> 1.1)
       multi_test (~> 1.1)
-      sys-uname (~> 1.3)
+      sys-uname (~> 1.5)
 
 GEM
   remote: https://rubygems.org/
@@ -126,14 +126,15 @@ GEM
     acts_as_list (1.2.6)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
-    addressable (2.8.9)
+    addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     afm (1.0.0)
     after_commit_everywhere (1.6.0)
       activerecord (>= 4.2)
       activesupport
-    ahoy_matey (5.4.1)
+    ahoy_matey (5.4.2)
       activesupport (>= 7.1)
+      cgi
       device_detector (>= 1)
       safely_block (>= 0.4)
     ast (2.4.3)
@@ -191,13 +192,14 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    capybara-playwright-driver (0.5.7)
+    capybara-playwright-driver (0.5.9)
       addressable
       capybara
       playwright-ruby-client (>= 1.16.0)
     capybara-screenshot (1.0.27)
       capybara (>= 1.0, < 4)
       launchy
+    cgi (0.5.1)
     childprocess (5.1.0)
       logger (~> 1.5)
     chunky_png (1.4.0)
@@ -294,9 +296,9 @@ GEM
       net-http (~> 0.5)
     faraday-retry (2.4.0)
       faraday (~> 2.0)
-    ffi (1.17.3-aarch64-linux-gnu)
-    ffi (1.17.3-arm64-darwin)
-    ffi (1.17.3-x86_64-linux-gnu)
+    ffi (1.17.4-aarch64-linux-gnu)
+    ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
     fhir_models (5.0.0)
       bcp47 (>= 0.3)
       date_time_precision (>= 0.8)
@@ -318,7 +320,7 @@ GEM
       ruby-progressbar (~> 1.4)
     globalid (1.3.0)
       activesupport (>= 6.1)
-    good_job (4.14.1)
+    good_job (4.14.2)
       activejob (>= 6.1.0)
       activerecord (>= 6.1.0)
       concurrent-ruby (>= 1.3.1)
@@ -596,7 +598,7 @@ GEM
     parallel (1.27.0)
     paranoia (3.1.0)
       activerecord (>= 7, < 8.2)
-    parser (3.3.10.2)
+    parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
     pdf-core (0.10.0)
@@ -618,7 +620,8 @@ GEM
       phlex (~> 2.4.0)
       railties (>= 7.1, < 9)
       zeitwerk (~> 2.7)
-    playwright-ruby-client (1.54.1)
+    playwright-ruby-client (1.58.1)
+      base64
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
     pp (0.6.3)
@@ -724,7 +727,7 @@ GEM
     refract (1.1.0)
       prism
       zeitwerk
-    regexp_parser (2.11.3)
+    regexp_parser (2.12.0)
     reline (0.6.3)
       io-console (~> 0.5)
     request_store (1.7.0)
@@ -820,7 +823,7 @@ GEM
     ruby_http_client (3.6.0)
     rubyntlm (0.6.5)
       base64
-    safely_block (0.5.0)
+    safely_block (1.0.0)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -850,7 +853,6 @@ GEM
       simplecov (~> 0.19)
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
-    sin_lru_redux (2.5.2)
     sinatra (4.2.1)
       logger (>= 1.6.0)
       mustermann (~> 3.0)
@@ -886,12 +888,10 @@ GEM
     stringio (3.2.0)
     strong_migrations (2.5.2)
       activerecord (>= 7.1)
-    strscan (3.1.7)
+    strscan (3.1.8)
     sys-uname (1.5.1)
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
-    tailwind_merge (0.16.0)
-      sin_lru_redux (~> 2.5)
     tailwindcss-rails (3.3.2)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 3.0)
@@ -971,6 +971,7 @@ GEM
 PLATFORMS
   aarch64-linux
   arm64-darwin-24
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
@@ -1113,7 +1114,6 @@ DEPENDENCIES
   stackprof
   store_model (< 5)
   strong_migrations
-  tailwind_merge (< 1.0)
   tailwindcss-rails (~> 3.0)
   tailwindcss-ruby (~> 3.4)
   terser
@@ -1134,7 +1134,7 @@ DEPENDENCIES
   yard (>= 0.9.35)
 
 RUBY VERSION
-   ruby 3.4.8p72
+  ruby 4.0.2
 
 BUNDLED WITH
-   2.7.2
+  4.0.6

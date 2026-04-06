@@ -20,7 +20,7 @@ with Ruby, Node.js, Yarn, and PostgreSQL installed on your machine.
 
 ### Prerequisites
 
-- Ruby `3.4.8` (see [`.ruby-version`](/Users/tim/Code/airslie/renalware/core/.ruby-version))
+- Ruby `4.x` (see [`.ruby-version`](/Users/tim/Code/airslie/renalware/core/.ruby-version))
 - Node.js `22.x`
 - Yarn `1.x`
 - PostgreSQL `16.x`
@@ -71,7 +71,7 @@ They all share the password `renalware`.
 
 Renalware is developed against locally installed tooling rather than a repo-managed
 package environment. Any Ruby version manager is fine so long as it provides
-Ruby `3.4.8`; common choices are `mise`, `asdf`, `rbenv`, or `chruby`.
+Ruby; common choices are `mise`, `asdf`, `rbenv`, or `chruby`.
 
 ### Direnv
 
