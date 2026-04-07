@@ -70,6 +70,19 @@ jobs:
     name: Linters
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout code
@@ -80,8 +93,21 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Setup test database
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          RAILS_ENV: test
+          PGHOST: localhost
+        run: bin/rails db:create db:schema:load
+
       - name: Rubocop
         run: bundle exec rubocop
+
+      - name: Packwerk
+        run: |
+          bundle exec packwerk validate
+          bin/packwerk check
 
       - name: Run security checks
         run: |

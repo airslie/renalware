@@ -1,0 +1,5 @@
+# Root metadata for this pack. Checks stay off until we have established
+# boundaries and captured a baseline.
+enforce_dependencies: true
+dependencies:
+  - "."

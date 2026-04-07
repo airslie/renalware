@@ -104,6 +104,7 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
   gem "launchy", require: false
   gem "overcommit"
+  gem "packwerk", require: false
   gem "pry-rails"
   gem "rspec-rails"
   gem "rubocop", require: false

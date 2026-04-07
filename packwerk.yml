@@ -1,0 +1,25 @@
+# See: Setting up the configuration file
+# https://github.com/Shopify/packwerk/blob/main/USAGE.md#configuring-packwerk
+
+# Start with Ruby sources that map cleanly to constants in this app. The custom
+# Zeitwerk setup for components and PDF forms introduces overlapping roots that
+# make Packwerk's constant resolver treat some constants as ambiguous.
+include:
+  - "app/**/*.rb"
+  - "config/**/*.rb"
+  - "lib/**/*.rb"
+  - "packs/**/*.rb"
+
+exclude:
+  - "app/models/renalware.rb"
+  - "app/components/**/*"
+  - "app/pdfs/**/*"
+  - "bin/**/*"
+  - "db/**/*"
+  - "node_modules/**/*"
+  - "script/**/*"
+  - "spec/**/*"
+  - "tmp/**/*"
+  - "vendor/**/*"
+
+package_paths: "{.,packs/*}/"
