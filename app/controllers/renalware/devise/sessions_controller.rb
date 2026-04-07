@@ -2,6 +2,8 @@ module Renalware
   class Devise::SessionsController < ::Devise::SessionsController
     include Concerns::DeviseControllerMethods
 
+    prepend_before_action :redirect_if_login_form_is_stale, only: :create
+
     def create
       user = Renalware::User.find_by(username: user_params[:username])
 
@@ -28,6 +30,13 @@ module Renalware
     end
 
     private
+
+    def redirect_if_login_form_is_stale
+      return if verified_request?
+
+      reset_session
+      redirect_to new_user_session_path, alert: t("devise.failure.stale_login_form")
+    end
 
     def user_valid?(user)
       user&.valid_password?(user_params[:password])
