@@ -36,6 +36,15 @@ module Renalware
         expect(response).to have_http_status(:redirect)
         expect(controller.current_user).to eq(user)
       end
+
+      it "redirects back to sign in when the login form authenticity check fails" do
+        allow(controller).to receive(:verified_request?).and_return(false)
+
+        post :create, params: { user: { username: user.username, password: "password123" } }
+
+        expect(response).to redirect_to(new_user_session_path)
+        expect(flash[:alert]).to eq("The sign-in page expired. Please try again.")
+      end
     end
   end
 end
