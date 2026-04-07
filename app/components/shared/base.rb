@@ -14,6 +14,7 @@ class Shared::Base < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
   include Rails.application.routes.url_helpers # paths without `renalware.` prefix
   include Phlex::Rails::Helpers::AssetPath
+  include Phlex::Rails::Helpers::Request
 
   attr_reader :attrs
 

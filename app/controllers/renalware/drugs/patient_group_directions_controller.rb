@@ -1,8 +1,6 @@
 module Renalware
   module Drugs
     class PatientGroupDirectionsController < BaseController
-      include Pagy::Backend
-
       def index
         pagy, directions = pagy(PatientGroupDirection.ordered)
         authorize directions

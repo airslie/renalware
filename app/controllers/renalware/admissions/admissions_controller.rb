@@ -3,8 +3,6 @@ require "collection_presenter"
 module Renalware
   module Admissions
     class AdmissionsController < BaseController
-      include Pagy::Backend
-
       helper Hospitals::HospitalsHelper
 
       def index

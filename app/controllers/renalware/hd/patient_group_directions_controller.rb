@@ -3,7 +3,6 @@ module Renalware
     class PatientGroupDirectionsController < BaseController
       include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PatientCasting
-      include Pagy::Backend
 
       def index
         authorize hd_patient

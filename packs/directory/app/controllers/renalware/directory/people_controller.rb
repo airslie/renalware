@@ -3,8 +3,6 @@ require "collection_presenter"
 module Renalware
   module Directory
     class PeopleController < BaseController
-      include Pagy::Backend
-
       def index
         query = PersonQuery.new(q: params[:q])
         pagy, people = pagy(call_query(query))

@@ -1,8 +1,6 @@
 module Renalware
   module Feeds
     class LogsController < BaseController
-      include Pagy::Backend
-
       def index
         query = Feeds::Log
           .includes(:patient, :message)

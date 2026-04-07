@@ -1,8 +1,6 @@
 module Renalware
   module Admissions
     class RequestsController < BaseController
-      include Pagy::Backend
-
       def index
         requests = Request
           .ordered

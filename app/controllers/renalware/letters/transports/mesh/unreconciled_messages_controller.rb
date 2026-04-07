@@ -1,8 +1,6 @@
 module Renalware
   module Letters::Transports::Mesh
     class UnreconciledMessagesController < BaseController
-      include Pagy::Backend
-
       layout -> { turbo_frame_request? ? "turbo_rails/frame" : "renalware/layouts/admin" }
 
       def index

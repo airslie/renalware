@@ -1,14 +1,12 @@
 module Renalware
   module Letters::Transports::Mesh
     class JobsController < BaseController
-      include Pagy::Backend
-
       layout -> { turbo_frame_request? ? "turbo_rails/frame" : "renalware/layouts/admin" }
 
       def index
         authorize Transmission, :index?
         query = GoodJob::Job.where(queue_name: "mesh").order(updated_at: :desc)
-        pagy, jobs = pagy(query, items: 30)
+        pagy, jobs = pagy(query, limit: 30)
         render locals: { pagy: pagy, jobs: jobs, stats: stats_hash }
       end
 

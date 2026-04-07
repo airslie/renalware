@@ -1,8 +1,6 @@
 module Renalware
   module System
     class UserFeedbackController < BaseController
-      include Pagy::Backend
-
       def index
         search = UserFeedback
           .includes(:author)

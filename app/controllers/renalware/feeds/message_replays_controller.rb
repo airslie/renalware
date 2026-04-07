@@ -1,8 +1,6 @@
 module Renalware
   module Feeds
     class MessageReplaysController < BaseController
-      include Pagy::Backend
-
       def index
         pagy, replays = pagy(replay_request.message_replays.order(created_at: :desc))
         authorize replays

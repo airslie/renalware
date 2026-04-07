@@ -4,7 +4,6 @@ module Renalware
   module Clinics
     # Patient-specific appointments
     class PatientAppointmentsController < BaseController
-      include Pagy::Backend
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
 

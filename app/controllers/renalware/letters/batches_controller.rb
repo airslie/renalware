@@ -1,8 +1,6 @@
 module Renalware
   module Letters
     class BatchesController < BaseController
-      include Pagy::Backend
-
       def index
         pagy, batches = pagy(Batch.order(created_at: :desc))
         authorize batches

@@ -4,13 +4,12 @@ module Renalware
       class MessagesController < BaseController
         include Renalware::Concerns::Pageable
         include PresenterHelper
-        include Pagy::Backend
 
         # Display all public message for a patient
         def index
           authorize Messaging::Internal::Message, :index?
           scope = patient.messages.where(public: true).order(created_at: :desc)
-          pagy, messages = pagy(scope, items: 20)
+          pagy, messages = pagy(scope, limit: 20)
           render locals: { patient: patient, messages: messages, pagy: pagy }
         end
 

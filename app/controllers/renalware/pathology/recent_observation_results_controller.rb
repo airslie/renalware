@@ -39,7 +39,8 @@ module Renalware
           patient: patient,
           code_group_name: code_group_name,
           page: params[:page] || 1,
-          per_page: 100
+          per_page: 100,
+          request:
         ).call
       end
     end

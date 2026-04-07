@@ -1,7 +1,6 @@
 module Renalware
   module Patients
     class AttachmentsController < BaseController
-      include Pagy::Backend
       include Renalware::Concerns::PatientVisibility
 
       def index

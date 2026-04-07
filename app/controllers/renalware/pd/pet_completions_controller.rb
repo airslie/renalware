@@ -1,8 +1,6 @@
 module Renalware
   module PD
     class PETCompletionsController < Renalware::BaseController
-      include Pagy::Backend
-
       def index
         query = PETResult.joins(:patient).order(performed_on: :desc).ransack(params[:q])
         pagy, results = pagy(query.result)

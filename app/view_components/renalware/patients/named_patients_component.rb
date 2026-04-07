@@ -2,8 +2,6 @@ module Renalware
   module Patients
     class NamedPatientsComponent < ApplicationComponent
       include ApplicationHelper
-      include Pagy::Backend
-      include Pagy::Frontend
 
       delegate :default_patient_link, to: :helpers
       pattr_initialize [:current_user!]
@@ -62,7 +60,7 @@ module Renalware
       private
 
       def load_patients
-        @pagination, @patients = pagy(scope, items: 10, anchor_string: "data-remote='true'")
+        @pagination, @patients = pagy(scope, limit: 10, anchor_string: "data-remote='true'")
       end
 
       def scope

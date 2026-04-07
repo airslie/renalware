@@ -1,8 +1,6 @@
 module Renalware
   module Hospitals
     class CentresController < BaseController
-      include Pagy::Backend
-
       def index
         query = params.fetch(:q, {})
         query[:s] ||= "name"

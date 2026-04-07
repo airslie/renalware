@@ -5,7 +5,6 @@ module Renalware
     class BodyCompositionsController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Pagy::Backend
 
       def index
         authorize BodyComposition, :index?

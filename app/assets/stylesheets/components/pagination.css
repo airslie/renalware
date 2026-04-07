@@ -6,11 +6,11 @@
      margin: 0;
     }
 
-    a.gap {
+    a[role="separator"] {
       @apply w-10 text-center font-normal border shadow-sm;
     }
 
-    a:not(.gap) {
+    a:not([role="separator"]) {
       @apply border block py-1 px-3 focus-visible:outline focus-visible:outline-2;
       @apply focus-visible:outline-offset-2 text-gray-700 shadow-sm;
 
@@ -22,7 +22,7 @@
         @apply text-gray-400 bg-gray-50 cursor-default font-normal;
       }
 
-      &.current {
+      &[aria-current="page"] {
         @apply text-white bg-gray-400;
         @apply border-sky-600 ;
         @apply bg-sky-600 text-white focus-visible:outline-sky-600;
@@ -44,5 +44,9 @@
         @apply bg-gray-100 border-none rounded-md;
       }
     }
+  }
+
+  .snippets .pagy {
+    margin-bottom: 15px;
   }
 }

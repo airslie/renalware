@@ -3,8 +3,6 @@ require "collection_presenter"
 module Renalware
   module Letters
     class ElectronicReceiptsController < BaseController
-      include Pagy::Backend
-
       # PATCH
       def mark_as_read
         authorize receipt

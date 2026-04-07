@@ -2,7 +2,6 @@ module Renalware
   module Patients
     class PatientsController < Renalware::BaseController
       include PresenterHelper
-      include Pagy::Backend
       include Renalware::Concerns::PatientVisibility
 
       def index

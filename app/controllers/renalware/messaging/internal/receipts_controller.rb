@@ -4,7 +4,6 @@ module Renalware
   module Messaging
     module Internal
       class ReceiptsController < BaseController
-        include Pagy::Backend
         include PresenterHelper
 
         # GET aka inbox

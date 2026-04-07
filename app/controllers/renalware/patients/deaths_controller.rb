@@ -2,7 +2,6 @@ module Renalware
   module Patients
     class DeathsController < BaseController
       include PresenterHelper
-      include Pagy::Backend
 
       def index
         query = Patients::DeceasedPatientsQuery.new(params[:q], scope: patient_scope)

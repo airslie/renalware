@@ -36,4 +36,4 @@
               pre
                 = JSON.pretty_generate(rr.criteria.as_json)
 
-  == pagy_nav(pagy) if pagy.pages > 1
+  == pagy.series_nav if pagy.pages > 1

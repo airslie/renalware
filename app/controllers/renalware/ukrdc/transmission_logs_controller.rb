@@ -4,7 +4,6 @@ module Renalware
   module UKRDC
     class TransmissionLogsController < BaseController
       include PresenterHelper
-      include Pagy::Backend
 
       # NB be sure not to select the payload as this will slow things down.
       # The payload is loaded by clicking on a link in the table

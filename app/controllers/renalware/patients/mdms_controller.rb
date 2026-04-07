@@ -2,7 +2,6 @@ module Renalware
   module Patients
     class MDMsController < BaseController
       include Renalware::Concerns::Pageable
-      include Pagy::Backend
 
       class MDMListOptions
         attr_reader_initialize [

@@ -3,8 +3,6 @@
 module Renalware
   module Letters
     class LettersController < Letters::BaseController # rubocop:disable Metrics/ClassLength
-      include Pagy::Backend
-
       # The turbo-rails gem mixes in a concern that will access request.headers on each request
       # to determine if a layout should be rendered. However when we render a PDF using the
       # render_to_string helper method that WickedPDF adds to ActionController,

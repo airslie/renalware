@@ -6,4 +6,4 @@
     = render Renalware::SpinnerComponent.new do |spinner|
       = spinner.with_main_content do
         = render "table", clinic_visits: visits
-        == pagy_nav(pagy) if pagy.pages > 1
+        == pagy.series_nav if pagy.pages > 1

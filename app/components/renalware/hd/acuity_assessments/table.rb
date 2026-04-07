@@ -2,8 +2,6 @@
 
 module Renalware
   class HD::AcuityAssessments::Table < Shared::Table
-    register_output_helper :pagy_nav, mark_safe: true
-
     RATIOS = {
       0.25 => { label: "1:4", color: "bg-green-300" },
       0.33 => { label: "1:3", color: "bg-lime-900" },
@@ -27,7 +25,7 @@ module Renalware
           assessments.each { row(it) }
         end
       end
-      pagy_nav(pagy) if pagy && pagy.pages > 1
+      raw(pagy.series_nav.html_safe) if pagy && pagy.pages > 1
     end
 
     private

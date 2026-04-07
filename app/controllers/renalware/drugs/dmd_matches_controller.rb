@@ -3,8 +3,6 @@ require "csv"
 module Renalware
   module Drugs
     class DMDMatchesController < BaseController
-      include Pagy::Backend
-
       def index
         authorize DMDMatch
 

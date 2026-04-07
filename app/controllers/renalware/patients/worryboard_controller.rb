@@ -3,7 +3,6 @@ module Renalware
     class WorryboardController < BaseController
       include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::Pageable
-      include Pagy::Backend
 
       def show
         authorize Worry, :index?

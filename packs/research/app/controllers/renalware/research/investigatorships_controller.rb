@@ -2,7 +2,6 @@ module Renalware
   module Research
     class InvestigatorshipsController < BaseController
       helper Renalware::ResearchHelper
-      include Pagy::Backend
 
       def index
         query = InvestigatorshipQuery.new(study: study, options: params[:q])

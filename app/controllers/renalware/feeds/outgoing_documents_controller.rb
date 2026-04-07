@@ -1,8 +1,6 @@
 module Renalware
   module Feeds
     class OutgoingDocumentsController < BaseController
-      include Pagy::Backend
-
       def index
         query = OutgoingDocument
           .includes(:created_by)

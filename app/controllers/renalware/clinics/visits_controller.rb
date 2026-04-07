@@ -2,8 +2,6 @@
 module Renalware
   module Clinics
     class VisitsController < BaseController
-      include Pagy::Backend
-
       def index
         visits_query = VisitQuery.new(query_params)
         pagy, visits = pagy(visits_query.call)

@@ -86,4 +86,4 @@
                     = list.definition(:dna_notes) { |value| simple_format(value) }
                     = list.definition(:source_clinic_name) { |value| simple_format(value) }
 
-      == pagy_nav(pagy) if pagy.pages > 1
+      == pagy.series_nav if pagy.pages > 1

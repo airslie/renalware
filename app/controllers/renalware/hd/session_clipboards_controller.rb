@@ -5,7 +5,6 @@ module Renalware
     class SessionClipboardsController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Pagy::Backend
       include PresenterHelper
 
       def show

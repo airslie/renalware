@@ -3,7 +3,6 @@ module Renalware
     class RegimesController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Pagy::Backend
 
       def index
         pagy, regimes = pagy(

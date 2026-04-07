@@ -2,7 +2,6 @@ module Renalware
   module Pathology
     class ObservationDescriptionsController < BaseController
       include Renalware::Concerns::PatientCasting
-      include Pagy::Backend
 
       def index
         query = ObservationDescription
@@ -10,7 +9,7 @@ module Renalware
           .includes(obx_mappings: :sender)
           .order(:code)
           .ransack(params[:q] || {})
-        pagy, descriptions = pagy(query.result, items: 50)
+        pagy, descriptions = pagy(query.result, limit: 50)
         authorize descriptions
         render locals: { descriptions: descriptions, pagy: pagy, query: query }
       end

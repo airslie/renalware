@@ -156,7 +156,7 @@ gem "omniauth-entra-id" # OAuth2/OIDC against Entra ID
 gem "omniauth-ldap"
 gem "omniauth-rails_csrf_protection"
 gem "ox", "~> 2.13"
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43"
 gem "pandoc-ruby", "~> 2.1.4"
 gem "paper_trail"
 gem "paranoia", "~> 3.0"

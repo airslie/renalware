@@ -25,4 +25,4 @@
                   span.tag(class=role.name)= role.name.humanize
               td= l(user.expired_at)
 
-      == pagy_nav(pagy) if pagy.pages > 1
+      == pagy.series_nav if pagy.pages > 1

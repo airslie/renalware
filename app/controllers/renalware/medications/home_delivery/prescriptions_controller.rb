@@ -2,8 +2,6 @@ module Renalware
   module Medications
     module HomeDelivery
       class PrescriptionsController < BaseController
-        include Pagy::Backend
-
         def index
           form = SearchForm.new(search_params)
           query = Medications::Delivery::PrescriptionsDueForDeliveryQuery.new(

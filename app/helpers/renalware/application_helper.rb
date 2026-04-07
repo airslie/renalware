@@ -5,7 +5,6 @@ require "breadcrumb"
 module Renalware
   module ApplicationHelper
     include Rails.application.routes.url_helpers
-    include Pagy::Frontend
 
     # If a consumer (eg a report) wants to generate a link to a patient page in a certain module/
     # context, as a convenience for the user, then this helper will generate a link to a url e.g.

@@ -1,7 +1,6 @@
 module Renalware
   module Renal
     class AKIAlertsController < BaseController
-      include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
 
       helper Hospitals::HospitalsHelper

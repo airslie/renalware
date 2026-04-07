@@ -15,7 +15,7 @@
   = render "renalware/shared/please_print_using_print_button_warning"
   = render "table", alerts: alerts, search: search
 
-  == pagy_nav(pagy) if pagy.pages > 1
+  == pagy.series_nav if pagy.pages > 1
 
   - if current_user_is_admin?
     .mt-20= help_panel do

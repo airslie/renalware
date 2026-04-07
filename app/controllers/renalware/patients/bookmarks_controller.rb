@@ -1,8 +1,6 @@
 module Renalware
   module Patients
     class BookmarksController < BaseController
-      include Pagy::Backend
-
       # Display the user's bookmarks
       def index
         search = BookmarksQuery.new(

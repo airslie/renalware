@@ -3,7 +3,6 @@ require "collection_presenter"
 module Renalware
   module Admissions
     class ConsultsController < BaseController
-      include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
 
       helper Hospitals::HospitalsHelper
