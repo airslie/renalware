@@ -5,10 +5,10 @@ module Renalware
       extend Enumerize
 
       UNIT_TYPE_RR8_MAP = {
-        hospital: "HOSP",
-        satellite: "SATL",
-        home: "HOME",
-        incentre: "INCENTRE"
+        hospital: "INCENTRE",
+        hospital_ward: "INCENTRE",
+        satellite: "INCENTRE",
+        home: "HOME"
       }.freeze
 
       belongs_to :hospital_centre,
