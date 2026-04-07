@@ -1,3 +1,6 @@
+> Renalware is now a Rails application and no longer a Rails engine.
+> For legacy engine use, please use branch `engine_stable`
+
 # Renalware
 
 Renalware uses demographic, clinical, pathology, and nephrology datasets to
