@@ -48,8 +48,6 @@ gem "good_job", "~> 4.0"
 
 gem "matrix"
 
-gem "tailwind_merge", "< 1.0" # For Tailwind 3.4
-
 group :test do
   gem "capybara" # , "~> 3.32"
   gem "capybara-screenshot" # , "~> 1.0"

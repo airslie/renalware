@@ -10,14 +10,10 @@
 # Pass unhandled attributes via the super initializer and they will be available
 # in the attrs reader.
 
-require "tailwind_merge"
-
 class Shared::Base < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
   include Rails.application.routes.url_helpers # paths without `renalware.` prefix
   include Phlex::Rails::Helpers::AssetPath
-
-  TAILWIND_MERGER = ::TailwindMerge::Merger.new.freeze
 
   attr_reader :attrs
 
@@ -25,7 +21,6 @@ class Shared::Base < Phlex::HTML
     @debug = user_attrs.delete(:debug)
     @debug = Rails.env.development? if @debug.nil?
     @attrs = mix(default_attrs, user_attrs)
-    @attrs[:class] = TAILWIND_MERGER.merge(@attrs[:class]) if @attrs[:class]
     super()
   end
 
