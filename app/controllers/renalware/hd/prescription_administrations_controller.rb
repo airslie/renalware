@@ -5,7 +5,6 @@ module Renalware
     class PrescriptionAdministrationsController < BaseController
       include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PatientCasting
-      include Pagy::Backend
 
       before_action :find_and_load_patient_from_prescription, except: [:index]
 

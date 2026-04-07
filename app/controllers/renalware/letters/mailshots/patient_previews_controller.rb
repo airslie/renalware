@@ -5,8 +5,6 @@ module Renalware
       # SQL view the user has chosen as the mailshot datasource, and returning a list of
       # patients that the user can see and check before going on to create the mailshot.
       class PatientPreviewsController < BaseController
-        include Pagy::Backend
-
         # Note we use data-remote as we want the table where the previewed patients are
         # displayed to have pagination links that work via ajax and do not refresh the page.
         def index

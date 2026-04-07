@@ -2,7 +2,6 @@ module Renalware
   module Research
     class StudiesController < BaseController
       helper Renalware::ResearchHelper
-      include Pagy::Backend
 
       def index
         query = Study.ordered.ransack(params[:q])

@@ -71,5 +71,5 @@ table#mdm-patients-table
 
 - pagy = options.pagination
 .clear-both.flex.items-center
-  == pagy_nav(pagy) if pagy.pages > 1
-  .pl-4.pt-2.text-right.text-gray-600== pagy_info(pagy) if pagy.count > 0
+  == pagy.series_nav if pagy.pages > 1
+  .pl-4.pt-2.text-right.text-gray-600== pagy.info_tag if pagy.count > 0

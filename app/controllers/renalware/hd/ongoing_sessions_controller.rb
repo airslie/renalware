@@ -1,8 +1,6 @@
 module Renalware
   module HD
     class OngoingSessionsController < BaseController
-      include Pagy::Backend
-
       def show
         query = Sessions::OngoingQuery.new(q: params[:q])
         sessions = query.call

@@ -1,7 +1,5 @@
 module Renalware
   class Admin::UsersController < BaseController
-    include Pagy::Backend
-
     def index
       query = params.fetch(:q, {})
       query[:s] ||= "family_name"

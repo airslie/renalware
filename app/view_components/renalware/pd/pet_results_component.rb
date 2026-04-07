@@ -1,8 +1,6 @@
 module Renalware
   module PD
     class PETResultsComponent < ApplicationComponent
-      include Pagy::Backend
-      include Pagy::Frontend
       include ToggleHelper
       include DropdownButtonHelper
 
@@ -18,7 +16,7 @@ module Renalware
 
       def results
         @results ||= begin
-          @pagination, @results = pagy(scope, items: 6)
+          @pagination, @results = pagy(scope, limit: 6)
           @results
         end
       end

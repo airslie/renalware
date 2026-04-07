@@ -99,4 +99,4 @@
                   dt MFFD checkbox ticked
                   dd= "#{slot_request.medically_fit_for_discharge_by} #{l(slot_request.medically_fit_for_discharge_at)}"
 
-      == pagy_nav(pagy) if pagy.pages > 1
+      == pagy.series_nav if pagy.pages > 1

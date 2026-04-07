@@ -2,8 +2,6 @@ module Renalware
   module Patients
     class MessagesComponent < ApplicationComponent
       include ToggleHelper
-      include Pagy::Backend
-      include Pagy::Frontend
 
       rattr_initialize [:patient!, :current_user!]
 
@@ -28,7 +26,7 @@ module Renalware
       private
 
       def load_messages
-        @pagination, @messages = pagy(scope, items: 5, anchor_string: "data-remote='true'")
+        @pagination, @messages = pagy(scope, limit: 5, anchor_string: "data-remote='true'")
       end
 
       def messaging_patient

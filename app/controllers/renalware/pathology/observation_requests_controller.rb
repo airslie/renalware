@@ -3,7 +3,6 @@ module Renalware
     class ObservationRequestsController < BaseController
       include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PatientCasting
-      include Pagy::Backend
 
       def index
         authorize pathology_patient

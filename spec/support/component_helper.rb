@@ -38,7 +38,6 @@ module ComponentHelper
     # These can also be converted to components and removed from here.
     @view_context.class_eval do
       include Renalware::DefinitionListHelper
-      include Pagy::Frontend
     end
 
     @view_context

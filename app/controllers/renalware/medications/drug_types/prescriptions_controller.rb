@@ -6,8 +6,6 @@ module Renalware
   module Medications
     module DrugTypes
       class PrescriptionsController < BaseController
-        include Pagy::Backend
-
         def index
           authorize Prescription, :index?
           pagy, prescriptions = pagy(query.call)

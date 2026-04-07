@@ -62,4 +62,4 @@
                     .w-8= centre.units_count
                     .p-0= link_to "View", hospitals.units_path, target: "_top"
 
-        == pagy_nav(pagy) if pagy.pages > 1
+        == pagy.series_nav if pagy.pages > 1

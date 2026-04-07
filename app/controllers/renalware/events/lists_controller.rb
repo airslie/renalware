@@ -1,7 +1,6 @@
 module Renalware
   module Events
     class ListsController < BaseController
-      include Pagy::Backend
       include Renalware::Concerns::Pageable
 
       use_layout :simple

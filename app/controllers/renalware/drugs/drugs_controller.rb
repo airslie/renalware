@@ -1,8 +1,6 @@
 module Renalware
   module Drugs
     class DrugsController < BaseController
-      include Pagy::Backend
-
       after_action :track_action, except: %i(selected_drugs prescribable)
 
       def prescribable

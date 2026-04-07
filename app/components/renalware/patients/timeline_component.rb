@@ -1,19 +1,19 @@
 module Renalware
   class Patients::TimelineComponent < Base
-    register_output_helper :pagy_nav, mark_safe: true
     SUMMARY_LIMIT = 6
 
     def initialize(patient:, **attrs)
       @patient = patient
       @page = attrs[:page]
       @full_view = attrs[:full_view]
-      @pagy, @items = items
       super
     end
 
     def render? = true
 
     def view_template
+      @pagy, @items = items
+
       div(class: "summary-part--timeline") do
         article do
           article_header unless @full_view
@@ -21,7 +21,7 @@ module Renalware
             table_header
             @items.each { render from_model(it) }
           end
-          pagy_nav(@pagy) if @full_view
+          raw(@pagy.series_nav.html_safe) if @full_view
         end
       end
     end
@@ -34,8 +34,9 @@ module Renalware
 
     def pagy_custom(collection, vars = {})
       limit = @full_view ? nil : SUMMARY_LIMIT
+      options = vars.merge(request:)
 
-      pagy = Pagy.new(count: collection.count, page: @page, limit:, **vars)
+      pagy = Pagy::Offset.new(count: collection.count, page: @page, limit:, **options)
       [pagy, collection.offset(pagy.offset, limit: pagy.limit)]
     end
 

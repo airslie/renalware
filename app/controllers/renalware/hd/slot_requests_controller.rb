@@ -3,8 +3,6 @@ require "collection_presenter"
 module Renalware
   module HD
     class SlotRequestsController < BaseController
-      include Pagy::Backend
-
       def index
         render_collection(relation: SlotRequest.current, historical: false)
       end

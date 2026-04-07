@@ -1,4 +1,4 @@
 = within_patient_layout(title: t(".title")) do
   = render "renalware/hd/sessions/pgds", pgds: pgds
   .mt-2.text-neutral-500= t("renalware.hd.patient_group_directions.summary", displayed: pgds.size, total: pagy.count)
-  == pagy_nav(pagy) if pagy.pages > 1
+  == pagy.series_nav if pagy.pages > 1

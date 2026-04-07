@@ -2,4 +2,4 @@
 .snippets
   = turbo_frame_tag "snippet-search" do
     = render "table", snippets:, author:, search:, in_dialog:
-    == pagy_nav(pagy, in_dialog:) if pagy.pages > 1
+    == pagy.series_nav if pagy.pages > 1

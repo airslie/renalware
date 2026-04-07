@@ -7,7 +7,6 @@ module Renalware
     module Scheduling
       class DiariesController < BaseController
         include Renalware::Concerns::PdfRenderable
-        include Pagy::Backend
 
         # Renders a list of diaries for a hospital unit
         def index

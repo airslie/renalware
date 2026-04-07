@@ -2,7 +2,6 @@ module Renalware
   module Research
     class ParticipationsController < BaseController
       helper Renalware::ResearchHelper
-      include Pagy::Backend
 
       def index
         authorize Participation, :index?

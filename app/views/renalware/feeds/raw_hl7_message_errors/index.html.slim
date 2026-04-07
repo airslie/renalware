@@ -19,4 +19,4 @@
           td= error.error_message_backtrace.to_s.lines.first.to_s.squish.truncate(140)
           td= error.body.to_s.lines.first.to_s.squish.truncate(140)
 
-  == pagy_nav(pagy) if pagy.pages > 1
+  == pagy.series_nav if pagy.pages > 1

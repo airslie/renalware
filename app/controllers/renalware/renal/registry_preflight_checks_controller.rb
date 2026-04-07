@@ -3,8 +3,6 @@ require "collection_presenter"
 module Renalware
   module Renal
     class RegistryPreflightChecksController < BaseController
-      include Pagy::Backend
-
       module WithHDUnit
         def hd_unit
           if current_modality.description.name == "HD"

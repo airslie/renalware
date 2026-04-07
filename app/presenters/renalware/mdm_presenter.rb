@@ -23,7 +23,8 @@ module Renalware
         patient: patient,
         code_group_name: pathology_code_group_name,
         page: 1,
-        per_page: 8
+        per_page: 8,
+        request: view_context.request
       ).call
     end
 

@@ -2,7 +2,6 @@ module Renalware
   module HD
     class AcuityAssessmentsController < BaseController
       include Renalware::Concerns::PatientCasting
-      include Pagy::Backend
 
       def index
         pagy, assessments = pagy(AcuityAssessment.for_patient(hd_patient).ordered)

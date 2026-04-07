@@ -2,7 +2,6 @@ module Renalware
   module HD
     class UnmetPreferencesController < BaseController
       include PresenterHelper
-      include Pagy::Backend
 
       def index
         query = PatientsWithUnmetPreferencesQuery.new(query_params)

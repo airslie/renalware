@@ -3,6 +3,7 @@ require "nhs_client"
 module Renalware
   class BaseController < ApplicationController
     include Concerns::DeviseControllerMethods
+    include Pagy::Method
     include Pundit::Authorization
     include Concerns::ReturnTo
 

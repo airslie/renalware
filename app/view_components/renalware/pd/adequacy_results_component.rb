@@ -2,8 +2,6 @@ module Renalware
   module PD
     class AdequacyResultsComponent < ApplicationComponent
       include BooleanHelper
-      include Pagy::Backend
-      include Pagy::Frontend
       include ToggleHelper
 
       rattr_initialize [:patient!, :current_user!]
@@ -13,7 +11,7 @@ module Renalware
 
       def results
         @results ||= begin
-          @pagination, @results = pagy(scope, items: 6)
+          @pagination, @results = pagy(scope, limit: 6)
           @results
         end
       end

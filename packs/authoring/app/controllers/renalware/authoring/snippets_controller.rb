@@ -1,8 +1,6 @@
 module Renalware
   module Authoring
     class SnippetsController < BaseController
-      include Pagy::Backend
-
       LIMIT = 10
 
       # rubocop:disable Metrics/MethodLength

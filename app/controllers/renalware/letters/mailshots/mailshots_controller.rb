@@ -2,8 +2,6 @@ module Renalware
   module Letters
     module Mailshots
       class MailshotsController < BaseController
-        include Pagy::Backend
-
         def index
           pagy, mailshots = pagy(Mailshot.includes(:author).order(created_at: :desc))
           authorize mailshots

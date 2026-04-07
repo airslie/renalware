@@ -2,7 +2,6 @@ module Renalware
   module Letters
     class ListsController < Letters::BaseController
       include Renalware::Concerns::Pageable
-      include Pagy::Backend
 
       layout -> { turbo_frame_request? ? "turbo_rails/frame" : "renalware/layouts/simple" }
 

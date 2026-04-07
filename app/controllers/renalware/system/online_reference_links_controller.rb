@@ -1,8 +1,6 @@
 module Renalware
   module System
     class OnlineReferenceLinksController < BaseController
-      include Pagy::Backend
-
       def index
         ransack_params = params[:q] || {}
         search = OnlineReferenceLink

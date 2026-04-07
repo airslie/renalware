@@ -1,6 +1,7 @@
 module Renalware
   class ApplicationComponent < ViewComponent::Base
     include Pundit::Authorization
+    include Pagy::Method
 
     include Rails.application.routes.url_helpers
 

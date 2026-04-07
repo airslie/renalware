@@ -2,7 +2,6 @@ module Renalware
   module Events
     class EventsController < BaseController
       include Renalware::Concerns::PatientVisibility
-      include Pagy::Backend
       include Renalware::Concerns::PdfRenderable
 
       def index

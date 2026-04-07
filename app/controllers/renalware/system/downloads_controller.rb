@@ -1,8 +1,6 @@
 module Renalware
   module System
     class DownloadsController < BaseController
-      include Pagy::Backend
-
       def index
         query = DownloadQuery.new(params[:q])
         pagy, items = pagy(query.call)

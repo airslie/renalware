@@ -1,8 +1,6 @@
 module Renalware
   module Transplants
     class WaitListsController < BaseController
-      include Pagy::Backend
-
       # Here we display a named filter eg Active and query for patients based on registration
       # status and also any search criteria entered in the search form which is backed by our
       # ransack #search object.

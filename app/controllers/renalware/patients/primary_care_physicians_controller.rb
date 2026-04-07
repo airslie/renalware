@@ -3,8 +3,6 @@
 module Renalware
   module Patients
     class PrimaryCarePhysiciansController < BaseController
-      include Pagy::Backend
-
       before_action :find_primary_care_physician, only: %i(edit update)
 
       def index

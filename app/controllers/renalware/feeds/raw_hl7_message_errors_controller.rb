@@ -1,8 +1,6 @@
 module Renalware
   module Feeds
     class RawHL7MessageErrorsController < BaseController
-      include Pagy::Backend
-
       def index
         authorize Feeds::RawHL7MessageError
 

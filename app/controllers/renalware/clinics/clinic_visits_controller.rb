@@ -3,7 +3,6 @@ module Renalware
     class ClinicVisitsController < BaseController
       include Renalware::Concerns::PatientCasting
       include Renalware::Concerns::PatientVisibility
-      include Pagy::Backend
 
       def index
         query = VisitQuery.new(query_params, scope: clinics_patient.clinic_visits)

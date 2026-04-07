@@ -1,8 +1,6 @@
 module Renalware
   module Reporting
     class ReportsController < BaseController
-      include Pagy::Backend
-
       helper Rails.application.helpers
 
       class ReportOptions

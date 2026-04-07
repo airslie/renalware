@@ -90,4 +90,4 @@
               td.bg-green-50.hover:bg-green-100
                 = description.obx_mappings[index]&.sender
 
-  == pagy_nav(pagy) if pagy.pages > 1
+  == pagy.series_nav if pagy.pages > 1

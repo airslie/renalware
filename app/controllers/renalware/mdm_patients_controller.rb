@@ -5,7 +5,6 @@
 module Renalware
   class MDMPatientsController < BaseController
     include PresenterHelper
-    include Pagy::Backend
 
     protected
 

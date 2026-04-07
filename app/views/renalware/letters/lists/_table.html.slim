@@ -26,4 +26,4 @@
 
     = render partial: "letter", collection: letters, locals: { named_filter: named_filter }
 
-  == pagy_nav(pagy) if pagy.pages > 1
+  == pagy.series_nav if pagy.pages > 1

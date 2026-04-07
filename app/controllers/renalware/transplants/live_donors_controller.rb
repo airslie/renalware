@@ -2,7 +2,6 @@ module Renalware
   module Transplants
     class LiveDonorsController < BaseController
       include Renalware::Concerns::PatientVisibility
-      include Pagy::Backend
 
       def index
         query = LiveDonorsQuery.new(

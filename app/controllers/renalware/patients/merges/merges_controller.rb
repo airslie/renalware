@@ -2,8 +2,6 @@ module Renalware
   module Patients
     module Merges
       class MergesController < BaseController
-        include Pagy::Backend
-
         def index
           authorize Merge, :index?
           pagy, merges = pagy(Merge.order(created_at: :desc))

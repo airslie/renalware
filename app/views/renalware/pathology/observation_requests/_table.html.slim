@@ -14,4 +14,4 @@ table data-controller="table-row-highlight"
                     data: { action: "click->table-row-highlight#select" }
         td= observation_request.description.name
 
-== pagy_nav(pagy) if pagy.pages > 1
+== pagy.series_nav if pagy.pages > 1
