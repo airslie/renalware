@@ -33,8 +33,20 @@ en:
         assessed_on: Assessment Date
         contact: Wait List Contact
         entered_on: Wait List Entry Date
+        kidney_status: Kidney Status
+        kidney_status_date: Kidney Status Date
+        kidney_waiting_time_days: Kidney Waiting Time (Days)
+        match_points: Match Points
+        match_score: Match Score
+        nhsbt_last_import_checksum: NHSBT Last Import Checksum
+        nhsbt_last_import_source: NHSBT Last Import Source
+        nhsbt_last_imported_at: NHSBT Last Import At
         notes: Notes
+        pancreas_status: Pancreas Status
+        pancreas_status_date: Pancreas Status Date
+        pancreas_waiting_time_days: Pancreas Waiting Time (Days)
         referred_on: Referral Date
+        sensi_eval_date: Sensitivity Evaluation Date
   enumerize:
     renalware/transplants/registration_document/organs:
       transplant_type:

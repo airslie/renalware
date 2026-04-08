@@ -4233,7 +4233,17 @@ CREATE TABLE renalware.transplant_registrations (
     notes text,
     document jsonb,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    pancreas_status character varying,
+    pancreas_status_date date,
+    sensi_eval_date date,
+    match_score numeric,
+    match_points numeric,
+    kidney_waiting_time_days integer,
+    pancreas_waiting_time_days integer,
+    nhsbt_last_imported_at timestamp(6) without time zone,
+    nhsbt_last_import_source character varying,
+    nhsbt_last_import_checksum character varying
 );
 
 
@@ -32169,6 +32179,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,public,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260408120000'),
 ('20260325113000'),
 ('20260324112837'),
 ('20260216170537'),
