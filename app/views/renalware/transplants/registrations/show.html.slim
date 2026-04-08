@@ -11,11 +11,36 @@
   .document-view
     .mgrid
       .row
-          - ["Organs", "Codes", "CRF", "HLA", "Transplant"].each do |group|
-            = render "renalware/shared/documents/attributes_group",
-                group: registration.document.public_send(group.parameterize(separator: "_")),
-                legend: group, destination: group.parameterize(separator: "_")
+        - ["Organs", "Codes", "CRF", "HLA", "Transplant"].each do |group|
+          = render "renalware/shared/documents/attributes_group",
+              group: registration.document.public_send(group.parameterize(separator: "_")),
+              legend: group, destination: group.parameterize(separator: "_")
 
-          = render "renalware/shared/attributes_group",
-              legend: "Admin", destination: "admin",
-              models: { registration => %i(referred_on assessed_on entered_on contact notes) }
+        = render "renalware/shared/attributes_group",
+            legend: "Admin", destination: "admin",
+            models: { registration => %i(referred_on assessed_on entered_on contact notes) }
+        .columns.small-12.medium-6.large-6.xlarge-4
+          article
+            header
+              h2 NHSBT Import Data
+            dl.dl-horizontal
+              dt= "#{registration.class.human_attribute_name(:pancreas_status)}:"
+              dd= registration.pancreas_status
+              dt= "#{registration.class.human_attribute_name(:pancreas_status_date)}:"
+              dd= registration.pancreas_status_date
+              dt= "#{registration.class.human_attribute_name(:sensi_eval_date)}:"
+              dd= registration.sensi_eval_date
+              dt= "#{registration.class.human_attribute_name(:match_score)}:"
+              dd= registration.match_score
+              dt= "#{registration.class.human_attribute_name(:match_points)}:"
+              dd= registration.match_points
+              dt= "#{registration.class.human_attribute_name(:kidney_waiting_time_days)}:"
+              dd= registration.kidney_waiting_time_days
+              dt= "#{registration.class.human_attribute_name(:pancreas_waiting_time_days)}:"
+              dd= registration.pancreas_waiting_time_days
+              dt= "#{registration.class.human_attribute_name(:nhsbt_last_imported_at)}:"
+              dd= registration.nhsbt_last_imported_at
+              dt= "#{registration.class.human_attribute_name(:nhsbt_last_import_source)}:"
+              dd= registration.nhsbt_last_import_source
+              dt= "#{registration.class.human_attribute_name(:nhsbt_last_import_checksum)}:"
+              dd= registration.nhsbt_last_import_checksum

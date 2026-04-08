@@ -9,7 +9,7 @@ article
                   patient_transplants_registration_path(patient),
                   class: "button secondary"
 
-  dl.dl-horizontal
+  dl.dl-horizontal.xlarge
     dt Status:
     dd
       - if registration.current_status.present?
@@ -21,7 +21,10 @@ article
 
     dt Transplant Type:
     dd= registration.document&.organs&.transplant_type&.text
+
     dt Last Update:
     dd
       - if (version = registration.versions.last)
         = "#{l(version.created_at)} by #{who_did_it(version)}"
+    dt NHSBT Last Import At:
+    dd= registration.nhsbt_last_imported_at

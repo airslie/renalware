@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_25_113000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_08_120000) do
   create_schema "renalware"
 
   # These are extensions that must be enabled in order to support this database
@@ -6025,9 +6025,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_113000) do
     t.datetime "created_at", precision: nil, null: false
     t.jsonb "document"
     t.date "entered_on"
+    t.integer "kidney_waiting_time_days"
+    t.decimal "match_points"
+    t.decimal "match_score"
+    t.string "nhsbt_last_import_checksum"
+    t.string "nhsbt_last_import_source"
+    t.datetime "nhsbt_last_imported_at"
     t.text "notes"
+    t.string "pancreas_status"
+    t.date "pancreas_status_date"
+    t.integer "pancreas_waiting_time_days"
     t.integer "patient_id"
     t.date "referred_on"
+    t.date "sensi_eval_date"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["document"], name: "index_transplant_registrations_on_document", using: :gin
     t.index ["patient_id"], name: "index_transplant_registrations_on_patient_id", unique: true
