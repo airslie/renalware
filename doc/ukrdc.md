@@ -13,8 +13,6 @@ running the rake task:
 ```bash
 bundle exec rake ukrdc:import
 ```
-> In local development, run the task directly as `ukrdc:*`; the old `app:` prefix is no longer
-  needed now that this repository is the Rails app.
 
 Any xml files in the folder `<UKRDC_WORKING_PATH>/incoming`  will imported. `UKRDC_WORKING_PATH`
 is an environment variable that can be configured in the relevant `.env` file.

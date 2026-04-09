@@ -1,8 +1,8 @@
 {
-  "name": "renalware-core",
-  "version": "2.2.11",
+  "name": "renalware",
+  "version": "2.4.5.6",
   "main": "app/assets/builds/renalware.js",
-  "repository": "https://github.com/airslie/renalware-core.git",
+  "repository": "https://github.com/airslie/renalware.git",
   "author": "Airslie Ltd",
   "license": "MIT",
   "browserslist": [
@@ -47,7 +47,7 @@
   "devDependencies": {
     "eslint": "^9.9",
     "eslint-plugin-import": "^2.7.0",
-    "playwright": "1.58.2",
+    "playwright": "1.59.0",
     "prettier": "^3.4"
   }
 }

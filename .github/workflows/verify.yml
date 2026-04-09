@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -43,16 +43,16 @@ jobs:
           bundler-cache: true
 
       - name: Setup node and yarn with caching
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: "yarn"
 
       - name: Install js packages with yarn
         run: yarn install --frozen-lockfile
 
       - name: Asset cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             public/assets
@@ -86,7 +86,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -142,7 +142,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: "true"
 
@@ -152,9 +152,9 @@ jobs:
           bundler-cache: true
 
       - name: Setup node and yarn with caching
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: "yarn"
 
       - name: Install js packages with yarn
@@ -162,7 +162,7 @@ jobs:
 
       - name: Cache Playwright Chromium browser
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
           key: playwright-browsers-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -176,7 +176,7 @@ jobs:
         run: yarn run playwright install-deps chromium
 
       - name: Restore asset cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             public/assets
@@ -211,14 +211,14 @@ jobs:
 
       - name: Store test failure screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-failure-screenshots
           path: tmp/capybara
           if-no-files-found: ignore
 
       - name: Upload coverage artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: coverage-${{ strategy.job-index }}
           path: coverage/.resultset.json
@@ -237,7 +237,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1

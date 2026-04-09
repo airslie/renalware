@@ -28,7 +28,7 @@ namespace :db do
   end
 
   namespace :demo do
-    desc "Loads demo seed data from the renalware-core gem"
+    desc "Loads demo seed data from the renalware gem"
     task seed: :environment do
       if Rails.env.development? || ENV["ALLOW_DEMO_SEEDS"] == "1"
         require Rails.root.join("db/seeds")

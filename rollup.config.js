@@ -23,7 +23,7 @@ export default {
     globals: {
       jquery: "jQuery",
     },
-    name: "renalware-core",
+    name: "renalware",
     sourcemap: true,
   },
   plugins: [

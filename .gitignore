@@ -52,8 +52,6 @@ key.gpg
 /package-lock.json
 /egpcur.zip
 /yarn-error.log
-/public/renalware-core-packs
-/public/renalware/renalware-core-packs
 /public/packs-test
 log/.bash_history
 /*.pdf

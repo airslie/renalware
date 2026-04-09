@@ -3,7 +3,7 @@ module Renalware
     # Represents a clinical study, e.g. HEROIC.
     #
     # A study can be
-    #   - 'vanilla', using just the renalware-core built in Study, Participation and
+    #   - 'vanilla', using just the renalware built-in Study, Participation and
     #     Investigatorship classes.
     #   - custom, where a host app (or a gem) can defined a custom (jsonb-persisted document
     #     attributes and the html necessary to edit and create that data.

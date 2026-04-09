@@ -5,7 +5,7 @@ in the Renalware PostgreSQL database schema.
 
 They offer a sort of embedded [NoSQL](https://en.wikipedia.org/wiki/NoSQL)
 approach in sections of patient data that are complex or
-can vary from hospital to hospital. A hospital can for example augment a renalware-core data
+can vary from hospital to hospital. A hospital can for example augment a renalware data
 `class` by adding a new, specific attribute, and this will be saved to the database in the jsonb
 field without an actual change to the database schema being required (e.g. no addition of new
 column required).

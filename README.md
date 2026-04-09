@@ -1,5 +1,3 @@
-> Renalware is now a Rails application and no longer a Rails engine.
-> For legacy engine use, please use branch `engine_stable`
 
 # Renalware
 
@@ -7,9 +5,22 @@ Renalware uses demographic, clinical, pathology, and nephrology datasets to
 improve patient care, undertake clinical and administrative audits and share
 data with external systems.
 
+> [!NOTE]
+> **Repository status**
+>
+> Renalware is developed in the private repository `airslie/renalware-dev`, which is the canonical
+> source of truth for code, pull requests, issues, and CI. The public repository `airslie/renalware`
+> is a downstream read-only open-source mirror. Only the `main` branch
+> and release tags beginning with `v` are mirrored publicly. Hospital-specific deployment state is
+> tracked through release documentation and container image tags rather than through separate public
+> branches.
+>
+> Renalware is now a Rails application and no longer a Rails engine.
+> For legacy engine use, please use branch `engine_stable`
+
 ## Technical Overview
 
-`renalware-core` is an open-source Ruby on Rails application for renal unit
+Renalware is an open-source Ruby on Rails application for renal unit
 management.
 
 Renalware is built using open source projects including:
@@ -47,8 +58,8 @@ psql -d postgres -c "ALTER USER renalware WITH PASSWORD 'renalware';"
 ### Bootstrap the application
 
 ```bash
-git clone git@github.com:airslie/renalware-core.git
-cd renalware-core
+git clone git@github.com:airslie/renalware.git
+cd renalware
 bundle install
 yarn install
 bin/rails db:create db:migrate

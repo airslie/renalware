@@ -3,7 +3,7 @@
 **Goal:** Give you just enough context to read/modify this code safely.
 
 ## Stack
-- Renalware-core is the Rails application in this repository.
+- Renalware is the Rails application in this repository.
 - Ruby 3.x, Rails 8, Postgres 16, slim templates, Phlex, ViewComponent, Stimulus, Turbo
 - Tests are written in RSpec and use FactoryBot
 - There are some cucumber features but we no longer add to these, and are migrating them to
