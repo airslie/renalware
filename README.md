@@ -8,7 +8,7 @@ data with external systems.
 > [!NOTE]
 > **Repository status**
 >
-> Renalware is developed in the private repository `airslie/renalware-source`, which is the canonical
+> Renalware is developed in the private repository `airslie/renalware-dev`, which is the canonical
 > source of truth for code, pull requests, issues, and CI. The public repository `airslie/renalware`
 > is a downstream read-only open-source mirror. Only the `main` branch
 > and release tags beginning with `v` are mirrored publicly. Hospital-specific deployment state is
