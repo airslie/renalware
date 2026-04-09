@@ -44,6 +44,19 @@ describe "Managing Hospital Units" do
     end
   end
 
+  describe "GET index" do
+    it "renders the HD diaries link using the main app route" do
+      hospital_unit
+      get hospitals.units_path
+
+      expect(response).to be_successful
+      expect(response.body).to include("/hd/scheduling/units/#{hospital_unit.id}/diaries")
+      expect(response.body).not_to include(
+        "hospitals/hd/scheduling/units/#{hospital_unit.id}/diaries"
+      )
+    end
+  end
+
   describe "PATCH update" do
     context "with valid attributes" do
       it "updates a record" do

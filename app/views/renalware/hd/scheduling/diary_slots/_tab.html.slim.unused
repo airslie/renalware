@@ -7,10 +7,10 @@
 
   - if scheduled_only
     = f.input :patient_id,
-             collection: patients,
-             label_method: ->(item) { item.to_s(:long) },
-             value_method: :id,
-             input_html: { class: "searchable_select" }
+              collection: patients,
+              label_method: ->(item) { item.to_s(:long) },
+              value_method: :id,
+              input_html: { class: "searchable_NOselect" }
   - else
     .pb-3
       = f.input :patient_id,
@@ -25,6 +25,6 @@
   = f.submit "Select", class: :button
   = blank_separator
   = link_to t("btn.cancel"),
-           "#",
-           "aria-label" => "Close",
-           class: "reveal-modal-close"
+            "#",
+            "aria-label" => "Close",
+            class: "reveal-modal-close"

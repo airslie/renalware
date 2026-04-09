@@ -43,8 +43,6 @@ require_relative "../../spec/support/text_editor_helpers"
 World(TextEditorHelpers)
 # rubocop:enable Style/GlobalVars
 
-World(CapybaraSelect2)
-
 module CucumberTranslation
   include AbstractController::Translation
 end

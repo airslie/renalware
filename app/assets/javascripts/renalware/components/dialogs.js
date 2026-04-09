@@ -12,7 +12,6 @@ $(document).foundation({
 $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
   var modal = $(this);
   modal.find('[autofocus]').focus();
-  $('.searchable_select', modal).select2();
   // If a modal is launched again, ensure the submit button is re-enabled.
   if ($('input[data-disable-with]').length > 0) {
     Rails.enableElement($('input[data-disable-with]')[0]);
@@ -20,10 +19,6 @@ $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
   // Refresh layout of foundation widgets
   $(document).foundation('reflow');
   initClockpickersIn("body");
-
-  var resizeSelect2DropDownsToFitModal = function(){
-    $('.select2', modal).css('width', "100%");
-  };
 });
 
 // If there was an error submitting a modal form, be sure to re-enable the submit button

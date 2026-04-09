@@ -30,10 +30,10 @@ RSpec.describe "Assign a contact to a patient", :js do
       click_on t("btn.add")
 
       within("#add-patient-contact-modal") do
-        select2(
+        slim_select(
           person.family_name,
-          css: "#person-id-select",
-          search: true
+          from: "Person",
+          wait_for: "Search term must be at least 3 characters"
         )
         select contact_description.to_s, from: "Description"
         submit_form

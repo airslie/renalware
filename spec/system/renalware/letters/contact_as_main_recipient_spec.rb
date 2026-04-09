@@ -41,10 +41,10 @@ RSpec.describe "Assign a person as a main recipient" do
       click_on "Add a different recipient via the contacts Directory"
 
       within("#add-patient-contact-modal") do
-        select2(
+        slim_select(
           person.family_name,
-          css: "#person-id-select",
-          search: true
+          from: "Person",
+          wait_for: "Search term must be at least 3 characters"
         )
         select contact_description.name, from: "Description"
 

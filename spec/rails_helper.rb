@@ -165,7 +165,6 @@ RSpec.configure do |config|
   config.include CapybaraHelper, type: :system
   config.include SelectDateSpecHelper, type: :system
   config.include TextEditorHelpers, type: :system
-  config.include CapybaraSelect2, type: :system
   config.include ActiveSupport::Testing::TimeHelpers
   config.include Shoulda::Matchers::ActiveModel, type: :model
   config.include Shoulda::Matchers::ActiveRecord, type: :model

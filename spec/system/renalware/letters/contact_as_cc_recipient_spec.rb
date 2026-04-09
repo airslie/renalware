@@ -52,10 +52,10 @@ RSpec.describe "Assign a person as a CC recipient", :js do
       click_on "Add new person to the list"
 
       within("#add-patient-contact-as-cc-modal") do
-        select2(
+        slim_select(
           person.family_name,
-          css: "#person-id-select",
-          search: true
+          from: "Person",
+          wait_for: "Search term must be at least 3 characters"
         )
         select contact_description.name, from: "Description"
         fill_in "Notes", with: "some contact notes"
@@ -64,6 +64,7 @@ RSpec.describe "Assign a person as a CC recipient", :js do
       end
 
       expect(page).to have_text(person.family_name)
+      expect(page).to have_css("#letter-ccs input[type='checkbox']:checked", visible: :all)
 
       expect(page).to have_no_text("is already a contact for the patient")
     end

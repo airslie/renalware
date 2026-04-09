@@ -11,26 +11,30 @@
   .row
     .large-12.columns
       - if nhs_client.api_enabled?
-        .mb-2.js-snomed-id-hint class=('hidden' if problem.snomed_id.blank?)
-          ' Snomed ID:
-          strong.snomed_id = problem.snomed_id
-        = f.hidden_field :snomed_id, id: 'js-snomed-id-field'
-        = f.input(:date,
-                  label: "Problem date",
-                  include_blank: false,
-                  prompt: { day: "Day", month: "Month", year: "Year" },
-                  order: [:day, :month, :year],
-                  start_year: Time.zone.today.year,
-                  end_year: Time.zone.today.year - 80,
-                  hint: "If necessary, only <b>Year</b> or <b>Month and Year</b> can be chosen".html_safe)
-        = f.input :description,
-                  collection: [problem.description],
-                  selected: problem.description,
-                  input_html: { \
-                    class: "problem-ajax-search",
-                    data: { "ajax--url" => search_patient_problems_path(patient, format: :json),
-                            placeholder: "Search by problem name." } \
-                  }
+        div(data-controller="problems-search")
+          .mb-2.js-snomed-id-hint class=('hidden' if problem.snomed_id.blank?) data-problems-search-target="snomedHint"
+            ' Snomed ID:
+            strong.snomed_id = problem.snomed_id
+          = f.hidden_field :snomed_id, id: 'js-snomed-id-field', data: { problems_search_target: "snomedField" }
+          = f.input(:date,
+                    label: "Problem date",
+                    include_blank: false,
+                    prompt: { day: "Day", month: "Month", year: "Year" },
+                    order: [:day, :month, :year],
+                    start_year: Time.zone.today.year,
+                    end_year: Time.zone.today.year - 80,
+                    hint: "If necessary, only <b>Year</b> or <b>Month and Year</b> can be chosen".html_safe)
+          .mb-4
+            = f.input :description,
+                      collection: [problem.description],
+                      selected: problem.description,
+                      input_html: { \
+                        autofocus: true,
+                        data: { problems_search_target: "select",
+                                options_url: search_patient_problems_path(patient, format: :json),
+                                hint: "Search by problem name (min. 3 characters)",
+                                placeholder: "Search by problem name." } \
+                      }
       - else
         = f.input :description, as: :text, autofocus: true
 

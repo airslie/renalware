@@ -22,7 +22,6 @@
 //= require foundation/foundation.tooltip
 //= require foundation/foundation.topbar
 //= require underscore/underscore
-//= require select2/dist/js/select2
 //= require jquery_nested_form
 //= require foundation-datepicker/js/foundation-datepicker
 //= require cocoon
@@ -36,5 +35,3 @@
 
 // Define a console.log if one does not yet exist - e.g. we in IE11
 window.console = window.console || { log: function () {} }
-
-$.fn.select2.defaults.set("width", "100%")

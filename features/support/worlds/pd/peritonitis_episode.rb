@@ -1,5 +1,3 @@
-require "capybara_select2/selectors"
-
 module World
   module PD::PeritonitisEpisode
     module Domain
