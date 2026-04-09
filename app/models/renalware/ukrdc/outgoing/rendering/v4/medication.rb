@@ -49,7 +49,14 @@ module Renalware
 
             def product_type_element
               create_node("DrugProduct") do |drug|
-                drug << create_node("Generic", prescription.drug)
+                if prescription.drug.code.present?
+                  drug << create_node("Id") do |elem|
+                    elem << create_node("CodingStandard", "DM+D")
+                    elem << create_node("Code", prescription.drug.code)
+                    elem << create_node("Description", prescription.drug.name)
+                  end
+                end
+                drug << create_node("Generic", prescription.drug.name)
               end
             end
 
