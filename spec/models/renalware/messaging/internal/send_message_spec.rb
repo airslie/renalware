@@ -13,7 +13,8 @@ module Renalware
           MessageForm.new(
             body: "Content",
             subject: "Subject",
-            recipient_ids: ["", recipient1.id, recipient2.id], # simulate select2 posting a blank
+            # Simulate a searchable select posting a blank first value.
+            recipient_ids: ["", recipient1.id, recipient2.id],
             urgent: false
           )
         end

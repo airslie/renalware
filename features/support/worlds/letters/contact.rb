@@ -99,10 +99,15 @@ module World
         wait_for_ajax
 
         within("#add-patient-contact-modal") do
-          select2(
+          # slim_select(
+          #   person.family_name,
+          #   css: "#person-id-select",
+          #   search: true
+          # )
+          slim_select(
             person.family_name,
-            css: "#person-id-select",
-            search: true
+            from: "Person",
+            wait_for: "Search term must be at least 3 characters"
           )
 
           find(:css, "#letters_contact_default_cc").set(true) if default_cc

@@ -1,11 +1,11 @@
-#person-id-select
+#person-id-select.mb-4
   = f.input :person_id,
             wrapper: :horizontal_large,
             collection: [[f.object.person&.to_s, f.object.person&.id]],
-            selected: 1,
+            selected: f.object.person&.id,
             input_html: { \
-              class: "person-ajax-search",
-              data: { "ajax--url" => directory.search_people_path(format: :json),
+              data: { controller: "slimselect-ajax",
+                      options_url: directory.search_people_path(term: "REPLACEME", format: :json),
                       placeholder: "Start entering the person's name (min. 2 characters)" } \
             }
 = f.input :description_id, collection: contact_descriptions

@@ -78,11 +78,7 @@ module World
         click_on t("btn.add")
 
         within "#add-patient-problem-modal .modal" do
-          # Close the search input on the pre-focussed select2 so our #select2 helper will work as
-          # expected (it won't work if the select2 has focus, ie its search input is already open).
-          find(:css, ".select2-selection").click
-
-          select2 "major problem", from: "* Description", search: true
+          slim_select "major problem", from: "* Description", search: true
           click_on "Save"
         end
 
@@ -97,7 +93,7 @@ module World
         click_on t("btn.edit")
         # actually now goes to #show
 
-        select2 description, from: "* Description", search: true
+        slim_select description, from: "* Description", search: true
         click_on "Save"
       end
 

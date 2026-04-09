@@ -51,17 +51,15 @@ gem "matrix"
 group :test do
   gem "capybara" # , "~> 3.32"
   gem "capybara-screenshot" # , "~> 1.0"
-  gem "capybara-select-2", github: "airslie/capybara_select2", branch: "playwright"
-  gem "cucumber", github: "cucumber/cucumber-ruby"
+  gem "cucumber"
   gem "cucumber-rails", require: false # , "~> 2.6.1", require: false # must be loaded in env.rb
   gem "database_cleaner", require: false # for cucumber (now not needed for rspec)
-  gem "execjs" # , "2.7.0" # 2.8.1 raises an error
+  gem "execjs"
   gem "fuubar", require: false
   gem "rails-controller-testing", "~> 1.0.4"
   gem "rspec-html-matchers", require: false
   gem "rspec_junit_formatter", "~> 0.4"
   gem "rspec-retry"
-  # gem "selenium-webdriver", "4.28.0"
   gem "shoulda-matchers", "~> 7.0"
   gem "simplecov", require: false # only loaded if required
   gem "simplecov-cobertura", "~> 3.1", require: false
@@ -76,7 +74,6 @@ group :development do
   # gem "traceroute" # for finding unused routes
   gem "awesome_print", require: false
   gem "binding_of_caller"
-  # gem "bullet"
   gem "foreman", require: false
   gem "query_count"
   gem "rack-mini-profiler"

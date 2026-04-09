@@ -6,7 +6,7 @@ module Renalware
       end
 
       def to_hash
-        { id: id, text: name_and_address }
+        { id: id, value: id, text: name_and_address }
       end
     end
   end

@@ -2,11 +2,13 @@
 
   h4 Search for a GP
   / TODO: use a turboframe
-  label(for="practice-search") First find the practice
-  select#practice-search(
-    data={ "ajax--url" => search_patients_practices_path,
-           "form-refresh-url" => edit_patient_primary_care_physician_path(patient),
-           "hint" => "Enter first few letters of practice name or its postcode" }
+  label(for="practice-search-slimselect") First find the practice
+  select#practice-search-slimselect(
+    data-controller="primary-care-physician-search"
+    data-options-url=search_patients_practices_path
+    data-form-refresh-url=edit_patient_primary_care_physician_path(patient)
+    data-hint="Enter first few letters of practice name or its postcode"
+    data-placeholder="Search for a practice"
     autofocus= "true"
   )
 

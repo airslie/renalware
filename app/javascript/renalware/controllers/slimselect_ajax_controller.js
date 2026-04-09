@@ -8,7 +8,6 @@ export default class extends Controller {
     this.setup()
   }
 
-
   disconnect(event) {
     this.cleanup()
   }
@@ -39,10 +38,6 @@ export default class extends Controller {
     this.slimSelect = new SlimSelect(options)
   }
 
-  // delayedSetup (event) {
-  //   setTimeout(this.setup.bind(this))
-  // }
-
   cleanup (event) {
     if (!this.slimSelect) return
     this.slimSelect.destroy()
@@ -65,10 +60,48 @@ export default class extends Controller {
       })
       .then((response) => response.json())
       .then(data => {
-        resolve([...data, ...currentData]);
+        resolve(this.mergeOptions(this.normalizeOptions(data), currentData));
       })
       .catch(error => reject("Sorry, there was a server error"))
     });
+  }
+
+  normalizeOptions(data) {
+    return data
+      .map((option) => this.normalizeOption(option))
+      .filter((option) => option !== null)
+  }
+
+  normalizeOption(option) {
+    const value = option.value || option.id
+    if (value === undefined || option.text === undefined) return null
+    const normalizedValue = String(value)
+
+    return {
+      id: normalizedValue,
+      value: normalizedValue,
+      text: option.text,
+      selected: option.selected || false
+    }
+  }
+
+  mergeOptions(newOptions, currentData) {
+    const merged = new Map()
+
+    newOptions.forEach((option) => {
+      merged.set(option.value, option)
+    })
+
+    currentData
+      .map((option) => this.normalizeOption(option))
+      .filter((option) => option !== null)
+      .forEach((option) => {
+        if (!merged.has(option.value)) {
+          merged.set(option.value, option)
+        }
+      })
+
+    return Array.from(merged.values())
   }
 
   debouncePromise(func, wait) {

@@ -24,7 +24,7 @@ module Renalware
 
         # Virtual attribute used on a form to determine what action as preformed on the slot
         attr_accessor :patient_search_scope
-        # Virtual to help the pre-population of select2 with the offending patient if an error
+        # Virtual to help pre-populate the patient search with the offending patient on error
         attr_accessor :patient_ids
 
         include Accountable

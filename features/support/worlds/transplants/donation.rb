@@ -123,9 +123,7 @@ module World
           click_on t("btn.edit")
         end
 
-        # Until we work how to test a select2 ajax autocomplete, for now insert the
-        # anticipated <option> into the select.
-        #   select2(recipient.family_name, from: "transplants_donation_recipient_id")
+        # Insert the anticipated <option> into the select.
         page.execute_script(
           %"$('#transplants_donation_recipient_id').html('<option value=\"#{recipient.id}\">Patty</option>')"
         )

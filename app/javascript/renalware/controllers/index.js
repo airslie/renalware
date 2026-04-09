@@ -21,6 +21,7 @@ import CollapsibleController from "./collapsible_controller"
 import DependentSelectController from "./dependent_select_controller"
 import PatientAttachmentsController from "./patients/attachments_controller"
 import PatientSearchController from "./patients/search_controller"
+import PrimaryCarePhysicianSearchController from "./patients/primary_care_physician_search_controller"
 import SortableController from "./sortable_controller"
 import SelectController from "./select_controller"
 import SelectResetController from "./select_reset_controller"
@@ -48,6 +49,7 @@ import LettersBatchCompileController from "./letters/batch_compile_controller"
 import ClipboardController from "./clipboard_controller"
 import TableHighlightRowController from "./table_highlight_row_controller"
 import ClipboardAsyncController from "./clipboard_async_controller"
+import ProblemsSearchController from "./problems/search_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
@@ -69,6 +71,7 @@ application.register("collapsible", CollapsibleController)
 application.register("dependent-select", DependentSelectController)
 application.register("patient-attachments", PatientAttachmentsController)
 application.register("patient-search", PatientSearchController)
+application.register("primary-care-physician-search", PrimaryCarePhysicianSearchController)
 application.register("sortable", SortableController)
 application.register("select", SelectController)
 application.register("select-reset", SelectResetController)
@@ -112,3 +115,4 @@ application.register("letters-batch-compile", LettersBatchCompileController)
 application.register("clipboard", ClipboardController)
 application.register("table-row-highlight", TableHighlightRowController)
 application.register("clipboard-async", ClipboardAsyncController)
+application.register("problems-search", ProblemsSearchController)

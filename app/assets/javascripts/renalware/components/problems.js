@@ -138,63 +138,7 @@ Renalware.Problems = {
   }
 };
 
-Renalware.ProblemSearch = (function() {
-
-  var template = function (d) {
-    if (typeof d.code !== 'undefined') {
-      return d.text + " <span class='problem-option'>" + d.code + "</span>";
-    } else {
-      return d.text + " <span class='problem-freetext-option'>free text</span>";
-    }
-  }
-
-  var initProblemSearch = function(){
-    var dropDown = $(".problem-ajax-search");
-
-    $(dropDown).select2({
-      tags: true,
-      language: {
-        inputTooShort: function(args) {
-          return $(dropDown).data("hint");
-        }
-      },
-      ajax: {
-        dataType: 'json',
-        delay: 250,
-        data: function (params) {
-          return {
-            term: params.term,
-            page: params.page
-          };
-        },
-        processResults: function (data, params) {
-          params.page = params.page || 1;
-
-          return {
-            results: data.problems,
-            pagination: {
-              more: (params.page * 10) < data.problems_total
-            }
-          };
-        },
-        cache: true
-      },
-      templateResult: template,
-      escapeMarkup: function(markup) { return markup; },
-      minimumInputLength: 3
-    });
-  };
-
-  return {
-    init: function () {
-      initProblemSearch();
-    }
-  };
-}());
-
 $(document).ready(function() {
-  Renalware.ProblemSearch.init();
-
   var trigger = $("a[data-behaviour='add-new-problem']");
 
   if (trigger.length > 0) {
@@ -207,27 +151,7 @@ $(document).ready(function() {
        event.preventDefault();
        modal.open();
        $('#js-snomed-id-field').val('');
-       $('.problem-ajax-search').val(null).trigger('change');
-       $('.problem-ajax-search').select2('open');
+       $('.js-snomed-id-hint').hide();
     })
-  }
-});
-
-$(document).on('opened.fndtn.reveal', '[data-reveal]', function() {
-  Renalware.ProblemSearch.init();
-});
-
-$('.problem-ajax-search').on('select2:select', function(e) {
-  var snomedId = e.params.data.code,
-      $snomedIdHint = $('.js-snomed-id-hint'),
-      $snomeIdField = $('#js-snomed-id-field');
-
-  if (snomedId) {
-    $snomeIdField.val(snomedId);
-    $snomedIdHint.find('strong').text(snomedId);
-    $snomedIdHint.show();
-  } else {
-    $snomeIdField.val('');
-    $snomedIdHint.hide();
   }
 });

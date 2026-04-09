@@ -30,7 +30,6 @@
     "print-js": "^1.6.0",
     "promise-polyfill": "^8.2.0",
     "rollup": "^4.22.4",
-    "select2": "4.1.0-rc.0",
     "semver": "^7.6.3",
     "serialize-javascript": "^7.0",
     "slim-select": "2.10.0",

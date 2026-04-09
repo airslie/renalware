@@ -24,7 +24,7 @@ strong.snomed_id {
   font-family: "Courier New", Courier, monospace;
 }
 
-.select2-container--default {
+.ss-content {
   .problem-option {
     font-family: "Courier New", Courier, monospace;
     margin-left: 1rem;
@@ -36,10 +36,17 @@ strong.snomed_id {
     margin-left: 1rem;
   }
 
-  .select2-results__option--highlighted[aria-selected] {
+  .ss-option.ss-highlighted {
     .problem-option,
     .problem-freetext-option {
       color: var(--off-white);
     }
+  }
+}
+
+.ss-main {
+  .problem-option,
+  .problem-freetext-option {
+    display: none;
   }
 }
