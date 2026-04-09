@@ -14,7 +14,7 @@ module Renalware
 
         # TODO: use build
         def create_prescription_for(patient, dose_amount: "99", prescribed_on: 1.week.ago)
-          drug = create(:drug, name: "Drug1")
+          drug = create(:drug, name: "Drug1", code: "DM+D-123")
           route = create(:medication_route, code: "Route1", name: "Route1")
           create(
             :prescription,
@@ -56,6 +56,11 @@ module Renalware
                     <Code>1</Code>
                   </Route>
                   <DrugProduct>
+                    <Id>
+                      <CodingStandard>DM+D</CodingStandard>
+                      <Code>DM+D-123</Code>
+                      <Description>Drug1</Description>
+                    </Id>
                     <Generic>Drug1</Generic>
                   </DrugProduct>
                   <Frequency>daily</Frequency>
@@ -97,6 +102,11 @@ module Renalware
                       <Code>1</Code>
                     </Route>
                     <DrugProduct>
+                      <Id>
+                        <CodingStandard>DM+D</CodingStandard>
+                        <Code>DM+D-123</Code>
+                        <Description>Drug1</Description>
+                      </Id>
                       <Generic>Drug1</Generic>
                     </DrugProduct>
                     <Frequency>daily</Frequency>
@@ -114,7 +124,7 @@ module Renalware
           end
 
           context "when the drug is terminated" do
-            it do
+            it do # rubocop:disable RSpec/ExampleLength
               terminated_prescription = create_terminated_prescription(
                 create(:patient),
                 dose_amount: "98",
@@ -135,6 +145,11 @@ module Renalware
                     <Code>1</Code>
                   </Route>
                   <DrugProduct>
+                    <Id>
+                      <CodingStandard>DM+D</CodingStandard>
+                      <Code>DM+D-123</Code>
+                      <Description>Drug1</Description>
+                    </Id>
                     <Generic>Drug1</Generic>
                   </DrugProduct>
                   <Frequency>daily</Frequency>
