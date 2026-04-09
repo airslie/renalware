@@ -82,7 +82,7 @@ const config = {
           },
           //{to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/airslie/renalware-core',
+            href: 'https://github.com/airslie/renalware',
             label: 'GitHub',
             position: 'right',
           },

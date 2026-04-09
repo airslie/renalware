@@ -20,7 +20,7 @@ data with external systems.
 
 ## Technical Overview
 
-`renalware-core` is an open-source Ruby on Rails application for renal unit
+Renalware is an open-source Ruby on Rails application for renal unit
 management.
 
 Renalware is built using open source projects including:
@@ -58,8 +58,8 @@ psql -d postgres -c "ALTER USER renalware WITH PASSWORD 'renalware';"
 ### Bootstrap the application
 
 ```bash
-git clone git@github.com:airslie/renalware-core.git
-cd renalware-core
+git clone git@github.com:airslie/renalware.git
+cd renalware
 bundle install
 yarn install
 bin/rails db:create db:migrate

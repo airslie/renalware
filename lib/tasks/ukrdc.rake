@@ -8,8 +8,6 @@ namespace :ukrdc do
       1. Running the rake task updates the sent_to_ukrdc_at for each patient exported.
          If you don't want to do this you may need to edit this task to wrap the code in a
          transaction you can optionally roll back.
-     2: If testing this inside the renalware-core gem, you will need to append app: e.g.
-        app:ukrdc:export ...
 
     Example usage
       1. To get all RR and PKB patients with who have changed
