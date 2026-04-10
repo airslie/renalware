@@ -1,0 +1,10 @@
+- donor_id = event.document.donor_id
+
+- if donor_id.present?
+  strong
+    | Donor ID:
+    = " #{donor_id}"
+  - if event.description.present?
+    br
+
+= event.description
