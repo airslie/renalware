@@ -21,7 +21,7 @@ module Renalware
 
         # Bundle here refers to the top level 'message' <Bundle> FHIR resource in the XML message.
         # See https://www.hl7.org/fhir/resourcelist.html and the wiki entry:
-        # https://github.com/airslie/renalwarev2/wiki/Transfer-Of-Care
+        # https://github.com/airslie/renalware-dev/wiki/Transfer-Of-Care
         def build_fhir_bundle_xml
           bundle = Resources::Bundle.call(arguments)
           validate_fhir_bundle(bundle)

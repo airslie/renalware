@@ -17,7 +17,7 @@ class BigintPkConversions1 < ActiveRecord::Migration[7.1]
       # will take a long time to convert, and the table is locked during the conversion, so
       # converting eg pathology_observations.id will need some careful testing.
       # You see a list of tables where we could convert to bigint here
-      # https://github.com/airslie/renalwarev2/issues/4858 4859 4860
+      # https://github.com/airslie/renalware-dev/issues/4858 4859 4860
       safety_assured do
         reversible do |direction|
           direction.up do
