@@ -28,7 +28,14 @@ jobs:
         id: meta
         shell: bash
         run: |
-          VERSION="$(ruby -e 'load "lib/renalware.rb"; puts Renalware::VERSION')"
+          VERSION="$(
+            ruby -e '
+              contents = File.read("lib/renalware.rb")
+              match = contents.match(/VERSION\s*=\s*"([^"]+)"/)
+              abort("Could not find Renalware::VERSION in lib/renalware.rb") unless match
+              puts match[1]
+            '
+          )"
           SHORT_SHA="${GITHUB_SHA::12}"
           BUILD_TIMESTAMP="$(date -u +'%Y%m%dT%H%M%SZ')"
           SHA_TAG="sha-${SHORT_SHA}"
