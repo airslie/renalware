@@ -63,5 +63,10 @@ FactoryBot.define do
       event_type factory: :advanced_care_plan_event_type
       document { { state: :not_required } }
     end
+
+    factory :transplant_offer, class: "Renalware::Transplants::Offer" do
+      event_type factory: :transplant_offer_event_type
+      document { { donor_id: "NHSBT-12345" } }
+    end
   end
 end

@@ -84,5 +84,11 @@ FactoryBot.define do
       name { "Transplant Review" }
       event_class_name { "Renalware::Transplants::Review" }
     end
+
+    factory :transplant_offer_event_type do
+      name { "Transplant Offer" }
+      slug { "transplant_offers" }
+      event_class_name { "Renalware::Transplants::Offer" }
+    end
   end
 end
