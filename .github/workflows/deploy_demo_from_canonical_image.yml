@@ -1,0 +1,151 @@
+name: Deploy Demo From Canonical Image
+
+on:
+  workflow_run:
+    workflows:
+      - Build Canonical Image
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-demo-from-canonical-image
+  cancel-in-progress: true
+
+jobs:
+  deploy-demo:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    env:
+      ACR_NAME: acrrenalwaredemo
+      RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      APP_SERVICE_NAME: app-renalware-demo
+      APP_SERVICE_RESOURCE_GROUP: ${{ vars.AZURE_APP_SERVICE_RESOURCE_GROUP }}
+
+    steps:
+      - name: Validate required repo variable
+        run: |
+          if [ -z "${RESOURCE_GROUP}" ]; then
+            echo "Repository variable AZURE_RESOURCE_GROUP is required but not set."
+            exit 1
+          fi
+
+      - name: Download image metadata artifact from triggering build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          ARTIFACT_ID="$(
+            gh api \
+              "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/artifacts" \
+              --jq '.artifacts[] | select(.name == "canonical-image-metadata") | .id'
+          )"
+
+          if [ -z "${ARTIFACT_ID}" ]; then
+            echo "Could not find canonical-image-metadata artifact on run ${RUN_ID}"
+            exit 1
+          fi
+
+          gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            --output canonical-image-metadata.zip
+
+          unzip -p canonical-image-metadata.zip canonical-image-metadata.json > canonical-image-metadata.json
+
+      - name: Resolve deploy metadata
+        id: meta
+        shell: bash
+        run: |
+          SOURCE_IMAGE="$(jq -r '.source_image' canonical-image-metadata.json)"
+          HUMAN_TAG="$(jq -r '.human_tag' canonical-image-metadata.json)"
+          VERSION_SHA_TAG="$(jq -r '.version_sha_tag' canonical-image-metadata.json)"
+          SHA_TAG="$(jq -r '.sha_tag' canonical-image-metadata.json)"
+
+          {
+            echo "source_image=${SOURCE_IMAGE}"
+            echo "human_tag=${HUMAN_TAG}"
+            echo "version_sha_tag=${VERSION_SHA_TAG}"
+            echo "sha_tag=${SHA_TAG}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Resolve ACR login server
+        id: acr
+        shell: bash
+        run: |
+          ACR_LOGIN_SERVER="$(
+            az acr show \
+              --name "${ACR_NAME}" \
+              --resource-group "${RESOURCE_GROUP}" \
+              --query loginServer \
+              --output tsv
+          )"
+          echo "login_server=${ACR_LOGIN_SERVER}" >> "${GITHUB_OUTPUT}"
+
+      - name: Import canonical image into demo ACR
+        shell: bash
+        run: |
+          for tag in \
+            "${{ steps.meta.outputs.human_tag }}" \
+            "${{ steps.meta.outputs.version_sha_tag }}" \
+            "${{ steps.meta.outputs.sha_tag }}" \
+            "demo-latest"
+          do
+            az acr import \
+              --name "${ACR_NAME}" \
+              --resource-group "${RESOURCE_GROUP}" \
+              --source "${{ steps.meta.outputs.source_image }}" \
+              --username "${{ secrets.GHCR_IMPORT_USERNAME }}" \
+              --password "${{ secrets.GHCR_IMPORT_TOKEN }}" \
+              --image "renalware:${tag}"
+          done
+
+      - name: Deploy image to App Service sidecar
+        shell: bash
+        run: |
+          APP_RG="${APP_SERVICE_RESOURCE_GROUP:-${RESOURCE_GROUP}}"
+          FULL_IMAGE="${{ steps.acr.outputs.login_server }}/renalware:${{ steps.meta.outputs.human_tag }}"
+          SITE_ID="$(
+            az webapp show \
+              --name "${APP_SERVICE_NAME}" \
+              --resource-group "${APP_RG}" \
+              --query id \
+              --output tsv
+          )"
+
+          az resource update \
+            --ids "${SITE_ID}/sitecontainers/main" \
+            --api-version 2025-03-01 \
+            --set properties.image="${FULL_IMAGE}"
+
+      - name: Restart App Service
+        shell: bash
+        run: |
+          APP_RG="${APP_SERVICE_RESOURCE_GROUP:-${RESOURCE_GROUP}}"
+          az webapp restart \
+            --name "${APP_SERVICE_NAME}" \
+            --resource-group "${APP_RG}"
+
+      - name: Summarise demo deployment
+        shell: bash
+        run: |
+          {
+            echo "## Demo deployed"
+            echo
+            echo "- Source: \`${{ steps.meta.outputs.source_image }}\`"
+            echo "- Demo image: \`${{ steps.acr.outputs.login_server }}/renalware:${{ steps.meta.outputs.human_tag }}\`"
+            echo "- Tracking tags refreshed: \`${{ steps.meta.outputs.version_sha_tag }}\`, \`${{ steps.meta.outputs.sha_tag }}\`, \`demo-latest\`"
+          } >> "${GITHUB_STEP_SUMMARY}"
