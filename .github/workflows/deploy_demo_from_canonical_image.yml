@@ -55,7 +55,7 @@ jobs:
 
           gh api \
             "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
-            --output canonical-image-metadata.zip
+            > canonical-image-metadata.zip
 
           unzip -p canonical-image-metadata.zip canonical-image-metadata.json > canonical-image-metadata.json
 
