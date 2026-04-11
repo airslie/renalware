@@ -964,7 +964,7 @@ This project adheres to Semantic Versioning.
 
 ### Fixed
 
-- Sort Virology Vaccinations by date_time descending [#3405](https://github.com/airslie/renalwarev2/issues/3405)
+- Sort Virology Vaccinations by date_time descending [#3405](https://github.com/airslie/renalware-dev/issues/3405)
 - Should not be able to edit Vaccine and Clinical Frailty scores #3351
 
 ## 2.0.166

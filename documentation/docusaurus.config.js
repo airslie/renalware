@@ -21,7 +21,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'airslie', // Usually your GitHub org/user name.
-  projectName: 'renalwarev2', // Usually your repo name.
+  projectName: 'renalware-dev', // Usually your repo name.
   deploymentBranch: 'gh-pages',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -46,7 +46,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/airslie/renalwarev2/tree/main/documentation/',
+            'https://github.com/airslie/renalware-dev/tree/main/documentation/',
         },
         // blog: {
         //   showReadingTime: true,
