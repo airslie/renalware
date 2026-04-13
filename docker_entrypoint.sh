@@ -1,6 +1,27 @@
 #!/bin/sh
 set -eu
 
+export_app_service_env() {
+  profile_d=/etc/profile.d
+  profile_script="${profile_d}/00-app-service-env.sh"
+
+  mkdir -p "${profile_d}"
+  : > "${profile_script}"
+
+  printenv | while IFS='=' read -r name value; do
+    case "${name}" in
+      PWD|SHLVL|_|OLDPWD)
+        continue
+        ;;
+    esac
+
+    escaped_value=$(printf "%s" "${value}" | sed 's/[\\"]/\\&/g')
+    printf 'export %s="%s"\n' "${name}" "${escaped_value}" >> "${profile_script}"
+  done
+
+  chmod 0644 "${profile_script}"
+}
+
 run_as_rails() {
   if [ "$(id -u)" -eq 0 ]; then
     exec gosu rails "$@"
@@ -19,6 +40,7 @@ if [ "${ENABLE_APP_SERVICE_SSH:-false}" = "true" ]; then
   mkdir -p /run/sshd
   ssh-keygen -A
   echo 'root:Docker!' | chpasswd
+  export_app_service_env
   /usr/sbin/sshd
 fi
 

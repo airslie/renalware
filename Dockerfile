@@ -189,8 +189,9 @@ EXPOSE 2222
 # chmod/chown is cleanest as root
 USER root
 COPY --chown=rails:rails docker_entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY ssh_as_rails.sh /usr/local/bin/ssh_as_rails.sh
 COPY sshd_config.azure /etc/ssh/sshd_config.d/azure-app-service.conf
-RUN chmod 0755 /usr/local/bin/entrypoint.sh
+RUN chmod 0755 /usr/local/bin/entrypoint.sh /usr/local/bin/ssh_as_rails.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]

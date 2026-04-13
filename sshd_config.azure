@@ -12,3 +12,6 @@ PermitEmptyPasswords no
 ChallengeResponseAuthentication no
 UsePAM yes
 PrintMotd no
+
+Match User root
+    ForceCommand /usr/local/bin/ssh_as_rails.sh
