@@ -1,7 +1,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.good_job.execution_mode = :async
+  config.good_job.execution_mode = Renalware.config.good_job_execution_mode
   config.active_record.action_on_strict_loading_violation = :log
 
   # Compress JavaScripts and CSS.
