@@ -1,0 +1,56 @@
+name: Notify Deployment Repo
+
+on:
+  workflow_run:
+    workflows:
+      - Build Canonical Image
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  notify:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download canonical-image-metadata artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          ARTIFACT_ID="$(
+            gh api \
+              "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/artifacts" \
+              --jq '.artifacts[] | select(.name == "canonical-image-metadata") | .id'
+          )"
+
+          if [ -z "${ARTIFACT_ID}" ]; then
+            echo "Could not find canonical-image-metadata artifact on run ${RUN_ID}"
+            exit 1
+          fi
+
+          gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            > canonical-image-metadata.zip
+
+          unzip -p canonical-image-metadata.zip canonical-image-metadata.json > canonical-image-metadata.json
+
+      - name: Dispatch demo sync event
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+        shell: bash
+        run: |
+          gh api repos/airslie/renalware-deployment/dispatches \
+            --method POST \
+            -f event_type=sync-demo-to-main \
+            -F client_payload[repository]="$(jq -r '.image_name' canonical-image-metadata.json)" \
+            -F client_payload[digest]="$(jq -r '.digest' canonical-image-metadata.json)" \
+            -F client_payload[display_tag]="$(jq -r '.human_tag' canonical-image-metadata.json)" \
+            -F client_payload[version_sha_tag]="$(jq -r '.version_sha_tag' canonical-image-metadata.json)" \
+            -F client_payload[sha_tag]="$(jq -r '.sha_tag' canonical-image-metadata.json)"
