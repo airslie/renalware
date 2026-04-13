@@ -69,4 +69,4 @@ working, possibly because parts of the tooling still assume a simpler app layout
 - Remove jquery-ui
 - Remove font-awesome and use SVG icons
 - Convert SASS to CSS, replacing SASS variables with CSS ones
-- Converge on slimselect for dropdowns
+- Converge on slimselect for dropdowns.
