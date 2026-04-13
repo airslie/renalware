@@ -434,6 +434,9 @@ module Renalware
     config_accessor(:mail_delivery_method) do
       ENV.fetch("MAIL_DELIVERY_METHOD", "microsoft_graph_api").to_sym
     end
+    config_accessor(:good_job_execution_mode) do
+      ENV.fetch("GOOD_JOB_EXECUTION_MODE", "external").to_sym
+    end
 
     config_accessor(:user_dashboard_display_named_patients) { true }
     config_accessor(:users_expire_after) {
