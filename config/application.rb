@@ -4,6 +4,8 @@ require "rack/attack"
 
 Bundler.require(*Rails.groups)
 require "renalware"
+require "renalware/config_accessors"
+require "renalware/configuration"
 
 module RenalwareApp
   class Application < Rails::Application
@@ -100,8 +102,6 @@ module RenalwareApp
     end
 
     config.before_initialize do
-      require "renalware/config_accessors"
-      require "renalware/configuration"
       require "renalware/required_env"
 
       Renalware::RequiredEnv.validate!
