@@ -22,6 +22,8 @@ article.hd-profile-summary
     dd= profile.formatted_prescribed_time
     dt= t(".hd_type")
     dd= profile.hd_type
+    dt= t(".incremental")
+    dd= profile.incremental&.text
     dt= t(".substitution_percent")
     dd= profile.substitution_percent
     dt= t(".named_nurse")

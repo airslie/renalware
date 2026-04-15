@@ -95,6 +95,7 @@ en:
             on_warfarin: 'On Warfarin:'
           has_sodium_profiling: 'Sodium profiling:'
           hd_type: 'HD Type:'
+          incremental: 'Incremental:'
           hospital_unit: 'Hospital unit:'
           last_update: 'Last Update:'
           named_nurse: 'Named Nurse:'

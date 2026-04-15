@@ -28,11 +28,17 @@
 
     .w-full.sm:max-w-xs.pr-2
       = f.input :schedule_definition_ids,
-          collection: Renalware::HD::ScheduleDefinitionFilter.all,
-          label_method: :days,
-          value_method: :ids,
+                 collection: Renalware::HD::ScheduleDefinitionFilter.all,
+                 label_method: :days,
+                 value_method: :ids,
+                 include_blank: true,
+                 label: t(".schedule")
+
+    .w-full.sm:max-w-xs.pr-2
+      = f.input :incremental,
+          collection: Renalware::HD::Profile.incremental_filter_options,
           include_blank: true,
-          label: t(".schedule")
+          label: t(".incremental")
 
     .w-full.sm:max-w-xs.pr-2
       .mt-6= filter_or_reset(form: f, reset_path: filter_form.url)

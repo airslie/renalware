@@ -5,6 +5,7 @@ module Renalware
     class ProfileDocument < Document::Embedded
       class Dialysis < Document::Embedded
         attribute :hd_type, Document::Enum, enums: %i(hd hdf_pre hdf_post)
+        attribute :incremental, Document::Enum, enums: %i(yes no), default: :no
         attribute :cannulation_type
         attribute :needle_size
         attribute :single_needle, Document::Enum, enums: %i(yes no)

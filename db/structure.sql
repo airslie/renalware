@@ -7694,6 +7694,10 @@ CREATE VIEW renalware.hd_mdm_patients AS
     h.name AS hospital_centre,
     ((((hdp.document -> 'transport'::text) ->> 'has_transport'::text) || ': '::text) || ((hdp.document -> 'transport'::text) ->> 'type'::text)) AS transport,
     ((sched.days_text || ' '::text) || upper((diurnal.code)::text)) AS schedule,
+        CASE
+            WHEN (((hdp.document -> 'dialysis'::text) ->> 'incremental'::text) = 'yes'::text) THEN true
+            ELSE false
+        END AS incremental,
     renalware.convert_to_float(((pa."values" -> 'HGB'::text) ->> 'result'::text), NULL::double precision) AS hgb,
     (((pa."values" -> 'HGB'::text) ->> 'observed_at'::text))::date AS hgb_date,
     renalware.convert_to_float(((pa."values" -> 'PHOS'::text) ->> 'result'::text), NULL::double precision) AS phos,
@@ -32179,6 +32183,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,public,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260415165113'),
 ('20260408120000'),
 ('20260325113000'),
 ('20260324112837'),
