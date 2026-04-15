@@ -1,9 +1,12 @@
 - donor_id = event.document.donor_id
+- donor_dob = event.document.donor_dob
 
 - if donor_id.present?
-  strong
-    | Donor ID:
-    = " #{donor_id}"
+  | Donor ID:
+  = " #{donor_id}"
+  - if donor_dob.present?
+    | ;
+    = " DOB: #{l(donor_dob)}"
   - if event.description.present?
     br
 

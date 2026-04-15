@@ -1,4 +1,8 @@
 = f.simple_fields_for :document, event.document do |fd|
   = fd.input :donor_id, label: "Donor Id", wrapper: :horizontal_medium
+  = fd.input :donor_dob,
+             as: :flatpickr,
+             label: "Donor DOB",
+             wrapper: :horizontal_datepicker
 
 = f.input :description, wrapper: :horizontal_medium
