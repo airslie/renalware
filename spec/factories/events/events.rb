@@ -66,7 +66,7 @@ FactoryBot.define do
 
     factory :transplant_offer, class: "Renalware::Transplants::Offer" do
       event_type factory: :transplant_offer_event_type
-      document { { donor_id: "NHSBT-12345" } }
+      document { { donor_id: "NHSBT-12345", donor_dob: Date.parse("1970-01-01") } }
     end
   end
 end
