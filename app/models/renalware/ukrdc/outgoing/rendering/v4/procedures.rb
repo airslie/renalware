@@ -18,6 +18,7 @@ module Renalware
               create_node("Procedures") do |elem|
                 dialysis_session_elements_inside(elem)
                 transplant_operation_elements_inside(elem)
+                vascular_access_elements_inside(elem)
               end
             end
 
@@ -35,6 +36,12 @@ module Renalware
               patient.transplant_operations.each do |operation|
                 operation_presenter = Renalware::UKRDC::TransplantOperationPresenter.new(operation)
                 elem << Transplant.new(operation: operation_presenter).xml
+              end
+            end
+
+            def vascular_access_elements_inside(elem)
+              patient.access_procedures.each do |procedure|
+                elem << VascularAccess.new(procedure:).xml
               end
             end
           end

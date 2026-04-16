@@ -10,11 +10,8 @@ module Renalware
           expected_xml = <<~XML.squish.gsub("> <", "><")
             <DialysisPrescription>
               <EnteredOn></EnteredOn>
-              <FromTime></FromTime>
-              <ToTime></ToTime>
-              <SessionType></SessionType>
+              <SessionType>HD</SessionType>
               <SessionsPerWeek></SessionsPerWeek>
-              <TimeDialysed></TimeDialysed>
               <VascularAccess></VascularAccess>
             </DialysisPrescription>
           XML

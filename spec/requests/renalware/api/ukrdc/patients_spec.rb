@@ -23,8 +23,15 @@ describe "API request for a single UKRDC patient XML document" do
     )
   end
 
-  def validate(xml)
-    Renalware::UKRDC::XsdSchema.new.validate(xml)
+  def validate(xml, &block)
+    errors = Renalware::UKRDC::XsdSchema.new.validate(xml)
+    return if errors.empty?
+
+    if block
+      errors.each(&block)
+    else
+      raise errors.map(&:message).join("\n")
+    end
   end
 
   def clinic_patient(patient)

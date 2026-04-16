@@ -186,6 +186,15 @@ module Renalware
         Transplants::RecipientOperation.for_patient(id).order(performed_on: :asc)
       end
 
+      def access_procedures
+        Accesses
+          .cast_patient(__getobj__)
+          .procedures
+          .includes(:type, :pd_catheter_insertion_technique)
+          .where(performed_on: changes_since.to_date..)
+          .order(:performed_on)
+      end
+
       def assessments
         [
           NullObject.instance,
