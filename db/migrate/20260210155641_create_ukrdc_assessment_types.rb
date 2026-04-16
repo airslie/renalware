@@ -8,10 +8,10 @@ class CreateUKRDCAssessmentTypes < ActiveRecord::Migration[8.0]
       end
 
       execute <<~SQL
-        INSERT INTO renalware.ukrdc_assessment_types (code, description) VALUES
-          ('TPLTassess','Suitability for renal transplant'),
-          ('RRTassess','Shared future RRT choice'),
-          ('PPDassess','Preferred place of dying') on conflict do nothing;
+        INSERT INTO renalware.ukrdc_assessment_types (id, code, description) VALUES
+          (1, 'TPLTassess','Suitability for renal transplant'),
+          (2, 'RRTassess','Shared future RRT choice'),
+          (3, 'PPDassess','Preferred place of dying') on conflict do nothing;
       SQL
     end
   end
