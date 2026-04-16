@@ -28,6 +28,18 @@ module Renalware::HD
           end
         end
       end
+
+      describe "incremental" do
+        it "maps to a ransack predicate" do
+          options = described_class.new(incremental: "true").ransacked_parameters
+          expect(options[:hd_profile_dialysis_incremental_eq]).to be(true)
+        end
+
+        it "casts 'false' to false so missing values can be included in the no filter" do
+          options = described_class.new(incremental: "false").ransacked_parameters
+          expect(options[:hd_profile_dialysis_incremental_eq]).to be(false)
+        end
+      end
     end
   end
 end

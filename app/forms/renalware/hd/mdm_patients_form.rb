@@ -13,6 +13,7 @@ module Renalware
       attribute :hospital_unit_id, Integer
       attribute :named_nurse_id, Integer
       attribute :named_consultant_id, Integer
+      attribute :incremental, Boolean
       attribute :schedule_definition_ids, String # an Integer array in string form e.g. "[1 ,2]"
       attribute :url
 
@@ -27,6 +28,7 @@ module Renalware
           hospital_centre_id_eq: hospital_centre_id,
           hd_profile_hospital_unit_id_eq: hospital_unit_id,
           hd_profile_schedule_definition_id_in: schedule_definition_ids_array,
+          hd_profile_dialysis_incremental_eq: incremental,
           named_nurse_id_eq: named_nurse_id,
           named_consultant_id_eq: named_consultant_id
         }

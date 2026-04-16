@@ -11,6 +11,7 @@ module Renalware
                to: :document
 
       delegate :dialyser,
+               :incremental,
                :cannulation_type,
                :bicarbonate,
                :needle_size,

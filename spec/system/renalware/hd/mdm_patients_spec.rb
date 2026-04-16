@@ -6,12 +6,16 @@ describe "HD MDM Patients" do
   let(:unit1) { create(:hd_hospital_unit, name: "Unit1", hospital_centre: hospital) }
   let(:unit2) { create(:hd_hospital_unit, name: "Unit2", hospital_centre: hospital) }
 
-  def create_hd_patient(unit:, family_name:, schedule_definition: nil, by: user)
+  def create_hd_patient(unit:, family_name:, schedule_definition: nil, incremental: nil, by: user)
+    document = { dialysis: { hd_type: :hd } }
+    document[:dialysis][:incremental] = incremental if incremental.present?
+
     create(:hd_patient, :with_hd_modality, family_name:, by: user).tap do |patient|
       patient.hd_profile = create(:hd_profile,
                                   patient:,
                                   hospital_unit: unit,
                                   schedule_definition:,
+                                  document:,
                                   by:)
 
       create(:prescription, patient:, by: user)
@@ -22,6 +26,7 @@ describe "HD MDM Patients" do
              by: user)
     end
   end
+
   describe "GET index" do
     it "responds successfully" do
       patient = create(:hd_patient,
@@ -79,6 +84,39 @@ describe "HD MDM Patients" do
 
       expect(page).to have_content(patient2.family_name)
       expect(page).to have_no_content(patient1.family_name)
+    end
+
+    it "filters by incremental dialysis" do
+      patient1 = create_hd_patient(unit: unit1, family_name: "XXXX", incremental: "yes")
+      patient2 = create_hd_patient(unit: unit2, family_name: "YYYY", incremental: "no")
+
+      login_as_clinical
+      visit hd_mdm_patients_path
+
+      expect(page).to have_content(patient1.family_name)
+      expect(page).to have_content(patient2.family_name)
+
+      select "Yes", from: "Incremental"
+      click_on t("btn.filter")
+
+      expect(page).to have_content(patient1.family_name)
+      expect(page).to have_no_content(patient2.family_name)
+    end
+
+    it "treats missing incremental values as no when filtering" do
+      patient1 = create_hd_patient(unit: unit1, family_name: "XXXX", incremental: "yes")
+      patient2 = create_hd_patient(unit: unit2, family_name: "YYYY", incremental: "no")
+      patient3 = create_hd_patient(unit: unit2, family_name: "ZZZZ")
+
+      login_as_clinical
+      visit hd_mdm_patients_path
+
+      select "No", from: "Incremental"
+      click_on t("btn.filter")
+
+      expect(page).to have_no_content(patient1.family_name)
+      expect(page).to have_content(patient2.family_name)
+      expect(page).to have_content(patient3.family_name)
     end
 
     describe "Named filters" do

@@ -36,7 +36,20 @@ module Renalware
       scope :current, -> { ordered.where(deactivated_at: nil).limit(1) }
       scope :dialysing_at_unit, ->(unit_id) { where(hospital_unit_id: unit_id) }
 
+      ransacker :dialysis_incremental, type: :boolean do
+        Arel.sql("coalesce((hd_profiles.document #>> '{dialysis,incremental}') = 'yes', false)")
+      end
+
       def self.policy_class = BasePolicy
+      def self.ransackable_attributes(*) = super + _ransackers.keys
+
+      def self.incremental_options
+        [%w(Yes yes), %w(No no)]
+      end
+
+      def self.incremental_filter_options
+        [["Yes", true], ["No", false]]
+      end
 
       def current_schedule
         return other_schedule if other_schedule.present?

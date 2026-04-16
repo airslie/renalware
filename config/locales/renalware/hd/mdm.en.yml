@@ -47,6 +47,7 @@ en:
       mdm_patients:
         filters:
           hospital_unit: Dialysing at
+          incremental: Incremental
           schedule: Schedule
         index:
           page_title: HD MDM Patients

@@ -47,6 +47,9 @@ describe "Editing a patient's current HD profile", js: false do
 
       # Dialysis
       choose "HDF-PRE"
+      within ".hd_profile_document_dialysis_incremental" do
+        choose "Yes"
+      end
       select "Buttonhole", from: "Cannulation Type"
       select "15", from: "Needle Size"
       within ".hd_profile_document_dialysis_single_needle" do
@@ -104,6 +107,7 @@ describe "Editing a patient's current HD profile", js: false do
       within ".hd-profile-summary" do
         expect(page).to have_content(user.to_s)
         expect(page).to have_content(hospital_unit.unit_code)
+        expect(page).to have_content("Incremental:")
       end
 
       expect(Renalware::HD::Profile.for_patient(patient).count).to eq(1)
@@ -123,6 +127,7 @@ describe "Editing a patient's current HD profile", js: false do
 
       expect(profile.document.dialysis).to have_attributes(
         hd_type: "hdf_pre",
+        incremental: "yes",
         needle_size: "15",
         cannulation_type: cannulation_type.name,
         single_needle: "yes",
