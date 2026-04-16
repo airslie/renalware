@@ -40,7 +40,7 @@ CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
 -- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
+CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA renalware;
 
 
 --
@@ -63,14 +63,27 @@ CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
 
 
 --
--- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA renalware;
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA renalware;
 
 
 --
--- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: -
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+
+
+--
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA renalware;
+
+
+--
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: -
 --
 
 
@@ -1040,10 +1053,10 @@ CREATE TYPE renalware.tristate_type AS ENUM (
 
 CREATE FUNCTION renalware.audit_view_as_json(view_name text) RETURNS json
     LANGUAGE plpgsql
-    AS $$
-  DECLARE result json;
-  BEGIN
-  EXECUTE format('
+    AS $$ DECLARE result json;
+
+BEGIN EXECUTE format(
+  '
   select row_to_json(t)
     from (
       select
@@ -1051,10 +1064,13 @@ CREATE FUNCTION renalware.audit_view_as_json(view_name text) RETURNS json
         (select array_to_json(array_agg(row_to_json(d))
       )
     from (select * from %s) d) as data) t;
-    ', quote_ident(view_name)) into result;
-  return result;
-END
-$$;
+    ',
+  quote_ident(view_name)
+) into result;
+
+return result;
+
+END $$;
 
 
 --
@@ -2214,15 +2230,47 @@ $$;
 
 
 --
--- Name: replace_nhs_number(integer); Type: FUNCTION; Schema: renalware; Owner: -
+-- Name: ukrdc_update_send_to_renalreg(); Type: FUNCTION; Schema: renalware; Owner: -
 --
 
-CREATE FUNCTION renalware.replace_nhs_number(pid integer) RETURNS void
+CREATE FUNCTION renalware.ukrdc_update_send_to_renalreg(OUT records_added integer, OUT records_updated integer) RETURNS record
     LANGUAGE plpgsql
     AS $$
-begin
-update patients p set nhs_number = (select x.nhs_number from nhs_numbers x where not exists (select 1 from patients p where p.nhs_number = x.nhs_number) limit 1) where p.id= pid;
-END;
+declare countOfUpdatedRows int = 0;
+BEGIN
+  with candidates as(
+    select
+        p.id as patient_id,
+        convert_to_float(pcos.values -> 'EGFR' ->> 'result', null) as egfr,
+        md.code as modality_code
+    from
+        renalware.patients p
+        inner join renalware.patient_current_modalities pcm on pcm.patient_id = p.id
+        left join renalware.pathology_current_observation_sets pcos on pcos.patient_id = p.id
+        inner join modality_descriptions md on md.id = pcm.modality_description_id
+    where
+        p.send_to_renalreg = false
+        and p.renalreg_decision_on is null
+        and md.code in ('transplant', 'pd', 'hd', 'low_clearance', 'nephrology')
+  ),
+  updateables as (
+    select patient_id, egfr, modality_code from candidates
+    where
+      modality_code in ('transplant', 'pd', 'hd')
+      or (modality_code in ('low_clearance', 'nephrology') and egfr < 30.0)
+  )
+  update renalware.patients p
+    set
+        send_to_renalreg = true,
+        renalreg_decision_on = now(),
+        renalreg_recorded_by = 'Renalware System'
+    from updateables
+    where updateables.patient_id = p.id;
+
+  -- Return the number of updated rows in records_updated
+  GET DIAGNOSTICS countOfUpdatedRows = ROW_COUNT;
+  select into records_added, records_updated 0, countOfUpdatedRows;
+END
 $$;
 
 
@@ -2358,7 +2406,7 @@ CREATE FUNCTION renalware.update_pathology_observations_nresult_from_trigger() R
 DECLARE
 BEGIN
   IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
-    NEW.nresult = renalware.convert_to_float(NEW.result, NULL);
+    NEW.nresult = convert_to_float(NEW.result, NULL);
   END IF;
   RETURN NEW ;
 END $$;
@@ -2413,9 +2461,707 @@ SET default_table_access_method = heap;
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
+
+
+--
+-- Name: drug_types; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.drug_types (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    code character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    "position" integer DEFAULT 0 NOT NULL,
+    weighting integer DEFAULT 0 NOT NULL,
+    colour renalware.enum_colour_name,
+    atc_codes character varying[]
+);
+
+
+--
+-- Name: COLUMN drug_types."position"; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.drug_types."position" IS 'Controls display order';
+
+
+--
+-- Name: COLUMN drug_types.weighting; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.drug_types.weighting IS 'More important drug types have a higher value so their colour trumps other types a drug might have.';
+
+
+--
+-- Name: COLUMN drug_types.colour; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.drug_types.colour IS 'A CSS colour e.f. ''#A12A12''';
+
+
+--
+-- Name: drug_types_drugs; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.drug_types_drugs (
+    drug_id integer NOT NULL,
+    drug_type_id integer NOT NULL,
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: drugs; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.drugs (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    deleted_at timestamp without time zone,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    description character varying,
+    read_code character varying,
+    code character varying,
+    inactive boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: medication_prescription_terminations; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.medication_prescription_terminations (
+    id integer NOT NULL,
+    terminated_on date NOT NULL,
+    notes text,
+    prescription_id integer NOT NULL,
+    created_by_id integer NOT NULL,
+    updated_by_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    terminated_on_set_by_user boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: COLUMN medication_prescription_terminations.terminated_on_set_by_user; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.medication_prescription_terminations.terminated_on_set_by_user IS 'If true, the system will not attempt to set to prescribed_on + 6 months if prescriptions administer_on_hd=true';
+
+
+--
+-- Name: medication_prescriptions; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.medication_prescriptions (
+    id integer NOT NULL,
+    patient_id integer NOT NULL,
+    drug_id integer NOT NULL,
+    treatable_type character varying NOT NULL,
+    treatable_id integer NOT NULL,
+    dose_amount character varying NOT NULL,
+    dose_unit character varying,
+    medication_route_id integer NOT NULL,
+    route_description character varying,
+    frequency character varying NOT NULL,
+    notes text,
+    prescribed_on date NOT NULL,
+    provider integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    created_by_id integer NOT NULL,
+    updated_by_id integer NOT NULL,
+    administer_on_hd boolean DEFAULT false NOT NULL,
+    last_delivery_date date,
+    next_delivery_date date,
+    unit_of_measure_id bigint,
+    trade_family_id bigint,
+    form_id bigint,
+    legacy_drug_id integer,
+    legacy_medication_route_id integer,
+    frequency_comment character varying,
+    stat boolean
+);
+
+
+--
+-- Name: COLUMN medication_prescriptions.legacy_drug_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.medication_prescriptions.legacy_drug_id IS 'Keep the previous drug id as a reference in case of issues with DMD migration';
+
+
+--
+-- Name: COLUMN medication_prescriptions.legacy_medication_route_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.medication_prescriptions.legacy_medication_route_id IS 'Keep the previous route id as a reference in case of issues with DMD migration';
+
+
+--
+-- Name: COLUMN medication_prescriptions.stat; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.medication_prescriptions.stat IS 'Can be chosen when administer_on_hd is true. Prescriptions marked as ''stat'' will be marked as terminated automatically once given.';
+
+
+--
+-- Name: medication_current_prescriptions; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.medication_current_prescriptions AS
+ SELECT mp.id,
+    mp.patient_id,
+    mp.drug_id,
+    mp.treatable_type,
+    mp.treatable_id,
+    mp.dose_amount,
+    mp.dose_unit,
+    mp.medication_route_id,
+    mp.route_description,
+    mp.frequency,
+    mp.notes,
+    mp.prescribed_on,
+    mp.provider,
+    mp.created_at,
+    mp.updated_at,
+    mp.created_by_id,
+    mp.updated_by_id,
+    mp.administer_on_hd,
+    mp.last_delivery_date,
+    drugs.name AS drug_name,
+    drug_types.code AS drug_type_code,
+    drug_types.name AS drug_type_name
+   FROM ((((renalware.medication_prescriptions mp
+     FULL JOIN renalware.medication_prescription_terminations mpt ON ((mpt.prescription_id = mp.id)))
+     JOIN renalware.drugs ON ((drugs.id = mp.drug_id)))
+     FULL JOIN renalware.drug_types_drugs ON ((drug_types_drugs.drug_id = drugs.id)))
+     FULL JOIN renalware.drug_types ON (((drug_types_drugs.drug_type_id = drug_types.id) AND ((mpt.terminated_on IS NULL) OR (mpt.terminated_on > now())))));
+
+
+--
+-- Name: pathology_observation_descriptions; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.pathology_observation_descriptions (
+    id integer NOT NULL,
+    code character varying NOT NULL,
+    name character varying,
+    measurement_unit_id integer,
+    loinc_code character varying,
+    display_group integer,
+    display_order integer,
+    letter_group integer,
+    letter_order integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    rr_type integer DEFAULT 0 NOT NULL,
+    rr_coding_standard integer DEFAULT 0 NOT NULL,
+    legacy_code character varying,
+    lower_threshold double precision,
+    upper_threshold double precision,
+    suggested_measurement_unit_id integer,
+    virtual boolean DEFAULT false NOT NULL,
+    chart_colour character varying,
+    chart_logarithmic boolean DEFAULT false NOT NULL,
+    chart_sql_function_name character varying,
+    created_by_sender_id bigint,
+    observations_count integer DEFAULT 0,
+    last_observed_at timestamp without time zone,
+    colour renalware.enum_colour_name
+);
+
+
+--
+-- Name: COLUMN pathology_observation_descriptions.lower_threshold; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.pathology_observation_descriptions.lower_threshold IS 'Value below which a result can be seen as abnormal';
+
+
+--
+-- Name: COLUMN pathology_observation_descriptions.upper_threshold; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.pathology_observation_descriptions.upper_threshold IS 'Value above which a result can be seen as abnormal';
+
+
+--
+-- Name: COLUMN pathology_observation_descriptions.chart_sql_function_name; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.pathology_observation_descriptions.chart_sql_function_name IS 'A custom json-returning SQL function returning a calculated/derived series. Must accept an integer (patient id) and date (start date to search from)';
+
+
+--
+-- Name: COLUMN pathology_observation_descriptions.created_by_sender_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.pathology_observation_descriptions.created_by_sender_id IS 'The feed source that dynmically created this OBX';
+
+
+--
+-- Name: pathology_observation_requests; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.pathology_observation_requests (
+    id integer NOT NULL,
+    requestor_order_number character varying,
+    requestor_name character varying NOT NULL,
+    requested_at timestamp without time zone NOT NULL,
+    patient_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    description_id integer NOT NULL,
+    filler_order_number character varying,
+    feed_message_id integer
+);
+
+
+--
+-- Name: COLUMN pathology_observation_requests.feed_message_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.pathology_observation_requests.feed_message_id IS 'Reference to the feed_message from which this observation_request was created. There is no constraint on this relationship as feed_messages can be housekept.';
+
+
+--
+-- Name: pathology_observations; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.pathology_observations (
+    id integer NOT NULL,
+    result character varying NOT NULL,
+    comment text,
+    observed_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    description_id integer NOT NULL,
+    request_id integer NOT NULL,
+    cancelled boolean,
+    nresult double precision,
+    legacy_comment text,
+    result_status renalware.enum_hl7_observation_result_status_codes
+);
+
+
+--
+-- Name: COLUMN pathology_observations.nresult; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.pathology_observations.nresult IS 'The result column cast to a float, for ease of using graphing and claculations.Will be null if the result has a text value that cannot be coreced into a number';
+
+
+--
+-- Name: COLUMN pathology_observations.result_status; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.pathology_observations.result_status IS 'OBX.11 - Observation Result Status
+Definition:
+C Record coming over is a correction and thus replaces a final result
+D Deletes the OBX record
+F Final results; Can only be changed with a corrected result.
+I Specimen in lab; results pending
+N Not asked
+O Order detail description only (no result)
+P Preliminary results
+R Results entered -- not verified
+S Partial results. Deprecated. Retained only for backward compatibility as of V2.6.
+U Results status change to final without retransmitting results already sent as preliminary
+W Post original as wrong, e.g., transmitted for wrong patient
+X Results cannot be obtained for this observation
+';
+
+
+--
+-- Name: pathology_current_observations; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.pathology_current_observations AS
+ SELECT DISTINCT ON (pathology_observation_requests.patient_id, pathology_observation_descriptions.id) pathology_observations.id,
+    pathology_observations.result,
+    pathology_observations.comment,
+    pathology_observations.observed_at,
+    pathology_observations.description_id,
+    pathology_observations.request_id,
+    pathology_observation_descriptions.code AS description_code,
+    pathology_observation_descriptions.name AS description_name,
+    pathology_observation_requests.patient_id
+   FROM ((renalware.pathology_observations
+     LEFT JOIN renalware.pathology_observation_requests ON ((pathology_observations.request_id = pathology_observation_requests.id)))
+     LEFT JOIN renalware.pathology_observation_descriptions ON ((pathology_observations.description_id = pathology_observation_descriptions.id)))
+  ORDER BY pathology_observation_requests.patient_id, pathology_observation_descriptions.id, pathology_observations.observed_at DESC;
+
+
+--
+-- Name: modality_descriptions; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.modality_descriptions (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    type character varying,
+    deleted_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    hidden boolean DEFAULT false NOT NULL,
+    ukrdc_modality_code_id bigint,
+    code character varying,
+    ignore_for_aki_alerts boolean DEFAULT false NOT NULL,
+    ignore_for_kfre boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: COLUMN modality_descriptions.ignore_for_aki_alerts; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.modality_descriptions.ignore_for_aki_alerts IS 'If true, HL7 AKI scores are ignored when the patient has this current modality';
+
+
+--
+-- Name: COLUMN modality_descriptions.ignore_for_kfre; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.modality_descriptions.ignore_for_kfre IS 'If true, we will attempt to generate a KFRE on receipt of ACR/PCR result when the patient has this current modality';
+
+
+--
+-- Name: modality_modalities; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.modality_modalities (
+    id integer NOT NULL,
+    patient_id integer NOT NULL,
+    description_id integer NOT NULL,
+    reason_id integer,
+    modal_change_type_deprecated character varying,
+    notes text,
+    started_on date NOT NULL,
+    ended_on date,
+    state character varying DEFAULT 'current'::character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    created_by_id integer NOT NULL,
+    updated_by_id integer NOT NULL,
+    change_type_id bigint,
+    source_hospital_centre_id bigint,
+    destination_hospital_centre_id bigint
+);
+
+
+--
+-- Name: COLUMN modality_modalities.source_hospital_centre_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.modality_modalities.source_hospital_centre_id IS 'Source hospital when modality is transferred in.';
+
+
+--
+-- Name: COLUMN modality_modalities.destination_hospital_centre_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.modality_modalities.destination_hospital_centre_id IS 'Destination hospital when modality is transferred out.';
+
+
+--
+-- Name: patients; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.patients (
+    id integer NOT NULL,
+    nhs_number character varying,
+    local_patient_id character varying,
+    family_name character varying NOT NULL,
+    given_name character varying NOT NULL,
+    born_on date NOT NULL,
+    paediatric_patient_indicator boolean DEFAULT false NOT NULL,
+    sex character varying,
+    ethnicity_id integer,
+    hospital_centre_code character varying,
+    primary_esrf_centre character varying,
+    died_on date,
+    first_cause_id integer,
+    second_cause_id integer,
+    death_notes text,
+    cc_on_all_letters boolean DEFAULT true NOT NULL,
+    cc_decision_on date,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    practice_id integer,
+    primary_care_physician_id integer,
+    created_by_id integer NOT NULL,
+    updated_by_id integer NOT NULL,
+    title character varying,
+    suffix character varying,
+    marital_status character varying,
+    telephone1 character varying,
+    telephone2 character varying,
+    email character varying,
+    document jsonb,
+    religion_id integer,
+    language_id integer,
+    allergy_status character varying DEFAULT 'unrecorded'::character varying NOT NULL,
+    allergy_status_updated_at timestamp without time zone,
+    local_patient_id_2 character varying,
+    local_patient_id_3 character varying,
+    local_patient_id_4 character varying,
+    local_patient_id_5 character varying,
+    external_patient_id character varying,
+    send_to_renalreg boolean DEFAULT false NOT NULL,
+    send_to_rpv boolean DEFAULT false NOT NULL,
+    renalreg_decision_on date,
+    rpv_decision_on date,
+    renalreg_recorded_by character varying,
+    rpv_recorded_by character varying,
+    ukrdc_external_id text DEFAULT public.uuid_generate_v4(),
+    country_of_birth_id integer,
+    legacy_patient_id integer,
+    secure_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    sent_to_ukrdc_at timestamp without time zone,
+    checked_for_ukrdc_changes_at timestamp without time zone,
+    hospital_centre_id bigint,
+    named_consultant_id bigint,
+    next_of_kin_notes text,
+    named_nurse_id bigint,
+    preferred_death_location_id bigint,
+    preferred_death_location_notes text,
+    actual_death_location_id bigint,
+    ukrdc_anonymise boolean DEFAULT false NOT NULL,
+    ukrdc_anonymise_decision_on date,
+    ukrdc_anonymise_recorded_by character varying,
+    renal_registry_id character varying,
+    marital_status_id bigint,
+    confidentiality renalware.enum_confidentiality DEFAULT 'normal'::renalware.enum_confidentiality NOT NULL,
+    ehr_person_identifier character varying,
+    merged_into_patient_id bigint,
+    next_of_kin text,
+    merged_at timestamp(6) without time zone
+);
+
+
+--
+-- Name: COLUMN patients.next_of_kin_notes; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.patients.next_of_kin_notes IS 'Manually entered next of kin details, not from HL7';
+
+
+--
+-- Name: COLUMN patients.confidentiality; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.patients.confidentiality IS 'Correspondence will not be sent via GP Connect if set to restricted';
+
+
+--
+-- Name: COLUMN patients.ehr_person_identifier; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.patients.ehr_person_identifier IS 'For use with an EHR eg Millennium. This is a unique identifier for the patient in the EHR system, and maybe be populated during the HL7 ingestion that creates the patient. SHould not be searchable from, or displayed in, the UI.';
+
+
+--
+-- Name: COLUMN patients.merged_into_patient_id; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.patients.merged_into_patient_id IS 'After an HL7 A34 or A40 merge, points to the major patient
+that this minor patient was merged into
+';
+
+
+--
+-- Name: COLUMN patients.next_of_kin; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.patients.next_of_kin IS 'Next of kin details from HL7 NK1 segments';
+
+
+--
+-- Name: pd_regimes; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.pd_regimes (
+    id integer NOT NULL,
+    patient_id integer NOT NULL,
+    start_date date NOT NULL,
+    end_date date,
+    treatment character varying NOT NULL,
+    type character varying,
+    glucose_volume_low_strength integer,
+    glucose_volume_medium_strength integer,
+    glucose_volume_high_strength integer,
+    amino_acid_volume integer,
+    icodextrin_volume integer,
+    add_hd boolean,
+    last_fill_volume integer,
+    tidal_indicator boolean,
+    tidal_percentage integer,
+    no_cycles_per_apd integer,
+    overnight_volume integer,
+    apd_machine_pac character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    therapy_time integer,
+    fill_volume integer,
+    delivery_interval character varying,
+    system_id integer,
+    additional_manual_exchange_volume integer,
+    tidal_full_drain_every_three_cycles boolean DEFAULT true,
+    daily_volume integer,
+    assistance_type character varying,
+    dwell_time integer,
+    exchanges_done_by character varying,
+    exchanges_done_by_if_other character varying,
+    exchanges_done_by_notes text,
+    created_by_id bigint,
+    updated_by_id bigint
+);
+
+
+--
+-- Name: reporting_pd_audit; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.reporting_pd_audit AS
+ WITH pd_patients AS (
+         SELECT patients.id
+           FROM ((renalware.patients
+             JOIN renalware.modality_modalities current_modality ON ((current_modality.patient_id = patients.id)))
+             JOIN renalware.modality_descriptions current_modality_description ON ((current_modality_description.id = current_modality.description_id)))
+          WHERE ((current_modality.ended_on IS NULL) AND (current_modality.started_on <= CURRENT_DATE) AND ((current_modality_description.name)::text = 'PD'::text))
+        ), current_regimes AS (
+         SELECT pd_regimes.id,
+            pd_regimes.patient_id,
+            pd_regimes.start_date,
+            pd_regimes.end_date,
+            pd_regimes.treatment,
+            pd_regimes.type,
+            pd_regimes.glucose_volume_low_strength,
+            pd_regimes.glucose_volume_medium_strength,
+            pd_regimes.glucose_volume_high_strength,
+            pd_regimes.amino_acid_volume,
+            pd_regimes.icodextrin_volume,
+            pd_regimes.add_hd,
+            pd_regimes.last_fill_volume,
+            pd_regimes.tidal_indicator,
+            pd_regimes.tidal_percentage,
+            pd_regimes.no_cycles_per_apd,
+            pd_regimes.overnight_volume,
+            pd_regimes.apd_machine_pac,
+            pd_regimes.created_at,
+            pd_regimes.updated_at,
+            pd_regimes.therapy_time,
+            pd_regimes.fill_volume,
+            pd_regimes.delivery_interval,
+            pd_regimes.system_id,
+            pd_regimes.additional_manual_exchange_volume,
+            pd_regimes.tidal_full_drain_every_three_cycles,
+            pd_regimes.daily_volume,
+            pd_regimes.assistance_type
+           FROM renalware.pd_regimes
+          WHERE ((pd_regimes.start_date >= CURRENT_DATE) AND (pd_regimes.end_date IS NULL))
+        ), current_apd_regimes AS (
+         SELECT current_regimes.id,
+            current_regimes.patient_id,
+            current_regimes.start_date,
+            current_regimes.end_date,
+            current_regimes.treatment,
+            current_regimes.type,
+            current_regimes.glucose_volume_low_strength,
+            current_regimes.glucose_volume_medium_strength,
+            current_regimes.glucose_volume_high_strength,
+            current_regimes.amino_acid_volume,
+            current_regimes.icodextrin_volume,
+            current_regimes.add_hd,
+            current_regimes.last_fill_volume,
+            current_regimes.tidal_indicator,
+            current_regimes.tidal_percentage,
+            current_regimes.no_cycles_per_apd,
+            current_regimes.overnight_volume,
+            current_regimes.apd_machine_pac,
+            current_regimes.created_at,
+            current_regimes.updated_at,
+            current_regimes.therapy_time,
+            current_regimes.fill_volume,
+            current_regimes.delivery_interval,
+            current_regimes.system_id,
+            current_regimes.additional_manual_exchange_volume,
+            current_regimes.tidal_full_drain_every_three_cycles,
+            current_regimes.daily_volume,
+            current_regimes.assistance_type
+           FROM current_regimes
+          WHERE ((current_regimes.type)::text ~~ '%::APD%'::text)
+        ), current_capd_regimes AS (
+         SELECT current_regimes.id,
+            current_regimes.patient_id,
+            current_regimes.start_date,
+            current_regimes.end_date,
+            current_regimes.treatment,
+            current_regimes.type,
+            current_regimes.glucose_volume_low_strength,
+            current_regimes.glucose_volume_medium_strength,
+            current_regimes.glucose_volume_high_strength,
+            current_regimes.amino_acid_volume,
+            current_regimes.icodextrin_volume,
+            current_regimes.add_hd,
+            current_regimes.last_fill_volume,
+            current_regimes.tidal_indicator,
+            current_regimes.tidal_percentage,
+            current_regimes.no_cycles_per_apd,
+            current_regimes.overnight_volume,
+            current_regimes.apd_machine_pac,
+            current_regimes.created_at,
+            current_regimes.updated_at,
+            current_regimes.therapy_time,
+            current_regimes.fill_volume,
+            current_regimes.delivery_interval,
+            current_regimes.system_id,
+            current_regimes.additional_manual_exchange_volume,
+            current_regimes.tidal_full_drain_every_three_cycles,
+            current_regimes.daily_volume,
+            current_regimes.assistance_type
+           FROM current_regimes
+          WHERE ((current_regimes.type)::text ~~ '%::CAPD%'::text)
+        )
+ SELECT 'APD'::text AS pd_type,
+    count(current_apd_regimes.patient_id) AS patient_count,
+    0 AS avg_hgb,
+    0 AS pct_hgb_gt_100,
+    0 AS pct_on_epo,
+    0 AS pct_pth_gt_500,
+    0 AS pct_phosphate_gt_1_8,
+    0 AS pct_strong_medium_bag_gt_1l
+   FROM current_apd_regimes
+UNION ALL
+ SELECT 'CAPD'::text AS pd_type,
+    count(current_capd_regimes.patient_id) AS patient_count,
+    0 AS avg_hgb,
+    0 AS pct_hgb_gt_100,
+    0 AS pct_on_epo,
+    0 AS pct_pth_gt_500,
+    0 AS pct_phosphate_gt_1_8,
+    0 AS pct_strong_medium_bag_gt_1l
+   FROM current_capd_regimes
+UNION ALL
+ SELECT 'PD'::text AS pd_type,
+    count(pd_patients.id) AS patient_count,
+    0 AS avg_hgb,
+    0 AS pct_hgb_gt_100,
+    0 AS pct_on_epo,
+    0 AS pct_pth_gt_500,
+    0 AS pct_phosphate_gt_1_8,
+    0 AS pct_strong_medium_bag_gt_1l
+   FROM pd_patients;
 
 
 --
@@ -3285,14 +4031,14 @@ CREATE TABLE renalware.clinic_visits (
     temperature numeric(3,1),
     standing_systolic_bp integer,
     standing_diastolic_bp integer,
+    document jsonb DEFAULT '{}'::jsonb NOT NULL,
+    type character varying,
     body_surface_area numeric(8,2),
     total_body_water numeric(8,2),
     bmi numeric(10,1),
-    document jsonb DEFAULT '{}'::jsonb NOT NULL,
-    type character varying,
+    uuid uuid DEFAULT public.uuid_generate_v4(),
     location_id bigint,
-    urine_glucose character varying,
-    uuid uuid DEFAULT public.uuid_generate_v4()
+    urine_glucose character varying
 );
 
 
@@ -3324,8 +4070,8 @@ CREATE TABLE renalware.hospital_centres (
     default_site boolean DEFAULT false NOT NULL,
     departments_count integer DEFAULT 0 NOT NULL,
     units_count integer DEFAULT 0 NOT NULL,
-    "position" integer DEFAULT 10 NOT NULL,
-    uuid uuid DEFAULT public.uuid_generate_v4()
+    uuid uuid DEFAULT public.uuid_generate_v4(),
+    "position" integer DEFAULT 10 NOT NULL
 );
 
 
@@ -3351,77 +4097,6 @@ COMMENT ON COLUMN renalware.hospital_centres."position" IS 'Allows us to float h
 
 
 --
--- Name: modality_descriptions; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.modality_descriptions (
-    id integer NOT NULL,
-    name character varying NOT NULL,
-    type character varying,
-    deleted_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    hidden boolean DEFAULT false NOT NULL,
-    ukrdc_modality_code_id bigint,
-    code character varying,
-    ignore_for_aki_alerts boolean DEFAULT false NOT NULL,
-    ignore_for_kfre boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: COLUMN modality_descriptions.ignore_for_aki_alerts; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.modality_descriptions.ignore_for_aki_alerts IS 'If true, HL7 AKI scores are ignored when the patient has this current modality';
-
-
---
--- Name: COLUMN modality_descriptions.ignore_for_kfre; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.modality_descriptions.ignore_for_kfre IS 'If true, we will attempt to generate a KFRE on receipt of ACR/PCR result when the patient has this current modality';
-
-
---
--- Name: modality_modalities; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.modality_modalities (
-    id integer NOT NULL,
-    patient_id integer NOT NULL,
-    description_id integer NOT NULL,
-    reason_id integer,
-    modal_change_type_deprecated character varying,
-    notes text,
-    started_on date NOT NULL,
-    ended_on date,
-    state character varying DEFAULT 'current'::character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_by_id integer NOT NULL,
-    change_type_id bigint,
-    source_hospital_centre_id bigint,
-    destination_hospital_centre_id bigint
-);
-
-
---
--- Name: COLUMN modality_modalities.source_hospital_centre_id; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.modality_modalities.source_hospital_centre_id IS 'Source hospital when modality is transferred in.';
-
-
---
--- Name: COLUMN modality_modalities.destination_hospital_centre_id; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.modality_modalities.destination_hospital_centre_id IS 'Destination hospital when modality is transferred out.';
-
-
---
 -- Name: pathology_current_observation_sets; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -3432,119 +4107,6 @@ CREATE TABLE renalware.pathology_current_observation_sets (
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
-
---
--- Name: patients; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.patients (
-    id integer NOT NULL,
-    nhs_number character varying,
-    local_patient_id character varying,
-    family_name character varying NOT NULL,
-    given_name character varying NOT NULL,
-    born_on date NOT NULL,
-    paediatric_patient_indicator boolean DEFAULT false NOT NULL,
-    sex character varying,
-    ethnicity_id integer,
-    hospital_centre_code character varying,
-    primary_esrf_centre character varying,
-    died_on date,
-    first_cause_id integer,
-    second_cause_id integer,
-    death_notes text,
-    cc_on_all_letters boolean DEFAULT true NOT NULL,
-    cc_decision_on date,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    practice_id integer,
-    primary_care_physician_id integer,
-    created_by_id integer NOT NULL,
-    updated_by_id integer NOT NULL,
-    title character varying,
-    suffix character varying,
-    marital_status character varying,
-    telephone1 character varying,
-    telephone2 character varying,
-    email character varying,
-    document jsonb,
-    religion_id integer,
-    language_id integer,
-    allergy_status character varying DEFAULT 'unrecorded'::character varying NOT NULL,
-    allergy_status_updated_at timestamp without time zone,
-    local_patient_id_2 character varying,
-    local_patient_id_3 character varying,
-    local_patient_id_4 character varying,
-    local_patient_id_5 character varying,
-    external_patient_id character varying,
-    send_to_renalreg boolean DEFAULT false NOT NULL,
-    send_to_rpv boolean DEFAULT false NOT NULL,
-    renalreg_decision_on date,
-    rpv_decision_on date,
-    renalreg_recorded_by character varying,
-    rpv_recorded_by character varying,
-    ukrdc_external_id text DEFAULT public.uuid_generate_v4(),
-    country_of_birth_id integer,
-    legacy_patient_id integer,
-    secure_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    sent_to_ukrdc_at timestamp without time zone,
-    checked_for_ukrdc_changes_at timestamp without time zone,
-    named_consultant_id bigint,
-    next_of_kin_notes text,
-    named_nurse_id bigint,
-    hospital_centre_id bigint,
-    preferred_death_location_id bigint,
-    preferred_death_location_notes text,
-    actual_death_location_id bigint,
-    ukrdc_anonymise boolean DEFAULT false NOT NULL,
-    ukrdc_anonymise_decision_on date,
-    ukrdc_anonymise_recorded_by character varying,
-    renal_registry_id character varying,
-    marital_status_id bigint,
-    confidentiality renalware.enum_confidentiality DEFAULT 'normal'::renalware.enum_confidentiality NOT NULL,
-    ehr_person_identifier character varying,
-    next_of_kin text,
-    merged_into_patient_id bigint,
-    merged_at timestamp(6) without time zone
-);
-
-
---
--- Name: COLUMN patients.next_of_kin_notes; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.patients.next_of_kin_notes IS 'Manually entered next of kin details, not from HL7';
-
-
---
--- Name: COLUMN patients.confidentiality; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.patients.confidentiality IS 'Correspondence will not be sent via GP Connect if set to restricted';
-
-
---
--- Name: COLUMN patients.ehr_person_identifier; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.patients.ehr_person_identifier IS 'For use with an EHR eg Millennium. This is a unique identifier for the patient in the EHR system, and maybe be populated during the HL7 ingestion that creates the patient. SHould not be searchable from, or displayed in, the UI.';
-
-
---
--- Name: COLUMN patients.next_of_kin; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.patients.next_of_kin IS 'Next of kin details from HL7 NK1 segments';
-
-
---
--- Name: COLUMN patients.merged_into_patient_id; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.patients.merged_into_patient_id IS 'After an HL7 A34 or A40 merge, points to the major patient
-that this minor patient was merged into
-';
 
 
 --
@@ -3713,6 +4275,7 @@ CREATE TABLE renalware.users (
     updated_at timestamp without time zone,
     telephone character varying,
     authentication_token character varying,
+    hospital_centre_id bigint,
     asked_for_write_access boolean DEFAULT false NOT NULL,
     consultant boolean DEFAULT false NOT NULL,
     hidden boolean DEFAULT false NOT NULL,
@@ -3722,7 +4285,6 @@ CREATE TABLE renalware.users (
     failed_attempts integer DEFAULT 0 NOT NULL,
     unlock_token character varying,
     locked_at timestamp without time zone,
-    hospital_centre_id bigint,
     password_changed_at timestamp without time zone,
     banned boolean DEFAULT false NOT NULL,
     notes text,
@@ -3875,14 +4437,14 @@ CREATE TABLE renalware.clinic_clinics (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     user_id integer,
+    visit_class_name character varying,
     code character varying,
     deleted_at timestamp without time zone,
     updated_by_id bigint,
     created_by_id bigint,
     appointments_count integer DEFAULT 0,
     clinic_visits_count integer DEFAULT 0,
-    default_modality_description_id bigint,
-    visit_class_name character varying
+    default_modality_description_id bigint
 );
 
 
@@ -4029,8 +4591,8 @@ CREATE TABLE renalware.clinic_visit_locations (
     created_by_id bigint NOT NULL,
     updated_by_id bigint NOT NULL,
     deleted_at timestamp(6) without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -4955,23 +5517,6 @@ CREATE TABLE renalware.drug_trade_family_classifications (
 
 
 --
--- Name: drugs; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.drugs (
-    id integer NOT NULL,
-    name character varying NOT NULL,
-    deleted_at timestamp without time zone,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    description character varying,
-    read_code character varying,
-    code character varying,
-    inactive boolean DEFAULT false NOT NULL
-);
-
-
---
 -- Name: drug_prescribable_drugs; Type: MATERIALIZED VIEW; Schema: renalware; Owner: -
 --
 
@@ -5086,57 +5631,6 @@ CREATE SEQUENCE renalware.drug_trade_family_classifications_id_seq
 --
 
 ALTER SEQUENCE renalware.drug_trade_family_classifications_id_seq OWNED BY renalware.drug_trade_family_classifications.id;
-
-
---
--- Name: drug_types; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.drug_types (
-    id integer NOT NULL,
-    name character varying NOT NULL,
-    code character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    "position" integer DEFAULT 0 NOT NULL,
-    weighting integer DEFAULT 0 NOT NULL,
-    colour renalware.enum_colour_name,
-    atc_codes character varying[]
-);
-
-
---
--- Name: COLUMN drug_types."position"; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.drug_types."position" IS 'Controls display order';
-
-
---
--- Name: COLUMN drug_types.weighting; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.drug_types.weighting IS 'More important drug types have a higher value so their colour trumps other types a drug might have.';
-
-
---
--- Name: COLUMN drug_types.colour; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.drug_types.colour IS 'A CSS colour e.f. ''#A12A12''';
-
-
---
--- Name: drug_types_drugs; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.drug_types_drugs (
-    drug_id integer NOT NULL,
-    drug_type_id integer NOT NULL,
-    id bigint NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
 
 
 --
@@ -5455,10 +5949,10 @@ CREATE TABLE renalware.event_types (
     updated_at timestamp without time zone NOT NULL,
     event_class_name character varying,
     slug character varying,
+    category_id bigint NOT NULL,
     save_pdf_to_electronic_public_register boolean DEFAULT false NOT NULL,
     title character varying,
     hidden boolean DEFAULT false NOT NULL,
-    category_id bigint NOT NULL,
     events_count integer DEFAULT 0 NOT NULL,
     external_document_type_code character varying,
     external_document_type_description character varying,
@@ -5575,8 +6069,8 @@ CREATE TABLE renalware.events (
     updated_by_id integer NOT NULL,
     type character varying NOT NULL,
     document jsonb,
-    subtype_id bigint,
     deleted_at timestamp without time zone,
+    subtype_id bigint,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL
 );
 
@@ -6514,7 +7008,8 @@ CREATE TABLE renalware.good_job_batches (
     callback_priority integer,
     enqueued_at timestamp(6) without time zone,
     discarded_at timestamp(6) without time zone,
-    finished_at timestamp(6) without time zone
+    finished_at timestamp(6) without time zone,
+    jobs_finished_at timestamp(6) without time zone
 );
 
 
@@ -6575,9 +7070,9 @@ CREATE TABLE renalware.good_jobs (
     queue_name text,
     priority integer,
     serialized_params jsonb,
-    scheduled_at timestamp without time zone,
-    performed_at timestamp without time zone,
-    finished_at timestamp without time zone,
+    scheduled_at timestamp(6) without time zone,
+    performed_at timestamp(6) without time zone,
+    finished_at timestamp(6) without time zone,
     error text,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
@@ -6585,7 +7080,7 @@ CREATE TABLE renalware.good_jobs (
     concurrency_key text,
     cron_key text,
     retried_good_job_id uuid,
-    cron_at timestamp without time zone,
+    cron_at timestamp(6) without time zone,
     batch_id uuid,
     batch_callback_id uuid,
     is_discrete boolean,
@@ -6872,8 +7367,8 @@ CREATE TABLE renalware.hospital_units (
 
 CREATE VIEW renalware.hd_diary_matrix AS
  WITH hd_empty_diary_matrix AS (
-         SELECT date_part('year'::text, the_date.the_date) AS year,
-            date_part('week'::text, the_date.the_date) AS week_number,
+         SELECT EXTRACT(year FROM the_date.the_date) AS year,
+            EXTRACT(week FROM the_date.the_date) AS week_number,
             h.id AS hospital_unit_id,
             s.id AS station_id,
             a.day_of_week,
@@ -6884,7 +7379,7 @@ CREATE VIEW renalware.hd_diary_matrix AS
              CROSS JOIN ( SELECT generate_series(1, 7) AS day_of_week) a)
              CROSS JOIN renalware.hd_diurnal_period_codes period)
           WHERE (h.is_hd_site = true)
-          ORDER BY (date_part('year'::text, the_date.the_date)), (date_part('week'::text, the_date.the_date)), h.id, s.id, a.day_of_week, period.id
+          ORDER BY (EXTRACT(year FROM the_date.the_date)), (EXTRACT(week FROM the_date.the_date)), h.id, s.id, a.day_of_week, period.id
         )
  SELECT m.year,
     m.week_number,
@@ -6904,7 +7399,7 @@ CREATE VIEW renalware.hd_diary_matrix AS
     (ms.updated_at)::date AS master_slot_updated_at,
     to_date((((((wd.year)::text || '-'::text) || (wd.week_number)::text) || '-'::text) || (ms.day_of_week)::text), 'iyyy-iw-ID'::text) AS slot_date
    FROM ((((hd_empty_diary_matrix m
-     LEFT JOIN renalware.hd_diaries wd ON (((wd.hospital_unit_id = m.hospital_unit_id) AND ((wd.year)::double precision = m.year) AND ((wd.week_number)::double precision = m.week_number) AND (wd.master = false))))
+     LEFT JOIN renalware.hd_diaries wd ON (((wd.hospital_unit_id = m.hospital_unit_id) AND ((wd.year)::numeric = m.year) AND ((wd.week_number)::numeric = m.week_number) AND (wd.master = false))))
      LEFT JOIN renalware.hd_diaries md ON (((md.hospital_unit_id = m.hospital_unit_id) AND (md.master = true))))
      LEFT JOIN renalware.hd_diary_slots ws ON (((ws.diary_id = wd.id) AND (ws.station_id = m.station_id) AND (ws.day_of_week = m.day_of_week) AND (ws.diurnal_period_code_id = m.diurnal_period_code_id))))
      LEFT JOIN renalware.hd_diary_slots ms ON (((ms.diary_id = md.id) AND (ms.station_id = m.station_id) AND (ms.day_of_week = m.day_of_week) AND (ms.diurnal_period_code_id = m.diurnal_period_code_id))));
@@ -7723,11 +8218,11 @@ CREATE TABLE renalware.hd_sessions (
     uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     external_id bigint,
     deleted_at timestamp without time zone,
+    started_at timestamp without time zone,
+    stopped_at timestamp without time zone,
     provider_id bigint,
     machine_ip_address character varying,
-    hd_station_id bigint,
-    started_at timestamp without time zone,
-    stopped_at timestamp without time zone
+    hd_station_id bigint
 );
 
 
@@ -8174,7 +8669,7 @@ CREATE TABLE renalware.hospital_departments (
 -- Name: TABLE hospital_departments; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON TABLE renalware.hospital_departments IS 'Can be assigned for example to a Letters::Letterhead. Useful for e.g. when including the sending organisation''s details in a Transfer Of Care message.';
+COMMENT ON TABLE renalware.hospital_departments IS 'Can be assigned for example to a Letters::Letterhead. Useful for e.g. when including the sending organisation''s details in a GP Connect message.';
 
 
 --
@@ -9544,86 +10039,6 @@ ALTER SEQUENCE renalware.low_clearance_versions_id_seq OWNED BY renalware.low_cl
 
 
 --
--- Name: medication_prescription_terminations; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.medication_prescription_terminations (
-    id integer NOT NULL,
-    terminated_on date NOT NULL,
-    notes text,
-    prescription_id integer NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_by_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    terminated_on_set_by_user boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: COLUMN medication_prescription_terminations.terminated_on_set_by_user; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.medication_prescription_terminations.terminated_on_set_by_user IS 'If true, the system will not attempt to set to prescribed_on + 6 months if prescriptions administer_on_hd=true';
-
-
---
--- Name: medication_prescriptions; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.medication_prescriptions (
-    id integer NOT NULL,
-    patient_id integer NOT NULL,
-    drug_id integer NOT NULL,
-    treatable_type character varying NOT NULL,
-    treatable_id integer NOT NULL,
-    dose_amount character varying NOT NULL,
-    dose_unit character varying,
-    medication_route_id integer NOT NULL,
-    route_description character varying,
-    frequency character varying NOT NULL,
-    notes text,
-    prescribed_on date NOT NULL,
-    provider integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_by_id integer NOT NULL,
-    administer_on_hd boolean DEFAULT false NOT NULL,
-    last_delivery_date date,
-    next_delivery_date date,
-    unit_of_measure_id bigint,
-    trade_family_id bigint,
-    form_id bigint,
-    legacy_drug_id integer,
-    legacy_medication_route_id integer,
-    frequency_comment character varying,
-    stat boolean
-);
-
-
---
--- Name: COLUMN medication_prescriptions.legacy_drug_id; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.medication_prescriptions.legacy_drug_id IS 'Keep the previous drug id as a reference in case of issues with DMD migration';
-
-
---
--- Name: COLUMN medication_prescriptions.legacy_medication_route_id; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.medication_prescriptions.legacy_medication_route_id IS 'Keep the previous route id as a reference in case of issues with DMD migration';
-
-
---
--- Name: COLUMN medication_prescriptions.stat; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.medication_prescriptions.stat IS 'Can be chosen when administer_on_hd is true. Prescriptions marked as ''stat'' will be marked as terminated automatically once given.';
-
-
---
 -- Name: medication_current_prescriptions; Type: VIEW; Schema: renalware; Owner: -
 --
 
@@ -10202,16 +10617,6 @@ ALTER SEQUENCE renalware.monitoring_mirth_channels_id_seq OWNED BY renalware.mon
 
 
 --
--- Name: nhs_numbers; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.nhs_numbers (
-    nhs_number character varying NOT NULL,
-    patient_id integer
-);
-
-
---
 -- Name: old_passwords; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -10455,23 +10860,6 @@ CREATE TABLE renalware.pathology_code_group_memberships (
 
 
 --
--- Name: pathology_code_group_memberships_backup; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.pathology_code_group_memberships_backup (
-    id bigint,
-    code_group_id bigint,
-    observation_description_id bigint,
-    subgroup integer,
-    position_within_subgroup integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    created_by_id bigint,
-    updated_by_id bigint
-);
-
-
---
 -- Name: pathology_code_group_memberships_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
 --
 
@@ -10506,25 +10894,6 @@ CREATE TABLE renalware.pathology_code_groups (
     context_specific boolean DEFAULT false NOT NULL,
     subgroup_colours renalware.enum_colour_name[],
     subgroup_titles text[] DEFAULT '{}'::text[]
-);
-
-
---
--- Name: pathology_code_groups_backup; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.pathology_code_groups_backup (
-    id bigint,
-    name character varying,
-    description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    created_by_id bigint,
-    updated_by_id bigint,
-    title character varying,
-    context_specific boolean,
-    subgroup_colours renalware.enum_colour_name[],
-    subgroup_titles text[]
 );
 
 
@@ -10564,160 +10933,6 @@ CREATE SEQUENCE renalware.pathology_current_observation_sets_id_seq
 --
 
 ALTER SEQUENCE renalware.pathology_current_observation_sets_id_seq OWNED BY renalware.pathology_current_observation_sets.id;
-
-
---
--- Name: pathology_observation_descriptions; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.pathology_observation_descriptions (
-    id integer NOT NULL,
-    code character varying NOT NULL,
-    name character varying,
-    measurement_unit_id integer,
-    loinc_code character varying,
-    display_group integer,
-    display_order integer,
-    letter_group integer,
-    letter_order integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    rr_type integer DEFAULT 0 NOT NULL,
-    rr_coding_standard integer DEFAULT 0 NOT NULL,
-    legacy_code character varying,
-    lower_threshold double precision,
-    upper_threshold double precision,
-    suggested_measurement_unit_id integer,
-    virtual boolean DEFAULT false NOT NULL,
-    chart_colour character varying,
-    chart_logarithmic boolean DEFAULT false NOT NULL,
-    chart_sql_function_name character varying,
-    created_by_sender_id bigint,
-    observations_count integer DEFAULT 0,
-    last_observed_at timestamp without time zone,
-    colour renalware.enum_colour_name
-);
-
-
---
--- Name: COLUMN pathology_observation_descriptions.lower_threshold; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.pathology_observation_descriptions.lower_threshold IS 'Value below which a result can be seen as abnormal';
-
-
---
--- Name: COLUMN pathology_observation_descriptions.upper_threshold; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.pathology_observation_descriptions.upper_threshold IS 'Value above which a result can be seen as abnormal';
-
-
---
--- Name: COLUMN pathology_observation_descriptions.chart_sql_function_name; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.pathology_observation_descriptions.chart_sql_function_name IS 'A custom json-returning SQL function returning a calculated/derived series. Must accept an integer (patient id) and date (start date to search from)';
-
-
---
--- Name: COLUMN pathology_observation_descriptions.created_by_sender_id; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.pathology_observation_descriptions.created_by_sender_id IS 'The feed source that dynmically created this OBX';
-
-
---
--- Name: pathology_observation_requests; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.pathology_observation_requests (
-    id integer NOT NULL,
-    requestor_order_number character varying,
-    requestor_name character varying NOT NULL,
-    requested_at timestamp without time zone NOT NULL,
-    patient_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    description_id integer NOT NULL,
-    filler_order_number character varying,
-    feed_message_id integer
-);
-
-
---
--- Name: COLUMN pathology_observation_requests.feed_message_id; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.pathology_observation_requests.feed_message_id IS 'Reference to the feed_message from which this observation_request was created. There is no constraint on this relationship as feed_messages can be housekept.';
-
-
---
--- Name: pathology_observations; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.pathology_observations (
-    id integer NOT NULL,
-    result character varying NOT NULL,
-    comment text,
-    observed_at timestamp without time zone NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    description_id integer NOT NULL,
-    request_id integer NOT NULL,
-    cancelled boolean,
-    nresult double precision,
-    legacy_comment text,
-    result_status renalware.enum_hl7_observation_result_status_codes
-);
-
-
---
--- Name: COLUMN pathology_observations.nresult; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.pathology_observations.nresult IS 'The result column cast to a float, for ease of using graphing and claculations.Will be null if the result has a text value that cannot be coreced into a number';
-
-
---
--- Name: COLUMN pathology_observations.result_status; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.pathology_observations.result_status IS 'OBX.11 - Observation Result Status
-Definition:
-C Record coming over is a correction and thus replaces a final result
-D Deletes the OBX record
-F Final results; Can only be changed with a corrected result.
-I Specimen in lab; results pending
-N Not asked
-O Order detail description only (no result)
-P Preliminary results
-R Results entered -- not verified
-S Partial results. Deprecated. Retained only for backward compatibility as of V2.6.
-U Results status change to final without retransmitting results already sent as preliminary
-W Post original as wrong, e.g., transmitted for wrong patient
-X Results cannot be obtained for this observation
-';
-
-
---
--- Name: pathology_current_observations; Type: VIEW; Schema: renalware; Owner: -
---
-
-CREATE VIEW renalware.pathology_current_observations AS
- SELECT DISTINCT ON (pathology_observation_requests.patient_id, pathology_observation_descriptions.id) pathology_observations.id,
-    pathology_observations.result,
-    pathology_observations.comment,
-    pathology_observations.observed_at,
-    pathology_observations.description_id,
-    pathology_observations.request_id,
-    pathology_observation_descriptions.code AS description_code,
-    pathology_observation_descriptions.name AS description_name,
-    pathology_observation_requests.patient_id
-   FROM ((renalware.pathology_observations
-     LEFT JOIN renalware.pathology_observation_requests ON ((pathology_observations.request_id = pathology_observation_requests.id)))
-     LEFT JOIN renalware.pathology_observation_descriptions ON ((pathology_observations.description_id = pathology_observation_descriptions.id)))
-  ORDER BY pathology_observation_requests.patient_id, pathology_observation_descriptions.id, pathology_observations.observed_at DESC;
 
 
 --
@@ -11631,8 +11846,6 @@ ALTER SEQUENCE renalware.patient_marital_statuses_id_seq OWNED BY renalware.pati
 CREATE TABLE renalware.patient_master_index_deprecated (
     id bigint NOT NULL,
     patient_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
     nhs_number character varying,
     hospital_number character varying,
     title character varying,
@@ -11645,7 +11858,9 @@ CREATE TABLE renalware.patient_master_index_deprecated (
     died_at timestamp without time zone,
     ethnicity character varying,
     practice_code character varying,
-    gp_code character varying
+    gp_code character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -12492,48 +12707,6 @@ CREATE TABLE renalware.pd_peritonitis_episodes (
     notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: pd_regimes; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.pd_regimes (
-    id integer NOT NULL,
-    patient_id integer NOT NULL,
-    start_date date NOT NULL,
-    end_date date,
-    treatment character varying NOT NULL,
-    type character varying,
-    glucose_volume_low_strength integer,
-    glucose_volume_medium_strength integer,
-    glucose_volume_high_strength integer,
-    amino_acid_volume integer,
-    icodextrin_volume integer,
-    add_hd boolean,
-    last_fill_volume integer,
-    tidal_indicator boolean,
-    tidal_percentage integer,
-    no_cycles_per_apd integer,
-    overnight_volume integer,
-    apd_machine_pac character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    therapy_time integer,
-    fill_volume integer,
-    delivery_interval character varying,
-    system_id integer,
-    additional_manual_exchange_volume integer,
-    tidal_full_drain_every_three_cycles boolean DEFAULT true,
-    daily_volume integer,
-    assistance_type character varying,
-    dwell_time integer,
-    exchanges_done_by character varying,
-    exchanges_done_by_if_other character varying,
-    exchanges_done_by_notes text,
-    created_by_id bigint,
-    updated_by_id bigint
 );
 
 
@@ -13712,6 +13885,68 @@ ALTER SEQUENCE renalware.renal_versions_id_seq OWNED BY renalware.renal_versions
 
 
 --
+-- Name: reporting_anaemia_audit; Type: VIEW; Schema: renalware; Owner: -
+--
+
+CREATE VIEW renalware.reporting_anaemia_audit AS
+ SELECT e1.modality_desc AS modality,
+    count(e1.patient_id) AS patient_count,
+    round(avg(e2.hgb), 2) AS avg_hgb,
+    round((((count(e4.hgb_gt_eq_10))::numeric / GREATEST((count(e2.hgb))::numeric, 1.0)) * 100.0), 2) AS pct_hgb_gt_eq_10,
+    round((((count(e5.hgb_gt_eq_11))::numeric / GREATEST((count(e2.hgb))::numeric, 1.0)) * 100.0), 2) AS pct_hgb_gt_eq_11,
+    round((((count(e6.hgb_gt_eq_13))::numeric / GREATEST((count(e2.hgb))::numeric, 1.0)) * 100.0), 2) AS pct_hgb_gt_eq_13,
+    round(avg(e3.fer), 2) AS avg_fer,
+    round((((count(e7.fer_gt_eq_150))::numeric / GREATEST((count(e3.fer))::numeric, 1.0)) * 100.0), 2) AS pct_fer_gt_eq_150,
+    (COALESCE(sum(immunosuppressants.ct), (0)::numeric))::integer AS count_epo,
+    (COALESCE(sum(mircer.ct), (0)::numeric))::integer AS count_mircer,
+    (COALESCE(sum(neo.ct), (0)::numeric))::integer AS count_neo,
+    (COALESCE(sum(ara.ct), (0)::numeric))::integer AS count_ara
+   FROM ((((((((((( SELECT p.id AS patient_id,
+            md.name AS modality_desc,
+            md.code AS modality_code
+           FROM ((renalware.patients p
+             JOIN renalware.modality_modalities m ON ((m.patient_id = p.id)))
+             JOIN renalware.modality_descriptions md ON ((m.description_id = md.id)))
+          WHERE ((m.ended_on IS NULL) OR (m.ended_on > CURRENT_TIMESTAMP))) e1
+     FULL JOIN ( SELECT mcp.patient_id,
+            count(DISTINCT mcp.drug_id) AS ct
+           FROM renalware.medication_current_prescriptions mcp
+          WHERE ((mcp.drug_type_code)::text = 'immunosuppressant'::text)
+          GROUP BY mcp.patient_id) immunosuppressants ON ((e1.patient_id = immunosuppressants.patient_id)))
+     FULL JOIN ( SELECT mcp.patient_id,
+            count(DISTINCT mcp.drug_id) AS ct
+           FROM renalware.medication_current_prescriptions mcp
+          WHERE ((mcp.drug_name)::text ~~ 'Mircer%'::text)
+          GROUP BY mcp.patient_id) mircer ON ((e1.patient_id = mircer.patient_id)))
+     FULL JOIN ( SELECT mcp.patient_id,
+            count(DISTINCT mcp.drug_id) AS ct
+           FROM renalware.medication_current_prescriptions mcp
+          WHERE ((mcp.drug_name)::text ~~ 'Neo%'::text)
+          GROUP BY mcp.patient_id) neo ON ((e1.patient_id = neo.patient_id)))
+     FULL JOIN ( SELECT mcp.patient_id,
+            count(DISTINCT mcp.drug_id) AS ct
+           FROM renalware.medication_current_prescriptions mcp
+          WHERE ((mcp.drug_name)::text ~~ 'Ara%'::text)
+          GROUP BY mcp.patient_id) ara ON ((e1.patient_id = ara.patient_id)))
+     LEFT JOIN LATERAL ( SELECT (pathology_current_observations.result)::numeric AS hgb
+           FROM public.pathology_current_observations
+          WHERE (((pathology_current_observations.description_code)::text = 'HGB'::text) AND (pathology_current_observations.patient_id = e1.patient_id))) e2 ON (true))
+     LEFT JOIN LATERAL ( SELECT (pathology_current_observations.result)::numeric AS fer
+           FROM public.pathology_current_observations
+          WHERE (((pathology_current_observations.description_code)::text = 'FER'::text) AND (pathology_current_observations.patient_id = e1.patient_id))) e3 ON (true))
+     LEFT JOIN LATERAL ( SELECT e2.hgb AS hgb_gt_eq_10
+          WHERE (e2.hgb >= (10)::numeric)) e4 ON (true))
+     LEFT JOIN LATERAL ( SELECT e2.hgb AS hgb_gt_eq_11
+          WHERE (e2.hgb >= (11)::numeric)) e5 ON (true))
+     LEFT JOIN LATERAL ( SELECT e2.hgb AS hgb_gt_eq_13
+          WHERE (e2.hgb >= (13)::numeric)) e6 ON (true))
+     LEFT JOIN LATERAL ( SELECT e3.fer AS fer_gt_eq_150
+          WHERE (e3.fer >= (150)::numeric)) e7 ON (true))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying, 'nephrology'::character varying])::text[]))
+  GROUP BY e1.modality_desc;
+
+
+--
 -- Name: reporting_audits; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -13771,13 +14006,13 @@ CREATE VIEW renalware.reporting_bone_audit AS
              JOIN renalware.modality_modalities m ON ((m.patient_id = p.id)))
              JOIN renalware.modality_descriptions md ON ((m.description_id = md.id)))) e1
      LEFT JOIN LATERAL ( SELECT (pathology_current_observations.result)::numeric AS pth
-           FROM renalware.pathology_current_observations
+           FROM public.pathology_current_observations
           WHERE (((pathology_current_observations.description_code)::text = 'PTHI'::text) AND (pathology_current_observations.patient_id = e1.patient_id))) e2 ON (true))
      LEFT JOIN LATERAL ( SELECT (pathology_current_observations.result)::numeric AS phos
-           FROM renalware.pathology_current_observations
+           FROM public.pathology_current_observations
           WHERE (((pathology_current_observations.description_code)::text = 'PHOS'::text) AND (pathology_current_observations.patient_id = e1.patient_id))) e3 ON (true))
      LEFT JOIN LATERAL ( SELECT (pathology_current_observations.result)::numeric AS cca
-           FROM renalware.pathology_current_observations
+           FROM public.pathology_current_observations
           WHERE (((pathology_current_observations.description_code)::text = 'CCA'::text) AND (pathology_current_observations.patient_id = e1.patient_id))) e4 ON (true))
      LEFT JOIN LATERAL ( SELECT e3.phos AS phos_lt_1_8
           WHERE (e3.phos < 1.8)) e5 ON (true))
@@ -13787,7 +14022,7 @@ CREATE VIEW renalware.reporting_bone_audit AS
           WHERE (e2.pth > (300)::numeric)) e7 ON (true))
      LEFT JOIN LATERAL ( SELECT e4.cca AS cca_2_1_to_2_4
           WHERE ((e4.cca >= 2.1) AND (e4.cca <= 2.4))) e8 ON (true))
-  WHERE ((e1.modality_code)::text = ANY (ARRAY[('hd'::character varying)::text, ('pd'::character varying)::text, ('transplant'::character varying)::text, ('low_clearance'::character varying)::text]))
+  WHERE ((e1.modality_code)::text = ANY ((ARRAY['hd'::character varying, 'pd'::character varying, 'transplant'::character varying, 'low_clearance'::character varying])::text[]))
   GROUP BY e1.modality_desc;
 
 
@@ -13941,142 +14176,6 @@ CREATE MATERIALIZED VIEW renalware.reporting_main_authors_audit AS
 
 
 --
--- Name: reporting_pd_audit; Type: VIEW; Schema: renalware; Owner: -
---
-
-CREATE VIEW renalware.reporting_pd_audit AS
- WITH pd_patients AS (
-         SELECT patients.id
-           FROM ((renalware.patients
-             JOIN renalware.modality_modalities current_modality ON ((current_modality.patient_id = patients.id)))
-             JOIN renalware.modality_descriptions current_modality_description ON ((current_modality_description.id = current_modality.description_id)))
-          WHERE ((current_modality.ended_on IS NULL) AND (current_modality.started_on <= CURRENT_DATE) AND ((current_modality_description.name)::text = 'PD'::text))
-        ), current_regimes AS (
-         SELECT pd_regimes.id,
-            pd_regimes.patient_id,
-            pd_regimes.start_date,
-            pd_regimes.end_date,
-            pd_regimes.treatment,
-            pd_regimes.type,
-            pd_regimes.glucose_volume_low_strength,
-            pd_regimes.glucose_volume_medium_strength,
-            pd_regimes.glucose_volume_high_strength,
-            pd_regimes.amino_acid_volume,
-            pd_regimes.icodextrin_volume,
-            pd_regimes.add_hd,
-            pd_regimes.last_fill_volume,
-            pd_regimes.tidal_indicator,
-            pd_regimes.tidal_percentage,
-            pd_regimes.no_cycles_per_apd,
-            pd_regimes.overnight_volume,
-            pd_regimes.apd_machine_pac,
-            pd_regimes.created_at,
-            pd_regimes.updated_at,
-            pd_regimes.therapy_time,
-            pd_regimes.fill_volume,
-            pd_regimes.delivery_interval,
-            pd_regimes.system_id,
-            pd_regimes.additional_manual_exchange_volume,
-            pd_regimes.tidal_full_drain_every_three_cycles,
-            pd_regimes.daily_volume,
-            pd_regimes.assistance_type
-           FROM renalware.pd_regimes
-          WHERE ((pd_regimes.start_date >= CURRENT_DATE) AND (pd_regimes.end_date IS NULL))
-        ), current_apd_regimes AS (
-         SELECT current_regimes.id,
-            current_regimes.patient_id,
-            current_regimes.start_date,
-            current_regimes.end_date,
-            current_regimes.treatment,
-            current_regimes.type,
-            current_regimes.glucose_volume_low_strength,
-            current_regimes.glucose_volume_medium_strength,
-            current_regimes.glucose_volume_high_strength,
-            current_regimes.amino_acid_volume,
-            current_regimes.icodextrin_volume,
-            current_regimes.add_hd,
-            current_regimes.last_fill_volume,
-            current_regimes.tidal_indicator,
-            current_regimes.tidal_percentage,
-            current_regimes.no_cycles_per_apd,
-            current_regimes.overnight_volume,
-            current_regimes.apd_machine_pac,
-            current_regimes.created_at,
-            current_regimes.updated_at,
-            current_regimes.therapy_time,
-            current_regimes.fill_volume,
-            current_regimes.delivery_interval,
-            current_regimes.system_id,
-            current_regimes.additional_manual_exchange_volume,
-            current_regimes.tidal_full_drain_every_three_cycles,
-            current_regimes.daily_volume,
-            current_regimes.assistance_type
-           FROM current_regimes
-          WHERE ((current_regimes.type)::text ~~ '%::APD%'::text)
-        ), current_capd_regimes AS (
-         SELECT current_regimes.id,
-            current_regimes.patient_id,
-            current_regimes.start_date,
-            current_regimes.end_date,
-            current_regimes.treatment,
-            current_regimes.type,
-            current_regimes.glucose_volume_low_strength,
-            current_regimes.glucose_volume_medium_strength,
-            current_regimes.glucose_volume_high_strength,
-            current_regimes.amino_acid_volume,
-            current_regimes.icodextrin_volume,
-            current_regimes.add_hd,
-            current_regimes.last_fill_volume,
-            current_regimes.tidal_indicator,
-            current_regimes.tidal_percentage,
-            current_regimes.no_cycles_per_apd,
-            current_regimes.overnight_volume,
-            current_regimes.apd_machine_pac,
-            current_regimes.created_at,
-            current_regimes.updated_at,
-            current_regimes.therapy_time,
-            current_regimes.fill_volume,
-            current_regimes.delivery_interval,
-            current_regimes.system_id,
-            current_regimes.additional_manual_exchange_volume,
-            current_regimes.tidal_full_drain_every_three_cycles,
-            current_regimes.daily_volume,
-            current_regimes.assistance_type
-           FROM current_regimes
-          WHERE ((current_regimes.type)::text ~~ '%::CAPD%'::text)
-        )
- SELECT 'APD'::text AS pd_type,
-    count(current_apd_regimes.patient_id) AS patient_count,
-    0 AS avg_hgb,
-    0 AS pct_hgb_gt_100,
-    0 AS pct_on_epo,
-    0 AS pct_pth_gt_500,
-    0 AS pct_phosphate_gt_1_8,
-    0 AS pct_strong_medium_bag_gt_1l
-   FROM current_apd_regimes
-UNION ALL
- SELECT 'CAPD'::text AS pd_type,
-    count(current_capd_regimes.patient_id) AS patient_count,
-    0 AS avg_hgb,
-    0 AS pct_hgb_gt_100,
-    0 AS pct_on_epo,
-    0 AS pct_pth_gt_500,
-    0 AS pct_phosphate_gt_1_8,
-    0 AS pct_strong_medium_bag_gt_1l
-   FROM current_capd_regimes
-UNION ALL
- SELECT 'PD'::text AS pd_type,
-    count(pd_patients.id) AS patient_count,
-    0 AS avg_hgb,
-    0 AS pct_hgb_gt_100,
-    0 AS pct_on_epo,
-    0 AS pct_pth_gt_500,
-    0 AS pct_phosphate_gt_1_8,
-    0 AS pct_strong_medium_bag_gt_1l
-   FROM pd_patients;
-
-
---
 -- Name: reporting_unit_patients; Type: VIEW; Schema: renalware; Owner: -
 --
 
@@ -14086,7 +14185,7 @@ CREATE VIEW renalware.reporting_unit_patients AS
             CURRENT_TIMESTAMP AS stop
         ), month_range AS (
          SELECT 0 AS current_month,
-            ((date_part('year'::text, age(date_range.start)) * (12)::double precision) + date_part('month'::text, age(date_range.start))) AS months_to_go_back
+            ((EXTRACT(year FROM age(date_range.start)) * (12)::numeric) + EXTRACT(month FROM age(date_range.start))) AS months_to_go_back
            FROM date_range
         ), months AS (
          SELECT generate_series(month_range.current_month, (month_range.months_to_go_back)::integer) AS month
@@ -14094,8 +14193,8 @@ CREATE VIEW renalware.reporting_unit_patients AS
         ), profile_history AS (
          SELECT hp.patient_id,
             hp.hospital_unit_id,
-            ((date_part('year'::text, age(hp.created_at)) * (12)::double precision) + date_part('month'::text, age(hp.created_at))) AS start_month,
-            COALESCE(((date_part('year'::text, age(hp.deactivated_at)) * (12)::double precision) + date_part('month'::text, age(hp.deactivated_at))), (0)::double precision) AS end_month
+            ((EXTRACT(year FROM age(hp.created_at)) * (12)::numeric) + EXTRACT(month FROM age(hp.created_at))) AS start_month,
+            COALESCE(((EXTRACT(year FROM age(hp.deactivated_at)) * (12)::numeric) + EXTRACT(month FROM age(hp.deactivated_at))), (0)::numeric) AS end_month
            FROM renalware.hd_profiles hp
           ORDER BY hp.patient_id
         ), deduplicated_profile_history AS (
@@ -14110,13 +14209,13 @@ CREATE VIEW renalware.reporting_unit_patients AS
             m_1.month,
             count(*) AS patients
            FROM (deduplicated_profile_history ph
-             JOIN months m_1 ON ((((m_1.month)::double precision <= ph.start_month) AND ((m_1.month)::double precision >= ph.end_month))))
+             JOIN months m_1 ON ((((m_1.month)::numeric <= ph.start_month) AND ((m_1.month)::numeric >= ph.end_month))))
           GROUP BY ph.hospital_unit_id, m_1.month
           ORDER BY ph.hospital_unit_id, m_1.month
         )
  SELECT hc.name AS hospital,
     hu.name AS unit,
-    (date_part('year'::text, (CURRENT_DATE - (((m.month)::text || ' month'::text))::interval)))::text AS year,
+    (EXTRACT(year FROM (CURRENT_DATE - (((m.month)::text || ' month'::text))::interval)))::text AS year,
     to_char((CURRENT_DATE - (((m.month)::text || ' month'::text))::interval), 'Mon'::text) AS month,
     pc.patients
    FROM (((renalware.hospital_units hu
@@ -14393,39 +14492,6 @@ CREATE SEQUENCE renalware.snippets_snippets_id_seq
 --
 
 ALTER SEQUENCE renalware.snippets_snippets_id_seq OWNED BY renalware.snippets_snippets.id;
-
-
---
--- Name: solid_cache_entries; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.solid_cache_entries (
-    id bigint NOT NULL,
-    key bytea NOT NULL,
-    value bytea NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    key_hash bigint NOT NULL,
-    byte_size integer NOT NULL
-);
-
-
---
--- Name: solid_cache_entries_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.solid_cache_entries_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: solid_cache_entries_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.solid_cache_entries_id_seq OWNED BY renalware.solid_cache_entries.id;
 
 
 --
@@ -15621,28 +15687,6 @@ CREATE SEQUENCE renalware.system_visits_id_seq
 --
 
 ALTER SEQUENCE renalware.system_visits_id_seq OWNED BY renalware.system_visits.id;
-
-
---
--- Name: tmp_date_update_steps; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.tmp_date_update_steps (
-    step integer,
-    t timestamp with time zone
-);
-
-
---
--- Name: tmp_problems_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.tmp_problems_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
 
 
 --
@@ -18602,13 +18646,6 @@ ALTER TABLE ONLY renalware.snippets_snippets ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- Name: solid_cache_entries id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.solid_cache_entries ALTER COLUMN id SET DEFAULT nextval('renalware.solid_cache_entries_id_seq'::regclass);
-
-
---
 -- Name: survey_questions id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -20987,14 +21024,6 @@ ALTER TABLE ONLY renalware.snippets_snippets
 
 
 --
--- Name: solid_cache_entries solid_cache_entries_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.solid_cache_entries
-    ADD CONSTRAINT solid_cache_entries_pkey PRIMARY KEY (id);
-
-
---
 -- Name: survey_questions survey_questions_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -22176,13 +22205,6 @@ CREATE INDEX index_clinic_clinics_on_deleted_at ON renalware.clinic_clinics USIN
 
 
 --
--- Name: index_clinic_clinics_on_name; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_clinic_clinics_on_name ON renalware.clinic_clinics USING btree (name);
-
-
---
 -- Name: index_clinic_clinics_on_updated_by_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -22607,6 +22629,13 @@ CREATE UNIQUE INDEX index_drug_prescribable_drugs_on_compound_id ON renalware.dr
 --
 
 COMMENT ON INDEX renalware.index_drug_prescribable_drugs_on_compound_id IS 'Unique idx on this materialized view enables us to refresh concurrently';
+
+
+--
+-- Name: index_drug_prescribable_drugs_on_compound_name; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_drug_prescribable_drugs_on_compound_name ON renalware.drug_prescribable_drugs USING gist (compound_name renalware.gist_trgm_ops);
 
 
 --
@@ -23201,7 +23230,7 @@ CREATE INDEX index_feed_raw_hl7_messages_on_created_at ON renalware.feed_raw_hl7
 -- Name: INDEX index_feed_raw_hl7_messages_on_created_at; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON INDEX renalware.index_feed_raw_hl7_messages_on_created_at IS 'We query for rows ordering by created_at asc to give us a chance to procsess in FIFO order, so having an ordered index means when we use a LIMIT (batching) in the query, rows will be determined by index scan without having to look to the end of the table - or something like that! In fact the index is implcitly ordered already but having created_at: :asc here makes our intention more explicit.';
+COMMENT ON INDEX renalware.index_feed_raw_hl7_messages_on_created_at IS 'We query for rows ordering by created_at asc to give us a chance to process in FIFO order, so having an ordered index means when we use a LIMIT (batching) in the query, rows will be determined by index scan without having to look to the end of the table - or something like that! In fact the index is implicitly ordered already but having created_at: :asc here makes our intention more explicit.';
 
 
 --
@@ -23342,13 +23371,6 @@ CREATE INDEX index_good_job_jobs_for_candidate_lookup ON renalware.good_jobs USI
 --
 
 CREATE UNIQUE INDEX index_good_job_settings_on_key ON renalware.good_job_settings USING btree (key);
-
-
---
--- Name: index_good_jobs_jobs_on_finished_at; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_good_jobs_jobs_on_finished_at ON renalware.good_jobs USING btree (finished_at) WHERE ((retried_good_job_id IS NULL) AND (finished_at IS NOT NULL));
 
 
 --
@@ -27146,27 +27168,6 @@ CREATE INDEX index_snippets_snippets_on_title ON renalware.snippets_snippets USI
 
 
 --
--- Name: index_solid_cache_entries_on_byte_size; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_solid_cache_entries_on_byte_size ON renalware.solid_cache_entries USING btree (byte_size);
-
-
---
--- Name: index_solid_cache_entries_on_key_hash; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_solid_cache_entries_on_key_hash ON renalware.solid_cache_entries USING btree (key_hash);
-
-
---
--- Name: index_solid_cache_entries_on_key_hash_and_byte_size; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_solid_cache_entries_on_key_hash_and_byte_size ON renalware.solid_cache_entries USING btree (key_hash, byte_size);
-
-
---
 -- Name: index_survey_questions_on_code_and_survey_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -27395,6 +27396,13 @@ CREATE INDEX index_system_logs_on_group ON renalware.system_logs USING btree ("g
 --
 
 CREATE INDEX index_system_logs_on_owner_id ON renalware.system_logs USING btree (owner_id);
+
+
+--
+-- Name: index_system_logs_on_severity; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_system_logs_on_severity ON renalware.system_logs USING btree (severity);
 
 
 --
@@ -28189,20 +28197,6 @@ CREATE UNIQUE INDEX master_index_hd_diaries_on_hospital_unit_id ON renalware.hd_
 
 
 --
--- Name: nhs_numbers_nhs_number_idx; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX nhs_numbers_nhs_number_idx ON renalware.nhs_numbers USING btree (nhs_number);
-
-
---
--- Name: nhs_numbers_patient_id_idx; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX nhs_numbers_patient_id_idx ON renalware.nhs_numbers USING btree (patient_id);
-
-
---
 -- Name: obx_unique_display_grouping; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -28400,11 +28394,130 @@ coerce the result into a new float column which can be more easily consumed for 
 
 
 --
+-- Name: research_participations update_research_study_participants_trigger; Type: TRIGGER; Schema: renalware; Owner: -
+--
+
+CREATE TRIGGER update_research_study_participants_trigger BEFORE INSERT ON renalware.research_participations FOR EACH ROW EXECUTE FUNCTION renalware.update_research_study_participants_from_trigger();
+
+
+--
+-- Name: access_assessments access_assessments_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_assessments
+    ADD CONSTRAINT access_assessments_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: access_assessments access_assessments_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_assessments
+    ADD CONSTRAINT access_assessments_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: access_procedures access_procedures_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_procedures
+    ADD CONSTRAINT access_procedures_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: access_procedures access_procedures_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_procedures
+    ADD CONSTRAINT access_procedures_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: access_profiles access_profiles_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_profiles
+    ADD CONSTRAINT access_profiles_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: access_profiles access_profiles_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_profiles
+    ADD CONSTRAINT access_profiles_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: clinic_visits clinic_visits_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_visits
+    ADD CONSTRAINT clinic_visits_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: clinic_visits clinic_visits_patient_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_visits
+    ADD CONSTRAINT clinic_visits_patient_id_fk FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: clinic_visits clinic_visits_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_visits
+    ADD CONSTRAINT clinic_visits_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: directory_people directory_people_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.directory_people
+    ADD CONSTRAINT directory_people_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: directory_people directory_people_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.directory_people
+    ADD CONSTRAINT directory_people_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: events events_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.events
+    ADD CONSTRAINT events_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: events events_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.events
+    ADD CONSTRAINT events_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: death_locations fk_rails_00de28eb89; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.death_locations
     ADD CONSTRAINT fk_rails_00de28eb89 FOREIGN KEY (ukrdc_assessment_outcome_code) REFERENCES renalware.ukrdc_assessment_outcomes(code);
+
+
+--
+-- Name: patients fk_rails_01ec61436d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_01ec61436d FOREIGN KEY (religion_id) REFERENCES renalware.patient_religions(id);
 
 
 --
@@ -28416,11 +28529,27 @@ ALTER TABLE ONLY renalware.clinical_igan_risks
 
 
 --
+-- Name: patients fk_rails_042462eeb9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_042462eeb9 FOREIGN KEY (language_id) REFERENCES renalware.patient_languages(id);
+
+
+--
 -- Name: patient_attachments fk_rails_04327b7e88; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.patient_attachments
     ADD CONSTRAINT fk_rails_04327b7e88 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: modality_modalities fk_rails_0447199042; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.modality_modalities
+    ADD CONSTRAINT fk_rails_0447199042 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28432,6 +28561,22 @@ ALTER TABLE ONLY renalware.feed_logs
 
 
 --
+-- Name: pathology_observation_requests fk_rails_050f679712; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_observation_requests
+    ADD CONSTRAINT fk_rails_050f679712 FOREIGN KEY (description_id) REFERENCES renalware.pathology_request_descriptions(id);
+
+
+--
+-- Name: virology_profiles fk_rails_05a8d28840; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.virology_profiles
+    ADD CONSTRAINT fk_rails_05a8d28840 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: help_tour_annotations fk_rails_064d8c296b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28440,11 +28585,35 @@ ALTER TABLE ONLY renalware.help_tour_annotations
 
 
 --
+-- Name: pathology_requests_patient_rules_requests fk_rails_06517764c3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_patient_rules_requests
+    ADD CONSTRAINT fk_rails_06517764c3 FOREIGN KEY (patient_rule_id) REFERENCES renalware.pathology_requests_patient_rules(id);
+
+
+--
 -- Name: event_subtypes fk_rails_06e2a8feaf; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.event_subtypes
     ADD CONSTRAINT fk_rails_06e2a8feaf FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_diaries fk_rails_07d7a349f6; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diaries
+    ADD CONSTRAINT fk_rails_07d7a349f6 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_schedule_definitions fk_rails_083e4d9774; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_schedule_definitions
+    ADD CONSTRAINT fk_rails_083e4d9774 FOREIGN KEY (diurnal_period_id) REFERENCES renalware.hd_diurnal_period_codes(id);
 
 
 --
@@ -28472,6 +28641,14 @@ ALTER TABLE ONLY renalware.hd_slot_requests
 
 
 --
+-- Name: hd_profiles fk_rails_0aab25a07c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT fk_rails_0aab25a07c FOREIGN KEY (named_nurse_id_legacy) REFERENCES renalware.users(id);
+
+
+--
 -- Name: event_types fk_rails_0af1b89c85; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28485,6 +28662,30 @@ ALTER TABLE ONLY renalware.event_types
 
 ALTER TABLE ONLY renalware.transplant_rejection_episodes
     ADD CONSTRAINT fk_rails_0b121fa111 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: transplant_donations fk_rails_0b66891291; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donations
+    ADD CONSTRAINT fk_rails_0b66891291 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: renal_aki_alerts fk_rails_0bac5aa8d3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.renal_aki_alerts
+    ADD CONSTRAINT fk_rails_0bac5aa8d3 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_electronic_receipts fk_rails_0c14df6b87; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_electronic_receipts
+    ADD CONSTRAINT fk_rails_0c14df6b87 FOREIGN KEY (letter_id) REFERENCES renalware.letter_letters(id);
 
 
 --
@@ -28504,6 +28705,14 @@ ALTER TABLE ONLY renalware.problem_comorbidities
 
 
 --
+-- Name: clinical_allergies fk_rails_0d8b5ebbad; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_allergies
+    ADD CONSTRAINT fk_rails_0d8b5ebbad FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: medication_delivery_events fk_rails_0e10e5038b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28517,6 +28726,14 @@ ALTER TABLE ONLY renalware.medication_delivery_events
 
 ALTER TABLE ONLY renalware.clinic_mappings
     ADD CONSTRAINT fk_rails_0ffb18aec5 FOREIGN KEY (clinic_id) REFERENCES renalware.clinic_clinics(id);
+
+
+--
+-- Name: access_procedures fk_rails_11c7f6fec3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_procedures
+    ADD CONSTRAINT fk_rails_11c7f6fec3 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28536,6 +28753,22 @@ ALTER TABLE ONLY renalware.hd_vnd_risk_assessments
 
 
 --
+-- Name: transplant_donor_stages fk_rails_15abd8aa8d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_stages
+    ADD CONSTRAINT fk_rails_15abd8aa8d FOREIGN KEY (stage_status_id) REFERENCES renalware.transplant_donor_stage_statuses(id);
+
+
+--
+-- Name: pathology_requests_patient_rules fk_rails_15f58845a2; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_patient_rules
+    ADD CONSTRAINT fk_rails_15f58845a2 FOREIGN KEY (lab_id) REFERENCES renalware.pathology_labs(id);
+
+
+--
 -- Name: hd_acuity_assessments fk_rails_169794a59e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28549,6 +28782,14 @@ ALTER TABLE ONLY renalware.hd_acuity_assessments
 
 ALTER TABLE ONLY renalware.pd_adequacy_results
     ADD CONSTRAINT fk_rails_16cf8add93 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: medication_prescriptions fk_rails_17327d4301; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescriptions
+    ADD CONSTRAINT fk_rails_17327d4301 FOREIGN KEY (medication_route_id) REFERENCES renalware.medication_routes(id);
 
 
 --
@@ -28568,6 +28809,22 @@ ALTER TABLE ONLY renalware.patient_merge_operations
 
 
 --
+-- Name: medication_prescription_terminations fk_rails_1f3fb8ef97; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescription_terminations
+    ADD CONSTRAINT fk_rails_1f3fb8ef97 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_pet_adequacy_results fk_rails_1f91303c21; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_pet_adequacy_results
+    ADD CONSTRAINT fk_rails_1f91303c21 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: problem_radar_diagnoses fk_rails_205f920f0a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28576,11 +28833,35 @@ ALTER TABLE ONLY renalware.problem_radar_diagnoses
 
 
 --
+-- Name: hd_diary_slots fk_rails_206582e5c0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diary_slots
+    ADD CONSTRAINT fk_rails_206582e5c0 FOREIGN KEY (station_id) REFERENCES renalware.hd_stations(id);
+
+
+--
+-- Name: low_clearance_profiles fk_rails_20f40e75a5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.low_clearance_profiles
+    ADD CONSTRAINT fk_rails_20f40e75a5 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: research_investigatorships fk_rails_210ebee29e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.research_investigatorships
     ADD CONSTRAINT fk_rails_210ebee29e FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: modality_modalities fk_rails_21e1b74109; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.modality_modalities
+    ADD CONSTRAINT fk_rails_21e1b74109 FOREIGN KEY (description_id) REFERENCES renalware.modality_descriptions(id);
 
 
 --
@@ -28600,11 +28881,43 @@ ALTER TABLE ONLY renalware.patient_worry_categories
 
 
 --
+-- Name: pd_assessments fk_rails_22dc579c4a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_assessments
+    ADD CONSTRAINT fk_rails_22dc579c4a FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: hd_sessions fk_rails_23d8c477eb; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_23d8c477eb FOREIGN KEY (dialysate_id) REFERENCES renalware.hd_dialysates(id);
+
+
+--
 -- Name: pathology_obx_mappings fk_rails_244dcc392f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pathology_obx_mappings
     ADD CONSTRAINT fk_rails_244dcc392f FOREIGN KEY (observation_description_id) REFERENCES renalware.pathology_observation_descriptions(id);
+
+
+--
+-- Name: pathology_requests_drugs_drug_categories fk_rails_24de49b694; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_drugs_drug_categories
+    ADD CONSTRAINT fk_rails_24de49b694 FOREIGN KEY (drug_id) REFERENCES renalware.drugs(id);
+
+
+--
+-- Name: medication_prescriptions fk_rails_25e627b557; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescriptions
+    ADD CONSTRAINT fk_rails_25e627b557 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28637,6 +28950,30 @@ ALTER TABLE ONLY renalware.hd_slot_requests
 
 ALTER TABLE ONLY renalware.patient_merge_merges
     ADD CONSTRAINT fk_rails_2714a86cea FOREIGN KEY (minor_patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: patient_worries fk_rails_27dc6e2dc8; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_worries
+    ADD CONSTRAINT fk_rails_27dc6e2dc8 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: medication_prescriptions fk_rails_27e92c81fe; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescriptions
+    ADD CONSTRAINT fk_rails_27e92c81fe FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: admission_consults fk_rails_2805127005; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_consults
+    ADD CONSTRAINT fk_rails_2805127005 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28680,6 +29017,22 @@ ALTER TABLE ONLY renalware.patients
 
 
 --
+-- Name: medication_prescriptions fk_rails_2ae6a3ad59; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescriptions
+    ADD CONSTRAINT fk_rails_2ae6a3ad59 FOREIGN KEY (drug_id) REFERENCES renalware.drugs(id);
+
+
+--
+-- Name: medication_prescription_terminations fk_rails_2bd34b98f9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescription_terminations
+    ADD CONSTRAINT fk_rails_2bd34b98f9 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: ukrdc_treatments fk_rails_2bf0a6c5e9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28688,11 +29041,35 @@ ALTER TABLE ONLY renalware.ukrdc_treatments
 
 
 --
+-- Name: hd_profiles fk_rails_2c988cf1f6; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT fk_rails_2c988cf1f6 FOREIGN KEY (schedule_definition_id) REFERENCES renalware.hd_schedule_definitions(id);
+
+
+--
 -- Name: pathology_code_groups fk_rails_2d8bebdd35; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pathology_code_groups
     ADD CONSTRAINT fk_rails_2d8bebdd35 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: clinic_appointments fk_rails_2eaec177ff; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_appointments
+    ADD CONSTRAINT fk_rails_2eaec177ff FOREIGN KEY (becomes_visit_id) REFERENCES renalware.clinic_visits(id);
+
+
+--
+-- Name: pd_peritonitis_episode_types fk_rails_2f135fd6d9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_peritonitis_episode_types
+    ADD CONSTRAINT fk_rails_2f135fd6d9 FOREIGN KEY (peritonitis_episode_id) REFERENCES renalware.pd_peritonitis_episodes(id);
 
 
 --
@@ -28720,6 +29097,22 @@ ALTER TABLE ONLY renalware.pathology_calculation_sources
 
 
 --
+-- Name: clinical_dry_weights fk_rails_31546389ab; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_dry_weights
+    ADD CONSTRAINT fk_rails_31546389ab FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: feed_files fk_rails_3196424d66; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_files
+    ADD CONSTRAINT fk_rails_3196424d66 FOREIGN KEY (file_type_id) REFERENCES renalware.feed_file_types(id);
+
+
+--
 -- Name: hd_acuity_assessments fk_rails_31a621b7df; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28736,11 +29129,75 @@ ALTER TABLE ONLY renalware.pd_regimes
 
 
 --
+-- Name: access_plans fk_rails_32c8b62063; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_plans
+    ADD CONSTRAINT fk_rails_32c8b62063 FOREIGN KEY (plan_type_id) REFERENCES renalware.access_plan_types(id);
+
+
+--
+-- Name: transplant_registration_statuses fk_rails_32f4ff205a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_registration_statuses
+    ADD CONSTRAINT fk_rails_32f4ff205a FOREIGN KEY (registration_id) REFERENCES renalware.transplant_registrations(id);
+
+
+--
+-- Name: transplant_registrations fk_rails_33f3612955; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_registrations
+    ADD CONSTRAINT fk_rails_33f3612955 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: letter_contacts fk_rails_33f61c70e6; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_contacts
+    ADD CONSTRAINT fk_rails_33f61c70e6 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: modality_modalities fk_rails_345aeedf24; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.modality_modalities
     ADD CONSTRAINT fk_rails_345aeedf24 FOREIGN KEY (change_type_id) REFERENCES renalware.modality_change_types(id);
+
+
+--
+-- Name: messaging_messages fk_rails_3567fcbb87; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.messaging_messages
+    ADD CONSTRAINT fk_rails_3567fcbb87 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: research_studies fk_rails_36273417ff; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.research_studies
+    ADD CONSTRAINT fk_rails_36273417ff FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_diary_slots fk_rails_36ae60c09d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diary_slots
+    ADD CONSTRAINT fk_rails_36ae60c09d FOREIGN KEY (diurnal_period_code_id) REFERENCES renalware.hd_diurnal_period_codes(id);
+
+
+--
+-- Name: transplant_registration_statuses fk_rails_36cb307ab5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_registration_statuses
+    ADD CONSTRAINT fk_rails_36cb307ab5 FOREIGN KEY (description_id) REFERENCES renalware.transplant_registration_status_descriptions(id);
 
 
 --
@@ -28776,6 +29233,14 @@ ALTER TABLE ONLY renalware.medication_prescriptions
 
 
 --
+-- Name: pathology_request_descriptions_requests_requests fk_rails_3916726775; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_request_descriptions_requests_requests
+    ADD CONSTRAINT fk_rails_3916726775 FOREIGN KEY (request_id) REFERENCES renalware.pathology_requests_requests(id);
+
+
+--
 -- Name: letter_mailshot_mailshots fk_rails_393db6be40; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -28784,11 +29249,43 @@ ALTER TABLE ONLY renalware.letter_mailshot_mailshots
 
 
 --
+-- Name: letter_letters fk_rails_39983ddc03; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT fk_rails_39983ddc03 FOREIGN KEY (letterhead_id) REFERENCES renalware.letter_letterheads(id);
+
+
+--
+-- Name: pathology_request_descriptions fk_rails_39da21b3fe; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_request_descriptions
+    ADD CONSTRAINT fk_rails_39da21b3fe FOREIGN KEY (required_observation_description_id) REFERENCES renalware.pathology_observation_descriptions(id);
+
+
+--
 -- Name: patients fk_rails_39e5ee7d7e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.patients
     ADD CONSTRAINT fk_rails_39e5ee7d7e FOREIGN KEY (preferred_death_location_id) REFERENCES renalware.death_locations(id);
+
+
+--
+-- Name: transplant_donor_stages fk_rails_3a0cb37b2f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_stages
+    ADD CONSTRAINT fk_rails_3a0cb37b2f FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: transplant_recipient_operations fk_rails_3a852d1667; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_recipient_operations
+    ADD CONSTRAINT fk_rails_3a852d1667 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28808,11 +29305,27 @@ ALTER TABLE ONLY renalware.hd_transmission_logs
 
 
 --
+-- Name: drug_types_drugs fk_rails_3bafe36805; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.drug_types_drugs
+    ADD CONSTRAINT fk_rails_3bafe36805 FOREIGN KEY (drug_type_id) REFERENCES renalware.drug_types(id);
+
+
+--
 -- Name: access_needling_assessments fk_rails_3c9303db18; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.access_needling_assessments
     ADD CONSTRAINT fk_rails_3c9303db18 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: clinical_body_compositions fk_rails_3cab0126da; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_body_compositions
+    ADD CONSTRAINT fk_rails_3cab0126da FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28824,11 +29337,51 @@ ALTER TABLE ONLY renalware.letter_mailshot_mailshots
 
 
 --
+-- Name: letter_letters fk_rails_3de9a678b4; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT fk_rails_3de9a678b4 FOREIGN KEY (approved_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_sessions fk_rails_3e035fe47f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_3e035fe47f FOREIGN KEY (profile_id) REFERENCES renalware.hd_profiles(id);
+
+
+--
+-- Name: hd_sessions fk_rails_3e0f147311; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_3e0f147311 FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
 -- Name: hd_session_patient_group_directions fk_rails_3e4958da13; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.hd_session_patient_group_directions
     ADD CONSTRAINT fk_rails_3e4958da13 FOREIGN KEY (patient_group_direction_id) REFERENCES renalware.drug_patient_group_directions(id);
+
+
+--
+-- Name: pathology_requests_requests fk_rails_3e725c96fc; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_requests
+    ADD CONSTRAINT fk_rails_3e725c96fc FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: pd_peritonitis_episode_types fk_rails_3e924fb47c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_peritonitis_episode_types
+    ADD CONSTRAINT fk_rails_3e924fb47c FOREIGN KEY (peritonitis_episode_type_description_id) REFERENCES renalware.pd_peritonitis_episode_type_descriptions(id);
 
 
 --
@@ -28840,11 +29393,43 @@ ALTER TABLE ONLY renalware.drug_trade_family_classifications
 
 
 --
+-- Name: patient_bookmarks fk_rails_3f47dd9cc1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_bookmarks
+    ADD CONSTRAINT fk_rails_3f47dd9cc1 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: ukrdc_treatments fk_rails_4011924f9c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.ukrdc_treatments
     ADD CONSTRAINT fk_rails_4011924f9c FOREIGN KEY (hd_profile_id) REFERENCES renalware.hd_profiles(id);
+
+
+--
+-- Name: pd_assessments fk_rails_408dde93e5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_assessments
+    ADD CONSTRAINT fk_rails_408dde93e5 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pathology_requests_global_rule_sets fk_rails_40e23de825; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_global_rule_sets
+    ADD CONSTRAINT fk_rails_40e23de825 FOREIGN KEY (clinic_id) REFERENCES renalware.clinic_clinics(id);
+
+
+--
+-- Name: admission_admissions fk_rails_4137fdc9b4; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_admissions
+    ADD CONSTRAINT fk_rails_4137fdc9b4 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28896,11 +29481,27 @@ ALTER TABLE ONLY renalware.drug_vmp_classifications
 
 
 --
+-- Name: system_user_feedback fk_rails_4cc9cf2dca; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_user_feedback
+    ADD CONSTRAINT fk_rails_4cc9cf2dca FOREIGN KEY (author_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: user_groups fk_rails_4d818c23e5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.user_groups
     ADD CONSTRAINT fk_rails_4d818c23e5 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: renal_aki_alerts fk_rails_4d907ef0f1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.renal_aki_alerts
+    ADD CONSTRAINT fk_rails_4d907ef0f1 FOREIGN KEY (action_id) REFERENCES renalware.renal_aki_alert_actions(id);
 
 
 --
@@ -28917,6 +29518,22 @@ ALTER TABLE ONLY renalware.feed_message_replays
 
 ALTER TABLE ONLY renalware.patient_attachments
     ADD CONSTRAINT fk_rails_4fe08d5c90 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: access_assessments fk_rails_506a7ce21d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_assessments
+    ADD CONSTRAINT fk_rails_506a7ce21d FOREIGN KEY (type_id) REFERENCES renalware.access_types(id);
+
+
+--
+-- Name: messaging_receipts fk_rails_50de46762d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.messaging_receipts
+    ADD CONSTRAINT fk_rails_50de46762d FOREIGN KEY (message_id) REFERENCES renalware.messaging_messages(id);
 
 
 --
@@ -28952,11 +29569,59 @@ ALTER TABLE ONLY renalware.transplant_registration_status_descriptions
 
 
 --
+-- Name: patients fk_rails_53c392b502; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_53c392b502 FOREIGN KEY (country_of_birth_id) REFERENCES renalware.system_countries(id);
+
+
+--
+-- Name: admission_consults fk_rails_53e81afb74; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_consults
+    ADD CONSTRAINT fk_rails_53e81afb74 FOREIGN KEY (seen_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_letters fk_rails_54a74fd998; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT fk_rails_54a74fd998 FOREIGN KEY (submitted_for_approval_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: admission_requests fk_rails_54b568383c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_requests
+    ADD CONSTRAINT fk_rails_54b568383c FOREIGN KEY (reason_id) REFERENCES renalware.admission_request_reasons(id);
+
+
+--
 -- Name: clinic_consultants fk_rails_553d00e0f9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.clinic_consultants
     ADD CONSTRAINT fk_rails_553d00e0f9 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_sessions fk_rails_563fedb262; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_563fedb262 FOREIGN KEY (dry_weight_id) REFERENCES renalware.clinical_dry_weights(id);
+
+
+--
+-- Name: renal_profiles fk_rails_568750244e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.renal_profiles
+    ADD CONSTRAINT fk_rails_568750244e FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -28968,11 +29633,35 @@ ALTER TABLE ONLY renalware.event_type_alert_triggers
 
 
 --
+-- Name: transplant_recipient_workups fk_rails_571a3cadda; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_recipient_workups
+    ADD CONSTRAINT fk_rails_571a3cadda FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: clinic_appointments fk_rails_57295b1aa7; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.clinic_appointments
     ADD CONSTRAINT fk_rails_57295b1aa7 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: virology_profiles fk_rails_58ffa1276c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.virology_profiles
+    ADD CONSTRAINT fk_rails_58ffa1276c FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: hd_diary_slots fk_rails_5910319259; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diary_slots
+    ADD CONSTRAINT fk_rails_5910319259 FOREIGN KEY (diary_id) REFERENCES renalware.hd_diaries(id);
 
 
 --
@@ -28992,11 +29681,35 @@ ALTER TABLE ONLY renalware.letter_letterheads
 
 
 --
+-- Name: patients fk_rails_5b44e541da; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_5b44e541da FOREIGN KEY (ethnicity_id) REFERENCES renalware.patient_ethnicities(id);
+
+
+--
 -- Name: system_logs fk_rails_5b48840751; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.system_logs
     ADD CONSTRAINT fk_rails_5b48840751 FOREIGN KEY (owner_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_training_sessions fk_rails_5cbe110e5f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_training_sessions
+    ADD CONSTRAINT fk_rails_5cbe110e5f FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: patient_practice_memberships fk_rails_5cc07e383f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_practice_memberships
+    ADD CONSTRAINT fk_rails_5cc07e383f FOREIGN KEY (practice_id) REFERENCES renalware.patient_practices(id);
 
 
 --
@@ -29032,6 +29745,14 @@ ALTER TABLE ONLY renalware.pathology_code_group_memberships
 
 
 --
+-- Name: pd_regime_terminations fk_rails_6021bed852; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_regime_terminations
+    ADD CONSTRAINT fk_rails_6021bed852 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: medication_delivery_events fk_rails_603a7f7a1f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29040,11 +29761,35 @@ ALTER TABLE ONLY renalware.medication_delivery_events
 
 
 --
+-- Name: access_assessments fk_rails_604fdf3a9e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_assessments
+    ADD CONSTRAINT fk_rails_604fdf3a9e FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: letter_signatures fk_rails_60aca3bf58; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_signatures
+    ADD CONSTRAINT fk_rails_60aca3bf58 FOREIGN KEY (user_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: pathology_requests_requests fk_rails_617c726b94; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pathology_requests_requests
     ADD CONSTRAINT fk_rails_617c726b94 FOREIGN KEY (consultant_id) REFERENCES renalware.clinic_consultants(id);
+
+
+--
+-- Name: letter_letters fk_rails_6191e75b3b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT fk_rails_6191e75b3b FOREIGN KEY (author_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29104,11 +29849,35 @@ ALTER TABLE ONLY renalware.letter_batch_items
 
 
 --
+-- Name: messaging_messages fk_rails_65f878b7cf; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.messaging_messages
+    ADD CONSTRAINT fk_rails_65f878b7cf FOREIGN KEY (author_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: admission_consults fk_rails_66c44c0949; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_consults
+    ADD CONSTRAINT fk_rails_66c44c0949 FOREIGN KEY (hospital_ward_id) REFERENCES renalware.hospital_wards(id);
+
+
+--
 -- Name: pathology_calculation_sources fk_rails_6725b36566; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pathology_calculation_sources
     ADD CONSTRAINT fk_rails_6725b36566 FOREIGN KEY (source_observation_id) REFERENCES renalware.pathology_observations(id);
+
+
+--
+-- Name: transplant_recipient_followups fk_rails_6893ba0593; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_recipient_followups
+    ADD CONSTRAINT fk_rails_6893ba0593 FOREIGN KEY (transplant_failure_cause_description_id) REFERENCES renalware.transplant_failure_cause_descriptions(id);
 
 
 --
@@ -29120,11 +29889,27 @@ ALTER TABLE ONLY renalware.hd_vnd_risk_assessments
 
 
 --
+-- Name: hd_preference_sets fk_rails_69555e3a94; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_preference_sets
+    ADD CONSTRAINT fk_rails_69555e3a94 FOREIGN KEY (schedule_definition_id) REFERENCES renalware.hd_schedule_definitions(id);
+
+
+--
 -- Name: hd_slot_requests fk_rails_6a3ab1b8b9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.hd_slot_requests
     ADD CONSTRAINT fk_rails_6a3ab1b8b9 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: problem_notes fk_rails_6a44f3907b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.problem_notes
+    ADD CONSTRAINT fk_rails_6a44f3907b FOREIGN KEY (problem_id) REFERENCES renalware.problem_problems(id);
 
 
 --
@@ -29184,6 +29969,14 @@ ALTER TABLE ONLY renalware.pd_pet_results
 
 
 --
+-- Name: pathology_observations fk_rails_70ef87ad18; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_observations
+    ADD CONSTRAINT fk_rails_70ef87ad18 FOREIGN KEY (request_id) REFERENCES renalware.pathology_observation_requests(id);
+
+
+--
 -- Name: geography_middle_super_output_areas fk_rails_7238531ba4; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29200,6 +29993,30 @@ ALTER TABLE ONLY renalware.patient_merge_merges
 
 
 --
+-- Name: admission_admissions fk_rails_74bb0c40ab; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_admissions
+    ADD CONSTRAINT fk_rails_74bb0c40ab FOREIGN KEY (modality_at_admission_id) REFERENCES renalware.modality_modalities(id);
+
+
+--
+-- Name: hd_sessions fk_rails_751ed7515f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_751ed7515f FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: events fk_rails_75f14fef31; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.events
+    ADD CONSTRAINT fk_rails_75f14fef31 FOREIGN KEY (event_type_id) REFERENCES renalware.event_types(id);
+
+
+--
 -- Name: patient_attachments fk_rails_76bb588f1f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29208,11 +30025,27 @@ ALTER TABLE ONLY renalware.patient_attachments
 
 
 --
+-- Name: patients fk_rails_76ea7f2448; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_76ea7f2448 FOREIGN KEY (second_cause_id) REFERENCES renalware.death_causes(id);
+
+
+--
 -- Name: clinic_clinics fk_rails_76f414c91a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.clinic_clinics
     ADD CONSTRAINT fk_rails_76f414c91a FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_letters fk_rails_774d7e4879; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT fk_rails_774d7e4879 FOREIGN KEY (completed_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29240,11 +30073,27 @@ ALTER TABLE ONLY renalware.letter_qr_encoded_online_reference_links
 
 
 --
+-- Name: transplant_recipient_followups fk_rails_78dc63040c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_recipient_followups
+    ADD CONSTRAINT fk_rails_78dc63040c FOREIGN KEY (operation_id) REFERENCES renalware.transplant_recipient_operations(id);
+
+
+--
 -- Name: admission_consults fk_rails_7906df81db; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.admission_consults
     ADD CONSTRAINT fk_rails_7906df81db FOREIGN KEY (specialty_id) REFERENCES renalware.admission_specialties(id);
+
+
+--
+-- Name: hd_profiles fk_rails_7d0453a2e8; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT fk_rails_7d0453a2e8 FOREIGN KEY (dialysate_id) REFERENCES renalware.hd_dialysates(id);
 
 
 --
@@ -29256,11 +30105,35 @@ ALTER TABLE ONLY renalware.ukrdc_treatments
 
 
 --
+-- Name: pd_regime_terminations fk_rails_7d318fdf1a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_regime_terminations
+    ADD CONSTRAINT fk_rails_7d318fdf1a FOREIGN KEY (regime_id) REFERENCES renalware.pd_regimes(id);
+
+
+--
 -- Name: ukrdc_treatments fk_rails_7d4def4f31; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.ukrdc_treatments
     ADD CONSTRAINT fk_rails_7d4def4f31 FOREIGN KEY (hospital_centre_id) REFERENCES renalware.hospital_centres(id);
+
+
+--
+-- Name: snippets_snippets fk_rails_7d5fdddbd2; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.snippets_snippets
+    ADD CONSTRAINT fk_rails_7d5fdddbd2 FOREIGN KEY (author_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_archives fk_rails_7dc4363735; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_archives
+    ADD CONSTRAINT fk_rails_7dc4363735 FOREIGN KEY (letter_id) REFERENCES renalware.letter_letters(id);
 
 
 --
@@ -29280,6 +30153,14 @@ ALTER TABLE ONLY renalware.clinic_visit_locations
 
 
 --
+-- Name: research_participations fk_rails_8039d07f46; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.research_participations
+    ADD CONSTRAINT fk_rails_8039d07f46 FOREIGN KEY (study_id) REFERENCES renalware.research_studies(id);
+
+
+--
 -- Name: pd_adequacy_results fk_rails_81e87b4414; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29296,11 +30177,43 @@ ALTER TABLE ONLY renalware.system_downloads
 
 
 --
+-- Name: research_participations fk_rails_87bef0e757; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.research_participations
+    ADD CONSTRAINT fk_rails_87bef0e757 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: patient_worries fk_rails_8837145e13; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_worries
+    ADD CONSTRAINT fk_rails_8837145e13 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_prescription_administrations fk_rails_885e37560e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_prescription_administrations
+    ADD CONSTRAINT fk_rails_885e37560e FOREIGN KEY (prescription_id) REFERENCES renalware.medication_prescriptions(id);
+
+
+--
 -- Name: letter_batches fk_rails_88dce46ac4; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.letter_batches
     ADD CONSTRAINT fk_rails_88dce46ac4 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_profiles fk_rails_89630f47ee; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT fk_rails_89630f47ee FOREIGN KEY (transport_decider_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29312,11 +30225,35 @@ ALTER TABLE ONLY renalware.monitoring_mirth_channel_stats
 
 
 --
+-- Name: clinical_body_compositions fk_rails_8acc26446b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_body_compositions
+    ADD CONSTRAINT fk_rails_8acc26446b FOREIGN KEY (modality_description_id) REFERENCES renalware.modality_descriptions(id);
+
+
+--
 -- Name: letter_mailshot_mailshots fk_rails_8b04a892b0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.letter_mailshot_mailshots
     ADD CONSTRAINT fk_rails_8b04a892b0 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: admission_requests fk_rails_8b3ff2812e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_requests
+    ADD CONSTRAINT fk_rails_8b3ff2812e FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
+-- Name: renal_aki_alerts fk_rails_8b50e868dc; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.renal_aki_alerts
+    ADD CONSTRAINT fk_rails_8b50e868dc FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -29344,6 +30281,38 @@ ALTER TABLE ONLY renalware.pd_pet_results
 
 
 --
+-- Name: access_profiles fk_rails_8d75e5423f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_profiles
+    ADD CONSTRAINT fk_rails_8d75e5423f FOREIGN KEY (decided_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: low_clearance_profiles fk_rails_8d84feb2ed; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.low_clearance_profiles
+    ADD CONSTRAINT fk_rails_8d84feb2ed FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hospital_units fk_rails_8f3a7fc1c7; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hospital_units
+    ADD CONSTRAINT fk_rails_8f3a7fc1c7 FOREIGN KEY (hospital_centre_id) REFERENCES renalware.hospital_centres(id);
+
+
+--
+-- Name: pathology_request_descriptions_requests_requests fk_rails_8f574ed703; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_request_descriptions_requests_requests
+    ADD CONSTRAINT fk_rails_8f574ed703 FOREIGN KEY (request_description_id) REFERENCES renalware.pathology_request_descriptions(id);
+
+
+--
 -- Name: hd_provider_units fk_rails_8f5e478f60; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29352,11 +30321,51 @@ ALTER TABLE ONLY renalware.hd_provider_units
 
 
 --
+-- Name: hd_diary_slots fk_rails_8fd55142bd; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diary_slots
+    ADD CONSTRAINT fk_rails_8fd55142bd FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: pathology_chart_series fk_rails_903a56989c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pathology_chart_series
     ADD CONSTRAINT fk_rails_903a56989c FOREIGN KEY (observation_description_id) REFERENCES renalware.pathology_observation_descriptions(id);
+
+
+--
+-- Name: clinic_appointments fk_rails_909dcaaf3d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_appointments
+    ADD CONSTRAINT fk_rails_909dcaaf3d FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: admission_requests fk_rails_9161088ec5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_requests
+    ADD CONSTRAINT fk_rails_9161088ec5 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: transplant_failure_cause_descriptions fk_rails_9183cb4170; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_failure_cause_descriptions
+    ADD CONSTRAINT fk_rails_9183cb4170 FOREIGN KEY (group_id) REFERENCES renalware.transplant_failure_cause_description_groups(id);
+
+
+--
+-- Name: clinical_allergies fk_rails_9193bda748; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_allergies
+    ADD CONSTRAINT fk_rails_9193bda748 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29376,11 +30385,27 @@ ALTER TABLE ONLY renalware.transplant_rejection_episodes
 
 
 --
+-- Name: transplant_donor_workups fk_rails_93dc1108f3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_workups
+    ADD CONSTRAINT fk_rails_93dc1108f3 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: pd_adequacy_results fk_rails_93e753133f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pd_adequacy_results
     ADD CONSTRAINT fk_rails_93e753133f FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_regime_terminations fk_rails_93f7877530; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_regime_terminations
+    ADD CONSTRAINT fk_rails_93f7877530 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29400,6 +30425,22 @@ ALTER TABLE ONLY renalware.problem_comorbidities
 
 
 --
+-- Name: pd_exit_site_infections fk_rails_9702c22886; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_exit_site_infections
+    ADD CONSTRAINT fk_rails_9702c22886 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: patients fk_rails_9739853ad1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_9739853ad1 FOREIGN KEY (primary_care_physician_id) REFERENCES renalware.patient_primary_care_physicians(id);
+
+
+--
 -- Name: letter_mailshot_mailshots fk_rails_973e755ca1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29413,6 +30454,14 @@ ALTER TABLE ONLY renalware.letter_mailshot_mailshots
 
 ALTER TABLE ONLY renalware.research_investigatorships
     ADD CONSTRAINT fk_rails_97cd654080 FOREIGN KEY (user_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: research_participations fk_rails_980af0ec33; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.research_participations
+    ADD CONSTRAINT fk_rails_980af0ec33 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -29440,11 +30489,67 @@ ALTER TABLE ONLY renalware.event_subtypes
 
 
 --
+-- Name: admission_admissions fk_rails_9b1787c128; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_admissions
+    ADD CONSTRAINT fk_rails_9b1787c128 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: clinical_igan_risks fk_rails_9b3432e846; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.clinical_igan_risks
     ADD CONSTRAINT fk_rails_9b3432e846 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: research_participations fk_rails_9c3d41afbe; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.research_participations
+    ADD CONSTRAINT fk_rails_9c3d41afbe FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_recipients fk_rails_9c76b7ba29; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_recipients
+    ADD CONSTRAINT fk_rails_9c76b7ba29 FOREIGN KEY (letter_id) REFERENCES renalware.letter_letters(id);
+
+
+--
+-- Name: roles_users fk_rails_9dada905f6; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.roles_users
+    ADD CONSTRAINT fk_rails_9dada905f6 FOREIGN KEY (role_id) REFERENCES renalware.roles(id);
+
+
+--
+-- Name: access_procedures fk_rails_9dbbc5bfd0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_procedures
+    ADD CONSTRAINT fk_rails_9dbbc5bfd0 FOREIGN KEY (type_id) REFERENCES renalware.access_types(id);
+
+
+--
+-- Name: admission_consults fk_rails_9e878a7b22; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_consults
+    ADD CONSTRAINT fk_rails_9e878a7b22 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: patient_alerts fk_rails_9efea309bb; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_alerts
+    ADD CONSTRAINT fk_rails_9efea309bb FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29464,6 +30569,22 @@ ALTER TABLE ONLY renalware.letter_batch_items
 
 
 --
+-- Name: pathology_request_descriptions fk_rails_a0b9cd97fe; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_request_descriptions
+    ADD CONSTRAINT fk_rails_a0b9cd97fe FOREIGN KEY (lab_id) REFERENCES renalware.pathology_labs(id);
+
+
+--
+-- Name: letter_contacts fk_rails_a0d87208a0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_contacts
+    ADD CONSTRAINT fk_rails_a0d87208a0 FOREIGN KEY (description_id) REFERENCES renalware.letter_contact_descriptions(id);
+
+
+--
 -- Name: feed_outgoing_documents fk_rails_a13bc8d2e9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29480,11 +30601,75 @@ ALTER TABLE ONLY renalware.system_view_calls
 
 
 --
+-- Name: hd_diaries fk_rails_a30d12c65b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diaries
+    ADD CONSTRAINT fk_rails_a30d12c65b FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
+-- Name: hd_sessions fk_rails_a3afae15cb; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_a3afae15cb FOREIGN KEY (modality_description_id) REFERENCES renalware.modality_descriptions(id);
+
+
+--
+-- Name: letter_contacts fk_rails_a5852d1710; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_contacts
+    ADD CONSTRAINT fk_rails_a5852d1710 FOREIGN KEY (person_id) REFERENCES renalware.directory_people(id);
+
+
+--
+-- Name: hd_patient_statistics fk_rails_a654a17f8d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_patient_statistics
+    ADD CONSTRAINT fk_rails_a654a17f8d FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
 -- Name: modality_descriptions fk_rails_a6efc804a5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.modality_descriptions
     ADD CONSTRAINT fk_rails_a6efc804a5 FOREIGN KEY (ukrdc_modality_code_id) REFERENCES renalware.ukrdc_modality_codes(id);
+
+
+--
+-- Name: pd_regimes fk_rails_a70920e237; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_regimes
+    ADD CONSTRAINT fk_rails_a70920e237 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: transplant_donor_stages fk_rails_a791cc53cd; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_stages
+    ADD CONSTRAINT fk_rails_a791cc53cd FOREIGN KEY (stage_position_id) REFERENCES renalware.transplant_donor_stage_positions(id);
+
+
+--
+-- Name: transplant_donor_stages fk_rails_a7ac3785a4; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_stages
+    ADD CONSTRAINT fk_rails_a7ac3785a4 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_stations fk_rails_a7fedf6e91; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_stations
+    ADD CONSTRAINT fk_rails_a7fedf6e91 FOREIGN KEY (location_id) REFERENCES renalware.hd_station_locations(id);
 
 
 --
@@ -29496,11 +30681,27 @@ ALTER TABLE ONLY renalware.patients
 
 
 --
+-- Name: pathology_requests_drugs_drug_categories fk_rails_a850498c88; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_drugs_drug_categories
+    ADD CONSTRAINT fk_rails_a850498c88 FOREIGN KEY (drug_category_id) REFERENCES renalware.pathology_requests_drug_categories(id);
+
+
+--
 -- Name: research_investigatorships fk_rails_a88d67c879; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.research_investigatorships
     ADD CONSTRAINT fk_rails_a88d67c879 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pathology_requests_requests fk_rails_a8d58d31e6; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_requests
+    ADD CONSTRAINT fk_rails_a8d58d31e6 FOREIGN KEY (clinic_id) REFERENCES renalware.clinic_clinics(id);
 
 
 --
@@ -29536,6 +30737,14 @@ ALTER TABLE ONLY renalware.letter_qr_encoded_online_reference_links
 
 
 --
+-- Name: hd_diaries fk_rails_aab1b8f3e1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diaries
+    ADD CONSTRAINT fk_rails_aab1b8f3e1 FOREIGN KEY (master_diary_id) REFERENCES renalware.hd_diaries(id);
+
+
+--
 -- Name: geography_output_areas fk_rails_ab0dd53286; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29552,11 +30761,35 @@ ALTER TABLE ONLY renalware.monitoring_mirth_channels
 
 
 --
+-- Name: hd_preference_sets fk_rails_ac8e970c42; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_preference_sets
+    ADD CONSTRAINT fk_rails_ac8e970c42 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: access_profiles fk_rails_acbcae03df; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_profiles
+    ADD CONSTRAINT fk_rails_acbcae03df FOREIGN KEY (type_id) REFERENCES renalware.access_types(id);
+
+
+--
 -- Name: system_online_reference_links fk_rails_ace781d947; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.system_online_reference_links
     ADD CONSTRAINT fk_rails_ace781d947 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_peritonitis_episodes fk_rails_ae56e9fe7e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_peritonitis_episodes
+    ADD CONSTRAINT fk_rails_ae56e9fe7e FOREIGN KEY (episode_type_id) REFERENCES renalware.pd_peritonitis_episode_type_descriptions(id);
 
 
 --
@@ -29568,11 +30801,43 @@ ALTER TABLE ONLY renalware.user_group_memberships
 
 
 --
+-- Name: virology_profiles fk_rails_af15bfebc8; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.virology_profiles
+    ADD CONSTRAINT fk_rails_af15bfebc8 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_stations fk_rails_af478cfba0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_stations
+    ADD CONSTRAINT fk_rails_af478cfba0 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: pathology_code_group_memberships fk_rails_aff8ecb964; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pathology_code_group_memberships
     ADD CONSTRAINT fk_rails_aff8ecb964 FOREIGN KEY (code_group_id) REFERENCES renalware.pathology_code_groups(id);
+
+
+--
+-- Name: pathology_requests_patient_rules fk_rails_b13e09c8a3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_patient_rules
+    ADD CONSTRAINT fk_rails_b13e09c8a3 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: hd_patient_statistics fk_rails_b163068880; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_patient_statistics
+    ADD CONSTRAINT fk_rails_b163068880 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -29584,11 +30849,35 @@ ALTER TABLE ONLY renalware.letter_section_snapshots
 
 
 --
+-- Name: clinical_body_compositions fk_rails_b4786e77de; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_body_compositions
+    ADD CONSTRAINT fk_rails_b4786e77de FOREIGN KEY (assessor_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: system_view_metadata fk_rails_b499d6a5de; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.system_view_metadata
     ADD CONSTRAINT fk_rails_b499d6a5de FOREIGN KEY (parent_id) REFERENCES renalware.system_view_metadata(id);
+
+
+--
+-- Name: pathology_observation_descriptions fk_rails_b4b10c7e86; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_observation_descriptions
+    ADD CONSTRAINT fk_rails_b4b10c7e86 FOREIGN KEY (measurement_unit_id) REFERENCES renalware.pathology_measurement_units(id);
+
+
+--
+-- Name: admission_admissions fk_rails_b4edf9f5f8; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_admissions
+    ADD CONSTRAINT fk_rails_b4edf9f5f8 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29608,11 +30897,67 @@ ALTER TABLE ONLY renalware.hd_acuity_assessments
 
 
 --
+-- Name: transplant_donor_operations fk_rails_b6ee03185c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_operations
+    ADD CONSTRAINT fk_rails_b6ee03185c FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: admission_admissions fk_rails_b722288de2; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_admissions
+    ADD CONSTRAINT fk_rails_b722288de2 FOREIGN KEY (hospital_ward_id) REFERENCES renalware.hospital_wards(id);
+
+
+--
+-- Name: pathology_requests_global_rules fk_rails_b77918cf71; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_global_rules
+    ADD CONSTRAINT fk_rails_b77918cf71 FOREIGN KEY (rule_set_id) REFERENCES renalware.pathology_requests_global_rule_sets(id);
+
+
+--
+-- Name: hospital_wards fk_rails_b7949167d5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hospital_wards
+    ADD CONSTRAINT fk_rails_b7949167d5 FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
 -- Name: drug_homecare_forms fk_rails_b7b0cfbbfa; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.drug_homecare_forms
     ADD CONSTRAINT fk_rails_b7b0cfbbfa FOREIGN KEY (supplier_id) REFERENCES renalware.drug_suppliers(id);
+
+
+--
+-- Name: clinic_appointments fk_rails_b7cc8fd5dd; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_appointments
+    ADD CONSTRAINT fk_rails_b7cc8fd5dd FOREIGN KEY (clinic_id) REFERENCES renalware.clinic_clinics(id);
+
+
+--
+-- Name: clinic_visits fk_rails_b844dc9537; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_visits
+    ADD CONSTRAINT fk_rails_b844dc9537 FOREIGN KEY (clinic_id) REFERENCES renalware.clinic_clinics(id);
+
+
+--
+-- Name: access_plans fk_rails_b898a29af1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_plans
+    ADD CONSTRAINT fk_rails_b898a29af1 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -29629,6 +30974,38 @@ ALTER TABLE ONLY renalware.hd_sessions
 
 ALTER TABLE ONLY renalware.clinic_visits
     ADD CONSTRAINT fk_rails_bb1c2fadb7 FOREIGN KEY (location_id) REFERENCES renalware.clinic_visit_locations(id);
+
+
+--
+-- Name: problem_problems fk_rails_bbae3e065d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.problem_problems
+    ADD CONSTRAINT fk_rails_bbae3e065d FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_sessions fk_rails_bd995b497c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_bd995b497c FOREIGN KEY (signed_on_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: patient_alerts fk_rails_bf45802f3f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_alerts
+    ADD CONSTRAINT fk_rails_bf45802f3f FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: patient_bookmarks fk_rails_c12b863727; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_bookmarks
+    ADD CONSTRAINT fk_rails_c12b863727 FOREIGN KEY (user_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29656,11 +31033,27 @@ ALTER TABLE ONLY renalware.letter_electronic_receipts
 
 
 --
+-- Name: modality_modalities fk_rails_c31cea56ac; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.modality_modalities
+    ADD CONSTRAINT fk_rails_c31cea56ac FOREIGN KEY (reason_id) REFERENCES renalware.modality_reasons(id);
+
+
+--
 -- Name: ukrdc_treatments fk_rails_c35a48f8d3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.ukrdc_treatments
     ADD CONSTRAINT fk_rails_c35a48f8d3 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: patient_alerts fk_rails_c37cc03264; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_alerts
+    ADD CONSTRAINT fk_rails_c37cc03264 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29680,11 +31073,27 @@ ALTER TABLE ONLY renalware.problem_comorbidities
 
 
 --
+-- Name: ukrdc_transmission_logs fk_rails_c59f71164c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.ukrdc_transmission_logs
+    ADD CONSTRAINT fk_rails_c59f71164c FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: research_investigatorships fk_rails_c6186ba63f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.research_investigatorships
     ADD CONSTRAINT fk_rails_c6186ba63f FOREIGN KEY (study_id) REFERENCES renalware.research_studies(id);
+
+
+--
+-- Name: hd_prescription_administrations fk_rails_c654406492; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_prescription_administrations
+    ADD CONSTRAINT fk_rails_c654406492 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29696,6 +31105,22 @@ ALTER TABLE ONLY renalware.pd_regimes
 
 
 --
+-- Name: transplant_donor_followups fk_rails_c75064199c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_followups
+    ADD CONSTRAINT fk_rails_c75064199c FOREIGN KEY (operation_id) REFERENCES renalware.transplant_donor_operations(id);
+
+
+--
+-- Name: medication_prescriptions fk_rails_c7b1e35b07; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescriptions
+    ADD CONSTRAINT fk_rails_c7b1e35b07 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: pathology_code_group_memberships fk_rails_c80615a8fc; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29704,11 +31129,27 @@ ALTER TABLE ONLY renalware.pathology_code_group_memberships
 
 
 --
+-- Name: hd_profiles fk_rails_c89b2174e9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT fk_rails_c89b2174e9 FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
 -- Name: clinic_consultants fk_rails_ca15ceb91b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.clinic_consultants
     ADD CONSTRAINT fk_rails_ca15ceb91b FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_regime_bags fk_rails_ca16ec591e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_regime_bags
+    ADD CONSTRAINT fk_rails_ca16ec591e FOREIGN KEY (regime_id) REFERENCES renalware.pd_regimes(id);
 
 
 --
@@ -29736,11 +31177,43 @@ ALTER TABLE ONLY renalware.hd_sessions
 
 
 --
+-- Name: renal_profiles fk_rails_cd10bc0ddf; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.renal_profiles
+    ADD CONSTRAINT fk_rails_cd10bc0ddf FOREIGN KEY (prd_description_id) REFERENCES renalware.renal_prd_descriptions(id);
+
+
+--
+-- Name: access_profiles fk_rails_d04ba97fc5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_profiles
+    ADD CONSTRAINT fk_rails_d04ba97fc5 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: survey_questions fk_rails_d0558bfd89; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.survey_questions
     ADD CONSTRAINT fk_rails_d0558bfd89 FOREIGN KEY (survey_id) REFERENCES renalware.survey_surveys(id);
+
+
+--
+-- Name: transplant_donor_stages fk_rails_d05e755f4a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donor_stages
+    ADD CONSTRAINT fk_rails_d05e755f4a FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: renal_aki_alerts fk_rails_d15c835018; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.renal_aki_alerts
+    ADD CONSTRAINT fk_rails_d15c835018 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29768,6 +31241,22 @@ ALTER TABLE ONLY renalware.patient_merge_logs
 
 
 --
+-- Name: admission_requests fk_rails_d42c308e35; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_requests
+    ADD CONSTRAINT fk_rails_d42c308e35 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_signatures fk_rails_d4aaa80dee; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_signatures
+    ADD CONSTRAINT fk_rails_d4aaa80dee FOREIGN KEY (letter_id) REFERENCES renalware.letter_letters(id);
+
+
+--
 -- Name: ukrdc_treatments fk_rails_d5e9d1f118; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29784,11 +31273,123 @@ ALTER TABLE ONLY renalware.feed_replay_requests
 
 
 --
+-- Name: access_plans fk_rails_d61e7c4674; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_plans
+    ADD CONSTRAINT fk_rails_d61e7c4674 FOREIGN KEY (decided_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: clinic_clinics fk_rails_d7ca5ef0af; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.clinic_clinics
     ADD CONSTRAINT fk_rails_d7ca5ef0af FOREIGN KEY (default_modality_description_id) REFERENCES renalware.modality_descriptions(id);
+
+
+--
+-- Name: addresses fk_rails_d873e14e27; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.addresses
+    ADD CONSTRAINT fk_rails_d873e14e27 FOREIGN KEY (country_id) REFERENCES renalware.system_countries(id);
+
+
+--
+-- Name: hd_profiles fk_rails_d92d27629e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT fk_rails_d92d27629e FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: access_plans fk_rails_d944a58ba2; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_plans
+    ADD CONSTRAINT fk_rails_d944a58ba2 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: access_plans fk_rails_db0b9b356b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.access_plans
+    ADD CONSTRAINT fk_rails_db0b9b356b FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pathology_observation_requests fk_rails_db5255e417; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_observation_requests
+    ADD CONSTRAINT fk_rails_db5255e417 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: pathology_observations fk_rails_dc1b1799e7; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_observations
+    ADD CONSTRAINT fk_rails_dc1b1799e7 FOREIGN KEY (description_id) REFERENCES renalware.pathology_observation_descriptions(id);
+
+
+--
+-- Name: messaging_messages fk_rails_dc393c1672; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.messaging_messages
+    ADD CONSTRAINT fk_rails_dc393c1672 FOREIGN KEY (replying_to_message_id) REFERENCES renalware.messaging_messages(id);
+
+
+--
+-- Name: pd_pet_adequacy_results fk_rails_dd74a1d162; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_pet_adequacy_results
+    ADD CONSTRAINT fk_rails_dd74a1d162 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: messaging_receipts fk_rails_dd8a10c86f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.messaging_receipts
+    ADD CONSTRAINT fk_rails_dd8a10c86f FOREIGN KEY (recipient_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pathology_current_observation_sets fk_rails_dd99e95861; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_current_observation_sets
+    ADD CONSTRAINT fk_rails_dd99e95861 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: patient_practice_memberships fk_rails_dd9db188d9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_practice_memberships
+    ADD CONSTRAINT fk_rails_dd9db188d9 FOREIGN KEY (primary_care_physician_id) REFERENCES renalware.patient_primary_care_physicians(id);
+
+
+--
+-- Name: pd_regime_bags fk_rails_de0d26811a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_regime_bags
+    ADD CONSTRAINT fk_rails_de0d26811a FOREIGN KEY (bag_type_id) REFERENCES renalware.pd_bag_types(id);
+
+
+--
+-- Name: patients fk_rails_de32a1820e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT fk_rails_de32a1820e FOREIGN KEY (first_cause_id) REFERENCES renalware.death_causes(id);
 
 
 --
@@ -29816,6 +31417,30 @@ ALTER TABLE ONLY renalware.problem_comorbidities
 
 
 --
+-- Name: pd_infection_organisms fk_rails_df82011585; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_infection_organisms
+    ADD CONSTRAINT fk_rails_df82011585 FOREIGN KEY (organism_code_id) REFERENCES renalware.pd_organism_codes(id);
+
+
+--
+-- Name: admission_requests fk_rails_e0d84c3803; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_requests
+    ADD CONSTRAINT fk_rails_e0d84c3803 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: hd_stations fk_rails_e1203401d3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_stations
+    ADD CONSTRAINT fk_rails_e1203401d3 FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
 -- Name: system_online_reference_links fk_rails_e129006acb; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29824,11 +31449,43 @@ ALTER TABLE ONLY renalware.system_online_reference_links
 
 
 --
+-- Name: events fk_rails_e1899a68af; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.events
+    ADD CONSTRAINT fk_rails_e1899a68af FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: roles_users fk_rails_e2a7142459; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.roles_users
+    ADD CONSTRAINT fk_rails_e2a7142459 FOREIGN KEY (user_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_diary_slots fk_rails_e2ba4fdc06; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diary_slots
+    ADD CONSTRAINT fk_rails_e2ba4fdc06 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: pathology_observation_descriptions fk_rails_e31991c52c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.pathology_observation_descriptions
     ADD CONSTRAINT fk_rails_e31991c52c FOREIGN KEY (suggested_measurement_unit_id) REFERENCES renalware.pathology_measurement_units(id);
+
+
+--
+-- Name: hd_sessions fk_rails_e32b0e0494; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT fk_rails_e32b0e0494 FOREIGN KEY (signed_off_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -29872,6 +31529,22 @@ ALTER TABLE ONLY renalware.geography_postcodes
 
 
 --
+-- Name: transplant_recipient_operations fk_rails_e41edf9bc0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_recipient_operations
+    ADD CONSTRAINT fk_rails_e41edf9bc0 FOREIGN KEY (hospital_centre_id) REFERENCES renalware.hospital_centres(id);
+
+
+--
+-- Name: pathology_requests_global_rule_sets fk_rails_e53c500fcd; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_global_rule_sets
+    ADD CONSTRAINT fk_rails_e53c500fcd FOREIGN KEY (request_description_id) REFERENCES renalware.pathology_request_descriptions(id);
+
+
+--
 -- Name: patient_worry_categories fk_rails_e56eb26d75; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29904,6 +31577,30 @@ ALTER TABLE ONLY renalware.user_groups
 
 
 --
+-- Name: pd_assessments fk_rails_e8c15c8c13; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_assessments
+    ADD CONSTRAINT fk_rails_e8c15c8c13 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_peritonitis_episodes fk_rails_e97a696dd5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_peritonitis_episodes
+    ADD CONSTRAINT fk_rails_e97a696dd5 FOREIGN KEY (fluid_description_id) REFERENCES renalware.pd_fluid_descriptions(id);
+
+
+--
+-- Name: hd_profiles fk_rails_eb5294f3df; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT fk_rails_eb5294f3df FOREIGN KEY (prescriber_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: access_needling_assessments fk_rails_ec033d247d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -29917,6 +31614,14 @@ ALTER TABLE ONLY renalware.access_needling_assessments
 
 ALTER TABLE ONLY renalware.users
     ADD CONSTRAINT fk_rails_ec9881f9c2 FOREIGN KEY (hospital_centre_id) REFERENCES renalware.hospital_centres(id);
+
+
+--
+-- Name: problem_problems fk_rails_edf3902cb0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.problem_problems
+    ADD CONSTRAINT fk_rails_edf3902cb0 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -29960,11 +31665,59 @@ ALTER TABLE ONLY renalware.geography_lower_super_output_areas
 
 
 --
+-- Name: letter_electronic_receipts fk_rails_f0ab49c550; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_electronic_receipts
+    ADD CONSTRAINT fk_rails_f0ab49c550 FOREIGN KEY (recipient_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: clinic_clinics fk_rails_f0adc9d29e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinic_clinics
+    ADD CONSTRAINT fk_rails_f0adc9d29e FOREIGN KEY (user_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_diary_slots fk_rails_f0b0195037; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diary_slots
+    ADD CONSTRAINT fk_rails_f0b0195037 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_preference_sets fk_rails_f0bcae6feb; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_preference_sets
+    ADD CONSTRAINT fk_rails_f0bcae6feb FOREIGN KEY (hospital_unit_id) REFERENCES renalware.hospital_units(id);
+
+
+--
+-- Name: research_studies fk_rails_f10169e6a9; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.research_studies
+    ADD CONSTRAINT fk_rails_f10169e6a9 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- Name: drug_vmp_classifications fk_rails_f1111cc6ef; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.drug_vmp_classifications
     ADD CONSTRAINT fk_rails_f1111cc6ef FOREIGN KEY (route_id) REFERENCES renalware.medication_routes(id);
+
+
+--
+-- Name: pd_peritonitis_episodes fk_rails_f228a98e1b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_peritonitis_episodes
+    ADD CONSTRAINT fk_rails_f228a98e1b FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
 
 
 --
@@ -29992,11 +31745,35 @@ ALTER TABLE ONLY renalware.modality_modalities
 
 
 --
+-- Name: hd_stations fk_rails_f4cc4cd5c4; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_stations
+    ADD CONSTRAINT fk_rails_f4cc4cd5c4 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_prescription_administrations fk_rails_f51a425d72; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_prescription_administrations
+    ADD CONSTRAINT fk_rails_f51a425d72 FOREIGN KEY (hd_session_id) REFERENCES renalware.hd_sessions(id);
+
+
+--
 -- Name: patient_attachments fk_rails_f5a021419e; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.patient_attachments
     ADD CONSTRAINT fk_rails_f5a021419e FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: admission_consults fk_rails_f5abb5bad4; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_consults
+    ADD CONSTRAINT fk_rails_f5abb5bad4 FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
 
 
 --
@@ -30024,6 +31801,46 @@ ALTER TABLE ONLY renalware.letter_mesh_operations
 
 
 --
+-- Name: patient_worries fk_rails_f866b9dc2f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patient_worries
+    ADD CONSTRAINT fk_rails_f866b9dc2f FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_pet_adequacy_results fk_rails_f8ae33fdba; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_pet_adequacy_results
+    ADD CONSTRAINT fk_rails_f8ae33fdba FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: pd_training_sessions fk_rails_f8d9e0a9b0; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_training_sessions
+    ADD CONSTRAINT fk_rails_f8d9e0a9b0 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: drug_types_drugs fk_rails_f8ed99dfda; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.drug_types_drugs
+    ADD CONSTRAINT fk_rails_f8ed99dfda FOREIGN KEY (drug_id) REFERENCES renalware.drugs(id);
+
+
+--
+-- Name: clinical_allergies fk_rails_f8f7b6daad; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_allergies
+    ADD CONSTRAINT fk_rails_f8f7b6daad FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: patients fk_rails_fa2fba60f1; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -30032,11 +31849,51 @@ ALTER TABLE ONLY renalware.patients
 
 
 --
+-- Name: pd_training_sessions fk_rails_fa412bd095; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_training_sessions
+    ADD CONSTRAINT fk_rails_fa412bd095 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
 -- Name: letter_batches fk_rails_fa73ef427b; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
 ALTER TABLE ONLY renalware.letter_batches
     ADD CONSTRAINT fk_rails_fa73ef427b FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: renal_aki_alerts fk_rails_fae5bb71b3; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.renal_aki_alerts
+    ADD CONSTRAINT fk_rails_fae5bb71b3 FOREIGN KEY (hospital_ward_id) REFERENCES renalware.hospital_wards(id);
+
+
+--
+-- Name: hd_prescription_administrations fk_rails_fb03f6bde8; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_prescription_administrations
+    ADD CONSTRAINT fk_rails_fb03f6bde8 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: problem_problems fk_rails_fb41553d96; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.problem_problems
+    ADD CONSTRAINT fk_rails_fb41553d96 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pathology_requests_patient_rules_requests fk_rails_fc41021986; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_patient_rules_requests
+    ADD CONSTRAINT fk_rails_fc41021986 FOREIGN KEY (request_id) REFERENCES renalware.pathology_requests_requests(id);
 
 
 --
@@ -30056,6 +31913,270 @@ ALTER TABLE ONLY renalware.modality_change_types
 
 
 --
+-- Name: clinical_dry_weights fk_rails_fdc1dbcc6d; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_dry_weights
+    ADD CONSTRAINT fk_rails_fdc1dbcc6d FOREIGN KEY (assessor_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: medication_prescription_terminations fk_rails_fe1184d31a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.medication_prescription_terminations
+    ADD CONSTRAINT fk_rails_fe1184d31a FOREIGN KEY (prescription_id) REFERENCES renalware.medication_prescriptions(id);
+
+
+--
+-- Name: low_clearance_profiles fk_rails_ff7b848263; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.low_clearance_profiles
+    ADD CONSTRAINT fk_rails_ff7b848263 FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: hd_diaries fk_rails_ffb6b0d291; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_diaries
+    ADD CONSTRAINT fk_rails_ffb6b0d291 FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: admission_admissions fk_rails_ffd7d79d65; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.admission_admissions
+    ADD CONSTRAINT fk_rails_ffd7d79d65 FOREIGN KEY (summarised_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: clinical_dry_weights hd_dry_weights_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_dry_weights
+    ADD CONSTRAINT hd_dry_weights_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: clinical_dry_weights hd_dry_weights_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.clinical_dry_weights
+    ADD CONSTRAINT hd_dry_weights_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_preference_sets hd_preference_sets_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_preference_sets
+    ADD CONSTRAINT hd_preference_sets_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_preference_sets hd_preference_sets_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_preference_sets
+    ADD CONSTRAINT hd_preference_sets_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_profiles hd_profiles_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT hd_profiles_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_profiles hd_profiles_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_profiles
+    ADD CONSTRAINT hd_profiles_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_sessions hd_sessions_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT hd_sessions_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: hd_sessions hd_sessions_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.hd_sessions
+    ADD CONSTRAINT hd_sessions_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_archives letter_archives_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_archives
+    ADD CONSTRAINT letter_archives_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_archives letter_archives_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_archives
+    ADD CONSTRAINT letter_archives_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_letters letter_letters_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT letter_letters_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: letter_letters letter_letters_patient_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT letter_letters_patient_id_fk FOREIGN KEY (patient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: letter_letters letter_letters_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.letter_letters
+    ADD CONSTRAINT letter_letters_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: modality_modalities modality_modalities_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.modality_modalities
+    ADD CONSTRAINT modality_modalities_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: modality_modalities modality_modalities_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.modality_modalities
+    ADD CONSTRAINT modality_modalities_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pathology_requests_requests pathology_requests_requests_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_requests
+    ADD CONSTRAINT pathology_requests_requests_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pathology_requests_requests pathology_requests_requests_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pathology_requests_requests
+    ADD CONSTRAINT pathology_requests_requests_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: patients patients_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT patients_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: patients patients_practice_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT patients_practice_id_fk FOREIGN KEY (practice_id) REFERENCES renalware.patient_practices(id);
+
+
+--
+-- Name: patients patients_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.patients
+    ADD CONSTRAINT patients_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: pd_regimes pd_regimes_system_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_regimes
+    ADD CONSTRAINT pd_regimes_system_id_fk FOREIGN KEY (system_id) REFERENCES renalware.pd_systems(id);
+
+
+--
+-- Name: pd_training_sessions pd_training_sessions_site_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_training_sessions
+    ADD CONSTRAINT pd_training_sessions_site_id_fk FOREIGN KEY (training_site_id) REFERENCES renalware.pd_training_sites(id);
+
+
+--
+-- Name: pd_training_sessions pd_training_sessions_type_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.pd_training_sessions
+    ADD CONSTRAINT pd_training_sessions_type_id_fk FOREIGN KEY (training_type_id) REFERENCES renalware.pd_training_types(id);
+
+
+--
+-- Name: problem_notes problem_notes_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.problem_notes
+    ADD CONSTRAINT problem_notes_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: problem_notes problem_notes_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.problem_notes
+    ADD CONSTRAINT problem_notes_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: transplant_donations transplant_donations_recipient_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_donations
+    ADD CONSTRAINT transplant_donations_recipient_id_fk FOREIGN KEY (recipient_id) REFERENCES renalware.patients(id);
+
+
+--
+-- Name: transplant_registration_statuses transplant_registration_statuses_created_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_registration_statuses
+    ADD CONSTRAINT transplant_registration_statuses_created_by_id_fk FOREIGN KEY (created_by_id) REFERENCES renalware.users(id);
+
+
+--
+-- Name: transplant_registration_statuses transplant_registration_statuses_updated_by_id_fk; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.transplant_registration_statuses
+    ADD CONSTRAINT transplant_registration_statuses_updated_by_id_fk FOREIGN KEY (updated_by_id) REFERENCES renalware.users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -30072,7 +32193,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20260211061047'),
 ('20260210185453'),
 ('20260210155641'),
-('20260209121300'),
 ('20260205172045'),
 ('20260202160254'),
 ('20260112190854'),
@@ -30149,15 +32269,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240807111645'),
 ('20240716103158'),
 ('20240711113718'),
-('20240709161234'),
-('20240709161233'),
-('20240709161232'),
-('20240709161231'),
-('20240709161230'),
-('20240709161229'),
-('20240709161228'),
-('20240709161227'),
-('20240709161226'),
 ('20240709080114'),
 ('20240628112023'),
 ('20240628111805'),
@@ -30186,16 +32297,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240409114257'),
 ('20240405092805'),
 ('20240405083738'),
-('20240321174505'),
-('20240321174504'),
-('20240321174503'),
-('20240321174502'),
 ('20240318191505'),
 ('20240318182553'),
 ('20240314134618'),
 ('20240314132659'),
 ('20240307171400'),
-('20240305160414'),
 ('20240229210002'),
 ('20240227120942'),
 ('20240220091704'),
@@ -30218,7 +32324,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231115135028'),
 ('20231115125057'),
 ('20231113124516'),
-('20231112080224'),
 ('20231106173109'),
 ('20231101152934'),
 ('20231025115724'),
@@ -30243,7 +32348,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230808150041'),
 ('20230718171106'),
 ('20230714135534'),
-('20230706094637'),
 ('20230705153656'),
 ('20230705151013'),
 ('20230705144308'),
@@ -30292,9 +32396,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230216115337'),
 ('20230215105027'),
 ('20230213103715'),
-('20230206192012'),
-('20230206192011'),
-('20230206192010'),
 ('20230203174407'),
 ('20230203174406'),
 ('20230112115053'),
@@ -30329,13 +32430,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220907174253'),
 ('20220824154208'),
 ('20220813081749'),
-('20220812154454'),
 ('20220701153541'),
 ('20220621084947'),
 ('20220620141323'),
 ('20220606105217'),
 ('20220601162848'),
-('20220520100619'),
 ('20220519120540'),
 ('20220518182012'),
 ('20220512161700'),
@@ -30352,7 +32451,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220113132731'),
 ('20220110135105'),
 ('20220107182152'),
-('20220105160514'),
 ('20211216145755'),
 ('20211215111646'),
 ('20211209123828'),
@@ -30617,14 +32715,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180628132323'),
 ('20180625124431'),
 ('20180622130552'),
-('20180608084826'),
-('20180606154103'),
 ('20180605175211'),
 ('20180605141806'),
 ('20180605114332'),
 ('20180524074320'),
 ('20180524072633'),
-('20180523162018'),
 ('20180516111411'),
 ('20180514151627'),
 ('20180511171835'),
@@ -30636,13 +32731,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180427133558'),
 ('20180422090043'),
 ('20180419141524'),
-('20180404092241'),
 ('20180328210434'),
 ('20180327100423'),
 ('20180326155400'),
 ('20180323150241'),
 ('20180319191942'),
-('20180319182238'),
 ('20180313124819'),
 ('20180313114927'),
 ('20180311104609'),
@@ -30652,7 +32745,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180307191650'),
 ('20180306080518'),
 ('20180306071308'),
-('20180305154250'),
 ('20180305134959'),
 ('20180301095040'),
 ('20180226132410'),
@@ -30660,24 +32752,19 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180223100420'),
 ('20180222090501'),
 ('20180221210458'),
-('20180220110945'),
 ('20180216132741'),
 ('20180214124317'),
 ('20180213171805'),
 ('20180213125734'),
 ('20180213124203'),
-('20180209115743'),
-('20180209095614'),
 ('20180208150629'),
 ('20180207082540'),
 ('20180206225525'),
 ('20180202184954'),
 ('20180201090444'),
 ('20180130165803'),
-('20180129080544'),
 ('20180126142314'),
 ('20180125201356'),
-('20180124190235'),
 ('20180122173922'),
 ('20180121115246'),
 ('20180119121243'),

@@ -7,12 +7,14 @@ class CreateUKRDCAssessmentTypes < ActiveRecord::Migration[8.0]
         t.timestamps default: -> { "CURRENT_TIMESTAMP" }
       end
 
-      execute <<~SQL
-        INSERT INTO renalware.ukrdc_assessment_types (id, code, description) VALUES
-          (1, 'TPLTassess','Suitability for renal transplant'),
-          (2, 'RRTassess','Shared future RRT choice'),
-          (3, 'PPDassess','Preferred place of dying') on conflict do nothing;
-      SQL
+      safety_assured do
+        execute <<~SQL
+          INSERT INTO renalware.ukrdc_assessment_types (id, code, description) VALUES
+            (1, 'TPLTassess','Suitability for renal transplant'),
+            (2, 'RRTassess','Shared future RRT choice'),
+            (3, 'PPDassess','Preferred place of dying') on conflict do nothing;
+        SQL
+      end
     end
   end
 end

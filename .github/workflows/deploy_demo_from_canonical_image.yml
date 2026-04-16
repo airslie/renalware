@@ -101,8 +101,7 @@ jobs:
           for tag in \
             "${{ steps.meta.outputs.human_tag }}" \
             "${{ steps.meta.outputs.version_sha_tag }}" \
-            "${{ steps.meta.outputs.sha_tag }}" \
-            "demo-latest"
+            "${{ steps.meta.outputs.sha_tag }}"
           do
             az acr import \
               --name "${ACR_NAME}" \
@@ -147,5 +146,5 @@ jobs:
             echo
             echo "- Source: \`${{ steps.meta.outputs.source_image }}\`"
             echo "- Demo image: \`${{ steps.acr.outputs.login_server }}/renalware:${{ steps.meta.outputs.human_tag }}\`"
-            echo "- Tracking tags refreshed: \`${{ steps.meta.outputs.version_sha_tag }}\`, \`${{ steps.meta.outputs.sha_tag }}\`, \`demo-latest\`"
+            echo "- Tracking tags refreshed: \`${{ steps.meta.outputs.version_sha_tag }}\`, \`${{ steps.meta.outputs.sha_tag }}\`"
           } >> "${GITHUB_STEP_SUMMARY}"

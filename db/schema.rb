@@ -14,10 +14,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   create_schema "renalware"
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
   enable_extension "pg_catalog.plpgsql"
-  enable_extension "pg_stat_statements"
+  enable_extension "pg_trgm"
+  enable_extension "pgcrypto"
   enable_extension "public.btree_gist"
-  enable_extension "public.hstore"
   enable_extension "public.intarray"
   enable_extension "public.tablefunc"
   enable_extension "public.uuid-ossp"
@@ -1529,6 +1530,182 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   ], force: :cascade
 
 
+  create_view "medication_current_prescriptions", sql_definition: <<-SQL
+      SELECT mp.id,
+      mp.patient_id,
+      mp.drug_id,
+      mp.treatable_type,
+      mp.treatable_id,
+      mp.dose_amount,
+      mp.dose_unit,
+      mp.medication_route_id,
+      mp.route_description,
+      mp.frequency,
+      mp.notes,
+      mp.prescribed_on,
+      mp.provider,
+      mp.created_at,
+      mp.updated_at,
+      mp.created_by_id,
+      mp.updated_by_id,
+      mp.administer_on_hd,
+      mp.last_delivery_date,
+      drugs.name AS drug_name,
+      drug_types.code AS drug_type_code,
+      drug_types.name AS drug_type_name
+     FROM ((((renalware.medication_prescriptions mp
+       FULL JOIN renalware.medication_prescription_terminations mpt ON ((mpt.prescription_id = mp.id)))
+       JOIN renalware.drugs ON ((drugs.id = mp.drug_id)))
+       FULL JOIN renalware.drug_types_drugs ON ((drug_types_drugs.drug_id = drugs.id)))
+       FULL JOIN renalware.drug_types ON (((drug_types_drugs.drug_type_id = drug_types.id) AND ((mpt.terminated_on IS NULL) OR (mpt.terminated_on > now())))));
+  SQL
+  create_view "pathology_current_observations", sql_definition: <<-SQL
+      SELECT DISTINCT ON (pathology_observation_requests.patient_id, pathology_observation_descriptions.id) pathology_observations.id,
+      pathology_observations.result,
+      pathology_observations.comment,
+      pathology_observations.observed_at,
+      pathology_observations.description_id,
+      pathology_observations.request_id,
+      pathology_observation_descriptions.code AS description_code,
+      pathology_observation_descriptions.name AS description_name,
+      pathology_observation_requests.patient_id
+     FROM ((renalware.pathology_observations
+       LEFT JOIN renalware.pathology_observation_requests ON ((pathology_observations.request_id = pathology_observation_requests.id)))
+       LEFT JOIN renalware.pathology_observation_descriptions ON ((pathology_observations.description_id = pathology_observation_descriptions.id)))
+    ORDER BY pathology_observation_requests.patient_id, pathology_observation_descriptions.id, pathology_observations.observed_at DESC;
+  SQL
+  create_view "reporting_pd_audit", sql_definition: <<-SQL
+      WITH pd_patients AS (
+           SELECT patients.id
+             FROM ((renalware.patients
+               JOIN renalware.modality_modalities current_modality ON ((current_modality.patient_id = patients.id)))
+               JOIN renalware.modality_descriptions current_modality_description ON ((current_modality_description.id = current_modality.description_id)))
+            WHERE ((current_modality.ended_on IS NULL) AND (current_modality.started_on <= CURRENT_DATE) AND ((current_modality_description.name)::text = 'PD'::text))
+          ), current_regimes AS (
+           SELECT pd_regimes.id,
+              pd_regimes.patient_id,
+              pd_regimes.start_date,
+              pd_regimes.end_date,
+              pd_regimes.treatment,
+              pd_regimes.type,
+              pd_regimes.glucose_volume_low_strength,
+              pd_regimes.glucose_volume_medium_strength,
+              pd_regimes.glucose_volume_high_strength,
+              pd_regimes.amino_acid_volume,
+              pd_regimes.icodextrin_volume,
+              pd_regimes.add_hd,
+              pd_regimes.last_fill_volume,
+              pd_regimes.tidal_indicator,
+              pd_regimes.tidal_percentage,
+              pd_regimes.no_cycles_per_apd,
+              pd_regimes.overnight_volume,
+              pd_regimes.apd_machine_pac,
+              pd_regimes.created_at,
+              pd_regimes.updated_at,
+              pd_regimes.therapy_time,
+              pd_regimes.fill_volume,
+              pd_regimes.delivery_interval,
+              pd_regimes.system_id,
+              pd_regimes.additional_manual_exchange_volume,
+              pd_regimes.tidal_full_drain_every_three_cycles,
+              pd_regimes.daily_volume,
+              pd_regimes.assistance_type
+             FROM renalware.pd_regimes
+            WHERE ((pd_regimes.start_date >= CURRENT_DATE) AND (pd_regimes.end_date IS NULL))
+          ), current_apd_regimes AS (
+           SELECT current_regimes.id,
+              current_regimes.patient_id,
+              current_regimes.start_date,
+              current_regimes.end_date,
+              current_regimes.treatment,
+              current_regimes.type,
+              current_regimes.glucose_volume_low_strength,
+              current_regimes.glucose_volume_medium_strength,
+              current_regimes.glucose_volume_high_strength,
+              current_regimes.amino_acid_volume,
+              current_regimes.icodextrin_volume,
+              current_regimes.add_hd,
+              current_regimes.last_fill_volume,
+              current_regimes.tidal_indicator,
+              current_regimes.tidal_percentage,
+              current_regimes.no_cycles_per_apd,
+              current_regimes.overnight_volume,
+              current_regimes.apd_machine_pac,
+              current_regimes.created_at,
+              current_regimes.updated_at,
+              current_regimes.therapy_time,
+              current_regimes.fill_volume,
+              current_regimes.delivery_interval,
+              current_regimes.system_id,
+              current_regimes.additional_manual_exchange_volume,
+              current_regimes.tidal_full_drain_every_three_cycles,
+              current_regimes.daily_volume,
+              current_regimes.assistance_type
+             FROM current_regimes
+            WHERE ((current_regimes.type)::text ~~ '%::APD%'::text)
+          ), current_capd_regimes AS (
+           SELECT current_regimes.id,
+              current_regimes.patient_id,
+              current_regimes.start_date,
+              current_regimes.end_date,
+              current_regimes.treatment,
+              current_regimes.type,
+              current_regimes.glucose_volume_low_strength,
+              current_regimes.glucose_volume_medium_strength,
+              current_regimes.glucose_volume_high_strength,
+              current_regimes.amino_acid_volume,
+              current_regimes.icodextrin_volume,
+              current_regimes.add_hd,
+              current_regimes.last_fill_volume,
+              current_regimes.tidal_indicator,
+              current_regimes.tidal_percentage,
+              current_regimes.no_cycles_per_apd,
+              current_regimes.overnight_volume,
+              current_regimes.apd_machine_pac,
+              current_regimes.created_at,
+              current_regimes.updated_at,
+              current_regimes.therapy_time,
+              current_regimes.fill_volume,
+              current_regimes.delivery_interval,
+              current_regimes.system_id,
+              current_regimes.additional_manual_exchange_volume,
+              current_regimes.tidal_full_drain_every_three_cycles,
+              current_regimes.daily_volume,
+              current_regimes.assistance_type
+             FROM current_regimes
+            WHERE ((current_regimes.type)::text ~~ '%::CAPD%'::text)
+          )
+   SELECT 'APD'::text AS pd_type,
+      count(current_apd_regimes.patient_id) AS patient_count,
+      0 AS avg_hgb,
+      0 AS pct_hgb_gt_100,
+      0 AS pct_on_epo,
+      0 AS pct_pth_gt_500,
+      0 AS pct_phosphate_gt_1_8,
+      0 AS pct_strong_medium_bag_gt_1l
+     FROM current_apd_regimes
+  UNION ALL
+   SELECT 'CAPD'::text AS pd_type,
+      count(current_capd_regimes.patient_id) AS patient_count,
+      0 AS avg_hgb,
+      0 AS pct_hgb_gt_100,
+      0 AS pct_on_epo,
+      0 AS pct_pth_gt_500,
+      0 AS pct_phosphate_gt_1_8,
+      0 AS pct_strong_medium_bag_gt_1l
+     FROM current_capd_regimes
+  UNION ALL
+   SELECT 'PD'::text AS pd_type,
+      count(pd_patients.id) AS patient_count,
+      0 AS avg_hgb,
+      0 AS pct_hgb_gt_100,
+      0 AS pct_on_epo,
+      0 AS pct_pth_gt_500,
+      0 AS pct_phosphate_gt_1_8,
+      0 AS pct_strong_medium_bag_gt_1l
+     FROM pd_patients;
+  SQL
+
   create_table "renalware.access_assessments", id: :serial, force: :cascade do |t|
     t.text "comments"
     t.datetime "created_at", precision: nil, null: false
@@ -1904,7 +2081,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["created_by_id"], name: "index_clinic_clinics_on_created_by_id"
     t.index ["default_modality_description_id"], name: "index_clinic_clinics_on_default_modality_description_id"
     t.index ["deleted_at"], name: "index_clinic_clinics_on_deleted_at"
-    t.index ["name"], name: "index_clinic_clinics_on_name", unique: true
     t.index ["updated_by_id"], name: "index_clinic_clinics_on_updated_by_id"
     t.index ["user_id"], name: "index_clinic_clinics_on_user_id"
   end
@@ -1949,12 +2125,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   end
 
   create_table "renalware.clinic_visit_locations", force: :cascade do |t|
-    t.datetime "created_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "created_by_id", null: false
     t.boolean "default_location", default: false, null: false
     t.datetime "deleted_at"
     t.string "name", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "updated_by_id", null: false
     t.index ["created_by_id"], name: "index_clinic_visit_locations_on_created_by_id"
     t.index ["default_location"], name: "index_clinic_visit_locations_on_default_location", unique: true, where: "((default_location = true) AND (deleted_at IS NULL))"
@@ -2631,7 +2807,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "sent_at"
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.index ["created_at"], name: "index_feed_raw_hl7_messages_on_created_at", comment: "We query for rows ordering by created_at asc to give us a chance to procsess in FIFO order, so having an ordered index means when we use a LIMIT (batching) in the query, rows will be determined by index scan without having to look to the end of the table - or something like that! In fact the index is implcitly ordered already but having created_at: :asc here makes our intention more explicit."
+    t.index ["created_at"], name: "index_feed_raw_hl7_messages_on_created_at", comment: "We query for rows ordering by created_at asc to give us a chance to process in FIFO order, so having an ordered index means when we use a LIMIT (batching) in the query, rows will be determined by index scan without having to look to the end of the table - or something like that! In fact the index is implicitly ordered already but having created_at: :asc here makes our intention more explicit."
     t.index ["sent_at"], name: "index_feed_raw_hl7_messages_on_sent_at"
   end
 
@@ -2740,6 +2916,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.datetime "discarded_at"
     t.datetime "enqueued_at"
     t.datetime "finished_at"
+    t.datetime "jobs_finished_at"
     t.text "on_discard"
     t.text "on_finish"
     t.text "on_success"
@@ -2786,22 +2963,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.uuid "batch_id"
     t.text "concurrency_key"
     t.datetime "created_at", null: false
-    t.datetime "cron_at", precision: nil
+    t.datetime "cron_at"
     t.text "cron_key"
     t.text "error"
     t.integer "error_event", limit: 2
     t.integer "executions_count"
-    t.datetime "finished_at", precision: nil
+    t.datetime "finished_at"
     t.boolean "is_discrete"
     t.text "job_class"
     t.text "labels", array: true
     t.datetime "locked_at"
     t.uuid "locked_by_id"
-    t.datetime "performed_at", precision: nil
+    t.datetime "performed_at"
     t.integer "priority"
     t.text "queue_name"
     t.uuid "retried_good_job_id"
-    t.datetime "scheduled_at", precision: nil
+    t.datetime "scheduled_at"
     t.jsonb "serialized_params"
     t.datetime "updated_at", null: false
     t.index ["active_job_id", "created_at"], name: "index_good_jobs_on_active_job_id_and_created_at"
@@ -2811,7 +2988,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["concurrency_key"], name: "index_good_jobs_on_concurrency_key_when_unfinished", where: "(finished_at IS NULL)"
     t.index ["cron_key", "created_at"], name: "index_good_jobs_on_cron_key_and_created_at_cond", where: "(cron_key IS NOT NULL)"
     t.index ["cron_key", "cron_at"], name: "index_good_jobs_on_cron_key_and_cron_at_cond", unique: true, where: "(cron_key IS NOT NULL)"
-    t.index ["finished_at"], name: "index_good_jobs_jobs_on_finished_at", where: "((retried_good_job_id IS NULL) AND (finished_at IS NOT NULL))"
     t.index ["finished_at"], name: "index_good_jobs_jobs_on_finished_at_only", where: "(finished_at IS NOT NULL)"
     t.index ["job_class"], name: "index_good_jobs_on_job_class"
     t.index ["labels"], name: "index_good_jobs_on_labels", where: "(labels IS NOT NULL)", using: :gin
@@ -3359,7 +3535,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["host_site"], name: "index_hospital_centres_on_host_site"
   end
 
-  create_table "renalware.hospital_departments", comment: "Can be assigned for example to a Letters::Letterhead. Useful for e.g. when including the sending organisation's details in a Transfer Of Care message.", force: :cascade do |t|
+  create_table "renalware.hospital_departments", comment: "Can be assigned for example to a Letters::Letterhead. Useful for e.g. when including the sending organisation's details in a GP Connect message.", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.text "description"
@@ -3995,13 +4171,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["uuid"], name: "index_monitoring_mirth_channels_on_uuid", unique: true
   end
 
-  create_table "renalware.nhs_numbers", id: false, force: :cascade do |t|
-    t.string "nhs_number", null: false
-    t.integer "patient_id"
-    t.index ["nhs_number"], name: "nhs_numbers_nhs_number_idx", unique: true
-    t.index ["patient_id"], name: "nhs_numbers_patient_id_idx", unique: true
-  end
-
   create_table "renalware.old_passwords", force: :cascade do |t|
     t.datetime "created_at", precision: nil
     t.string "encrypted_password", null: false
@@ -4060,18 +4229,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["updated_by_id"], name: "index_pathology_code_group_memberships_on_updated_by_id"
   end
 
-  create_table "renalware.pathology_code_group_memberships_backup", id: false, force: :cascade do |t|
-    t.bigint "code_group_id"
-    t.datetime "created_at", precision: nil
-    t.bigint "created_by_id"
-    t.bigint "id"
-    t.bigint "observation_description_id"
-    t.integer "position_within_subgroup"
-    t.integer "subgroup"
-    t.datetime "updated_at", precision: nil
-    t.bigint "updated_by_id"
-  end
-
   create_table "renalware.pathology_code_groups", force: :cascade do |t|
     t.boolean "context_specific", default: false, null: false
     t.datetime "created_at", precision: nil, null: false
@@ -4086,20 +4243,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["created_by_id"], name: "index_pathology_code_groups_on_created_by_id"
     t.index ["name"], name: "index_pathology_code_groups_on_name", unique: true
     t.index ["updated_by_id"], name: "index_pathology_code_groups_on_updated_by_id"
-  end
-
-  create_table "renalware.pathology_code_groups_backup", id: false, force: :cascade do |t|
-    t.boolean "context_specific"
-    t.datetime "created_at", precision: nil
-    t.bigint "created_by_id"
-    t.text "description"
-    t.bigint "id"
-    t.string "name"
-    t.enum "subgroup_colours", array: true, enum_type: "enum_colour_name"
-    t.text "subgroup_titles", array: true
-    t.string "title"
-    t.datetime "updated_at", precision: nil
-    t.bigint "updated_by_id"
   end
 
   create_table "renalware.pathology_current_observation_sets", force: :cascade do |t|
@@ -5379,17 +5522,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["title"], name: "index_snippets_snippets_on_title"
   end
 
-  create_table "renalware.solid_cache_entries", force: :cascade do |t|
-    t.integer "byte_size", null: false
-    t.datetime "created_at", null: false
-    t.binary "key", null: false
-    t.bigint "key_hash", null: false
-    t.binary "value", null: false
-    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
-    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
-    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
-  end
-
   create_table "renalware.survey_questions", force: :cascade do |t|
     t.string "code", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -5531,6 +5663,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["group"], name: "index_system_logs_on_group"
     t.index ["owner_id"], name: "index_system_logs_on_owner_id"
+    t.index ["severity"], name: "index_system_logs_on_severity"
   end
 
   create_table "renalware.system_messages", force: :cascade do |t|
@@ -5664,11 +5797,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.string "visitor_token"
     t.index ["user_id"], name: "index_system_visits_on_user_id"
     t.index ["visit_token"], name: "index_system_visits_on_visit_token", unique: true
-  end
-
-  create_table "renalware.tmp_date_update_steps", id: false, force: :cascade do |t|
-    t.integer "step"
-    t.timestamptz "t"
   end
 
   create_table "renalware.transplant_donations", id: :serial, force: :cascade do |t|
@@ -6162,16 +6290,55 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.index ["item_type", "item_id"], name: "index_virology_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "renalware.access_assessments", "renalware.access_types", column: "type_id"
+  add_foreign_key "renalware.access_assessments", "renalware.patients"
+  add_foreign_key "renalware.access_assessments", "renalware.users", column: "created_by_id", name: "access_assessments_created_by_id_fk"
+  add_foreign_key "renalware.access_assessments", "renalware.users", column: "updated_by_id", name: "access_assessments_updated_by_id_fk"
   add_foreign_key "renalware.access_needling_assessments", "renalware.patients"
   add_foreign_key "renalware.access_needling_assessments", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.access_needling_assessments", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.access_plans", "renalware.access_plan_types", column: "plan_type_id"
+  add_foreign_key "renalware.access_plans", "renalware.patients"
+  add_foreign_key "renalware.access_plans", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.access_plans", "renalware.users", column: "decided_by_id"
+  add_foreign_key "renalware.access_plans", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.access_procedures", "renalware.access_types", column: "type_id"
+  add_foreign_key "renalware.access_procedures", "renalware.patients"
+  add_foreign_key "renalware.access_procedures", "renalware.users", column: "created_by_id", name: "access_procedures_created_by_id_fk"
+  add_foreign_key "renalware.access_procedures", "renalware.users", column: "updated_by_id", name: "access_procedures_updated_by_id_fk"
+  add_foreign_key "renalware.access_profiles", "renalware.access_types", column: "type_id"
+  add_foreign_key "renalware.access_profiles", "renalware.patients"
+  add_foreign_key "renalware.access_profiles", "renalware.users", column: "created_by_id", name: "access_profiles_created_by_id_fk"
+  add_foreign_key "renalware.access_profiles", "renalware.users", column: "decided_by_id"
+  add_foreign_key "renalware.access_profiles", "renalware.users", column: "updated_by_id", name: "access_profiles_updated_by_id_fk"
   add_foreign_key "renalware.active_storage_attachments", "renalware.active_storage_blobs", column: "blob_id"
   add_foreign_key "renalware.active_storage_variant_records", "renalware.active_storage_blobs", column: "blob_id"
+  add_foreign_key "renalware.addresses", "renalware.system_countries", column: "country_id"
+  add_foreign_key "renalware.admission_admissions", "renalware.hospital_wards"
+  add_foreign_key "renalware.admission_admissions", "renalware.modality_modalities", column: "modality_at_admission_id"
+  add_foreign_key "renalware.admission_admissions", "renalware.patients"
+  add_foreign_key "renalware.admission_admissions", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.admission_admissions", "renalware.users", column: "summarised_by_id"
+  add_foreign_key "renalware.admission_admissions", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.admission_consults", "renalware.admission_specialties", column: "specialty_id"
+  add_foreign_key "renalware.admission_consults", "renalware.hospital_wards"
+  add_foreign_key "renalware.admission_consults", "renalware.patients"
+  add_foreign_key "renalware.admission_consults", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.admission_consults", "renalware.users", column: "seen_by_id"
+  add_foreign_key "renalware.admission_consults", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.admission_requests", "renalware.admission_request_reasons", column: "reason_id"
+  add_foreign_key "renalware.admission_requests", "renalware.hospital_units"
+  add_foreign_key "renalware.admission_requests", "renalware.patients"
+  add_foreign_key "renalware.admission_requests", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.admission_requests", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.clinic_appointments", "renalware.clinic_clinics", column: "clinic_id"
   add_foreign_key "renalware.clinic_appointments", "renalware.clinic_consultants", column: "consultant_id"
+  add_foreign_key "renalware.clinic_appointments", "renalware.clinic_visits", column: "becomes_visit_id"
+  add_foreign_key "renalware.clinic_appointments", "renalware.patients"
   add_foreign_key "renalware.clinic_appointments", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.clinic_appointments", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.clinic_clinics", "renalware.modality_descriptions", column: "default_modality_description_id"
+  add_foreign_key "renalware.clinic_clinics", "renalware.users"
   add_foreign_key "renalware.clinic_clinics", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.clinic_clinics", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.clinic_consultants", "renalware.users", column: "created_by_id"
@@ -6179,14 +6346,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.clinic_mappings", "renalware.clinic_clinics", column: "clinic_id"
   add_foreign_key "renalware.clinic_visit_locations", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.clinic_visit_locations", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.clinic_visits", "renalware.clinic_clinics", column: "clinic_id"
   add_foreign_key "renalware.clinic_visits", "renalware.clinic_visit_locations", column: "location_id"
+  add_foreign_key "renalware.clinic_visits", "renalware.patients", name: "clinic_visits_patient_id_fk"
+  add_foreign_key "renalware.clinic_visits", "renalware.users", column: "created_by_id", name: "clinic_visits_created_by_id_fk"
+  add_foreign_key "renalware.clinic_visits", "renalware.users", column: "updated_by_id", name: "clinic_visits_updated_by_id_fk"
+  add_foreign_key "renalware.clinical_allergies", "renalware.patients"
+  add_foreign_key "renalware.clinical_allergies", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.clinical_allergies", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.clinical_body_compositions", "renalware.modality_descriptions"
+  add_foreign_key "renalware.clinical_body_compositions", "renalware.patients"
+  add_foreign_key "renalware.clinical_body_compositions", "renalware.users", column: "assessor_id"
+  add_foreign_key "renalware.clinical_dry_weights", "renalware.patients"
+  add_foreign_key "renalware.clinical_dry_weights", "renalware.users", column: "assessor_id"
+  add_foreign_key "renalware.clinical_dry_weights", "renalware.users", column: "created_by_id", name: "hd_dry_weights_created_by_id_fk"
+  add_foreign_key "renalware.clinical_dry_weights", "renalware.users", column: "updated_by_id", name: "hd_dry_weights_updated_by_id_fk"
   add_foreign_key "renalware.clinical_igan_risks", "renalware.patients"
   add_foreign_key "renalware.clinical_igan_risks", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.clinical_igan_risks", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.death_locations", "renalware.ukrdc_assessment_outcomes", column: "ukrdc_assessment_outcome_code", primary_key: "code"
+  add_foreign_key "renalware.directory_people", "renalware.users", column: "created_by_id", name: "directory_people_created_by_id_fk"
+  add_foreign_key "renalware.directory_people", "renalware.users", column: "updated_by_id", name: "directory_people_updated_by_id_fk"
   add_foreign_key "renalware.drug_homecare_forms", "renalware.drug_suppliers", column: "supplier_id"
   add_foreign_key "renalware.drug_trade_family_classifications", "renalware.drug_trade_families", column: "trade_family_id"
   add_foreign_key "renalware.drug_trade_family_classifications", "renalware.drugs"
+  add_foreign_key "renalware.drug_types_drugs", "renalware.drug_types"
+  add_foreign_key "renalware.drug_types_drugs", "renalware.drugs"
   add_foreign_key "renalware.drug_vmp_classifications", "renalware.drug_forms", column: "form_id"
   add_foreign_key "renalware.drug_vmp_classifications", "renalware.drug_unit_of_measures", column: "unit_of_measure_id"
   add_foreign_key "renalware.drug_vmp_classifications", "renalware.drugs"
@@ -6197,6 +6382,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.event_type_alert_triggers", "renalware.event_types"
   add_foreign_key "renalware.event_types", "renalware.event_categories", column: "category_id"
   add_foreign_key "renalware.events", "renalware.event_subtypes", column: "subtype_id"
+  add_foreign_key "renalware.events", "renalware.event_types"
+  add_foreign_key "renalware.events", "renalware.patients"
+  add_foreign_key "renalware.events", "renalware.users", column: "created_by_id", name: "events_created_by_id_fk"
+  add_foreign_key "renalware.events", "renalware.users", column: "updated_by_id", name: "events_updated_by_id_fk"
+  add_foreign_key "renalware.feed_files", "renalware.feed_file_types", column: "file_type_id"
   add_foreign_key "renalware.feed_logs", "renalware.feed_messages", column: "message_id"
   add_foreign_key "renalware.feed_logs", "renalware.patients"
   add_foreign_key "renalware.feed_message_replays", "renalware.feed_messages", column: "message_id"
@@ -6211,25 +6401,70 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.hd_acuity_assessments", "renalware.patients"
   add_foreign_key "renalware.hd_acuity_assessments", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.hd_acuity_assessments", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.hd_diaries", "renalware.hd_diaries", column: "master_diary_id"
+  add_foreign_key "renalware.hd_diaries", "renalware.hospital_units"
+  add_foreign_key "renalware.hd_diaries", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.hd_diaries", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.hd_diary_slots", "renalware.hd_diaries", column: "diary_id"
+  add_foreign_key "renalware.hd_diary_slots", "renalware.hd_diurnal_period_codes", column: "diurnal_period_code_id"
+  add_foreign_key "renalware.hd_diary_slots", "renalware.hd_stations", column: "station_id"
+  add_foreign_key "renalware.hd_diary_slots", "renalware.patients"
+  add_foreign_key "renalware.hd_diary_slots", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.hd_diary_slots", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.hd_patient_statistics", "renalware.hospital_units"
+  add_foreign_key "renalware.hd_patient_statistics", "renalware.patients"
+  add_foreign_key "renalware.hd_preference_sets", "renalware.hd_schedule_definitions", column: "schedule_definition_id"
+  add_foreign_key "renalware.hd_preference_sets", "renalware.hospital_units"
+  add_foreign_key "renalware.hd_preference_sets", "renalware.patients"
+  add_foreign_key "renalware.hd_preference_sets", "renalware.users", column: "created_by_id", name: "hd_preference_sets_created_by_id_fk"
+  add_foreign_key "renalware.hd_preference_sets", "renalware.users", column: "updated_by_id", name: "hd_preference_sets_updated_by_id_fk"
   add_foreign_key "renalware.hd_prescription_administrations", "renalware.hd_prescription_administration_reasons", column: "reason_id"
+  add_foreign_key "renalware.hd_prescription_administrations", "renalware.hd_sessions"
+  add_foreign_key "renalware.hd_prescription_administrations", "renalware.medication_prescriptions", column: "prescription_id"
   add_foreign_key "renalware.hd_prescription_administrations", "renalware.patients"
   add_foreign_key "renalware.hd_prescription_administrations", "renalware.users", column: "administered_by_id"
+  add_foreign_key "renalware.hd_prescription_administrations", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.hd_prescription_administrations", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.hd_prescription_administrations", "renalware.users", column: "witnessed_by_id"
+  add_foreign_key "renalware.hd_profiles", "renalware.hd_dialysates", column: "dialysate_id"
+  add_foreign_key "renalware.hd_profiles", "renalware.hd_schedule_definitions", column: "schedule_definition_id"
+  add_foreign_key "renalware.hd_profiles", "renalware.hospital_units"
+  add_foreign_key "renalware.hd_profiles", "renalware.patients"
+  add_foreign_key "renalware.hd_profiles", "renalware.users", column: "created_by_id", name: "hd_profiles_created_by_id_fk"
+  add_foreign_key "renalware.hd_profiles", "renalware.users", column: "named_nurse_id_legacy"
+  add_foreign_key "renalware.hd_profiles", "renalware.users", column: "prescriber_id"
+  add_foreign_key "renalware.hd_profiles", "renalware.users", column: "transport_decider_id"
+  add_foreign_key "renalware.hd_profiles", "renalware.users", column: "updated_by_id", name: "hd_profiles_updated_by_id_fk"
   add_foreign_key "renalware.hd_provider_units", "renalware.hd_providers"
   add_foreign_key "renalware.hd_provider_units", "renalware.hospital_units"
+  add_foreign_key "renalware.hd_schedule_definitions", "renalware.hd_diurnal_period_codes", column: "diurnal_period_id"
   add_foreign_key "renalware.hd_session_form_batch_items", "renalware.hd_session_form_batches", column: "batch_id"
   add_foreign_key "renalware.hd_session_form_batches", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.hd_session_form_batches", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.hd_session_patient_group_directions", "renalware.drug_patient_group_directions", column: "patient_group_direction_id"
   add_foreign_key "renalware.hd_session_patient_group_directions", "renalware.hd_sessions", column: "session_id"
+  add_foreign_key "renalware.hd_sessions", "renalware.clinical_dry_weights", column: "dry_weight_id"
+  add_foreign_key "renalware.hd_sessions", "renalware.hd_dialysates", column: "dialysate_id"
+  add_foreign_key "renalware.hd_sessions", "renalware.hd_profiles", column: "profile_id"
   add_foreign_key "renalware.hd_sessions", "renalware.hd_providers", column: "provider_id"
   add_foreign_key "renalware.hd_sessions", "renalware.hd_stations"
+  add_foreign_key "renalware.hd_sessions", "renalware.hospital_units"
+  add_foreign_key "renalware.hd_sessions", "renalware.modality_descriptions"
+  add_foreign_key "renalware.hd_sessions", "renalware.patients"
+  add_foreign_key "renalware.hd_sessions", "renalware.users", column: "created_by_id", name: "hd_sessions_created_by_id_fk"
+  add_foreign_key "renalware.hd_sessions", "renalware.users", column: "signed_off_by_id"
+  add_foreign_key "renalware.hd_sessions", "renalware.users", column: "signed_on_by_id"
+  add_foreign_key "renalware.hd_sessions", "renalware.users", column: "updated_by_id", name: "hd_sessions_updated_by_id_fk"
   add_foreign_key "renalware.hd_slot_requests", "renalware.hd_slot_request_access_states", column: "access_state_id"
   add_foreign_key "renalware.hd_slot_requests", "renalware.hd_slot_request_deletion_reasons", column: "deletion_reason_id"
   add_foreign_key "renalware.hd_slot_requests", "renalware.hd_slot_request_locations", column: "location_id"
   add_foreign_key "renalware.hd_slot_requests", "renalware.patients"
   add_foreign_key "renalware.hd_slot_requests", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.hd_slot_requests", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.hd_stations", "renalware.hd_station_locations", column: "location_id"
+  add_foreign_key "renalware.hd_stations", "renalware.hospital_units"
+  add_foreign_key "renalware.hd_stations", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.hd_stations", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.hd_transmission_logs", "renalware.hd_provider_units"
   add_foreign_key "renalware.hd_transmission_logs", "renalware.patients"
   add_foreign_key "renalware.hd_vnd_risk_assessments", "renalware.patients"
@@ -6237,14 +6472,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.hd_vnd_risk_assessments", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.help_tour_annotations", "renalware.help_tour_pages", column: "page_id"
   add_foreign_key "renalware.hospital_departments", "renalware.hospital_centres"
+  add_foreign_key "renalware.hospital_units", "renalware.hospital_centres"
+  add_foreign_key "renalware.hospital_wards", "renalware.hospital_units"
+  add_foreign_key "renalware.letter_archives", "renalware.letter_letters", column: "letter_id"
+  add_foreign_key "renalware.letter_archives", "renalware.users", column: "created_by_id", name: "letter_archives_created_by_id_fk"
+  add_foreign_key "renalware.letter_archives", "renalware.users", column: "updated_by_id", name: "letter_archives_updated_by_id_fk"
   add_foreign_key "renalware.letter_batch_items", "renalware.letter_batches", column: "batch_id"
   add_foreign_key "renalware.letter_batch_items", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_batches", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.letter_batches", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.letter_contacts", "renalware.directory_people", column: "person_id"
+  add_foreign_key "renalware.letter_contacts", "renalware.letter_contact_descriptions", column: "description_id"
+  add_foreign_key "renalware.letter_contacts", "renalware.patients"
   add_foreign_key "renalware.letter_descriptions", "renalware.letter_snomed_document_types", column: "snomed_document_type_id"
+  add_foreign_key "renalware.letter_electronic_receipts", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_electronic_receipts", "renalware.user_groups", validate: false
+  add_foreign_key "renalware.letter_electronic_receipts", "renalware.users", column: "recipient_id"
   add_foreign_key "renalware.letter_letterheads", "renalware.hospital_departments"
+  add_foreign_key "renalware.letter_letters", "renalware.letter_letterheads", column: "letterhead_id"
+  add_foreign_key "renalware.letter_letters", "renalware.patients", name: "letter_letters_patient_id_fk"
+  add_foreign_key "renalware.letter_letters", "renalware.users", column: "approved_by_id"
+  add_foreign_key "renalware.letter_letters", "renalware.users", column: "author_id"
+  add_foreign_key "renalware.letter_letters", "renalware.users", column: "completed_by_id"
+  add_foreign_key "renalware.letter_letters", "renalware.users", column: "created_by_id", name: "letter_letters_created_by_id_fk"
   add_foreign_key "renalware.letter_letters", "renalware.users", column: "deleted_by_id"
+  add_foreign_key "renalware.letter_letters", "renalware.users", column: "submitted_for_approval_by_id"
+  add_foreign_key "renalware.letter_letters", "renalware.users", column: "updated_by_id", name: "letter_letters_updated_by_id_fk"
   add_foreign_key "renalware.letter_mailshot_items", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_mailshot_items", "renalware.letter_mailshot_mailshots", column: "mailshot_id"
   add_foreign_key "renalware.letter_mailshot_mailshots", "renalware.letter_letterheads", column: "letterhead_id"
@@ -6256,24 +6509,48 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.letter_mesh_transmissions", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_qr_encoded_online_reference_links", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_qr_encoded_online_reference_links", "renalware.system_online_reference_links", column: "online_reference_link_id"
+  add_foreign_key "renalware.letter_recipients", "renalware.letter_letters", column: "letter_id"
   add_foreign_key "renalware.letter_section_snapshots", "renalware.letter_letters", column: "letter_id"
+  add_foreign_key "renalware.letter_signatures", "renalware.letter_letters", column: "letter_id"
+  add_foreign_key "renalware.letter_signatures", "renalware.users"
   add_foreign_key "renalware.low_clearance_dialysis_plans", "renalware.ukrdc_assessment_outcomes", column: "ukrdc_assessment_outcome_code", primary_key: "code"
   add_foreign_key "renalware.low_clearance_profiles", "renalware.low_clearance_referrers", column: "referrer_id"
+  add_foreign_key "renalware.low_clearance_profiles", "renalware.patients"
+  add_foreign_key "renalware.low_clearance_profiles", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.low_clearance_profiles", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.medication_delivery_event_prescriptions", "renalware.medication_delivery_events", column: "event_id"
   add_foreign_key "renalware.medication_delivery_event_prescriptions", "renalware.medication_prescriptions", column: "prescription_id"
   add_foreign_key "renalware.medication_delivery_events", "renalware.drug_homecare_forms", column: "homecare_form_id"
   add_foreign_key "renalware.medication_delivery_events", "renalware.drug_types"
   add_foreign_key "renalware.medication_delivery_events", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.medication_delivery_events", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.medication_prescription_terminations", "renalware.medication_prescriptions", column: "prescription_id"
+  add_foreign_key "renalware.medication_prescription_terminations", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.medication_prescription_terminations", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.medication_prescriptions", "renalware.drug_forms", column: "form_id"
   add_foreign_key "renalware.medication_prescriptions", "renalware.drug_trade_families", column: "trade_family_id"
   add_foreign_key "renalware.medication_prescriptions", "renalware.drug_unit_of_measures", column: "unit_of_measure_id"
+  add_foreign_key "renalware.medication_prescriptions", "renalware.drugs"
+  add_foreign_key "renalware.medication_prescriptions", "renalware.medication_routes"
+  add_foreign_key "renalware.medication_prescriptions", "renalware.patients"
+  add_foreign_key "renalware.medication_prescriptions", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.medication_prescriptions", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.messaging_messages", "renalware.messaging_messages", column: "replying_to_message_id"
+  add_foreign_key "renalware.messaging_messages", "renalware.patients"
+  add_foreign_key "renalware.messaging_messages", "renalware.users", column: "author_id"
+  add_foreign_key "renalware.messaging_receipts", "renalware.messaging_messages", column: "message_id"
+  add_foreign_key "renalware.messaging_receipts", "renalware.users", column: "recipient_id"
   add_foreign_key "renalware.modality_change_types", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.modality_change_types", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.modality_descriptions", "renalware.ukrdc_modality_codes"
   add_foreign_key "renalware.modality_modalities", "renalware.hospital_centres", column: "destination_hospital_centre_id"
   add_foreign_key "renalware.modality_modalities", "renalware.hospital_centres", column: "source_hospital_centre_id"
   add_foreign_key "renalware.modality_modalities", "renalware.modality_change_types", column: "change_type_id"
+  add_foreign_key "renalware.modality_modalities", "renalware.modality_descriptions", column: "description_id"
+  add_foreign_key "renalware.modality_modalities", "renalware.modality_reasons", column: "reason_id"
+  add_foreign_key "renalware.modality_modalities", "renalware.patients"
+  add_foreign_key "renalware.modality_modalities", "renalware.users", column: "created_by_id", name: "modality_modalities_created_by_id_fk"
+  add_foreign_key "renalware.modality_modalities", "renalware.users", column: "updated_by_id", name: "modality_modalities_updated_by_id_fk"
   add_foreign_key "renalware.monitoring_mirth_channel_stats", "renalware.monitoring_mirth_channels", column: "channel_id"
   add_foreign_key "renalware.monitoring_mirth_channels", "renalware.monitoring_mirth_channel_groups", column: "channel_group_id"
   add_foreign_key "renalware.pathology_calculation_sources", "renalware.pathology_observations", column: "calculated_observation_id"
@@ -6287,54 +6564,144 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.pathology_code_group_memberships", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.pathology_code_groups", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.pathology_code_groups", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.pathology_current_observation_sets", "renalware.patients"
+  add_foreign_key "renalware.pathology_observation_descriptions", "renalware.pathology_measurement_units", column: "measurement_unit_id"
   add_foreign_key "renalware.pathology_observation_descriptions", "renalware.pathology_measurement_units", column: "suggested_measurement_unit_id"
   add_foreign_key "renalware.pathology_observation_descriptions", "renalware.pathology_senders", column: "created_by_sender_id"
+  add_foreign_key "renalware.pathology_observation_requests", "renalware.pathology_request_descriptions", column: "description_id"
+  add_foreign_key "renalware.pathology_observation_requests", "renalware.patients"
+  add_foreign_key "renalware.pathology_observations", "renalware.pathology_observation_descriptions", column: "description_id"
+  add_foreign_key "renalware.pathology_observations", "renalware.pathology_observation_requests", column: "request_id"
   add_foreign_key "renalware.pathology_obx_mappings", "renalware.pathology_observation_descriptions", column: "observation_description_id"
   add_foreign_key "renalware.pathology_obx_mappings", "renalware.pathology_senders", column: "sender_id"
   add_foreign_key "renalware.pathology_obx_mappings", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.pathology_obx_mappings", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.pathology_request_descriptions", "renalware.pathology_labs", column: "lab_id"
+  add_foreign_key "renalware.pathology_request_descriptions", "renalware.pathology_observation_descriptions", column: "required_observation_description_id"
+  add_foreign_key "renalware.pathology_request_descriptions_requests_requests", "renalware.pathology_request_descriptions", column: "request_description_id"
+  add_foreign_key "renalware.pathology_request_descriptions_requests_requests", "renalware.pathology_requests_requests", column: "request_id"
+  add_foreign_key "renalware.pathology_requests_drugs_drug_categories", "renalware.drugs"
+  add_foreign_key "renalware.pathology_requests_drugs_drug_categories", "renalware.pathology_requests_drug_categories", column: "drug_category_id"
+  add_foreign_key "renalware.pathology_requests_global_rule_sets", "renalware.clinic_clinics", column: "clinic_id"
+  add_foreign_key "renalware.pathology_requests_global_rule_sets", "renalware.pathology_request_descriptions", column: "request_description_id"
+  add_foreign_key "renalware.pathology_requests_global_rules", "renalware.pathology_requests_global_rule_sets", column: "rule_set_id"
+  add_foreign_key "renalware.pathology_requests_patient_rules", "renalware.pathology_labs", column: "lab_id"
+  add_foreign_key "renalware.pathology_requests_patient_rules", "renalware.patients"
+  add_foreign_key "renalware.pathology_requests_patient_rules_requests", "renalware.pathology_requests_patient_rules", column: "patient_rule_id"
+  add_foreign_key "renalware.pathology_requests_patient_rules_requests", "renalware.pathology_requests_requests", column: "request_id"
+  add_foreign_key "renalware.pathology_requests_requests", "renalware.clinic_clinics", column: "clinic_id"
   add_foreign_key "renalware.pathology_requests_requests", "renalware.clinic_consultants", column: "consultant_id"
+  add_foreign_key "renalware.pathology_requests_requests", "renalware.patients"
+  add_foreign_key "renalware.pathology_requests_requests", "renalware.users", column: "created_by_id", name: "pathology_requests_requests_created_by_id_fk"
+  add_foreign_key "renalware.pathology_requests_requests", "renalware.users", column: "updated_by_id", name: "pathology_requests_requests_updated_by_id_fk"
+  add_foreign_key "renalware.patient_alerts", "renalware.patients"
+  add_foreign_key "renalware.patient_alerts", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.patient_alerts", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.patient_attachments", "renalware.patient_attachment_types", column: "attachment_type_id"
   add_foreign_key "renalware.patient_attachments", "renalware.patients"
   add_foreign_key "renalware.patient_attachments", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.patient_attachments", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.patient_bookmarks", "renalware.patients"
+  add_foreign_key "renalware.patient_bookmarks", "renalware.users"
   add_foreign_key "renalware.patient_master_index_deprecated", "renalware.patients"
   add_foreign_key "renalware.patient_merge_logs", "renalware.patient_merge_operations", column: "operation_id"
   add_foreign_key "renalware.patient_merge_merges", "renalware.feed_messages"
   add_foreign_key "renalware.patient_merge_merges", "renalware.patients", column: "major_patient_id"
   add_foreign_key "renalware.patient_merge_merges", "renalware.patients", column: "minor_patient_id"
   add_foreign_key "renalware.patient_merge_operations", "renalware.patient_merge_merges", column: "merge_id"
+  add_foreign_key "renalware.patient_practice_memberships", "renalware.patient_practices", column: "practice_id"
+  add_foreign_key "renalware.patient_practice_memberships", "renalware.patient_primary_care_physicians", column: "primary_care_physician_id"
   add_foreign_key "renalware.patient_worries", "renalware.patient_worry_categories", column: "worry_category_id"
+  add_foreign_key "renalware.patient_worries", "renalware.patients"
+  add_foreign_key "renalware.patient_worries", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.patient_worries", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.patient_worry_categories", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.patient_worry_categories", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.patients", "renalware.death_causes", column: "first_cause_id"
+  add_foreign_key "renalware.patients", "renalware.death_causes", column: "second_cause_id"
   add_foreign_key "renalware.patients", "renalware.death_locations", column: "actual_death_location_id"
   add_foreign_key "renalware.patients", "renalware.death_locations", column: "preferred_death_location_id"
   add_foreign_key "renalware.patients", "renalware.hospital_centres"
+  add_foreign_key "renalware.patients", "renalware.patient_ethnicities", column: "ethnicity_id"
+  add_foreign_key "renalware.patients", "renalware.patient_languages", column: "language_id"
   add_foreign_key "renalware.patients", "renalware.patient_marital_statuses", column: "marital_status_id"
+  add_foreign_key "renalware.patients", "renalware.patient_practices", column: "practice_id", name: "patients_practice_id_fk"
+  add_foreign_key "renalware.patients", "renalware.patient_primary_care_physicians", column: "primary_care_physician_id"
+  add_foreign_key "renalware.patients", "renalware.patient_religions", column: "religion_id"
   add_foreign_key "renalware.patients", "renalware.patients", column: "merged_into_patient_id"
+  add_foreign_key "renalware.patients", "renalware.system_countries", column: "country_of_birth_id"
+  add_foreign_key "renalware.patients", "renalware.users", column: "created_by_id", name: "patients_created_by_id_fk"
   add_foreign_key "renalware.patients", "renalware.users", column: "named_consultant_id"
   add_foreign_key "renalware.patients", "renalware.users", column: "named_nurse_id"
+  add_foreign_key "renalware.patients", "renalware.users", column: "updated_by_id", name: "patients_updated_by_id_fk"
   add_foreign_key "renalware.pd_adequacy_results", "renalware.patients"
   add_foreign_key "renalware.pd_adequacy_results", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.pd_adequacy_results", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.pd_assessments", "renalware.patients"
+  add_foreign_key "renalware.pd_assessments", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.pd_assessments", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.pd_exit_site_infections", "renalware.patients"
+  add_foreign_key "renalware.pd_infection_organisms", "renalware.pd_organism_codes", column: "organism_code_id"
+  add_foreign_key "renalware.pd_peritonitis_episode_types", "renalware.pd_peritonitis_episode_type_descriptions", column: "peritonitis_episode_type_description_id"
+  add_foreign_key "renalware.pd_peritonitis_episode_types", "renalware.pd_peritonitis_episodes", column: "peritonitis_episode_id"
+  add_foreign_key "renalware.pd_peritonitis_episodes", "renalware.patients"
+  add_foreign_key "renalware.pd_peritonitis_episodes", "renalware.pd_fluid_descriptions", column: "fluid_description_id"
+  add_foreign_key "renalware.pd_peritonitis_episodes", "renalware.pd_peritonitis_episode_type_descriptions", column: "episode_type_id"
+  add_foreign_key "renalware.pd_pet_adequacy_results", "renalware.patients"
+  add_foreign_key "renalware.pd_pet_adequacy_results", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.pd_pet_adequacy_results", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.pd_pet_results", "renalware.patients"
   add_foreign_key "renalware.pd_pet_results", "renalware.pd_pet_dextrose_concentrations", column: "dextrose_concentration_id"
   add_foreign_key "renalware.pd_pet_results", "renalware.pd_pet_dextrose_concentrations", column: "overnight_dextrose_concentration_id"
   add_foreign_key "renalware.pd_pet_results", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.pd_pet_results", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.pd_regime_bags", "renalware.pd_bag_types", column: "bag_type_id"
+  add_foreign_key "renalware.pd_regime_bags", "renalware.pd_regimes", column: "regime_id"
+  add_foreign_key "renalware.pd_regime_terminations", "renalware.pd_regimes", column: "regime_id"
+  add_foreign_key "renalware.pd_regime_terminations", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.pd_regime_terminations", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.pd_regimes", "renalware.patients"
+  add_foreign_key "renalware.pd_regimes", "renalware.pd_systems", column: "system_id", name: "pd_regimes_system_id_fk"
   add_foreign_key "renalware.pd_regimes", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.pd_regimes", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.pd_training_sessions", "renalware.patients"
+  add_foreign_key "renalware.pd_training_sessions", "renalware.pd_training_sites", column: "training_site_id", name: "pd_training_sessions_site_id_fk"
+  add_foreign_key "renalware.pd_training_sessions", "renalware.pd_training_types", column: "training_type_id", name: "pd_training_sessions_type_id_fk"
+  add_foreign_key "renalware.pd_training_sessions", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.pd_training_sessions", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.problem_comorbidities", "renalware.patients"
   add_foreign_key "renalware.problem_comorbidities", "renalware.problem_comorbidity_descriptions", column: "description_id"
   add_foreign_key "renalware.problem_comorbidities", "renalware.problem_malignancy_sites", column: "malignancy_site_id"
   add_foreign_key "renalware.problem_comorbidities", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.problem_comorbidities", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.problem_notes", "renalware.problem_problems", column: "problem_id"
+  add_foreign_key "renalware.problem_notes", "renalware.users", column: "created_by_id", name: "problem_notes_created_by_id_fk"
+  add_foreign_key "renalware.problem_notes", "renalware.users", column: "updated_by_id", name: "problem_notes_updated_by_id_fk"
+  add_foreign_key "renalware.problem_problems", "renalware.patients"
+  add_foreign_key "renalware.problem_problems", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.problem_problems", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.problem_radar_diagnoses", "renalware.problem_radar_cohorts", column: "cohort_id"
   add_foreign_key "renalware.renal_aki_alerts", "renalware.hospital_centres"
+  add_foreign_key "renalware.renal_aki_alerts", "renalware.hospital_wards"
+  add_foreign_key "renalware.renal_aki_alerts", "renalware.patients"
+  add_foreign_key "renalware.renal_aki_alerts", "renalware.renal_aki_alert_actions", column: "action_id"
+  add_foreign_key "renalware.renal_aki_alerts", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.renal_aki_alerts", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.renal_profiles", "renalware.patients"
+  add_foreign_key "renalware.renal_profiles", "renalware.renal_prd_descriptions", column: "prd_description_id"
   add_foreign_key "renalware.research_investigatorships", "renalware.research_studies", column: "study_id"
   add_foreign_key "renalware.research_investigatorships", "renalware.users"
   add_foreign_key "renalware.research_investigatorships", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.research_investigatorships", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.research_participations", "renalware.patients"
+  add_foreign_key "renalware.research_participations", "renalware.research_studies", column: "study_id"
+  add_foreign_key "renalware.research_participations", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.research_participations", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.research_studies", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.research_studies", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.roles_users", "renalware.roles"
+  add_foreign_key "renalware.roles_users", "renalware.users"
+  add_foreign_key "renalware.snippets_snippets", "renalware.users", column: "author_id"
   add_foreign_key "renalware.survey_questions", "renalware.survey_surveys", column: "survey_id"
   add_foreign_key "renalware.survey_responses", "renalware.survey_questions", column: "question_id"
   add_foreign_key "renalware.system_dashboard_components", "renalware.system_components", column: "component_id"
@@ -6345,16 +6712,39 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.system_logs", "renalware.users", column: "owner_id"
   add_foreign_key "renalware.system_online_reference_links", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.system_online_reference_links", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.system_user_feedback", "renalware.users", column: "author_id"
   add_foreign_key "renalware.system_view_calls", "renalware.system_view_metadata", column: "view_metadata_id"
   add_foreign_key "renalware.system_view_calls", "renalware.users"
   add_foreign_key "renalware.system_view_metadata", "renalware.system_view_metadata", column: "parent_id"
+  add_foreign_key "renalware.transplant_donations", "renalware.patients"
+  add_foreign_key "renalware.transplant_donations", "renalware.patients", column: "recipient_id", name: "transplant_donations_recipient_id_fk"
+  add_foreign_key "renalware.transplant_donor_followups", "renalware.transplant_donor_operations", column: "operation_id"
+  add_foreign_key "renalware.transplant_donor_operations", "renalware.patients"
+  add_foreign_key "renalware.transplant_donor_stages", "renalware.patients"
+  add_foreign_key "renalware.transplant_donor_stages", "renalware.transplant_donor_stage_positions", column: "stage_position_id"
+  add_foreign_key "renalware.transplant_donor_stages", "renalware.transplant_donor_stage_statuses", column: "stage_status_id"
+  add_foreign_key "renalware.transplant_donor_stages", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.transplant_donor_stages", "renalware.users", column: "updated_by_id"
+  add_foreign_key "renalware.transplant_donor_workups", "renalware.patients"
+  add_foreign_key "renalware.transplant_failure_cause_descriptions", "renalware.transplant_failure_cause_description_groups", column: "group_id"
+  add_foreign_key "renalware.transplant_recipient_followups", "renalware.transplant_failure_cause_descriptions"
+  add_foreign_key "renalware.transplant_recipient_followups", "renalware.transplant_recipient_operations", column: "operation_id"
+  add_foreign_key "renalware.transplant_recipient_operations", "renalware.hospital_centres"
+  add_foreign_key "renalware.transplant_recipient_operations", "renalware.patients"
   add_foreign_key "renalware.transplant_recipient_operations", "renalware.transplant_induction_agents", column: "induction_agent_id"
+  add_foreign_key "renalware.transplant_recipient_workups", "renalware.patients"
   add_foreign_key "renalware.transplant_registration_status_descriptions", "renalware.ukrdc_assessment_outcomes", column: "ukrdc_assessment_outcome_code", primary_key: "code"
+  add_foreign_key "renalware.transplant_registration_statuses", "renalware.transplant_registration_status_descriptions", column: "description_id"
+  add_foreign_key "renalware.transplant_registration_statuses", "renalware.transplant_registrations", column: "registration_id"
+  add_foreign_key "renalware.transplant_registration_statuses", "renalware.users", column: "created_by_id", name: "transplant_registration_statuses_created_by_id_fk"
+  add_foreign_key "renalware.transplant_registration_statuses", "renalware.users", column: "updated_by_id", name: "transplant_registration_statuses_updated_by_id_fk"
+  add_foreign_key "renalware.transplant_registrations", "renalware.patients"
   add_foreign_key "renalware.transplant_rejection_episodes", "renalware.transplant_recipient_followups", column: "followup_id"
   add_foreign_key "renalware.transplant_rejection_episodes", "renalware.transplant_rejection_treatments", column: "treatment_id"
   add_foreign_key "renalware.transplant_rejection_episodes", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.transplant_rejection_episodes", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.ukrdc_assessment_outcomes", "renalware.ukrdc_assessment_types", column: "assessment_type_id"
+  add_foreign_key "renalware.ukrdc_transmission_logs", "renalware.patients"
   add_foreign_key "renalware.ukrdc_transmission_logs", "renalware.ukrdc_batches", column: "batch_id"
   add_foreign_key "renalware.ukrdc_treatments", "renalware.hd_profiles"
   add_foreign_key "renalware.ukrdc_treatments", "renalware.hospital_centres"
@@ -6369,4 +6759,183 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
   add_foreign_key "renalware.user_groups", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.user_groups", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.users", "renalware.hospital_centres"
+  add_foreign_key "renalware.virology_profiles", "renalware.patients"
+  add_foreign_key "renalware.virology_profiles", "renalware.users", column: "created_by_id"
+  add_foreign_key "renalware.virology_profiles", "renalware.users", column: "updated_by_id"
+
+  create_view "medication_current_prescriptions", sql_definition: <<-SQL
+      SELECT mp.id,
+      mp.patient_id,
+      mp.drug_id,
+      mp.treatable_type,
+      mp.treatable_id,
+      mp.dose_amount,
+      mp.dose_unit,
+      mp.medication_route_id,
+      mp.route_description,
+      mp.frequency,
+      mp.notes,
+      mp.prescribed_on,
+      mp.provider,
+      mp.created_at,
+      mp.updated_at,
+      mp.created_by_id,
+      mp.updated_by_id,
+      mp.administer_on_hd,
+      mp.last_delivery_date,
+      drugs.name AS drug_name,
+      drug_types.code AS drug_type_code,
+      drug_types.name AS drug_type_name
+     FROM ((((renalware.medication_prescriptions mp
+       FULL JOIN renalware.medication_prescription_terminations mpt ON ((mpt.prescription_id = mp.id)))
+       JOIN renalware.drugs ON ((drugs.id = mp.drug_id)))
+       FULL JOIN renalware.drug_types_drugs ON ((drug_types_drugs.drug_id = drugs.id)))
+       FULL JOIN renalware.drug_types ON (((drug_types_drugs.drug_type_id = drug_types.id) AND ((mpt.terminated_on IS NULL) OR (mpt.terminated_on > now())))));
+  SQL
+  create_view "pathology_current_observations", sql_definition: <<-SQL
+      SELECT DISTINCT ON (pathology_observation_requests.patient_id, pathology_observation_descriptions.id) pathology_observations.id,
+      pathology_observations.result,
+      pathology_observations.comment,
+      pathology_observations.observed_at,
+      pathology_observations.description_id,
+      pathology_observations.request_id,
+      pathology_observation_descriptions.code AS description_code,
+      pathology_observation_descriptions.name AS description_name,
+      pathology_observation_requests.patient_id
+     FROM ((renalware.pathology_observations
+       LEFT JOIN renalware.pathology_observation_requests ON ((pathology_observations.request_id = pathology_observation_requests.id)))
+       LEFT JOIN renalware.pathology_observation_descriptions ON ((pathology_observations.description_id = pathology_observation_descriptions.id)))
+    ORDER BY pathology_observation_requests.patient_id, pathology_observation_descriptions.id, pathology_observations.observed_at DESC;
+  SQL
+  create_view "reporting_pd_audit", sql_definition: <<-SQL
+      WITH pd_patients AS (
+           SELECT patients.id
+             FROM ((renalware.patients
+               JOIN renalware.modality_modalities current_modality ON ((current_modality.patient_id = patients.id)))
+               JOIN renalware.modality_descriptions current_modality_description ON ((current_modality_description.id = current_modality.description_id)))
+            WHERE ((current_modality.ended_on IS NULL) AND (current_modality.started_on <= CURRENT_DATE) AND ((current_modality_description.name)::text = 'PD'::text))
+          ), current_regimes AS (
+           SELECT pd_regimes.id,
+              pd_regimes.patient_id,
+              pd_regimes.start_date,
+              pd_regimes.end_date,
+              pd_regimes.treatment,
+              pd_regimes.type,
+              pd_regimes.glucose_volume_low_strength,
+              pd_regimes.glucose_volume_medium_strength,
+              pd_regimes.glucose_volume_high_strength,
+              pd_regimes.amino_acid_volume,
+              pd_regimes.icodextrin_volume,
+              pd_regimes.add_hd,
+              pd_regimes.last_fill_volume,
+              pd_regimes.tidal_indicator,
+              pd_regimes.tidal_percentage,
+              pd_regimes.no_cycles_per_apd,
+              pd_regimes.overnight_volume,
+              pd_regimes.apd_machine_pac,
+              pd_regimes.created_at,
+              pd_regimes.updated_at,
+              pd_regimes.therapy_time,
+              pd_regimes.fill_volume,
+              pd_regimes.delivery_interval,
+              pd_regimes.system_id,
+              pd_regimes.additional_manual_exchange_volume,
+              pd_regimes.tidal_full_drain_every_three_cycles,
+              pd_regimes.daily_volume,
+              pd_regimes.assistance_type
+             FROM renalware.pd_regimes
+            WHERE ((pd_regimes.start_date >= CURRENT_DATE) AND (pd_regimes.end_date IS NULL))
+          ), current_apd_regimes AS (
+           SELECT current_regimes.id,
+              current_regimes.patient_id,
+              current_regimes.start_date,
+              current_regimes.end_date,
+              current_regimes.treatment,
+              current_regimes.type,
+              current_regimes.glucose_volume_low_strength,
+              current_regimes.glucose_volume_medium_strength,
+              current_regimes.glucose_volume_high_strength,
+              current_regimes.amino_acid_volume,
+              current_regimes.icodextrin_volume,
+              current_regimes.add_hd,
+              current_regimes.last_fill_volume,
+              current_regimes.tidal_indicator,
+              current_regimes.tidal_percentage,
+              current_regimes.no_cycles_per_apd,
+              current_regimes.overnight_volume,
+              current_regimes.apd_machine_pac,
+              current_regimes.created_at,
+              current_regimes.updated_at,
+              current_regimes.therapy_time,
+              current_regimes.fill_volume,
+              current_regimes.delivery_interval,
+              current_regimes.system_id,
+              current_regimes.additional_manual_exchange_volume,
+              current_regimes.tidal_full_drain_every_three_cycles,
+              current_regimes.daily_volume,
+              current_regimes.assistance_type
+             FROM current_regimes
+            WHERE ((current_regimes.type)::text ~~ '%::APD%'::text)
+          ), current_capd_regimes AS (
+           SELECT current_regimes.id,
+              current_regimes.patient_id,
+              current_regimes.start_date,
+              current_regimes.end_date,
+              current_regimes.treatment,
+              current_regimes.type,
+              current_regimes.glucose_volume_low_strength,
+              current_regimes.glucose_volume_medium_strength,
+              current_regimes.glucose_volume_high_strength,
+              current_regimes.amino_acid_volume,
+              current_regimes.icodextrin_volume,
+              current_regimes.add_hd,
+              current_regimes.last_fill_volume,
+              current_regimes.tidal_indicator,
+              current_regimes.tidal_percentage,
+              current_regimes.no_cycles_per_apd,
+              current_regimes.overnight_volume,
+              current_regimes.apd_machine_pac,
+              current_regimes.created_at,
+              current_regimes.updated_at,
+              current_regimes.therapy_time,
+              current_regimes.fill_volume,
+              current_regimes.delivery_interval,
+              current_regimes.system_id,
+              current_regimes.additional_manual_exchange_volume,
+              current_regimes.tidal_full_drain_every_three_cycles,
+              current_regimes.daily_volume,
+              current_regimes.assistance_type
+             FROM current_regimes
+            WHERE ((current_regimes.type)::text ~~ '%::CAPD%'::text)
+          )
+   SELECT 'APD'::text AS pd_type,
+      count(current_apd_regimes.patient_id) AS patient_count,
+      0 AS avg_hgb,
+      0 AS pct_hgb_gt_100,
+      0 AS pct_on_epo,
+      0 AS pct_pth_gt_500,
+      0 AS pct_phosphate_gt_1_8,
+      0 AS pct_strong_medium_bag_gt_1l
+     FROM current_apd_regimes
+  UNION ALL
+   SELECT 'CAPD'::text AS pd_type,
+      count(current_capd_regimes.patient_id) AS patient_count,
+      0 AS avg_hgb,
+      0 AS pct_hgb_gt_100,
+      0 AS pct_on_epo,
+      0 AS pct_pth_gt_500,
+      0 AS pct_phosphate_gt_1_8,
+      0 AS pct_strong_medium_bag_gt_1l
+     FROM current_capd_regimes
+  UNION ALL
+   SELECT 'PD'::text AS pd_type,
+      count(pd_patients.id) AS patient_count,
+      0 AS avg_hgb,
+      0 AS pct_hgb_gt_100,
+      0 AS pct_on_epo,
+      0 AS pct_pth_gt_500,
+      0 AS pct_phosphate_gt_1_8,
+      0 AS pct_strong_medium_bag_gt_1l
+     FROM pd_patients;
+  SQL
 end
