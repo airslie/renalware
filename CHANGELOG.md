@@ -9,6 +9,44 @@ This project adheres to Semantic Versioning.
 ### Changed
 ### Fixed
 
+## 2.5.0
+### Added
+- UKRDC v5 changes #4921
+  - Adds the new UKRDC export structures for assessments, diagnoses, dialysis prescriptions/sessions and related outcome fields, so UKRDC exports should be regression tested carefully.
+- Add PDG tab to HD Summary #5764
+  - Reinstate Add Session and Add DNA Session buttons and expose recent PGD activity from the HD dashboard.
+- Add a superadmin page to inspect RawHL7MessageErrors #5767
+- Add read-only clinic visit show page and separate View/Edit links #5792
+- Create Transplant Offer event #5850
+- Add new NHSBT Tx registration columns #5844
+- Add donor DOB to transplant_offer event #5866
+- Add HD incremental flag to HD profiles and MDM patient filters #5869
+
+### Changed
+- Switch to omniauth-ldap for LDAP sign-in #5657
+  - Changes the sign-in flow and LDAP/Active Directory role handling, so authentication and role assignment should be rechecked.
+- Convert Renalware from a Rails engine into a Rails app #5697
+  - Broad platform change with high regression risk around sign-in, navigation, forms, PDFs/letters and background processing.
+- Replace legacy Select2 widgets with SlimSelect across key forms #5766
+  - Includes patient search and selection in admissions, consults, clinic appointments, slot requests and research forms.
+- Continue Select2 to SlimSelect migration in renal, PD and transplant forms #5776
+- Replace Select2 with SlimSelect across letters, problems and GP search #5845
+- Include dm+d code in UKRDC v4 DrugProduct export #5846
+- Auto-select Hospital provider if Give on HD is checked on prescriptions #5745
+
+### Fixed
+- Ensure completed letters broadcast correctly to the UI #5749
+- Prevent HD sessions being created in the future #5768
+- Remove the 'add patient first' prompt from Consults and Admissions #5769
+- Tx wait list fixes #5770
+  - Fix broken wait list sorting and make default/host sites appear first in the Tx operation form.
+- Fix HD protocol latest dry weight ordering #5789
+- LDAP improvements #5809
+  - Improves LDAP user handling, including nested group support.
+- Fix occasional HD Session form batch printing bug #5815
+- Handle stale CSRF failures on the sign-in form #5842
+- Fix UKRDC4 QBL05 mapping #5840
+
 ## 2.4.5.6
 ### Added
 - HD Acuity Assessments #5403
