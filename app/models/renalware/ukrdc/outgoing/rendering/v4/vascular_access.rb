@@ -8,6 +8,8 @@ module Renalware
           class VascularAccess < Rendering::Base
             pattr_initialize [:procedure!]
 
+            delegate :type, to: :procedure
+
             def xml
               vascular_access_element
             end
@@ -22,14 +24,11 @@ module Renalware
               end
             end
 
-            # TODO: we need to determine the correct code and description to use here.
-            # This is currently hardcoded to the code for "Construction of arteriovenous fistula"
-            # as an example.
             def procedure_type_element
               create_node("ProcedureType") do |elem|
                 elem << create_node("CodingStandard", "SNOMED")
-                elem << create_node("Code", "27929005")
-                elem << create_node("Description", "Construction of arteriovenous fistula")
+                elem << create_node("Code", type.snomed_procedure_code)
+                elem << create_node("Description", type.snomed_procedure_description)
               end
             end
 
