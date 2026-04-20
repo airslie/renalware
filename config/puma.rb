@@ -58,7 +58,11 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 
 # config/puma.rb
 # https://github.com/bensheldon/good_job?tab=readme-ov-file#execute-jobs-async--in-process
-if ENV.fetch("WEB_CONCURRENCY", 0).to_i > 0
+# Puma runs outside the app config lifecycle, so use the env var directly here.
+good_job_execution_mode = ENV.fetch("GOOD_JOB_EXECUTION_MODE", "external")
+
+if ENV.fetch("WEB_CONCURRENCY", 0).to_i > 0 &&
+   good_job_execution_mode.in?(%w(async async_server async_all))
   before_fork do
     GoodJob.shutdown
   end
