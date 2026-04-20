@@ -7,8 +7,15 @@ module Renalware
         include XmlSpecHelper
 
         it "renders a vascular access procedure with supported attributes" do
+          access_type = create(
+            :access_type,
+            rr02_code: "AVF",
+            snomed_procedure_code: "TestProcedureCode",
+            snomed_procedure_description: "TestProcedureCodeDescription"
+          )
           procedure = create(
             :access_procedure,
+            type: access_type,
             performed_on: Date.parse("2021-01-02"),
             first_used_on: Date.parse("2021-01-03"),
             failed_on: Date.parse("2021-01-04"),
@@ -23,8 +30,8 @@ module Renalware
             <VascularAccess>
               <ProcedureType>
                 <CodingStandard>SNOMED</CodingStandard>
-                <Code>27929005</Code>
-                <Description>Construction of arteriovenous fistula</Description>
+                <Code>TestProcedureCode</Code>
+                <Description>TestProcedureCodeDescription</Description>
               </ProcedureType>
               <ProcedureTime>2021-01-02T00:00:00+00:00</ProcedureTime>
               <Attributes>
