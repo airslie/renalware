@@ -9,6 +9,7 @@ Rails.application.configure do
   # Note the following env variables are available
   # (see https://github.com/bensheldon/good_job#execute-jobs-async--in-process)
   # GOOD_JOB_EXECUTION_MODE=async
+  # GOOD_JOB_ENABLE_CRON=true
   # GOOD_JOB_MAX_THREADS=4
   # GOOD_JOB_POLL_INTERVAL=30
   # GOOD_JOB_CLEANUP_PRESERVED_JOBS_BEFORE_SECONDS_AGO=36000
@@ -21,7 +22,7 @@ Rails.application.configure do
   custom_logger.level = Rails.logger.level
   config.good_job.logger = custom_logger
 
-  config.good_job.enable_cron = ENV.fetch("GOODJOB_CRON", !Rails.env.local?)
+  config.good_job.enable_cron = ENV.fetch("GOOD_JOB_ENABLE_CRON", !Rails.env.local?)
   config.good_job.cron = Renalware::ScheduledJobs.config
 
   config.good_job.smaller_number_is_higher_priority = true
