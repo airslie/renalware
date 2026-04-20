@@ -3491,8 +3491,28 @@ CREATE TABLE renalware.access_types (
     abbreviation character varying,
     rr02_code character varying,
     rr41_code character varying,
-    hd_vascular boolean DEFAULT true NOT NULL
+    hd_vascular boolean DEFAULT true NOT NULL,
+    snomed_procedure_code character varying,
+    snomed_procedure_description character varying,
+    snomed_finding_code character varying,
+    snomed_finding_description character varying,
+    snomed_structure_code character varying,
+    snomed_structure_description character varying
 );
+
+
+--
+-- Name: COLUMN access_types.snomed_procedure_code; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.access_types.snomed_procedure_code IS 'used for UKRDC Procedure ie the initial Construction';
+
+
+--
+-- Name: COLUMN access_types.snomed_finding_code; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.access_types.snomed_finding_code IS 'used for UKRDC Dialysis Session and Dialysis Prescription';
 
 
 --
@@ -32183,6 +32203,7 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware,public,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260420112012'),
 ('20260415165113'),
 ('20260408120000'),
 ('20260325113000'),

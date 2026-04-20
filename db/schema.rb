@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_20_112012) do
   create_schema "renalware"
 
   # These are extensions that must be enabled in order to support this database
@@ -1836,6 +1836,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_165113) do
     t.string "name", null: false
     t.string "rr02_code"
     t.string "rr41_code"
+    t.string "snomed_finding_code", comment: "used for UKRDC Dialysis Session and Dialysis Prescription"
+    t.string "snomed_finding_description"
+    t.string "snomed_procedure_code", comment: "used for UKRDC Procedure ie the initial Construction"
+    t.string "snomed_procedure_description"
+    t.string "snomed_structure_code"
+    t.string "snomed_structure_description"
     t.datetime "updated_at", precision: nil, null: false
   end
 
