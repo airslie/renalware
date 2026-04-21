@@ -3,7 +3,9 @@ class OpenTelemetryErrorSubscriber
     span = OpenTelemetry::Trace.current_span
     return unless span&.recording?
 
-    span.record_exception(error)
+    # Handled errors are often expected/report-only paths; avoid attaching full
+    # stack traces because Azure Monitor enforces a small custom property limit.
+    span.record_exception(error) unless handled
     span.status = OpenTelemetry::Trace::Status.error(error.class.name)
     span.set_attribute("error.source", source)
     span.set_attribute("error.handled", handled)

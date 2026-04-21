@@ -40,6 +40,23 @@ RSpec.describe OpenTelemetryErrorSubscriber do
     expect(span).not_to have_received(:set_attribute).with("error.context.metadata", anything)
   end
 
+  it "does not record the exception for handled errors", :aggregate_failures do
+    subscriber.report(
+      error,
+      handled: true,
+      severity: :warn,
+      source: "application",
+      context: { job: "TestJob" }
+    )
+
+    expect(span).not_to have_received(:record_exception)
+    expect(span).to have_received(:status=).with(status)
+    expect(span).to have_received(:set_attribute).with("error.source", "application")
+    expect(span).to have_received(:set_attribute).with("error.handled", true)
+    expect(span).to have_received(:set_attribute).with("error.severity", "warn")
+    expect(span).to have_received(:set_attribute).with("error.context.job", "TestJob")
+  end
+
   it "does nothing when the current span is not recording" do
     allow(span).to receive(:recording?).and_return(false)
 
