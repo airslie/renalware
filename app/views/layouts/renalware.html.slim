@@ -33,6 +33,9 @@ html lang="en"
   body(class="#{ content_for?(:body_class) ? yield(:body_class) : "page--" + controller_path&.tr("/", "-")&.sub("renalware-", "")} #{Rails.env}"
        *Renalware::UserSessionPresenter.session_controller_data_attributes(user_session: controller.request.session))
 
+    - if Renalware.stage.uat?
+      div.stage-banner.stage-banner--uat.bg-yellow-200.h-2
+
     #modals-wrapper
 
     header

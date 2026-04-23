@@ -32,7 +32,7 @@ module Renalware
     end
 
     def production_stage?
-      ENV["RENALWARE_STAGE"].to_s.casecmp?(PRODUCTION_STAGE)
+      Renalware.stage.production?
     end
   end
 end
