@@ -6,7 +6,7 @@ module Renalware
       end
 
       def current_regime
-        @current_regime ||= patient.pd_regimes&.current
+        @current_regime ||= patient.pd_regimes&.with_bags&.current_one
       end
 
       def latest_pd_line_change_events

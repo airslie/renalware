@@ -70,11 +70,11 @@ default:
   pd:
     -
       - label: Treatment
-        path: pd_patient.regimes.current.treatment
+        path: pd_patient.regimes.current_one.treatment
       - label: Assistance
-        path: pd_patient.regimes.current.assistance_type.text
+        path: pd_patient.regimes.current_one.assistance_type.text
       - label: Exchanges Done By
-        path: pd_patient.regimes.current.exchanges_done_by.text
+        path: pd_patient.regimes.current_one.exchanges_done_by.text
     -
       - label: Dry Weight
         path: clinical_patient.latest_dry_weight.weight
@@ -91,23 +91,23 @@ default:
         path: transplants_patient.current_registration.document.uk_transplant_centre.status_updated_on:date
     - # APD Only
       - label: Overnight Volume
-        path: pd_patient.regimes.current.overnight_volume:ml
+        path: pd_patient.regimes.current_one.overnight_volume:ml
       - label: Daily Volume
-        path: pd_patient.regimes.current.daily_volume:ml
+        path: pd_patient.regimes.current_one.daily_volume:ml
       - label: Therapy Time
-        path: pd_patient.regimes.current.therapy_time:duration
+        path: pd_patient.regimes.current_one.therapy_time:duration
       - label: Cycles
-        path: pd_patient.regimes.current.cycles
+        path: pd_patient.regimes.current_one.cycles
     - # APD Only
       - label: Tidal
-        path: pd_patient.regimes.current.tidal_indicator
+        path: pd_patient.regimes.current_one.tidal_indicator
       - label: Percentage
-        path: pd_patient.regimes.current.tidal_percentage:percentage
+        path: pd_patient.regimes.current_one.tidal_percentage:percentage
     - # APD Only
       - label: Fill Volume
-        path: pd_patient.regimes.current.fill_volume:ml
+        path: pd_patient.regimes.current_one.fill_volume:ml
       - label: Last Fill Volume
-        path: pd_patient.regimes.current.last_fill_volume:ml
+        path: pd_patient.regimes.current_one.last_fill_volume:ml
 
   akcc:
     -

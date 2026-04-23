@@ -122,6 +122,30 @@ module Renalware
             expect(listener).to have_received(:patient_modality_changed_to_death).with(
               patient:,
               modality:,
+              previous_modality: old_modality,
+              actor: user
+            )
+          end
+
+          it "broadcasts a patient_modality_changed_from event with the previous modality" do
+            modality = build_modality(death)
+            old_modality = build_stubbed_modality(pd_modality_description)
+            allow(patient).to receive(:current_modality).and_return(old_modality)
+
+            listener = double("Listener") # rubocop:disable RSpec/VerifiedDoubles
+            command.subscribe(listener)
+
+            allow(old_modality).to receive(:save!).and_return(true)
+            allow(modality).to receive(:save!).and_return(true)
+            allow(listener).to receive(:patient_modality_changed_from_pd)
+
+            result = command.call(modality:)
+
+            expect(result).to be_a(Success)
+            expect(listener).to have_received(:patient_modality_changed_from_pd).with(
+              patient:,
+              modality:,
+              previous_modality: old_modality,
               actor: user
             )
           end
