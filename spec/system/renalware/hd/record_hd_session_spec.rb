@@ -22,7 +22,7 @@ RSpec.describe "Recording an HD session", :js do
     select hospital_unit.to_s, from: "Hospital Unit"
     expect(page).to have_content "StationA"
     select "StationA", from: "Station"
-    fill_in "Start time", with: "13:00"
+    fill_in "Start time", with: "00:00"
 
     # Force invalid HD session
     # This will normally default to the todays date

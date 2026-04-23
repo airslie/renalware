@@ -31,8 +31,7 @@ module Renalware
                   presence: true,
                   timeliness: {
                     type: :date,
-                    allow_blank: true,
-                    on_or_before: -> { Date.current }
+                    allow_blank: true
                   }
         validates :start_time,
                   timeliness: {
@@ -40,6 +39,7 @@ module Renalware
                     if: -> { require_all_fields == true }
                   },
                   presence: { if: -> { require_all_fields == true } }
+        validate :validate_started_at_is_not_in_the_future
 
         # If overnight_dialysis is true then we allow the end time to be before the
         # start time, as it refers to the next day
@@ -79,12 +79,7 @@ module Renalware
         def started_at
           return unless valid?
 
-          start = start_date_in_time_zone
-
-          if start_time.present?
-            start += start_time.seconds_since_midnight
-          end
-          start
+          computed_started_at
         end
 
         # If overnight_dialysis is true then add 1 day to the start_date
@@ -97,6 +92,29 @@ module Renalware
         end
 
         private
+
+        def validate_started_at_is_not_in_the_future
+          return if start_date.blank? ||
+                    errors[:start_date].present? ||
+                    errors[:start_time].present?
+
+          if computed_started_at > Time.zone.now
+            if start_date == Time.zone.today && start_time.present?
+              errors.add(:start_time, "must not be in the future")
+            else
+              errors.add(:start_date, "must be on or before #{Date.current}")
+            end
+          end
+        end
+
+        def computed_started_at
+          start = start_date_in_time_zone
+
+          if start_time.present?
+            start += start_time.seconds_since_midnight
+          end
+          start
+        end
 
         def start_date_in_time_zone
           @start_date_in_time_zone ||= start_date.in_time_zone
