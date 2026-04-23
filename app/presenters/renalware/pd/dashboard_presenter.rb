@@ -11,7 +11,7 @@ module Renalware
       end
 
       def current_regime
-        patient.pd_regimes.any? && patient.pd_regimes.current.with_bags.first
+        patient.pd_regimes.any? && patient.pd_regimes.with_bags.current_one
       end
 
       def capd_regimes

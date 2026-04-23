@@ -37,7 +37,7 @@ module Renalware
       end
 
       def current_regime
-        @current_regime ||= patient.pd_regimes.current.first || NullObject.instance
+        @current_regime ||= patient.pd_regimes.current_one || NullObject.instance
       end
     end
   end

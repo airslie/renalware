@@ -47,10 +47,11 @@ module Renalware
       }
       scope :with_bags, -> { eager_load(bags: [:bag_type]) }
 
+      def self.current_one = current.first
       def self.policy_class = RegimePolicy
 
       def current?
-        patient.pd_regimes.current.first == self
+        patient.pd_regimes.current_one == self
       end
 
       def terminated?

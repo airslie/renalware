@@ -46,6 +46,9 @@ AllCops:
 # Keep this disabled via .rubocop_todo.yml baseline for incremental cleanup.
 # When ready, remove the todo entry and re-enable with your preferred settings.
 
+RSpec/LetSetup:
+  Enabled: false
+
 Rails/ResponseParsedBody:
   Enabled: false
 
