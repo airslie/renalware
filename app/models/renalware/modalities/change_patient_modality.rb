@@ -45,8 +45,9 @@ module Renalware
       def call(options)
         new_modality = parse_options(options)
         if new_modality.valid?
-          make_new_modality_the_current_one(new_modality)
-          broadcast_modality_change_event_to_any_listeners(new_modality)
+          previous_modality = patient.current_modality
+          make_new_modality_the_current_one(new_modality, previous_modality)
+          broadcast_modality_change_event_to_any_listeners(new_modality, previous_modality)
           ::Success.new(new_modality)
         else
           ::Failure.new(new_modality)
@@ -55,9 +56,9 @@ module Renalware
 
       private
 
-      def make_new_modality_the_current_one(new_modality)
+      def make_new_modality_the_current_one(new_modality, previous_modality)
         Modality.transaction do
-          current_modality.terminate_by(user, on: new_modality.started_on)
+          (previous_modality || NullObject.instance).terminate_by(user, on: new_modality.started_on)
           new_modality.save_by!(user)
         end
       end
@@ -87,15 +88,30 @@ module Renalware
       #
       # When broadcasting events, if the event description has a #.to_sym e.g :hd or :death
       # then we use that in the name of the event, e.g. `patient_modality_changed_to_death`.
+      # We also broadcast the previous modality in the event name when present, e.g.
+      # `patient_modality_changed_from_pd`, for subscribers that care about what the patient is
+      # leaving rather than what they are moving to.
       # Otherwise, for more generic events we use `patient_modality_changed`.
       # I'm not sure this is a very consistent approach so may need to revisit.
-      def broadcast_modality_change_event_to_any_listeners(new_modality)
+      def broadcast_modality_change_event_to_any_listeners(new_modality, previous_modality)
         type = new_modality.description.to_sym
         method_name = type.nil? ? :patient_modality_changed : :"patient_modality_changed_to_#{type}"
         broadcast(
           method_name,
           patient: patient,
           modality: new_modality,
+          previous_modality: previous_modality,
+          actor: user
+        )
+
+        previous_type = previous_modality&.description&.to_sym
+        return if previous_type.nil?
+
+        broadcast(
+          :"patient_modality_changed_from_#{previous_type}",
+          patient: patient,
+          modality: new_modality,
+          previous_modality: previous_modality,
           actor: user
         )
       end
@@ -106,10 +122,6 @@ module Renalware
         change_type = options.delete(:change_type_id) || ChangeType.default&.id
         options[:change_type_id] = change_type
         patient.modalities.new(options)
-      end
-
-      def current_modality
-        patient.current_modality || NullObject.instance
       end
     end
   end

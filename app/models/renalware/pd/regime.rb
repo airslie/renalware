@@ -39,17 +39,18 @@ module Renalware
       validates :treatment, presence: true
       validate :min_one_bag
 
-      scope :current, -> { eager_load(:termination).where(terminated_on: nil).first }
+      scope :current, lambda {
+        eager_load(:termination)
+          .where(pd_regime_terminations: { terminated_on: nil })
+          .order(created_at: :desc)
+          .limit(1)
+      }
       scope :with_bags, -> { eager_load(bags: [:bag_type]) }
-
-      def self.current
-        Regime.order("pd_regimes.created_at DESC").limit(1).with_bags.first
-      end
 
       def self.policy_class = RegimePolicy
 
       def current?
-        Regime.current == self
+        patient.pd_regimes.current.first == self
       end
 
       def terminated?
