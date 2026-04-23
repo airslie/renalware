@@ -17,6 +17,8 @@
             dt Treatment:
             dd= regime.treatment
             = render("renalware/pd/regimes/assistance_type", regime: regime)
+            dt Delivery frequency:
+            dd= Renalware::PD::DeliveryIntervalPresenter.new(regime.delivery_interval).to_s
             dt= attr_name(regime, :exchanges_done_by)
             dd= regime.exchanges_done_by&.text
             dt= attr_name(regime, :exchanges_done_by_if_other)
