@@ -5,5 +5,11 @@
   = render "filters", form: form
 
 = within_admin_layout(title: "Inpatient Admissions") do
+  - if policy(Renalware::Patient).create?
+    .panel.radius.compact
+      ' If the patient is not on Renalware yet, please
+      = link_to("add them", new_patient_path)
+      |  first
+
   = render "table", admissions: admissions
   == pagy.series_nav if pagy.pages > 1
