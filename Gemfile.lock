@@ -1146,7 +1146,7 @@ DEPENDENCIES
   yard (>= 0.9.35)
 
 RUBY VERSION
-  ruby 4.0.2
+  ruby 4.0.3
 
 BUNDLED WITH
   4.0.6

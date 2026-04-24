@@ -8,7 +8,7 @@
 # For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=4.0.2
+ARG RUBY_VERSION=4.0.3
 
 # Note that we are pinning debian to trixie (13) here to ensure consistent builds. We could use
 # -slim and let it track latest stable, but that might lead to unexpected breakages.
