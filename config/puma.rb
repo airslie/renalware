@@ -62,7 +62,7 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 good_job_execution_mode = ENV.fetch("GOOD_JOB_EXECUTION_MODE", "external")
 
 if ENV.fetch("WEB_CONCURRENCY", 0).to_i > 0 &&
-   good_job_execution_mode.in?(%w(async async_server async_all))
+   %w(async async_server async_all).include?(good_job_execution_mode)
   before_fork do
     GoodJob.shutdown
   end
