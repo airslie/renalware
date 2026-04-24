@@ -23,7 +23,6 @@
 //= require foundation/foundation.topbar
 //= require underscore/underscore
 //= require jquery_nested_form
-//= require foundation-datepicker/js/foundation-datepicker
 //= require cocoon
 //= require renalware/iframeResizer
 //= require clipboard

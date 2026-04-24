@@ -973,11 +973,6 @@ for-each@^0.3.3, for-each@^0.3.5:
   dependencies:
     is-callable "^1.2.7"
 
-foundation-datepicker@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/foundation-datepicker/-/foundation-datepicker-1.5.0.tgz#abbccde1c1f9b0c4f640f9d0da244871b84b2b47"
-  integrity sha512-hBqxmqHT/OstAdhZ2BvAtJlY5lQdSw8/Ly3QBBsUxbmEqL9OSb9wRs1Qr2btkWKkVoHFWBfJw5BgnZlByc59uA==
-
 fsevents@2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"

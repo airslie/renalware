@@ -23,7 +23,6 @@
     "date-fns": "^4.1.0",
     "debounce": "^2.2.0",
     "flatpickr": "^4.6.13",
-    "foundation-datepicker": "1.5.0",
     "highcharts": "11.4.8",
     "masonry-layout": "^4.2.2",
     "moment": "2.30.1",
