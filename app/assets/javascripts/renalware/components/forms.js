@@ -11,25 +11,6 @@ $(document).on(
   }
 )
 
-function initDatePicker(container, elem, pickerOptions) {
-  $(container + " " + elem).fdatepicker(pickerOptions)
-
-  $(container + " " + elem + "-wrapper .prefix i").on("click", function () {
-    $(this)
-      .closest(elem + "-wrapper")
-      .find(elem)
-      .fdatepicker("show")
-  })
-}
-
-function initDateTimepickersIn(container) {
-  initDatePicker(container, ".datetimepicker", {
-    format: "dd-M-yyyy hh:ii",
-    pickTime: true,
-    minuteStep: 1,
-  })
-}
-
 function initClockpickersIn(container) {
   var elem = ".clockpicker"
   var pickerOptions = {
@@ -54,6 +35,5 @@ function initClockpickersIn(container) {
 }
 
 $(function () {
-  initDateTimepickersIn("body")
   initClockpickersIn("body")
 })
