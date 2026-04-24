@@ -10,6 +10,7 @@ module Renalware
         .merge(gp_connect_jobs)
         .merge(ukrdc_jobs)
         .merge(housekeeping_jobs)
+        .merge(urr_generation_jobs)
         .merge(custom_jobs)
     end
 
@@ -156,6 +157,20 @@ module Renalware
           cron: "every day at 5:30am",
           class: "Renalware::UKRDC::Outgoing::TransferFilesJob",
           description: "SFTP files generated earlier to the UKRDC"
+        }
+      }
+    end
+
+    def urr_generation_jobs
+      return {} unless Renalware.config.urr_generation_enabled
+
+      {
+        generate_missing_urr: {
+          cron: "1 5-23/1 * * *", # At minute 1 past every hour from 5 through 23,
+          args: ["bundle exec rake pathology:generate_missing_urr"],
+          class: "Renalware::InvokeCommandJob",
+          description: "Generate a URR value if we find a P_URE result (post-HD urea) with URE " \
+                       "value we think is its pre-HD sibling"
         }
       }
     end
