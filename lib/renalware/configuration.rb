@@ -585,6 +585,10 @@ module Renalware
         ENV.fetch("DEFAULT_FROM_EMAIL_ADDRESS", nil)
     end
 
+    config_accessor(:urr_generation_enabled) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("URR_GENERATION_ENABLED", "false"))
+    end
+
     #
     # Monitoring::Mirth
     # Default to out-of-the-box development settings

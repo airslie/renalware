@@ -13,6 +13,7 @@ describe Renalware::Configuration do
       ENFORCE_USER_PRESCRIBER_FLAG
       DEVISE_EXTRA_MODULES
       PATIENT_HOSPITAL_IDENTIFIERS
+      URR_GENERATION_ENABLED
     )
     original_values = env_keys_that_override_defaults.index_with { |key| ENV.fetch(key, nil) }
     env_keys_that_override_defaults.each { |key| ENV.delete(key) }
@@ -127,5 +128,17 @@ describe Renalware::Configuration do
       end
     end
     # rubocop:enable Lint/SymbolConversion
+  end
+
+  describe "#urr_generation_enabled" do
+    it "defaults to false" do
+      expect(config.urr_generation_enabled).to be(false)
+    end
+
+    it "casts truthy ENV values to true" do
+      ENV["URR_GENERATION_ENABLED"] = "1"
+
+      expect(config.urr_generation_enabled).to be(true)
+    end
   end
 end

@@ -20,7 +20,8 @@ module Renalware
         send_gp_letters_over_mesh: true,
         process_hl7_via_raw_messages_table: true,
         housekeeping_jobs_enabled: true,
-        ukrdc_enabled: true
+        ukrdc_enabled: true,
+        urr_generation_enabled: false
       )
     end
 
@@ -85,6 +86,22 @@ module Renalware
         args: ["renalware_mse.ukrdc_update_send_to_renalreg()"],
         description: "Mark patients as send to the Renal Registry. See function for logic"
       )
+    end
+
+    it "includes the URR generation job when enabled" do
+      allow(Renalware.config).to receive(:urr_generation_enabled).and_return(true)
+
+      expect(jobs_config.fetch(:generate_missing_urr)).to eq(
+        cron: "1 5-23/1 * * *",
+        args: ["bundle exec rake pathology:generate_missing_urr"],
+        class: "Renalware::InvokeCommandJob",
+        description: "Generate a URR value if we find a P_URE result (post-HD urea) with URE " \
+                     "value we think is its pre-HD sibling"
+      )
+    end
+
+    it "omits the URR generation job when disabled" do
+      expect(jobs_config).not_to have_key(:generate_missing_urr)
     end
   end
 end
