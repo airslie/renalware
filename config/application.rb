@@ -10,9 +10,9 @@ require "renalware/configuration"
 module RenalwareApp
   class Application < Rails::Application
     config.load_defaults 8.1
-
     config.cache_store = :file_store, Rails.root.join("tmp/cache")
     config.active_record.time_zone_aware_types = [:datetime]
+    config.active_storage.variant_processor = :disabled
     config.active_storage.service = :local
     config.autoloader = :zeitwerk
     config.active_record.belongs_to_required_by_default = false
