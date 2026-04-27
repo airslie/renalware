@@ -54,5 +54,5 @@ databases:
     plan: basic-1gb
     previewPlan: basic-1gb
     diskSizeGB: 15
-    previewDiskSizeGB: 1
+    previewDiskSizeGB: 15
     region: frankfurt
