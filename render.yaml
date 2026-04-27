@@ -23,7 +23,7 @@ services:
         value: local
       - key: CACHE_DATABASE_URL
         fromDatabase:
-          name: renalware-review-cache
+          name: renalware-review-db
           property: connectionString
       - key: DATABASE_URL
         fromDatabase:
@@ -54,13 +54,5 @@ databases:
     plan: basic-1gb
     previewPlan: basic-256mb
     diskSizeGB: 15
-    previewDiskSizeGB: 1
-    region: frankfurt
-
-  - name: renalware-review-cache
-    databaseName: renalware_cache
-    plan: basic-256mb
-    previewPlan: basic-256mb
-    diskSizeGB: 1
     previewDiskSizeGB: 1
     region: frankfurt
