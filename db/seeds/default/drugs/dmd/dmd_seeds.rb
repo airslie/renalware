@@ -2,6 +2,15 @@ require_relative "../../../seeds_helper"
 
 module Renalware
   module Drugs::DMD
+    DMD_UPSERT_BATCH_SIZE = ENV.fetch("DMD_UPSERT_BATCH_SIZE", 1_000).to_i
+
+    def self.upsert_csv_in_batches(file_path, model, unique_by:, &)
+      CSV.foreach(file_path, headers: true).each_slice(DMD_UPSERT_BATCH_SIZE) do |rows|
+        upserts = rows.map(&)
+        model.upsert_all(upserts, unique_by: unique_by)
+      end
+    end
+
     Rails.benchmark "DM+D -> Forms" do
       file_path = File.join(File.dirname(__FILE__), "dmd_forms.csv")
 
@@ -71,49 +80,44 @@ module Renalware
     Rails.benchmark "DM+D -> VirtualMedicalProduct" do
       file_path = File.join(File.dirname(__FILE__), "dmd_virtual_medical_products.csv")
 
-      upserts = CSV.foreach(file_path, headers: true).map do |row|
-        {
-          name: row["name"],
-          code: row["code"],
-          form_code: row["form_code"],
-          route_code: row["route_code"],
-          unit_dose_uom_code: row["unit_dose_uom_code"],
-          unit_dose_form_size_uom_code: row["unit_dose_form_size_uom_code"],
-          active_ingredient_strength_numerator_uom_code:
-            row["active_ingredient_strength_numerator_uom_code"],
-          basis_of_strength: row["basis_of_strength"],
-          strength_numerator_value: row["strength_numerator_value"],
-          virtual_therapeutic_moiety_code: row["virtual_therapeutic_moiety_code"],
-          atc_code: row["atc_code"]
-        }
+      upsert_csv_in_batches(file_path, VirtualMedicalProduct, unique_by: :code) do |row|
+        row.to_h.slice(
+          "name",
+          "code",
+          "form_code",
+          "route_code",
+          "unit_dose_uom_code",
+          "unit_dose_form_size_uom_code",
+          "active_ingredient_strength_numerator_uom_code",
+          "basis_of_strength",
+          "strength_numerator_value",
+          "virtual_therapeutic_moiety_code",
+          "atc_code"
+        )
       end
-
-      VirtualMedicalProduct.upsert_all(upserts, unique_by: :code)
     end
 
     Rails.benchmark "DM+D -> ActualMedicalProduct" do
       file_path = File.join(File.dirname(__FILE__), "dmd_actual_medical_products.csv")
-      upserts = CSV.foreach(file_path, headers: true).map do |row|
+
+      upsert_csv_in_batches(file_path, ActualMedicalProduct, unique_by: :code) do |row|
         {
           code: row["code"],
           virtual_medical_product_code: row["virtual_medical_product_code"],
           trade_family_code: row["trade_family_code"]
         }
       end
-
-      ActualMedicalProduct.upsert_all(upserts, unique_by: :code)
     end
 
     Rails.benchmark "DM+D -> TradeFamilies" do
       file_path = File.join(File.dirname(__FILE__), "drug_trade_families.csv")
 
-      upserts = CSV.foreach(file_path, headers: true).map do |row|
+      upsert_csv_in_batches(file_path, Drugs::TradeFamily, unique_by: :code) do |row|
         {
           name: row["name"],
           code: row["code"]
         }
       end
-      Drugs::TradeFamily.upsert_all(upserts, unique_by: :code)
     end
 
     Rails.benchmark "DM+D -> ClassificationAndDrugsSynchroniser" do

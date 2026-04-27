@@ -15,7 +15,7 @@ services:
     preDeployCommand: bundle exec rails db:prepare
     initialDeployHook: bundle exec rails db:seed
     previews:
-      plan: starter
+      plan: standard
       numInstances: 1
     envVars:
       - fromGroup: renalware-review-secrets
