@@ -1,7 +1,5 @@
 module Renalware
   Rails.benchmark "Adding Demo Site Users" do
-    ensure_factory_bot_loaded
-
     sites = %w(Barts KCH Kent Lister)
     host_hospital_centre_id = Hospitals::Centre.where(host_site: true).order(:name).pick(:id)
 
@@ -10,9 +8,7 @@ module Renalware
 
       # superadmin
       username = "super#{site_code}"
-      FactoryBot.create(
-        :user,
-        :find_or_create,
+      create_seed_user(
         username: username,
         given_name: site,
         family_name: "Superuser",
@@ -28,9 +24,7 @@ module Renalware
 
       # admin
       username = "#{site_code}admin"
-      FactoryBot.create(
-        :user,
-        :find_or_create,
+      create_seed_user(
         username: username,
         given_name: site,
         family_name: "Admin",
@@ -46,9 +40,7 @@ module Renalware
 
       # clinician
       username = "#{site_code}doc"
-      FactoryBot.create(
-        :user,
-        :find_or_create,
+      create_seed_user(
         username: username,
         given_name: "Doctor",
         family_name: site,
@@ -65,9 +57,7 @@ module Renalware
 
       # nurse NB same role as doc
       username = "#{site_code}nurse"
-      FactoryBot.create(
-        :user,
-        :find_or_create,
+      create_seed_user(
         username: username,
         given_name: site,
         family_name: "Nurse",
@@ -82,9 +72,7 @@ module Renalware
 
       # guest i.e. readonly
       username = "#{site_code}guest"
-      FactoryBot.create(
-        :user,
-        :find_or_create,
+      create_seed_user(
         username: username,
         given_name: site,
         family_name: "Guest",
@@ -100,9 +88,7 @@ module Renalware
 
     # add rwdev superadmin
     username = "rwdev"
-    FactoryBot.create(
-      :user,
-      :find_or_create,
+    create_seed_user(
       username: username,
       given_name: "Renalware",
       family_name: "Developer",

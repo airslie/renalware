@@ -4,11 +4,7 @@ module Renalware
   include SeedsHelper
 
   Rails.benchmark "Adding System User" do
-    ensure_factory_bot_loaded
-
-    FactoryBot.create(
-      :user,
-      :find_or_create,
+    create_seed_user(
       given_name: "System",
       family_name: "User",
       username: Renalware::SystemUser.username,
