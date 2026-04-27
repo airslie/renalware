@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "up" => "rails/health#show", as: :rails_health_check
+
   super_admin_constraint = lambda do |request|
     current_user = request.env["warden"].user || Renalware::NullUser.new
     current_user.has_role?(:super_admin)

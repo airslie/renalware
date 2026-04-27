@@ -13,7 +13,7 @@ Rails.application.configure do
   # the Gemfile and no config.assets.css_compressor option is set.
   config.assets.css_compressor = nil
   config.sass.line_comments = false
-  config.active_storage.service = :azure
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "azure").to_sym
 
   config.action_mailer.smtp_settings = {
     port: ENV.fetch("MAILGUN_SMTP_PORT", nil),
@@ -118,10 +118,10 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = {
-    host: ENV.fetch("HOST", "localhost"),
+    host: ENV.fetch("HOST", ENV.fetch("RENDER_EXTERNAL_HOSTNAME", "localhost")),
     protocol: "https"
   }
 
-  config.action_mailer.delivery_method = :microsoft_graph_api
+  config.action_mailer.delivery_method = Renalware.config.mail_delivery_method
   config.active_job.log_arguments = false
 end

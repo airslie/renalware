@@ -1,0 +1,66 @@
+previews:
+  generation: manual
+  expireAfterDays: 5
+
+services:
+  - type: web
+    name: renalware-review
+    runtime: docker
+    plan: standard
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeployTrigger: checksPass
+    healthCheckPath: /up
+    preDeployCommand: bundle exec rails db:prepare
+    initialDeployHook: bundle exec rails db:seed
+    previews:
+      plan: starter
+      numInstances: 1
+    envVars:
+      - fromGroup: renalware-review-secrets
+      - key: ACTIVE_STORAGE_SERVICE
+        value: local
+      - key: CACHE_DATABASE_URL
+        fromDatabase:
+          name: renalware-review-cache
+          property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: renalware-review-db
+          property: connectionString
+      - key: GOOD_JOB_ENABLE_CRON
+        value: false
+      - key: GOOD_JOB_EXECUTION_MODE
+        value: async
+      - key: MAIL_DELIVERY_METHOD
+        value: test
+      - key: PORT
+        value: 3000
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MAX_THREADS
+        value: 3
+      - key: RENALWARE_STAGE
+        value: demo
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 1
+
+databases:
+  - name: renalware-review-db
+    databaseName: renalware
+    plan: basic-1gb
+    previewPlan: basic-256mb
+    diskSizeGB: 15
+    previewDiskSizeGB: 1
+    region: frankfurt
+
+  - name: renalware-review-cache
+    databaseName: renalware_cache
+    plan: basic-256mb
+    previewPlan: basic-256mb
+    diskSizeGB: 1
+    previewDiskSizeGB: 1
+    region: frankfurt
