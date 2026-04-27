@@ -11,12 +11,14 @@ module SeedsHelper
     end
   end
 
-  def ensure_factory_bot_loaded
-    require "factory_bot_rails"
-    require "faker"
-    return if FactoryBot.factories.any?
+  def create_seed_user(attributes)
+    role_names = Array(attributes.delete(:role)) + Array(attributes.delete(:additional_roles))
+    roles = role_names.compact.map { |name| Renalware::Role.find_by!(name: name) }
 
-    FactoryBot.definition_file_paths = Array(Rails.root.join("spec/factories"))
-    FactoryBot.find_definitions
+    user = Renalware::User.find_or_initialize_by(username: attributes.fetch(:username))
+    user.assign_attributes(attributes)
+    user.roles = user.roles.to_a | roles
+    user.save!
+    user
   end
 end
