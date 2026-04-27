@@ -52,7 +52,7 @@ databases:
   - name: renalware-review-db
     databaseName: renalware
     plan: basic-1gb
-    previewPlan: basic-256mb
+    previewPlan: basic-1gb
     diskSizeGB: 15
     previewDiskSizeGB: 1
     region: frankfurt
