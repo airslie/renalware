@@ -24,7 +24,8 @@ module Renalware
       ["every_3_months", "Every three months", 0.08],
       ["every_6_months", "Every six months", 0.04],
       ["as_required", "As required", nil],
-      ["once_only", "Once only (stat)", nil]
+      ["once_only", "Once only (stat)", nil],
+      ["on_hd", "On HD", nil]
     ].each_with_index do |(name, title, doses_per_week), idx|
       Drugs::Frequency.find_or_create_by!(
         name: name,
