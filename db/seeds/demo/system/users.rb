@@ -101,5 +101,8 @@ module Renalware
       hospital_centre_id: host_hospital_centre_id,
       role: :devops
     )
+
+    # Make the users 'active' so they appear in various dropdowns in the UI.
+    Renalware::User.update_all(last_activity_at: 1.day.ago)
   end
 end
