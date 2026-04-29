@@ -88,6 +88,12 @@ module Renalware
         ::Renalware::Duration.from_minutes(prescribed_time).to_s
       end
 
+      def formatted_anuric
+        return "Unknown" if anuric.nil?
+
+        anuric ? "Yes" : "No"
+      end
+
       def blood_flow
         "#{dialysis.blood_flow} ml/min" if dialysis.blood_flow.present?
       end

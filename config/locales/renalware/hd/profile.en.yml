@@ -32,9 +32,11 @@ en:
   activerecord:
     attributes:
       renalware/hd/profile:
+        anuric: Anuric (<100ml daily)
         created_at: Started
         deactivated_at: Stopped
         dialysate: Dialysis Solution
+        formatted_anuric: Anuric (<100ml daily)
         formatted_prescribed_time: Prescribed Time on HD
         hospital_centre: Hospital Centre
         hospital_unit: Hospital Unit
@@ -79,6 +81,7 @@ en:
             loading_dose: 'Loading dose:'
             stop_time: "  Stop time:"
             type: 'Anticoagulant:'
+          anuric: 'Anuric (<100ml daily):'
           home_machine_identifier: Home Machine Identifier
           bicarbonate: 'Bicarbonate:'
           blood_flow: 'Blood flow:'

@@ -44,6 +44,9 @@ describe "Editing a patient's current HD profile", js: false do
       select "2:00", from: "Prescribed Time on HD"
       select nurse.to_s, from: "Named nurse"
       fill_in "Prescription Date", with: "01 Feb 2018"
+      within ".hd_profile_anuric" do
+        choose "Yes"
+      end
 
       # Dialysis
       choose "HDF-PRE"
@@ -122,6 +125,7 @@ describe "Editing a patient's current HD profile", js: false do
         hospital_unit:,
         prescriber: user,
         schedule_definition:,
+        anuric: true,
         home_machine_identifier: "ABC123"
       )
 
