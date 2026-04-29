@@ -17,6 +17,7 @@
           legend: "Prescription", destination: "prescription",
           models: { profile => [:prescribed_time,
                                 :prescribed_on,
+                                :formatted_anuric,
                                 :prescriber] }
 
       = render "renalware/shared/attributes_group",

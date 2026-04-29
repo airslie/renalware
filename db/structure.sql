@@ -7563,7 +7563,8 @@ CREATE TABLE renalware.hd_profiles (
     schedule_definition_id integer,
     dialysate_id bigint,
     scheduled_time time without time zone,
-    home_machine_identifier character varying
+    home_machine_identifier character varying,
+    anuric boolean
 );
 
 
@@ -32200,9 +32201,10 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO renalware,public,renalware_mse,renalware_blt,renalware_ich;
+SET search_path TO renalware, public, renalware_mse, renalware_blt, renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260429120000'),
 ('20260420112012'),
 ('20260415165113'),
 ('20260408120000'),

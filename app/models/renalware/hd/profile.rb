@@ -51,6 +51,10 @@ module Renalware
         [["Yes", true], ["No", false]]
       end
 
+      def self.anuric_options
+        [["Unknown", nil], ["Yes", true], ["No", false]]
+      end
+
       def current_schedule
         return other_schedule if other_schedule.present?
 

@@ -9,6 +9,7 @@ en:
             loading_dose: loading_dose
             stop_time: stop_time
             type: 'Anticoagulant:'
+          anuric: 'Anuric (<100ml daily):'
           blood_flow: Blood Flow
           cannulation_type: 'Cannulation type:'
           dialysate: 'Dialysate:'

@@ -80,7 +80,7 @@ module Renalware
         [
           :schedule_definition_id, :other_schedule, :hospital_unit_id, :dialysate_id,
           :scheduled_time, :prescribed_time, :prescribed_on, :prescriber_id,
-          :named_nurse_id, :transport_decider_id, :home_machine_identifier,
+          :anuric, :named_nurse_id, :transport_decider_id, :home_machine_identifier,
           document: {}
         ]
       end

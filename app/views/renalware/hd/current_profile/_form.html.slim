@@ -41,6 +41,10 @@ ruby:
       = f.input :prescribed_on,
                 as: :flatpickr,
                 wrapper: :horizontal_datepicker
+      = f.input :anuric,
+                as: :inline_radio_buttons,
+                collection: Renalware::HD::Profile.anuric_options,
+                wrapper: :horizontal_medium
       = f.association :prescriber,
                       as: :user_picker,
                       collection: Renalware::User.active,
