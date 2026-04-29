@@ -68,10 +68,19 @@ module Renalware
       end
 
       def profile_params
-        params
+        permitted = params
           .require(:hd_profile)
           .permit(attributes)
-          .to_h.merge(by: current_user)
+          .to_h
+
+        permitted[:anuric] = normalize_anuric(permitted[:anuric]) if permitted.key?(:anuric)
+        permitted.merge(by: current_user)
+      end
+
+      def normalize_anuric(value)
+        return nil if value.blank? || value == "unknown"
+
+        ActiveModel::Type::Boolean.new.cast(value)
       end
 
       # Note that named_nurse_id is a virtual attribute allowing us to update

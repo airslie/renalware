@@ -44,6 +44,7 @@ ruby:
       = f.input :anuric,
                 as: :inline_radio_buttons,
                 collection: Renalware::HD::Profile.anuric_options,
+                checked: Renalware::HD::Profile.anuric_option_for(profile.anuric),
                 wrapper: :horizontal_medium
       = f.association :prescriber,
                       as: :user_picker,

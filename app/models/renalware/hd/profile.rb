@@ -52,7 +52,13 @@ module Renalware
       end
 
       def self.anuric_options
-        [["Unknown", nil], ["Yes", true], ["No", false]]
+        [%w(Unknown unknown), %w(Yes true), %w(No false)]
+      end
+
+      def self.anuric_option_for(value)
+        return "unknown" if value.nil?
+
+        value.to_s
       end
 
       def current_schedule

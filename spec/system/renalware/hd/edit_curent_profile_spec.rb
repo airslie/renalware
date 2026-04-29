@@ -169,6 +169,35 @@ describe "Editing a patient's current HD profile", js: false do
         assessed_on: Date.parse("2018-04-01")
       )
     end
+
+    it "stores an unknown anuric value as nil and displays Unknown" do
+      centre
+      hospital_unit
+      dialysate
+
+      user = login_as_clinical
+      visit patient_hd_dashboard_path(patient)
+      within ".page-actions" do
+        click_on t("btn.add")
+        click_on "HD Profile"
+      end
+
+      select "Unit1", from: "Hospital Unit"
+      select user.to_s, from: "Prescriber"
+      fill_in "Prescription Date", with: "01 Feb 2018"
+      within ".hd_profile_anuric" do
+        choose "Unknown"
+      end
+
+      submit_form
+
+      expect(page).to have_current_path(patient_hd_dashboard_path(patient))
+      within ".hd-profile-summary" do
+        expect(page).to have_content("Anuric (<100ml daily):")
+        expect(page).to have_content("Unknown")
+      end
+      expect(patient.reload.hd_profile.anuric).to be_nil
+    end
   end
 
   context "when the patient already has an HD Profile" do
