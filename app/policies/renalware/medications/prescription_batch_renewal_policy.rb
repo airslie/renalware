@@ -17,7 +17,9 @@ module Renalware
       end
 
       def auto_terminate_hd_prescriptions_after_period?
-        Renalware.config.auto_terminate_hd_prescriptions_after_period.present?
+        period = Renalware.config.auto_terminate_hd_prescriptions_after_period
+
+        period.present? && !period.zero?
       end
     end
   end

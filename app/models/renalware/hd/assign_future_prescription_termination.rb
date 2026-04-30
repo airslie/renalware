@@ -18,6 +18,7 @@ module Renalware
         return unless prescription.administer_on_hd?
         return if prescription.prescribed_on.blank?
         return if termination_period.nil?
+        return if termination_period.zero?
         return if termination&.terminated_on_set_by_user?
 
         if termination.present?

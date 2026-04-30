@@ -15,7 +15,7 @@ module Renalware
       def self.maximum_allowed_termination_date(record)
         prescription = record.prescription
         period = Renalware.config.auto_terminate_hd_prescriptions_after_period
-        if prescription.administer_on_hd? && period.present?
+        if prescription.administer_on_hd? && period.present? && !period.zero?
           prescription.prescribed_on + period + 1.day
         else
           100.years.from_now

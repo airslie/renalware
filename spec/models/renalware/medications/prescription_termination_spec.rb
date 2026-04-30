@@ -55,6 +55,20 @@ module Renalware
             end
           end
 
+          context "when hd prescription auto termination is disabled with a zero duration" do
+            let(:max_period) { 0.days }
+
+            it "allows far future termination dates" do
+              termination = build(
+                :prescription_termination,
+                terminated_on: prescription.prescribed_on + 20.years,
+                prescription:
+              )
+
+              expect(termination).to be_valid
+            end
+          end
+
           context "when terminated_on is more than the max configured period after " \
                   "prescribed_on plus one day" do
             let(:max_period) { 1.year }

@@ -42,6 +42,34 @@ describe Renalware::Configuration do
     end
   end
 
+  describe "#auto_terminate_hd_prescriptions_after_period" do
+    it "can be disabled via ENV with a zero duration" do
+      ENV["AUTO_TERMINATE_HD_PRESCRIPTIONS_AFTER_PERIOD"] = "P0D"
+
+      expect(config.auto_terminate_hd_prescriptions_after_period).to be_nil
+    end
+
+    it "can be disabled via ENV with a blank value" do
+      ENV["AUTO_TERMINATE_HD_PRESCRIPTIONS_AFTER_PERIOD"] = ""
+
+      expect(config.auto_terminate_hd_prescriptions_after_period).to be_nil
+    end
+  end
+
+  describe "#auto_terminate_hd_stat_prescriptions_after_period" do
+    it "can be disabled via ENV with a zero duration" do
+      ENV["AUTO_TERMINATE_HD_STAT_PRESCRIPTIONS_AFTER_PERIOD"] = "P0D"
+
+      expect(config.auto_terminate_hd_stat_prescriptions_after_period).to be_nil
+    end
+
+    it "can be disabled via ENV with a blank value" do
+      ENV["AUTO_TERMINATE_HD_STAT_PRESCRIPTIONS_AFTER_PERIOD"] = ""
+
+      expect(config.auto_terminate_hd_stat_prescriptions_after_period).to be_nil
+    end
+  end
+
   describe "#devise_extra_modules" do
     it "defaults to empty" do
       expect(config.devise_extra_modules).to eq([])

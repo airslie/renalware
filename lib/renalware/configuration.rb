@@ -409,14 +409,10 @@ module Renalware
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("ALLOW_MODALITY_HISTORY_AMENDMENTS", "true"))
     }
     config_accessor(:auto_terminate_hd_prescriptions_after_period) {
-      ActiveSupport::Duration.parse(
-        ENV.fetch("AUTO_TERMINATE_HD_PRESCRIPTIONS_AFTER_PERIOD", "P6M")
-      )
+      optional_duration_from_env("AUTO_TERMINATE_HD_PRESCRIPTIONS_AFTER_PERIOD", "P6M")
     }
     config_accessor(:auto_terminate_hd_stat_prescriptions_after_period) {
-      ActiveSupport::Duration.parse(
-        ENV.fetch("AUTO_TERMINATE_HD_STAT_PRESCRIPTIONS_AFTER_PERIOD", "P14D")
-      )
+      optional_duration_from_env("AUTO_TERMINATE_HD_STAT_PRESCRIPTIONS_AFTER_PERIOD", "P14D")
     }
     config_accessor(:enable_expiring_prescriptions_list_component) {
       ActiveModel::Type::Boolean.new.cast(
@@ -640,6 +636,16 @@ module Renalware
 
     def entra_authentication_enabled?
       authentication_provider_enabled?(:entra_id)
+    end
+
+    private
+
+    def optional_duration_from_env(key, default)
+      value = ENV.fetch(key, default)
+      return if value.blank?
+
+      duration = ActiveSupport::Duration.parse(value)
+      duration.zero? ? nil : duration
     end
   end
 

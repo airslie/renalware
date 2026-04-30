@@ -41,6 +41,19 @@ module Renalware
             end
           end
 
+          context "when auto_terminate_hd_prescriptions_after_period is zero" do
+            before do
+              allow(Renalware.config)
+                .to receive(:auto_terminate_hd_prescriptions_after_period)
+                .and_return(0.days)
+            end
+
+            it { is_expected.not_to permit(super_admin, nil) }
+            it { is_expected.not_to permit(super_admin_hd_prescriber, nil) }
+            it { is_expected.not_to permit(clinician, nil) }
+            it { is_expected.not_to permit(clinician_hd_prescriber, nil) }
+          end
+
           context "when auto_terminate_hd_prescriptions_after_period is set to a period" do
             before do
               allow(Renalware.config)
