@@ -201,6 +201,23 @@ describe "Create an HD prescription" do
           expect(Renalware::Medications::Prescription.last.termination).to be_nil
         end
 
+        it "does not create a termination if the configured period is zero" do
+          allow(Renalware.config)
+            .to receive(:auto_terminate_hd_prescriptions_after_period)
+            .and_return(0.days)
+
+          params = prescription_params(administer_on_hd: true)
+
+          post(
+            patient_prescriptions_path(patient),
+            params: { medications_prescription: params }
+          )
+          follow_redirect!
+          expect(response).to be_successful
+
+          expect(Renalware::Medications::Prescription.last.termination).to be_nil
+        end
+
         it "does not error when data is missing" do
           period = 3.months
           allow(Renalware.config)
@@ -279,6 +296,23 @@ describe "Create an HD prescription" do
         allow(Renalware.config)
           .to receive(:auto_terminate_hd_stat_prescriptions_after_period)
           .and_return(nil)
+
+        params = prescription_params(administer_on_hd: true, stat: true)
+
+        post(
+          patient_prescriptions_path(patient),
+          params: { medications_prescription: params }
+        )
+        follow_redirect!
+        expect(response).to be_successful
+
+        expect(Renalware::Medications::Prescription.last.termination).to be_nil
+      end
+
+      it "does not create a termination if the configured period is zero" do
+        allow(Renalware.config)
+          .to receive(:auto_terminate_hd_stat_prescriptions_after_period)
+          .and_return(0.days)
 
         params = prescription_params(administer_on_hd: true, stat: true)
 
