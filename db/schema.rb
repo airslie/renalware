@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_29_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_30_120100) do
   create_schema "renalware"
 
   # These are extensions that must be enabled in order to support this database
@@ -2686,10 +2686,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_120000) do
     t.index ["patient_id"], name: "index_feed_logs_on_patient_id"
   end
 
+  create_table "renalware.feed_message_housekeeping_runs", force: :cascade do |t|
+    t.integer "batch_size", null: false
+    t.datetime "created_at", null: false
+    t.datetime "cutoff_sent_at", null: false
+    t.integer "deleted_count", default: 0, null: false
+    t.text "error_message"
+    t.datetime "finished_at"
+    t.string "function_name", null: false
+    t.enum "message_type", enum_type: "hl7_message_type"
+    t.datetime "newest_deleted_sent_at"
+    t.datetime "oldest_deleted_sent_at"
+    t.interval "retention_period"
+    t.datetime "started_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "renalware.feed_message_replays", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "error_message"
-    t.bigint "message_id", null: false
+    t.bigint "message_id"
     t.bigint "replay_request_id", null: false
     t.boolean "success", default: false, null: false
     t.datetime "updated_at", null: false

@@ -1367,6 +1367,137 @@ CREATE FUNCTION renalware.hd_schedule_definition_days_text(days integer[]) RETUR
 
 
 --
+-- Name: housekeep_old_adt_feed_messages(); Type: FUNCTION; Schema: renalware; Owner: -
+--
+
+CREATE FUNCTION renalware.housekeep_old_adt_feed_messages() RETURNS TABLE(run_id bigint, deleted_count integer, cutoff_sent_at timestamp without time zone, oldest_deleted_sent_at timestamp without time zone, newest_deleted_sent_at timestamp without time zone)
+    LANGUAGE plpgsql
+    AS $$
+declare
+  v_function_name text := 'housekeep_old_adt_feed_messages';
+  v_started_at timestamp := current_timestamp;
+  v_cutoff_sent_at timestamp := current_timestamp - interval '6 months';
+  v_message_type renalware.hl7_message_type := 'ADT';
+  v_retention_period interval := interval '6 months';
+  v_batch_size integer := 5000;
+  v_run_id bigint;
+  v_deleted_count integer := 0;
+  v_oldest_deleted_sent_at timestamp;
+  v_newest_deleted_sent_at timestamp;
+begin
+  insert into renalware.feed_message_housekeeping_runs (
+    function_name,
+    started_at,
+    message_type,
+    retention_period,
+    batch_size,
+    cutoff_sent_at,
+    created_at,
+    updated_at
+  ) values (
+    v_function_name,
+    v_started_at,
+    v_message_type,
+    v_retention_period,
+    v_batch_size,
+    v_cutoff_sent_at,
+    current_timestamp,
+    current_timestamp
+  )
+  returning id into v_run_id;
+
+  begin
+    create temporary table if not exists feed_message_housekeeping_candidates(
+      id integer primary key,
+      sent_at timestamp
+    ) on commit drop;
+
+    truncate table feed_message_housekeeping_candidates;
+
+    insert into feed_message_housekeeping_candidates(id, sent_at)
+    select feed_messages.id, feed_messages.sent_at
+    from renalware.feed_messages
+    where feed_messages.message_type = v_message_type
+    and feed_messages.sent_at < v_cutoff_sent_at
+    and not exists (
+      select 1
+      from renalware.patient_merge_merges
+      where patient_merge_merges.feed_message_id = feed_messages.id
+    )
+    order by feed_messages.sent_at asc, feed_messages.id asc
+    limit v_batch_size
+    for update of feed_messages skip locked;
+
+    update renalware.feed_logs
+    set message_id = null,
+        updated_at = current_timestamp
+    where message_id in (
+      select id
+      from feed_message_housekeeping_candidates
+    );
+
+    update renalware.feed_message_replays
+    set message_id = null,
+        updated_at = current_timestamp
+    where message_id in (
+      select id
+      from feed_message_housekeeping_candidates
+    );
+
+    with deleted as (
+      delete from renalware.feed_messages
+      where id in (
+        select id
+        from feed_message_housekeeping_candidates
+      )
+      returning sent_at
+    )
+    select
+      count(*)::integer,
+      min(deleted.sent_at),
+      max(deleted.sent_at)
+    into
+      v_deleted_count,
+      v_oldest_deleted_sent_at,
+      v_newest_deleted_sent_at
+    from deleted;
+  exception
+    when others then
+      update renalware.feed_message_housekeeping_runs
+      set finished_at = current_timestamp,
+          error_message = sqlerrm,
+          updated_at = current_timestamp
+      where id = v_run_id;
+
+      return query
+      select
+        v_run_id,
+        0,
+        v_cutoff_sent_at,
+        null::timestamp,
+        null::timestamp;
+  end;
+
+  update renalware.feed_message_housekeeping_runs
+  set finished_at = current_timestamp,
+      deleted_count = v_deleted_count,
+      oldest_deleted_sent_at = v_oldest_deleted_sent_at,
+      newest_deleted_sent_at = v_newest_deleted_sent_at,
+      updated_at = current_timestamp
+  where id = v_run_id;
+
+  return query
+  select
+    v_run_id,
+    v_deleted_count,
+    v_cutoff_sent_at,
+    v_oldest_deleted_sent_at,
+    v_newest_deleted_sent_at;
+end;
+$$;
+
+
+--
 -- Name: import_feed_gps(); Type: FUNCTION; Schema: renalware; Owner: -
 --
 
@@ -6315,13 +6446,54 @@ ALTER SEQUENCE renalware.feed_logs_id_seq OWNED BY renalware.feed_logs.id;
 
 
 --
+-- Name: feed_message_housekeeping_runs; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.feed_message_housekeeping_runs (
+    id bigint NOT NULL,
+    function_name character varying NOT NULL,
+    started_at timestamp(6) without time zone NOT NULL,
+    finished_at timestamp(6) without time zone,
+    message_type renalware.hl7_message_type,
+    retention_period interval,
+    batch_size integer NOT NULL,
+    cutoff_sent_at timestamp(6) without time zone NOT NULL,
+    deleted_count integer DEFAULT 0 NOT NULL,
+    oldest_deleted_sent_at timestamp(6) without time zone,
+    newest_deleted_sent_at timestamp(6) without time zone,
+    error_message text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: feed_message_housekeeping_runs_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.feed_message_housekeeping_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_message_housekeeping_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.feed_message_housekeeping_runs_id_seq OWNED BY renalware.feed_message_housekeeping_runs.id;
+
+
+--
 -- Name: feed_message_replays; Type: TABLE; Schema: renalware; Owner: -
 --
 
 CREATE TABLE renalware.feed_message_replays (
     id bigint NOT NULL,
     replay_request_id bigint NOT NULL,
-    message_id bigint NOT NULL,
+    message_id bigint,
     success boolean DEFAULT false NOT NULL,
     error_message text,
     created_at timestamp(6) without time zone NOT NULL,
@@ -17435,6 +17607,13 @@ ALTER TABLE ONLY renalware.feed_logs ALTER COLUMN id SET DEFAULT nextval('renalw
 
 
 --
+-- Name: feed_message_housekeeping_runs id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_message_housekeeping_runs ALTER COLUMN id SET DEFAULT nextval('renalware.feed_message_housekeeping_runs_id_seq'::regclass);
+
+
+--
 -- Name: feed_message_replays id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -19594,6 +19773,14 @@ ALTER TABLE ONLY renalware.feed_hl7_test_messages
 
 ALTER TABLE ONLY renalware.feed_logs
     ADD CONSTRAINT feed_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_message_housekeeping_runs feed_message_housekeeping_runs_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.feed_message_housekeeping_runs
+    ADD CONSTRAINT feed_message_housekeeping_runs_pkey PRIMARY KEY (id);
 
 
 --
@@ -32204,6 +32391,8 @@ ALTER TABLE ONLY renalware.transplant_registration_statuses
 SET search_path TO renalware, public, renalware_mse, renalware_blt, renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260430120100'),
+('20260430120000'),
 ('20260429120000'),
 ('20260420112012'),
 ('20260415165113'),
