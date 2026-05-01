@@ -18,8 +18,8 @@ export default class extends Controller {
   // Note protect_from_forgery options in SnippetInvocationsController
   createSnippetInvocation(invocationUrl) {
     fetch(invocationUrl, {
-      method: 'POST',
-      credentials: 'same-origin',
+      method: "POST",
+      credentials: "same-origin",
       headers: new Headers({"content-type": "application/json"})
     })
     .then(response => response.json())

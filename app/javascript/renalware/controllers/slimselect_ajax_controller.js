@@ -14,7 +14,7 @@ export default class extends Controller {
 
   setup(event) {
     this.cleanup()
-    this.go = this.go.bind(this);
+    this.go = this.go.bind(this)
     const options = {
       select: this.element,
       events: {},
@@ -27,11 +27,11 @@ export default class extends Controller {
     }
 
     if (this.optionsUrl) {
-      options.settings.searchingText = 'Searching...'
+      options.settings.searchingText = "Searching..."
       options.events = {
         search: this.debouncePromise(this.go, 200),
         afterOpen: () => {
-          this.slimSelect.search('')
+          this.slimSelect.search("")
         }
       }
     }
@@ -47,23 +47,23 @@ export default class extends Controller {
   go(searchTerm, currentData) {
     return new Promise((resolve, reject) => {
       if (searchTerm.length < 3) {
-        reject("Search term must be at least 3 characters");
-        return;
+        reject("Search term must be at least 3 characters")
+        return
       }
-      const url = this.optionsUrl.replace('REPLACEME', searchTerm);
+      const url = this.optionsUrl.replace("REPLACEME", searchTerm)
 
       fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Accept': 'application/json'
+          "Accept": "application/json"
         },
       })
       .then((response) => response.json())
       .then(data => {
-        resolve(this.mergeOptions(this.normalizeOptions(data), currentData));
+        resolve(this.mergeOptions(this.normalizeOptions(data), currentData))
       })
       .catch(error => reject("Sorry, there was a server error"))
-    });
+    })
   }
 
   normalizeOptions(data) {
@@ -105,7 +105,7 @@ export default class extends Controller {
   }
 
   debouncePromise(func, wait) {
-    let timeout;
+    let timeout
     return function (...args) {
       clearTimeout(timeout)
       return new Promise((resolve, reject) => {
@@ -119,11 +119,11 @@ export default class extends Controller {
   }
 
   get addable () {
-    return this.element.dataset.addable === 'true'
+    return this.element.dataset.addable === "true"
   }
 
   get allowDeselect () {
-    return this.element.dataset.allowDeselect === 'true'
+    return this.element.dataset.allowDeselect === "true"
   }
 
   get optionsUrl () {
@@ -131,6 +131,6 @@ export default class extends Controller {
   }
 
   get placeholder () {
-    return this.element.getAttribute('placeholder')
+    return this.element.getAttribute("placeholder")
   }
 }

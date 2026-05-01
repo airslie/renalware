@@ -25,7 +25,7 @@ export default class extends Controller {
     const target = event.target
     target.innerHTML = this.lessTextValue
     this.contentTarget.style.setProperty("--read-more-line-clamp", "'unset'")
-    $('.mgrid > .row').masonry('layout');
+    $(".mgrid > .row").masonry("layout")
   }
 
   hide(event) {
@@ -34,6 +34,6 @@ export default class extends Controller {
     const target = event.target
     target.innerHTML = this.moreTextValue
     this.contentTarget.style.removeProperty("--read-more-line-clamp")
-    $('.mgrid > .row').masonry('layout');
+    $(".mgrid > .row").masonry("layout")
   }
 }
