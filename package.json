@@ -44,8 +44,7 @@
     "build:css": "bundle exec tailwindcss -c ./config/tailwind.config.js -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css"
   },
   "devDependencies": {
-    "eslint": "^9.9",
-    "eslint-plugin-import": "^2.7.0",
+    "eslint": "^10.0",
     "playwright": "1.59.0",
     "prettier": "^3.4"
   }
