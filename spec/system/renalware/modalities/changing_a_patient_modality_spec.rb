@@ -1,4 +1,28 @@
 describe "Changing a patient's modality", :js do
+  it "hides notes and warns when death is selected" do
+    warning = "Please note that after saving the Death modality, " \
+              "all current prescriptions will be terminated!"
+    login_as_clinical
+    patient = create(:patient)
+    create(:modality_description, :death)
+    create(:modality_description, :hd)
+    create(:modality_change_type, :other, default: true)
+
+    visit new_patient_modality_path(patient)
+
+    expect(page).to have_field("Notes")
+
+    accept_alert(warning) do
+      select "Death", from: "Description"
+    end
+
+    expect(page).to have_no_field("Notes")
+
+    select "HD", from: "Description"
+
+    expect(page).to have_field("Notes")
+  end
+
   it "allows specifying a source hospital if the change type requires it" do
     user = login_as_clinical
     patient = create(:patient, by: user)

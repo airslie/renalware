@@ -8,6 +8,7 @@ import WeightChangeCalculatorController from "./clinics/weight_change_calculator
 import DietaryProteinCalculatorController from "./clinics/dietary_protein_calculator_controller"
 import HDPrescriptionController from "./hd/prescription_administration_controller"
 import MedicationsHomeDeliveryModalController from "./medications/home_delivery_modal_controller"
+import ModalitiesDeathToggleController from "./modalities/death_toggle_controller"
 import SnippetsController from "./snippets_controller"
 import SnippetController from "./snippet_controller"
 import LettersFormController from "./letters/form_controller"
@@ -54,6 +55,7 @@ import ProblemsSearchController from "./problems/search_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
+application.register("modalities--death-toggle", ModalitiesDeathToggleController)
 application.register(
   "home-delivery-modal",
   MedicationsHomeDeliveryModalController
