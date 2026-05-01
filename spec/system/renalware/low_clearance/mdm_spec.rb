@@ -8,13 +8,13 @@ describe "Advanced Kidney Care MDM" do
 
     visit patient_low_clearance_mdm_path(patient)
 
-    expect(page).to have_content(patient.to_s)
-    expect(page).to have_content("Current Problems")
-    expect(page).to have_content("Prescriptions")
-    expect(page).to have_content("Events")
-    expect(page).to have_content("Letters")
-    expect(page).to have_content("Pathology")
-    expect(page).to have_content("AKCC")
-    expect(page).to have_content("Date first seen")
+    expect(page).to have_text(patient.to_s)
+    expect(page).to have_text("Current Problems")
+    expect(page).to have_text("Prescriptions")
+    expect(page).to have_text("Events")
+    expect(page).to have_text("Letters")
+    expect(page).to have_text("Pathology")
+    expect(page).to have_text("AKCC")
+    expect(page).to have_text("Date first seen")
   end
 end

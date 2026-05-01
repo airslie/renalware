@@ -10,7 +10,7 @@ describe "Creating a investigation event", :js do
       slim_select "Investigation", from: "Event type"
 
       within("#event-type-specific-inputs") do
-        expect(page).to have_content("Transplant recipient")
+        expect(page).to have_text("Transplant recipient")
       end
 
       choose "Transplant recipient"
@@ -22,7 +22,7 @@ describe "Creating a investigation event", :js do
       click_button "Create"
 
       within "h1" do
-        expect(page).to have_content("Events", exact: true)
+        expect(page).to have_text("Events", exact: true)
       end
 
       expect(page).to have_current_path(patient_events_path(patient))

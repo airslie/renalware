@@ -13,10 +13,10 @@ module Renalware
 
         visit system_nag_definitions_path
 
-        expect(page).to have_content nag_def.importance
-        expect(page).to have_content nag_def.description
-        expect(page).to have_content nag_def.sql_function_name
-        expect(page).to have_content nag_def.title
+        expect(page).to have_text nag_def.importance
+        expect(page).to have_text nag_def.description
+        expect(page).to have_text nag_def.sql_function_name
+        expect(page).to have_text nag_def.title
       end
     end
 

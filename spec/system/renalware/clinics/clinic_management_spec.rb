@@ -9,10 +9,10 @@ describe "Clinic management" do
 
     visit clinics_path
 
-    expect(page).to have_content("Clinics")
+    expect(page).to have_text("Clinics")
     clinics.each do |clinic|
-      expect(page).to have_content(clinic.code)
-      expect(page).to have_content(clinic.name)
+      expect(page).to have_text(clinic.code)
+      expect(page).to have_text(clinic.name)
     end
   end
 

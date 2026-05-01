@@ -19,11 +19,11 @@ describe "Department Management" do
     visit hospitals.centre_departments_path(centre, department)
 
     expect(page).to have_http_status(:success)
-    expect(page).to have_no_content(other_department.name)
-    expect(page).to have_content("DeptA")
-    expect(page).to have_content("123")
-    expect(page).to have_content("depta@hospa.com")
-    expect(page).to have_content(department.hospital_centre.name)
+    expect(page).to have_no_text(other_department.name)
+    expect(page).to have_text("DeptA")
+    expect(page).to have_text("123")
+    expect(page).to have_text("depta@hospa.com")
+    expect(page).to have_text(department.hospital_centre.name)
   end
 
   it "add a department" do
@@ -33,7 +33,7 @@ describe "Department Management" do
 
     visit hospitals.centres_path
 
-    expect(page).to have_content("HospA")
+    expect(page).to have_text("HospA")
 
     within("table tr#centre_#{centre.id} .departments_count") do
       click_on "View"
@@ -94,10 +94,10 @@ describe "Department Management" do
     fill_in "Postcode", with: "NEW_POSTCODE"
     click_on t("btn.save")
 
-    expect(page).to have_content("Department updated")
+    expect(page).to have_text("Department updated")
     expect(page).to have_current_path(hospitals.centre_departments_path(centre))
 
-    expect(page).to have_content("NewName")
-    expect(page).to have_content("NEW_POSTCODE")
+    expect(page).to have_text("NewName")
+    expect(page).to have_text("NEW_POSTCODE")
   end
 end

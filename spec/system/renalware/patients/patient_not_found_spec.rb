@@ -7,7 +7,7 @@ module Renalware
         visit patient_clinical_summary_path(patient_id: "asdasdasdasdasdasd")
 
         expect(page).to have_current_path(dashboard_path)
-        expect(page).to have_content("Patient not found")
+        expect(page).to have_text("Patient not found")
       end
 
       it "going to demographics redirects to the dashboard with a flash message" do
@@ -16,7 +16,7 @@ module Renalware
         visit patient_path(id: "asdasdasdasdasdasd")
 
         expect(page).to have_current_path(dashboard_path)
-        expect(page).to have_content("Patient not found")
+        expect(page).to have_text("Patient not found")
       end
     end
   end

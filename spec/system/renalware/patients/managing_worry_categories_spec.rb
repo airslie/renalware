@@ -9,9 +9,9 @@ describe "Worry Category Management" do
     expect(page).to have_current_path(worry_categories_path)
 
     within "#worry_categories" do
-      expect(page).to have_content(category.name)
-      expect(page).to have_content(user.family_name)
-      expect(page).to have_content(I18n.l(category.updated_at))
+      expect(page).to have_text(category.name)
+      expect(page).to have_text(user.family_name)
+      expect(page).to have_text(I18n.l(category.updated_at))
     end
   end
 
@@ -29,7 +29,7 @@ describe "Worry Category Management" do
     click_on t("btn.save")
 
     within "#worry_categories" do
-      expect(page).to have_content("NewName")
+      expect(page).to have_text("NewName")
     end
   end
 
@@ -46,7 +46,7 @@ describe "Worry Category Management" do
     click_on t("btn.create")
 
     within "#worry_categories" do
-      expect(page).to have_content("NewName")
+      expect(page).to have_text("NewName")
     end
   end
 
@@ -61,7 +61,7 @@ describe "Worry Category Management" do
     end
 
     within "#worry_categories" do
-      expect(page).to have_content(category.name) # row will display but be styled as deleted (red)
+      expect(page).to have_text(category.name) # row will display but be styled as deleted (red)
     end
   end
 end

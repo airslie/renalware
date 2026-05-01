@@ -30,14 +30,14 @@ describe "Viewing the dashboard" do
     visit patient_virology_dashboard_path(patient)
 
     within ".patient-content" do
-      expect(page).to have_content("Virology")
-      expect(page).to have_content("Vaccinations")
+      expect(page).to have_text("Virology")
+      expect(page).to have_text("Vaccinations")
 
       within "article.vaccinations" do
-        expect(page).to have_content("Desc")
-        expect(page).to have_content("12-Dec-2017")
+        expect(page).to have_text("Desc")
+        expect(page).to have_text("12-Dec-2017")
         within "header" do
-          expect(page).to have_content("Add")
+          expect(page).to have_text("Add")
         end
       end
     end
@@ -55,10 +55,10 @@ describe "Viewing the dashboard" do
     visit patient_virology_dashboard_path(patient)
 
     within ".patient-content" do
-      expect(page).to have_content("HIV")
-      expect(page).to have_content("Yes (2001)")
-      expect(page).to have_content("HTLV")
-      expect(page).to have_content("Yes (2018)")
+      expect(page).to have_text("HIV")
+      expect(page).to have_text("Yes (2001)")
+      expect(page).to have_text("HTLV")
+      expect(page).to have_text("Yes (2018)")
     end
   end
 
@@ -75,8 +75,8 @@ describe "Viewing the dashboard" do
     visit patient_virology_dashboard_path(patient)
 
     within ".hep_b_antibody_path_results #observations" do
-      expect(page).to have_content("1.11", count: 5)
-      expect(page).to have_content("BHBS")
+      expect(page).to have_text("1.11", count: 5)
+      expect(page).to have_text("BHBS")
     end
   end
 end

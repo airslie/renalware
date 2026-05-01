@@ -23,7 +23,7 @@ describe "Create Duke Activity Status Index (DASI) event", :js do
       click_on "Create"
     }.not_to change(Renalware::Events::Event, :count)
 
-    expect(page).to have_content("is not a number")
+    expect(page).to have_text("is not a number")
 
     fill_in "Score", with: ""
 
@@ -31,7 +31,7 @@ describe "Create Duke Activity Status Index (DASI) event", :js do
       click_on "Create"
     }.not_to change(Renalware::Events::Event, :count)
 
-    expect(page).to have_content("can't be blank")
+    expect(page).to have_text("can't be blank")
 
     #
     # Now add valid inputs

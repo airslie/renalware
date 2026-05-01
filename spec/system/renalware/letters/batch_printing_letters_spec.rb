@@ -16,14 +16,14 @@ describe "Batch printing letters", :js do
 
       visit letters_list_path
 
-      expect(page).to have_content(letter1.author.to_s)
-      expect(page).to have_content(letter2.author.to_s)
+      expect(page).to have_text(letter1.author.to_s)
+      expect(page).to have_text(letter2.author.to_s)
 
       slim_select letter1.author.to_s, from: "Author"
 
       within ".letters-table" do
-        expect(page).to have_content(letter1.author.to_s)
-        expect(page).to have_no_content(letter2.author.to_s)
+        expect(page).to have_text(letter1.author.to_s)
+        expect(page).to have_no_text(letter2.author.to_s)
       end
     end
   end

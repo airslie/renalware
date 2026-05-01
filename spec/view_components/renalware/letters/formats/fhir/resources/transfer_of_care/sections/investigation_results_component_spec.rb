@@ -4,7 +4,7 @@ module Renalware::Letters::Formats::FHIR
       it do
         letter = nil
         render_inline(described_class.new(letter))
-        expect(page).to have_content("Investigation Results")
+        expect(page).to have_text("Investigation Results")
       end
     end
   end

@@ -9,7 +9,7 @@ describe "Creating an Access Plan" do
 
     visit patient_accesses_dashboard_path(patient)
 
-    expect(page).to have_no_content("Plan History")
+    expect(page).to have_no_text("Plan History")
 
     within ".page-actions" do
       click_on t("btn.add")
@@ -26,9 +26,9 @@ describe "Creating an Access Plan" do
     expect(page).to have_current_path(patient_accesses_dashboard_path(patient))
 
     within ".access-plans .current-access-plan" do
-      expect(page).to have_content(plan_type.name)
-      expect(page).to have_content(notes)
-      expect(page).to have_content(todays_date)
+      expect(page).to have_text(plan_type.name)
+      expect(page).to have_text(notes)
+      expect(page).to have_text(todays_date)
     end
   end
 
@@ -56,13 +56,13 @@ describe "Creating an Access Plan" do
     expect(page).to have_current_path(patient_accesses_dashboard_path(patient))
 
     within ".access-plans .current-access-plan" do
-      expect(page).to have_content(plan_type2.name)
-      expect(page).to have_content(notes)
-      expect(page).to have_content(todays_date)
+      expect(page).to have_text(plan_type2.name)
+      expect(page).to have_text(notes)
+      expect(page).to have_text(todays_date)
     end
 
     within ".access-plans .historical-access-plans" do
-      expect(page).to have_content(plan_type1.name)
+      expect(page).to have_text(plan_type1.name)
     end
   end
 

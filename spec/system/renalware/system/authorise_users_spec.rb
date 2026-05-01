@@ -26,7 +26,7 @@ module Renalware
       click_on "Approve"
 
       expect(page).to have_current_path(admin_users_path)
-      expect(page).to have_content("User updated")
+      expect(page).to have_text("User updated")
       expect(unapproved.reload).to be_approved
       expect(unapproved.roles).to contain_exactly(clinician_role)
     end
@@ -45,7 +45,7 @@ module Renalware
 
       expect(page).to have_current_path(admin_users_path)
       expect(unapproved_user.reload).to be_approved
-      expect(page).to have_content("User updated")
+      expect(page).to have_text("User updated")
       expect(unapproved_user.roles).not_to be_empty
     end
 
@@ -61,7 +61,7 @@ module Renalware
       click_on "Save (approve later)"
 
       expect(page).to have_current_path(admin_users_path)
-      expect(page).to have_content("User updated")
+      expect(page).to have_text("User updated")
       expect(unapproved.reload).to have_attributes(
         approved: false,
         notes: "Some notes"
@@ -82,8 +82,8 @@ module Renalware
       end
 
       expect(page).to have_current_path(admin_user_path(approved))
-      expect(page).to have_content("User could not be updated")
-      expect(page).to have_content(/approved users must have a role/)
+      expect(page).to have_text("User could not be updated")
+      expect(page).to have_text(/approved users must have a role/)
     end
 
     it "An admin gives an existing approved user additional roles" do
@@ -100,7 +100,7 @@ module Renalware
       click_on t("btn.update")
 
       expect(page).to have_current_path(admin_users_path)
-      expect(page).to have_content("User updated")
+      expect(page).to have_text("User updated")
       expect(approved.reload).to be_approved
       expect(approved.roles).to include(role_b)
     end
@@ -117,12 +117,12 @@ module Renalware
       click_on t("btn.update")
 
       expect(page).to have_current_path(admin_users_path)
-      expect(page).to have_content("User updated")
+      expect(page).to have_text("User updated")
       expect(expired.reload.expired_at).to be_nil
 
       click_link "Inactive"
 
-      expect(page).to have_no_content(expired.username)
+      expect(page).to have_no_text(expired.username)
     end
 
     it "An admin cannot remove the super_admin role" do

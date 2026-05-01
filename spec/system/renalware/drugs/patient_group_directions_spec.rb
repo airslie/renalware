@@ -7,9 +7,9 @@ describe "Patient Group Directions (PGD)" do
     visit drugs_patient_group_directions_path
 
     within(".non-patient-page") do
-      expect(body).to have_content("Patient Group Directions")
-      expect(page).to have_content(pgd.name)
-      expect(page).to have_content(pgd.code)
+      expect(body).to have_text("Patient Group Directions")
+      expect(page).to have_text(pgd.name)
+      expect(page).to have_text(pgd.code)
     end
   end
 
@@ -18,7 +18,7 @@ describe "Patient Group Directions (PGD)" do
     visit new_drugs_patient_group_direction_path
 
     within(".non-patient-page") do
-      expect(body).to have_content("New Patient Group Direction")
+      expect(body).to have_text("New Patient Group Direction")
       fill_in "Name", with: "PGD Name1"
       fill_in "Code", with: "pgd code1"
       click_on "Create"

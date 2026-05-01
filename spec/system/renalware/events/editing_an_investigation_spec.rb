@@ -27,7 +27,7 @@ RSpec.describe "Editing an investigation", :js do
     # On Tx Recip Dashboard, check we can see the investigation we just created
     within("article.investigations") do
       expect(page).to have_css("tbody tr", count: 1)
-      expect(page).to have_content("initial_result")
+      expect(page).to have_text("initial_result")
       click_on t("btn.edit")
     end
 
@@ -49,7 +49,7 @@ RSpec.describe "Editing an investigation", :js do
 
     within("table.events-table") do
       expect(page).to have_css("tbody tr", count: 1)
-      expect(page).to have_content("edited_result")
+      expect(page).to have_text("edited_result")
     end
   end
 end

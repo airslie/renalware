@@ -31,10 +31,10 @@ describe Renalware::Patients::MessagesComponent, type: :component do
 
       render_inline(component)
 
-      expect(page).to have_content("Messages")
-      expect(page).to have_content("B1")
-      expect(page).to have_content(l(Date.current))
-      expect(page).to have_content(user.to_s)
+      expect(page).to have_text("Messages")
+      expect(page).to have_text("B1")
+      expect(page).to have_text(l(Date.current))
+      expect(page).to have_text(user.to_s)
     end
 
     it "displays a 'no messages' message!" do
@@ -43,8 +43,8 @@ describe Renalware::Patients::MessagesComponent, type: :component do
 
       render_inline(described_class.new(patient:, current_user: user))
 
-      expect(page).to have_content("Messages")
-      expect(page).to have_content("No messages")
+      expect(page).to have_text("Messages")
+      expect(page).to have_text("No messages")
     end
   end
 end

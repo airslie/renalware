@@ -12,7 +12,7 @@ describe "Clinic Visits" do
       visit clinic_visits_path
 
       expect(page.status_code).to eq(200)
-      expect(page).to have_content("271 707 3604")
+      expect(page).to have_text("271 707 3604")
     end
   end
 
@@ -36,7 +36,7 @@ describe "Clinic Visits" do
         click_on t("btn.create")
       end
 
-      expect(page).to have_content(
+      expect(page).to have_text(
         "20-Jul-2015\tNo\t#{clinic.description}\t1.78\t82.5\t26.0\t110/75\t107/71\t100\t37.3"
       )
     end
@@ -64,14 +64,14 @@ describe "Clinic Visits" do
 
       submit_form
 
-      expect(page).to have_content(
+      expect(page).to have_text(
         "#{today}\tNo\t#{clinic.description}\t1.71\t75.0\t25.6\t128/95\t124/92\t101\t37.7"
       )
 
       all("a.toggler")[1].click
 
-      expect(page).to have_content "Updated notes"
-      expect(page).to have_content "Updated admin notes"
+      expect(page).to have_text "Updated notes"
+      expect(page).to have_text "Updated admin notes"
     end
   end
 end

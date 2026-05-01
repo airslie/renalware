@@ -7,13 +7,13 @@ module Renalware::Pathology
 
         visit pathology_code_groups_path
 
-        expect(page).to have_content "Pathology Code Groups"
+        expect(page).to have_text "Pathology Code Groups"
 
         within ".code-groups-table" do
-          expect(page).to have_content group.name
-          expect(page).to have_content group.title
-          expect(page).to have_content group.description
-          expect(page).to have_content "View"
+          expect(page).to have_text group.name
+          expect(page).to have_text group.title
+          expect(page).to have_text group.description
+          expect(page).to have_text "View"
         end
       end
     end
@@ -26,7 +26,7 @@ module Renalware::Pathology
 
         visit pathology_code_group_path(group)
 
-        expect(page).to have_content "Group1"
+        expect(page).to have_text "Group1"
       end
     end
 
@@ -37,8 +37,8 @@ module Renalware::Pathology
 
         visit edit_pathology_code_group_path(group)
 
-        expect(page).to have_content "Pathology Code"
-        expect(page).to have_content "Group1"
+        expect(page).to have_text "Pathology Code"
+        expect(page).to have_text "Group1"
 
         fill_in "Description", with: "Changed description"
         click_on t("btn.save")

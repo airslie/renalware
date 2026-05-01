@@ -36,7 +36,7 @@ module Renalware
             login_as_clinical
             visit edit_patient_letters_letter_path(patient, letter)
 
-            expect(page).to have_content("Pathology")
+            expect(page).to have_text("Pathology")
 
             within ".letter-pathology" do
               choose "Yes"

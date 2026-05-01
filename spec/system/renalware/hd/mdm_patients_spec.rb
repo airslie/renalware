@@ -41,7 +41,7 @@ describe "HD MDM Patients" do
       login_as_clinical
       visit hd_mdm_patients_path
 
-      expect(page).to have_content(patient.family_name.upcase)
+      expect(page).to have_text(patient.family_name.upcase)
     end
 
     it "filters by hospital unit and HD schedule" do
@@ -63,27 +63,27 @@ describe "HD MDM Patients" do
       visit hd_mdm_patients_path
 
       # See all
-      expect(page).to have_content(patient1.family_name)
-      expect(page).to have_content(patient2.family_name)
+      expect(page).to have_text(patient1.family_name)
+      expect(page).to have_text(patient2.family_name)
 
       # Show only those patients dialysing in unit1
       select unit1.name, from: "Dialysing at"
       click_on t("btn.filter")
 
-      expect(page).to have_content(patient1.family_name)
-      expect(page).to have_no_content(patient2.family_name)
+      expect(page).to have_text(patient1.family_name)
+      expect(page).to have_no_text(patient2.family_name)
 
       # Reset filters to see all
       click_on t("btn.reset").downcase
-      expect(page).to have_content(patient1.family_name)
-      expect(page).to have_content(patient2.family_name)
+      expect(page).to have_text(patient1.family_name)
+      expect(page).to have_text(patient2.family_name)
 
       # Show only those patients scheduled at this time
       select "Mon Wed Fri PM", from: "Schedule"
       click_on t("btn.filter")
 
-      expect(page).to have_content(patient2.family_name)
-      expect(page).to have_no_content(patient1.family_name)
+      expect(page).to have_text(patient2.family_name)
+      expect(page).to have_no_text(patient1.family_name)
     end
 
     it "filters by incremental dialysis" do
@@ -93,14 +93,14 @@ describe "HD MDM Patients" do
       login_as_clinical
       visit hd_mdm_patients_path
 
-      expect(page).to have_content(patient1.family_name)
-      expect(page).to have_content(patient2.family_name)
+      expect(page).to have_text(patient1.family_name)
+      expect(page).to have_text(patient2.family_name)
 
       select "Yes", from: "Incremental"
       click_on t("btn.filter")
 
-      expect(page).to have_content(patient1.family_name)
-      expect(page).to have_no_content(patient2.family_name)
+      expect(page).to have_text(patient1.family_name)
+      expect(page).to have_no_text(patient2.family_name)
     end
 
     it "treats missing incremental values as no when filtering" do
@@ -114,9 +114,9 @@ describe "HD MDM Patients" do
       select "No", from: "Incremental"
       click_on t("btn.filter")
 
-      expect(page).to have_no_content(patient1.family_name)
-      expect(page).to have_content(patient2.family_name)
-      expect(page).to have_content(patient3.family_name)
+      expect(page).to have_no_text(patient1.family_name)
+      expect(page).to have_text(patient2.family_name)
+      expect(page).to have_text(patient3.family_name)
     end
 
     describe "Named filters" do
@@ -130,8 +130,8 @@ describe "HD MDM Patients" do
         visit hd_mdm_patients_path
         click_on t("renalware.hd.mdm_patients.tabs.tab.all")
 
-        expect(page).to have_content(patient2.family_name)
-        expect(page).to have_content(patient1.family_name)
+        expect(page).to have_text(patient2.family_name)
+        expect(page).to have_text(patient1.family_name)
       end
 
       it "'on worryboard' filter displays patients on the worryboard" do
@@ -144,8 +144,8 @@ describe "HD MDM Patients" do
         visit hd_mdm_patients_path
         click_on t("renalware.hd.mdm_patients.tabs.tab.on_worryboard")
 
-        expect(page).to have_content(patient2.family_name)
-        expect(page).to have_no_content(patient1.family_name)
+        expect(page).to have_text(patient2.family_name)
+        expect(page).to have_no_text(patient1.family_name)
       end
 
       it "'on worryboard' tab remains active if the user filters by hospital unit" do
@@ -176,9 +176,9 @@ describe "HD MDM Patients" do
           hd_filtered_mdm_patients_path(named_filter: :on_worryboard), ignore_query: true
         )
         # We should only see patients on the worryboard dialysing at unit1
-        expect(page).to have_content(wb_patient_at_unit1.family_name)
-        expect(page).to have_no_content(wb_patient_at_unit2.family_name)
-        expect(page).to have_no_content(nonwb_patient_at_unit1.family_name) # not on wb
+        expect(page).to have_text(wb_patient_at_unit1.family_name)
+        expect(page).to have_no_text(wb_patient_at_unit2.family_name)
+        expect(page).to have_no_text(nonwb_patient_at_unit1.family_name) # not on wb
       end
     end
   end

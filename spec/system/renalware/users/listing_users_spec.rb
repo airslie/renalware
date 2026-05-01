@@ -18,12 +18,12 @@ describe "A user views a list of users" do
 
     visit users_path
 
-    expect(page).to have_content("Users")
-    expect(page).to have_content("Fred Jones")
-    expect(page).to have_content("fred@a.com")
-    expect(page).to have_content("Dr")
-    expect(page).to have_content("Julie Smith")
-    expect(page).to have_content("julie@a.com")
-    expect(page).to have_content("CEO")
+    expect(page).to have_text("Users")
+    expect(page).to have_text("Fred Jones")
+    expect(page).to have_text("fred@a.com")
+    expect(page).to have_text("Dr")
+    expect(page).to have_text("Julie Smith")
+    expect(page).to have_text("julie@a.com")
+    expect(page).to have_text("CEO")
   end
 end

@@ -8,7 +8,7 @@ describe "Creating an event", :js do
 
     slim_select "Access--Clinic", from: "Event type"
 
-    expect(page).to have_content("Description")
+    expect(page).to have_text("Description")
 
     fill_in "Description", with: "Test"
     click_on t("btn.create")

@@ -20,7 +20,7 @@ RSpec.describe "Approving a letter", :js do
 
     accept_alert { click_on "Approve and archive" }
 
-    expect(page).to have_content "Approved"
+    expect(page).to have_text "Approved"
 
     letter = Renalware::Letters::Letter.last
     expect(letter).to be_signed

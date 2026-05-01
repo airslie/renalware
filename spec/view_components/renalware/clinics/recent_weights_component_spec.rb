@@ -8,8 +8,8 @@ module Renalware
         render_inline(instance)
 
         expect(instance.render?).to be(true)
-        expect(page).to have_content("Recent Weights")
-        expect(page).to have_content("DateWeight")
+        expect(page).to have_text("Recent Weights")
+        expect(page).to have_text("DateWeight")
       end
     end
 
@@ -33,9 +33,9 @@ module Renalware
 
           expect(instance.render?).to be(true)
 
-          expect(page).to have_content("Recent Weights")
-          expect(page).to have_content("DateWeight")
-          expect(page).to have_content("11-Oct-202272.0 kg")
+          expect(page).to have_text("Recent Weights")
+          expect(page).to have_text("DateWeight")
+          expect(page).to have_text("11-Oct-202272.0 kg")
         end
       end
 
@@ -47,8 +47,8 @@ module Renalware
 
           expect(instance.render?).to be(true)
 
-          expect(page).to have_content("Recent Weights")
-          expect(page).to have_content("DateWeight")
+          expect(page).to have_text("Recent Weights")
+          expect(page).to have_text("DateWeight")
         end
       end
     end

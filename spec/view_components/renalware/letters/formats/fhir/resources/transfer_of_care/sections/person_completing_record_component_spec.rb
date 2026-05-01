@@ -5,7 +5,7 @@ module Renalware::Letters::Formats::FHIR
         letter = nil
         render_inline(described_class.new(letter))
 
-        expect(page).to have_content("PersonCompletingRecordComponent")
+        expect(page).to have_text("PersonCompletingRecordComponent")
       end
     end
   end

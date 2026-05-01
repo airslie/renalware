@@ -104,22 +104,22 @@ describe "Patient Dietetics MDM" do
       visit patients_mdms_path("dietetics")
 
       expect(page).to have_css("#mdm-patients-table tbody tr", count: 1)
-      expect(page).to have_content("Dietetics MDMS")
-      expect(page).to have_content("Consultant, Clive")
-      expect(page).to have_content("Dietician, Doris")
-      expect(page).to have_content("JONES, Jack")
-      expect(page).to have_content("01-Jan-1988")
-      expect(page).to have_content("HD")
-      expect(page).to have_content("1.99") # Phos
-      expect(page).to have_content("22.2") # BMI
-      expect(page).to have_content("80") # weight
-      expect(page).to have_content("09-Sep-2022")
-      expect(page).to have_content("09-Oct-2022")
-      expect(page).to have_content(/Dietetic r v/i)
-      expect(page).to have_content("14.3%") # weight change
-      expect(page).to have_content("80") # current weight
-      expect(page).to have_content("overdue") # outstanding dietetic visit
-      expect(page).to have_content("Dover Hospital")
+      expect(page).to have_text("Dietetics MDMS")
+      expect(page).to have_text("Consultant, Clive")
+      expect(page).to have_text("Dietician, Doris")
+      expect(page).to have_text("JONES, Jack")
+      expect(page).to have_text("01-Jan-1988")
+      expect(page).to have_text("HD")
+      expect(page).to have_text("1.99") # Phos
+      expect(page).to have_text("22.2") # BMI
+      expect(page).to have_text("80") # weight
+      expect(page).to have_text("09-Sep-2022")
+      expect(page).to have_text("09-Oct-2022")
+      expect(page).to have_text(/Dietetic r v/i)
+      expect(page).to have_text("14.3%") # weight change
+      expect(page).to have_text("80") # current weight
+      expect(page).to have_text("overdue") # outstanding dietetic visit
+      expect(page).to have_text("Dover Hospital")
     end
   end
 
@@ -134,46 +134,46 @@ describe "Patient Dietetics MDM" do
 
       visit patient_dietetics_mdm_path(patient)
 
-      expect(page).to have_content("JONES, Jack")
+      expect(page).to have_text("JONES, Jack")
 
       within "article", text: "Dietetic Visits" do
-        expect(page).to have_content("Dietetic D1")
-        expect(page).to have_content("1.9") # Height
-        expect(page).to have_content("22.2") # BMI
-        expect(page).to have_content("112/71") # BP
-        expect(page).to have_content("100") # Pulse
-        expect(page).to have_content("2.08") # BSA
+        expect(page).to have_text("Dietetic D1")
+        expect(page).to have_text("1.9") # Height
+        expect(page).to have_text("22.2") # BMI
+        expect(page).to have_text("112/71") # BP
+        expect(page).to have_text("100") # Pulse
+        expect(page).to have_text("2.08") # BSA
         # expect(page).to have_content("46.54") # TBW; This changes depending on age
       end
 
       within "article", text: "Clinic Visits" do
-        expect(page).to have_content("Dietetic D1")
-        expect(page).to have_content("1.9") # Height
-        expect(page).to have_content("22.2") # BMI
-        expect(page).to have_content("112/71") # BP
-        expect(page).to have_content("100") # Pulse
-        expect(page).to have_content("2.08") # BSA
+        expect(page).to have_text("Dietetic D1")
+        expect(page).to have_text("1.9") # Height
+        expect(page).to have_text("22.2") # BMI
+        expect(page).to have_text("112/71") # BP
+        expect(page).to have_text("100") # Pulse
+        expect(page).to have_text("2.08") # BSA
         # expect(page).to have_content("46.54") # TBW; This changes depending on age
       end
 
       within "article", text: "Dietetic Profile" do
-        expect(page).to have_content "Date09-Sep-2022"
-        expect(page).to have_content "Ideal body weight28 kg"
-        expect(page).to have_content "SgaA - Well nourished"
-        expect(page).to have_content "Estimated energy requirement2800 kcal"
-        expect(page).to have_content "Estimated energy intake2300 kcal"
-        expect(page).to have_content "Estimated protein intake70 g/day"
-        expect(page).to have_content "Estimated protein requirement66 g/day"
+        expect(page).to have_text "Date09-Sep-2022"
+        expect(page).to have_text "Ideal body weight28 kg"
+        expect(page).to have_text "SgaA - Well nourished"
+        expect(page).to have_text "Estimated energy requirement2800 kcal"
+        expect(page).to have_text "Estimated energy intake2300 kcal"
+        expect(page).to have_text "Estimated protein intake70 g/day"
+        expect(page).to have_text "Estimated protein requirement66 g/day"
       end
 
       within "article", text: "Recent Weights" do
-        expect(page).to have_content "09-Sep-2022"
-        expect(page).to have_content "80.0 kg"
+        expect(page).to have_text "09-Sep-2022"
+        expect(page).to have_text "80.0 kg"
       end
 
       within "article", text: "Recent Handgrips" do
-        expect(page).to have_content "09-Sep-2022"
-        expect(page).to have_content "40 kg"
+        expect(page).to have_text "09-Sep-2022"
+        expect(page).to have_text "40 kg"
       end
     end
   end

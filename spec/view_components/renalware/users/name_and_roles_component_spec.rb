@@ -19,7 +19,7 @@ describe Renalware::Users::NameAndRolesComponent, type: :component do
 
     render_inline(component).to_html
 
-    expect(page).to have_content("John Smith")
-    expect(page).to have_content("Admin, Clinical, Readonly")
+    expect(page).to have_text("John Smith")
+    expect(page).to have_text("Admin, Clinical, Readonly")
   end
 end

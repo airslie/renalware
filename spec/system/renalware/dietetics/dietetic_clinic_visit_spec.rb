@@ -35,10 +35,10 @@ module Renalware
         fill_in "Estimated energy requirement", with: "1"
 
         click_button "Create"
-        expect(page).to have_content "Date can't be blank"
-        expect(page).to have_content "must be greater than or equal to 15" # Previous weight
-        expect(page).to have_content "must be greater than or equal to 30" # Waist
-        expect(page).to have_content "must be greater than or equal to 500" # Est energy requirement
+        expect(page).to have_text "Date can't be blank"
+        expect(page).to have_text "must be greater than or equal to 15" # Previous weight
+        expect(page).to have_text "must be greater than or equal to 30" # Waist
+        expect(page).to have_text "must be greater than or equal to 500" # Est energy requirement
 
         fill_in "Date", with: "20-07-2015"
         fill_in "Weight", with: "82.5"
@@ -53,11 +53,11 @@ module Renalware
         within_section "Weight", match: :first do
           fill_in "Weight notes", with: "Weight test notes"
 
-          expect(page).to have_content "123.0 (10-Oct-2020) kg" # dry weight
+          expect(page).to have_text "123.0 (10-Oct-2020) kg" # dry weight
           fill_in "Previous weight", with: "70"
           fill_in "Previous weight date", with: "20-Jul-2020"
-          expect(page).to have_content "Weight change\n17.9%"
-          expect(page).to have_content "26.0" # BMI
+          expect(page).to have_text "Weight change\n17.9%"
+          expect(page).to have_text "26.0" # BMI
           fill_in "Adjusted BMI", with: "Add BMI"
           fill_in "Ideal body weight", with: "71"
           fill_in "Waist circumference", with: "80"
@@ -69,7 +69,7 @@ module Renalware
           fill_in "High biological value", with: "90"
           fill_in "Estimated energy requirement", with: "2000"
           fill_in "Estimated energy intake", with: "1900"
-          expect(page).to have_content "0.6 g/day/kg" # Estimated protein intake
+          expect(page).to have_text "0.6 g/day/kg" # Estimated protein intake
         end
 
         within_section "Handgrip", match: :first do
@@ -95,45 +95,45 @@ module Renalware
 
         # Get to index page
         within "h1" do
-          expect(page).to have_content "Clinic Visits"
+          expect(page).to have_text "Clinic Visits"
         end
 
         click_link "Toggle all rows"
 
-        expect(page).to have_content "Assessment type\nDietetic phone assessment"
-        expect(page).to have_content "Location\nBy telephone"
-        expect(page).to have_content "Weight"
-        expect(page).to have_content "Weight notes\nWeight test notes"
-        expect(page).to have_content "Previous weight\n70 kg"
-        expect(page).to have_content "Previous weight date\n20-Jul-2020"
-        expect(page).to have_content "Weight change\n17.9 %"
-        expect(page).to have_content "Ideal body weight\n71 kg"
-        expect(page).to have_content "Adjusted BMI for amputations/significant oedema\nAdd BMI"
-        expect(page).to have_content "Waist circumference\n80"
+        expect(page).to have_text "Assessment type\nDietetic phone assessment"
+        expect(page).to have_text "Location\nBy telephone"
+        expect(page).to have_text "Weight"
+        expect(page).to have_text "Weight notes\nWeight test notes"
+        expect(page).to have_text "Previous weight\n70 kg"
+        expect(page).to have_text "Previous weight date\n20-Jul-2020"
+        expect(page).to have_text "Weight change\n17.9 %"
+        expect(page).to have_text "Ideal body weight\n71 kg"
+        expect(page).to have_text "Adjusted BMI for amputations/significant oedema\nAdd BMI"
+        expect(page).to have_text "Waist circumference\n80"
 
-        expect(page).to have_content "Dietary"
-        expect(page).to have_content "Estimated protein requirement\n30 g/day"
-        expect(page).to have_content "Estimated protein intake\n40 g/day"
-        expect(page).to have_content "High biological value\n90"
-        expect(page).to have_content "Estimated energy requirement\n2000 kcal/day"
-        expect(page).to have_content "Estimated energy intake\n1900 kcal/day"
+        expect(page).to have_text "Dietary"
+        expect(page).to have_text "Estimated protein requirement\n30 g/day"
+        expect(page).to have_text "Estimated protein intake\n40 g/day"
+        expect(page).to have_text "High biological value\n90"
+        expect(page).to have_text "Estimated energy requirement\n2000 kcal/day"
+        expect(page).to have_text "Estimated energy intake\n1900 kcal/day"
 
-        expect(page).to have_content "Handgrip"
-        expect(page).to have_content "Left\n30"
-        expect(page).to have_content "Right\n10"
-        expect(page).to have_content "Dominant hand\nright"
+        expect(page).to have_text "Handgrip"
+        expect(page).to have_text "Left\n30"
+        expect(page).to have_text "Right\n10"
+        expect(page).to have_text "Dominant hand\nright"
 
-        expect(page).to have_content "Assessment"
-        expect(page).to have_content "Sga assessment\nC - Severe malnutrition"
-        expect(page).to have_content "Plan\nThorough plan"
-        expect(page).to have_content "Intervention a\nNo change"
-        expect(page).to have_content "Intervention b\nFibre"
-        expect(page).to have_content "Intervention c\nPotassium"
+        expect(page).to have_text "Assessment"
+        expect(page).to have_text "Sga assessment\nC - Severe malnutrition"
+        expect(page).to have_text "Plan\nThorough plan"
+        expect(page).to have_text "Intervention a\nNo change"
+        expect(page).to have_text "Intervention b\nFibre"
+        expect(page).to have_text "Intervention c\nPotassium"
 
-        expect(page).to have_content "Consultation time and review date"
-        expect(page).to have_content "Time for consultation\n10 mins"
-        expect(page).to have_content "Time for documentation\n40 mins"
-        expect(page).to have_content "Next review date\n12 months"
+        expect(page).to have_text "Consultation time and review date"
+        expect(page).to have_text "Time for consultation\n10 mins"
+        expect(page).to have_text "Time for documentation\n40 mins"
+        expect(page).to have_text "Next review date\n12 months"
 
         # Now check the input fields are all filled out as expected
         click_link "Edit"
@@ -147,10 +147,10 @@ module Renalware
         within_section "Weight", match: :first do
           expect(page).to have_field "Weight notes", with: "Weight test notes"
 
-          expect(page).to have_content "123.0 (10-Oct-2020) kg" # dry weight
+          expect(page).to have_text "123.0 (10-Oct-2020) kg" # dry weight
           expect(page).to have_field "Previous weight", with: "70"
           expect(page).to have_field "Previous weight date", with: "20-Jul-2020"
-          expect(page).to have_content "26.0" # BMI
+          expect(page).to have_text "26.0" # BMI
           expect(page).to have_field "Adjusted BMI", with: "Add BMI"
           expect(page).to have_field "Ideal body weight", with: "71"
           expect(page).to have_field "Waist circumference", with: "80"
@@ -162,7 +162,7 @@ module Renalware
           expect(page).to have_field "High biological value", with: "90"
           expect(page).to have_field "Estimated energy requirement", with: "2000"
           expect(page).to have_field "Estimated energy intake", with: "1900"
-          expect(page).to have_content "0.6 g/day/kg" # Estimated protein intake
+          expect(page).to have_text "0.6 g/day/kg" # Estimated protein intake
         end
 
         within_section "Handgrip", match: :first do

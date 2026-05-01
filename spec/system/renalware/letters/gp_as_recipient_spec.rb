@@ -90,7 +90,7 @@ RSpec.describe("Persisting the correct recipients when a letter is saved", :js) 
         click_on "Approve and archive"
       end
       # wait to get back to the Clinical Summary page
-      expect(page).to have_content "Clinical Summary"
+      expect(page).to have_text "Clinical Summary"
 
       # Sanity checks
       expect(patient.letters.count).to eq(1)

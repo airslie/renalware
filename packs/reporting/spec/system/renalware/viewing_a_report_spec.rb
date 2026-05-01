@@ -15,7 +15,7 @@ describe "Viewing a report", :js do
       visit reporting.report_path(report)
     }.to change(report.calls, :count).by(1)
 
-    expect(page).to have_content(report.title)
-    expect(page).to have_content(report.description)
+    expect(page).to have_text(report.title)
+    expect(page).to have_text(report.description)
   end
 end

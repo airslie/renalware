@@ -22,8 +22,8 @@ module Renalware
         expect(page).to have_current_path(patient_clinical_profile_path(clinical_patient))
 
         within "#igan_risk" do
-          expect(page).to have_content("53.99")
-          expect(page).to have_content("A" * 10)
+          expect(page).to have_text("53.99")
+          expect(page).to have_text("A" * 10)
         end
       end
 
@@ -46,8 +46,8 @@ module Renalware
         expect(page).to have_current_path(patient_clinical_profile_path(clinical_patient))
 
         within "#igan_risk" do
-          expect(page).to have_content("53.99")
-          expect(page).to have_content("A" * 10)
+          expect(page).to have_text("53.99")
+          expect(page).to have_text("A" * 10)
         end
       end
     end

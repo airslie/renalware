@@ -56,7 +56,7 @@ RSpec.describe "Printing a letter", :js do
       end
 
       within("table.letters") do
-        expect(page).to have_content("RABBIT")
+        expect(page).to have_text("RABBIT")
         expect(page).to have_css("tbody tr", count: 1)
 
         # Print the letter
@@ -75,7 +75,7 @@ RSpec.describe "Printing a letter", :js do
       # rubocop:enable Capybara/CurrentPathExpectation
 
       within(".modal") do
-        expect(page).to have_content("Was printing successful?")
+        expect(page).to have_text("Was printing successful?")
         click_on "Yes - remove from the Print Queue"
       end
 
@@ -110,7 +110,7 @@ RSpec.describe "Printing a letter", :js do
       end
 
       within("table.letters") do
-        expect(page).to have_content("RABBIT")
+        expect(page).to have_text("RABBIT")
         expect(page).to have_css("tbody tr", count: 1)
 
         click_on t("btn.print")
@@ -122,11 +122,11 @@ RSpec.describe "Printing a letter", :js do
       # rubocop:enable Capybara/CurrentPathExpectation
 
       within(".modal") do
-        expect(page).to have_content("Was printing successful?")
+        expect(page).to have_text("Was printing successful?")
         click_on "No - leave in the Print Queue"
       end
 
-      expect(page).to have_no_content("Was printing successful?")
+      expect(page).to have_no_text("Was printing successful?")
       within("table.letters") do
         expect(page).to have_css("tbody tr", count: 1)
       end

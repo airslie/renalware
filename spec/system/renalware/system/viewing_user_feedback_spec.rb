@@ -4,15 +4,15 @@ describe "Managing user feedback" do
     create(:user_feedback, author: user, comment: "My comment is..")
     visit system_user_feedback_index_path
 
-    expect(page).to have_content "Feedback"
+    expect(page).to have_text "Feedback"
     within "table.feedback" do
-      expect(page).to have_content "My comment is"
-      expect(page).to have_content user.to_s
+      expect(page).to have_text "My comment is"
+      expect(page).to have_text user.to_s
       click_on t("btn.edit")
     end
 
-    expect(page).to have_content("My comment is")
-    expect(page).to have_content(user.to_s)
+    expect(page).to have_text("My comment is")
+    expect(page).to have_text(user.to_s)
     fill_in "Admin notes", with: "My notes"
     check "Acknowledged"
     click_on t("btn.save")

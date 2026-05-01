@@ -26,7 +26,7 @@ describe "/medications/esa_prescriptions" do
     expect(page).to have_css("tbody tr", count: 1)
 
     within "tbody tr" do
-      expect(page).to have_content "ESA Pill"
+      expect(page).to have_text "ESA Pill"
     end
   end
 end

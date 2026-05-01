@@ -7,7 +7,7 @@ module Renalware::Pathology
 
         visit patient_pathology_observation_requests_path(patient)
 
-        expect(page).to have_content("No investigations available for this patient.")
+        expect(page).to have_text("No investigations available for this patient.")
       end
     end
 
@@ -29,26 +29,26 @@ module Renalware::Pathology
 
         within("#observation-requests") do
           # Displays a list of investgations (OBRs)
-          expect(page).to have_content(obr_desc.name)
-          expect(page).to have_content(l(obr.requested_at))
+          expect(page).to have_text(obr_desc.name)
+          expect(page).to have_text(l(obr.requested_at))
         end
 
         # Click on the OBR to load up the OBXes withinit
         click_on obr_desc.code
 
         # The OBX list loaded by ajax
-        expect(page).to have_content(obr_desc.name)
-        expect(page).to have_content(obr_desc.code)
-        expect(page).to have_content(obx.result)
+        expect(page).to have_text(obr_desc.name)
+        expect(page).to have_text(obr_desc.code)
+        expect(page).to have_text(obx.result)
 
         # Click on the OBX name to see all similar OBXes
         click_on(obx_desc.name)
 
         # A list of all OBXes of this type (OBX description) for this patient
         expect(page).to have_current_path(patient_pathology_observations_path(patient, obx_desc))
-        expect(page).to have_content(obx_desc.name)
-        expect(page).to have_content(l(obr.requested_at)) # TODO: should be obx.observed_at ?
-        expect(page).to have_content(obx.result)
+        expect(page).to have_text(obx_desc.name)
+        expect(page).to have_text(l(obr.requested_at)) # TODO: should be obx.observed_at ?
+        expect(page).to have_text(obx.result)
       end
 
       context "when filtering by investigations" do
@@ -63,8 +63,8 @@ module Renalware::Pathology
           visit patient_pathology_observation_requests_path(patient)
 
           # It displays all the requests, unfiltered, by default
-          expect(page).to have_content(obr_desc1.name)
-          expect(page).to have_content(obr_desc2.name)
+          expect(page).to have_text(obr_desc1.name)
+          expect(page).to have_text(obr_desc2.name)
 
           # Exercise the options
           slim_select "OBR1 - MyOBR1", from: "Filter by Code"
@@ -75,8 +75,8 @@ module Renalware::Pathology
 
           within("#observation-requests") do
             # It only displays the filtered OBRs
-            expect(page).to have_content(obr_desc2.name)
-            expect(page).to have_no_content(obr_desc1.name)
+            expect(page).to have_text(obr_desc2.name)
+            expect(page).to have_no_text(obr_desc1.name)
           end
         end
       end

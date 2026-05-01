@@ -311,119 +311,119 @@ end
 
 Then /^I should see the new CAPD regime on the PD dashboard$/ do
   within("table.capd-regimes tbody tr:first-child") do
-    expect(page).to have_content(l(Date.parse("02-04-2015")))
-    expect(page).to have_content(l(Date.parse("01-06-2015")))
-    expect(page).to have_content("CAPD 4 exchanges per day")
+    expect(page).to have_text(l(Date.parse("02-04-2015")))
+    expect(page).to have_text(l(Date.parse("01-06-2015")))
+    expect(page).to have_text("CAPD 4 exchanges per day")
   end
 
   # average daily glucose
   within("table.capd-regimes tbody tr:first-child td:nth-child(5)") do
-    expect(page).to have_content("0")
+    expect(page).to have_text("0")
   end
 
   within("table.capd-regimes tbody tr:first-child td:nth-child(6)") do
-    expect(page).to have_content("0")
+    expect(page).to have_text("0")
   end
 
   within("table.capd-regimes tbody tr:first-child td:nth-child(7)") do
-    expect(page).to have_content("0")
+    expect(page).to have_text("0")
   end
 end
 
 Then /^I should see the new APD regime on the PD dashboard$/ do
   within("table.apd-regimes tbody tr:first-child") do
-    expect(page).to have_content(l(Date.parse("15-05-2015")))
-    expect(page).to have_content(l(Date.parse("16-07-2015")))
-    expect(page).to have_content("APD Wet Day")
+    expect(page).to have_text(l(Date.parse("15-05-2015")))
+    expect(page).to have_text(l(Date.parse("16-07-2015")))
+    expect(page).to have_text("APD Wet Day")
   end
 
   # average daily glucose
   within("table.apd-regimes tbody tr:first-child td:nth-child(5)") do
-    expect(page).to have_content("0")
+    expect(page).to have_text("0")
   end
 
   within("table.apd-regimes tbody tr:first-child td:nth-child(6)") do
-    expect(page).to have_content("0")
+    expect(page).to have_text("0")
   end
 
   within("table.apd-regimes tbody tr:first-child td:nth-child(7)") do
-    expect(page).to have_content("0")
+    expect(page).to have_text("0")
   end
 end
 
 Then /^the new CAPD regime should be current$/ do
   within(".current-regime") do
-    expect(page).to have_content(l(Date.parse("02-04-2015")))
-    expect(page).to have_content(l(Date.parse("01-06-2015")))
-    expect(page).to have_content("CAPD 4 exchanges per day")
-    expect(page).to have_content("On additional HD?")
-    expect(page).to have_content("Yes")
+    expect(page).to have_text(l(Date.parse("02-04-2015")))
+    expect(page).to have_text(l(Date.parse("01-06-2015")))
+    expect(page).to have_text("CAPD 4 exchanges per day")
+    expect(page).to have_text("On additional HD?")
+    expect(page).to have_text("Yes")
   end
 end
 
 Then /^the new APD regime should be current$/ do
   within(".current-regime") do
-    expect(page).to have_content(l(Date.parse("15-05-2015")))
-    expect(page).to have_content(l(Date.parse("16-07-2015")))
-    expect(page).to have_content("APD Wet")
-    expect(page).to have_content("On additional HD?")
-    expect(page).to have_content("No")
-    expect(page).to have_content("Add'l manual exchange?:\nNo")
+    expect(page).to have_text(l(Date.parse("15-05-2015")))
+    expect(page).to have_text(l(Date.parse("16-07-2015")))
+    expect(page).to have_text("APD Wet")
+    expect(page).to have_text("On additional HD?")
+    expect(page).to have_text("No")
+    expect(page).to have_text("Add'l manual exchange?:\nNo")
 
-    expect(page).to have_content("Low strength\n0 ml")
-    expect(page).to have_content("Med. strength\n0 ml")
-    expect(page).to have_content("High strength\n0 ml")
+    expect(page).to have_text("Low strength\n0 ml")
+    expect(page).to have_text("Med. strength\n0 ml")
+    expect(page).to have_text("High strength\n0 ml")
 
     # pd regime bags
-    expect(page).to have_content("Nutrineal PD4 (Blue)")
+    expect(page).to have_text("Nutrineal PD4 (Blue)")
     #  Volume: 4000ml, No. per week: 3, Days: Sun, Mon, Thu"
     # )
 
     # expect(page).to have_content("Last Fill: 520")
-    expect(page).to have_content("Therapy time:\n7:30")
-    expect(page).to have_content("Dwell time:\n100")
-    expect(page).to have_content("Cycles per session:\n3")
-    expect(page).to have_content("123-4567-890")
+    expect(page).to have_text("Therapy time:\n7:30")
+    expect(page).to have_text("Dwell time:\n100")
+    expect(page).to have_text("Cycles per session:\n3")
+    expect(page).to have_text("123-4567-890")
   end
 end
 
 Then /^I should see the updated CAPD regime on the PD dashboard$/ do
   within("table.capd-regimes tbody tr:first-child") do
-    expect(page).to have_content(l(Date.parse("03-05-2015")))
+    expect(page).to have_text(l(Date.parse("03-05-2015")))
   end
 end
 
 Then /^I should see the updated APD regime on the PD dashboard$/ do
   within("table.apd-regimes tbody tr:first-child") do
-    expect(page).to have_content(l(Date.parse("30-08-2015")))
+    expect(page).to have_text(l(Date.parse("30-08-2015")))
   end
 end
 
 Then /^I should see the chosen CAPD regime details$/ do
-  expect(page).to have_content(l(Date.parse("02-04-2015")))
-  expect(page).to have_content(l(Date.parse("21-May-2015")))
-  expect(page).to have_content("Treatment:")
-  expect(page).to have_content("CAPD 5 exchanges per day")
-  expect(page).to have_content("On additional HD?")
-  expect(page).to have_content("No")
+  expect(page).to have_text(l(Date.parse("02-04-2015")))
+  expect(page).to have_text(l(Date.parse("21-May-2015")))
+  expect(page).to have_text("Treatment:")
+  expect(page).to have_text("CAPD 5 exchanges per day")
+  expect(page).to have_text("On additional HD?")
+  expect(page).to have_text("No")
 end
 
 Then /^I should see the chosen APD regime details$/ do
-  expect(page).to have_content("Start")
-  expect(page).to have_content(l(Date.parse("20-03-2015")))
-  expect(page).to have_content("End")
-  expect(page).to have_content(l(Date.parse("28-05-2015")))
-  expect(page).to have_content("Treatment")
-  expect(page).to have_content("APD Wet Day")
-  expect(page).to have_content("On additional HD?")
-  expect(page).to have_content("Yes")
-  expect(page).to have_content("Add'l manual exchange?")
-  expect(page).to have_content("Yes")
-  expect(page).to have_content("Tidal")
-  expect(page).to have_content("No")
-  expect(page).to have_content("Cycles per session")
-  expect(page).to have_content("4")
-  expect(page).to have_content("Overnight APD volume")
-  expect(page).to have_content("Machine PAC")
-  expect(page).to have_content("123-4567-890")
+  expect(page).to have_text("Start")
+  expect(page).to have_text(l(Date.parse("20-03-2015")))
+  expect(page).to have_text("End")
+  expect(page).to have_text(l(Date.parse("28-05-2015")))
+  expect(page).to have_text("Treatment")
+  expect(page).to have_text("APD Wet Day")
+  expect(page).to have_text("On additional HD?")
+  expect(page).to have_text("Yes")
+  expect(page).to have_text("Add'l manual exchange?")
+  expect(page).to have_text("Yes")
+  expect(page).to have_text("Tidal")
+  expect(page).to have_text("No")
+  expect(page).to have_text("Cycles per session")
+  expect(page).to have_text("4")
+  expect(page).to have_text("Overnight APD volume")
+  expect(page).to have_text("Machine PAC")
+  expect(page).to have_text("123-4567-890")
 end

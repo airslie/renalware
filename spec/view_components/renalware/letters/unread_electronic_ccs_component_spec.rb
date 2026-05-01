@@ -17,8 +17,8 @@ describe Renalware::Letters::UnreadElectronicCCsComponent, type: :component do #
 
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Electronic CCs")
-      expect(page).to have_content(letter.description)
+      expect(page).to have_text("Electronic CCs")
+      expect(page).to have_text(letter.description)
     end
   end
 
@@ -28,8 +28,8 @@ describe Renalware::Letters::UnreadElectronicCCsComponent, type: :component do #
 
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Electronic CCs")
-      expect(page).to have_content("You have no electronic CCs")
+      expect(page).to have_text("Electronic CCs")
+      expect(page).to have_text("You have no electronic CCs")
     end
   end
 end

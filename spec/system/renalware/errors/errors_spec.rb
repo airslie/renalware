@@ -18,7 +18,7 @@ module Renalware
         visit admin_user_path(id: 99999999999)
 
         expect(page.status_code).to eq(404)
-        expect(page).to have_content("Not Found")
+        expect(page).to have_text("Not Found")
       end
     end
 
@@ -29,7 +29,7 @@ module Renalware
         visit generate_test_internal_server_error_path
 
         expect(page.status_code).to eq(500)
-        expect(page).to have_content("Internal Server Error")
+        expect(page).to have_text("Internal Server Error")
       end
     end
   end

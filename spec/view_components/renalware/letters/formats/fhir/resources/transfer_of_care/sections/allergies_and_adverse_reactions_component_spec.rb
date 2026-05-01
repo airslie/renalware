@@ -15,8 +15,8 @@ module Renalware::Letters::Formats::FHIR
 
           render_inline(described_class.new(letter))
 
-          expect(page).to have_content("Allergy 1")
-          expect(page).to have_content("Allergy 2")
+          expect(page).to have_text("Allergy 1")
+          expect(page).to have_text("Allergy 2")
         end
       end
 
@@ -27,7 +27,7 @@ module Renalware::Letters::Formats::FHIR
 
           render_inline(described_class.new(letter))
 
-          expect(page).to have_content("No recorded allergies")
+          expect(page).to have_text("No recorded allergies")
         end
       end
 
@@ -41,7 +41,7 @@ module Renalware::Letters::Formats::FHIR
 
           render_inline(described_class.new(letter))
 
-          expect(page).to have_content("No known allergy")
+          expect(page).to have_text("No known allergy")
         end
       end
     end

@@ -22,7 +22,7 @@ RSpec.describe "Batch printing HD Session form PDFs from the HD MDM list", :js d
 
       visit hd_mdm_patients_path
 
-      patients.each { |patient| expect(page).to have_content(patient.family_name) }
+      patients.each { |patient| expect(page).to have_text(patient.family_name) }
 
       click_on "Batch Print 2 HD Session Forms"
 

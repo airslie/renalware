@@ -25,14 +25,14 @@ RSpec.describe "Manage electronic CCs" do
     visit dashboard_path
 
     within ".electronic-ccs" do
-      expect(page).to have_content(approved_letter.description)
-      expect(page).to have_no_content(draft_letter.description)
+      expect(page).to have_text(approved_letter.description)
+      expect(page).to have_no_text(draft_letter.description)
       expect(page).to have_css("tbody tr", count: 1)
 
       click_on t("btn.toggle")
       click_on "Mark as read"
 
-      expect(page).to have_no_content(approved_letter.description)
+      expect(page).to have_no_text(approved_letter.description)
     end
   end
 end

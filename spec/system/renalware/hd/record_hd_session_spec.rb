@@ -20,7 +20,7 @@ RSpec.describe "Recording an HD session", :js do
     end
 
     select hospital_unit.to_s, from: "Hospital Unit"
-    expect(page).to have_content "StationA"
+    expect(page).to have_text "StationA"
     select "StationA", from: "Station"
     fill_in "Start time", with: "00:00"
 
@@ -32,8 +32,8 @@ RSpec.describe "Recording an HD session", :js do
       click_on t("btn.create")
     end
 
-    expect(page).to have_content("HD session could not be added")
-    expect(page).to have_content("can't be blank")
+    expect(page).to have_text("HD session could not be added")
+    expect(page).to have_text("can't be blank")
     expect(Renalware::HD::Session.count).to eq(0)
 
     # Correct the invalid HD session so the form submits
@@ -42,7 +42,7 @@ RSpec.describe "Recording an HD session", :js do
       click_on t("btn.create")
     end
 
-    expect(page).to have_content("HD session added")
+    expect(page).to have_text("HD session added")
     expect(Renalware::HD::Session.for_patient(patient)).to be_present
   end
 
@@ -152,7 +152,7 @@ RSpec.describe "Recording an HD session", :js do
     page.first("input[name='signoff']").click
 
     expect(page).to have_current_path(patient_hd_dashboard_path(patient))
-    expect(page).to have_no_content "failed"
+    expect(page).to have_no_text "failed"
     hd_patient = Renalware::HD.cast_patient(patient)
     sessions = hd_patient.reload.hd_sessions
     expect(sessions.length).to eq(1)

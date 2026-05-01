@@ -13,8 +13,8 @@ describe "Clinical Profile Allergies Display" do
 
       visit patient_clinical_profile_path(patient)
 
-      expect(page).to have_content("Allergies")
-      expect(page).to have_content("Peanuts")
+      expect(page).to have_text("Allergies")
+      expect(page).to have_text("Peanuts")
     end
 
     it "shows allergy alert in patient banner" do
@@ -24,7 +24,7 @@ describe "Clinical Profile Allergies Display" do
 
       visit patient_path(patient)
 
-      expect(page).to have_css(".allergies").or have_content("Penicillin")
+      expect(page).to have_css(".allergies").or have_text("Penicillin")
     end
   end
 
@@ -40,9 +40,9 @@ describe "Clinical Profile Allergies Display" do
 
       visit patient_clinical_profile_path(patient)
 
-      expect(page).to have_content("SMITH, John")
-      expect(page).to have_no_content("Allergies")
-      expect(page).to have_no_content("Peanuts")
+      expect(page).to have_text("SMITH, John")
+      expect(page).to have_no_text("Allergies")
+      expect(page).to have_no_text("Peanuts")
     end
 
     it "does not show allergy alert in patient banner" do
@@ -52,9 +52,9 @@ describe "Clinical Profile Allergies Display" do
 
       visit patient_path(patient)
 
-      expect(page).to have_content("SMITH, John")
+      expect(page).to have_text("SMITH, John")
       expect(page).to have_no_css(".allergies")
-      expect(page).to have_no_content("Penicillin")
+      expect(page).to have_no_text("Penicillin")
     end
   end
 end

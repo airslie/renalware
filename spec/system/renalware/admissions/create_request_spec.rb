@@ -17,11 +17,11 @@ describe "Create an Admission Request", :js do
     # We have just raised a modal, but are on the same page
     expect(page).to have_current_path(clinical_profile_path)
 
-    expect(page).to have_content(dialog_title)
+    expect(page).to have_text(dialog_title)
 
     # 1. Try filling out without a reason and we should get an error displayed in the dialog
     click_on("Create")
-    expect(page).to have_content("can't be blank")
+    expect(page).to have_text("can't be blank")
 
     # 2. Now submit valid data and we should be able to submit
     select reason.description, from: "Reason"
@@ -30,7 +30,7 @@ describe "Create an Admission Request", :js do
     fill_in "Notes", with: "Some notes"
     click_on("Create")
 
-    expect(page).to have_no_content(dialog_title)
+    expect(page).to have_no_text(dialog_title)
     requests = Renalware::Admissions::Request.all
     expect(requests.length).to eq(1)
     request = requests.first

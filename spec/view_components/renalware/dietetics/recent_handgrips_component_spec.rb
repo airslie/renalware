@@ -8,8 +8,8 @@ module Renalware
         render_inline(instance)
 
         expect(instance.render?).to be(true)
-        expect(page).to have_content("Recent Handgrips")
-        expect(page).to have_content("DateLeftRight")
+        expect(page).to have_text("Recent Handgrips")
+        expect(page).to have_text("DateLeftRight")
       end
     end
 
@@ -37,9 +37,9 @@ module Renalware
 
           expect(instance.render?).to be(true)
 
-          expect(page).to have_content("Recent Handgrips")
-          expect(page).to have_content("DateLeftRight")
-          expect(page).to have_content("11-Oct-202210 kg10 kg")
+          expect(page).to have_text("Recent Handgrips")
+          expect(page).to have_text("DateLeftRight")
+          expect(page).to have_text("11-Oct-202210 kg10 kg")
         end
       end
 
@@ -51,8 +51,8 @@ module Renalware
 
           expect(instance.render?).to be(true)
 
-          expect(page).to have_content("Recent Handgrips")
-          expect(page).to have_content("DateLeftRight")
+          expect(page).to have_text("Recent Handgrips")
+          expect(page).to have_text("DateLeftRight")
         end
       end
     end

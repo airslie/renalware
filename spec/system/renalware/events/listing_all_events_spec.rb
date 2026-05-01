@@ -4,6 +4,6 @@ describe "Listing all events" do
 
     visit events_filtered_list_path(named_filter: :all)
 
-    expect(page).to have_content("Events")
+    expect(page).to have_text("Events")
   end
 end

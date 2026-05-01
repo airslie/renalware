@@ -30,7 +30,7 @@ module SlimSelectHelper
 
   def wait_and_click_on(item_text)
     within(".ss-list") do
-      expect(page).to have_content(item_text)
+      expect(page).to have_text(item_text)
       find(".ss-search-highlight", text: item_text).click
     end
   end
@@ -47,7 +47,7 @@ module SlimSelectHelper
   # Wait for the list of items (or a message) to appear before continuing
   def wait_for_list(item_text, text_to_wait_for)
     within(".ss-list") do
-      expect(page).to have_content(text_to_wait_for || item_text)
+      expect(page).to have_text(text_to_wait_for || item_text)
     end
   end
 end

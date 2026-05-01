@@ -14,8 +14,8 @@ describe "Viewing a list of reports" do
 
     visit reporting.reports_path
 
-    expect(page).to have_content("Reports")
-    expect(page).to have_content(report.title)
-    expect(page).to have_content(report.sub_category)
+    expect(page).to have_text("Reports")
+    expect(page).to have_text(report.title)
+    expect(page).to have_text(report.sub_category)
   end
 end

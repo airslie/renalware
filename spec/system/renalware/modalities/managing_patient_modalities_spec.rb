@@ -33,7 +33,7 @@ describe "Managing a patient's modalities", js: false do
       fill_in "Notes", with: "Needs wheel chair access"
       click_on "Create"
 
-      expect(page).to have_content("Other")
+      expect(page).to have_text("Other")
     end
 
     it "adds a death modality for a patient" do
@@ -55,7 +55,7 @@ describe "Managing a patient's modalities", js: false do
         end
       end
 
-      expect(page).to have_content "Cause of Death"
+      expect(page).to have_text "Cause of Death"
 
       within ".edit_patient" do
         fill_in "Date of Death", with: l(Time.zone.today)
@@ -71,19 +71,19 @@ describe "Managing a patient's modalities", js: false do
 
       visit patient_modalities_path(patient)
 
-      expect(page).to have_content "Death"
-      expect(page).to have_content(l(Time.zone.today))
+      expect(page).to have_text "Death"
+      expect(page).to have_text(l(Time.zone.today))
 
       visit patient_clinical_profile_path(patient)
 
-      expect(page).to have_content(l(Time.zone.today))
-      expect(page).to have_content("Dementia")
-      expect(page).to have_content("Cachexia")
+      expect(page).to have_text(l(Time.zone.today))
+      expect(page).to have_text("Dementia")
+      expect(page).to have_text("Cachexia")
 
       visit patient_deaths_path
       within("#patients-deceased") do
-        expect(page).to have_content(patient.nhs_number_formatted)
-        expect(page).to have_content("M")
+        expect(page).to have_text(patient.nhs_number_formatted)
+        expect(page).to have_text("M")
       end
 
       patient.reload
@@ -110,7 +110,7 @@ describe "Managing a patient's modalities", js: false do
         visit patient_modalities_path(patient)
         within("#patient-modalities") do
           expect(page).to have_css("tbody tr", count: 3) # 1 = hd, 2 = overlap msg, 3 = pd
-          expect(page).to have_content(
+          expect(page).to have_text(
             "Overlapping modality dates 02-Jan-2023 and 01-Jan-2023 (1 day)"
           )
         end
@@ -134,7 +134,7 @@ describe "Managing a patient's modalities", js: false do
         visit patient_modalities_path(patient)
         within("#patient-modalities") do
           expect(page).to have_css("tbody tr", count: 3) # 1 = hd, 2 = missing mod msg, 3 = pd
-          expect(page).to have_content(
+          expect(page).to have_text(
             "Missing modality data between 30-Dec-2022 and 01-Jan-2023 (2 days)"
           )
         end
@@ -184,7 +184,7 @@ describe "Managing a patient's modalities", js: false do
           expect(page).to have_current_path(patient_modalities_path(patient))
 
           within "##{dom_id(modality)}" do
-            expect(page).to have_content("PD")
+            expect(page).to have_text("PD")
           end
 
           expect(modality.reload).to have_attributes(

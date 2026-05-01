@@ -22,16 +22,16 @@ describe "Refreshing materialized view" do
     visit reporting.reports_path
 
     within "table" do
-      expect(page).to have_content "Title"
+      expect(page).to have_text "Title"
       click_button "Refresh Data"
     end
 
     expect(Renalware::System::RefreshMaterializedViewWithMetadataJob).to have_been_enqueued
-    expect(page).to have_content "Materialized View will be refreshed in the " \
-                                 "background"
+    expect(page).to have_text "Materialized View will be refreshed in the " \
+                              "background"
 
     within "table" do
-      expect(page).to have_content I18n.l(Time.zone.today) # the refreshed date
+      expect(page).to have_text I18n.l(Time.zone.today) # the refreshed date
     end
   end
 end

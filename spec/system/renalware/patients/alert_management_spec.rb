@@ -14,7 +14,7 @@ RSpec.describe "Alert management" do
     end
 
     within ".patient-alerts" do
-      expect(page).to have_content("Some note")
+      expect(page).to have_text("Some note")
       expect(page).to have_css(".patient-alert", count: 1)
     end
   end
@@ -30,7 +30,7 @@ RSpec.describe "Alert management" do
     visit patient_path(patient)
 
     within ".patient-alerts" do
-      expect(page).to have_content("Abc")
+      expect(page).to have_text("Abc")
       expect(page).to have_css(".patient-alert", count: 1)
     end
 

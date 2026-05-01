@@ -11,9 +11,9 @@ module Renalware
       click_on "Sign up"
 
       within(".error-messages") do
-        expect(page).to have_content("Email can't be blank")
-        expect(page).to have_content("Password can't be blank")
-        expect(page).to have_content("Family name can't be blank")
+        expect(page).to have_text("Email can't be blank")
+        expect(page).to have_text("Password can't be blank")
+        expect(page).to have_text("Family name can't be blank")
       end
     end
 

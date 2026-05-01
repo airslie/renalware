@@ -29,20 +29,20 @@ describe "Prescriptions - from an exit site infection", :js do
   it "allows to create, edit and terminate a drug" do
     visit patient_pd_exit_site_infection_path(patient, esi)
 
-    expect(page).to have_content "There are no prescriptions in this list."
+    expect(page).to have_text "There are no prescriptions in this list."
     click_link "Add Prescription"
 
     # Test 'Cancel'
     click_link "Cancel"
-    expect(page).to have_content "Exit Site Infection"
+    expect(page).to have_text "Exit Site Infection"
 
     # Create a prescription
     click_link "Add Prescription"
     slim_select "Blue Pill", from: "Drug", wait_for: "Search term must be"
 
     # Automatically pre-populates as only 1 option available
-    expect(page).to have_content "Unit of measure\nAmpoule"
-    expect(page).to have_content "Route\nOral"
+    expect(page).to have_text "Unit of measure\nAmpoule"
+    expect(page).to have_text "Route\nOral"
 
     # Complete all required fields
     fill_in "Dose amount", with: 1
@@ -52,15 +52,15 @@ describe "Prescriptions - from an exit site infection", :js do
 
     #
     # Back on Exit Site Infection page
-    expect(page).to have_content "Exit Site Infection"
+    expect(page).to have_text "Exit Site Infection"
 
     within "article", text: "Antibiotics/Routes", match: :prefer_exact do
-      expect(page).to have_content("Blue Pill")
-      expect(page).to have_content("1 Ampoule")
-      expect(page).to have_content("abc")
-      expect(page).to have_content("Oral")
-      expect(page).to have_content("GP")
-      expect(page).to have_content(l(Date.current))
+      expect(page).to have_text("Blue Pill")
+      expect(page).to have_text("1 Ampoule")
+      expect(page).to have_text("abc")
+      expect(page).to have_text("Oral")
+      expect(page).to have_text("GP")
+      expect(page).to have_text(l(Date.current))
 
       # Go back to Edit
       click_link "Edit"
@@ -78,7 +78,7 @@ describe "Prescriptions - from an exit site infection", :js do
 
     # Test 'Cancel' from edit
     click_link "Cancel"
-    expect(page).to have_content "Exit Site Infection"
+    expect(page).to have_text "Exit Site Infection"
 
     # Now make a real edit
     within "article", text: "Antibiotics/Routes", match: :prefer_exact do
@@ -88,6 +88,6 @@ describe "Prescriptions - from an exit site infection", :js do
     fill_in "Frequency", with: "New frequency", match: :prefer_exact
     click_button "Save"
 
-    expect(page).to have_content "PD Summary / Exit Site Infection"
+    expect(page).to have_text "PD Summary / Exit Site Infection"
   end
 end

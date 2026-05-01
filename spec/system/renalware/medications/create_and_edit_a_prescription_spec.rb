@@ -32,7 +32,7 @@ describe "Prescriptions - create / edit / terminate", :js do
       treatable_id: patient
     )
 
-    expect(page).to have_content "There are no prescriptions in this list."
+    expect(page).to have_text "There are no prescriptions in this list."
 
     within ".page-actions" do
       click_link "Add"
@@ -62,7 +62,7 @@ describe "Prescriptions - create / edit / terminate", :js do
     #
     # Test validation
     click_button "Create"
-    expect(page).to have_content("Dose amount can't be blank")
+    expect(page).to have_text("Dose amount can't be blank")
 
     # Now complete all required fields
     fill_in "Dose amount", with: 1
@@ -72,23 +72,23 @@ describe "Prescriptions - create / edit / terminate", :js do
 
     # Now on index page
     within "article", text: "Historical" do
-      expect(page).to have_content("Blue Pill")
-      expect(page).to have_content("1 Ampoule")
-      expect(page).to have_content("Often")
-      expect(page).to have_content("not on Monday")
-      expect(page).to have_content("Oral")
-      expect(page).to have_content("GP")
-      expect(page).to have_content(l(Date.current))
+      expect(page).to have_text("Blue Pill")
+      expect(page).to have_text("1 Ampoule")
+      expect(page).to have_text("Often")
+      expect(page).to have_text("not on Monday")
+      expect(page).to have_text("Oral")
+      expect(page).to have_text("GP")
+      expect(page).to have_text(l(Date.current))
     end
 
     within "article", text: "Current" do
-      expect(page).to have_content("Blue Pill")
-      expect(page).to have_content("1 Ampoule")
-      expect(page).to have_content("Often")
-      expect(page).to have_content("not on Monday")
-      expect(page).to have_content("Oral")
-      expect(page).to have_content("GP")
-      expect(page).to have_content(l(Date.current))
+      expect(page).to have_text("Blue Pill")
+      expect(page).to have_text("1 Ampoule")
+      expect(page).to have_text("Often")
+      expect(page).to have_text("not on Monday")
+      expect(page).to have_text("Oral")
+      expect(page).to have_text("GP")
+      expect(page).to have_text(l(Date.current))
     end
 
     #
@@ -122,13 +122,13 @@ describe "Prescriptions - create / edit / terminate", :js do
       expect(page).to have_link "Edit"
       # # There will be no Terminate button as it is a stat drug that already has a termination date
       # expect(page).not_to have_link "Terminate"
-      expect(page).to have_no_content("Blue Pill\t\tCapsule\t1 Ampoule")
-      expect(page).to have_content("Blue Pill\t\tCapsule\tlarger dose Ampoule")
+      expect(page).to have_no_text("Blue Pill\t\tCapsule\t1 Ampoule")
+      expect(page).to have_text("Blue Pill\t\tCapsule\tlarger dose Ampoule")
     end
 
     within "article", text: "Historical" do
-      expect(page).to have_content("Blue Pill\t\tCapsule\t1 Ampoule")
-      expect(page).to have_content("Blue Pill\t\tCapsule\tlarger dose Ampoule")
+      expect(page).to have_text("Blue Pill\t\tCapsule\t1 Ampoule")
+      expect(page).to have_text("Blue Pill\t\tCapsule\tlarger dose Ampoule")
     end
 
     #
@@ -149,7 +149,7 @@ describe "Prescriptions - create / edit / terminate", :js do
 
     # Go and edit the termination date to today
     within "article", text: "Current" do
-      expect(page).to have_content "Blue Pill"
+      expect(page).to have_text "Blue Pill"
       click_link "Edit"
     end
 
@@ -160,11 +160,11 @@ describe "Prescriptions - create / edit / terminate", :js do
     # Now the drug is only in the historial ones
 
     within "article", text: "Current" do
-      expect(page).to have_content "no prescriptions in this list"
+      expect(page).to have_text "no prescriptions in this list"
     end
 
     within "article", text: "Historical" do
-      expect(page).to have_content "Blue Pill"
+      expect(page).to have_text "Blue Pill"
       expect(page).to have_no_link "Edit"
     end
   end
@@ -189,25 +189,25 @@ describe "Prescriptions - create / edit / terminate", :js do
 
       slim_select "Blue Pill (TradeFamily)", from: "Drug", wait_for: "Search term must be"
       # most dropdowns are automatically selected to the first option
-      expect(page).to have_content "Unit of measure\nAmpoule"
-      expect(page).to have_content "Route\nOral"
-      expect(page).to have_content "Form\nCapsule"
+      expect(page).to have_text "Unit of measure\nAmpoule"
+      expect(page).to have_text "Route\nOral"
+      expect(page).to have_text "Form\nCapsule"
 
       fill_in "Dose amount", with: "1"
 
       click_button "Create"
 
       within "article", text: "Current" do
-        expect(page).to have_content("Blue Pill (TradeFamily)")
-        expect(page).to have_content("1 Ampoule")
-        expect(page).to have_content("Often")
-        expect(page).to have_content("Oral")
-        expect(page).to have_content("GP")
-        expect(page).to have_content(l(Date.current))
+        expect(page).to have_text("Blue Pill (TradeFamily)")
+        expect(page).to have_text("1 Ampoule")
+        expect(page).to have_text("Often")
+        expect(page).to have_text("Oral")
+        expect(page).to have_text("GP")
+        expect(page).to have_text(l(Date.current))
       end
 
       within "article", text: "Historical" do
-        expect(page).to have_content("Blue Pill (TradeFamily)\t\tCapsule\t1 Ampoule")
+        expect(page).to have_text("Blue Pill (TradeFamily)\t\tCapsule\t1 Ampoule")
       end
     end
   end
@@ -233,12 +233,12 @@ describe "Prescriptions - create / edit / terminate", :js do
       visit patient_prescriptions_path(patient)
 
       within "article", text: "Current" do
-        expect(page).to have_content("Blue Pill")
-        expect(page).to have_content("20 Ampoule")
-        expect(page).to have_content("daily")
-        expect(page).to have_content("Oral")
-        expect(page).to have_content("GP")
-        expect(page).to have_content("09-Oct-2022")
+        expect(page).to have_text("Blue Pill")
+        expect(page).to have_text("20 Ampoule")
+        expect(page).to have_text("daily")
+        expect(page).to have_text("Oral")
+        expect(page).to have_text("GP")
+        expect(page).to have_text("09-Oct-2022")
 
         click_link "Edit"
       end
@@ -246,7 +246,7 @@ describe "Prescriptions - create / edit / terminate", :js do
       #
       # Edit just the dose
       expect(page).to have_select "Drug", selected: "Blue Pill", disabled: true
-      expect(page).to have_content("No longer available")
+      expect(page).to have_text("No longer available")
 
       expect(page).to have_field "Dose amount", with: "20"
       # expect(page).to have_select "Unit of measure", selected: "Ampoule"
@@ -264,12 +264,12 @@ describe "Prescriptions - create / edit / terminate", :js do
       within "article", text: "Current" do
         expect(page).to have_link "Edit"
         expect(page).to have_link "Terminate"
-        expect(page).to have_no_content("20 Ampoule")
-        expect(page).to have_content("Blue PillCapsulelarger dose Ampoule")
+        expect(page).to have_no_text("20 Ampoule")
+        expect(page).to have_text("Blue PillCapsulelarger dose Ampoule")
       end
 
       within "article", text: "Historical" do
-        expect(page).to have_content("Blue PillCapsule20 Ampoule")
+        expect(page).to have_text("Blue PillCapsule20 Ampoule")
       end
     end
   end
@@ -303,8 +303,8 @@ describe "Prescriptions - create / edit / terminate", :js do
       #
       # Now on index page
       within "article", text: "Current" do
-        expect(page).to have_content("Blue Pill")
-        expect(page).to have_content("More Often")
+        expect(page).to have_text("Blue Pill")
+        expect(page).to have_text("More Often")
         click_link "Edit"
       end
 

@@ -7,7 +7,7 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 8
-Capybara/NegationMatcherAfterVisit:
+Capybara/RSpec/NegationMatcherAfterVisit:
   Exclude:
     - 'packs/research/spec/system/renalware/research/add_participation_spec.rb'
     - 'spec/system/renalware/accesses/creating_a_plan_spec.rb'

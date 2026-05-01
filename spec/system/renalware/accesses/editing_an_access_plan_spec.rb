@@ -30,11 +30,11 @@ describe "Editing an Access Plan" do
     expect(page).to have_current_path(patient_accesses_dashboard_path(patient))
 
     within ".access-plans .current-access-plan" do
-      expect(page).to have_content("Changed notes")
+      expect(page).to have_text("Changed notes")
     end
 
     within ".access-plans .historical-access-plans" do
-      expect(page).to have_content("Original notes")
+      expect(page).to have_text("Original notes")
     end
   end
 

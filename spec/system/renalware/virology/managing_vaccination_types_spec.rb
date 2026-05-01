@@ -6,9 +6,9 @@ describe "Managing vaccination types" do
 
     expect(page).to have_http_status(:success)
     expect(page).to have_current_path(virology_vaccination_types_path)
-    expect(page).to have_content("Vaccination Types")
-    expect(page).to have_content("Bbb")
-    expect(page).to have_content("aaa")
+    expect(page).to have_text("Vaccination Types")
+    expect(page).to have_text("Bbb")
+    expect(page).to have_text("aaa")
   end
 
   context "when editing" do
@@ -21,7 +21,7 @@ describe "Managing vaccination types" do
       click_on "Save"
 
       expect(page).to have_current_path(virology_vaccination_types_path)
-      expect(page).to have_content("New name")
+      expect(page).to have_text("New name")
     end
 
     it "disallows a name that has already been taken by an active type" do
@@ -34,7 +34,7 @@ describe "Managing vaccination types" do
       click_on "Save"
 
       expect(page).to have_no_current_path(virology_vaccination_types_path)
-      expect(page).to have_content("already used")
+      expect(page).to have_text("already used")
     end
 
     it "disallows a name that has already been taken by a deleted type" do
@@ -47,7 +47,7 @@ describe "Managing vaccination types" do
       click_on "Save"
 
       expect(page).to have_no_current_path(virology_vaccination_types_path)
-      expect(page).to have_content("already used")
+      expect(page).to have_text("already used")
     end
   end
 
@@ -61,8 +61,8 @@ describe "Managing vaccination types" do
       click_on "Create"
 
       expect(page).to have_current_path(virology_vaccination_types_path)
-      expect(page).to have_content("New name")
-      expect(page).to have_content("a_new_code")
+      expect(page).to have_text("New name")
+      expect(page).to have_text("a_new_code")
     end
 
     it "disallows a code that has already been used in a deleted type" do
@@ -74,7 +74,7 @@ describe "Managing vaccination types" do
       fill_in "Code", with: "xxx"
       click_on "Create"
 
-      expect(page).to have_content("already used")
+      expect(page).to have_text("already used")
     end
   end
 
@@ -93,8 +93,8 @@ describe "Managing vaccination types" do
 
       expect(page).to have_current_path(virology_vaccination_types_path)
       # We still display the type but it will be show a deleted_at datetime
-      expect(page).to have_content("Bbb")
-      expect(page).to have_content(I18n.l(Time.zone.now)) # deleted_at
+      expect(page).to have_text("Bbb")
+      expect(page).to have_text(I18n.l(Time.zone.now)) # deleted_at
     end
   end
 end

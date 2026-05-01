@@ -15,10 +15,10 @@ describe "Manage a patient's attachments (linked files)" do
 
       expect(page).to have_current_path(patient_attachments_path(patient))
 
-      expect(page).to have_content("Linked Files")
-      expect(page).to have_content(attachment.name)
-      expect(page).to have_content(attachment.attachment_type.name)
-      expect(page).to have_content(I18n.l(attachment.document_date))
+      expect(page).to have_text("Linked Files")
+      expect(page).to have_text(attachment.name)
+      expect(page).to have_text(attachment.attachment_type.name)
+      expect(page).to have_text(I18n.l(attachment.document_date))
     end
   end
 

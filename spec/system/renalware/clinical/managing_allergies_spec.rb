@@ -16,8 +16,8 @@ describe "Managing a patient's allergies", :js do
 
       # Verify allergies appear in the UI
       within ".clinical-allergies" do
-        expect(page).to have_content("Nuts")
-        expect(page).to have_content("Penicillin")
+        expect(page).to have_text("Nuts")
+        expect(page).to have_text("Penicillin")
       end
 
       # Verify allergies are persisted in database

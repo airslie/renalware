@@ -18,13 +18,13 @@ module Renalware
 
         visit patient_clinical_summary_path(patient)
 
-        expect(page).to have_content "Problems (1)"
-        expect(page).to have_content "Events (1)"
-        expect(page).to have_content "Letters (1)"
-        expect(page).to have_content "Prescriptions (1)"
-        expect(page).to have_content "Admissions (1)"
-        expect(page).to have_content "Consults (1)"
-        expect(page).to have_content "Messages"
+        expect(page).to have_text "Problems (1)"
+        expect(page).to have_text "Events (1)"
+        expect(page).to have_text "Letters (1)"
+        expect(page).to have_text "Prescriptions (1)"
+        expect(page).to have_text "Admissions (1)"
+        expect(page).to have_text "Consults (1)"
+        expect(page).to have_text "Messages"
       end
     end
   end

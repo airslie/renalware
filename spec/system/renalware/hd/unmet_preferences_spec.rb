@@ -68,9 +68,9 @@ describe "Viewing patients whose HD preferences do not match their profile" do
 
       visit hd_unmet_preferences_path
 
-      expect(page).to have_content(patient_schedule.family_name.upcase)
-      expect(page).to have_content(patient_unit.family_name.upcase)
-      expect(page).to have_no_content(patient_met.family_name.upcase)
+      expect(page).to have_text(patient_schedule.family_name.upcase)
+      expect(page).to have_text(patient_unit.family_name.upcase)
+      expect(page).to have_no_text(patient_met.family_name.upcase)
     end
 
     context "when filtering" do
@@ -86,9 +86,9 @@ describe "Viewing patients whose HD preferences do not match their profile" do
         select "Y", from: "q_hd_preference_set_hospital_unit_id_eq"
         click_on t("btn.filter")
 
-        expect(page).to have_content(patient_unit.family_name.upcase)
-        expect(page).to have_no_content(patient_met.family_name.upcase)
-        expect(page).to have_no_content(patient_schedule.family_name.upcase)
+        expect(page).to have_text(patient_unit.family_name.upcase)
+        expect(page).to have_no_text(patient_met.family_name.upcase)
+        expect(page).to have_no_text(patient_schedule.family_name.upcase)
       end
     end
   end

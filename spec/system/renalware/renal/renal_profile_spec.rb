@@ -18,7 +18,7 @@ describe "Renal Profile", :js do
 
       # Renal profile #show
       expect(page).to have_current_path(patient_renal_profile_path(patient))
-      expect(page).to have_content(esrf_date)
+      expect(page).to have_text(esrf_date)
 
       within ".page-actions" do
         click_on t("btn.edit")
@@ -46,7 +46,7 @@ describe "Renal Profile", :js do
 
       # Renal profile #show
       expect(page).to have_current_path(patient_renal_profile_path(patient))
-      expect(page).to have_content(updated_esrf_date)
+      expect(page).to have_text(updated_esrf_date)
 
       # Reaching into the saved object here as it is a more reliable means of testing
       # we saved the comorbidities than reading the screen

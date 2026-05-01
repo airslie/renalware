@@ -6,23 +6,23 @@ describe "Searching for a patient from the menu bar search area" do
     create(:patient, by: user, family_name: "MOUSE", given_name: "Minnie")
     visit patients_path
 
-    expect(page).to have_content("RABBIT, Roger")
-    expect(page).to have_content("MOUSE, Minnie")
+    expect(page).to have_text("RABBIT, Roger")
+    expect(page).to have_text("MOUSE, Minnie")
 
     within(".patient-search-form") do
       fill_in "patient_search_identity_match", with: "rab ro"
       find(".button").click
     end
 
-    expect(page).to have_content("RABBIT, Roger")
-    expect(page).to have_no_content("MOUSE, Minnie")
+    expect(page).to have_text("RABBIT, Roger")
+    expect(page).to have_no_text("MOUSE, Minnie")
 
     within(".patient-search-form") do
       fill_in "patient_search_identity_match", with: "mous m"
       find(".button").click
     end
 
-    expect(page).to have_content("MOUSE, Minnie")
-    expect(page).to have_no_content("RABBIT, Roger")
+    expect(page).to have_text("MOUSE, Minnie")
+    expect(page).to have_no_text("RABBIT, Roger")
   end
 end

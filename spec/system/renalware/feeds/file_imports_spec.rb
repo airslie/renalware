@@ -7,8 +7,8 @@ describe "File Import viewing and uploading" do
       login_as_clinical
       visit admin_feeds_files_path
 
-      expect(page).to have_content(user.family_name)
-      expect(page).to have_content("Primarycarephysicians")
+      expect(page).to have_text(user.family_name)
+      expect(page).to have_text("Primarycarephysicians")
     end
   end
 end

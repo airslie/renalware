@@ -5,8 +5,8 @@ module Renalware::Letters::Formats::FHIR
         letter = instance_double(Renalware::Letters::Letter, salutation: "Dear X", body: "abc")
         render_inline(described_class.new(letter))
 
-        expect(page).to have_content("Dear X")
-        expect(page).to have_content("abc")
+        expect(page).to have_text("Dear X")
+        expect(page).to have_text("abc")
       end
     end
   end

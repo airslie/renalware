@@ -14,9 +14,9 @@ module Renalware
 
         visit system_online_reference_links_path
 
-        expect(page).to have_content reference.url
-        expect(page).to have_content reference.title
-        expect(page).to have_content reference.description
+        expect(page).to have_text reference.url
+        expect(page).to have_text reference.title
+        expect(page).to have_text reference.description
       end
     end
 

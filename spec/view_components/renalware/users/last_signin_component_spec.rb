@@ -43,8 +43,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
       component = described_class.new(current_user: user)
 
       render_inline(component).to_html
-      expect(page).to have_content success_message
-      expect(page).to have_content "10 days ago"
+      expect(page).to have_text success_message
+      expect(page).to have_text "10 days ago"
     end
   end
 
@@ -59,8 +59,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content failed_message
-        expect(page).to have_content "2 days ago"
+        expect(page).to have_text failed_message
+        expect(page).to have_text "2 days ago"
       end
     end
 
@@ -75,8 +75,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content failed_message
-        expect(page).to have_content "10 days ago"
+        expect(page).to have_text failed_message
+        expect(page).to have_text "10 days ago"
       end
     end
 
@@ -91,8 +91,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content failed_message
-        expect(page).to have_content "2 days ago"
+        expect(page).to have_text failed_message
+        expect(page).to have_text "2 days ago"
       end
     end
 
@@ -107,8 +107,8 @@ describe Renalware::Users::LastSigninComponent, type: :component do
         component = described_class.new(current_user: user)
 
         render_inline(component).to_html
-        expect(page).to have_content success_message
-        expect(page).to have_content "2 days ago"
+        expect(page).to have_text success_message
+        expect(page).to have_text "2 days ago"
       end
     end
   end

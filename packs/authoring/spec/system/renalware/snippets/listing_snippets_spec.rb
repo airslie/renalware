@@ -13,8 +13,8 @@ RSpec.describe "Listing snippets", :js do
     it "displays their own snippets" do
       visit authoring.snippets_path
 
-      expect(page).to have_content("#{snippet1.title}\t\n#{snippet1.body}")
-      expect(page).to have_no_content("#{snippet2.title}\t\n#{snippet2.body}")
+      expect(page).to have_text("#{snippet1.title}\t\n#{snippet1.body}")
+      expect(page).to have_no_text("#{snippet2.title}\t\n#{snippet2.body}")
     end
   end
 
@@ -25,8 +25,8 @@ RSpec.describe "Listing snippets", :js do
       visit authoring.snippets_path
       click_on "Everyone's"
 
-      expect(page).to have_content("#{snippet1.title}\t\n#{snippet1.body}")
-      expect(page).to have_content("#{snippet2.title}\t\n#{snippet2.body}")
+      expect(page).to have_text("#{snippet1.title}\t\n#{snippet1.body}")
+      expect(page).to have_text("#{snippet2.title}\t\n#{snippet2.body}")
     end
   end
 
@@ -39,13 +39,13 @@ RSpec.describe "Listing snippets", :js do
     end
 
     it "allows navigating to the next page" do
-      expect(page).to have_content("#{snippets.first.title}\t\n#{snippets.first.body}")
-      expect(page).to have_content("#{snippets.second.title}\t\n#{snippets.second.body}")
-      expect(page).to have_no_content("#{snippets.third.title}\t\n#{snippets.third.body}")
+      expect(page).to have_text("#{snippets.first.title}\t\n#{snippets.first.body}")
+      expect(page).to have_text("#{snippets.second.title}\t\n#{snippets.second.body}")
+      expect(page).to have_no_text("#{snippets.third.title}\t\n#{snippets.third.body}")
 
       click_on ">"
 
-      expect(page).to have_content("#{snippets.last.title}\t\n#{snippets.last.body}")
+      expect(page).to have_text("#{snippets.last.title}\t\n#{snippets.last.body}")
       expect(page).to have_link("Edit")
     end
   end

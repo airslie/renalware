@@ -42,22 +42,22 @@ RSpec.describe "HD patient group directions", :js do
 
     visit patient_hd_patient_group_directions_path(patient)
 
-    expect(page).to have_content("Patient Group Directions")
-    expect(page).to have_content("Showing 25 of 26")
+    expect(page).to have_text("Patient Group Directions")
+    expect(page).to have_text("Showing 25 of 26")
     within "table.auto-layout" do
-      expect(first("tbody tr")).to have_content(newest_pgd.name)
-      expect(page).to have_no_content(excluded_pgd.name)
-      expect(page).to have_no_content(page_two_pgd.name)
+      expect(first("tbody tr")).to have_text(newest_pgd.name)
+      expect(page).to have_no_text(excluded_pgd.name)
+      expect(page).to have_no_text(page_two_pgd.name)
     end
 
     expect(page).to have_css("nav.pagy")
 
     visit patient_hd_patient_group_directions_path(patient, page: 2)
 
-    expect(page).to have_content("Showing 1 of 26")
+    expect(page).to have_text("Showing 1 of 26")
     within "table.auto-layout" do
-      expect(page).to have_content(page_two_pgd.name)
-      expect(page).to have_no_content(newest_pgd.name)
+      expect(page).to have_text(page_two_pgd.name)
+      expect(page).to have_no_text(newest_pgd.name)
     end
   end
 end

@@ -21,8 +21,8 @@ describe Renalware::Messaging::UnreadMessagesComponent, type: :component do
 
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Messages")
-      expect(page).to have_content(message.subject)
+      expect(page).to have_text("Messages")
+      expect(page).to have_text(message.subject)
     end
   end
 
@@ -32,8 +32,8 @@ describe Renalware::Messaging::UnreadMessagesComponent, type: :component do
 
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Messages")
-      expect(page).to have_content("You have no messages")
+      expect(page).to have_text("Messages")
+      expect(page).to have_text("You have no messages")
     end
   end
 end

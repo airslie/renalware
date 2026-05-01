@@ -4,7 +4,7 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
 
     render_inline(described_class.new(patient:))
 
-    expect(page).to have_content("Record HD Drugs")
+    expect(page).to have_text("Record HD Drugs")
   end
 
   context "when the patient has no drugs to be given on HD" do
@@ -13,7 +13,7 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
 
       render_inline(described_class.new(patient:))
 
-      expect(page).to have_content("Patient has no drugs to be given on HD")
+      expect(page).to have_text("Patient has no drugs to be given on HD")
     end
   end
 
@@ -31,11 +31,11 @@ describe Renalware::HD::AdministerPrescriptionDropdownComponent, type: :componen
 
       render_inline(described_class.new(patient:))
 
-      expect(page).to have_no_content("Patient has no drugs to be given on HD")
+      expect(page).to have_no_text("Patient has no drugs to be given on HD")
 
-      expect(page).to have_content("Drug1")
-      expect(page).to have_content("Drug2")
-      expect(page).to have_no_content("Drug3")
+      expect(page).to have_text("Drug1")
+      expect(page).to have_text("Drug2")
+      expect(page).to have_no_text("Drug3")
 
       # Note that the links in the html seem to have an .html extension. Not attempting to
       # fix that yet, so specifying an html format here for now

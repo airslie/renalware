@@ -8,7 +8,7 @@ module Renalware
         render_inline(instance)
 
         expect(instance.render?).to be(true)
-        expect(page).to have_content("No dietetic visits")
+        expect(page).to have_text("No dietetic visits")
       end
     end
 
@@ -42,14 +42,14 @@ module Renalware
 
           expect(instance.render?).to be(true)
 
-          expect(page).to have_content("Dietetic Profile")
-          expect(page).to have_content("Date11-Oct-2022")
-          expect(page).to have_content("Ideal body weight72")
-          expect(page).to have_content("SgaA - Well nourished")
-          expect(page).to have_content("Estimated energy intake40 kcal/day")
-          expect(page).to have_content("Estimated energy requirement120 kcal/day")
-          expect(page).to have_content("Estimated protein intake199 g/day")
-          expect(page).to have_content("Estimated protein requirement87 g/day")
+          expect(page).to have_text("Dietetic Profile")
+          expect(page).to have_text("Date11-Oct-2022")
+          expect(page).to have_text("Ideal body weight72")
+          expect(page).to have_text("SgaA - Well nourished")
+          expect(page).to have_text("Estimated energy intake40 kcal/day")
+          expect(page).to have_text("Estimated energy requirement120 kcal/day")
+          expect(page).to have_text("Estimated protein intake199 g/day")
+          expect(page).to have_text("Estimated protein requirement87 g/day")
         end
       end
 
@@ -61,14 +61,14 @@ module Renalware
 
           expect(instance.render?).to be(true)
 
-          expect(page).to have_content("Dietetic Profile")
-          expect(page).to have_content("Date")
-          expect(page).to have_content("Ideal body weight")
-          expect(page).to have_content("Sga")
-          expect(page).to have_content("Estimated energy intake")
-          expect(page).to have_content("Estimated energy requirement")
-          expect(page).to have_content("Estimated protein intake")
-          expect(page).to have_content("Estimated protein requirement")
+          expect(page).to have_text("Dietetic Profile")
+          expect(page).to have_text("Date")
+          expect(page).to have_text("Ideal body weight")
+          expect(page).to have_text("Sga")
+          expect(page).to have_text("Estimated energy intake")
+          expect(page).to have_text("Estimated energy requirement")
+          expect(page).to have_text("Estimated protein intake")
+          expect(page).to have_text("Estimated protein requirement")
         end
       end
     end

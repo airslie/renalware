@@ -18,11 +18,11 @@ describe "Viewing patients merges" do
 
       visit patients_merges_path
 
-      expect(page).to have_content("Patient Merges")
-      expect(page).to have_content("Major")
-      expect(page).to have_content("Minor")
-      expect(page).to have_content(major_patient.family_name)
-      expect(page).to have_content(minor_patient.family_name)
+      expect(page).to have_text("Patient Merges")
+      expect(page).to have_text("Major")
+      expect(page).to have_text("Minor")
+      expect(page).to have_text(major_patient.family_name)
+      expect(page).to have_text(minor_patient.family_name)
     end
   end
 
@@ -37,14 +37,14 @@ describe "Viewing patients merges" do
 
       pending "Fix test failure after recent changes to view"
 
-      expect(page).to have_content("Create Patient Merge")
+      expect(page).to have_text("Create Patient Merge")
       fill_in "Major patient ID", with: major_patient.id
       fill_in "Minor patient ID", with: minor_patient.id
       click_button "Create Merge"
 
-      expect(page).to have_content("Patient Merges")
-      expect(page).to have_content(major_patient.family_name)
-      expect(page).to have_content(minor_patient.family_name)
+      expect(page).to have_text("Patient Merges")
+      expect(page).to have_text(major_patient.family_name)
+      expect(page).to have_text(minor_patient.family_name)
 
       click_link "Operations"
     end

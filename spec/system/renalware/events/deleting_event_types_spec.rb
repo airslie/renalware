@@ -22,7 +22,7 @@ describe "Deleting event types" do
     visit patient_events_path(patient)
 
     within("tbody#event_#{event.id}") do
-      expect(page).to have_content("TestType")
+      expect(page).to have_text("TestType")
     end
 
     # 4. Now delete the event type
@@ -38,7 +38,7 @@ describe "Deleting event types" do
     visit patient_events_path(patient)
 
     within("tbody#event_#{event.id}") do
-      expect(page).to have_content("TestType")
+      expect(page).to have_text("TestType")
     end
 
     # 6. make sure we can still edit and update the event.
@@ -51,8 +51,8 @@ describe "Deleting event types" do
 
     # 7. Our edits are replicated in the events table.
     within("tbody#event_#{event.id}") do
-      expect(page).to have_content("TestType") # unchanged
-      expect(page).to have_content("ABC") # new
+      expect(page).to have_text("TestType") # unchanged
+      expect(page).to have_text("ABC") # new
     end
   end
 end

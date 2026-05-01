@@ -39,7 +39,7 @@ describe Renalware::Medications::LatestReviewComponent, type: :component do
             )
           )
 
-          expect(page).to have_content(title)
+          expect(page).to have_text(title)
         end
       end
     end

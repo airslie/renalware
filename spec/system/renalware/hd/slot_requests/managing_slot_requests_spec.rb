@@ -21,15 +21,15 @@ describe "Managing a list of HD Slot Requests" do
 
     visit hd_slot_requests_path
 
-    expect(page).to have_content("HD Slot Requests")
+    expect(page).to have_text("HD Slot Requests")
 
     within("table#slot-requests") do
-      expect(page).to have_content("01-Oct-2023")
-      expect(page).to have_content(patient.to_s)
-      expect(page).to have_content(patient.local_patient_id)
-      expect(page).to have_content("Highly urgent")
-      expect(page).to have_content(location.name)
-      expect(page).to have_content(access_state.name)
+      expect(page).to have_text("01-Oct-2023")
+      expect(page).to have_text(patient.to_s)
+      expect(page).to have_text(patient.local_patient_id)
+      expect(page).to have_text("Highly urgent")
+      expect(page).to have_text(location.name)
+      expect(page).to have_text(access_state.name)
     end
   end
 
@@ -61,10 +61,10 @@ describe "Managing a list of HD Slot Requests" do
       expect(page).to have_current_path(hd_slot_requests_path)
 
       within("table#slot-requests") do
-        expect(page).to have_content("01-Oct-2023")
-        expect(page).to have_content(patient.to_s)
-        expect(page).to have_content(patient.local_patient_id)
-        expect(page).to have_content("urgent")
+        expect(page).to have_text("01-Oct-2023")
+        expect(page).to have_text(patient.to_s)
+        expect(page).to have_text(patient.local_patient_id)
+        expect(page).to have_text("urgent")
       end
 
       slot_request = Renalware::HD::SlotRequest.last
@@ -108,7 +108,7 @@ describe "Managing a list of HD Slot Requests" do
         click_on "Create"
       end
 
-      expect(page).to have_content "HD slot requested"
+      expect(page).to have_text "HD slot requested"
 
       expect(Renalware::HD::SlotRequest.last).to have_attributes(
         location_id: location.id,
@@ -138,7 +138,7 @@ describe "Managing a list of HD Slot Requests" do
 
       # Allocate the slot request
       within("table#slot-requests") do
-        expect(page).to have_content(patient.to_s)
+        expect(page).to have_text(patient.to_s)
         click_on "Resolve"
         click_on "Allocate"
       end
@@ -148,7 +148,7 @@ describe "Managing a list of HD Slot Requests" do
 
       # Check the patient has been removed
       within("table#slot-requests") do
-        expect(page).to have_no_content(patient.to_s)
+        expect(page).to have_no_text(patient.to_s)
       end
 
       # Find and inspect the slot_request to check the allocated_at
@@ -177,7 +177,7 @@ describe "Managing a list of HD Slot Requests" do
 
       # Allocate the slot request
       within("table#slot-requests") do
-        expect(page).to have_content(patient.to_s)
+        expect(page).to have_text(patient.to_s)
         click_on "Resolve"
         click_on "Some Reason"
       end
@@ -187,7 +187,7 @@ describe "Managing a list of HD Slot Requests" do
 
       # Check the patient has been removed
       within("table#slot-requests") do
-        expect(page).to have_no_content(patient.to_s)
+        expect(page).to have_no_text(patient.to_s)
       end
 
       # Find and inspect the slot_request to check the allocated_at
@@ -220,7 +220,7 @@ describe "Managing a list of HD Slot Requests" do
           visit hd_slot_requests_path
 
           within("table#slot-requests") do
-            expect(page).to have_content(patient.to_s)
+            expect(page).to have_text(patient.to_s)
             click_on "Edit"
           end
 
@@ -260,7 +260,7 @@ describe "Managing a list of HD Slot Requests" do
             visit hd_slot_requests_path
 
             within("table#slot-requests") do
-              expect(page).to have_content(patient.to_s)
+              expect(page).to have_text(patient.to_s)
               click_on "Edit"
             end
 

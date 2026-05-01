@@ -12,7 +12,7 @@ describe "Create new appointment manually (not via HL7 message)", :js do
       end
 
       expect(page).to have_current_path(new_appointment_path)
-      expect(page).to have_content("Clinic Appointments / New")
+      expect(page).to have_text("Clinic Appointments / New")
 
       # Patient visibility testing...
       # Use and patient should have a hospital centre set, and the hosp must be a host site
@@ -34,11 +34,11 @@ describe "Create new appointment manually (not via HL7 message)", :js do
         click_on t("btn.create")
       end
 
-      expect(page).to have_no_content("Clinic Appointments / New")
+      expect(page).to have_no_text("Clinic Appointments / New")
 
       within("#appointments") do
-        expect(page).to have_content(patient.to_s)
-        expect(page).to have_content(clinic.to_s)
+        expect(page).to have_text(patient.to_s)
+        expect(page).to have_text(clinic.to_s)
       end
 
       appointment = Renalware::Clinics::Appointment.last

@@ -12,7 +12,7 @@ describe "Managing needling assessments" do
     end
 
     expect(page).to have_current_path new_patient_accesses_needling_assessment_path(patient)
-    expect(page).to have_content "New Ease of Needling (MAGIC)"
+    expect(page).to have_text "New Ease of Needling (MAGIC)"
 
     within("#new_needling_assessment") do
       select "Moderate", from: "Difficulty"
