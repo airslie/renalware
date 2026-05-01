@@ -3,7 +3,9 @@
           class: "button"
 = simple_form_for request_html_form_params,
                 url: pathology_requests_new_request_path,
-                html: { autocomplete: "off", style: "display: inline" },
+                html: { autocomplete: "off",
+                        id: "appointment-request-form",
+                        style: "display: inline" },
                 as: :request do |f|
 
   = f.input :patient_ids, as: :hidden_array

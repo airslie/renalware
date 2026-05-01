@@ -3,6 +3,7 @@ import Dropdown from "stimulus-dropdown"
 
 import ToggleController from "./toggle_controller"
 import ClinicsBmiCalculatorController from "./clinics/bmi_calculator_controller"
+import ClinicsAppointmentSelectionController from "./clinics/appointment_selection_controller"
 import WeightChangeCalculatorController from "./clinics/weight_change_calculator_controller"
 import DietaryProteinCalculatorController from "./clinics/dietary_protein_calculator_controller"
 import HDPrescriptionController from "./hd/prescription_administration_controller"
@@ -88,6 +89,10 @@ application.register("flash", FlashController)
 application.register("flatpickr", FlatpickrController)
 application.register("input-value-alerter", InputValueAlerterController)
 application.register("select-update-frame", SelectUpdateFrameController)
+application.register(
+  "clinics--appointment-selection",
+  ClinicsAppointmentSelectionController
+)
 application.register("clinics--bmi-calculator", ClinicsBmiCalculatorController)
 application.register(
   "clinics--weight-change-calculator",
