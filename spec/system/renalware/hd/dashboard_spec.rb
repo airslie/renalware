@@ -15,11 +15,11 @@ module Renalware
     it "renders the patient's HD Summary" do
       visit patient_hd_dashboard_path(patient)
 
-      expect(page).to have_content(patient.to_s)
+      expect(page).to have_text(patient.to_s)
 
-      expect(page).to have_content("HD Summary")
+      expect(page).to have_text("HD Summary")
       within(".acuity-assessments") do
-        expect(page).to have_content("Acuity Assessments")
+        expect(page).to have_text("Acuity Assessments")
         expect(page).to have_css("a[href$='.pdf'][target='_blank']")
       end
     end
@@ -30,8 +30,8 @@ module Renalware
       it "renders the patient's HD Summary" do
         visit patient_hd_dashboard_path(patient)
 
-        expect(page).to have_content("HD Summary")
-        expect(page).to have_no_content("Acuity Assessments")
+        expect(page).to have_text("HD Summary")
+        expect(page).to have_no_text("Acuity Assessments")
       end
     end
 
@@ -44,7 +44,7 @@ module Renalware
           click_on "Acuity Assessment"
         end
 
-        expect(page).to have_content("New HD Acuity Assessment")
+        expect(page).to have_text("New HD Acuity Assessment")
       end
     end
 
@@ -56,13 +56,13 @@ module Renalware
           click_on "Add"
         end
 
-        expect(page).to have_content("New HD Acuity Assessment")
+        expect(page).to have_text("New HD Acuity Assessment")
 
         choose "1:4"
         click_on "Create"
 
         expect(page).to have_current_path(patient_hd_dashboard_path(patient))
-        expect(page).to have_content("Acuity assessment added")
+        expect(page).to have_text("Acuity assessment added")
       end
     end
   end

@@ -10,7 +10,7 @@ describe "Transplants MDM Patients" do
       login_as_clinical
       visit transplants_mdm_patients_path
 
-      expect(page).to have_content(patient.family_name.upcase)
+      expect(page).to have_text(patient.family_name.upcase)
     end
 
     it "`recent` filter displays patients with an operation within 3 months" do
@@ -21,8 +21,8 @@ describe "Transplants MDM Patients" do
       visit transplants_mdm_patients_path
       click_on t("renalware.transplants.mdm_patients.tabs.tab.recent")
 
-      expect(page).to have_content(patient2.local_patient_id)
-      expect(page).to have_no_content(patient1.local_patient_id)
+      expect(page).to have_text(patient2.local_patient_id)
+      expect(page).to have_no_text(patient1.local_patient_id)
     end
 
     it "'on worryboard' filter displays transplant patients on the worryboard" do
@@ -35,8 +35,8 @@ describe "Transplants MDM Patients" do
       visit transplants_mdm_patients_path
       click_on t("renalware.transplants.mdm_patients.tabs.tab.on_worryboard")
 
-      expect(page).to have_content(patient2.local_patient_id)
-      expect(page).to have_no_content(patient1.local_patient_id)
+      expect(page).to have_text(patient2.local_patient_id)
+      expect(page).to have_no_text(patient1.local_patient_id)
     end
 
     it "`past_year` filter displays transplant patients in the last year" do
@@ -60,9 +60,9 @@ describe "Transplants MDM Patients" do
       visit transplants_mdm_patients_path
       click_on t("renalware.transplants.mdm_patients.tabs.tab.past_year")
 
-      expect(page).to have_content(matched_patient.local_patient_id)
-      expect(page).to have_no_content(no_op_patient.local_patient_id)
-      expect(page).to have_no_content(unmatched_patient.local_patient_id)
+      expect(page).to have_text(matched_patient.local_patient_id)
+      expect(page).to have_no_text(no_op_patient.local_patient_id)
+      expect(page).to have_no_text(unmatched_patient.local_patient_id)
     end
 
     def create_donor_patient(user)

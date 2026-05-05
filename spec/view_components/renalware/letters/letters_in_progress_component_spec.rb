@@ -6,7 +6,7 @@ describe Renalware::Letters::LettersInProgressComponent, type: :component do
       user = login_as_clinical
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Letters in progress")
+      expect(page).to have_text("Letters in progress")
     end
   end
 
@@ -18,7 +18,7 @@ describe Renalware::Letters::LettersInProgressComponent, type: :component do
 
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Letters in progress")
+      expect(page).to have_text("Letters in progress")
     end
   end
 end

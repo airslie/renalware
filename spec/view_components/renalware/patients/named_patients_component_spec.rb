@@ -19,10 +19,10 @@ describe Renalware::Patients::NamedPatientsComponent, type: :component do
 
       render_inline(component)
 
-      expect(page).to have_content("Named Patients (2)")
-      expect(page).to have_content(my_patient1.family_name.upcase)
-      expect(page).to have_content(my_patient2.family_name.upcase)
-      expect(page).to have_no_content(not_my_patient.family_name.upcase)
+      expect(page).to have_text("Named Patients (2)")
+      expect(page).to have_text(my_patient1.family_name.upcase)
+      expect(page).to have_text(my_patient2.family_name.upcase)
+      expect(page).to have_no_text(not_my_patient.family_name.upcase)
     end
   end
 end

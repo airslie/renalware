@@ -14,9 +14,9 @@ describe "Viewing an Access Plan" do
 
     visit patient_accesses_plan_path(patient, plan)
 
-    expect(page).to have_content(todays_date)
-    expect(page).to have_content(user.to_s)
-    expect(page).to have_content(plan.notes)
-    expect(page).to have_content(plan.plan_type.to_s)
+    expect(page).to have_text(todays_date)
+    expect(page).to have_text(user.to_s)
+    expect(page).to have_text(plan.notes)
+    expect(page).to have_text(plan.plan_type.to_s)
   end
 end

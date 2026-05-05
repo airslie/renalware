@@ -22,7 +22,7 @@ module Renalware
         end
 
         within ".admissions-consults-table tbody" do
-          expect(page).to have_content("RABBIT, Ronald")
+          expect(page).to have_text("RABBIT, Ronald")
         end
       end
     end

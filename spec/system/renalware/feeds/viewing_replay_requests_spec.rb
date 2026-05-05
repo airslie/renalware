@@ -4,6 +4,6 @@ describe "Viewing Feed Replay Requests" do
 
     visit feeds_replay_requests_path
 
-    expect(page).to have_content("Replay Requests")
+    expect(page).to have_text("Replay Requests")
   end
 end

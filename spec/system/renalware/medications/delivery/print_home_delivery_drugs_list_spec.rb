@@ -107,7 +107,7 @@ RSpec.describe "Print a patient's ESA drug list", :js do
 
       # We have opened a PDF in a new tab but stayed on this one in the current tab
 
-      expect(page).to have_content("Was printing successful?")
+      expect(page).to have_text("Was printing successful?")
 
       dialog.indicate_printing_was_succesful
 

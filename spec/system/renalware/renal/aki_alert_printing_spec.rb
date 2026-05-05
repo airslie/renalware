@@ -52,14 +52,14 @@ module Renalware
     it "tests AKI alerts filtering, edit, validation and cancel" do
       # by default the '24 hours before 0945 today' date range filter is selected, so only
       # aki_akert_at_ward1 will be selected as aki_akert_at_ward2 is pas 0945 today
-      expect(page).to have_content("AT WARD1, Peter")
-      expect(page).to have_no_content("AT WARD2, Ben")
+      expect(page).to have_text("AT WARD1, Peter")
+      expect(page).to have_no_text("AT WARD2, Ben")
 
       select "All", from: "Date range"
       click_button "Filter"
 
-      expect(page).to have_content("AT WARD1, Peter")
-      expect(page).to have_content("AT WARD2, Ben")
+      expect(page).to have_text("AT WARD1, Peter")
+      expect(page).to have_text("AT WARD2, Ben")
 
       # test Cancel button after validation error
       within "tr", text: "AT WARD1, Peter" do
@@ -68,13 +68,13 @@ module Renalware
 
       fill_in "Max AKI", with: 9
       click_button "Save"
-      expect(page).to have_content "not included in the list"
+      expect(page).to have_text "not included in the list"
 
       click_link "Cancel"
 
       # Back at the index page, we should see the previous filter applied
-      expect(page).to have_content("AT WARD1, Peter")
-      expect(page).to have_content("AT WARD2, Ben")
+      expect(page).to have_text("AT WARD1, Peter")
+      expect(page).to have_text("AT WARD2, Ben")
 
       within "tr", text: "AT WARD1, Peter" do
         click_link "Edit"
@@ -83,17 +83,17 @@ module Renalware
       # Test going back to filters after validation error, then success
       fill_in "Max AKI", with: 9
       click_button "Save"
-      expect(page).to have_content "not included in the list"
+      expect(page).to have_text "not included in the list"
       fill_in "Max AKI", with: 2
       click_button "Save"
 
       # Back at the index page, we should see the previous filter applied
-      expect(page).to have_content("AT WARD1, Peter")
-      expect(page).to have_content("AT WARD2, Ben")
+      expect(page).to have_text("AT WARD1, Peter")
+      expect(page).to have_text("AT WARD2, Ben")
 
       # check the change was applied
       within "tr", text: "AT WARD1, Peter" do
-        expect(page).to have_content("Ward1Yes2") # '2' after 'Yes' is the Max AKI
+        expect(page).to have_text("Ward1Yes2") # '2' after 'Yes' is the Max AKI
       end
     end
 
@@ -106,16 +106,16 @@ module Renalware
 
         # contains only active consults and the correct filter summary
         expect(page.status_code).to eq(200)
-        expect(page).to have_content("AKI Alerts")
-        expect(page).to have_content(l(Time.zone.today))
-        expect(page).to have_content("Filters")
-        expect(page).to have_content("Ward:Ward1")
-        expect(page).to have_content(aki_akert_at_ward1.patient.to_s)
-        expect(page).to have_content(aki_akert_at_ward1.patient.hospital_identifiers)
-        expect(page).to have_content(l(aki_akert_at_ward1.patient.born_on))
-        expect(page).to have_content(aki_akert_at_ward1.max_cre)
-        expect(page).to have_content(l(aki_akert_at_ward1.cre_date))
-        expect(page).to have_no_content(aki_akert_at_ward2.patient.to_s)
+        expect(page).to have_text("AKI Alerts")
+        expect(page).to have_text(l(Time.zone.today))
+        expect(page).to have_text("Filters")
+        expect(page).to have_text("Ward:Ward1")
+        expect(page).to have_text(aki_akert_at_ward1.patient.to_s)
+        expect(page).to have_text(aki_akert_at_ward1.patient.hospital_identifiers)
+        expect(page).to have_text(l(aki_akert_at_ward1.patient.born_on))
+        expect(page).to have_text(aki_akert_at_ward1.max_cre)
+        expect(page).to have_text(l(aki_akert_at_ward1.cre_date))
+        expect(page).to have_no_text(aki_akert_at_ward2.patient.to_s)
       end
     end
   end

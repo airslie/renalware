@@ -9,8 +9,8 @@ module Renalware::Letters::Formats::FHIR
 
         render_inline(described_class.new(letter))
 
-        expect(page).to have_content("Dr GP, X")
-        expect(page).to have_content("PracticeX")
+        expect(page).to have_text("Dr GP, X")
+        expect(page).to have_text("PracticeX")
       end
     end
   end

@@ -23,8 +23,8 @@ RSpec.describe "Add a patient to a study (creating a participation)", :js do
       click_on "Create"
 
       expect(page).to have_current_path(research.study_participations_path(study))
-      expect(page).to have_content(patient.to_s)
-      expect(page).to have_content("123xx")
+      expect(page).to have_text(patient.to_s)
+      expect(page).to have_text("123xx")
     end
   end
 

@@ -6,11 +6,11 @@ describe "View transmission logs" do
 
       visit ukrdc_transmission_logs_path
 
-      expect(page).to have_content("UKRDC Transmission Logs")
+      expect(page).to have_text("UKRDC Transmission Logs")
 
       within ".ukrdc_transmission_logs" do
-        expect(page).to have_content("01-Jan-2021 11:00")
-        expect(page).to have_content("sftped")
+        expect(page).to have_text("01-Jan-2021 11:00")
+        expect(page).to have_text("sftped")
       end
     end
   end

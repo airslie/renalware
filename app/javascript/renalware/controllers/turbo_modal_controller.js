@@ -18,9 +18,9 @@ export default class extends Controller {
   // detect the 204 and redirect to the specific url. This avoids a double render (a problem with
   // the "turbo:frame-missing" redirect solution)
   submitEnd(event) {
-    let response = event.detail?.fetchResponse?.response;
-    let status = response?.status;
-    let url = response?.headers?.get('location') ?? null;
+    let response = event.detail?.fetchResponse?.response
+    let status = response?.status
+    let url = response?.headers?.get("location") ?? null
 
     if (status === 204 && url) {
         event.preventDefault()

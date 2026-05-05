@@ -27,9 +27,9 @@ RSpec.describe "Edit a patient's participation in a study" do
       click_on "Save"
 
       expect(page).to have_current_path(research.study_participations_path(participation.study))
-      expect(page).to have_content(participation.patient.to_s)
-      expect(page).to have_content("01-Feb-2019")
-      expect(page).to have_content("123xx")
+      expect(page).to have_text(participation.patient.to_s)
+      expect(page).to have_text("01-Feb-2019")
+      expect(page).to have_text("123xx")
     end
   end
 end

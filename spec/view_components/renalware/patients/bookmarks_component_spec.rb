@@ -7,8 +7,8 @@ describe Renalware::Patients::BookmarksComponent, type: :component do
 
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Bookmarked Patients")
-      expect(page).to have_content(patient.to_s)
+      expect(page).to have_text("Bookmarked Patients")
+      expect(page).to have_text(patient.to_s)
     end
   end
 
@@ -18,8 +18,8 @@ describe Renalware::Patients::BookmarksComponent, type: :component do
 
       render_inline(described_class.new(current_user: user))
 
-      expect(page).to have_content("Bookmarked Patients")
-      expect(page).to have_content("There are no patients bookmarked")
+      expect(page).to have_text("Bookmarked Patients")
+      expect(page).to have_text("There are no patients bookmarked")
     end
   end
 end

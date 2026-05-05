@@ -18,9 +18,9 @@ module Renalware
       click_on "Save"
 
       within("##{dom_id(worry)}") do
-        expect(page).to have_content("Category99")
+        expect(page).to have_text("Category99")
         page.find("a.toggler").click # toggle notes open - will be in another tbody
-        expect(page).to have_content("new notes")
+        expect(page).to have_text("new notes")
       end
     end
 

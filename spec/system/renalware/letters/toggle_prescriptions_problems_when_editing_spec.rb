@@ -14,7 +14,7 @@ module Renalware
         visit new_patient_letters_letter_path(patient)
 
         within ".letter-form-problems-and-prescriptions" do
-          expect(page).to have_content("Problems and Prescriptions")
+          expect(page).to have_text("Problems and Prescriptions")
           expect(page).to have_no_css(".problems")
           expect(page).to have_no_css(".prescriptions")
 
@@ -22,8 +22,8 @@ module Renalware
 
           expect(page).to have_css(".problems")
           expect(page).to have_css(".prescriptions")
-          expect(page).to have_content(problem.description)
-          expect(page).to have_content(prescription.drug_name)
+          expect(page).to have_text(problem.description)
+          expect(page).to have_text(prescription.drug_name)
         end
       end
     end

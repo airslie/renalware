@@ -15,16 +15,16 @@ describe "PD Dashboard" do
     visit patient_pd_dashboard_path(patient)
 
     within "article.capd-regimes header" do
-      expect(page).to have_content("CAPD Regimes")
-      expect(page).to have_content("(5 of 6)")
+      expect(page).to have_text("CAPD Regimes")
+      expect(page).to have_text("(5 of 6)")
       click_on "View All"
     end
     # Visit the page to view all CAPD regimes (regimes#index)
     expect(page).to have_current_path(patient_pd_capd_regimes_path(patient))
     # refresh page so we can change the per_page param
     visit patient_pd_capd_regimes_path(patient)
-    expect(page).to have_content("PD Summary") # breadcrumb
-    expect(page).to have_content("CAPD Regimes")
+    expect(page).to have_text("PD Summary") # breadcrumb
+    expect(page).to have_text("CAPD Regimes")
     # Display 5 - the 6th is on another page'
     expect(page).to have_css("table.capd-regimes tbody tr", count: 6)
   end
@@ -45,13 +45,13 @@ describe "PD Dashboard" do
     visit patient_pd_dashboard_path(patient)
 
     within "article.apd-regimes header" do
-      expect(page).to have_content("APD Regimes")
-      expect(page).to have_content("(5 of 6)")
+      expect(page).to have_text("APD Regimes")
+      expect(page).to have_text("(5 of 6)")
       click_on "View All"
     end
     # Visit the page to view all APD regimes (regimes#index)
     expect(page).to have_current_path(patient_pd_apd_regimes_path(patient))
-    expect(page).to have_content("APD Regimes")
+    expect(page).to have_text("APD Regimes")
     expect(page).to have_css("table.apd-regimes tbody tr", count: 6)
   end
 end

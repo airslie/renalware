@@ -7,13 +7,13 @@ describe "View transmission logs" do
 
       visit hd_transmission_logs_path
 
-      expect(page).to have_content("HD Transmission Logs")
+      expect(page).to have_text("HD Transmission Logs")
 
       within ".hd_transmission_logs" do
-        expect(page).to have_content("log_2")
-        expect(page).to have_content(log_2.direction)
-        expect(page).to have_content(log_2.format)
-        expect(page).to have_content("log_1")
+        expect(page).to have_text("log_2")
+        expect(page).to have_text(log_2.direction)
+        expect(page).to have_text(log_2.format)
+        expect(page).to have_text("log_1")
       end
     end
   end

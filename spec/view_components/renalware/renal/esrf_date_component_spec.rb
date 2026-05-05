@@ -27,7 +27,7 @@ describe Renalware::Renal::ESRFDateComponent, type: :component do
 
           render_inline(component).to_html
 
-          expect(page).to have_content "ESRF:Missing"
+          expect(page).to have_text "ESRF:Missing"
         end
       end
 
@@ -39,7 +39,7 @@ describe Renalware::Renal::ESRFDateComponent, type: :component do
 
           render_inline(component).to_html
 
-          expect(page).to have_content "ESRF:01-Jan-2018"
+          expect(page).to have_text "ESRF:01-Jan-2018"
         end
       end
     end
@@ -67,7 +67,7 @@ describe Renalware::Renal::ESRFDateComponent, type: :component do
 
           render_inline(component).to_html
 
-          expect(page).to have_content "ESRF:01-Jan-2018"
+          expect(page).to have_text "ESRF:01-Jan-2018"
         end
       end
     end
@@ -92,7 +92,7 @@ describe Renalware::Renal::ESRFDateComponent, type: :component do
 
         render_inline(component).to_html
 
-        expect(page).to have_content "ESRF:01-Jan-2018"
+        expect(page).to have_text "ESRF:01-Jan-2018"
       end
     end
   end

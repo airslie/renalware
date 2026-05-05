@@ -1,5 +1,0 @@
-# going forward we are only linting es6 js in app/javascript
-app/assets/javascripts/**/*
-vendor/assets/javascripts/**/*
-**/*{.,-}min.js
-coverage/**/*

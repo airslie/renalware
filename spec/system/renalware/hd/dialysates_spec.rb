@@ -25,12 +25,12 @@ describe "Managing Dialysates" do
       click_on t("btn.create")
 
       within ".hd-dialysates tbody" do
-        expect(page).to have_content("a name")
-        expect(page).to have_content("a description")
-        expect(page).to have_content("111 mmol/L")
-        expect(page).to have_content("222.2 mmol/L")
-        expect(page).to have_content("333.3 mmol/L")
-        expect(page).to have_content("444.4 mmol/L")
+        expect(page).to have_text("a name")
+        expect(page).to have_text("a description")
+        expect(page).to have_text("111 mmol/L")
+        expect(page).to have_text("222.2 mmol/L")
+        expect(page).to have_text("333.3 mmol/L")
+        expect(page).to have_text("444.4 mmol/L")
       end
     end
   end
@@ -51,8 +51,8 @@ describe "Managing Dialysates" do
       click_on t("btn.save")
 
       within ".hd-dialysates tbody" do
-        expect(page).to have_content("a new name")
-        expect(page).to have_content("a new description")
+        expect(page).to have_text("a new name")
+        expect(page).to have_text("a new description")
       end
     end
   end

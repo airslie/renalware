@@ -20,18 +20,18 @@ describe "Soft-deleted letter administration" do
       login_as superadmin
       visit letters_list_path
 
-      expect(page).to have_content(patient1.family_name)
-      expect(page).to have_no_content(patient2.family_name)
+      expect(page).to have_text(patient1.family_name)
+      expect(page).to have_no_text(patient2.family_name)
 
       within(".sub-nav") do
         click_on "Deleted"
       end
 
       expect(page).to have_current_path(letters_deleted_path)
-      expect(page).to have_content(patient2.family_name)
-      expect(page).to have_no_content(patient1.family_name)
-      expect(page).to have_content(deleted_letter.deleted_by)
-      expect(page).to have_content(I18n.l(deleted_letter.deleted_at))
+      expect(page).to have_text(patient2.family_name)
+      expect(page).to have_no_text(patient1.family_name)
+      expect(page).to have_text(deleted_letter.deleted_by)
+      expect(page).to have_text(I18n.l(deleted_letter.deleted_at))
     end
   end
 end

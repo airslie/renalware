@@ -41,16 +41,16 @@ module Renalware
 
       visit hd_ongoing_sessions_path
 
-      expect(page).to have_content("Ongoing HD Sessions")
+      expect(page).to have_text("Ongoing HD Sessions")
 
       expect(page).to have_css("#hd_ongoing_sessions tbody tr", count: 2)
       rows = page.all("#hd_ongoing_sessions tbody tr")
-      expect(rows[0]).to have_content(open_session1.patient.family_name.upcase)
-      expect(rows[0]).to have_content(I18n.l(open_session1.started_at.to_date))
-      expect(rows[0]).to have_content(open_session1.hospital_unit.name)
-      expect(rows[1]).to have_content(open_session2.patient.family_name.upcase)
-      expect(rows[1]).to have_content(I18n.l(open_session2.started_at.to_date))
-      expect(rows[1]).to have_content(open_session2.hospital_unit.name)
+      expect(rows[0]).to have_text(open_session1.patient.family_name.upcase)
+      expect(rows[0]).to have_text(I18n.l(open_session1.started_at.to_date))
+      expect(rows[0]).to have_text(open_session1.hospital_unit.name)
+      expect(rows[1]).to have_text(open_session2.patient.family_name.upcase)
+      expect(rows[1]).to have_text(I18n.l(open_session2.started_at.to_date))
+      expect(rows[1]).to have_text(open_session2.hospital_unit.name)
     end
 
     context "when filtering using turbo-framed filters", :js do
@@ -67,7 +67,7 @@ module Renalware
 
         expect(page).to have_css("#hd_ongoing_sessions tbody tr", count: 1)
         rows = page.all("#hd_ongoing_sessions tbody tr")
-        expect(rows[0]).to have_content(open_session2.hospital_unit.name)
+        expect(rows[0]).to have_text(open_session2.hospital_unit.name)
       end
 
       it "filtering by Named Nurse" do
@@ -84,7 +84,7 @@ module Renalware
         expect(page).to have_css("#hd_ongoing_sessions tbody tr", count: 1)
         rows = page.all("#hd_ongoing_sessions tbody tr")
         expect(rows.size).to eq(1)
-        expect(rows[0]).to have_content(open_session2.patient.to_s)
+        expect(rows[0]).to have_text(open_session2.patient.to_s)
       end
     end
 
@@ -100,8 +100,8 @@ module Renalware
 
         expect(page).to have_css("#hd_ongoing_sessions tbody tr", count: 2)
         rows = page.all("#hd_ongoing_sessions tbody tr")
-        expect(rows[0]).to have_content(open_session2.patient.family_name.upcase)
-        expect(rows[1]).to have_content(open_session1.patient.family_name.upcase)
+        expect(rows[0]).to have_text(open_session2.patient.family_name.upcase)
+        expect(rows[1]).to have_text(open_session1.patient.family_name.upcase)
       end
 
       it "sorts by unit asc" do
@@ -115,8 +115,8 @@ module Renalware
 
         expect(page).to have_css("#hd_ongoing_sessions tbody tr", count: 2)
         rows = page.all("#hd_ongoing_sessions tbody tr")
-        expect(rows[0]).to have_content(open_session1.patient.family_name.upcase)
-        expect(rows[1]).to have_content(open_session2.patient.family_name.upcase)
+        expect(rows[0]).to have_text(open_session1.patient.family_name.upcase)
+        expect(rows[1]).to have_text(open_session2.patient.family_name.upcase)
       end
 
       it "sorts by date asc (reverse of the default which is date desc)" do
@@ -130,8 +130,8 @@ module Renalware
 
         expect(page).to have_css("#hd_ongoing_sessions tbody tr", count: 2)
         rows = page.all("#hd_ongoing_sessions tbody tr")
-        expect(rows[0]).to have_content(open_session2.patient.family_name.upcase)
-        expect(rows[1]).to have_content(open_session1.patient.family_name.upcase)
+        expect(rows[0]).to have_text(open_session2.patient.family_name.upcase)
+        expect(rows[1]).to have_text(open_session1.patient.family_name.upcase)
       end
     end
   end

@@ -5,8 +5,8 @@ describe "Manage letter topics" do
 
     visit letters_topics_path
 
-    expect(page).to have_content("Letter Topics")
-    expect(page).to have_content(topic.text)
+    expect(page).to have_text("Letter Topics")
+    expect(page).to have_text(topic.text)
   end
 
   it "enables a superadmin to add a letter topic" do
@@ -23,9 +23,9 @@ describe "Manage letter topics" do
     click_on "Create"
 
     within "table" do
-      expect(page).to have_content("LD123")
-      expect(page).to have_content("HD")
-      expect(page).to have_content I18n.l(Renalware::Letters::Topic.last.created_at)
+      expect(page).to have_text("LD123")
+      expect(page).to have_text("HD")
+      expect(page).to have_text I18n.l(Renalware::Letters::Topic.last.created_at)
     end
   end
 
@@ -44,8 +44,8 @@ describe "Manage letter topics" do
     click_on "Save"
 
     within "table" do
-      expect(page).to have_content("LD2")
-      expect(page).to have_content("AKCC")
+      expect(page).to have_text("LD2")
+      expect(page).to have_text("AKCC")
     end
 
     expect(topic.reload).to have_attributes(text: "LD2", section_identifier: "akcc")

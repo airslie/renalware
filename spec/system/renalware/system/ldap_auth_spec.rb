@@ -14,7 +14,7 @@ module Renalware
       hospital_centre
       visit new_user_session_path
 
-      expect(page).to have_content("Sign in")
+      expect(page).to have_text("Sign in")
       expect(page).to have_css("form[action='#{user_ldap_omniauth_callback_path}']")
       expect(page).to have_field("Username")
       expect(page).to have_field("Password")
@@ -24,7 +24,7 @@ module Renalware
     it "hides signup and forgot password links" do
       visit new_user_session_path
 
-      expect(page).to have_content("Sign in")
+      expect(page).to have_text("Sign in")
       expect(page).to have_no_link("Sign up")
       expect(page).to have_no_link("Forgotten your password?")
     end
@@ -49,8 +49,8 @@ module Renalware
       it "shows both password-based sign-in forms" do
         visit new_user_session_path
 
-        expect(page).to have_content("Sign in with a local account")
-        expect(page).to have_content("Sign in with LDAP")
+        expect(page).to have_text("Sign in with a local account")
+        expect(page).to have_text("Sign in with LDAP")
         expect(page).to have_css("form[action='#{new_user_session_path}']")
         expect(page).to have_css("form[action='#{user_ldap_omniauth_callback_path}']")
       end

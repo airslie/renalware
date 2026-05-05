@@ -9,9 +9,9 @@ describe "Death location management" do
 
     visit deaths_locations_path
 
-    expect(page).to have_content("Death Locations")
+    expect(page).to have_text("Death Locations")
     locations.each do |location|
-      expect(page).to have_content(location.name)
+      expect(page).to have_text(location.name)
     end
   end
 
@@ -74,7 +74,7 @@ describe "Death location management" do
     visit deaths_locations_path
 
     within("#death-locations tbody") do
-      expect(page).to have_no_content("Delete")
+      expect(page).to have_no_text("Delete")
     end
   end
 end

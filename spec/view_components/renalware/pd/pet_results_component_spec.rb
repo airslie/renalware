@@ -25,7 +25,7 @@ describe Renalware::PD::PETResultsComponent, type: :component do
 
       render_inline(component).to_html
 
-      expect(page).to have_content "01-Jan-2020"
+      expect(page).to have_text "01-Jan-2020"
     end
   end
 end

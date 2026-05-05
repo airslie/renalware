@@ -47,13 +47,13 @@ describe "View a list of home delivery prescriptions filtered by delivery dates"
 
       visit medications_home_delivery_prescriptions_path(named_filter: :esa)
 
-      expect(page).to have_content(patient.to_s)
-      expect(page).to have_content(patient.nhs_number)
-      expect(page).to have_content("ESA")
-      expect(page).to have_content(prescription.drug_name)
-      expect(page).to have_content(l(prescription.prescribed_on))
-      expect(page).to have_content("01-Nov-2020")
-      expect(page).to have_content("01-Dec-2020")
+      expect(page).to have_text(patient.to_s)
+      expect(page).to have_text(patient.nhs_number)
+      expect(page).to have_text("ESA")
+      expect(page).to have_text(prescription.drug_name)
+      expect(page).to have_text(l(prescription.prescribed_on))
+      expect(page).to have_text("01-Nov-2020")
+      expect(page).to have_text("01-Dec-2020")
     end
   end
 
@@ -72,13 +72,13 @@ describe "View a list of home delivery prescriptions filtered by delivery dates"
 
       visit medications_home_delivery_prescriptions_path(named_filter: :immunosuppressant)
 
-      expect(page).to have_content(patient.to_s)
-      expect(page).to have_content(patient.nhs_number)
-      expect(page).to have_content("Immunosuppressant")
-      expect(page).to have_content(prescription.drug_name)
-      expect(page).to have_content(l(prescription.prescribed_on))
-      expect(page).to have_content("01-Nov-2020")
-      expect(page).to have_content("01-Dec-2020")
+      expect(page).to have_text(patient.to_s)
+      expect(page).to have_text(patient.nhs_number)
+      expect(page).to have_text("Immunosuppressant")
+      expect(page).to have_text(prescription.drug_name)
+      expect(page).to have_text(l(prescription.prescribed_on))
+      expect(page).to have_text("01-Nov-2020")
+      expect(page).to have_text("01-Dec-2020")
     end
   end
 end

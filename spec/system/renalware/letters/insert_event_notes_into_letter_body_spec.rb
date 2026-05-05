@@ -41,7 +41,7 @@ describe "Insert letter.event notes (e.g. from a clinic visit) into the letter b
         visit new_patient_letters_letter_path(patient)
 
         link_text = "Insert my clinic visit notes"
-        expect(page).to have_content(link_text)
+        expect(page).to have_text(link_text)
 
         trix_editor = page.find("trix-editor")
         expect(trix_editor.text).to eq ""

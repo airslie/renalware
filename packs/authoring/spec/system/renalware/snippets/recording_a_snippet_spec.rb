@@ -13,8 +13,8 @@ RSpec.describe "Recording a snippet", :js do
     fill_trix_editor with: body
     click_on "Create"
 
-    expect(page).to have_content("Snippet added")
+    expect(page).to have_text("Snippet added")
 
-    expect(page).to have_content("#{title}\t\n#{body}")
+    expect(page).to have_text("#{title}\t\n#{body}")
   end
 end

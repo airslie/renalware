@@ -11,11 +11,11 @@ describe "Consultant management" do
 
     visit consultants_path
 
-    expect(page).to have_content("Consultants")
+    expect(page).to have_text("Consultants")
 
     consultants.each do |consultant|
-      expect(page).to have_content(consultant.code)
-      expect(page).to have_content(consultant.name)
+      expect(page).to have_text(consultant.code)
+      expect(page).to have_text(consultant.name)
     end
   end
 

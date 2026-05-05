@@ -18,14 +18,14 @@ describe "Managing a list of HD Slot Requests" do
 
     visit historical_hd_slot_requests_path
 
-    expect(page).to have_content("HD Slot Requests")
-    expect(page).to have_content("Historical")
+    expect(page).to have_text("HD Slot Requests")
+    expect(page).to have_text("Historical")
 
     within("table#slot-requests") do
-      expect(page).to have_content("01-Oct-2023")
-      expect(page).to have_content(patient.to_s)
-      expect(page).to have_content(patient.local_patient_id)
-      expect(page).to have_content("Highly urgent")
+      expect(page).to have_text("01-Oct-2023")
+      expect(page).to have_text(patient.to_s)
+      expect(page).to have_text(patient.local_patient_id)
+      expect(page).to have_text("Highly urgent")
     end
   end
 
@@ -44,8 +44,8 @@ describe "Managing a list of HD Slot Requests" do
     visit historical_hd_slot_requests_path
 
     within("table#slot-requests") do
-      expect(page).to have_content("01-Oct-2023")
-      expect(page).to have_content("Something")
+      expect(page).to have_text("01-Oct-2023")
+      expect(page).to have_text("Something")
     end
   end
 
@@ -61,7 +61,7 @@ describe "Managing a list of HD Slot Requests" do
     visit historical_hd_slot_requests_path
 
     within("table#slot-requests") do
-      expect(page).to have_no_content(patient.to_s)
+      expect(page).to have_no_text(patient.to_s)
     end
   end
 end

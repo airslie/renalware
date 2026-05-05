@@ -21,9 +21,9 @@ describe "A superadmin lists groups", :js do
 
     visit user_groups_path
 
-    expect(page).to have_content("User Groups")
-    expect(page).to have_content("G1")
-    expect(page).to have_content("G2")
+    expect(page).to have_text("User Groups")
+    expect(page).to have_text("G1")
+    expect(page).to have_text("G2")
   end
 
   it "add a group" do
@@ -40,8 +40,8 @@ describe "A superadmin lists groups", :js do
     click_on "Create"
 
     expect(page).to have_current_path(user_groups_path)
-    expect(page).to have_content("Group1")
-    expect(page).to have_content(another_user.to_s)
+    expect(page).to have_text("Group1")
+    expect(page).to have_text(another_user.to_s)
 
     expect(Renalware::Users::Group.first.users).to eq([another_user])
   end
@@ -61,8 +61,8 @@ describe "A superadmin lists groups", :js do
     click_on "Save"
 
     expect(page).to have_current_path(user_groups_path)
-    expect(page).to have_content("GroupX")
-    expect(page).to have_content(another_user.to_s)
+    expect(page).to have_text("GroupX")
+    expect(page).to have_text(another_user.to_s)
 
     expect(group.users).to eq([another_user])
   end

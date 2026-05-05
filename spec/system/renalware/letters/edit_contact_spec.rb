@@ -20,12 +20,12 @@ RSpec.describe "Managing an existing letter contact", :js do
       visit patient_letters_contacts_path(patient)
 
       within "#letters_contact_#{contact.id}" do
-        expect(page).to have_content("Yes")
-        expect(page).to have_content("Parent")
+        expect(page).to have_text("Yes")
+        expect(page).to have_text("Parent")
         click_on t("btn.edit")
       end
 
-      expect(page).to have_content("Edit Patient Contact")
+      expect(page).to have_text("Edit Patient Contact")
 
       within "#edit-patient-contact-modal .letters_contact_default_cc" do
         # As the data behind this radio is a boolean false, simple_form/rails was adding the
@@ -51,8 +51,8 @@ RSpec.describe "Managing an existing letter contact", :js do
       expect(contact.description_id).to eq(description2.id)
 
       within "#letters_contact_#{contact.id}" do
-        expect(page).to have_content("No")
-        expect(page).to have_content("Child")
+        expect(page).to have_text("No")
+        expect(page).to have_text("Child")
       end
     end
   end

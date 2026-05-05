@@ -11,6 +11,6 @@ describe "Viewing Message Replays" do
 
     visit feeds_replay_request_message_replays_path(replay_request)
 
-    expect(page).to have_content("Replayed Feed Messages")
+    expect(page).to have_text("Replayed Feed Messages")
   end
 end

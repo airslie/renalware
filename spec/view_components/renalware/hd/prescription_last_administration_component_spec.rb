@@ -16,8 +16,8 @@ describe Renalware::HD::PrescriptionLastAdministrationComponent, type: :componen
 
     render_inline(described_class.new(prescription:))
 
-    expect(page).to have_content("Last given on Wed 01-Jan-2020 by #{user}")
-    expect(page).to have_content("Notes: abc")
+    expect(page).to have_text("Last given on Wed 01-Jan-2020 by #{user}")
+    expect(page).to have_text("Notes: abc")
   end
 
   context "when prescription is nil" do

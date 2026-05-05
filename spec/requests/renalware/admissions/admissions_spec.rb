@@ -36,9 +36,9 @@ module Renalware
         visit admissions_admissions_path
 
         within(".non-patient-page") do
-          expect(body).to have_content("Inpatient Admissions")
-          expect(body).to have_content("Ward1")
-          expect(body).to have_content(admission.patient.to_s)
+          expect(body).to have_text("Inpatient Admissions")
+          expect(body).to have_text("Ward1")
+          expect(body).to have_text(admission.patient.to_s)
         end
       end
     end

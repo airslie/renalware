@@ -30,20 +30,20 @@ RSpec.describe "Creating a patient event", :js do
     end
 
     expect(page).to have_current_path(patient_events_path(patient))
-    expect(page).to have_content(l(fake_date))
-    expect(page).to have_content(fake_time)
-    expect(page).to have_content("Email")
-    expect(page).to have_content("Discussed meeting to be set up with family.")
+    expect(page).to have_text(l(fake_date))
+    expect(page).to have_text(fake_time)
+    expect(page).to have_text("Email")
+    expect(page).to have_text("Discussed meeting to be set up with family.")
     click_on t("btn.toggle")
-    expect(page).to have_content("Patty to speak to family before meeting set up.")
+    expect(page).to have_text("Patty to speak to family before meeting set up.")
 
     visit patient_events_path(patient)
 
-    expect(page).to have_content(l(fake_date))
-    expect(page).to have_content(fake_time)
-    expect(page).to have_content("Email")
-    expect(page).to have_content("Discussed meeting to be set up with family.")
+    expect(page).to have_text(l(fake_date))
+    expect(page).to have_text(fake_time)
+    expect(page).to have_text("Email")
+    expect(page).to have_text("Discussed meeting to be set up with family.")
     click_on t("btn.toggle")
-    expect(page).to have_content("Patty to speak to family before meeting set up.")
+    expect(page).to have_text("Patty to speak to family before meeting set up.")
   end
 end

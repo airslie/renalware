@@ -12,7 +12,7 @@ describe "View global letters list", js: false do
       visit letters_list_path
 
       expect(page.status_code).to eq(200)
-      expect(page).to have_content(patient.to_s)
+      expect(page).to have_text(patient.to_s)
     end
   end
 end

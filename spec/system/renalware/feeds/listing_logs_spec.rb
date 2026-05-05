@@ -9,7 +9,7 @@ describe "Feed Log messages" do
 
     visit feeds_logs_path
 
-    expect(page).to have_content("Feed Log Message")
-    expect(page).to have_content("JONES, Jack")
+    expect(page).to have_text("Feed Log Message")
+    expect(page).to have_text("JONES, Jack")
   end
 end

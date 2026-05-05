@@ -48,14 +48,14 @@ RSpec.describe "Copy HD session to clipboard", :js do
       # Make a direct request to the clipboard endpoint to verify the format
       visit patient_hd_session_clipboard_path(patient, hd_session, format: :text)
 
-      expect(page).to have_content("NHS: #{patient.nhs_number}")
-      expect(page).to have_content("MRN: #{patient.local_patient_id}")
-      expect(page).to have_content("Hospital Unit:")
-      expect(page).to have_content(hospital_unit.unit_code)
-      expect(page).to have_content("Duration:")
-      expect(page).to have_content("Put On By:")
-      expect(page).to have_content("Pre-weight:")
-      expect(page).to have_content("Post-weight:")
+      expect(page).to have_text("NHS: #{patient.nhs_number}")
+      expect(page).to have_text("MRN: #{patient.local_patient_id}")
+      expect(page).to have_text("Hospital Unit:")
+      expect(page).to have_text(hospital_unit.unit_code)
+      expect(page).to have_text("Duration:")
+      expect(page).to have_text("Put On By:")
+      expect(page).to have_text("Pre-weight:")
+      expect(page).to have_text("Post-weight:")
     end
   end
 end

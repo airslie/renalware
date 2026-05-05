@@ -15,8 +15,8 @@ RSpec.describe "Editing a swab", :js do
     # On Clinical Profile..
     within("article.swabs") do
       expect(page).to have_css("tbody tr", count: 1)
-      expect(page).to have_no_content(swab_site)
-      expect(page).to have_no_content(swab_result)
+      expect(page).to have_no_text(swab_site)
+      expect(page).to have_no_text(swab_result)
       click_on t("btn.edit")
     end
 
@@ -29,8 +29,8 @@ RSpec.describe "Editing a swab", :js do
     expect(page).to have_current_path(patient_clinical_profile_path(patient))
     within("article.swabs") do
       expect(page).to have_css("tbody tr", count: 1)
-      expect(page).to have_content(swab_site)
-      expect(page).to have_content(swab_result)
+      expect(page).to have_text(swab_site)
+      expect(page).to have_text(swab_result)
       click_on t("btn.edit")
     end
   end

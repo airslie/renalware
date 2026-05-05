@@ -8,8 +8,8 @@ module Renalware
         render_inline(instance)
 
         expect(instance.render?).to be(true)
-        expect(page).to have_content("Dietetic Visits")
-        expect(page).to have_content("0 of 0")
+        expect(page).to have_text("Dietetic Visits")
+        expect(page).to have_text("0 of 0")
       end
     end
 

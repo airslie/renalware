@@ -7,8 +7,8 @@ describe Renalware::Medications::TabbedPrescriptionsListComponent, type: :compon
 
     render_inline(described_class.new(groups))
 
-    expect(page).to have_content("Current")
-    expect(page).to have_content("Other")
+    expect(page).to have_text("Current")
+    expect(page).to have_text("Other")
   end
 
   it "generates a table for prescription array in the group" do
@@ -30,7 +30,7 @@ describe Renalware::Medications::TabbedPrescriptionsListComponent, type: :compon
 
     render_inline(described_class.new(groups))
 
-    expect(page).to have_content("Oxo")
-    expect(page).to have_content("Bovril")
+    expect(page).to have_text("Oxo")
+    expect(page).to have_text("Bovril")
   end
 end

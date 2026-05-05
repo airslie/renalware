@@ -26,10 +26,10 @@ describe "Search wait list registrations by UKT number" do
 
       visit transplants_wait_list_path(named_filter: "all")
 
-      expect(page).to have_content("Transplant Wait List Registrations")
+      expect(page).to have_text("Transplant Wait List Registrations")
       expect(page).to have_css("dl.sub-nav dd:first-child.active:contains('All')")
       within(".wait-list-registrations-table") do
-        expect(page).to have_content(patient.to_s)
+        expect(page).to have_text(patient.to_s)
       end
     end
 
@@ -43,7 +43,7 @@ describe "Search wait list registrations by UKT number" do
         within ".main-content" do
           fill_in "UKT recipient number", with: "X12"
           page.find(".search-registrations").click
-          expect(page).to have_no_content(patient.to_s)
+          expect(page).to have_no_text(patient.to_s)
         end
       end
     end
@@ -58,7 +58,7 @@ describe "Search wait list registrations by UKT number" do
         within ".main-content" do
           fill_in "UKT recipient number", with: "X123"
           page.find(".search-registrations").click
-          expect(page).to have_content(patient.to_s)
+          expect(page).to have_text(patient.to_s)
         end
       end
     end

@@ -28,7 +28,7 @@ describe "Creating a mailshot", :js do
 
     po = Pages::Letters::Mailshots::Form.new
     po.navigate_here_from_admin_dashboard
-    expect(page).to have_content("New mailshot")
+    expect(page).to have_text("New mailshot")
     po.description = test_description
     po.letterhead = "MyLetterhead"
     po.author = user
@@ -38,8 +38,8 @@ describe "Creating a mailshot", :js do
     po.sql_view_name = "letter_mailshot_test"
     expect(page).to have_css("#mailshot-patients-preview tbody tr")
     within(po.patient_preview_table) do
-      expect(page).to have_content("JONES, Jack")
-      expect(page).to have_content("9999999999")
+      expect(page).to have_text("JONES, Jack")
+      expect(page).to have_text("9999999999")
     end
 
     # In this end-to-end test we are going to force the enqueues CreateMailshotLettersJob
@@ -57,10 +57,10 @@ describe "Creating a mailshot", :js do
     # The mailshot was created, and the job to create the letter has been
     # executed inline (see above).
     within("table.mailshots") do
-      expect(page).to have_content(l(Time.zone.today)) # the date part of created_at
-      expect(page).to have_content("Test mailshot") # description
-      expect(page).to have_content(user.to_s) # author
-      expect(page).to have_content("SUCCESS") # status
+      expect(page).to have_text(l(Time.zone.today)) # the date part of created_at
+      expect(page).to have_text("Test mailshot") # description
+      expect(page).to have_text(user.to_s) # author
+      expect(page).to have_text("SUCCESS") # status
     end
 
     # Check the letter was created

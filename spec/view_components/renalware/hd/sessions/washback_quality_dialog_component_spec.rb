@@ -44,10 +44,10 @@ describe Renalware::HD::Sessions::WashbackQualityDialogComponent, type: :compone
   it "render a table of quality grades with info pulled from I18n" do
     render_inline(described_class.new)
 
-    expect(page).to have_content("Dialog title")
-    expect(page).to have_content("Name1")
-    expect(page).to have_content("Desc1")
-    expect(page).to have_content("Name4")
-    expect(page).to have_content("Desc4")
+    expect(page).to have_text("Dialog title")
+    expect(page).to have_text("Name1")
+    expect(page).to have_text("Desc1")
+    expect(page).to have_text("Name4")
+    expect(page).to have_text("Desc4")
   end
 end

@@ -15,8 +15,8 @@ describe "View unreconciled messages" do
 
     visit letters_transports_mesh_unreconciled_messages_path
 
-    expect(page).to have_content("Unreconciled Messages")
-    expect(page).to have_content("reconciliation_error1")
-    expect(page).to have_content("ABC123")
+    expect(page).to have_text("Unreconciled Messages")
+    expect(page).to have_text("reconciliation_error1")
+    expect(page).to have_text("ABC123")
   end
 end

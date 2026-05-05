@@ -108,9 +108,9 @@ describe "Editing a patient's current HD profile", js: false do
       expect(page).to have_current_path(patient_hd_dashboard_path(patient))
 
       within ".hd-profile-summary" do
-        expect(page).to have_content(user.to_s)
-        expect(page).to have_content(hospital_unit.unit_code)
-        expect(page).to have_content("Incremental:")
+        expect(page).to have_text(user.to_s)
+        expect(page).to have_text(hospital_unit.unit_code)
+        expect(page).to have_text("Incremental:")
       end
 
       expect(Renalware::HD::Profile.for_patient(patient).count).to eq(1)
@@ -193,8 +193,8 @@ describe "Editing a patient's current HD profile", js: false do
 
       expect(page).to have_current_path(patient_hd_dashboard_path(patient))
       within ".hd-profile-summary" do
-        expect(page).to have_content("Anuric (<100ml daily):")
-        expect(page).to have_content("Unknown")
+        expect(page).to have_text("Anuric (<100ml daily):")
+        expect(page).to have_text("Unknown")
       end
       expect(patient.reload.hd_profile.anuric).to be_nil
     end

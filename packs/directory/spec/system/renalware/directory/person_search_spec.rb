@@ -14,7 +14,7 @@ describe "Searching people" do
         click_on t("btn.filter")
 
         within("table.people") do
-          expect(page).to have_content("Yosemite")
+          expect(page).to have_text("Yosemite")
         end
       end
     end

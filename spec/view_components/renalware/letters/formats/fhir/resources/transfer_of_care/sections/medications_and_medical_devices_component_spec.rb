@@ -38,12 +38,12 @@ module Renalware::Letters::Formats::FHIR
 
         render_inline(component)
 
-        expect(page).to have_content("Current Medications")
-        expect(page).to have_content("::drug name::")
-        expect(page).to have_content("20 mg Oral daily GP")
-        expect(page).to have_no_content("Drugs to give on Haemodialysis")
-        expect(page).to have_content("Recently Stopped Medications")
-        expect(page).to have_content("None")
+        expect(page).to have_text("Current Medications")
+        expect(page).to have_text("::drug name::")
+        expect(page).to have_text("20 mg Oral daily GP")
+        expect(page).to have_no_text("Drugs to give on Haemodialysis")
+        expect(page).to have_text("Recently Stopped Medications")
+        expect(page).to have_text("None")
       end
 
       it "displays HD prescriptions" do
@@ -51,13 +51,13 @@ module Renalware::Letters::Formats::FHIR
 
         render_inline(component)
 
-        expect(page).to have_content("Current Medications")
-        expect(page).to have_content("None")
-        expect(page).to have_content("Drugs to give on Haemodialysis")
-        expect(page).to have_content("::hd drug name::")
-        expect(page).to have_content("20 mg Oral daily GP")
-        expect(page).to have_content("Recently Stopped Medications")
-        expect(page).to have_content("None")
+        expect(page).to have_text("Current Medications")
+        expect(page).to have_text("None")
+        expect(page).to have_text("Drugs to give on Haemodialysis")
+        expect(page).to have_text("::hd drug name::")
+        expect(page).to have_text("20 mg Oral daily GP")
+        expect(page).to have_text("Recently Stopped Medications")
+        expect(page).to have_text("None")
       end
 
       it "displays recently stopped prescriptions" do
@@ -67,12 +67,12 @@ module Renalware::Letters::Formats::FHIR
 
         pending "fix tests as seems to be using current datetime"
 
-        expect(page).to have_content("Current Medications")
-        expect(page).to have_content("No medications")
-        expect(page).to have_no_content("Drugs to give on Haemodialysis")
-        expect(page).to have_content("::drug name::")
-        expect(page).to have_content("20 mg Per Oral daily GP 20-Mar-2024")
-        expect(page).to have_content("Recently Stopped Medications")
+        expect(page).to have_text("Current Medications")
+        expect(page).to have_text("No medications")
+        expect(page).to have_no_text("Drugs to give on Haemodialysis")
+        expect(page).to have_text("::drug name::")
+        expect(page).to have_text("20 mg Per Oral daily GP 20-Mar-2024")
+        expect(page).to have_text("Recently Stopped Medications")
       end
     end
   end

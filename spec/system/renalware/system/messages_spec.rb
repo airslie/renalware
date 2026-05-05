@@ -16,11 +16,11 @@ describe "Managing system messages that are displayed on the login page" do
     end
 
     within ".system-messages" do
-      expect(page).to have_content(message.title)
-      expect(page).to have_content(message.body)
-      expect(page).to have_content(l(message.display_from))
-      expect(page).to have_content(l(message.display_until))
-      expect(page).to have_content("Yes") # active?
+      expect(page).to have_text(message.title)
+      expect(page).to have_text(message.body)
+      expect(page).to have_text(l(message.display_from))
+      expect(page).to have_text(l(message.display_until))
+      expect(page).to have_text("Yes") # active?
     end
   end
 
@@ -42,11 +42,11 @@ describe "Managing system messages that are displayed on the login page" do
     expect(page).to have_current_path(system_messages_path)
 
     within ".system-messages" do
-      expect(page).to have_content("Test title")
-      expect(page).to have_content("Test body")
-      expect(page).to have_content("Edit")
-      expect(page).to have_content("Delete")
-      expect(page).to have_content("Warning")
+      expect(page).to have_text("Test title")
+      expect(page).to have_text("Test body")
+      expect(page).to have_text("Edit")
+      expect(page).to have_text("Delete")
+      expect(page).to have_text("Warning")
     end
   end
 
@@ -67,8 +67,8 @@ describe "Managing system messages that are displayed on the login page" do
     expect(page).to have_current_path(system_messages_path)
 
     within ".system-messages" do
-      expect(page).to have_content("Edited title")
-      expect(page).to have_content("Edited body")
+      expect(page).to have_text("Edited title")
+      expect(page).to have_text("Edited body")
     end
   end
 
@@ -78,12 +78,12 @@ describe "Managing system messages that are displayed on the login page" do
     visit system_messages_path
 
     within ".system-messages" do
-      expect(page).to have_content("Test title")
+      expect(page).to have_text("Test title")
       click_on t("btn.delete")
     end
 
     within ".system-messages" do
-      expect(page).to have_no_content("Test title")
+      expect(page).to have_no_text("Test title")
     end
   end
 
@@ -98,7 +98,7 @@ describe "Managing system messages that are displayed on the login page" do
 
     visit new_user_session_path
 
-    expect(page).to have_content(message.title)
-    expect(page).to have_content(message.body)
+    expect(page).to have_text(message.title)
+    expect(page).to have_text(message.body)
   end
 end

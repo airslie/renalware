@@ -26,7 +26,7 @@ describe "Managing downloads - files uploaded by super admins which can be acces
     click_on t("btn.save")
 
     within(".download") do
-      expect(page).to have_content("Updated name")
+      expect(page).to have_text("Updated name")
     end
   end
 
@@ -44,9 +44,9 @@ describe "Managing downloads - files uploaded by super admins which can be acces
     create(:system_download, name: "Name1", description: "Description1")
     visit system_downloads_path
 
-    expect(page).to have_content("Name1")
-    expect(page).to have_content("Description1")
-    expect(page).to have_content("View")
+    expect(page).to have_text("Name1")
+    expect(page).to have_text("Description1")
+    expect(page).to have_text("View")
   end
 
   it "filtering items" do
@@ -63,7 +63,7 @@ describe "Managing downloads - files uploaded by super admins which can be acces
     end
 
     expect(page).to have_css(".download", count: 1)
-    expect(page).to have_content("Description2")
+    expect(page).to have_text("Description2")
   end
 
   describe "viewing an attachment" do

@@ -43,28 +43,28 @@ describe "Managing a patient's comorbidities", :js do
       page.find_all("td a.toggler").map(&:click) # toggle open details
 
       within("table.comorbidities tbody##{dom_id(malignancy_desc)}") do
-        expect(page).to have_content malignancy_desc.name
-        expect(page).to have_content I18n.l(malignancy_comob.recognised_at)
-        expect(page).to have_content "Yes"
-        expect(page).to have_content "Malignancy site"
-        expect(page).to have_content "Neck"
+        expect(page).to have_text malignancy_desc.name
+        expect(page).to have_text I18n.l(malignancy_comob.recognised_at)
+        expect(page).to have_text "Yes"
+        expect(page).to have_text "Malignancy site"
+        expect(page).to have_text "Neck"
       end
 
       within("table.comorbidities ##{dom_id(diabetes_desc)}") do
-        expect(page).to have_content diabetes_desc.name
-        expect(page).to have_content I18n.l(diabetes_comob.recognised_at)
-        expect(page).to have_content "Yes"
-        expect(page).to have_content "Diabetes type"
-        expect(page).to have_content "TYPE1"
+        expect(page).to have_text diabetes_desc.name
+        expect(page).to have_text I18n.l(diabetes_comob.recognised_at)
+        expect(page).to have_text "Yes"
+        expect(page).to have_text "Diabetes type"
+        expect(page).to have_text "TYPE1"
       end
 
       within("table.comorbidities ##{dom_id(other_desc)}") do
-        expect(page).to have_content other_desc.name
-        expect(page).to have_no_content "Unknown"
-        expect(page).to have_no_content "Yes"
-        expect(page).to have_no_content "No"
-        expect(page).to have_no_content "Malignancy site"
-        expect(page).to have_no_content "Diabetes type"
+        expect(page).to have_text other_desc.name
+        expect(page).to have_no_text "Unknown"
+        expect(page).to have_no_text "Yes"
+        expect(page).to have_no_text "No"
+        expect(page).to have_no_text "Malignancy site"
+        expect(page).to have_no_text "Diabetes type"
       end
     end
   end
@@ -79,8 +79,8 @@ describe "Managing a patient's comorbidities", :js do
 
       visit edit_patient_comorbidities_path(patient)
 
-      expect(page).to have_content desc1.name
-      expect(page).to have_content desc2.name
+      expect(page).to have_text desc1.name
+      expect(page).to have_text desc2.name
 
       within("##{dom_id(desc1)}") do
         select "Yes"

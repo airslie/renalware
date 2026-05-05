@@ -5,7 +5,7 @@ describe "Listing patient events" do
 
     visit patient_events_path(patient)
 
-    expect(page).to have_content("Events")
+    expect(page).to have_text("Events")
 
     # TODO: check displayed, test filtering
   end

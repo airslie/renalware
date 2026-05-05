@@ -12,7 +12,7 @@ module Renalware
       click_on t("btn.save")
 
       expect(page).to have_current_path(root_path)
-      expect(page).to have_content("You updated your account successfully")
+      expect(page).to have_text("You updated your account successfully")
       expect(@clinician.reload.professional_position).to eq("Renal Nurse")
       expect(@clinician.signature).to eq("Dr. X, Y Z")
     end
@@ -23,8 +23,8 @@ module Renalware
       fill_in "Current password", with: @clinician.password
       click_on t("btn.save")
 
-      expect(page).to have_content("Professional position can't be blank")
-      expect(page).to have_content("Signature can't be blank")
+      expect(page).to have_text("Professional position can't be blank")
+      expect(page).to have_text("Signature can't be blank")
     end
 
     context "when LDAP authentication is enabled" do
@@ -45,7 +45,7 @@ module Renalware
         click_on t("btn.save")
 
         expect(page).to have_current_path(root_path)
-        expect(page).to have_content("You updated your account successfully")
+        expect(page).to have_text("You updated your account successfully")
         expect(@clinician.reload.professional_position).to eq("Senior Nurse")
         expect(@clinician.signature).to eq("Jane Smith, RN")
       end
@@ -59,7 +59,7 @@ module Renalware
         fill_in "Current password", with: "wrong_password"
         click_on t("btn.save")
 
-        expect(page).to have_content("Current password is invalid")
+        expect(page).to have_text("Current password is invalid")
         expect(@clinician.reload.professional_position).not_to eq("Senior Nurse")
       end
     end

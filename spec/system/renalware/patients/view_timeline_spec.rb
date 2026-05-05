@@ -12,11 +12,11 @@ RSpec.describe "A user views the timeline", :js do
 
     click_on "Activity Summary"
 
-    expect(page).to have_content "Admission\tUnknown\t#{admission_created_by}"
-    expect(page).to have_content "Consult\tAKI Risk: Yes\t#{consult_created_by}"
+    expect(page).to have_text "Admission\tUnknown\t#{admission_created_by}"
+    expect(page).to have_text "Consult\tAKI Risk: Yes\t#{consult_created_by}"
 
     first(:link, "Toggle").click
 
-    expect(page).to have_content "Ward A"
+    expect(page).to have_text "Ward A"
   end
 end

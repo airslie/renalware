@@ -21,12 +21,12 @@ describe "Searching HD Slot Requests", :js do
 
     visit hd_slot_requests_path
 
-    expect(page).to have_content("HD Slot Requests")
+    expect(page).to have_text("HD Slot Requests")
 
-    expect(page).to have_content("FAMILYXXX")
+    expect(page).to have_text("FAMILYXXX")
 
     fill_in "Patient name/NHS/MRN", with: "Yyy"
 
-    expect(page).to have_no_content("FAMILYXXX")
+    expect(page).to have_no_text("FAMILYXXX")
   end
 end

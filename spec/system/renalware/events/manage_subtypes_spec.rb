@@ -13,7 +13,7 @@ describe "Managing event subtypes" do
     login_as_super_admin
     visit events_types_path
 
-    expect(page).to have_content("EventType1")
+    expect(page).to have_text("EventType1")
     click_on "Subtypes"
 
     # TODO: Extend test

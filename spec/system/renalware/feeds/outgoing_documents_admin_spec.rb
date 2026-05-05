@@ -10,9 +10,9 @@ describe "Outgoing document management" do
 
     visit feeds_outgoing_documents_path(format: :html)
 
-    expect(page).to have_content("Outgoing Documents")
-    expect(page).to have_content(user.to_s)
-    expect(page).to have_content(doc.id)
-    expect(page).to have_content(doc.state)
+    expect(page).to have_text("Outgoing Documents")
+    expect(page).to have_text(user.to_s)
+    expect(page).to have_text(doc.id)
+    expect(page).to have_text(doc.state)
   end
 end

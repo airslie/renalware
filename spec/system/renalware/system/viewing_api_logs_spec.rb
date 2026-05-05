@@ -10,13 +10,13 @@ module Renalware
 
       visit system_api_logs_path
 
-      expect(page).to have_content "API Logs"
-      expect(page).to have_content "ABC"
-      expect(page).to have_content "XYZ"
-      expect(page).to have_content "working"
-      expect(page).to have_content "8888888"
-      expect(page).to have_content "2222222"
-      expect(page).to have_content "big error"
+      expect(page).to have_text "API Logs"
+      expect(page).to have_text "ABC"
+      expect(page).to have_text "XYZ"
+      expect(page).to have_text "working"
+      expect(page).to have_text "8888888"
+      expect(page).to have_text "2222222"
+      expect(page).to have_text "big error"
     end
   end
 end

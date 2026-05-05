@@ -13,10 +13,10 @@ RSpec.describe "Deleting a letter", :js do
       login_as doctor
       visit patient_letters_letters_path(patient)
 
-      expect(page).to have_content "Pending Review"
+      expect(page).to have_text "Pending Review"
       accept_alert { click_on t("btn.delete") }
-      expect(page).to have_content "Letters"
-      expect(page).to have_no_content "Pending Review"
+      expect(page).to have_text "Letters"
+      expect(page).to have_no_text "Pending Review"
       expect(Renalware::Letters::Letter.with_deleted.count).to eq(0)
     end
 
@@ -25,7 +25,7 @@ RSpec.describe "Deleting a letter", :js do
         login_as other_doctor
         visit patient_letters_letters_path(patient)
 
-        expect(page).to have_content "Pending Review"
+        expect(page).to have_text "Pending Review"
         expect(page).to have_no_button t("btn.delete")
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe "Deleting a letter", :js do
         login_as doctor
         visit patient_letters_letters_path(patient)
 
-        expect(page).to have_content "Approved"
+        expect(page).to have_text "Approved"
         expect(page).to have_no_button t("btn.delete")
       end
     end
@@ -50,17 +50,17 @@ RSpec.describe "Deleting a letter", :js do
         visit patient_letters_letters_path(patient)
 
         within(".patient-side-nav") do
-          expect(page).to have_content("Letters (1)")
+          expect(page).to have_text("Letters (1)")
         end
 
-        expect(page).to have_content "Approved"
+        expect(page).to have_text "Approved"
         expect(page).to have_link t("btn.delete")
 
         accept_alert { first(:link, t("btn.delete")).click }
-        expect(page).to have_content "Letters"
+        expect(page).to have_text "Letters"
 
         within(".patient-side-nav") do
-          expect(page).to have_content("Letters (0)")
+          expect(page).to have_text("Letters (0)")
         end
 
         expect(Renalware::Letters::Letter.with_deleted.count).to eq(1)

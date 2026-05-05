@@ -32,8 +32,8 @@ module Renalware
 
       # Summary
       within ".pd_assessments table tbody" do
-        expect(page).to have_content("Yes")
-        expect(page).to have_content(home_visit_on)
+        expect(page).to have_text("Yes")
+        expect(page).to have_text(home_visit_on)
       end
     end
 
@@ -58,8 +58,8 @@ module Renalware
 
       # Summary
       within ".pd_assessments table tbody" do
-        expect(page).to have_content("No")
-        expect(page).to have_content(home_visit_on)
+        expect(page).to have_text("No")
+        expect(page).to have_text(home_visit_on)
         # We don't need to test all fields, just that the ones we changed have updated.
       end
     end
@@ -79,8 +79,8 @@ module Renalware
       # View
       doc = assessment.document
       within "article.pd_assessment_document" do
-        expect(page).to have_content(l(doc.home_visit_on))
-        expect(page).to have_content(doc.occupant_notes)
+        expect(page).to have_text(l(doc.home_visit_on))
+        expect(page).to have_text(doc.occupant_notes)
         # No need to test presence of all items here - we just want to make
         # we are are in the right place and some is being displayed.
       end

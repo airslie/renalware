@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import URLSearchParams from "@ungap/url-search-params"
 import Highcharts from "highcharts"
 
 export default class extends Controller {

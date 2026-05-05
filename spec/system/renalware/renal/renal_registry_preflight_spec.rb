@@ -4,7 +4,7 @@ describe "Renal Registry Preflight checks", :js do
       login_as_clinical
       visit patients_renal_registry_preflight_checks_path
 
-      expect(page).to have_content("Renal Registry")
+      expect(page).to have_text("Renal Registry")
     end
   end
 
@@ -13,7 +13,7 @@ describe "Renal Registry Preflight checks", :js do
       login_as_clinical
       visit deaths_renal_registry_preflight_checks_path
 
-      expect(page).to have_content("Renal Registry")
+      expect(page).to have_text("Renal Registry")
     end
   end
 
@@ -22,7 +22,7 @@ describe "Renal Registry Preflight checks", :js do
       login_as_clinical
       visit missing_esrf_renal_registry_preflight_checks_path
 
-      expect(page).to have_content("Renal Registry")
+      expect(page).to have_text("Renal Registry")
     end
   end
 end

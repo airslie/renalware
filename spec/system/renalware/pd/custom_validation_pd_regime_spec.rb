@@ -20,7 +20,7 @@ module Renalware
 
       click_on t("btn.create")
 
-      expect(page).to have_content("Regime must be assigned at least one bag")
+      expect(page).to have_text("Regime must be assigned at least one bag")
     end
   end
 end

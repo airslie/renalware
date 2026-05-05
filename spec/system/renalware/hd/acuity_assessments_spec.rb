@@ -11,9 +11,9 @@ RSpec.describe "Acuity Assessment", :js do
     it "responds with a list" do
       visit patient_hd_acuity_assessments_path(patient)
 
-      expect(page).to have_content("1:4")
-      expect(page).to have_content(assessment.created_by.to_s)
-      expect(page).to have_content(I18n.l(assessment.created_at.to_date))
+      expect(page).to have_text("1:4")
+      expect(page).to have_text(assessment.created_by.to_s)
+      expect(page).to have_text(I18n.l(assessment.created_at.to_date))
     end
   end
 
@@ -26,9 +26,9 @@ RSpec.describe "Acuity Assessment", :js do
         choose "1:4"
         click_on "Create"
 
-        expect(page).to have_content("Acuity assessment added")
+        expect(page).to have_text("Acuity assessment added")
         expect(patient_assessments.count).to eq(1)
-        expect(page).to have_content("1:4")
+        expect(page).to have_text("1:4")
       end
     end
 
@@ -38,11 +38,11 @@ RSpec.describe "Acuity Assessment", :js do
 
         click_on "Add"
 
-        expect(page).to have_content("Select the HD acuity ratio")
+        expect(page).to have_text("Select the HD acuity ratio")
 
         click_on "Create"
 
-        expect(page).to have_content("Ratio can't be blank")
+        expect(page).to have_text("Ratio can't be blank")
         expect(patient_assessments.count).to eq(0)
       end
     end
@@ -60,9 +60,9 @@ RSpec.describe "Acuity Assessment", :js do
         end
       end
 
-      expect(page).to have_content("HD acuity assessment removed")
+      expect(page).to have_text("HD acuity assessment removed")
       expect(patient_assessments.count).to eq(0)
-      expect(page).to have_no_content("1:4")
+      expect(page).to have_no_text("1:4")
       expect(page).to have_link("Add")
     end
   end

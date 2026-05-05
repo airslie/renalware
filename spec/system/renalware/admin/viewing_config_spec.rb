@@ -9,7 +9,7 @@ describe "Viewing the system config" do
 
     expect(page).to have_current_path(admin_config_path)
     within(".page-heading") do
-      expect(page).to have_content("Config Settings")
+      expect(page).to have_text("Config Settings")
     end
   end
 end

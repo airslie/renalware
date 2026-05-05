@@ -5,9 +5,9 @@ describe "Manage pathology labs" do
 
     visit pathology_labs_path
 
-    expect(page).to have_content("Pathology Labs")
+    expect(page).to have_text("Pathology Labs")
 
-    expect(page).to have_content("Lab123")
+    expect(page).to have_text("Lab123")
   end
 
   it "enables editing a lab" do

@@ -8,8 +8,8 @@ describe "Ward Management" do
     visit hospitals.unit_wards_path(unit.id)
 
     expect(page).to have_http_status(:success)
-    expect(page).to have_content("WardA")
-    expect(page).to have_content("WardB")
+    expect(page).to have_text("WardA")
+    expect(page).to have_text("WardB")
   end
 
   it "edit a ward" do
@@ -27,11 +27,11 @@ describe "Ward Management" do
     fill_in "Name", with: "NewName"
     click_on t("btn.save")
 
-    expect(page).to have_content("Ward updated")
+    expect(page).to have_text("Ward updated")
 
     within ".hospital-wards" do
-      expect(page).to have_content("NewCode")
-      expect(page).to have_content("NewName")
+      expect(page).to have_text("NewCode")
+      expect(page).to have_text("NewName")
     end
   end
 
@@ -49,11 +49,11 @@ describe "Ward Management" do
     fill_in "Name", with: "NewName"
     click_on t("btn.create")
 
-    expect(page).to have_content("Ward added")
+    expect(page).to have_text("Ward added")
 
     within ".hospital-wards" do
-      expect(page).to have_content("NewCode")
-      expect(page).to have_content("NewName")
+      expect(page).to have_text("NewCode")
+      expect(page).to have_text("NewName")
     end
   end
 end

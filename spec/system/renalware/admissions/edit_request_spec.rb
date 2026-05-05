@@ -13,7 +13,7 @@ RSpec.describe "Update Admission Request", :js do
     click_on t("btn.save")
 
     within "#admissions_request_#{request.id}" do
-      expect(page).to have_content("more notes")
+      expect(page).to have_text("more notes")
     end
   end
 end

@@ -28,8 +28,8 @@ module Renalware
 
       # Back on PD Summary
       within ".pd_training_sessions table tbody" do
-        expect(page).to have_content("Home")
-        expect(page).to have_content(started_on)
+        expect(page).to have_text("Home")
+        expect(page).to have_text(started_on)
       end
     end
 
@@ -51,7 +51,7 @@ module Renalware
 
       # Back on PD Summary
       within ".pd_training_sessions table tbody" do
-        expect(page).to have_content("Successful")
+        expect(page).to have_text("Successful")
         # We don't need to test all fields, just that the ones we changed have updated.
       end
     end
@@ -70,7 +70,7 @@ module Renalware
       # View
       doc = training_session.document
       within "article.pd_training_session_document" do
-        expect(page).to have_content(l(doc.started_on))
+        expect(page).to have_text(l(doc.started_on))
         # No need to test presence of all items here - we just want to make
         # we are are in the right place and some is being displayed.
       end

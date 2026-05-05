@@ -15,9 +15,9 @@ describe "Managing HD Stations for a Hospital Unit" do
 
     visit hd_unit_stations_path(unit)
 
-    expect(page).to have_content("UnitCode")
-    expect(page).to have_content("Station-1")
-    expect(page).to have_content("Station-2")
+    expect(page).to have_text("UnitCode")
+    expect(page).to have_text("Station-1")
+    expect(page).to have_text("Station-2")
   end
 
   it "Adding a station" do
@@ -34,8 +34,8 @@ describe "Managing HD Stations for a Hospital Unit" do
     click_on t("btn.create")
 
     expect(page).to have_current_path(hd_unit_stations_path(unit))
-    expect(page).to have_content("Station-X")
-    expect(page).to have_content("Side room")
+    expect(page).to have_text("Station-X")
+    expect(page).to have_text("Side room")
   end
 
   it "Editing a station" do
@@ -52,6 +52,6 @@ describe "Managing HD Stations for a Hospital Unit" do
     click_on t("btn.save")
 
     expect(page).to have_current_path(hd_unit_stations_path(unit))
-    expect(page).to have_content("Station-XX")
+    expect(page).to have_text("Station-XX")
   end
 end

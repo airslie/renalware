@@ -16,7 +16,7 @@ module Renalware
         fill_in "Password", with: user.password
         click_on "Sign in"
 
-        expect(page).to have_content "You last signed in 1 day ago."
+        expect(page).to have_text "You last signed in 1 day ago."
       end
     end
 
@@ -58,7 +58,7 @@ module Renalware
         click_on "Sign in"
 
         expect(page).to have_current_path root_path
-        expect(page).to have_content(
+        expect(page).to have_text(
           "Your account had a failed sign-in attempt less than a minute ago"
         )
       end

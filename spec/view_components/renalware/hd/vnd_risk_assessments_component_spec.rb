@@ -19,9 +19,9 @@ describe Renalware::HD::VNDRiskAssessmentsComponent, type: :component do
     render_inline(component)
 
     # thead
-    expect(page).to have_content("VND Risk Assessments")
-    expect(page).to have_content("Overall risk")
-    expect(page).to have_content("Assessor")
+    expect(page).to have_text("VND Risk Assessments")
+    expect(page).to have_text("Overall risk")
+    expect(page).to have_text("Assessor")
     # tbody
     expect(page).to have_css("tbody tr td", text: "2")
     expect(page).to have_css("tbody tr td", text: I18n.l(assessment.created_at.to_date))

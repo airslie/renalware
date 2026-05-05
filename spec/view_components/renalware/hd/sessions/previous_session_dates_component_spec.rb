@@ -36,7 +36,7 @@ describe Renalware::HD::Sessions::PreviousSessionDatesComponent, type: :componen
 
         render_inline(instance)
 
-        expect(page).to have_content(session.started_at.strftime("%d-%b"))
+        expect(page).to have_text(session.started_at.strftime("%d-%b"))
       end
     end
 

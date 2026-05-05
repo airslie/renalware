@@ -28,8 +28,8 @@ describe "Changing a patient's modality", :js do
     expect(page).to have_current_path(patient_modalities_path(patient))
 
     within("#patient-modalities table tbody") do
-      expect(page).to have_content("HD")
-      expect(page).to have_content("MyChangeType from HospA")
+      expect(page).to have_text("HD")
+      expect(page).to have_text("MyChangeType from HospA")
     end
   end
 
@@ -62,8 +62,8 @@ describe "Changing a patient's modality", :js do
     expect(page).to have_current_path(patient_modalities_path(patient))
 
     within("#patient-modalities table tbody") do
-      expect(page).to have_content("HD")
-      expect(page).to have_content("MyChangeType to HospA")
+      expect(page).to have_text("HD")
+      expect(page).to have_text("MyChangeType to HospA")
     end
   end
 end

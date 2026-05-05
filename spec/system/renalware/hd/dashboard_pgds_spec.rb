@@ -40,10 +40,10 @@ RSpec.describe "HD dashboard PGDs", :js do
           "View All PGDs",
           href: patient_hd_patient_group_directions_path(patient)
         )
-        expect(page).to have_content("Showing 10 of 11")
-        expect(first("tbody tr")).to have_content(newest_pgd.name)
-        expect(page).to have_content(created_pgds.second.name)
-        expect(page).to have_no_content(oldest_pgd.name)
+        expect(page).to have_text("Showing 10 of 11")
+        expect(first("tbody tr")).to have_text(newest_pgd.name)
+        expect(page).to have_text(created_pgds.second.name)
+        expect(page).to have_no_text(oldest_pgd.name)
       end
     end
   end
