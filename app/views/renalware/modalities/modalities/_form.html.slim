@@ -1,6 +1,6 @@
 = render "renalware/shared/errors", model: modality
 
-.modality-form.row(data-controller="select")
+.modality-form.row(data-controller="select modalities--death-toggle")
 
   = simple_form_for modality,
                     as: :modality,
@@ -10,9 +10,16 @@
 
       .large-9.columns
 
+          - description_input_html = { \
+            id: "modality-description-select",
+            data: { \
+              "modalities--death-toggle-target": "select",
+              action: "change->modalities--death-toggle#update" \
+            } \
+          }
           = m.input :description_id,
                     collection: Renalware::Modalities::DescriptionPresenter.list_for_dropdown,
-                    input_html: { id: "modality-description-select" },
+                    input_html: description_input_html,
                     wrapper: :horizontal_medium,
                     autofocus: true
 
@@ -56,7 +63,7 @@
             = m.input :ended_on,
                       as: :flatpickr,
                       wrapper: :horizontal_datepicker
-          .hide-death
+          .hide-death(data-modalities--death-toggle-target="toggleable")
             = m.input :notes,
                       as: :text,
                       input_html: { rows: 5 },

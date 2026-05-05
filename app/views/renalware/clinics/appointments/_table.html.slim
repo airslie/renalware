@@ -1,7 +1,10 @@
 = turbo_frame_tag("appointments-turbo-frame", "data-turbo-action" => "advance") do
   = render Renalware::SpinnerComponent.new do |spinner|
     = spinner.with_main_content do
-      table#appointments.toggleable(data-controller="toggle")
+      table#appointments.toggleable(
+        data-controller="toggle clinics--appointment-selection"
+        data-clinics--appointment-selection-form-selector-value="#appointment-request-form"
+      )
         thead
           tr
             th.togglers.noprint= rows_toggler
@@ -9,7 +12,9 @@
               | Generate request form?
               br
               |
-              = link_to "(Uncheck all)", "#", id: "uncheck_all_appointments_link"
+              = link_to "(Uncheck all)",
+                        "#",
+                        data: { action: "clinics--appointment-selection#uncheckAll" }
             th.col-width-small.text-center Clinic Visit
             th.col-width-date-time
               = sort_link([:renalware, search],
@@ -49,10 +54,16 @@
             th.show-for-xlarge-up DNA notes
 
         - appointments.each do |appointment|
+          - selection_data = { clinics__appointment_selection_target: "checkbox",
+                               action: "clinics--appointment-selection#toggle" }
           tbody(class=("bg-green-100" if appointment.becomes_visit_id.present?))
             tr
               td= row_toggler
-              td.text-center= check_box_tag nil, appointment.patient.id, true, class: "patient_checkbox"
+              td.text-center= check_box_tag nil,
+                                           appointment.patient.id,
+                                           true,
+                                           class: "patient_checkbox",
+                                           data: selection_data
               td.nowrap.text-center.actions
                 - if (clinic_visit = appointment.clinic_visit).present?
                   = link_to "View", patient_clinic_visit_path(appointment.patient, clinic_visit), data: { turbo_frame: "_top" }

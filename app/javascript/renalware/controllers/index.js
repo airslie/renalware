@@ -3,10 +3,12 @@ import Dropdown from "stimulus-dropdown"
 
 import ToggleController from "./toggle_controller"
 import ClinicsBmiCalculatorController from "./clinics/bmi_calculator_controller"
+import ClinicsAppointmentSelectionController from "./clinics/appointment_selection_controller"
 import WeightChangeCalculatorController from "./clinics/weight_change_calculator_controller"
 import DietaryProteinCalculatorController from "./clinics/dietary_protein_calculator_controller"
 import HDPrescriptionController from "./hd/prescription_administration_controller"
 import MedicationsHomeDeliveryModalController from "./medications/home_delivery_modal_controller"
+import ModalitiesDeathToggleController from "./modalities/death_toggle_controller"
 import SnippetsController from "./snippets_controller"
 import SnippetController from "./snippet_controller"
 import LettersFormController from "./letters/form_controller"
@@ -53,6 +55,7 @@ import ProblemsSearchController from "./problems/search_controller"
 
 application.register("toggle", ToggleController)
 application.register("hd-prescription-administration", HDPrescriptionController)
+application.register("modalities--death-toggle", ModalitiesDeathToggleController)
 application.register(
   "home-delivery-modal",
   MedicationsHomeDeliveryModalController
@@ -88,6 +91,10 @@ application.register("flash", FlashController)
 application.register("flatpickr", FlatpickrController)
 application.register("input-value-alerter", InputValueAlerterController)
 application.register("select-update-frame", SelectUpdateFrameController)
+application.register(
+  "clinics--appointment-selection",
+  ClinicsAppointmentSelectionController
+)
 application.register("clinics--bmi-calculator", ClinicsBmiCalculatorController)
 application.register(
   "clinics--weight-change-calculator",
