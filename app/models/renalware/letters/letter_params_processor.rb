@@ -24,10 +24,12 @@ module Renalware
         )
       end
 
-      # Copy letter topic if description hasn't been explicitly set, but Topic has
+      # Keep the legacy description in sync with an explicitly submitted topic.
       def copy_description_from_topic_if_empty(params)
         if params[:topic_id].present?
           params[:description] ||= Topic.find(params[:topic_id]).text
+        elsif params.key?(:topic_id) && !params.key?(:description)
+          params[:description] = nil
         end
 
         params

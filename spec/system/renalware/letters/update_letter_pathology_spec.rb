@@ -44,6 +44,8 @@ module Renalware
 
             submit_form
 
+            expect(page).to have_current_path(patient_letters_letter_path(patient, letter))
+
             letter.reload
             expect(letter.pathology_timestamp).to eq(date)
           end
@@ -92,7 +94,8 @@ module Renalware
 
     def create_letter(patient)
       Letters::LetterFactory.new(patient, clinical: true).build.tap do |letter|
-        letter.description = create(:letter_topic).text
+        letter.topic = create(:letter_topic)
+        letter.description = letter.topic.text
         letter.letterhead = create(:letter_letterhead)
         letter.author = User.first
         letter.by = User.first

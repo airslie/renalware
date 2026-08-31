@@ -14,8 +14,16 @@ module Renalware
       context "when topic_id is empty string" do
         let(:params) { { topic_id: "" } }
 
-        it do
-          expect(instance.call(params)[:description]).to be_nil
+        it "explicitly clears the description" do
+          expect(instance.call(params)).to include(topic_id: "", description: nil)
+        end
+
+        context "when a legacy description is explicitly passed" do
+          let(:params) { { topic_id: "", description: "Legacy description" } }
+
+          it "preserves the description" do
+            expect(instance.call(params)[:description]).to eq("Legacy description")
+          end
         end
       end
 
