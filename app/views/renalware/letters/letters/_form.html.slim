@@ -13,7 +13,13 @@ ruby:
 
     = f.association :letterhead, autofocus: true
 
-    - frame_url = url_for(request.params.merge(preview_topic_id: "REPLACE_ID"))
+    - preview_params = { preview_topic_id: "REPLACE_ID" }
+    - if letter.persisted?
+      - frame_url = edit_patient_letters_letter_path(patient, letter, preview_params)
+    - else
+      - preview_params[:clinical] = true if letter.clinical?
+      - preview_params.merge!(event_type: event.class.name, event_id: event.id) if event.present?
+      - frame_url = new_patient_letters_letter_path(patient, preview_params)
 
     .mb-3
       = f.association :topic,

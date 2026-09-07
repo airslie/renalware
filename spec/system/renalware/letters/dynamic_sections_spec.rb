@@ -95,6 +95,24 @@ module Renalware
         slim_select "Topic without section", from: "Topic"
         expect(page).to have_no_text "HD Unit\nUNITA\nHD Duration\n5:00"
       end
+
+      it "loads the topic content after a validation error" do
+        login_as user
+
+        visit new_patient_letters_letter_path(patient, clinical: true)
+
+        select "Letterhead", from: "Letterhead"
+        submit_form
+
+        expect(page).to have_text "Topic can't be blank"
+
+        slim_select "Main Topic", from: "Topic"
+
+        within "article", text: "Haemodialysis" do
+          expect(page).to have_text "HD UnitUNITAHD Duration5:00"
+        end
+        expect(page).to have_button t("btn.create")
+      end
     end
   end
 end

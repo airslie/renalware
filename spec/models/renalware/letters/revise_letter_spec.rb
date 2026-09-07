@@ -147,6 +147,21 @@ module Renalware
                 expect(letter.errors).to eq("TestDescription")
               end
           end
+
+          context "when the selected topic is cleared" do
+            let(:topic) { create(:letter_topic) }
+
+            it "fails validation and preserves the persisted topic" do
+              expect_subject_to_broadcast(:revise_letter_failed, kind_of(Letters::Letter))
+
+              service.call(patient, letter.id, topic_id: "", by: user)
+                .on(:revise_letter_failed) do |invalid_letter|
+                  expect(invalid_letter.errors[:topic]).to include("can't be blank")
+                end
+
+              expect(letter.reload.topic).to eq(topic)
+            end
+          end
         end
       end
 
