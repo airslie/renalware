@@ -38,8 +38,8 @@ describe "Clinic Visits" do
         fill_in "Temperature", with: "37.3"
         fill_in "Blood Pressure", with: "110/75"
         fill_in "Standing BP", with: "107/71"
-        find("trix-editor").set("Notes")
         find("textarea[name='clinic_visit[admin_notes]']").set("Admin notes")
+        fill_trix_editor with: "Notes"
 
         click_on t("btn.create")
       end
@@ -70,8 +70,9 @@ describe "Clinic Visits" do
       fill_in "Temperature", with: "37.7"
       fill_in "Blood Pressure", with: "128/95"
       fill_in "Standing BP", with: "124/92"
-      find("trix-editor").set("Updated notes")
       fill_in "clinic_visit[admin_notes]", with: "Updated admin notes"
+      # Fill Trix last so its deferred selection updates cannot steal focus while typing elsewhere.
+      fill_trix_editor with: "Updated notes"
 
       submit_form
 
@@ -81,6 +82,9 @@ describe "Clinic Visits" do
         body_measurements: %w(1.71 75.0 25.6),
         blood_pressures: %w(128/95 124/92 101 37.7)
       )
+
+      expect(clinic_visit.reload.admin_notes).to eq("Updated admin notes")
+      expect(clinic_visit.notes).to eq("<div>Updated notes</div>")
 
       all("a.toggler")[1].click
 
