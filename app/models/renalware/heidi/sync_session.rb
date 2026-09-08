@@ -21,12 +21,22 @@ module Renalware
         consult_note = body.dig("session", "consult_note") || {}
         note = html_note(consult_note["result"])
 
-        session.with_lock do
+        with_sync_lock do
           append_consult_note_to_clinic_visit(note) if append_consult_note?(note)
           session.update!(synced_session_attributes(body, consult_note, note))
         end
 
         session
+      end
+
+      # Saves also lock the visit before updating sessions. Reload the session under
+      # its lock so an override saved while the API request was running is respected.
+      def with_sync_lock(&)
+        if session.clinic_visit
+          session.clinic_visit.with_lock { session.with_lock(&) }
+        else
+          session.with_lock(&)
+        end
       end
 
       def synced_session_attributes(body, consult_note, note)
@@ -44,15 +54,14 @@ module Renalware
         note.present? &&
           session.consult_note.blank? &&
           session.consult_note_inserted_at.blank? &&
+          session.notes_superseded_at.blank? &&
           session.clinic_visit.present?
       end
 
       def append_consult_note_to_clinic_visit(note)
         clinic_visit = session.clinic_visit
-        clinic_visit.with_lock do
-          clinic_visit.by = session.user
-          clinic_visit.update!(notes: appended_notes(clinic_visit.notes, note))
-        end
+        clinic_visit.by = session.user
+        clinic_visit.update!(notes: appended_notes(clinic_visit.notes, note))
         session.consult_note_inserted_at = Time.zone.now
       end
 

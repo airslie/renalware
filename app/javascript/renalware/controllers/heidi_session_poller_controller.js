@@ -1,15 +1,21 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["lastChecked", "noteStatus", "seenSessionIds", "status", "trix"]
+  static targets = ["lastChecked", "noteStatus", "seenSessionIds", "supersededSessionIds", "status", "trix",
+    "refreshButton", "refreshStatus", "chooser", "documentSelect", "preview", "replaceButton"]
 
   static values = {
     interval: { type: Number, default: 10000 },
     insertedSessionIds: { type: Array, default: [] },
     url: String,
+    polling: { type: Boolean, default: true },
+    sessionIds: { type: Array, default: [] },
   }
 
   connect() {
+    const replacementPending = this.hasSupersededSessionIdsTarget && this.supersededSessionIdsTarget.value !== ""
+    this.pollingStopped = !this.pollingValue || replacementPending
+    if (this.pollingStopped) return
     this.poll()
     this.timer = window.setInterval(() => this.poll(), this.intervalValue)
   }
@@ -27,7 +33,7 @@ export default class extends Controller {
       if (!response.ok) return
 
       const body = await response.json()
-      if (!body.present) return
+      if (!body.present || this.pollingStopped) return
 
       this.updateStatus(body)
       if (body.synced) this.handleSyncedSession(body)
@@ -123,7 +129,75 @@ export default class extends Controller {
     return div.innerHTML
   }
 
+  async refresh(event) {
+    if (this.refreshing) return
+    const button = event.currentTarget
+    this.refreshing = true
+    this.setRefreshButtonLoading(button, true)
+    this.chooserTarget.hidden = true
+    this.refreshStatusTarget.textContent = ""
+    this.refreshButtonTargets.forEach((button) => { button.disabled = true })
+    try {
+      const response = await fetch(button.dataset.url, {
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Accept": "application/json" },
+      })
+      if (!response.ok) throw new Error("Refresh failed")
+      const body = await response.json()
+      this.documents = body.documents
+      this.documentSelectTarget.replaceChildren(...this.documents.map((document, index) => {
+        const option = new Option(document.name, index)
+        return option
+      }))
+      this.chooserTarget.hidden = false
+      this.preview()
+    } catch {
+      this.refreshStatusTarget.textContent = "Unable to fetch Heidi documents. Notes have not been changed. Please try again."
+    } finally {
+      this.refreshing = false
+      this.setRefreshButtonLoading(button, false)
+      this.refreshButtonTargets.forEach((button) => { button.disabled = false })
+    }
+  }
+
+  setRefreshButtonLoading(button, loading) {
+    button.setAttribute("aria-busy", String(loading))
+    button.querySelector("[data-refresh-spinner]").classList.toggle("hidden", !loading)
+    button.querySelector("[data-refresh-label]").textContent = loading ? "Checking Heidi…" : "Check for updates"
+  }
+
+  preview() {
+    const document = this.documents?.[this.documentSelectTarget.value]
+    this.previewTarget.innerHTML = document?.content || ""
+    this.replaceButtonTarget.disabled = !document?.content
+    if (!document?.content) {
+      this.previewTarget.textContent = "This document is not ready. Wait for Heidi to finish generating it, then check for updates again."
+    }
+  }
+
+  replaceNotes() {
+    const document = this.documents?.[this.documentSelectTarget.value]
+    if (!document?.content || !this.hasTrixTarget || !this.trixTarget.editor) return
+    if (!window.confirm("Replace all current Notes with this Heidi document? This includes any changes you have made in Renalware.")) return
+
+    this.stopPolling()
+    this.trixTarget.editor.recordUndoEntry("Replace Notes from Heidi")
+    this.trixTarget.editor.loadHTML(document.content)
+    // Replacing all Notes intentionally supersedes imports from every listed session.
+    this.sessionIdsValue.forEach((id) => this.markSessionSeen(id))
+    this.supersededSessionIdsTarget.value = this.sessionIdsValue.join(",")
+    this.chooserTarget.hidden = true
+    this.refreshStatusTarget.textContent = "Notes replaced. Review and save the form to keep these changes."
+  }
+
+  cancelRefresh() {
+    this.chooserTarget.hidden = true
+    this.refreshStatusTarget.textContent = ""
+  }
+
   stopPolling() {
+    this.pollingStopped = true
     if (this.timer) window.clearInterval(this.timer)
     this.timer = null
   }

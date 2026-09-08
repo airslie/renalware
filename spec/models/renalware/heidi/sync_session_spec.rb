@@ -46,6 +46,34 @@ describe Renalware::Heidi::SyncSession do
     expect(clinic_visit.reload.notes).to eq("Existing notes<br><p>Generated note</p>")
   end
 
+  it "respects an override saved while the API request was in flight" do
+    clinic_visit = create(:clinic_visit, notes: "Replacement document")
+    session.update!(clinic_visit:)
+    allow(client).to receive(:get) do
+      Renalware::Heidi::Session.find(session.id).update!(notes_superseded_at: Time.current)
+      completed_heidi_response("Default note")
+    end
+
+    sync.call
+
+    expect(clinic_visit.reload.notes).to eq("Replacement document")
+    expect(session.reload).to be_synced
+    expect(session.consult_note).to eq("<p>Default note</p>")
+    expect(session.consult_note_inserted_at).to be_nil
+  end
+
+  it "allows a new session to import after an earlier session was superseded" do
+    clinic_visit = create(:clinic_visit, notes: "Replacement document")
+    create(:heidi_session, clinic_visit:, notes_superseded_at: Time.current)
+    session.update!(clinic_visit:)
+    stub_heidi_response("New session note")
+
+    sync.call
+
+    expect(clinic_visit.reload.notes).to eq("Replacement document<br><p>New session note</p>")
+    expect(session.reload.consult_note_inserted_at).to be_present
+  end
+
   it "does not append the consult note twice from stale sync instances" do
     clinic_visit = create(:clinic_visit, notes: "Existing notes")
     session.update!(clinic_visit:)

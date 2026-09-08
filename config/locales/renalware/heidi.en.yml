@@ -2,6 +2,7 @@
 en:
   renalware:
     heidi:
+      refresh_failed: Unable to fetch Heidi documents. Please try again.
       launch_clinic_visit_session:
         account_not_linked: Your Renalware account is not linked to Heidi yet.
         link_status_failed: "Heidi account link status could not be checked: %{error}"

@@ -12,6 +12,7 @@
           th.col-width-small Status
           th.col-width-date-time Last checked
           th Note
+          th Actions
       tbody
         - heidi_sessions.each_with_index do |session, index|
           tr
@@ -24,3 +25,29 @@
             td(data-heidi-session-poller-target=("noteStatus" if index.zero?))
               = session.consult_note_status.presence || "Not ready"
 
+            td
+              - if session.heidi_session_id.present?
+                = button_tag type: "button", class: "btn btn-tertiary btn-compact",
+                    data: { action: "heidi-session-poller#refresh", \
+                            "heidi-session-poller-target": "refreshButton", \
+                            url: documents_patient_clinic_visit_heidi_session_path(clinic_visit.patient, clinic_visit, session_id: session.id) } do
+                  .flex.gap-2.items-center
+                    span.hidden(data-refresh-spinner=true aria-hidden="true")
+                      svg(class="animate-spin motion-reduce:animate-none" width="14" height="14" viewBox="0 0 24 24" fill="none")
+                        circle(cx="12" cy="12" r="9" stroke="currentColor" stroke-width="3" opacity="0.25")
+                        path(d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" stroke-width="3" stroke-linecap="round")
+                    span(data-refresh-label=true) Check for updates
+
+    p(role="status" aria-live="polite" data-heidi-session-poller-target="refreshStatus" class="p-0 m-0")
+    div(hidden=true data-heidi-session-poller-target="chooser")
+      p.p-0.m-0 Heidi may take a little time to generate updated notes and documents. Check the preview includes your latest changes; if not, wait and check again.
+      div.flex.gap-4.items-center.mt-2
+        label(for="heidi-document", class="whitespace-nowrap") Heidi document
+        select.select#heidi-document(data-heidi-session-poller-target="documentSelect" data-action="heidi-session-poller#preview" class="w-1/2 border-gray-300")
+      p.font-bold.p-0.mt-2 Preview
+      div(data-heidi-session-poller-target="preview" style="max-height: 20rem; overflow-y: auto" class="shadow p-4 rounded-lg mb-4 bg-gray-50")
+      .flex.gap-2
+        = button_tag "Replace Notes", type: "button", class: "btn btn-compact btn-primary",
+            data: { action: "heidi-session-poller#replaceNotes", "heidi-session-poller-target": "replaceButton" }
+        = button_tag "Cancel", type: "button", class: "btn btn-compact btn-secondary",
+            data: { action: "heidi-session-poller#cancelRefresh" }

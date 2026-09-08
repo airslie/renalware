@@ -6,9 +6,11 @@
   - heidi_enabled = Renalware.config.heidi_enabled
   - latest_heidi_session = heidi_enabled ? clinic_visit.heidi_sessions.order(created_at: :desc).first : nil
   - poller_data = {}
-  - if latest_heidi_session&.launched?
+  - if latest_heidi_session.present?
     - poller_data = { \
         controller: "heidi-session-poller",
+        "heidi-session-poller-polling-value": latest_heidi_session.launched?,
+        "heidi-session-poller-session-ids-value": clinic_visit.heidi_sessions.pluck(:id).to_json,
         "heidi-session-poller-url-value": patient_clinic_visit_heidi_session_path(patient, clinic_visit) \
       }
 

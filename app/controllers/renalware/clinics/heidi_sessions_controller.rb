@@ -12,6 +12,19 @@ module Renalware
         render json: session_payload(session)
       end
 
+      def documents
+        clinic_visit = find_and_authorize_visit
+        session = clinic_visit.heidi_sessions.find(params[:session_id])
+        return head :unprocessable_content if session.heidi_session_id.blank?
+
+        response.headers["Cache-Control"] = "no-store"
+        documents = Heidi::SessionDocuments.new(session:).call
+        render json: { documents: }
+      rescue Heidi::SessionDocuments::FetchError
+        render json: { error: t("renalware.heidi.refresh_failed") },
+               status: :bad_gateway
+      end
+
       private
 
       def find_and_authorize_visit

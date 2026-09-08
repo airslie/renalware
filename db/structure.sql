@@ -9196,7 +9196,8 @@ CREATE TABLE renalware.heidi_sessions (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     clinic_visit_id bigint,
-    consult_note_inserted_at timestamp(6) without time zone
+    consult_note_inserted_at timestamp(6) without time zone,
+    notes_superseded_at timestamp(6) without time zone
 );
 
 
@@ -35565,6 +35566,7 @@ ALTER TABLE ONLY renalware_heroic.biobank_usages
 SET search_path TO renalware,public,renalware_heroic,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260908120000'),
 ('20260903120000'),
 ('20260902120000'),
 ('20260827123001'),

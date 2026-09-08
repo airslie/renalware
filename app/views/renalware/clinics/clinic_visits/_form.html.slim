@@ -90,6 +90,9 @@
             - seen_heidi_session_ids = clinic_visit.heidi_sessions.synced.where.not(consult_note_inserted_at: nil).filter_map do |session|
               - session.id if clinic_visit.notes.to_s.include?(session.consult_note.to_s)
             = hidden_field_tag "clinic_visit[heidi_notes_loaded_at]", notes_loaded_at.iso8601(6)
+            = hidden_field_tag "clinic_visit[superseded_heidi_session_ids]",
+                               params.dig(:clinic_visit, :superseded_heidi_session_ids),
+                               data: { "heidi-session-poller-target": "supersededSessionIds" }
             = hidden_field_tag "clinic_visit[seen_heidi_session_ids]",
                                seen_heidi_session_ids.join(","),
                                data: { "heidi-session-poller-target": "seenSessionIds" }

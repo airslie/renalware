@@ -1,6 +1,8 @@
 resources :patients, only: [] do
   resources :clinic_visits, controller: "clinics/clinic_visits" do
-    resource :heidi_session, only: :show, controller: "clinics/heidi_sessions"
+    resource :heidi_session, only: :show, controller: "clinics/heidi_sessions" do
+      get :documents
+    end
   end
   resources :appointments, controller: "clinics/patient_appointments", only: [:index]
 end

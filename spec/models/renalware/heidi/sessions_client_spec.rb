@@ -63,6 +63,26 @@ describe Renalware::Heidi::SessionsClient do
     end
   end
 
+  describe "#documents" do
+    it "fetches all documents using the session owner's JWT" do
+      stub_documents
+
+      result = sessions_client.documents(user, "session-1")
+
+      expect(result).to be_success
+      expect(result.body).to eq("documents" => [])
+      stubs.verify_stubbed_calls
+    end
+  end
+
+  def stub_documents
+    stubs.get("sessions/session-1/documents") do |env|
+      expect(env.request_headers["Authorization"]).to eq("Bearer jwt-token")
+      expect(env.request_headers["Heidi-Api-Key"]).to eq("test-api-key")
+      [200, { "Content-Type" => "application/json" }, { documents: [] }.to_json]
+    end
+  end
+
   def stub_create_session
     stubs.post("sessions") do |env|
       expect(env.request_headers["Authorization"]).to eq("Bearer jwt-token")

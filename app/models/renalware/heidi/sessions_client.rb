@@ -43,6 +43,17 @@ module Renalware
         end
       end
 
+      def documents(user, session_id)
+        with_jwt(user) do |token|
+          response = connection.get("sessions/#{session_id}/documents") do |request|
+            request.headers["Authorization"] = "Bearer #{token}"
+            request.headers["Heidi-Api-Key"] = api_key
+          end
+
+          result_from(response)
+        end
+      end
+
       private
 
       attr_reader :client
