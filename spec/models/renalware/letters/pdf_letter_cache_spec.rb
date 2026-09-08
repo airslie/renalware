@@ -5,7 +5,7 @@ module Renalware
         it "uses Rails.cache with a PDF-specific key prefix" do
           patient = Struct.new(:id).new(1)
           html = "<html>Letter</html>"
-          letter = Struct.new(:patient, :id, :updated_at, keyword_init: true) do
+          letter = Struct.new(:patient, :id, :updated_at) do
             define_method(:to_html) { html }
           end.new(
             patient:,

@@ -1,6 +1,6 @@
 module Renalware
   describe EffectiveUpdatedInfoPresenter do
-    let(:subject) { described_class.new(Patient.new) }
+    subject { described_class.new(Patient.new) }
 
     it do
       is_expected.to respond_to :updated_at

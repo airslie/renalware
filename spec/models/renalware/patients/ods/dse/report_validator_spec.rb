@@ -1,4 +1,3 @@
-# rubocop:disable-next Metrics/BlockNesting
 module Renalware
   module Patients
     module ODS
