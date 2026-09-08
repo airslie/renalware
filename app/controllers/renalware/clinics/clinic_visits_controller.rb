@@ -178,7 +178,15 @@ module Renalware
 
       def update_clinic_visit(clinic_visit)
         clinic_visit.with_lock do
-          clinic_visit.update(visit_params_with_preserved_heidi_notes(clinic_visit))
+          attrs = visit_params_with_preserved_heidi_notes(clinic_visit)
+          next false unless clinic_visit.update(attrs)
+
+          if visit_params.key?("notes")
+            clinic_visit.heidi_sessions
+              .where(id: superseded_heidi_session_ids, notes_superseded_at: nil)
+              .update_all(notes_superseded_at: Time.current)
+          end
+          true
         end
       end
 
@@ -209,7 +217,7 @@ module Renalware
         clinic_visit
           .heidi_sessions
           .synced
-          .where.not(id: seen_heidi_session_ids)
+          .where.not(id: seen_heidi_session_ids + superseded_heidi_session_ids)
           .where.not(consult_note_inserted_at: nil)
           .where(consult_note_inserted_at: heidi_notes_loaded_at..)
           .where.not(consult_note: [nil, ""])
@@ -230,6 +238,14 @@ module Renalware
       def seen_heidi_session_ids
         params
           .dig(:clinic_visit, :seen_heidi_session_ids)
+          .to_s
+          .split(",")
+          .filter_map { |id| Integer(id, exception: false) }
+      end
+
+      def superseded_heidi_session_ids
+        params
+          .dig(:clinic_visit, :superseded_heidi_session_ids)
           .to_s
           .split(",")
           .filter_map { |id| Integer(id, exception: false) }

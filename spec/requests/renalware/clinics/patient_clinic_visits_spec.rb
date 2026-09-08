@@ -298,6 +298,64 @@ describe "Clinic Visits Management" do
   describe "PUT update" do
     let(:clinic_visit) { create(:clinic_visit, patient:, by: user) }
 
+    context "with a manual Heidi replacement" do
+      let!(:heidi_session) { create(:heidi_session, patient:, clinic_visit:, user:) }
+      let!(:other_session) { create(:heidi_session) }
+      let(:replacement_params) do
+        valid_clinic_visit_params.merge(
+          notes: "<p>Replacement document</p>",
+          superseded_heidi_session_ids: "#{heidi_session.id},#{other_session.id}"
+        )
+      end
+
+      it "persists the override only for sessions belonging to the visit" do
+        put patient_clinic_visit_path(patient, clinic_visit),
+            params: { clinic_visit: replacement_params }
+
+        expect(response).to be_redirect
+        expect(clinic_visit.reload.notes).to eq("<p>Replacement document</p>")
+        expect(heidi_session.reload.notes_superseded_at).to be_present
+        expect(other_session.reload.notes_superseded_at).to be_nil
+
+        client = instance_double(Renalware::Heidi::SessionsClient)
+        result = Renalware::Heidi::BaseClient::Result.new(
+          success: true,
+          body: { "session" => { "consult_note" => { "result" => "Late automatic note" } } }
+        )
+        allow(client).to receive(:get).and_return(result)
+        Renalware::Heidi::SyncSession.new(session: heidi_session, client:).call
+
+        expect(clinic_visit.reload.notes).to eq("<p>Replacement document</p>")
+        expect(heidi_session.reload.consult_note).to eq("<p>Late automatic note</p>")
+      end
+
+      it "does not persist an override when validation fails and preserves it for retry" do
+        put patient_clinic_visit_path(patient, clinic_visit),
+            params: { clinic_visit: replacement_params.merge(date: "") }
+
+        expect(heidi_session.reload.notes_superseded_at).to be_nil
+        expect(response.body).to include('name="clinic_visit[superseded_heidi_session_ids]"')
+        expect(response.body).to include("#{heidi_session.id},#{other_session.id}")
+      end
+
+      it "does not mark an override when Notes are not submitted" do
+        put patient_clinic_visit_path(patient, clinic_visit),
+            params: { clinic_visit: replacement_params.except(:notes) }
+
+        expect(heidi_session.reload.notes_superseded_at).to be_nil
+      end
+
+      it "does not preserve an automatic import superseded by the replacement" do
+        heidi_session.update!(status: :synced, consult_note: "<p>Automatic note</p>",
+                              consult_note_inserted_at: Time.current)
+        put patient_clinic_visit_path(patient, clinic_visit), params: {
+          clinic_visit: replacement_params.merge(heidi_notes_loaded_at: 5.minutes.ago.iso8601)
+        }
+
+        expect(clinic_visit.reload.notes).to eq("<p>Replacement document</p>")
+      end
+    end
+
     it "redirects to the clinic_visits index" do
       put patient_clinic_visit_path(patient_id: patient.to_param, id: clinic_visit.to_param),
           params: {
