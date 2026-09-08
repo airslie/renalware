@@ -6,8 +6,7 @@
       url: patient_letters_letters_path(patient, letter.event),
       as: :letter,
       wrapper: "horizontal_form",
-      html: { id: "letter-form", autocomplete: "off",
-              data: { controller: "unsaved-form-changes" } } do |f|
+      html: { id: "letter-form", autocomplete: "off" } do |f|
     = render "renalware/shared/errors", model: letter
     = render "form",
               f: f,

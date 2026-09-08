@@ -28,6 +28,8 @@ module Renalware
       visit new_patient_letters_letter_path(patient)
       fill_in "Salutation", with: "Dear Doctor"
 
+      pending "removed the stimulus controller form new and edit forms for now"
+
       expect(dialog_shown? { click_link t("btn.cancel") }).to be(true)
 
       # Dismissing the warning keeps the user on the page with their changes intact
@@ -37,6 +39,8 @@ module Renalware
     it "lets the user leave anyway once they confirm the warning" do
       visit new_patient_letters_letter_path(patient)
       fill_in "Salutation", with: "Dear Doctor"
+
+      pending "removed the stimulus controller form new and edit forms for now"
 
       page.driver.accept_modal(:beforeunload, wait: 1) { click_link t("btn.cancel") }
 
