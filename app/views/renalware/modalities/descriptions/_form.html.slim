@@ -20,4 +20,9 @@
             wrapper: :horizontal_small,
             hint: "Do not calculate KFRE for patients with this current modality")
 
+  = f.input(:allow_hd,
+            label: "Allow HD",
+            wrapper: :horizontal_small,
+            hint: "Allow HD sessions, profiles and preferences for patients with this current or previous modality")
+
   = save_or_cancel(form: f, back_path: modalities_descriptions_path)

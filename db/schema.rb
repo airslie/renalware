@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_08_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_120000) do
   create_schema "renalware"
   create_schema "renalware_heroic"
 
@@ -4272,6 +4272,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_120000) do
   end
 
   create_table "renalware.modality_descriptions", id: :serial, force: :cascade do |t|
+    t.boolean "allow_hd", default: false, null: false
     t.string "code"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil

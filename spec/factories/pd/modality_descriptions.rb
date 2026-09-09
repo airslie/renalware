@@ -5,5 +5,6 @@ FactoryBot.define do
     end
     name { "PD" }
     code { "pd" }
+    allow_hd { true }
   end
 end

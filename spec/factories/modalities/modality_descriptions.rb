@@ -13,24 +13,28 @@ FactoryBot.define do
     trait :pd do
       name { "PD" }
       type { "Renalware::PD::ModalityDescription" }
+      allow_hd { true }
       code { "pd" }
     end
 
     trait :hd do
       name { "HD" }
       type { "Renalware::HD::ModalityDescription" }
+      allow_hd { true }
       code { "hd" }
     end
 
     trait :hd do
       name { "HD" }
       type { "Renalware::HD::ModalityDescription" }
+      allow_hd { true }
       code { "hd" }
     end
 
     trait :transplant do
       name { "Transplant" }
       type { "Renalware::Transplants::RecipientModalityDescription" }
+      allow_hd { true }
       code { "transplant" }
     end
 

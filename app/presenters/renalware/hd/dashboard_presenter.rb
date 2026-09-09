@@ -3,8 +3,6 @@ module Renalware
     class DashboardPresenter
       attr_accessor :patient
 
-      delegate :has_ever_been_on_hd?, to: :patient
-
       def initialize(patient, view_context, current_user)
         @patient = patient
         @view_context = view_context
@@ -112,11 +110,17 @@ module Renalware
       end
 
       def can_add_session?
-        policy_for(Renalware::HD::Session::Open).new?
+        policy_for(Renalware::HD::Session::Open).new? && has_ever_been_on_hd?
       end
 
       def can_add_dna_session?
-        policy_for(Renalware::HD::Session::DNA).new?
+        policy_for(Renalware::HD::Session::DNA).new? && has_ever_been_on_hd?
+      end
+
+      def has_ever_been_on_hd? # rubocop:disable Naming/PredicatePrefix
+        return @has_ever_been_on_hd if defined?(@has_ever_been_on_hd)
+
+        @has_ever_been_on_hd = patient.modality_descriptions.exists?(allow_hd: true)
       end
 
       private

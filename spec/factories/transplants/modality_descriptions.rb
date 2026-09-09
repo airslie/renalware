@@ -12,5 +12,6 @@ FactoryBot.define do
       Renalware::Transplants::RecipientModalityDescription.find_or_create_by(name: "Transplant")
     end
     code { "transplant" }
+    allow_hd { true }
   end
 end

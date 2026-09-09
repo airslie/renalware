@@ -15,6 +15,7 @@
         th.col-width-tiny Hidden
         th.col-width-tiny AKI Alerts
         th.col-width-tiny KFRE
+        th.col-width-tiny Allow HD
         th Name
     tbody
       - modality_descriptions.each do |description|
@@ -35,5 +36,8 @@
           td
             = inline_check_icon(description.ignore_for_kfre,
                          title: "Allow KFRE to be calculated on receipt of ACR/PCR for patient with this current modality")
+
+          td
+            = inline_check_icon(description.allow_hd)
 
           td= description.name
