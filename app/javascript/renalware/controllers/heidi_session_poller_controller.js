@@ -182,8 +182,11 @@ export default class extends Controller {
     if (!window.confirm("Replace all current Notes with this Heidi document? This includes any changes you have made in Renalware.")) return
 
     this.stopPolling()
-    this.trixTarget.editor.recordUndoEntry("Replace Notes from Heidi")
-    this.trixTarget.editor.loadHTML(document.content)
+    const editor = this.trixTarget.editor
+    editor.recordUndoEntry("Replace Notes from Heidi")
+    editor.setSelectedRange([0, editor.getDocument().getLength()])
+    // Use the same importer as automatic sync: loadHTML collapses paragraph spacing.
+    editor.insertHTML(document.content)
     // Replacing all Notes intentionally supersedes imports from every listed session.
     this.sessionIdsValue.forEach((id) => this.markSessionSeen(id))
     this.supersededSessionIdsTarget.value = this.sessionIdsValue.join(",")

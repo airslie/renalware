@@ -5,6 +5,7 @@ module Renalware
     let(:clinic_visit) { create(:clinic_visit, patient:, by: user, notes: "Clinician edits") }
     let(:session) { create(:heidi_session, patient:, clinic_visit:, user:, status: :synced) }
     let(:fetcher) { instance_double(Heidi::SessionDocuments) }
+    let(:document_content) { "<p>Updated referral</p><p>Further assessment</p>" }
 
     around do |example|
       original = Renalware.config.heidi_enabled
@@ -21,7 +22,7 @@ module Renalware
                                                     { id: "consult_note", name: "Main note",
                                                       content: nil },
                                                     { id: "letter", name: "Referral",
-                                                      content: "<p>Updated referral</p>" }
+                                                      content: document_content }
                                                   ])
       login_as user
       visit edit_patient_clinic_visit_path(patient, clinic_visit)
@@ -51,6 +52,30 @@ module Renalware
       expect(clinic_visit.reload.notes).to include("Updated referral")
       expect(clinic_visit.notes).not_to include("Earlier automatic import")
       expect(session.reload.notes_superseded_at).to be_present
+    end
+
+    it "preserves the same paragraph spacing as automatic insertion and can undo replacement" do
+      automatic_text = page.evaluate_script(<<~JS)
+        (() => {
+          const editor = document.querySelector("trix-editor").editor;
+          editor.loadHTML("");
+          editor.insertHTML(#{document_content.to_json});
+          const text = editor.getDocument().toString();
+          editor.loadHTML("Clinician edits");
+          return text;
+        })()
+      JS
+      expect(automatic_text).to match(/Updated referral\n{2,}Further assessment/)
+
+      click_button "Check for updates"
+      select "Referral", from: "Heidi document"
+      accept_confirm { click_button "Replace Notes" }
+
+      editor = find("trix-editor")
+      expect(editor.evaluate_script("this.editor.getDocument().toString()")).to eq(automatic_text)
+      editor.execute_script("this.editor.undo()")
+      expect(editor).to have_text "Clinician edits"
+      expect(editor).to have_no_text "Updated referral"
     end
 
     it "does not disable imports when the replacement is abandoned" do
