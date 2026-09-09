@@ -18,17 +18,19 @@
           i.fas.fa-arrow-left
           |  Back
     dd.name.patient-menu-toggler
-      button.patient-menu-toggle(
-        type="button"
-        aria-label="Toggle patient menu"
-        aria-controls="patient-side-menu"
-        aria-expanded="true"
-        data-action="patient-menu#toggle"
-        data-patient-menu-target="toggle"
-      )
-        - unless local_assigns[:skip_hamburger]
-          = inline_icon(:ellipsis_vertical, size: :xxl, class: "inline-block align-text-bottom text-gray-300 hover:text-gray-50")
+      - if local_assigns[:skip_hamburger]
         span= patient
+      - else
+        button.patient-menu-toggle(
+          type="button"
+          aria-label="Toggle patient menu"
+          aria-controls="patient-side-menu"
+          aria-expanded="true"
+          data-action="patient-menu#toggle"
+          data-patient-menu-target="toggle"
+        )
+          = inline_icon(:ellipsis_vertical, size: :xxl, class: "inline-block align-text-bottom text-gray-300 hover:text-gray-50")
+          span= patient
 
     - if patient.hospital_identifiers.all.count > 1
       - patient.hospital_identifiers.all.each do |hospital_identifier|
