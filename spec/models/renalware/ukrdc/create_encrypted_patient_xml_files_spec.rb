@@ -1,4 +1,3 @@
-# rubocop:disable-next Metrics/BlockNesting
 module Renalware
   describe UKRDC::CreateEncryptedPatientXmlFiles do
     let(:failed_patient) do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable RSpec/SpecFilePathFormat
-
 RSpec.describe ApplicationJob do
   subject(:job_class) do
     stub_const("TestJob", Class.new(described_class) do
@@ -32,4 +30,3 @@ RSpec.describe ApplicationJob do
     end
   end
 end
-# rubocop:enable RSpec/SpecFilePathFormat
