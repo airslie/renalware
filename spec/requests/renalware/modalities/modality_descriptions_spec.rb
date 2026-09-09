@@ -12,7 +12,7 @@ describe "Configuring Modality Descriptions" do
   describe "POST create" do
     context "with valid attributes" do
       it "creates a new record" do
-        attributes = attributes_for(:modality_description)
+        attributes = attributes_for(:modality_description, allow_hd: true)
 
         post modalities_descriptions_path, params: { modalities_description: attributes }
 
@@ -41,6 +41,7 @@ describe "Configuring Modality Descriptions" do
       get modalities_descriptions_path
 
       expect(response).to be_successful
+      expect(response.body).to include("Allow HD")
     end
   end
 
@@ -49,6 +50,7 @@ describe "Configuring Modality Descriptions" do
       get edit_modalities_description_path(modality_description)
 
       expect(response).to be_successful
+      expect(Capybara.string(response.body)).to have_field("Allow HD", type: "checkbox")
     end
   end
 
@@ -57,7 +59,8 @@ describe "Configuring Modality Descriptions" do
       it "updates a record" do
         attributes = {
           name: "My Edited Modality Description",
-          hidden: true
+          hidden: true,
+          allow_hd: true
         }
 
         patch modalities_description_path(modality_description),
@@ -70,6 +73,16 @@ describe "Configuring Modality Descriptions" do
 
         expect(response).to be_successful
       end
+    end
+
+    it "allows HD to be disabled" do
+      modality_description.update!(allow_hd: true)
+
+      patch modalities_description_path(modality_description),
+            params: { modalities_description: { allow_hd: "0" } }
+
+      expect(response).to have_http_status(:redirect)
+      expect(modality_description.reload.allow_hd).to be(false)
     end
 
     context "with invalid attributes" do

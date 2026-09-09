@@ -66,7 +66,8 @@ module Renalware
             :site,
             :hidden,
             :ignore_for_aki_alerts,
-            :ignore_for_kfre
+            :ignore_for_kfre,
+            :allow_hd
           )
       end
 

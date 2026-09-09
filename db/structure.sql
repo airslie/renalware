@@ -3177,7 +3177,8 @@ CREATE TABLE renalware.modality_descriptions (
     ukrdc_modality_code_id bigint,
     code character varying,
     ignore_for_aki_alerts boolean DEFAULT false NOT NULL,
-    ignore_for_kfre boolean DEFAULT false NOT NULL
+    ignore_for_kfre boolean DEFAULT false NOT NULL,
+    allow_hd boolean DEFAULT false NOT NULL
 );
 
 
@@ -35566,6 +35567,7 @@ ALTER TABLE ONLY renalware_heroic.biobank_usages
 SET search_path TO renalware,public,renalware_heroic,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260909120000'),
 ('20260908120000'),
 ('20260903120000'),
 ('20260902120000'),

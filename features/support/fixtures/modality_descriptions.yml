@@ -8,11 +8,14 @@ live_donor:
 transplant:
   name: Transplant
   type: Renalware::Transplants::RecipientModalityDescription
+  allow_hd: true
 other:
   name: Other
 pd:
   name: PD
   type: Renalware::PD::ModalityDescription
+  allow_hd: true
 hd:
   name: HD
   type: Renalware::HD::ModalityDescription
+  allow_hd: true

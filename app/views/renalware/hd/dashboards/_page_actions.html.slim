@@ -49,5 +49,5 @@
 
   = render Renalware::HD::AdministerPrescriptionDropdownComponent.new(patient: patient)
 
-  - unless patient.has_ever_been_on_hd?
+  - unless dashboard.has_ever_been_on_hd?
     = render "modality_missing_warning", modality_name: "HD"
