@@ -7,7 +7,7 @@ require "renalware/pack_engines"
 Renalware::PackEngines.load!
 
 module Renalware
-  VERSION = "2.5.4".freeze
+  VERSION = "2.5.5".freeze
 
   # Keep table names unchanged (do not prefix with renalware_).
   def self.table_name_prefix = nil
