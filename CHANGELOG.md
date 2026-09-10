@@ -9,6 +9,61 @@ This project adheres to Semantic Versioning.
 ### Changed
 ### Fixed
 
+## 2.5.5
+
+### Added
+
+- Heidi integration for clinic visits, where enabled locally #5985
+  - Clinicians can link their Heidi account, launch Heidi from a clinic visit with patient details, current problems and prescriptions, and import generated notes. Heidi status is shown alongside clinic visits.
+  - Test account linking/unlinking, launching for the correct patient, transferred clinical context, note import without duplication or loss of existing notes, and note formatting in clinic visits and letters. Check feedback when linking or launch fails.
+- Preview and replace clinic visit Notes from Heidi #6183 #6187
+  - “Check for updates” previews the Heidi note and additional documents before “Replace Notes” replaces the clinic visit Notes. Paragraph spacing is preserved.
+  - Test previewing and selecting documents, replacing or cancelling, saving after validation errors, and confirming that later automatic imports do not overwrite or append to a saved replacement.
+- Heidi administration reports, where enabled locally #5985
+  - Adds a session list with status/error information and a monthly report of users and sessions.
+  - Test session filters, links to patients/visits/letters, monthly usage totals and access permissions.
+- Hepatitis C end date and clearer virology profile layout #6167
+  - Adds an optional “Ended” date for Hepatitis C, displayed in the virology summary, and aligns infection status and diagnosis fields.
+  - Test recording, editing and clearing the end date, date validation, summary display and saving the other virology fields.
+- Uploaded-file malware checks, where configured locally #6060
+  - Files awaiting a scan or without a clean result cannot be opened; users see an explanatory message. Administrators can review scan results in a new dashboard.
+  - Test patient attachments and system downloads while scans are pending, after clean or unsafe results, and after scan failures; also check dashboard filters and permissions.
+- Searchable administration menu #6171
+  - Adds filtering to help users find administration pages.
+  - Test finding and opening permitted menu items, clearing the search and navigating between administration areas.
+
+### Changed
+
+- HD dashboard actions now follow configurable modality eligibility #6166 #6185
+  - An “Allow HD” setting on modality descriptions controls access to adding HD sessions, DNA sessions, profiles and preferences using current or historical modalities. Initial eligible modalities include HD, PD and transplant recipient modalities; Home HD is excluded by default. Existing user permissions still apply.
+  - Test these actions and the HD Summary warning for eligible and ineligible patients, including PD/transplant patients without prior HD, Home HD patients and read-only users. Check local “Allow HD” settings.
+- Updated navigation is now used throughout the application #6153 #6157 #6167
+  - Makes the newer main navigation standard and updates patient-menu and tab selection behaviour, including a fix for a navigation rendering error.
+  - Test patient search, opening/closing the patient menu, main menus and selected tabs on desktop and smaller screens.
+- GP and practice directory updates use the replacement NHS ODS service #6155
+  - Updates GP/practice records and their associations, including retired GPs and closed practices, while preserving locally maintained records.
+  - After a directory update, test GP/practice searches, patient GP selection and letter recipient details, including local records and the Generic GP.
+- Formatted-text editor updated #6154
+  - Test entering, formatting, saving and reopening clinic notes and letters, checking that paragraphs, lists and emphasis are retained.
+- Transplant donor cause-of-death options now use maintained reference records #6156
+  - Existing UKT codes and descriptions are retained.
+  - Test selecting and saving the donor cause of death in transplant recipient operations, “Other” details and display of previously saved operations.
+
+### Fixed
+
+- Letter topics can be cleared or changed after a validation error #6173
+  - Clearing a topic now removes its stored description; changing topics after a failed save no longer causes a redirect error.
+  - Test new and existing letters, including clinic-visit letters: clear/change the topic, trigger a validation error, correct it and save.
+- Patient names and readability on HD protocol PDFs #6186
+  - Restores missing patient names and increases the protocol text size.
+  - Test printed HD protocols/session forms for patient identification, readability, page breaks and clipped content.
+- More reliable combined PDFs #6152
+  - Corrects handling of filenames when combining PDFs.
+  - Test single- and multiple-letter batch printing and check the resulting PDFs contain all expected pages.
+- Only superadmins can ban or unban users #6152
+  - Ordinary administrator edits now preserve an account's existing banned status.
+  - Test superadmin banning/unbanning and ordinary administrator edits to both banned and active accounts.
+
 ## 2.5.4
 ### Added
 - Add NHSBT wait list upload workflow #6067
