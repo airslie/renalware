@@ -429,7 +429,7 @@ GEM
     minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
-    msgpack (1.8.4)
+    msgpack (1.8.5)
     multi_test (1.1.0)
     multi_xml (0.9.1)
       bigdecimal (>= 3.1, < 5)
@@ -438,7 +438,7 @@ GEM
     nested_form (0.3.2)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.6.6)
+    net-imap (0.6.7)
       date
       net-protocol
     net-ldap (0.20.0)
@@ -833,7 +833,7 @@ GEM
     rubydex (0.4.1-aarch64-linux)
     rubydex (0.4.1-arm64-darwin)
     rubydex (0.4.1-x86_64-linux)
-    rubyntlm (0.6.5)
+    rubyntlm (0.6.8)
       base64
     rubyzip (3.6.0)
     safely_block (1.0.0)
