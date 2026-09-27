@@ -25,10 +25,10 @@
     "masonry-layout": "^4.2.2",
     "moment": "2.30.1",
     "print-js": "^1.6.0",
-    "rollup": "^4.22.4",
+    "rollup": "^4.63.4",
     "semver": "^7.6.3",
     "serialize-javascript": "^7.1",
-    "slim-select": "^4.0.7",
+    "slim-select": "^4.2.4",
     "sortablejs": "^1.13.0",
     "underscore": "1.13.8"
   },
@@ -39,6 +39,6 @@
   "devDependencies": {
     "eslint": "^10.9",
     "playwright": "1.62.1",
-    "prettier": "^3.4"
+    "prettier": "^3.9"
   }
 }
