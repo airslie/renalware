@@ -29,6 +29,7 @@ gem "bootsnap", require: false # speeds up rspec and rails server boot time in d
 gem "faker"
 gem "i18n-tasks", require: false
 gem "jsbundling-rails", "~> 1.0"
+gem "json", "~> 2.21.2"
 gem "net-smtp", require: false # remove in Rails 7
 gem "rails", "~> 8.1.2"
 gem "ruby-prof", require: false
