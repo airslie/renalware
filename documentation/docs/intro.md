@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 slug: /
-description: Technical documentation for renal technicians, administrators and developers configuring and supporting Renalware.
+description: User guides and technical documentation for people using, configuring and supporting Renalware.
 ---
 
 # Renalware
@@ -11,19 +11,19 @@ patient, clinical and pathology information to support kidney care, reporting an
 
 ## About these docs
 
-These docs are for renal technicians, system administrators and developers who configure
-and support Renalware. They cover technical setup and maintenance rather than day-to-day
-clinical use. Some guides assume familiarity with SQL and access to administrative tools.
+These docs bring together guidance for day-to-day use and the technical information
+needed to configure and support Renalware.
 
-## What you can find here
+- [User Guide](./user-guide/index.md): registration, navigation, patient records, letters,
+  and renal modules for clinical and other Renalware users.
+- [Administration & Technical](./technical/index.md): reporting, patient nags, safety alerts,
+  and test data for administrators, renal technicians, and developers.
+- [Accessibility](./99-Accessibility/index.md): Renalware's accessibility statement and how
+  to report issues.
+- [Onboarding videos](https://airslie.com/rw_onboarding/): introductory training for new users.
 
-- [Reporting](./02-Reporting/index.md): create reports, add filters, and configure graphs and widgets.
-- [Patient nags](./04-Nags/01-nags.md): configure reminders for missing or out-of-date patient information.
-- [Safety Alerts](./05-Safety-Alerts/index.md): define alert rules and monitor their operation.
-- [Test data](./03-Testing/example_nhs_numbers.md): example NHS numbers for testing.
-- [Accessibility](./99-Accessibility/index.md): Renalware's accessibility statement and how to report issues.
-
-Use the sidebar to browse the available guides.
+Choose a section from the navigation above or search across all the documentation.
+Some technical guides assume familiarity with SQL and access to administrative tools.
 
 ## Source code
 

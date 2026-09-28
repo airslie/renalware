@@ -4,7 +4,7 @@ module Renalware
       def self.included(base)
         # URL of an externally-hosted HTML or PDF Renalware user guide.
         base.config_accessor(:help_user_guide_link) do
-          ENV.fetch("HELP_USER_GUIDE_LINK", "https://airslie.com/rw_user_guide/")
+          ENV.fetch("HELP_USER_GUIDE_LINK", "https://docs.renalware.com/user-guide")
         end
 
         base.config_accessor(:help_training_videos_link) do

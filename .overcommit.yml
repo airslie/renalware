@@ -47,6 +47,7 @@ PreCommit:
     - "doc/*.svg"
     - Makefile
     - app/assets/javascripts/renalware/built.js
+    - documentation/**/*
   I18nMissing:
     enabled: true
     description: Checking for missing locale snippets

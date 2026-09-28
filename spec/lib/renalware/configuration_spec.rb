@@ -28,6 +28,7 @@ describe Renalware::Configuration do
       HEIDI_SCRIBE_SESSION_BASE_URL
       HEIDI_LINK_ACCOUNT_URL
       HEIDI_REGION
+      HELP_USER_GUIDE_LINK
     )
     original_values = env_keys_that_override_defaults.index_with { |key| ENV.fetch(key, nil) }
     env_keys_that_override_defaults.each { |key| ENV.delete(key) }
@@ -96,9 +97,16 @@ describe Renalware::Configuration do
         heidi_scribe_session_base_url: "https://registrar.scribe.heidihealth.com/scribe/session/",
         heidi_link_account_url: "https://registrar.scribe.heidihealth.com/integration/widget/auth",
         heidi_region: "AU",
+        help_user_guide_link: "https://docs.renalware.com/user-guide",
         mesh_care_setting_snomed_code: "788003006",
         mesh_care_setting_description: "Nephrology service"
       )
+    end
+
+    it "can override the user guide URL from ENV" do
+      ENV["HELP_USER_GUIDE_LINK"] = "https://example.test/user-guide"
+
+      expect(config.help_user_guide_link).to eq("https://example.test/user-guide")
     end
 
     it "can enable Heidi from ENV" do
