@@ -35,7 +35,7 @@ jobs:
   assets:
     name: Build Assets
     timeout-minutes: 10
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     steps:
       - name: Checkout code
@@ -73,7 +73,7 @@ jobs:
   linters:
     name: Linters
     timeout-minutes: 10
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     services:
       postgres:
         image: postgres:18.4
@@ -165,7 +165,7 @@ jobs:
     name: ${{ matrix.name }}
     needs: assets
     timeout-minutes: 30
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     env:
       RENALWARE_EXTENSIONS: heroic
     strategy:
