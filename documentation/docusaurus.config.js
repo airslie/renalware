@@ -24,7 +24,7 @@ const config = {
   projectName: 'renalware-dev', // Usually your repo name.
   deploymentBranch: 'gh-pages',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {hooks: {onBrokenMarkdownLinks: 'throw'}},
   trailingSlash: false,
 
   // Even if you don't use internationalization, you can use this field to set
@@ -35,6 +35,17 @@ const config = {
     locales: ['en'],
   },
 
+  themes: [
+    ['@easyops-cn/docusaurus-search-local', {
+      hashed: 'filename',
+      language: 'en',
+      docsRouteBasePath: '/',
+      indexBlog: false,
+      // Keep the large test-number list out of search, while indexing its page title.
+      ignoreCssSelectors: ['.search-exclude'],
+    }],
+  ],
+
   presets: [
     [
       'classic',
@@ -42,6 +53,10 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
+          async sidebarItemsGenerator({defaultSidebarItemsGenerator, ...args}) {
+            const items = await defaultSidebarItemsGenerator(args);
+            return items.filter(item => item.id !== 'user-guide/changelog');
+          },
           routeBasePath: '/', // Set this value to '/'.
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -75,10 +90,16 @@ const config = {
         // },
         items: [
           {
-            type: 'doc',
-            docId: 'intro',
+            type: 'docSidebar',
+            sidebarId: 'userGuideSidebar',
             position: 'left',
-            label: 'Documentation',
+            label: 'User Guide',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'technicalSidebar',
+            position: 'left',
+            label: 'Administration & Technical',
           },
           //{to: '/blog', label: 'Blog', position: 'left'},
           {
@@ -103,7 +124,14 @@ const config = {
       },
       footer: {
         style: 'dark',
-        links: [],
+        links: [{
+          title: 'Documentation',
+          items: [
+            {label: 'Home', to: '/'},
+            {label: 'Accessibility', to: '/Accessibility/'},
+            {label: 'Onboarding videos', href: 'https://airslie.com/rw_onboarding/'},
+          ],
+        }],
           // {
           //   title: 'Docs',
           //   items: [
