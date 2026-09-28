@@ -163,6 +163,9 @@ jobs:
     runs-on: ubuntu-26.04
     env:
       RENALWARE_EXTENSIONS: heroic
+      # wkhtmltopdf-binary 0.12.6.8 does not recognise Ubuntu 26.04.
+      # Select the same bundled binary that it uses on Ubuntu 24.04.
+      WKHTMLTOPDF_HOST_SUFFIX: ubuntu_22.04_amd64
     strategy:
       fail-fast: false
       matrix:
@@ -260,6 +263,16 @@ jobs:
             ghostscript \
             pandoc
           pg_dump --version | grep -E '^pg_dump \(PostgreSQL\) 18\.'
+
+      - name: Verify wkhtmltopdf can render a PDF
+        run: |
+          bundle exec wkhtmltopdf --version
+          printf '<html><body>PDF rendering smoke test</body></html>' |
+            bundle exec wkhtmltopdf --encoding UTF-8 --page-size A4 \
+              --footer-right 'Page [page] of [topage]' --footer-font-size 8 \
+              - "$RUNNER_TEMP/wkhtmltopdf-smoke.pdf"
+          test -s "$RUNNER_TEMP/wkhtmltopdf-smoke.pdf"
+          head -c 5 "$RUNNER_TEMP/wkhtmltopdf-smoke.pdf" | grep -F '%PDF-'
 
       - name: Setup test database
         env:
