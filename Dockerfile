@@ -25,7 +25,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl imagemagick-7-common=8:7.1.1.43+dfsg1-1+deb13u11 libjemalloc2 libmagickcore-7.q16-10=8:7.1.1.43+dfsg1-1+deb13u11 libssh2-1 libvips libpq-dev && \
+    apt-get install --no-install-recommends -y curl imagemagick-7-common=8:7.1.1.43+dfsg1-1+deb13u12 libjemalloc2 libmagickcore-7.q16-10=8:7.1.1.43+dfsg1-1+deb13u12 libssh2-1 libvips libpq-dev && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
