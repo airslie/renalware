@@ -35,7 +35,7 @@ jobs:
   assets:
     name: Build Assets
     timeout-minutes: 10
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     steps:
       - name: Checkout code
@@ -73,7 +73,7 @@ jobs:
   linters:
     name: Linters
     timeout-minutes: 10
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     services:
       postgres:
         image: postgres:18.4
@@ -106,7 +106,7 @@ jobs:
       - name: Install js packages with yarn
         run: yarn install --frozen-lockfile
 
-      - name: Install PostgreSQL 18.4 client
+      - name: Install PostgreSQL 18 client
         run: |
           sudo install -d /usr/share/postgresql-common/pgdg
           sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
@@ -116,13 +116,8 @@ jobs:
             sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update
 
-          client_version="$(
-            apt-cache madison postgresql-client-18 |
-              awk '$3 ~ /^18[.]4-/ { print $3; exit }'
-          )"
-          test -n "$client_version"
-          sudo apt-get install -y "postgresql-client-18=$client_version"
-          pg_dump --version | grep -F "18.4"
+          sudo apt-get install -y postgresql-client-18
+          pg_dump --version | grep -E '^pg_dump \(PostgreSQL\) 18\.'
 
       - name: Setup test database
         env:
@@ -165,9 +160,12 @@ jobs:
     name: ${{ matrix.name }}
     needs: assets
     timeout-minutes: 30
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     env:
       RENALWARE_EXTENSIONS: heroic
+      # wkhtmltopdf-binary 0.12.6.8 does not recognise Ubuntu 26.04.
+      # Select the same bundled binary that it uses on Ubuntu 24.04.
+      WKHTMLTOPDF_HOST_SUFFIX: ubuntu_22.04_amd64
     strategy:
       fail-fast: false
       matrix:
@@ -260,16 +258,21 @@ jobs:
             sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update
 
-          client_version="$(
-            apt-cache madison postgresql-client-18 |
-              awk '$3 ~ /^18[.]4-/ { print $3; exit }'
-          )"
-          test -n "$client_version"
           sudo apt-get install -y \
-            "postgresql-client-18=$client_version" \
+            postgresql-client-18 \
             ghostscript \
             pandoc
-          pg_dump --version | grep -F "18.4"
+          pg_dump --version | grep -E '^pg_dump \(PostgreSQL\) 18\.'
+
+      - name: Verify wkhtmltopdf can render a PDF
+        run: |
+          bundle exec wkhtmltopdf --version
+          printf '<html><body>PDF rendering smoke test</body></html>' |
+            bundle exec wkhtmltopdf --encoding UTF-8 --page-size A4 \
+              --footer-right 'Page [page] of [topage]' --footer-font-size 8 \
+              - "$RUNNER_TEMP/wkhtmltopdf-smoke.pdf"
+          test -s "$RUNNER_TEMP/wkhtmltopdf-smoke.pdf"
+          head -c 5 "$RUNNER_TEMP/wkhtmltopdf-smoke.pdf" | grep -F '%PDF-'
 
       - name: Setup test database
         env:

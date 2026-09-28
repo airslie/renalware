@@ -21,7 +21,7 @@ jobs:
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.head_branch == 'main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     env:
       ACR_NAME: acrrenalwaredemo
       RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}

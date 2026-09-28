@@ -14,7 +14,7 @@ permissions:
 jobs:
   mirror-main:
     if: github.ref_type == 'branch' && github.ref_name == 'main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     steps:
       - name: Check out private repo
@@ -36,7 +36,7 @@ jobs:
 
   mirror-tag:
     if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     steps:
       - name: Check out private repo

@@ -51,7 +51,8 @@ module Renalware
 
         # Create a tempfile outside the temp dir as dir will be destroyed when outside block closes.
         def using_a_temporary_output_file
-          file = Tempfile.new("pdf_combined", rails_tmp_folder)
+          # Ubuntu's Ghostscript AppArmor profile requires a recognised file extension.
+          file = Tempfile.new(["pdf_combined", ".pdf"], rails_tmp_folder)
           begin
             yield file
           ensure
