@@ -106,7 +106,7 @@ jobs:
       - name: Install js packages with yarn
         run: yarn install --frozen-lockfile
 
-      - name: Install PostgreSQL 18.4 client
+      - name: Install PostgreSQL 18 client
         run: |
           sudo install -d /usr/share/postgresql-common/pgdg
           sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
@@ -116,13 +116,8 @@ jobs:
             sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update
 
-          client_version="$(
-            apt-cache madison postgresql-client-18 |
-              awk '$3 ~ /^18[.]4-/ { print $3; exit }'
-          )"
-          test -n "$client_version"
-          sudo apt-get install -y "postgresql-client-18=$client_version"
-          pg_dump --version | grep -F "18.4"
+          sudo apt-get install -y postgresql-client-18
+          pg_dump --version | grep -E '^pg_dump \(PostgreSQL\) 18\.'
 
       - name: Setup test database
         env:
@@ -260,16 +255,11 @@ jobs:
             sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update
 
-          client_version="$(
-            apt-cache madison postgresql-client-18 |
-              awk '$3 ~ /^18[.]4-/ { print $3; exit }'
-          )"
-          test -n "$client_version"
           sudo apt-get install -y \
-            "postgresql-client-18=$client_version" \
+            postgresql-client-18 \
             ghostscript \
             pandoc
-          pg_dump --version | grep -F "18.4"
+          pg_dump --version | grep -E '^pg_dump \(PostgreSQL\) 18\.'
 
       - name: Setup test database
         env:
