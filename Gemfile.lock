@@ -996,6 +996,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  arm64-darwin-23
   arm64-darwin-24
   arm64-darwin-25
   x86_64-linux
@@ -1162,7 +1163,7 @@ DEPENDENCIES
   yard (>= 0.9.35)
 
 RUBY VERSION
-  ruby 4.0.5
+  ruby 4.0.7
 
 BUNDLED WITH
-  4.0.10
+  4.0.20
