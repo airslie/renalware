@@ -52,7 +52,7 @@ module Document
       context "with nested attribute" do
         before do
           @klass = Class.new(Document::Embedded) do
-            def self.name # rubocop:disable Lint/DuplicateMethods
+            def self.name
               "Document::Foo"
             end
 

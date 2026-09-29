@@ -21,7 +21,7 @@ module Renalware
       create_feed_message(patients)
     end
 
-    def user        = @user ||= SystemUser.find # rubocop:disable Layout/SpaceAroundOperators
+    def user        = @user ||= SystemUser.find
     def sex         = %w(M F).sample
     def dob         = Time.zone.today - rand(30000) + 100
     def nhs_number  = nhs_numbers.sample
