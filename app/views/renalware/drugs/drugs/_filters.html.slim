@@ -9,10 +9,10 @@
                               controller: "form",
                               action: "input->form#submit" } do |f|
       .row
-        .small-8.large-3.columns
+        .small-8.large-2.columns
           = f.label "Name or type"
           = f.search_field :name_or_drug_types_name_cont, autofocus: true
-        .small-8.large-3.columns
+        .small-8.large-2.columns
           = f.label "Drug type"
           = f.select(:drug_types_id_eq,
                      options_from_collection_for_select( \
@@ -31,6 +31,13 @@
           = f.select(:inactive_eq,
                      options_from_collection_for_select( \
                      [%w(No false), %w(Yes true)], :last, :first, drug_search.inactive_eq),
+                     data: { action: "change->form#submit" })
+        .small-8.large-2.columns
+          = f.label :deleted_at_not_null, "Deletion status"
+          = f.select(:deleted_at_not_null,
+                     options_for_select( \
+                     [%w(Non-deleted false), %w(Deleted true)], drug_search.deleted_at_not_null),
+                     { include_blank: "All" },
                      data: { action: "change->form#submit" })
         .small-8.large-2.columns.actions.end
           .pt-px= link_to("Reset", drugs_drugs_path, class: "btn btn-secondary")

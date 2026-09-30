@@ -44,16 +44,77 @@ describe "Configuring Drugs" do
   end
 
   describe "GET index" do
-    it "responds successfully" do
+    let!(:current_drug) { create(:drug, name: "Current drug") }
+    let!(:deleted_drug) { create(:drug, name: "Deleted drug", deleted_at: Time.zone.now) }
+
+    it "defaults to non-deleted drugs" do
       get drugs_drugs_path
 
       expect(response).to be_successful
+      expect(response.body).to include(current_drug.name)
+      expect(response.body).not_to include(deleted_drug.name)
+      selected_option = response.parsed_body.at_css("#q_deleted_at_not_null option[selected]")
+      expect(selected_option.text).to eq("Non-deleted")
+    end
+
+    it "shows both current and deleted drugs when All is selected" do
+      get drugs_drugs_path, params: { q: { deleted_at_not_null: "" } }
+
+      expect(response).to be_successful
+      expect(response.body).to include(current_drug.name, deleted_drug.name, "Deleted at")
+      deleted_row = response.parsed_body.at_css("tr#drugs_drug_#{deleted_drug.id}")
+      expect(deleted_row["class"]).to eq("deleted")
+      expect(deleted_row.css("td").last.text).to eq(I18n.l(deleted_drug.deleted_at))
+      expect(deleted_row.css("a")).to be_empty
+      current_row = response.parsed_body.at_css("tr#drugs_drug_#{current_drug.id}")
+      expect(current_row["class"]).to be_blank
+      expect(current_row.css("td").last.text).to be_empty
+      expect(current_row.css("a").map(&:text)).to eq(%w(Edit Delete))
+      expect(response.parsed_body.at_css("#q_deleted_at_not_null option").text).to eq("All")
+    end
+
+    it "filters to non-deleted drugs" do
+      get drugs_drugs_path, params: { q: { deleted_at_not_null: "false" } }
+
+      expect(response.body).to include(current_drug.name)
+      expect(response.body).not_to include(deleted_drug.name)
+    end
+
+    it "filters to deleted drugs" do
+      get drugs_drugs_path, params: { q: { deleted_at_not_null: "true" } }
+
+      expect(response.body).to include(deleted_drug.name)
+      expect(response.body).not_to include(current_drug.name)
+    end
+
+    it "shows all deletion statuses when All is selected" do
+      get drugs_drugs_path, params: { q: { deleted_at_not_null: "" } }
+
+      expect(response.body).to include(current_drug.name, deleted_drug.name)
+    end
+
+    it "combines deletion status with the existing filters" do
+      create(:drug, name: "Other deleted drug", deleted_at: Time.zone.now)
+      create(:drug, name: "Deleted inactive drug", deleted_at: Time.zone.now, inactive: true)
+
+      get drugs_drugs_path, params: {
+        q: {
+          deleted_at_not_null: "true",
+          name_or_drug_types_name_start: "Deleted",
+          inactive_eq: false
+        }
+      }
+
+      expect(response.body).to include(deleted_drug.name)
+      expect(response.body).not_to include(current_drug.name, "Other deleted drug",
+                                           "Deleted inactive drug")
     end
   end
 
   describe "GET index as JSON" do
     it "responds with json" do
       create(:drug, name: "::drug name::")
+      create(:drug, name: "Deleted drug", deleted_at: Time.zone.now)
 
       get drugs_drugs_path, params: { format: :json }
 
@@ -181,6 +242,8 @@ describe "Configuring Drugs" do
       expect(response).to be_successful
 
       expect(Renalware::Drugs::PrescribableDrug.count).to eq(0)
+      expect(response.parsed_body.at_css("tr#drugs_drug_#{drug.id}")).to be_nil
+      expect(Renalware::Drugs::Drug.with_deleted.find(drug.id).deleted_at).to be_present
     end
   end
 end

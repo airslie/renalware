@@ -115,8 +115,9 @@ module Renalware
 
       def drug_search
         @drug_search ||= begin
-          search_params = params.fetch(:q, { inactive_eq: false })
-          Drug.ransack(search_params).tap { |query| query.sorts = "name" }
+          search_params = params.fetch(:q, { inactive_eq: false, deleted_at_not_null: false })
+          drugs = request.format.html? ? Drug.with_deleted : Drug.all
+          drugs.ransack(search_params).tap { |query| query.sorts = "name" }
         end
       end
 

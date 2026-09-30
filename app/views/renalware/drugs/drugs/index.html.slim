@@ -18,19 +18,22 @@
               th Name
               th Dm+d Virtual Product ID
               th Active
+              th.col-width-date-time Deleted at
           tbody
             - drugs.each do |drug|
-              tr
+              tr(id=dom_id(drug) class=(drug.deleted? ? "deleted" : ""))
                 td.actions
-                  = link_to t("btn.edit"), edit_drugs_drug_path(drug), target: "_top"
-                  = link_to t("btn.delete"), drugs_drug_path(drug),
-                    id: "#{drug.id}-drug",
-                    method: :delete,
-                    data: { confirm: I18n.t("prompts.confirm_delete") },
-                    target: "_top"
+                  - unless drug.deleted?
+                    = link_to t("btn.edit"), edit_drugs_drug_path(drug), target: "_top"
+                    = link_to t("btn.delete"), drugs_drug_path(drug),
+                      id: "#{drug.id}-drug",
+                      method: :delete,
+                      data: { confirm: I18n.t("prompts.confirm_delete") },
+                      target: "_top"
                 td= drug.id
                 td= drug
                 td= drug.code
                 td= inline_check_icon(!drug.inactive)
+                td= l(drug.deleted_at)
 
         == pagy.series_nav if pagy.pages > 1
