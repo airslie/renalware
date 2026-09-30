@@ -23,7 +23,7 @@
     "flatpickr": "^4.6.13",
     "highcharts": "11.4.8",
     "masonry-layout": "^4.2.2",
-    "moment": "2.30.1",
+    "moment": "2.31.0",
     "print-js": "^1.6.0",
     "rollup": "^4.63.4",
     "semver": "^7.6.3",
