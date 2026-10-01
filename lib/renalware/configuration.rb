@@ -114,7 +114,11 @@ module Renalware
         ENV.fetch("SESSION_REGISTER_USER_USER_ACTIVITY_AFTER", "PT2M") # 2 mins
       )
     }
-    config_accessor(:duration_of_last_url_memory_after_session_expiry) { 30.minutes }
+    config_accessor(:duration_of_last_url_memory_after_session_expiry) {
+      ActiveSupport::Duration.parse(
+        ENV.fetch("DURATION_OF_LAST_URL_MEMORY_AFTER_SESSION_EXPIRY", "PT30M")
+      )
+    }
     config_accessor(:broadcast_subscription_map) { {} }
     config_accessor(:aki_alerts_enabled) do
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("AKI_ALERTS_ENABLED", "true"))
