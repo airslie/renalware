@@ -2546,33 +2546,36 @@ CREATE FUNCTION renalware.refresh_all_matierialized_views(_schema text DEFAULT '
 CREATE FUNCTION renalware.refresh_current_observation_set(a_patient_id integer) RETURNS integer
     LANGUAGE plpgsql
     AS $$
-  BEGIN
-  with current_patient_obs as(
-      select
-        DISTINCT ON (p.id, obxd.id)
-  p.id as patient_id,
-        obxd.code,
-        json_build_object('result',(obx.result),'observed_at',obx.observed_at) as value
-        from patients p
-        inner join pathology_observation_requests obr on obr.patient_id = p.id
-        inner join pathology_observations obx on obx.request_id = obr.id
-        inner join pathology_observation_descriptions obxd on obx.description_id = obxd.id
-        where p.id = a_patient_id
-        order by p.id, obxd.id, obx.observed_at desc
-    ),
-    current_patient_obs_as_jsonb as (
-      select patient_id,
-        jsonb_object_agg(code, value) as values,
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP
-        from current_patient_obs
-        group by patient_id order by patient_id
-    )
-    insert into pathology_current_observation_sets (patient_id, values, created_at, updated_at)
-      select * from current_patient_obs_as_jsonb
-      ON conflict (patient_id)
-      DO UPDATE
-      SET values = excluded.values, updated_at = excluded.updated_at;
+BEGIN
+  -- Rebuild from the latest non-empty result for each code, including clearing a
+  -- stale snapshot when no results remain. Pause pathology writes during bulk
+  -- rebuilds so a concurrent trigger update cannot be overwritten.
+  WITH current_patient_obs AS (
+    SELECT DISTINCT ON (obx.description_id)
+      obxd.code,
+      jsonb_build_object(
+        'result', obx.result,
+        'observed_at', obx.observed_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/London'
+      ) AS value
+    FROM pathology_observation_requests obr
+    INNER JOIN pathology_observations obx ON obx.request_id = obr.id
+    INNER JOIN pathology_observation_descriptions obxd ON obxd.id = obx.description_id
+    WHERE obr.patient_id = a_patient_id AND obx.result <> ''
+    -- For equal observation times, prefer the most recently changed row, then
+    -- creation time and ID. SQL corrections must maintain updated_at for this
+    -- to reflect correction order; historic write order cannot be recovered.
+    ORDER BY obx.description_id, obx.observed_at DESC,
+      obx.updated_at DESC, obx.created_at DESC, obx.id DESC
+  )
+  INSERT INTO pathology_current_observation_sets (patient_id, values, created_at, updated_at)
+    SELECT p.id,
+      COALESCE((SELECT jsonb_object_agg(code, value) FROM current_patient_obs), '{}'::jsonb),
+      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    FROM patients p
+    WHERE p.id = a_patient_id
+  ON CONFLICT (patient_id) DO UPDATE
+    SET values = excluded.values, updated_at = excluded.updated_at;
+
   RETURN a_patient_id;
 END
 $$;
@@ -35567,6 +35570,7 @@ ALTER TABLE ONLY renalware_heroic.biobank_usages
 SET search_path TO renalware,public,renalware_heroic,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260930120000'),
 ('20260909120000'),
 ('20260908120000'),
 ('20260903120000'),
