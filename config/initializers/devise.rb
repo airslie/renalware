@@ -238,10 +238,21 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  # config.warden do |manager|
-  #   manager.intercept_401 = false
-  #   manager.default_strategies(scope: :user).unshift :some_external_strategy
-  # end
+  config.warden do |manager|
+    manager.failure_app = ->(env) { Renalware::Devise::FailureApp.call(env) }
+  end
+
+  # Devise resets the session when a user times out, so capture who they were (and when they
+  # were last active) for Renalware::Devise::FailureApp to remember where they were.
+  Warden::Manager.before_logout do |user, warden, options|
+    next if user.nil?
+
+    scope_session = warden.request.session["warden.user.#{options[:scope]}.session"] || {}
+    warden.env[Renalware::Devise::FailureApp::SIGNED_OUT_USER_ENV_KEY] = {
+      user:,
+      last_request_at: scope_session["last_request_at"]
+    }
+  end
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine

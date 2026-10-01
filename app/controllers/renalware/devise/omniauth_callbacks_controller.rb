@@ -2,6 +2,8 @@ module Renalware
   module Devise
     # rubocop:disable-next Rails/I18nLocaleTexts
     class OmniauthCallbacksController < ::Devise::OmniauthCallbacksController
+      include Concerns::ResumeAfterSignIn
+
       # Callback for LDAP OmniAuth strategy
       def entra_id
         auth = request.env["omniauth.auth"]
