@@ -41,9 +41,17 @@ without exposing that page to a different user signing in on the same browser.
 - `Concerns::ResumeAfterSignIn` is shared by the sessions and OmniAuth callbacks controllers.
 - Signed-out visitors following a deep link are still returned to it via Devise's `user_return_to`.
 
-## Phase 2: warn before timeout
-- `session_controller.js` already knows the server expiry; show a "You'll be signed out in 2:00 –
-  Stay signed in" modal so form data is not lost.
+## Phase 2: warn before timeout (done)
+- `Renalware::SessionExpiryWarning` (Phlex) renders a `<dialog>` in the layout for signed-in
+  users. `session_controller.js` opens it `Renalware.config.session_timeout_warning` before the
+  server expiry (env `SESSION_TIMEOUT_WARNING`, ISO8601, default `PT2M`, `PT0S` switches it off;
+  capped at half the session timeout), with a live countdown and a "Session expiring" tab title.
+- "Stay signed in" (or Escape) sends a keep-alive; the new expiry is broadcast to other tabs, which
+  close their warnings. "Log out" signs out of every open tab.
+- Activity is only registered with the server on a throttle (2 minutes by default), so activity
+  just before expiry used to be lost. When the warning is due and there is unregistered activity,
+  it is registered immediately instead of warning a user who is evidently still there.
+- When a background tab regains focus the warning is re-evaluated, as its timers may be delayed.
 
 ## Phase 3: per-user, tiered resume
 - Persist the resume location per user in the database (survives browser restarts and session

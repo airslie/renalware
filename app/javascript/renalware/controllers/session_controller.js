@@ -11,7 +11,11 @@ import { Controller } from "@hotwired/stimulus"
 // - Do one expiry check when we expect timeout, not periodic polling.
 // - If the tab regains focus after expected expiry, reconcile once with server.
 // - Keep server as source of truth for session expiry.
+// - Warn the user shortly before expiry so they can choose to stay signed in, unless they have
+//   been active since the session was last extended, in which case just extend it.
 export default class extends Controller {
+  static targets = ["warningDialog", "countdown"]
+
   logoutEventStorageKey = "logout-event"
   sessionExpiryEventStorageKey = "session-expiry-event"
   checkForSessionExpiryTimeout = null
@@ -25,6 +29,11 @@ export default class extends Controller {
   throttlePeriodSeconds = 0
   defaultThrottlePeriodSeconds = 20
   networkRetryDelaySeconds = 30
+  warnBeforeSeconds = 0
+  warningTimeout = null
+  countdownInterval = null
+  activityPending = false
+  titleBeforeWarning = null
 
   initialize() {
     this.throttlePeriodSeconds = parseInt(
@@ -39,6 +48,8 @@ export default class extends Controller {
     this.initialSessionExpiryAtEpochMs = parseInt(this.data.get("expires-at-epoch-ms"), 10)
     this.loginPath = this.data.get("login-path")
     this.keepAlivePath = this.data.get("keep-alive-path")
+    this.warnBeforeSeconds = parseInt(this.data.get("warn-before") || "0", 10)
+    this.boundUserActivity = this.userActivity.bind(this)
     this.boundStorageChange = this.storageChange.bind(this)
     this.boundVisibilityChange = this.visibilityChange.bind(this)
     this.boundWindowFocus = this.windowFocus.bind(this)
@@ -71,6 +82,8 @@ export default class extends Controller {
       this.removeUserActivityHandlers()
       this.clearCheckForSessionExpiryTimeout()
       this.throttledRegisterUserActivity.cancel()
+      this.clearWarningTimeout()
+      this.hideWarning()
     }
   }
 
@@ -85,11 +98,17 @@ export default class extends Controller {
     )
   }
 
-  // Throttled event handler for key/click/resize.
-  // If we come in there then the user has interacted with the page
-  // within throttlePeriodSeconds
+  // Event handler for key/click/resize. We note the activity and register it with the server
+  // at most once per throttle period, or sooner if the expiry warning becomes due.
+  userActivity() {
+    this.activityPending = true
+    this.throttledRegisterUserActivity()
+  }
+
+  // Throttled handler: the user has interacted with the page within throttlePeriodSeconds
   registerUserActivity() {
     this.log("some activity detected")
+    this.activityPending = false
     this.resetCheckForSessionExpiryTimeout(this.sessionTimeoutSeconds)
     this.sendRequestToKeepSessionAlive()
   }
@@ -107,6 +126,86 @@ export default class extends Controller {
     const delayMs = Math.max(expiresAtEpochMs - Date.now(), 0)
     this.log(`resetting session expiry timeout ${delayMs / 1000}`)
     this.checkForSessionExpiryTimeout = setTimeout(this.checkForSessionExpiry.bind(this), delayMs)
+    this.scheduleWarning()
+  }
+
+  scheduleWarning() {
+    this.clearWarningTimeout()
+    if (this.warnBeforeSeconds <= 0 || !this.hasWarningDialogTarget) return
+
+    const delayMs = this.sessionExpiryAtEpochMs - this.warnBeforeSeconds * 1000 - Date.now()
+    if (delayMs <= 0) {
+      this.warningDue()
+    } else {
+      this.hideWarning()
+      this.warningTimeout = setTimeout(this.warningDue.bind(this), delayMs)
+    }
+  }
+
+  clearWarningTimeout() {
+    clearTimeout(this.warningTimeout)
+    this.warningTimeout = null
+  }
+
+  // Activity not yet registered with the server would be lost when the session expires, so
+  // register it now rather than warning a user who is evidently still here.
+  warningDue() {
+    if (this.activityPending) {
+      this.log("warning due but user has been active - extending session")
+      this.throttledRegisterUserActivity.cancel()
+      this.registerUserActivity()
+    } else {
+      this.showWarning()
+    }
+  }
+
+  showWarning() {
+    if (!this.warningDialogTarget.open) {
+      this.log("showing session expiry warning")
+      this.warningDialogTarget.showModal()
+      this.titleBeforeWarning = document.title
+      document.title = `Session expiring - ${this.titleBeforeWarning}`
+    }
+    this.updateCountdown()
+    clearInterval(this.countdownInterval)
+    this.countdownInterval = setInterval(this.updateCountdown.bind(this), 1000)
+  }
+
+  hideWarning() {
+    clearInterval(this.countdownInterval)
+    this.countdownInterval = null
+    if (!this.hasWarningDialogTarget || !this.warningDialogTarget.open) return
+
+    this.warningDialogTarget.close()
+    if (this.titleBeforeWarning !== null) document.title = this.titleBeforeWarning
+    this.titleBeforeWarning = null
+  }
+
+  updateCountdown() {
+    if (!this.hasCountdownTarget) return
+
+    const remainingSeconds = Math.max(Math.ceil((this.sessionExpiryAtEpochMs - Date.now()) / 1000), 0)
+    const minutes = Math.floor(remainingSeconds / 60)
+    const seconds = String(remainingSeconds % 60).padStart(2, "0")
+    this.countdownTarget.textContent = `${minutes}:${seconds}`
+  }
+
+  // Action for the warning's "Stay signed in" button, and for dismissing it with Escape.
+  // The current expiry is suspended while the keep-alive is in flight, as reloading at that
+  // expiry would lose unsaved work if the server extends the session but responds slowly. The
+  // keep-alive response sets the new expiry; if none arrives we reconcile with the server later.
+  staySignedIn(event) {
+    event.preventDefault()
+    this.hideWarning()
+    this.activityPending = false
+    this.throttledRegisterUserActivity.cancel()
+    this.clearWarningTimeout()
+    this.clearCheckForSessionExpiryTimeout()
+    this.checkForSessionExpiryTimeout = setTimeout(
+      this.checkForSessionExpiry.bind(this),
+      this.networkRetryDelaySeconds * 1000
+    )
+    this.sendRequestToKeepSessionAlive()
   }
 
   // Server returns absolute epoch time. If that value is already in the past
@@ -196,20 +295,20 @@ export default class extends Controller {
   }
 
   addHandlersToMonitorUserActivity() {
-    document.addEventListener("click", this.throttledRegisterUserActivity)
-    document.addEventListener("mousedown", this.throttledRegisterUserActivity)
-    document.addEventListener("keydown", this.throttledRegisterUserActivity)
-    window.addEventListener("resize", this.throttledRegisterUserActivity)
+    document.addEventListener("click", this.boundUserActivity)
+    document.addEventListener("mousedown", this.boundUserActivity)
+    document.addEventListener("keydown", this.boundUserActivity)
+    window.addEventListener("resize", this.boundUserActivity)
     window.addEventListener("storage", this.boundStorageChange)
     document.addEventListener("visibilitychange", this.boundVisibilityChange)
     window.addEventListener("focus", this.boundWindowFocus)
   }
 
   removeUserActivityHandlers() {
-    document.removeEventListener("click", this.throttledRegisterUserActivity)
-    document.removeEventListener("mousedown", this.throttledRegisterUserActivity)
-    document.removeEventListener("keydown", this.throttledRegisterUserActivity)
-    window.removeEventListener("resize", this.throttledRegisterUserActivity)
+    document.removeEventListener("click", this.boundUserActivity)
+    document.removeEventListener("mousedown", this.boundUserActivity)
+    document.removeEventListener("keydown", this.boundUserActivity)
+    window.removeEventListener("resize", this.boundUserActivity)
     window.removeEventListener("storage", this.boundStorageChange)
     document.removeEventListener("visibilitychange", this.boundVisibilityChange)
     window.removeEventListener("focus", this.boundWindowFocus)
@@ -221,6 +320,7 @@ export default class extends Controller {
       this.log(`initialSessionExpiryAtEpochMs ${this.initialSessionExpiryAtEpochMs}`)
       this.log(`loginPath ${this.loginPath}`)
       this.log(`sessionTimeoutSeconds ${this.sessionTimeoutSeconds}`)
+      this.log(`warnBeforeSeconds ${this.warnBeforeSeconds}`)
       this.log(`throttlePeriodSeconds ${this.throttlePeriodSeconds}`)
     }
   }
@@ -267,10 +367,15 @@ export default class extends Controller {
     this.reconcileSessionWhenReturningToTab()
   }
 
+  // Timers in background tabs can be delayed, so re-check the expiry and warning on return.
   reconcileSessionWhenReturningToTab() {
-    if (!this.sessionExpiryAtEpochMs || Date.now() < this.sessionExpiryAtEpochMs) return
+    if (!this.sessionExpiryAtEpochMs) return
 
-    this.checkForSessionExpiry()
+    if (Date.now() < this.sessionExpiryAtEpochMs) {
+      this.scheduleWarning()
+    } else {
+      this.checkForSessionExpiry()
+    }
   }
 
   get onLoginPage() {

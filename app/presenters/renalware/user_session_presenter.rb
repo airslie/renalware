@@ -13,7 +13,8 @@ module Renalware
     #       data-session-expires-at-epoch-ms="1744300427000"
     #       data-session-keep-alive-path="/keep_session_alive"
     #       data-session-login-path="/users/sign_in"
-    #       data-session-timeout="3600">
+    #       data-session-timeout="3600"
+    #       data-session-warn-before="120">
     def self.session_controller_data_attributes(user_session:)
       urls = Rails.application.routes.url_helpers
       {
@@ -26,10 +27,15 @@ module Renalware
             debug: Rails.env.development?.to_s, # eg "true" or "false"
             "register-user-activity-after":
               Renalware.config.session_register_user_user_activity_after.to_i,
-            timeout: ::Devise.timeout_in
+            timeout: ::Devise.timeout_in,
+            "warn-before": warn_before_expiry_seconds
           }
         }
       }
+    end
+
+    def self.warn_before_expiry_seconds
+      [Renalware.config.session_timeout_warning.to_i, ::Devise.timeout_in.to_i / 2].min
     end
 
     def self.session_expires_at_epoch_ms(user_session)

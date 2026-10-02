@@ -1,19 +1,24 @@
 describe "Session timeout", :js do
   around do |example|
     original_session_timeout = Devise.timeout_in
+    original_activity = Renalware.config.session_register_user_user_activity_after
+    original_warning = Renalware.config.session_timeout_warning
     # see session_controller.js - we set the session timeout to be almost in the past
     # because we add an 10 second buffer in that file.
     Devise.timeout_in = -8.seconds
 
     example.run
-
+  ensure
     Devise.timeout_in = original_session_timeout
+    Renalware.config.session_register_user_user_activity_after = original_activity
+    Renalware.config.session_timeout_warning = original_warning
   end
 
   def configure_fast_expiry_with_buffer
     # Use a short timeout so we can verify activity extends the session window.
     Devise.timeout_in = 4.seconds
     Renalware.config.session_register_user_user_activity_after = 1.second
+    Renalware.config.session_timeout_warning = 0.seconds
   end
 
   it "A user is redirected by JS to the login page when their session expires" do

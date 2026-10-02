@@ -41,8 +41,9 @@ working, possibly because parts of the tooling still assume a simpler app layout
 - Service objects (in `app/services`)
 - Query objects (in `app/queries`)
 - Form objects for backing complex HTML forms (in `app/forms`)
-- Use Phlex for low level components, and slim for high level views
-- Prefer Phlex over ViewComponent for new components
+- Do not create new Phlex components or convert existing views to Phlex.
+- Use Slim templates and partials for new UI, following existing Rails patterns.
+- Existing Phlex components may be maintained when required by the task; do not introduce new Phlex components as part of that work.
 - Prefer Stimulus and Turbo when adding functionality using JavaScript
 - Keep Turbo Drive disabled for now
 - Run rubocop before pushing a commit

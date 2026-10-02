@@ -1,5 +1,11 @@
 # Repository Guidance
 
+## UI Rendering Policy
+
+- Do not create new Phlex components or convert existing views to Phlex.
+- Use Slim templates and partials for new UI, following existing Rails patterns.
+- Existing Phlex components may be maintained when required by the task; do not introduce new Phlex components as part of that work.
+
 ## jQuery Migration Policy
 
 - Treat any touched jQuery-powered code as an opportunity to migrate incrementally toward Stimulus, Turbo, or plain DOM APIs.
