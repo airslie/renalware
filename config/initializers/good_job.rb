@@ -16,8 +16,8 @@ Rails.application.configure do
   # GOOD_JOB_SHUTDOWN_TIMEOUT=60
 
   # NB: good_job.execution_mode is set per environment in config/environments/*.
-  log_file = Rails.root.join("log", "good_job_#{Rails.env}.log")
-  custom_logger = ActiveSupport::Logger.new(log_file)
+  # Send GoodJob output to stdout so it is captured by container log streams.
+  custom_logger = ActiveSupport::Logger.new($stdout)
   custom_logger.formatter = Rails.logger.formatter
   custom_logger.level = Rails.logger.level
   config.good_job.logger = custom_logger
