@@ -1,0 +1,23 @@
+- rows = group.active_memberships.sort_by { |membership| [membership.subgroup, membership.position_within_subgroup] }.group_by(&:subgroup)
+#code-group-preview-content
+  p.text-sm.text-gray-500 Sample values are shown. Results appear as they do on a patient's current results page.
+  .grid-curr-observations.grid-flow-row.auto-rows-auto.mt-6(data-controller="grid-row-auto-span")
+    - (1..group.subgroup_count).each do |number|
+      - next if rows[number].blank?
+      - colour = group.subgroup_colour(number)
+      - title = group.subgroup_title(number)
+      - style = "border-left-width: 3px;" if colour.present?
+      - border_class = "border-l-#{colour}-300" if colour.present?
+      .w-auto.rounded.px-3.pt-1.pb-0.mr-4.mb-4.min-w-max(style=style class=border_class data-grid-row-auto-span-target="content")
+        table.current_observations.content.no-border-on-last-row.mt-1
+          tbody
+            - if title.present?
+              tr
+                th.font-normal.text-sm.text-gray-500.pb-2.pt-0(colspan=3)= title
+            - rows[number].each do |membership|
+              - description = membership.observation_description
+              - bg_class = "bg-#{description.colour}-100" if description.colour.present?
+              tr
+                th(class=bg_class title=description.name)= description.code
+                td.px-3(class=bg_class) 12.3
+                td.nowrap.text-right(class=bg_class)= l(Date.current)

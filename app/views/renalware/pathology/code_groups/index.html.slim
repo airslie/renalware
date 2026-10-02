@@ -1,7 +1,11 @@
 = within_new_admin_layout(title: "Pathology Code Groups") do
   = help_panel do
-    ' Context-specific groups will not appear in filter dropdown in lists.
-    ' Groups ending in _mdm are automcatically used in their corresponding MDM view eg 'hd_mdm'
+    ' Code groups choose and order the results shown on pathology pages. The default group is used
+    ' for the main results view and the other groups appear in the "Results view" dropdown.
+    ' System-level groups (context specific) can be edited but not renamed or deleted.
+
+  .mb-4
+    = link_to "New code group", new_pathology_code_group_path, class: "btn btn-primary"
 
   table.code-groups-table
     thead
@@ -10,15 +14,18 @@
         th System name
         th Displayed title
         th= t("thead.description")
-        th.col-width-tiny Context specific
+        th.col-width-tiny Results
+        th.col-width-tiny System
 
     tbody
       - groups.each do |group|
         tr
           td.actions
-            - if policy(group).edit?
-              = link_to t("btn.view"), pathology_code_group_path(group)
+            = link_to t("btn.view"), pathology_code_group_path(group)
+            '
+            = link_to t("btn.edit"), edit_pathology_code_group_path(group)
           td= group.name
           td= group.title
           td= group.description
-          td = inline_check_icon(group.context_specific)
+          td= group.memberships.size
+          td= inline_check_icon(group.context_specific)

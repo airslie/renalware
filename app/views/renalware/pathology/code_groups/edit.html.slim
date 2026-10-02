@@ -1,8 +1,10 @@
-= within_new_admin_layout(title: "Pathology Code Group <code>#{group.name}</code>".html_safe) do
+= within_new_admin_layout(title: "Code group <code>#{group.name}</code>".html_safe) do
+  = render "form", group: group, url: pathology_code_group_path(group), draft_url: draft_pathology_code_group_path(group)
 
-  = simple_form_for(group,
-                    url: pathology_code_group_path(group),
-                    method: :patch,
-                    as: :code_group) do |f|
-    = f.input :description
-    = f.submit class: :button
+  - if group.persisted? && group.deletable?
+    .mt-6
+      = button_to "Delete code group",
+                  pathology_code_group_path(group),
+                  method: :delete,
+                  class: "btn btn-danger",
+                  data: { confirm: I18n.t("prompts.confirm_delete") }
