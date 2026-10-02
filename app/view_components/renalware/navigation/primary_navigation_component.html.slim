@@ -53,10 +53,12 @@ nav.rw-primary-nav(data-controller="primary-navigation"
               = unread_message_count
             li= link_to "Electronic CCs", main_app.unread_letters_electronic_receipts_path
             li.rw-primary-nav__submenu-separator
-              = link_to t("renalware.navigation.sign_out.log_out"),
-                        main_app.destroy_user_session_path,
+              = link_to main_app.destroy_user_session_path,
                         method: :delete,
-                        data: { action: "click->session#sendLogoutMessageToAnyOpenTabs" }
+                        class: "items-center",
+                        data: { action: "click->session#sendLogoutMessageToAnyOpenTabs" } do
+                = inline_icon(:logout, size: :md, aria: { hidden: true }, focusable: false)
+                span= t("renalware.navigation.sign_out.log_out")
 
         - primary_menu_groups.each do |group|
           li.rw-primary-nav__item
