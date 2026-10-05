@@ -1,21 +1,20 @@
 = within_patient_layout(title: "Archived Pathology Results",
                         navigation_partial: "renalware/pathology/navigation") do
 
-  - if table.rows.empty?
-    p No results available for this patient.
+  = turbo_frame_tag "path" do
+    = render Renalware::SpinnerComponent.new do |spinner|
+      = spinner.with_pre_content do
+        = render "renalware/pathology/turbo_code_group_filter",
+                 patient: patient,
+                 filter_form: filter_form,
+                 url: patient_pathology_recent_observations_path(patient)
+      = spinner.with_main_content do
+        - if table.rows.empty?
+          p No results available for this patient in the selected code group.
+        - else
+          p.hint
+            | Hover over row header for investigation name.
 
-  - else
-    p.hint
-      | Hover over row header for investigation name.
-
-    = turbo_frame_tag "path" do
-      = render Renalware::SpinnerComponent.new do |spinner|
-        = spinner.with_pre_content do
-          = render "renalware/pathology/turbo_code_group_filter",
-                   patient: patient,
-                   filter_form: filter_form,
-                   url: patient_pathology_recent_observations_path(patient)
-        = spinner.with_main_content do
           .overflow-auto.pathology data-controller="add-top-horizontal-scrollbar"
             = render "table", table: table, patient: patient
 
