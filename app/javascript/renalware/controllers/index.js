@@ -19,6 +19,7 @@ import SimpleToggleController from "./simple_toggle_controller"
 import ShowOnSelectedController from "./show_on_selected_controller"
 import TabsController from "./tabs_controller"
 import PDPetChartsController from "./pd/pet_charts_controller"
+import PDBagDaysController from "./pd/bag_days_controller"
 import CollapsibleController from "./collapsible_controller"
 import DependentSelectController from "./dependent_select_controller"
 import PatientAttachmentsController from "./patients/attachments_controller"
@@ -29,6 +30,8 @@ import PrimaryCarePhysicianAddressController from "./patients/primary_care_physi
 import SortableController from "./sortable_controller"
 import SelectController from "./select_controller"
 import SelectResetController from "./select_reset_controller"
+import ComorbiditiesController from "./comorbidities_controller"
+import RenalProfileAddressController from "./renal/profile_address_controller"
 import ConditionalDisplayController from "./conditional_display_controller"
 import SlimselectController from "./slimselect_controller"
 import SlimselectAjaxController from "./slimselect_ajax_controller"
@@ -37,6 +40,7 @@ import FormController from "./form_controller"
 import AlternativeFormSubmitterController from "./alternative_form_submitter_controller"
 import FlashController from "./flash_controller"
 import FlatpickrController from "./flatpickr_controller"
+import DateShortcutsController from "./date_shortcuts_controller"
 import InputValueAlerterController from "./input_value_alerter_controller"
 import SelectUpdateFrameController from "./select_update_frame_controller"
 import AddTopHorizontalScrollbarController from "./add_top_horizontal_scrollbar_controller"
@@ -78,6 +82,7 @@ application.register("simple-toggle", SimpleToggleController)
 application.register("show-on-selected", ShowOnSelectedController)
 application.register("tabs", TabsController)
 application.register("pd-pet-chart", PDPetChartsController)
+application.register("pd-bag-days", PDBagDaysController)
 application.register("collapsible", CollapsibleController)
 application.register("dependent-select", DependentSelectController)
 application.register("patient-attachments", PatientAttachmentsController)
@@ -91,6 +96,8 @@ application.register(
 application.register("sortable", SortableController)
 application.register("select", SelectController)
 application.register("select-reset", SelectResetController)
+application.register("comorbidities", ComorbiditiesController)
+application.register("renal-profile-address", RenalProfileAddressController)
 application.register("conditional-display", ConditionalDisplayController)
 application.register("slimselect", SlimselectController)
 application.register("slimselect-ajax", SlimselectAjaxController)
@@ -102,6 +109,7 @@ application.register(
 )
 application.register("flash", FlashController)
 application.register("flatpickr", FlatpickrController)
+application.register("date-shortcuts", DateShortcutsController)
 application.register("input-value-alerter", InputValueAlerterController)
 application.register("select-update-frame", SelectUpdateFrameController)
 application.register(

@@ -64,11 +64,20 @@ const browserGlobals = Object.fromEntries(
 
 module.exports = defineConfig([
   globalIgnores([
+    "app/assets/builds/**/*",
     "app/assets/javascripts/**/*",
     "vendor/assets/javascripts/**/*",
     "**/*{.,-}min.js",
     "coverage/**/*"
   ]),
+  {
+    files: ["documentation/src/**/*.{js,jsx}"],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: { jsx: true }
+      }
+    }
+  },
   {
     files: ["app/javascript/**/*.js"],
     languageOptions: {

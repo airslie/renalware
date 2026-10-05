@@ -33,15 +33,16 @@
       = rb.input :capd_overnight_bag,
                  as: :inline_radio_buttons
 
-.row.bag-days
+.row.bag-days(data-controller="pd-bag-days")
   .large-12.columns class="#{highlight_days_invalid(rb.object)}"
     .title
       label Days to be administered:
-      a.deselect-bag-days(href="#") Deselect all
+      a(href="#" data-action="pd-bag-days#deselectAll") Deselect all
     div
       - Date::DAYNAME_SYMBOLS.each do |day|
         = rb.input day,
                    as: :boolean,
                    boolean_style: :inline,
                    wrapper: false,
+                   input_html: { data: { pd_bag_days_target: "day" } },
                    label_html: { class: "nested" }

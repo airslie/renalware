@@ -1,4 +1,45 @@
 describe "Renal Profile", :js do
+  it "sets legacy comorbidities to No and smoking to Non without changing diagnosis years" do
+    allow(Renalware.config).to receive(:use_rolling_comorbidities).and_return(false)
+    user = login_as_clinical
+    patient = create(:renal_patient, by: user)
+    patient.create_profile!
+
+    visit patient_renal_profile_path(patient)
+    within ".page-actions" do
+      click_on t("btn.edit")
+    end
+    expect(page).to have_current_path(edit_patient_renal_profile_path(patient))
+
+    within ".year-dated-confirmation--ischaemic_heart_dis" do
+      choose "Yes"
+      select "1990"
+    end
+    find('input[type="radio"][value="current"]').choose
+
+    click_on "Set all comorbidities to No"
+
+    within "table.comorbidities" do
+      expect(page).to have_css('input[type="radio"][value="no"]:checked', count: 15)
+      expect(page).to have_css('input[type="radio"][value="non_smoker"]:checked', count: 1)
+    end
+    within ".year-dated-confirmation--ischaemic_heart_dis" do
+      expect(page).to have_select(selected: "1990")
+    end
+
+    within page.first(".form-actions") do
+      click_on t("btn.save")
+    end
+    expect(page).to have_current_path(patient_renal_profile_path(patient))
+
+    comorbidities = patient.reload.profile.document.comorbidities
+    expect(comorbidities.smoking.value).to eq("non_smoker")
+    expect(comorbidities.ischaemic_heart_dis.confirmed_on_year).to eq(1990)
+    (comorbidities.class.attributes_list - [:smoking]).each do |attribute|
+      expect(comorbidities.public_send(attribute).status).to eq("no")
+    end
+  end
+
   describe "GET #show" do
     it "updating the renal profile" do
       Renalware.config.use_rolling_comorbidities = false
@@ -61,14 +102,42 @@ describe "Renal Profile", :js do
     it "pulling in the patient's current address" do
       user = login_as_clinical
       patient = create(:renal_patient, by: user)
+      country = create(:algeria)
+      patient.current_address.update!(country:, postcode: "AB1 2CD", telephone: "01234567890")
+      profile = patient.create_profile!
+      address = profile.create_address_at_diagnosis!(street_1: "Old address")
 
-      visit edit_patient_renal_profile_path(patient)
+      visit patient_renal_profile_path(patient)
+      within ".page-actions" do
+        click_on t("btn.edit")
+      end
+      expect(page).to have_current_path(edit_patient_renal_profile_path(patient))
 
       within "#address_at_diagnosis" do
         fill_in "Line 1", with: "Somewhere"
         click_on "Use current address"
-        expect(find_field("Line 1").value).to eq("123 Legoland")
+        expect(page).to have_field("Line 1", with: "123 Legoland")
+        expect(page).to have_field("Postcode", with: "AB1 2CD")
+        expect(page).to have_field("Telephone", with: "01234567890")
+        expect(page).to have_select("Country", selected: country.name)
+
+        fill_in "Line 1", with: "Changed again"
+        click_on "Use current address"
+        expect(page).to have_field("Line 1", with: "123 Legoland")
       end
+
+      within page.first(".form-actions") do
+        click_on t("btn.save")
+      end
+      expect(page).to have_current_path(patient_renal_profile_path(patient))
+      expect(profile.reload.address_at_diagnosis).to have_attributes(
+        id: address.id,
+        street_1: "123 Legoland",
+        postcode: "AB1 2CD",
+        telephone: "01234567890",
+        country_id: country.id
+      )
+      expect(patient.current_address.reload.street_1).to eq("123 Legoland")
     end
   end
 end
