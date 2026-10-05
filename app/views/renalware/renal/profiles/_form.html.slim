@@ -53,6 +53,8 @@
             = link_to "Use current address",
                        "",
                        id: "use-current-address-for-address-at-diagnosis",
+                       data: { action: "renal-profile-address#copy" },
                        class: "button left"
           = a.input :id, as: :hidden
-          .form-content= render("renalware/addresses/form", a: a)
+          .form-content(data-renal-profile-address-target="destination")
+            = render("renalware/addresses/form", a: a)

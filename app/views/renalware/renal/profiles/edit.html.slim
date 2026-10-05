@@ -8,7 +8,7 @@
     = render "renalware/shared/errors", model: profile
 
   .row
-    .large-12.columns
+    .large-12.columns(data-controller="renal-profile-address")
       / This first form is a dummy one to hold address fields for the patient's current address.
       / If the user wants to overwrite or copy in the patient's current address, we use JS to
       / clone this hidden current address form and replace the actual address form fields
@@ -16,7 +16,8 @@
       #hidden-current-address-form(style="display:none")
         = simple_form_for profile, url: patient_renal_profile_path(patient) do |f|
           = f.simple_fields_for :address_at_diagnosis_attributes, patient.current_address do |add|
-            .form-content= render("renalware/addresses/form", a: add)
+            .form-content(data-renal-profile-address-target="source")
+              = render("renalware/addresses/form", a: add)
 
       = simple_form_for profile,
           url: patient_renal_profile_path(patient),

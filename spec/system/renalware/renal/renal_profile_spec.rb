@@ -102,14 +102,42 @@ describe "Renal Profile", :js do
     it "pulling in the patient's current address" do
       user = login_as_clinical
       patient = create(:renal_patient, by: user)
+      country = create(:algeria)
+      patient.current_address.update!(country:, postcode: "AB1 2CD", telephone: "01234567890")
+      profile = patient.create_profile!
+      address = profile.create_address_at_diagnosis!(street_1: "Old address")
 
-      visit edit_patient_renal_profile_path(patient)
+      visit patient_renal_profile_path(patient)
+      within ".page-actions" do
+        click_on t("btn.edit")
+      end
+      expect(page).to have_current_path(edit_patient_renal_profile_path(patient))
 
       within "#address_at_diagnosis" do
         fill_in "Line 1", with: "Somewhere"
         click_on "Use current address"
-        expect(find_field("Line 1").value).to eq("123 Legoland")
+        expect(page).to have_field("Line 1", with: "123 Legoland")
+        expect(page).to have_field("Postcode", with: "AB1 2CD")
+        expect(page).to have_field("Telephone", with: "01234567890")
+        expect(page).to have_select("Country", selected: country.name)
+
+        fill_in "Line 1", with: "Changed again"
+        click_on "Use current address"
+        expect(page).to have_field("Line 1", with: "123 Legoland")
       end
+
+      within page.first(".form-actions") do
+        click_on t("btn.save")
+      end
+      expect(page).to have_current_path(patient_renal_profile_path(patient))
+      expect(profile.reload.address_at_diagnosis).to have_attributes(
+        id: address.id,
+        street_1: "123 Legoland",
+        postcode: "AB1 2CD",
+        telephone: "01234567890",
+        country_id: country.id
+      )
+      expect(patient.current_address.reload.street_1).to eq("123 Legoland")
     end
   end
 end

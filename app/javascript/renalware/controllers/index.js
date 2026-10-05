@@ -30,6 +30,7 @@ import SortableController from "./sortable_controller"
 import SelectController from "./select_controller"
 import SelectResetController from "./select_reset_controller"
 import ComorbiditiesController from "./comorbidities_controller"
+import RenalProfileAddressController from "./renal/profile_address_controller"
 import ConditionalDisplayController from "./conditional_display_controller"
 import SlimselectController from "./slimselect_controller"
 import SlimselectAjaxController from "./slimselect_ajax_controller"
@@ -93,6 +94,7 @@ application.register("sortable", SortableController)
 application.register("select", SelectController)
 application.register("select-reset", SelectResetController)
 application.register("comorbidities", ComorbiditiesController)
+application.register("renal-profile-address", RenalProfileAddressController)
 application.register("conditional-display", ConditionalDisplayController)
 application.register("slimselect", SlimselectController)
 application.register("slimselect-ajax", SlimselectAjaxController)
