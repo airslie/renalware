@@ -8,6 +8,10 @@
     @apply px-3 py-1 font-normal;
   }
 
+  /* .btn:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-sky-700;
+  } */
+
   .btn-xs {
     @apply px-1 py-0 font-normal text-sm;
   }

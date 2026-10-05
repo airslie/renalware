@@ -23,6 +23,7 @@ export default class extends Controller {
     this.cleanup()
 
     this.search = this.search.bind(this)
+    const debouncedSearch = this.debouncePromise(this.search, 250)
     this.slimSelect = new SlimSelect({
       select: this.selectTarget,
       settings: {
@@ -35,8 +36,8 @@ export default class extends Controller {
         modal: "off"
       },
       events: {
-        search: this.debouncePromise(this.search, 250),
-        addable: (value) => this.buildFreeTextOption(value),
+        search: (term) => this.trackSearch(term, debouncedSearch),
+        addable: (value) => this.awaitingResults(value) ? false : this.buildFreeTextOption(value),
         afterChange: (newValue) => {
           this.updateSnomed(newValue[0])
         },
@@ -46,10 +47,28 @@ export default class extends Controller {
   }
 
   cleanup() {
+    this.searchRequest = null
     if (!this.slimSelect) return
 
     this.slimSelect.destroy()
     delete this.slimSelect
+  }
+
+  trackSearch(term, performSearch) {
+    const request = { term, pending: true }
+    this.searchRequest = request
+    const promise = performSearch(term)
+    const settled = () => {
+      if (this.searchRequest === request) request.pending = false
+    }
+    promise.then(settled, settled)
+    return promise
+  }
+
+  awaitingResults(value) {
+    // Also cover SlimSelect's input debounce, before its search callback runs.
+    return value.length >= 3 &&
+      (this.searchRequest?.term !== value || this.searchRequest.pending)
   }
 
   search(searchTerm) {
@@ -200,6 +219,7 @@ export default class extends Controller {
   }
 
   resetSearchState() {
+    this.searchRequest = null
     this.resetOptions()
     this.slimSelect?.setSelected("")
     this.slimSelect?.search("")
