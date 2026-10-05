@@ -13,11 +13,12 @@ ruby:
                        name: "comorbidities" } do
 
       = fd.simple_fields_for :comorbidities, fd.object.comorbidities do |fcm|
-        = link_to "Set all comorbidities to No", "#",
-                  class: "set_all_comorbidities_to_no"
-        table.comorbidities
-          - fcm.object.class.attributes_list.each do |attribute|
-            = render_input fcm, attribute
+        div(data-controller="comorbidities")
+          = link_to "Set all comorbidities to No", "#",
+                    data: { action: "comorbidities#setAllToNo" }
+          table.comorbidities
+            - fcm.object.class.attributes_list.each do |attribute|
+              = render_input fcm, attribute
 
     = render layout: "renalware/shared/fieldset",
              locals: { legend: "Virology/Bacteriology/Cytology",

@@ -1,4 +1,45 @@
 describe "Renal Profile", :js do
+  it "sets legacy comorbidities to No and smoking to Non without changing diagnosis years" do
+    allow(Renalware.config).to receive(:use_rolling_comorbidities).and_return(false)
+    user = login_as_clinical
+    patient = create(:renal_patient, by: user)
+    patient.create_profile!
+
+    visit patient_renal_profile_path(patient)
+    within ".page-actions" do
+      click_on t("btn.edit")
+    end
+    expect(page).to have_current_path(edit_patient_renal_profile_path(patient))
+
+    within ".year-dated-confirmation--ischaemic_heart_dis" do
+      choose "Yes"
+      select "1990"
+    end
+    find('input[type="radio"][value="current"]').choose
+
+    click_on "Set all comorbidities to No"
+
+    within "table.comorbidities" do
+      expect(page).to have_css('input[type="radio"][value="no"]:checked', count: 15)
+      expect(page).to have_css('input[type="radio"][value="non_smoker"]:checked', count: 1)
+    end
+    within ".year-dated-confirmation--ischaemic_heart_dis" do
+      expect(page).to have_select(selected: "1990")
+    end
+
+    within page.first(".form-actions") do
+      click_on t("btn.save")
+    end
+    expect(page).to have_current_path(patient_renal_profile_path(patient))
+
+    comorbidities = patient.reload.profile.document.comorbidities
+    expect(comorbidities.smoking.value).to eq("non_smoker")
+    expect(comorbidities.ischaemic_heart_dis.confirmed_on_year).to eq(1990)
+    (comorbidities.class.attributes_list - [:smoking]).each do |attribute|
+      expect(comorbidities.public_send(attribute).status).to eq("no")
+    end
+  end
+
   describe "GET #show" do
     it "updating the renal profile" do
       Renalware.config.use_rolling_comorbidities = false

@@ -32,10 +32,12 @@
         = render layout: "renalware/shared/fieldset",
             locals: { legend: "Comorbidities", name: "comorbidities" } do
           = fd.simple_fields_for :comorbidities, fd.object.comorbidities do |fcm|
-            = link_to "Set all comorbidities to No", "#", class: "set_all_comorbidities_to_no"
-            table.comorbidities.align-centre
-              - fcm.object.class.attributes_list.each do |attribute|
-                = render_input fcm, attribute
+            div(data-controller="comorbidities")
+              = link_to "Set all comorbidities to No", "#",
+                        data: { action: "comorbidities#setAllToNo" }
+              table.comorbidities.align-centre
+                - fcm.object.class.attributes_list.each do |attribute|
+                  = render_input fcm, attribute
 
     - f.object.build_address_at_diagnosis if f.object.address_at_diagnosis.blank?
     - label = "Address at ESRF Date"

@@ -1,25 +1,22 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Set all select inputs options within the controller's element to selected if their
-// value = matchValue (eg "no" in the case of tristate Yes No Unknown dropdown.)
+// Set targeted selects to matchValue (eg "no" for Yes/No/Unknown dropdowns).
 // Example usage:
 // div(data-controller="select-reset" data-select-reset-match-value="no")
-//   <select>
+//   <select data-select-reset-target="select">
 //     <option value="no">No</option
 //     <option value="yes">Yes</option
 //     <option value="unknown">Unknown</option
 //   ...
 
 export default class extends Controller {
+  static targets = ["select"]
   static values = { match: String }
 
   reset_all(event) {
-    const that = this
-    const selectInputs = Array.prototype.slice.call(
-      this.element.querySelectorAll("select")
-    )
-    selectInputs.forEach(function(a){
-      a.value = that.matchValue
+    event.preventDefault()
+    this.selectTargets.forEach((select) => {
+      select.value = this.matchValue
     })
   }
 }

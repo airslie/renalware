@@ -2,14 +2,6 @@ var Renalware = typeof Renalware === 'undefined' ? {} : Renalware;
 
 Renalware.Renal = (function () {
 
-  var setAllComorbidityOptionsToNo = function() {
-    $(document).on( "click", "a.set_all_comorbidities_to_no", function(e) {
-      e.preventDefault();
-      $(".comorbidities input[type=radio]").filter("[value=no],[value=non_smoker]")
-        .prop("checked", true);
-    });
-  };
-
   // If the user wants to overwrite or copy in the patient's current address, clone this
   // from a hidden form and use it to replace the existing visible address form.
   var wireUpUseCurrentAddressButton = function() {
@@ -25,7 +17,6 @@ Renalware.Renal = (function () {
 
   return {
     init : function() {
-      setAllComorbidityOptionsToNo();
       wireUpUseCurrentAddressButton();
     }
   }

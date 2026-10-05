@@ -70,6 +70,45 @@ describe "Managing a patient's comorbidities", :js do
   end
 
   describe "editing comorbidities" do
+    it "sets all recognised dropdowns to No without changing other details" do
+      user = login_as_clinical
+      patient = create(:patient, by: user)
+      malignancy_site = Renalware::Problems::MalignancySite.create!(description: "Neck")
+      malignancy = create(:comorbidity_description, name: "Malignancy", has_malignancy_site: true)
+      diabetes = create(:comorbidity_description, name: "Diabetes", has_diabetes_type: true)
+      other = create(:comorbidity_description, name: "Other")
+
+      visit edit_patient_comorbidities_path(patient)
+
+      within("##{dom_id(malignancy)}") do
+        select "Yes", from: "Malignancy"
+        find("select[name$='[malignancy_site_id]']").select("Neck")
+        find(".flatpickr-input").set("01-01-2001")
+      end
+      within("##{dom_id(diabetes)}") do
+        select "No", from: "Diabetes"
+        select "TYPE1", from: "Type"
+      end
+      within("##{dom_id(other)}") do
+        expect(page).to have_select("Other", selected: "Unknown")
+      end
+
+      click_on "Set all to No"
+
+      [malignancy, diabetes, other].each do |description|
+        within("##{dom_id(description)}") do
+          expect(page).to have_select(description.name, selected: "No")
+        end
+      end
+      within("##{dom_id(malignancy)}") do
+        expect(find("select[name$='[malignancy_site_id]']").value).to eq(malignancy_site.id.to_s)
+        expect(find(".flatpickr-input").value).to eq("01-Jan-2001")
+      end
+      within("##{dom_id(diabetes)}") do
+        expect(page).to have_select("Type", selected: "TYPE1")
+      end
+    end
+
     it do
       user = login_as_clinical
       patient = create(:patient, by: user)
