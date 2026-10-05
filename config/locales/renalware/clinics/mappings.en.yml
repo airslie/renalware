@@ -1,0 +1,10 @@
+---
+en:
+  renalware:
+    clinics:
+      mappings:
+        form:
+          default_clinic_hint: Use this clinic for previously unseen feed names. Clear the existing default before choosing another.
+        index:
+          delete_confirmation: Delete this clinic mapping? Future messages may recreate it using the default clinic.
+          delete_default_confirmation: Delete this default clinic mapping? This also removes the fallback clinic for previously unseen feed names. Future messages may recreate this mapping without a clinic assigned.

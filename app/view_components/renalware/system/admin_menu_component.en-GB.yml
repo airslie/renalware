@@ -14,8 +14,9 @@ en-GB:
           access_configuration:
             title: Configuration
             items:
-              event_types: Event Types
               clinics: Clinics
+              clinic_mappings: Clinic Mappings
+              event_types: Event Types
               consultants: Consultants
               drugs: Drugs
               patient_group_directions: PGDs

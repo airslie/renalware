@@ -12,7 +12,7 @@ module Renalware
         on: %i(create update destroy)
       )
 
-      validates :name_in_feed, presence: true, uniqueness: true
+      validates :name_in_feed, presence: true, uniqueness: { case_sensitive: false }
       validates :default_clinic, uniqueness: { scope: :default_clinic, if: :default_clinic? }
       belongs_to :clinic, class_name: "Renalware::Clinics::Clinic"
 
@@ -22,9 +22,19 @@ module Renalware
       def self.clinic_for(hl7_clinic_name)
         return nil if hl7_clinic_name.nil?
 
-        find_or_create_by!(name_in_feed: hl7_clinic_name) do |c|
-          c.clinic_id = default_clinic_id
-        end&.clinic
+        matching = where("lower(name_in_feed) = lower(?)", hl7_clinic_name)
+        mapping = matching.first
+        return mapping.clinic if mapping
+
+        # Roll back a conflicting insert to a savepoint before retrying the lookup.
+        transaction(requires_new: true) do
+          create!(name_in_feed: hl7_clinic_name, clinic_id: default_clinic_id)
+        end.clinic
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
+        mapping = matching.first
+        raise unless mapping
+
+        mapping.clinic
       end
 
       def self.default_clinic_id = where(default_clinic: true).pick(:clinic_id)

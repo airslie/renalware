@@ -9,11 +9,23 @@
 - Prefer incremental vertical-slice migrations over broad rewrites.
 - Prioritize replacing simple event handling, DOM toggling, AJAX form flows, and modal lifecycle glue before attempting plugin-heavy or cross-cutting rewrites.
 
-## Verification
+## Required verification before completion
 
-- After making code changes, run `bundle exec rubocop` on the touched files where feasible.
-- Fix any RuboCop offenses introduced by the change before finishing.
-- If RuboCop cannot be run or a clean result is blocked by pre-existing offenses outside the change, report that clearly in the final response.
+After making code changes, run both commands from the repository root:
+
+- `bundle exec rubocop`
+- `bin/yarn eslint app/javascript --max-warnings=0`
+
+Run both even when only Ruby, JavaScript, or templates changed.
+Wait for both commands to finish and inspect their exit statuses.
+After fixing lint failures, rerun the affected checks.
+
+Do not weaken lint configuration or add suppressions merely to pass.
+Fix violations introduced by the task. Report unrelated existing failures.
+
+The final response must report RuboCop and ESLint separately as:
+PASS, FAIL, or NOT RUN, with a reason for any failure or omission.
+Do not describe the work as fully verified unless both checks pass.
 
 ## Default Codex Workflow
 
@@ -23,5 +35,5 @@
 - Do not introduce new jQuery. When touching jQuery-powered behavior, migrate the local slice to Stimulus, Turbo, or plain DOM APIs if low risk.
 - Add or update focused tests when the change affects behavior.
 - Prioritize authorization, query performance, Turbo/Stimulus regressions, and missing tests.
-- Run RuboCop on touched files where feasible and fix offenses introduced by the change.
+- Complete the required verification above.
 - Summarize the change, verification performed, and any residual risk.

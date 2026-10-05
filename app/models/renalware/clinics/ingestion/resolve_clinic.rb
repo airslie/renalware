@@ -12,6 +12,7 @@ module Renalware::Clinics
       #   we look for a clinic with a matching code, return nil if none found.
       #   this is useful we have a firehose of clinic appointments that have not been
       #   pre-filtered by Renal specialty.
+      #
       # :by_name_mapping
       #   look up a row in Renalware::Clinics::Mapping with a
       #   name_in_feed matching the HL7 PV1-3 and return the mapped clinic_id, the default clinic

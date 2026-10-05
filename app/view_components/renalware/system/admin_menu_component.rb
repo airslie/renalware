@@ -4,7 +4,7 @@ module Renalware
       include Renalware::IconHelper
       include Renalware::UsersHelper
 
-      MenuItem = Data.define(:title, :path, :controller_pattern, :keywords, :icon)
+      MenuItem = Data.define(:title, :path, :controller_pattern, :keywords, :icon, :sort_key)
       MenuSection = Data.define(:key, :title, :items)
       I18N_SCOPE = "renalware.system.admin_menu_component".freeze
       MENU_CONFIG = YAML.safe_load_file(
@@ -28,7 +28,7 @@ module Renalware
           key = definition.fetch(:key)
           i18n_scope = "#{I18N_SCOPE}.sections.#{key}"
           items = build_items(definition.fetch(:items), i18n_scope: "#{i18n_scope}.items")
-          items.sort_by! { |item| item.title.downcase }
+          items.sort_by! { |item| (item.sort_key || item.title).downcase }
 
           title = translate_menu_label(i18n_scope, :title)
           MenuSection.new(key:, title:, items:) if items.any?
@@ -68,7 +68,8 @@ module Renalware
           path: resolve_route(definition),
           controller_pattern: Regexp.new(definition.fetch(:controller)),
           keywords: Array(definition[:keywords]),
-          icon: definition[:icon]
+          icon: definition[:icon],
+          sort_key: definition[:sort_key]
         )
       end
 

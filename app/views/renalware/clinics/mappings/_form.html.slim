@@ -1,0 +1,8 @@
+= simple_form_for(mapping, as: :mapping, url: url) do |f|
+  = f.input :name_in_feed, label: "Clinic name in feed"
+  = f.association :clinic, collection: Renalware::Clinics::Clinic.order(:name),
+                  label: "Renalware clinic", include_blank: "Unmapped"
+  = f.input :default_clinic, label: "Default clinic",
+            hint: t("renalware.clinics.mappings.form.default_clinic_hint")
+  = f.submit class: :button
+  = link_to "Cancel", clinic_mappings_path
