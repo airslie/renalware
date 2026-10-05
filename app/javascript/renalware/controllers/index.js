@@ -40,6 +40,7 @@ import FormController from "./form_controller"
 import AlternativeFormSubmitterController from "./alternative_form_submitter_controller"
 import FlashController from "./flash_controller"
 import FlatpickrController from "./flatpickr_controller"
+import DateShortcutsController from "./date_shortcuts_controller"
 import InputValueAlerterController from "./input_value_alerter_controller"
 import SelectUpdateFrameController from "./select_update_frame_controller"
 import AddTopHorizontalScrollbarController from "./add_top_horizontal_scrollbar_controller"
@@ -108,6 +109,7 @@ application.register(
 )
 application.register("flash", FlashController)
 application.register("flatpickr", FlatpickrController)
+application.register("date-shortcuts", DateShortcutsController)
 application.register("input-value-alerter", InputValueAlerterController)
 application.register("select-update-frame", SelectUpdateFrameController)
 application.register(

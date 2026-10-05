@@ -34,12 +34,13 @@ scss:
 
           // This div shows the datepicker when the user has selected the Specific Date option
           // in the date range select above
-          #specific-date.w-auto.relative(class="#{form.show_specific_date_input? ? '' : 'hidden'}")
-            = f.input :date, as: :flatpickr
+          #specific-date.w-auto.relative(class="#{form.show_specific_date_input? ? '' : 'hidden'}" data-controller="date-shortcuts")
+            = f.input :date, as: :flatpickr,
+                      input_html: { data: { date_shortcuts_target: "input" } }
             .link_to_right_of_input_label
-              a.set_filter_date_to_today(href="") Today
+              a(href="#" data-action="date-shortcuts#today") Today
               | &nbsp;|&nbsp;
-              a.set_filter_date_to_any_date(href="") Clear
+              a(href="#" data-action="date-shortcuts#clear") Clear
 
     .row
       .columns.medium-2
