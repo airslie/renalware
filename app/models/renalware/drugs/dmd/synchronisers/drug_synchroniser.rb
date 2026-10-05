@@ -29,7 +29,9 @@ module Renalware
 
           return if upserts.empty?
 
-          Drugs::Drug.upsert_all(upserts, unique_by: :code)
+          # Remove Paranoia's default scope so it cannot add deleted_at: nil to the upsert
+          # and restore existing soft-deleted drugs.
+          Drugs::Drug.with_deleted.upsert_all(upserts, unique_by: :code)
         end
       end
     end

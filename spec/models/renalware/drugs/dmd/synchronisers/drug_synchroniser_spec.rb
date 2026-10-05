@@ -65,6 +65,24 @@ module Renalware
               expect(drug.inactive).to be true
             end
           end
+
+          context "when entry with same code has been soft-deleted" do
+            it "updates the drug without restoring it or changing its deletion timestamp" do
+              drug = create(:drug, code: "code", name: "Some other name", inactive: false)
+              drug.destroy!
+              deleted_at = Drug.with_deleted.find(drug.id).deleted_at
+
+              2.times { instance.call }
+
+              expect(Drug.where(code: "code")).not_to exist
+              expect(Drug.with_deleted.where(code: "code").count).to eq 1
+
+              drug = Drug.with_deleted.find(drug.id)
+              expect(drug.deleted_at).to eq deleted_at
+              expect(drug.name).to eq "name"
+              expect(drug.inactive).to be true
+            end
+          end
         end
       end
     end
