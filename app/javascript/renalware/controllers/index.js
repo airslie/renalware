@@ -19,6 +19,7 @@ import SimpleToggleController from "./simple_toggle_controller"
 import ShowOnSelectedController from "./show_on_selected_controller"
 import TabsController from "./tabs_controller"
 import PDPetChartsController from "./pd/pet_charts_controller"
+import PDBagDaysController from "./pd/bag_days_controller"
 import CollapsibleController from "./collapsible_controller"
 import DependentSelectController from "./dependent_select_controller"
 import PatientAttachmentsController from "./patients/attachments_controller"
@@ -80,6 +81,7 @@ application.register("simple-toggle", SimpleToggleController)
 application.register("show-on-selected", ShowOnSelectedController)
 application.register("tabs", TabsController)
 application.register("pd-pet-chart", PDPetChartsController)
+application.register("pd-bag-days", PDBagDaysController)
 application.register("collapsible", CollapsibleController)
 application.register("dependent-select", DependentSelectController)
 application.register("patient-attachments", PatientAttachmentsController)

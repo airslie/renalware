@@ -4,15 +4,6 @@ var Renalware = typeof Renalware === 'undefined' ? {} : Renalware;
 // Define the Renalware.PdRegimes closure.
 Renalware.PdRegimes = (function () {
   // private functions and vars here
-  var deselectAllBagDays = function() {
-    $(document).on( "click", "a.deselect-bag-days", function(event) {
-      event.preventDefault();
-      var parent = $(this).closest(".bag-days");
-      var checkboxes = $(parent).find("input[type='checkbox']");
-      checkboxes.prop('checked', false);
-    });
-  };
-
   var duplicateBag = function() {
     $(document).on( "click", "#pd-regime-bags a.duplicate-bag", function(event) {
       event.preventDefault();
@@ -37,7 +28,6 @@ Renalware.PdRegimes = (function () {
   // public functions and vars here
   return {
     init : function() {
-      deselectAllBagDays();
       duplicateBag();
     },
     toggleAddRemoveBags : function () {
