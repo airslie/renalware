@@ -7,6 +7,11 @@ module Renalware
     # name that we don't recognise.
     # We enforce that there can only be one default clinic.
     class Mapping < ApplicationRecord
+      has_paper_trail(
+        versions: { class_name: "Renalware::Clinics::Version" },
+        on: %i(create update destroy)
+      )
+
       validates :name_in_feed, presence: true, uniqueness: true
       validates :default_clinic, uniqueness: { scope: :default_clinic, if: :default_clinic? }
       belongs_to :clinic, class_name: "Renalware::Clinics::Clinic"

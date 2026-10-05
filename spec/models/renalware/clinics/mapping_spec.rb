@@ -1,5 +1,7 @@
 module Renalware::Clinics
   describe Mapping do
+    it { is_expected.to be_versioned }
+
     it :aggregate_failures do
       is_expected.to validate_presence_of(:name_in_feed)
       is_expected.to belong_to(:clinic).class_name("Renalware::Clinics::Clinic")
