@@ -19,13 +19,19 @@ sections:
 
   - key: access_configuration
     items:
+      - key: clinics
+        route: clinics_path
+        controller: clinics/clinics
+      - key: clinic_mappings
+        sort_key: Clinics / Mappings
+        route: clinic_mappings_path
+        controller: clinics/mappings
+        access: super_admin
+        keywords: [HL7, feeds, Cerner, Oracle]
       - key: event_types
         route: events_types_path
         controller: events/types
         access: super_admin
-      - key: clinics
-        route: clinics_path
-        controller: clinics/clinics
       - key: consultants
         route: consultants_path
         controller: clinics/consultants

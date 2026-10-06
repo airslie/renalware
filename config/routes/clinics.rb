@@ -11,3 +11,5 @@ resources :appointments, controller: "clinics/appointments", only: %i(new create
 resources :clinic_visits, only: :index, controller: "clinics/visits"
 resources :clinics, controller: "clinics/clinics"
 resources :consultants, controller: "clinics/consultants"
+
+resources :clinic_mappings, controller: "clinics/mappings", except: :show

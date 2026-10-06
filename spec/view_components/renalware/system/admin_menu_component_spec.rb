@@ -21,6 +21,8 @@ describe Renalware::System::AdminMenuComponent, type: :component do
       expect(page).to have_link("Transmission Logs", visible: :all)
       expect(page).to have_link("Logs", exact: true, visible: :all)
       expect(page).to have_link("API Logs", visible: :all)
+      expect(page.find(".access-configuration", visible: :all))
+        .to have_link("Clinic Mappings", href: clinic_mappings_path, visible: :all)
       expect(page).to have_link("UKRDC Logs", visible: :all)
     end
 
@@ -39,6 +41,14 @@ describe Renalware::System::AdminMenuComponent, type: :component do
       expect(page).to have_link("User Groups", visible: :all)
     end
 
+    it "places Clinic Mappings immediately after Clinics in Configuration" do
+      render_inline(described_class.new(current_user: create(:user, :super_admin)))
+
+      links = page.all(".access-configuration a", visible: :all).map(&:text)
+      expect(links[links.index("Clinics") + 1]).to eq("Clinic Mappings")
+      expect(page).to have_no_css(".clinics", visible: :all)
+    end
+
     it "prefixes Dashboard with a decorative icon" do
       render_inline(described_class.new(current_user: create(:user, :super_admin)))
 
@@ -48,7 +58,7 @@ describe Renalware::System::AdminMenuComponent, type: :component do
       expect(dashboard_link.text(normalize_ws: true)).to eq("Dashboard")
     end
 
-    it "orders items within each section by their translated name" do
+    it "orders items within each section by their sort key or translated name" do
       component = described_class.new(current_user: create(:user, :super_admin))
       render_inline(component)
 
@@ -117,6 +127,7 @@ describe Renalware::System::AdminMenuComponent, type: :component do
       expect(page).to have_no_link("API Logs", visible: :all)
       expect(page).to have_no_link("UKRDC Logs", visible: :all)
       expect(page).to have_no_link("User Groups", visible: :all)
+      expect(page).to have_no_link("Clinic Mappings", visible: :all)
     end
   end
 
@@ -148,7 +159,7 @@ describe Renalware::System::AdminMenuComponent, type: :component do
 
   def unordered_section_titles(component)
     component.menu_sections.filter_map do |section|
-      titles = section.items.map(&:title)
+      titles = section.items.map { |item| item.sort_key || item.title }
       section.title unless titles == titles.sort_by(&:downcase)
     end
   end

@@ -1,0 +1,28 @@
+= content_for(:actions) do
+  = link_to t("btn.add"), new_clinic_mapping_path, class: "button"
+
+= within_new_admin_layout(title: "Clinic Mappings") do
+  = help_panel do
+    p Map the clinic name received in an HL7 message to a Renalware clinic when using the by_name_mapping resolution strategy.
+    p An unknown feed name is automatically mapped to the default clinic, if one is configured. Only one mapping can be the default. Blank clinics indicate unmapped feed names.
+
+  table
+    thead
+      tr
+        th.actions.col-width-small
+        th Clinic name in feed
+        th Renalware clinic
+        th Default clinic
+    tbody
+      - mappings.each do |mapping|
+        tr(id=dom_id(mapping))
+          td.actions
+            = link_to "Edit", edit_clinic_mapping_path(mapping)
+            - confirmation_key = mapping.default_clinic? ? :delete_default_confirmation : :delete_confirmation
+            = link_to "Delete", clinic_mapping_path(mapping), method: :delete,
+                      data: { confirm: t(confirmation_key, scope: "renalware.clinics.mappings.index") }
+          td= mapping.name_in_feed
+          td= mapping.clinic&.name || "Unmapped"
+          td= mapping.default_clinic? ? "Yes" : "No"
+
+  = paginate mappings
