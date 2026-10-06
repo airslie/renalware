@@ -6,6 +6,11 @@ module Renalware
 
       acts_as_paranoid
 
+      has_paper_trail(
+        versions: { class_name: "Renalware::Clinics::Version" },
+        on: %i(create update destroy)
+      )
+
       # The dependent option is not really compatible with acts_as_paranoid
       has_many :clinic_visits
       has_many :appointments
