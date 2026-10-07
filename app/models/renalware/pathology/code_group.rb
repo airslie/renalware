@@ -32,8 +32,15 @@ module Renalware
         on: [:create, :update, :destroy]
       )
 
+      COLOURS = %w(
+        slate gray zinc neutral stone red orange amber yellow lime green emerald teal cyan sky
+        blue indigo violet purple fuchsia pink rose
+      ).freeze
+
       validates :name, presence: true, uniqueness: true
       validates :description, presence: true
+      validates :title, presence: true, on: :design
+      validate :subgroup_colours_are_known
       has_many(
         :memberships,
         -> { ordered },
@@ -42,6 +49,10 @@ module Renalware
       )
       has_many :observation_descriptions, through: :memberships
 
+      accepts_nested_attributes_for :memberships, allow_destroy: true
+
+      before_validation :normalise_subgroups_and_positions
+
       def self.descriptions_for_group(name)
         group = CodeGroup.find_by(name: name)
         return [] if group.nil?
@@ -49,6 +60,67 @@ module Renalware
         group
           .observation_descriptions
           .order(subgroup: :asc, position_within_subgroup: :asc)
+      end
+
+      def subgroup_count(members = active_memberships)
+        [
+          Array(subgroup_titles).size,
+          Array(subgroup_colours).size,
+          members.filter_map(&:subgroup).max.to_i,
+          1
+        ].max
+      end
+
+      def active_memberships
+        memberships.reject(&:marked_for_destruction?)
+      end
+
+      def deletable? = !context_specific? && name != "default"
+
+      def subgroup_title(number) = Array(subgroup_titles)[number - 1]
+
+      def subgroup_colour(number) = Array(subgroup_colours)[number - 1]
+
+      def pad_subgroups(members = active_memberships)
+        count = subgroup_count(members)
+        self.subgroup_titles = padded(subgroup_titles, "", count)
+        self.subgroup_colours = padded(subgroup_colours, nil, count)
+      end
+
+      private
+
+      def subgroup_colours_are_known
+        unknown = Array(subgroup_colours).compact_blank - COLOURS
+        if unknown.any?
+          errors.add(:subgroup_colours,
+                     "include unknown colours: #{unknown.join(', ')}")
+        end
+      end
+
+      # Must not load the memberships association: doing so when a group is first saved would
+      # cache an empty list and hide memberships created afterwards.
+      def normalise_subgroups_and_positions
+        members = in_memory_memberships
+        pad_subgroups(members)
+        self.subgroup_colours = subgroup_colours.map(&:presence)
+        renumber_positions(members)
+      end
+
+      def in_memory_memberships
+        (memberships.loaded? ? memberships.to_a : memberships.target)
+          .reject(&:marked_for_destruction?)
+      end
+
+      def padded(values, filler, count)
+        Array(values).fill(filler, Array(values).size...count)
+      end
+
+      def renumber_positions(members)
+        members.group_by(&:subgroup).each_value do |siblings|
+          by_position = siblings.each_with_index
+            .sort_by { |m, i| [m.position_within_subgroup.to_i, i] }
+          by_position.each_with_index { |(m, _), i| m.position_within_subgroup = i + 1 }
+        end
       end
     end
   end

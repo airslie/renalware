@@ -32,7 +32,10 @@ end
 
 namespace :pathology do
   resources :labs
-  resources :code_groups
+  resources :code_groups do
+    collection { match :draft, via: %i(post patch) }
+    member { match :draft, via: %i(post patch) }
+  end
   resources :observation_descriptions, except: :destroy
   namespace :requests do
     # NOTE: This needs to be POST since the params may exceed url char limit in GET

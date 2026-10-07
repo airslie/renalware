@@ -1,0 +1,93 @@
+- rows = group.memberships.each_with_index.reject { |membership, _| membership.marked_for_destruction? }
+- rows_by_subgroup = rows.sort_by { |membership, _| [membership.subgroup, membership.position_within_subgroup] }.group_by { |membership, _| membership.subgroup }
+- already_chosen = rows.map { |membership, _| membership.observation_description_id }
+- available = Renalware::Pathology::ObservationDescription.where.not(id: already_chosen).order(:code).pluck(:code, :name, :id)
+
+= simple_form_for(group,
+                  as: :code_group,
+                  url: url,
+                  authenticity_token: form_authenticity_token,
+                  method: group.persisted? ? :patch : :post,
+                  html: { data: { controller: "code-group-editor",
+                                  code_group_editor_draft_url_value: draft_url,
+                                  action: "input->code-group-editor#queuePreview change->code-group-editor#queuePreview" } }) do |f|
+  button.hidden(type="submit" tabindex="-1" aria-hidden="true") Submit form
+  = f.error_notification message: "Please review the problems below"
+  - if group.errors[:subgroup_colours].any?
+    p.text-red-600= group.errors[:subgroup_colours].to_sentence
+
+  .flex.flex-wrap.gap-6
+    .w-full.lg:w-1/3.max-w-lg
+      = f.input :name, disabled: group.persisted?, hint: "Used by the system to find the group, locked once created"
+      = f.input :title, hint: "Shown in the Results view dropdown"
+      = f.input :description, as: :text, input_html: { rows: 3 }
+
+      h5.mt-4 Add a result
+      .border.rounded.px-4.py-2.mb-2
+        = label_tag :observation_description_id, "Result to add"
+        = select_tag :observation_description_id,
+                     options_for_select(available.map { |code, name, id| ["#{code} – #{name}", id] }),
+                     include_blank: true,
+                     data: { controller: "slimselect" }
+        = label_tag :subgroup, "In subgroup", class: "mt-2"
+        = select_tag :subgroup, options_for_select(1..group.subgroup_count)
+        .mt-2
+          = button_tag "Add result", name: "command", value: "add_result", formaction: draft_url, class: "btn btn-secondary"
+          = button_tag "Add subgroup", name: "command", value: "add_subgroup", formaction: draft_url, class: "btn btn-secondary ml-2"
+          - if group.subgroup_count > 1 && rows_by_subgroup[group.subgroup_count].blank?
+            = button_tag "Remove last subgroup", name: "command", value: "remove_subgroup", formaction: draft_url, class: "btn btn-secondary ml-2"
+
+    .flex-1.min-w-0
+      .flex.items-center.justify-between
+        h5 Subgroups
+        = button_tag "Refresh preview",
+                     formaction: draft_url,
+                     class: "btn btn-secondary",
+                     data: { action: "code-group-editor#refreshPreview:prevent" }
+      p.text-sm.text-gray-500.mb-2 Drag results by their handle to reorder them or move them between subgroups.
+
+      .flex.flex-wrap.gap-4
+        - (1..group.subgroup_count).each do |number|
+          - colour = group.subgroup_colour(number)
+          .subgroup-panel.border.rounded.p-3.w-64(class=("border-l-4 border-l-#{colour}-300" if colour.present?))
+            = label_tag "code_group_subgroup_title_#{number}", "Subgroup #{number} title", class: "text-sm"
+            = text_field_tag "code_group[subgroup_titles][]", group.subgroup_title(number), id: "code_group_subgroup_title_#{number}", class: "w-full"
+            = label_tag "code_group_subgroup_colour_#{number}", "Subgroup #{number} colour", class: "text-sm mt-1"
+            = select_tag "code_group[subgroup_colours][]",
+                         options_for_select(Renalware::Pathology::CodeGroup::COLOURS, colour),
+                         include_blank: "None",
+                         id: "code_group_subgroup_colour_#{number}"
+
+            table.w-full.mt-2
+              tbody(data-subgroup=number data-code-group-editor-target="list")
+                - (rows_by_subgroup[number] || []).each do |membership, key|
+                  tr.membership(data-subgroup-row=true)
+                    td.w-6.handle.cursor-grab.text-gray-400 title="Drag to reorder" ⋮⋮
+                    td
+                      strong= membership.observation_description.code
+                      br
+                      span.text-xs.text-gray-500= membership.observation_description.name
+                    td.text-right
+                      = hidden_field_tag "code_group[memberships_attributes][#{key}][id]", membership.id if membership.persisted?
+                      = hidden_field_tag "code_group[memberships_attributes][#{key}][observation_description_id]", membership.observation_description_id
+                      = hidden_field_tag "code_group[memberships_attributes][#{key}][subgroup]", membership.subgroup, data: { field: "subgroup" }
+                      = hidden_field_tag "code_group[memberships_attributes][#{key}][position_within_subgroup]", membership.position_within_subgroup, data: { field: "position" }
+                      = button_tag "×",
+                                   name: "remove_result",
+                                   value: key,
+                                   formaction: draft_url,
+                                   title: "Remove #{membership.observation_description.code}",
+                                   class: "text-red-600"
+                tr.empty.text-xs.text-gray-400(class=("hidden" if rows_by_subgroup[number].present?))
+                  td(colspan=3) No results in this subgroup
+
+  - group.memberships.each_with_index.select { |membership, _| membership.marked_for_destruction? && membership.persisted? }.each do |membership, key|
+    = hidden_field_tag "code_group[memberships_attributes][#{key}][id]", membership.id
+    = hidden_field_tag "code_group[memberships_attributes][#{key}][_destroy]", "1"
+
+  .mt-6
+    = save_or_cancel(form: f, back_path: pathology_code_groups_path)
+
+h3.text-lg.font-bold.mt-6.mb-2 Preview
+#code-group-preview
+  = render "renalware/pathology/code_groups/preview", group: group

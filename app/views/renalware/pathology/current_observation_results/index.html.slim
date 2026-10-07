@@ -16,7 +16,7 @@
             - subgroup_border_colour = (filter_form.code_group.subgroup_colours || [])[group_number - 1]
             - title = (filter_form.code_group.subgroup_titles || [])[group_number - 1]
             - style = "border-left-width: 3px;" if subgroup_border_colour.present?
-            - border_class = "border-l-#{subgroup_border_colour}-400" if subgroup_border_colour.present?
+            - border_class = "border-l-#{subgroup_border_colour}-300" if subgroup_border_colour.present?
 
             .w-auto.rounded.px-3.pt-1.pb-0.mr-4.mb-4.min-w-max(style=style class=border_class data-grid-row-auto-span-target="content")
               table.current_observations.content.no-border-on-last-row.mt-1

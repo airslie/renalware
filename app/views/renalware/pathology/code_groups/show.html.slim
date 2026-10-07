@@ -1,31 +1,13 @@
 = within_new_admin_layout(title: "Code group <code>#{group.name}</code>".html_safe) do
+  .mb-4
+    = link_to t("btn.edit"), edit_pathology_code_group_path(group), class: "btn btn-primary"
+    = link_to "Back", pathology_code_groups_path, class: "btn btn-secondary ml-2"
 
-  .panel.info.radius.columns
-    | Editing code groups here is not currently supported, sorry.
-    | You'll need to update the database directly for now.
+  dl.mb-4
+    dt.font-bold Title
+    dd= group.title
+    dt.font-bold Description
+    dd= group.description
 
-  span
-    .text-lg.font-bold Description
-    .mr-2.inline = group.description
-    = link_to t("btn.edit"), edit_pathology_code_group_path(group)
-
-  br
-  br
-
-  .text-lg.font-bold Codes
-
-  table.pathology-code-group-memberships.sortables(data-controller="sortable")
-    thead
-      /th.col-width-tiny
-      th.col-width-tiny Subgroup
-      th.col-width-small Pos. within sub group
-      th.col-width-small Code
-      th Name
-
-    tbody
-      - group.memberships.order(:subgroup, :position_within_subgroup).each do |membership|
-        tr.sortable
-          td= membership.subgroup
-          td= membership.position_within_subgroup
-          td= membership.observation_description.code
-          td= membership.observation_description.name
+  h3.text-lg.font-bold.mb-2 Preview
+  = render "preview", group: group

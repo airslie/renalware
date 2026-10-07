@@ -28,6 +28,7 @@ import PatientMenuController from "./patients/menu_controller"
 import PrimaryCarePhysicianSearchController from "./patients/primary_care_physician_search_controller"
 import PrimaryCarePhysicianAddressController from "./patients/primary_care_physician_address_controller"
 import SortableController from "./sortable_controller"
+import CodeGroupEditorController from "./code_group_editor_controller"
 import SelectController from "./select_controller"
 import SelectResetController from "./select_reset_controller"
 import ComorbiditiesController from "./comorbidities_controller"
@@ -94,6 +95,7 @@ application.register(
   PrimaryCarePhysicianAddressController
 )
 application.register("sortable", SortableController)
+application.register("code-group-editor", CodeGroupEditorController)
 application.register("select", SelectController)
 application.register("select-reset", SelectResetController)
 application.register("comorbidities", ComorbiditiesController)
