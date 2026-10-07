@@ -47,7 +47,7 @@ gem "rake"
 gem "strong_migrations"
 
 gem "fhir_stu3_models", github: "airslie/fhir_stu3_models"
-gem "good_job", "~> 4.0"
+gem "good_job", "~> 4.19"
 
 gem "matrix"
 gem "roo"
@@ -174,7 +174,7 @@ gem "puma", "~> 8.0.2" # Puma 7 may require testing due to call back changes
 gem "pundit", "~> 2.5.0"
 gem "rack"
 gem "rack-attack"
-gem "ransack", "~> 4.2"
+gem "ransack", "~> 4.4"
 gem "rqrcode", "~> 2.0"
 gem "ruby-hl7", "~> 1.3"
 gem "sassc-rails", "~> 2.1.0"
