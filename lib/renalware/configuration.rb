@@ -114,6 +114,11 @@ module Renalware
         ENV.fetch("SESSION_REGISTER_USER_USER_ACTIVITY_AFTER", "PT2M") # 2 mins
       )
     }
+    # How long before their session expires the user is warned, and can choose to stay signed in.
+    # Use PT0S to switch the warning off.
+    config_accessor(:session_timeout_warning) {
+      ActiveSupport::Duration.parse(ENV.fetch("SESSION_TIMEOUT_WARNING", "PT2M"))
+    }
     config_accessor(:duration_of_last_url_memory_after_session_expiry) {
       ActiveSupport::Duration.parse(
         ENV.fetch("DURATION_OF_LAST_URL_MEMORY_AFTER_SESSION_EXPIRY", "PT30M")

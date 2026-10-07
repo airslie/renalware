@@ -39,6 +39,9 @@ html lang="en"
 
     #modals-wrapper
 
+    - if user_signed_in?
+      = render Renalware::SessionExpiryWarning.new
+
     header
       - if Renalware.config.display_feedback_banner
         = render "renalware/system/user_feedback/banner"

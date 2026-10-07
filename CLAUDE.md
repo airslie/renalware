@@ -52,9 +52,10 @@ The application is organized into medical/clinical domains under `app/models/ren
 - Testing: RSpec with Playwright driver
 - Code quality: RuboCop with custom configuration
 - UI
-  - Forms: Slim templates
-  - Legacy: Slim templates, ViewComponents (deprecated)
-  - New: Phlex except for forms
+  - New UI and forms: Slim templates and partials
+  - Do not create new Phlex components or convert existing views to Phlex.
+  - Existing Phlex components may be maintained when required by the task; do not introduce new Phlex components as part of that work.
+  - Legacy: Phlex components, ViewComponents (deprecated)
   - Styling: Tailwind CSS (Foundation is deprecated)
 
 ### Data Integration
