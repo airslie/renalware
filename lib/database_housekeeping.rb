@@ -31,7 +31,14 @@ class DatabaseHousekeeping
 
   def clear_old_system_visit_and_events
     puts " Clear old system visits and events"
-    Renalware::System::Event.where(time: ...6.months.ago).delete_all
-    Renalware::System::Visit.where(started_at: ...6.months.ago).delete_all
+    retention_period = ActiveSupport::Duration.parse(
+      ENV.fetch("SYSTEM_VISITS_AND_EVENTS_RETENTION_PERIOD", "P12M")
+    )
+    now = Time.current
+    # Compare calendar cutoffs to guarantee at least six months of audit data is retained.
+    cutoff = [retention_period.ago(now), 6.months.ago(now)].min
+
+    Renalware::System::Event.where(time: ...cutoff).delete_all
+    Renalware::System::Visit.where(started_at: ...cutoff).delete_all
   end
 end
