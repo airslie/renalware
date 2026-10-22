@@ -6,6 +6,8 @@ module Renalware
         # is true. See config/initializers/renalware.rb
         class PracticeListener
           def letter_approved(letter)
+            return if letter.patient.confidentiality_restricted?
+
             EmailLetterToPractice.call(letter)
           end
         end

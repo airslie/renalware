@@ -1,4 +1,5 @@
 describe Renalware::EPR::SaveLetterJob do
+  include ActiveJob::TestHelper
   include LettersSpecHelper
 
   let(:folder) { Rails.root.join("tmp/epr_spec_#{SecureRandom.hex(4)}") }
@@ -39,8 +40,24 @@ describe Renalware::EPR::SaveLetterJob do
     expect(xml.at_xpath("//DocumentType").text).to eq("CO03.011")
     expect(xml.at_xpath("//SpecialtyCode").text).to eq("361")
     expect(xml.at_xpath("//DocumentDate").text).to eq("13-03-2025")
-    expect(xml.at_xpath("//FileUpload/@filename").value).to eq(
-      Renalware::EPR::LetterFilename.new(letter, :DVH).to_s
+    expect(xml.at_xpath("//FileUpload/@filename").value).to eq(pdf_path.basename.to_s)
+  end
+
+  it "references the queued PDF path after patient demographics change" do
+    ActiveJob::Base.queue_adapter = :test
+    filename = Renalware::EPR::LetterFilename.new(letter, :DVH).to_s
+    path = folder.join(filename)
+    described_class.perform_later(letter:, file_path: path.to_s)
+    patient.update_columns(
+      family_name: "Jones", born_on: Date.new(1980, 2, 3), local_patient_id_3: "678"
     )
+
+    perform_enqueued_jobs(only: described_class)
+
+    expect(path).to exist
+    xml = Nokogiri::XML(path.sub_ext(".xml").read)
+    expect(xml.at_xpath("//FileUpload/@filename").value).to eq(path.basename.to_s)
+    expect(xml.at_xpath("//PatientHospitalNumber").text).to eq("0000678")
+    expect(xml.at_xpath("//DestinationPath").text).to include("\\0000678\\")
   end
 end

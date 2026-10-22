@@ -1,7 +1,9 @@
 module Renalware
   module EPR
     # Builds the XML sidecar that sits alongside an EPR PDF, describing the document so the
-    # receiving document store can file it against the patient.
+    # receiving document store can file it against the patient. Use the actual PDF basename:
+    # patient demographics may have changed since the export path was queued. Filing identifiers
+    # come from the current patient record; the filename is only a reference to the exported file.
     class MetadataXml
       pattr_initialize [
         :filename!,
@@ -15,10 +17,10 @@ module Renalware
         :renal_activity!
       ]
 
-      def self.for_letter(letter, site)
+      def self.for_letter(letter, site, filename:)
         name = LetterFilename.new(letter, site)
         new(
-          filename: name.to_s,
+          filename:,
           hospital_number: name.hospital_number,
           section: "Correspondence",
           destination_label: "Administrative_Letter",
@@ -30,10 +32,10 @@ module Renalware
         )
       end
 
-      def self.for_event(event, site)
+      def self.for_event(event, site, filename:)
         name = MdtFilename.new(event, site)
         new(
-          filename: name.to_s,
+          filename:,
           hospital_number: name.hospital_number,
           section: "Clinical Notes & History",
           destination_label: "MDT_Meeting_Notes",
