@@ -83,4 +83,13 @@ Renalware.configure do |config|
     config.broadcast_subscription_map["Renalware::Letters::ApproveLetter"] <<
       "Renalware::Letters::Delivery::Email::PracticeListener"
   end
+
+  if config.epr_export_enabled
+    raise "EPR_SITE_CODE must be set when EPR_EXPORT_ENABLED is true" if config.epr_site_code.blank?
+
+    map = config.broadcast_subscription_map
+    map["Renalware::Letters::CompleteLetter"] ||= []
+    map["Renalware::Letters::CompleteLetter"] << "Renalware::EPR::LetterListener"
+    map["Renalware::Events::CreateEvent"] << "Renalware::EPR::EventListener"
+  end
 end

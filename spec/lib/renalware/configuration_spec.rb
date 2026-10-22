@@ -27,6 +27,13 @@ describe Renalware::Configuration do
       OUTPATIENT_PRESCRIPTION_ADMINISTRATION_ENABLED
       HEIDI_ENABLED
       EMAIL_APPROVED_LETTERS_TO_PRACTICE
+      EPR_EXPORT_ENABLED
+      EPR_SITE_CODE
+      EPR_LETTERS_FOLDER
+      EPR_EVENTS_FOLDER
+      EPR_RENAL_ACTIVITY_CODE
+      EPR_LETTER_DOCUMENT_TYPE
+      EPR_MDT_DOCUMENT_TYPE
       HEIDI_API_BASE_URL
       HEIDI_SCRIBE_SESSION_BASE_URL
       HEIDI_LINK_ACCOUNT_URL
@@ -120,6 +127,30 @@ describe Renalware::Configuration do
       ENV["EMAIL_APPROVED_LETTERS_TO_PRACTICE"] = "true"
 
       expect(config.email_approved_letters_to_practice).to be(true)
+    end
+
+    it "has EPR export disabled and unconfigured by default" do
+      expect(config).to have_attributes(
+        epr_export_enabled: false,
+        epr_site_code: nil,
+        epr_letters_folder: nil,
+        epr_events_folder: nil,
+        epr_renal_activity_code: "361",
+        epr_letter_document_type: "CO03.011",
+        epr_mdt_document_type: "CL06.080"
+      )
+    end
+
+    it "can configure EPR export from ENV" do
+      ENV["EPR_EXPORT_ENABLED"] = "true"
+      ENV["EPR_SITE_CODE"] = "DVH"
+      ENV["EPR_LETTERS_FOLDER"] = "/var/epr/letters"
+
+      expect(config).to have_attributes(
+        epr_export_enabled: true,
+        epr_site_code: "DVH",
+        epr_letters_folder: "/var/epr/letters"
+      )
     end
 
     it "disables Heidi when HEIDI_ENABLED is unset" do
