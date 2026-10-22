@@ -26,6 +26,7 @@ describe Renalware::Configuration do
       LETTERS_EXTERNAL_DOCUMENT_TYPE_DESCRIPTION
       OUTPATIENT_PRESCRIPTION_ADMINISTRATION_ENABLED
       HEIDI_ENABLED
+      EMAIL_APPROVED_LETTERS_TO_PRACTICE
       HEIDI_API_BASE_URL
       HEIDI_SCRIBE_SESSION_BASE_URL
       HEIDI_LINK_ACCOUNT_URL
@@ -109,6 +110,16 @@ describe Renalware::Configuration do
       ENV["HELP_USER_GUIDE_LINK"] = "https://example.test/user-guide"
 
       expect(config.help_user_guide_link).to eq("https://example.test/user-guide")
+    end
+
+    it "disables emailing approved letters to the practice when the ENV var is unset" do
+      expect(config.email_approved_letters_to_practice).to be(false)
+    end
+
+    it "can enable emailing approved letters to the practice from ENV" do
+      ENV["EMAIL_APPROVED_LETTERS_TO_PRACTICE"] = "true"
+
+      expect(config.email_approved_letters_to_practice).to be(true)
     end
 
     it "disables Heidi when HEIDI_ENABLED is unset" do

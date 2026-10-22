@@ -171,6 +171,10 @@ module Renalware
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("HEIDI_ENABLED", "false"))
     end
 
+    config_accessor(:email_approved_letters_to_practice) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("EMAIL_APPROVED_LETTERS_TO_PRACTICE", "false"))
+    end
+
     # MESHAPI
     # Introduce an optional delay between letter approval and letter send, in order to allow
     # any human errors to be resolved (letter rescinded etc)

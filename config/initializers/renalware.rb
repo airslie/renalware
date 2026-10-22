@@ -78,4 +78,9 @@ Renalware.configure do |config|
     )
     config.broadcast_subscription_map["Renalware::Letters::ApproveLetter"] << job
   end
+
+  if config.email_approved_letters_to_practice
+    config.broadcast_subscription_map["Renalware::Letters::ApproveLetter"] <<
+      "Renalware::Letters::Delivery::Email::PracticeListener"
+  end
 end
