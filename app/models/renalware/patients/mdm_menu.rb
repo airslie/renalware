@@ -20,16 +20,6 @@ module Renalware
         cached_items
       end
 
-      def self.menu_definitions
-        Rails.logger.info "#### Loading MDM scope names! ####"
-        menu_items = Renalware::System::ViewMetadata
-          .where(category: :mdm)
-          .order(:title)
-          .select(:scope, :title, :slug, :view_name)
-
-        sanitize_menu_definitions(menu_items)
-      end
-
       # Only accept MDM scopes names that are simple lower case underscored strings eg "hd".
       # For the menu title use #title if present and is not0 "All" otherwise use the scope.
       def self.sanitize_menu_definitions(definitions)
@@ -42,6 +32,16 @@ module Renalware
               filter: definition.selection_key
             )
           end
+      end
+
+      def self.menu_definitions
+        Rails.logger.info "#### Loading MDM scope names! ####"
+        menu_items = Renalware::System::ViewMetadata
+          .where(category: :mdm)
+          .order(:title)
+          .select(:scope, :title, :slug, :view_name)
+
+        sanitize_menu_definitions(menu_items)
       end
 
       def self.normalize_title(scope, title)
