@@ -1,9 +1,6 @@
 module Renalware
   module Pathology
-    # A custom relation-like object, implementing a kaminari-like pagination interface.
-    # Its a query object but means to be used like a relation. If passed into a view you can
-    # do = paginate(relation).
-    # See ObservationsGroupedByDateTable for intended usage.
+    # Fetches a page of daily aggregated pathology results for ObservationsGroupedByDateTable.
     #
     # .all() returns a jsonb hash of OBX results for each day a patient had an observation.
     # Only returns observations whose code matches observation_descriptions
@@ -27,8 +24,6 @@ module Renalware
     #
     class ObservationsGroupedByDateQuery
       attr_reader :patient, :observation_descriptions, :page, :limit
-      alias current_page page
-      alias limit_value limit
 
       def initialize(patient:, observation_descriptions:, page: 1, per_page: 50)
         @patient = patient
@@ -36,12 +31,6 @@ module Renalware
           observation_descriptions.presence || observation_descriptions_null_object
         @page = Integer(page)
         @limit = Integer(per_page)
-      end
-
-      def total_pages
-        result = conn.execute(to_count_sql)
-        total = result.getvalue(0, 0)
-        (total.to_f / limit).ceil
       end
 
       def offset
@@ -86,10 +75,6 @@ module Renalware
           group by patient_id, (obs.observed_at AT TIME ZONE 'UTC' at time zone 'Europe/London')::date
           order by patient_id asc, (obs.observed_at AT TIME ZONE 'UTC' at time zone 'Europe/London')::date DESC
         SQL
-      end
-
-      def to_count_sql
-        "select count(*) from (#{to_sql}) as query"
       end
 
       def to_paginated_sql

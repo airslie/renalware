@@ -75,18 +75,29 @@ module Renalware
             )
           end
 
-          # expect(descriptions.map(&:code).sort).to match_array(%w(HGB NA PLT POT URE WBC))
-
           service = described_class.new(
             patient:,
-            code_group_name: "xx"
+            code_group_name: "xx",
+            per_page: 3,
+            page: 1
           )
 
           table = service.call
 
-          pending "need to understand why 4 rows returned not 3"
-
+          expect(table.pagy.page).to eq(1)
+          expect(table.pagy.pages).to eq(2)
           expect(table.rows.count).to eq(3)
+          expect(table.rows.map(&:observed_at)).to eq(dates[0..2].map(&:to_date))
+
+          second_page = described_class.new(
+            patient:,
+            code_group_name: "xx",
+            per_page: 3,
+            page: 2
+          ).call
+
+          expect(second_page.pagy.page).to eq(2)
+          expect(second_page.rows.map(&:observed_at)).to eq([dates[3].to_date])
         end
       end
 
