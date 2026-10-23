@@ -3,7 +3,6 @@ module Renalware
     class ObservationsController < BaseController
       include Renalware::Concerns::PatientVisibility
       include Renalware::Concerns::PatientCasting
-      include Renalware::Concerns::Pageable
 
       # Observation history for a particular OBX.
       # - HTML version is rendered from patient pathology under Investigations when you
@@ -12,14 +11,15 @@ module Renalware
       def index
         authorize pathology_patient
         description = find_description
-        observations = find_observations_for_description(description)
+        pagy, observations = pagy(find_observations_for_description(description), limit: 25)
 
         respond_to do |format|
           format.html do
             render locals: {
               patient: pathology_patient,
               observations: observations,
-              description: description
+              description: description,
+              pagy: pagy
             }
           end
           format.json do
@@ -43,7 +43,6 @@ module Renalware
       def find_observations_for_description(description)
         pathology_patient
           .observations
-          .page(page)
           .includes(:request)
           .for_description(description)
           .ordered

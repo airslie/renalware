@@ -16,4 +16,4 @@
               td= l observation.request.requested_at
               td= observation.result
 
-    = paginate observations
+    == pagy.series_nav if pagy.pages > 1
