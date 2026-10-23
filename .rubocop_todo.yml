@@ -2756,7 +2756,6 @@ Style/StringLiterals:
     - '.simplecov'
     - 'app/view_components/renalware/problems/summary_component.html.slim'
     - 'app/views/devise/registrations/new.html.slim'
-    - 'app/views/kaminari/_page.html.slim'
     - 'app/views/layouts/renalware.html.slim'
     - 'app/views/renalware/clinical/profiles/_page_actions.html.slim'
     - 'app/views/renalware/clinics/clinic_visits/_table_row.html.slim'
