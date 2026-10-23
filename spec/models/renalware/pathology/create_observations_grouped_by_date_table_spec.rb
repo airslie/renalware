@@ -76,10 +76,6 @@ module Renalware
 
           table = service.call
 
-          # pagination
-          expect(table.total_pages).to eq(2)
-          expect(table.current_page).to eq(1)
-
           expect(table.rows.count).to eq(3)
           expect(table.rows.map(&:observed_on)).to eq(dates[0..2].map(&:to_date))
           expect(table.rows.map(&:row_hash)).to eq(
@@ -101,6 +97,15 @@ module Renalware
               }
             ]
           )
+
+          second_page = described_class.new(
+            patient:,
+            observation_descriptions: descriptions,
+            per_page: 3,
+            page: 2
+          ).call
+
+          expect(second_page.rows.map(&:observed_on)).to eq([dates[3].to_date])
         end
       end
 

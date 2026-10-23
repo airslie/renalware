@@ -64,10 +64,6 @@ module Renalware
       t("#{action_name}.failed", model_name: model_name&.humanize)
     end
 
-    def paginate(collection, default_per_page: 25)
-      collection.page(params[:page]).per(params[:per_page] || default_per_page)
-    end
-
     def track_action
       ahoy.track "action", request.path_parameters
     end
