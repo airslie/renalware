@@ -24,18 +24,6 @@ module Renalware
       Duration.new(seconds)
     end
 
-    def self.to_seconds(string)
-      return nil if string.blank?
-
-      case string
-      when /(?<hours>\d+):(?<minutes>\d{2})/ # "hh:mm"
-        match = $LAST_MATCH_INFO
-        Hour.to_seconds(match[:hours]) + Minute.to_seconds(match[:minutes])
-      else
-        Minute.to_seconds(string)
-      end
-    end
-
     def initialize(seconds)
       @seconds = seconds
     end
@@ -47,6 +35,18 @@ module Renalware
       hours, seconds = @seconds.divmod(Hour.to_seconds(1))
       minutes = seconds / Minute.to_seconds(1)
       sprintf("%d:%02d", hours, minutes)
+    end
+
+    def self.to_seconds(string)
+      return nil if string.blank?
+
+      case string
+      when /(?<hours>\d+):(?<minutes>\d{2})/ # "hh:mm"
+        match = $LAST_MATCH_INFO
+        Hour.to_seconds(match[:hours]) + Minute.to_seconds(match[:minutes])
+      else
+        Minute.to_seconds(string)
+      end
     end
 
     private_class_method :to_seconds

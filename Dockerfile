@@ -9,9 +9,9 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 # To get the sha use eg
-# docker buildx imagetools inspect docker.io/library/ruby:4.0.7-slim-trixie
+# docker buildx imagetools inspect docker.io/library/ruby:4.0.9-slim-trixie
 # and use the Digest (under MediaType at the top of the output)
-ARG RUBY_VERSION=4.0.7
+ARG RUBY_VERSION=4.0.9
 ARG RUBY_IMAGE_SHA=sha256:db9ddd17cc6ac603f2497d98ac5c88e4118908d6f9a45f2422ebee141f91e485
 
 # Note that we are pinning debian to trixie (13) here to ensure consistent builds. We could use
