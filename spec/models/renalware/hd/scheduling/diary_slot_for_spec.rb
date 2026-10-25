@@ -36,6 +36,21 @@ module Renalware::HD::Scheduling
       end
     end
 
+    %w(2026-01-11 2026-03-29 2026-07-12 2026-10-25).each do |sunday|
+      it "returns a master slot created at the end of Sunday #{sunday}" do
+        slot = create_slot(
+          diary: master_diary,
+          created_at: Time.zone.parse("#{sunday} 23:59:59")
+        )
+
+        found = master_diary.reload.slot_for(
+          am.id, station.id, 1, valid_from: Date.parse(sunday)
+        )
+
+        expect(found).to eq(slot)
+      end
+    end
+
     context "with a master diary" do
       it "returns the matching slot decorated as master" do
         slot = create_slot(diary: master_diary)
@@ -46,19 +61,11 @@ module Renalware::HD::Scheduling
         expect(found).to be_master
       end
 
-      it "returns the slot if it was created before the end of the valid_from week" do
-        create_slot(diary: master_diary)
-
-        found = master_diary.reload.slot_for(am.id, station.id, 1, valid_from: Time.zone.today)
-
-        expect(found).to be_present
-      end
-
       it "ignores slots created after the end of the valid_from week" do
-        create_slot(diary: master_diary)
+        create_slot(diary: master_diary, created_at: Time.zone.parse("2026-10-26 00:00:00"))
 
         found = master_diary.reload.slot_for(
-          am.id, station.id, 1, valid_from: 3.weeks.ago.to_date
+          am.id, station.id, 1, valid_from: Date.new(2026, 10, 25)
         )
 
         expect(found).to be_nil

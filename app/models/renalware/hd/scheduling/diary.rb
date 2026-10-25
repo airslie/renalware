@@ -38,7 +38,7 @@ module Renalware
             # show recurring slots if they were created before the time frame
             # of the current week being viewed.
             if found && valid_from
-              found = (slot.created_at <= valid_from.end_of_week)
+              found = (slot.created_at <= valid_from.end_of_week.end_of_day)
             end
             found
           end
