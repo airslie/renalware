@@ -171,10 +171,28 @@ module Renalware
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("HEIDI_ENABLED", "false"))
     end
 
+    config_accessor(:email_approved_letters_to_practice) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("EMAIL_APPROVED_LETTERS_TO_PRACTICE", "false"))
+    end
+
     # MESHAPI
     # Introduce an optional delay between letter approval and letter send, in order to allow
     # any human errors to be resolved (letter rescinded etc)
     #
+    # Electronic public register (EPR) export of completed letters and MDT events as PDFs with an
+    # XML metadata sidecar, dropped into folders for collection by another process.
+    config_accessor(:epr_export_enabled) do
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("EPR_EXPORT_ENABLED", "false"))
+    end
+    config_accessor(:epr_site_code) { ENV.fetch("EPR_SITE_CODE", nil) }
+    config_accessor(:epr_letters_folder) { ENV.fetch("EPR_LETTERS_FOLDER", nil) }
+    config_accessor(:epr_events_folder) { ENV.fetch("EPR_EVENTS_FOLDER", nil) }
+    config_accessor(:epr_renal_activity_code) { ENV.fetch("EPR_RENAL_ACTIVITY_CODE", "361") }
+    config_accessor(:epr_letter_document_type) do
+      ENV.fetch("EPR_LETTER_DOCUMENT_TYPE", "CO03.011")
+    end
+    config_accessor(:epr_mdt_document_type) { ENV.fetch("EPR_MDT_DOCUMENT_TYPE", "CL06.080") }
+
     config_accessor(:send_gp_letters_over_mesh) do
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("SEND_GP_LETTERS_OVER_MESH", "false"))
     end

@@ -8,7 +8,9 @@ module Renalware
         # TOD: Avoid loading all letters into memory
         def call
           Batch.transaction do
-            batch.letters.each { |letter| CompleteLetter.build(letter).call(by: user) }
+            batch.letters.each do |letter|
+              CompleteLetter.build(letter).broadcasting_to_configured_subscribers.call(by: user)
+            end
             batch.update_by(user, status: :success)
             batch.reload
           end

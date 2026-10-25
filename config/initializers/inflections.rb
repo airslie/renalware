@@ -16,6 +16,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "DMD"
   inflect.acronym "DNA"
   inflect.acronym "EDTA"
+  inflect.acronym "EPR"
   inflect.acronym "EQ5D"
   inflect.acronym "EQ5D5L"
   inflect.acronym "ESRF"
