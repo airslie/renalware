@@ -19,6 +19,7 @@ describe Renalware::Configuration do
       URR_GENERATION_ENABLED
       DISPLAY_NHSBT_WAIT_LIST_UPLOAD
       BYPASS_RAW_HL7_PROCESSING_ADVISORY_LOCK
+      FEEDS_OUTGOING_DOCUMENTS_CORRECT_MSH_HEADER
       FEEDS_OUTGOING_DOCUMENTS_SENDING_FACILITY
       MESH_CARE_SETTING_SNOMED_CODE
       MESH_CARE_SETTING_DESCRIPTION
@@ -390,6 +391,24 @@ describe Renalware::Configuration do
       ENV["BYPASS_RAW_HL7_PROCESSING_ADVISORY_LOCK"] = "1"
 
       expect(config.bypass_raw_hl7_processing_advisory_lock).to be(true)
+    end
+  end
+
+  describe "#feeds_outgoing_documents_correct_msh_header" do
+    it "defaults to false" do
+      expect(config.feeds_outgoing_documents_correct_msh_header).to be(false)
+    end
+
+    it "can be enabled via ENV" do
+      ENV["FEEDS_OUTGOING_DOCUMENTS_CORRECT_MSH_HEADER"] = "true"
+
+      expect(config.feeds_outgoing_documents_correct_msh_header).to be(true)
+    end
+
+    it "can be explicitly disabled via ENV" do
+      ENV["FEEDS_OUTGOING_DOCUMENTS_CORRECT_MSH_HEADER"] = "false"
+
+      expect(config.feeds_outgoing_documents_correct_msh_header).to be(false)
     end
   end
 

@@ -30,6 +30,13 @@ module Renalware
           ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_SENDING_FACILITY", "MSE")
         end
 
+        # Opt in only after the TIE mapping supports standard MSH field placement.
+        base.config_accessor(:feeds_outgoing_documents_correct_msh_header) do
+          ActiveModel::Type::Boolean.new.cast(
+            ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_CORRECT_MSH_HEADER", "false")
+          )
+        end
+
         base.config_accessor(:feeds_outgoing_documents_use_guids) do
           ActiveModel::Type::Boolean.new.cast(
             ENV.fetch("FEEDS_OUTGOING_DOCUMENTS_USE_GUIDS", "false")
