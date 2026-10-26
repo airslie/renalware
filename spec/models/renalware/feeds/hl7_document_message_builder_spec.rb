@@ -8,6 +8,7 @@ module Renalware
 
       before do
         allow(Renalware.config).to receive_messages(
+          feeds_outgoing_documents_correct_msh_header: false,
           feeds_outgoing_documents_letter_format: :pdf,
           patient_hospital_identifiers: {
             HOSP1: :local_patient_id,
@@ -95,6 +96,53 @@ module Renalware
                 expect(msg[:OBX].to_s).to eq(
                   "OBX|1|ED|||^TEXT^PDF^Base64^QQ=="
                 )
+              end
+            end
+
+            context "when the correct MSH header is enabled" do
+              before do
+                allow(Renalware.config).to receive_messages(
+                  feeds_outgoing_documents_correct_msh_header: true
+                )
+              end
+
+              [true, false].each do |production|
+                [true, false].each do |use_guids|
+                  it "uses standard fields with production=#{production} and GUIDs=#{use_guids}" do
+                    allow(Rails.env).to receive(:production?).and_return(production)
+                    allow(Renalware.config)
+                      .to receive(:feeds_outgoing_documents_use_guids).and_return(use_guids)
+                    stub_const("Renalware::VERSION", "9.9.9")
+                    stub_rendering(:pdf, "A")
+                    letter = create_approved_letter_to_patient_with_cc_to_gp_and_one_contact(
+                      patient:,
+                      clinical: true,
+                      author: user
+                    )
+                    document = OutgoingDocument.create!(renderable: letter, by:)
+                    identifier = use_guids ? document.external_uuid : "RW#{document.id.to_s.rjust(10, '0')}"
+                    processing_id = production ? "P" : "T"
+
+                    travel_to Time.zone.parse("20211117152417") do
+                      msg = described_class.call(renderable: letter, document:)
+
+                      expect(msg[:MSH].to_s).to eq(
+                        "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02^MDM_T02|#{identifier}|#{processing_id}|2.4"
+                      )
+
+                      allow(Renalware.config)
+                        .to receive(:feeds_outgoing_documents_correct_msh_header).and_return(false)
+                      legacy_msg = described_class.call(renderable: letter, document:)
+                      legacy_processing_id = production ? "P" : "U"
+
+                      expect(legacy_msg[:MSH].to_s).to eq(
+                        "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|#{identifier}|#{identifier}|#{legacy_processing_id}|9.9.9"
+                      )
+                      expect(msg.to_s.split("\r").drop(1))
+                        .to eq(legacy_msg.to_s.split("\r").drop(1))
+                    end
+                  end
+                end
               end
             end
 

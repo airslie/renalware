@@ -55,21 +55,30 @@ module Renalware
 
       def deleted? = deleted_at.present?
 
-      # E.g. MSH|^~\&|Renalware|MSE|||20210920180000||MDM^T02|RW0000000001|P|2.3.1
+      # Opt-in: MSH|^~\&|Renalware|MSE|||20210920180000||MDM^T02^MDM_T02|RW0000000001|P|2.4
       def msh
         seg = HL7::Message::Segment::MSH.new
         seg.enc_chars = "^~\\&"
         seg.sending_app = "Renalware"
         seg.sending_facility = Renalware.config.feeds_outgoing_documents_sending_facility
-        # message_control_id is the correct place for our external_id - however, we accidentally
-        # used the processing_id field for this in the past, so we populate both now.
         seg.message_control_id = external_id
-        seg.processing_id = external_id
         seg.message_type = "MDM^T02"
         seg.time = Time.zone.now
-        seg.version_id = Rails.env.production? ? "P" : "U"
-        seg.seq = Renalware::VERSION
+        configure_msh_processing(seg)
         seg
+      end
+
+      def configure_msh_processing(seg)
+        if Renalware.config.feeds_outgoing_documents_correct_msh_header
+          seg.message_type = "MDM^T02^MDM_T02"
+          seg.processing_id = Rails.env.production? ? "P" : "T"
+          seg.version_id = "2.4"
+        else
+          # Preserve historical field placement for TIE mappings that depend on it.
+          seg.processing_id = external_id
+          seg.version_id = Rails.env.production? ? "P" : "U"
+          seg.seq = Renalware::VERSION
+        end
       end
 
       def evn
