@@ -12,7 +12,7 @@
 # docker buildx imagetools inspect docker.io/library/ruby:4.0.9-slim-trixie
 # and use the Digest (under MediaType at the top of the output)
 ARG RUBY_VERSION=4.0.9
-ARG RUBY_IMAGE_SHA=sha256:db9ddd17cc6ac603f2497d98ac5c88e4118908d6f9a45f2422ebee141f91e485
+ARG RUBY_IMAGE_SHA=sha256:88f0d8f1f2f7829c8c85c5cfee774f7ac936a7ba460e904e8c873b6a7f96c311
 
 # Note that we are pinning debian to trixie (13) here to ensure consistent builds. We could use
 # -slim and let it track latest stable, but that might lead to unexpected breakages.
