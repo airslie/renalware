@@ -18,6 +18,28 @@ describe "Viewing the admin dashboard" do
     allow(Renalware.config).to receive(:monitoring_mirth_enabled).and_return(true)
   end
 
+  %i(clinical read_only).each do |role|
+    it "denies direct access to #{role} users before loading placements" do
+      login_user(role)
+      allow(Renalware::System::Dashboard).to receive(:global).and_call_original
+
+      visit admin_dashboard_path
+
+      expect(page).to have_current_path(dashboard_path)
+      expect(page).to have_text("You are not authorized to perform this action.")
+      expect(Renalware::System::Dashboard).not_to have_received(:global)
+    end
+  end
+
+  it "allows devops users to access the dashboard directly" do
+    login_as_with_user(create(:user, role: :devops))
+
+    visit admin_dashboard_path
+
+    expect(page).to have_current_path(admin_dashboard_path)
+    expect(page).to have_text("Admin Dashboard")
+  end
+
   it "lays its components out in a responsive two-column grid" do
     add_widget("System::UserActivityComponent", roles: %i(super_admin), position: 10)
     add_widget(

@@ -1,7 +1,7 @@
 module Renalware
   class Admin::DashboardsController < BaseController
     def show
-      authorize User, :index?
+      authorize :"renalware/admin/dashboard", :show?
       @placements = System::Dashboard.global("admin")&.visible_placements_for(current_user) || []
     end
   end
