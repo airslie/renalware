@@ -6,13 +6,8 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :terser
-  # Added this to prevent sassc-rails error in tailwindcss-generated css
-  # 'Error: Function rgb is missing argument $green'
-  # >>   border-color: rgb(229 231 235 / var(--tw-border-opacity));
-  # The sassc-rails gem is automatically used for CSS compression if included in
-  # the Gemfile and no config.assets.css_compressor option is set.
+  # Tailwind builds its own CSS; leave CSS compression disabled in Sprockets.
   config.assets.css_compressor = nil
-  config.sass.line_comments = false
   config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "azure").to_sym
 
   config.action_mailer.smtp_settings = {
