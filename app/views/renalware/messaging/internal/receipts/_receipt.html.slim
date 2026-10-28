@@ -53,5 +53,6 @@ tr(class="#{ "urgent" if message.urgent?}" id=message.html_identifier)
                   class: "button mark-as-read",
                   method: :patch,
                   remote: true) do
-        = icon(:check, class: "h-4 w-4 inline stroke-white mb-1 mr-1")
-        | Mark as read
+        .flex.items-center.gap-1
+          = inline_icon(:check, size: :sm)
+          | Mark as read

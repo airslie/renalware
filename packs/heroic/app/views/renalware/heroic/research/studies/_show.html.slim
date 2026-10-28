@@ -3,20 +3,23 @@ article.biobank
     h2 BioBank
 
   = link_to heroic.new_bio_bank_sample_upload_path, class: "button secondary" do
-    i.fas.fa-upload
-    | Upload samples
+    .flex.items-center.gap-1
+      = inline_icon("upload-file", aria_hidden: true)
+      | Upload samples
   | &nbsp;
   = link_to heroic.new_bio_bank_usage_upload_path, class: "button secondary" do
-    i.fas.fa-upload
-    | Upload aliquot usage
+    .flex.items-center.gap-1
+      = inline_icon("upload-file", aria_hidden: true)
+      | Upload aliquot usage
 
 
 article.uploads
   header
     h2 MRI ANTAROS
   = link_to "#", class: "button secondary" do
-    i.fas.fa-upload
-    | Upload MRI events
+    .flex.items-center.gap-1
+      = inline_icon("upload-file", aria_hidden: true)
+      | Upload MRI events
 
 article.reports
   header
@@ -36,5 +39,6 @@ article.reports
           td.right
             = link_to(heroic.reports_download_path(report, format: :csv),
                       class: "button secondary compact") do
-                i.fas.fa-download
-                | DOWNLOAD CSV
+                .flex.items-center.gap-1
+                  = inline_icon("download_file", aria_hidden: true)
+                  | DOWNLOAD CSV

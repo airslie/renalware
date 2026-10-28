@@ -68,6 +68,5 @@ working, possibly because parts of the tooling still assume a simpler app layout
 - Enable packwerk
 - Remove the Zurb Foundation css/js framework, which is currently used for the grid system etc.
 - Remove jquery-ui
-- Remove font-awesome and use SVG icons
 - Convert SASS to CSS, replacing SASS variables with CSS ones
 - Converge on slimselect for dropdowns.

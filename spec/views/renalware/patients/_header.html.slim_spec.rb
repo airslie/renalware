@@ -1,6 +1,17 @@
 describe "renalware/patients/_header" do
   helper(Renalware::ApplicationHelper, Renalware::PatientHelper)
 
+  it "renders the back link with a decorative inline SVG" do
+    patient = build(:patient)
+
+    render partial: "renalware/patients/header", locals: { patient:, back_path: "/patients" }
+
+    link = Nokogiri::HTML.fragment(rendered).at_css("dd.back-link a")
+    expect(link["href"]).to eq("/patients")
+    expect(link.text.strip).to eq("Back")
+    expect(link.at_css('svg[aria-hidden="true"] path')).to be_present
+  end
+
   it "renders the patient name as plain text for PDFs" do
     patient = build(:patient)
 

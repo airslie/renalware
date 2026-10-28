@@ -268,15 +268,6 @@ article.clinical-allergies {
           border-left: 1px solid var(--winter-sky);
           font-style: italic;
           white-space: nowrap;
-
-          .fa,
-          .fas,
-          .far {
-            color: var(--light-grey);
-            &:hover {
-              color: var(--white);
-            }
-          }
         }
 
         .actions {

@@ -35,33 +35,14 @@
     font-style: italic;
     white-space: nowrap;
   }
-
-  i {
-    &::before {
-      color: inherit !important;
-      content: fa-content($fa-var-exclamation-triangle);
-    }
-  }
 }
 
 .patient-nag-severity-none {
   background-color: var(--off-white) !important;
-
-  i {
-    width: 0;
-
-    &::before {
-      content: "";
-    }
-  }
 }
 
 .patient-nag-severity-info {
   background-color: $nhs-light-blue !important;
-
-  i::before {
-    content: fa-content($fa-var-info-circle);
-  }
 
   span.date,
   span.value {
