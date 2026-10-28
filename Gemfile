@@ -62,7 +62,7 @@ group :test do
   gem "fuubar", require: false
   gem "rails-controller-testing", "~> 1.0.4"
   gem "rspec-html-matchers", require: false
-  gem "rspec_junit_formatter", "~> 0.4"
+  gem "rspec_junit_formatter", "~> 0.6"
   gem "rspec-retry"
   gem "shoulda-matchers", "~> 8.0"
   gem "simplecov", require: false # only loaded if required
