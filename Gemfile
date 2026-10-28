@@ -137,7 +137,6 @@ gem "enumerize", "~> 2.5"
 gem "faraday"
 gem "faraday-retry"
 gem "fhir_models"
-gem "font-awesome-sass", "~> 5.6" # See icons here: https://fortawesome.github.io/Font-Awesome/icons/
 gem "friendly_id", "~> 5.3"
 gem "fugit", ">= 1.1"
 gem "groupdate", ">= 4.2", "< 7"

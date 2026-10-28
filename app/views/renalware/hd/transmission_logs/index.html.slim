@@ -42,7 +42,7 @@
               - if log.parent_id.present?
                 = log.external_session_id
               - else
-                i.fas.fa-arrow
+                = inline_icon("arrow-right", class: "inline-block align-middle mr-2", aria_hidden: true)
             td
               - if log.patient && log.session
                 = link_to log.session_id, patient_hd_session_path(log.patient, log.session)

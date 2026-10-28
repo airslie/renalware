@@ -12,8 +12,9 @@ article
             = link_to new_patient_medications_prescription_batch_renewal_path(patient),
                       data: { turbo: true, turbo_frame: "modal" },
                       class: %i(button) do
-              = icon(:check, class: "h-4 w-4 inline stroke-white mb-1 mr-1")
-              | Renew HD Prescriptions
+              .flex.items-center.gap-1
+                = inline_icon(:check, size: :sm)
+                | Renew HD Prescriptions
 
         - if policy(Renalware::Medications::Review).new?
           = link_to patient_medications_reviews_path(patient, format: :js),
@@ -21,8 +22,9 @@ article
               remote: true,
               class: %i(button add_prescription),
               data: { confirm: "Create a new Medication Review event?" } do
-            = icon(:check, class: "h-4 w-4 inline stroke-white mb-1 mr-1")
-            | Medication Review
+            .flex.items-center.gap-1
+              = inline_icon(:check, size: :sm)
+              | Medication Review
 
         - if policy(Renalware::Medications::Prescription).new?
           = link_to new_patient_prescription_path(patient,

@@ -15,7 +15,7 @@
       dt
       dd.back-link
         = link_to back_path do
-          i.fas.fa-arrow-left
+          = inline_icon("arrow-left", class: "inline-block align-middle mr-2", aria_hidden: true)
           |  Back
     dd.name.patient-menu-toggler
       - if local_assigns[:skip_hamburger]
