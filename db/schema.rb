@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_120100) do
   create_schema "renalware"
   create_schema "renalware_heroic"
 
@@ -5859,18 +5859,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
     t.index ["status"], name: "index_system_api_logs_on_status"
   end
 
-  create_table "renalware.system_components", comment: "Available ruby display widgets for use e.g. in dashboards", force: :cascade do |t|
-    t.string "class_name", null: false, comment: "Component class eg Renalware::.."
-    t.string "name", null: false, comment: "Friendly component name e.g. 'Letters in Progress'"
-    t.boolean "dashboard", default: true, null: false, comment: "If true, can use on dashboards"
-    t.string "roles", comment: "Who can use or be assigned this component"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.index ["class_name"], name: "index_system_components_on_class_name"
-    t.index ["name"], name: "index_system_components_on_name", unique: true
-    t.index ["roles"], name: "index_system_components_on_roles"
-  end
-
   create_table "renalware.system_countries", force: :cascade do |t|
     t.string "name", null: false
     t.string "alpha2", null: false
@@ -5882,27 +5870,50 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
     t.index ["position"], name: "index_system_countries_on_position"
   end
 
-  create_table "renalware.system_dashboard_components", comment: "Defines dashboard content", force: :cascade do |t|
-    t.bigint "dashboard_id"
-    t.bigint "component_id"
-    t.integer "position", default: 1, null: false
+  create_table "renalware.system_dashboard_placements", comment: "A widget placed on a dashboard", force: :cascade do |t|
+    t.bigint "dashboard_id", null: false
+    t.bigint "widget_id", null: false
+    t.integer "position", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["component_id"], name: "index_system_dashboard_components_on_component_id"
-    t.index ["dashboard_id", "component_id"], name: "idx_dashboard_component_useage_unique", unique: true, comment: "Allow only one instance of a component on any dashboard"
-    t.index ["dashboard_id", "position"], name: "idx_dashboard_component_position", unique: true, comment: "Position must be unique within a dashboard"
+    t.jsonb "settings", default: {}, null: false, comment: "e.g. wrapper_classes (Tailwind)"
+    t.index ["dashboard_id", "position"], name: "idx_dashboard_placement_position"
+    t.index ["dashboard_id", "widget_id"], name: "idx_dashboard_placement_widget_unique", unique: true, comment: "Allow only one instance of a widget on any dashboard"
+    t.index ["widget_id"], name: "index_system_dashboard_placements_on_widget_id"
+  end
+
+  create_table "renalware.system_dashboard_widget_roles", comment: "The roles whose users may see a dashboard widget. No rows means visible to no one", force: :cascade do |t|
+    t.bigint "widget_id", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_system_dashboard_widget_roles_on_role_id"
+    t.index ["widget_id", "role_id"], name: "index_system_dashboard_widget_roles_on_widget_id_and_role_id", unique: true
+  end
+
+  create_table "renalware.system_dashboard_widgets", comment: "Ruby view components registered for use on dashboards", force: :cascade do |t|
+    t.string "class_name", null: false, comment: "Component class e.g. Renalware::.."
+    t.string "name", null: false, comment: "Friendly component name e.g. 'Letters in Progress'"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.string "key", null: false, comment: "Stable immutable identifier e.g. user_activity"
+    t.text "description"
+    t.index ["class_name"], name: "index_system_dashboard_widgets_on_class_name", unique: true
+    t.index ["key"], name: "index_system_dashboard_widgets_on_key", unique: true
+    t.index ["name"], name: "index_system_dashboard_widgets_on_name", unique: true
   end
 
   create_table "renalware.system_dashboards", force: :cascade do |t|
-    t.string "name", comment: "A named dashboard e.g. default, hd_nurse"
+    t.string "name", null: false, comment: "A named dashboard e.g. default, hd_nurse"
     t.text "description"
     t.bigint "user_id", comment: "If present, this dashboard belongs to a user e.g. they have customised a named dashboard to make it their own"
-    t.bigint "cloned_from_dashboard_id", comment: "Is the user customised their dashboard we store the original here"
+    t.bigint "cloned_from_dashboard_id", comment: "If the user customised their dashboard we store the original here"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.string "key", null: false, comment: "Stable immutable identifier e.g. admin"
     t.index ["cloned_from_dashboard_id"], name: "index_system_dashboards_on_cloned_from_dashboard_id"
-    t.index ["name"], name: "index_system_dashboards_on_name", unique: true
-    t.index ["user_id"], name: "index_system_dashboards_on_user_id", unique: true
+    t.index ["key"], name: "idx_system_dashboards_global_key", unique: true, where: "(user_id IS NULL)"
+    t.index ["user_id", "cloned_from_dashboard_id"], name: "idx_system_dashboards_user_clone", unique: true, where: "(user_id IS NOT NULL)"
   end
 
   create_table "renalware.system_downloads", force: :cascade do |t|
@@ -7046,9 +7057,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_120000) do
   add_foreign_key "renalware.snippets_snippets", "renalware.users", column: "author_id"
   add_foreign_key "renalware.survey_questions", "renalware.survey_surveys", column: "survey_id"
   add_foreign_key "renalware.survey_responses", "renalware.survey_questions", column: "question_id"
-  add_foreign_key "renalware.system_dashboard_components", "renalware.system_components", column: "component_id"
-  add_foreign_key "renalware.system_dashboard_components", "renalware.system_dashboards", column: "dashboard_id"
-  add_foreign_key "renalware.system_dashboards", "renalware.system_dashboards", column: "cloned_from_dashboard_id"
+  add_foreign_key "renalware.system_dashboard_placements", "renalware.system_dashboard_widgets", column: "widget_id", on_delete: :restrict
+  add_foreign_key "renalware.system_dashboard_placements", "renalware.system_dashboards", column: "dashboard_id", on_delete: :cascade
+  add_foreign_key "renalware.system_dashboard_widget_roles", "renalware.roles", on_delete: :cascade
+  add_foreign_key "renalware.system_dashboard_widget_roles", "renalware.system_dashboard_widgets", column: "widget_id", on_delete: :cascade
+  add_foreign_key "renalware.system_dashboards", "renalware.system_dashboards", column: "cloned_from_dashboard_id", on_delete: :nullify
+  add_foreign_key "renalware.system_dashboards", "renalware.users", on_delete: :cascade
   add_foreign_key "renalware.system_downloads", "renalware.users", column: "created_by_id"
   add_foreign_key "renalware.system_downloads", "renalware.users", column: "updated_by_id"
   add_foreign_key "renalware.system_logs", "renalware.users", column: "owner_id"

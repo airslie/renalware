@@ -12,6 +12,8 @@ module.exports = {
     "./packs/*/app/**/*.{erb,haml,html,slim,rb,js}",
   ],
   safelist: [
+    // Dashboard placement wrapper_classes are stored in the database (system_dashboard_placements.settings)
+    "min-w-0",
     // Form builder generated classes (emitted from Ruby code in lib/, not directly in templates)
     "rw-form",
     "rw-field-row",

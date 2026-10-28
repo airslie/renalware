@@ -15882,75 +15882,6 @@ ALTER SEQUENCE renalware.system_api_logs_id_seq OWNED BY renalware.system_api_lo
 
 
 --
--- Name: system_components; Type: TABLE; Schema: renalware; Owner: -
---
-
-CREATE TABLE renalware.system_components (
-    id bigint NOT NULL,
-    class_name character varying NOT NULL,
-    name character varying NOT NULL,
-    dashboard boolean DEFAULT true NOT NULL,
-    roles character varying,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: TABLE system_components; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON TABLE renalware.system_components IS 'Available ruby display widgets for use e.g. in dashboards';
-
-
---
--- Name: COLUMN system_components.class_name; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.system_components.class_name IS 'Component class eg Renalware::..';
-
-
---
--- Name: COLUMN system_components.name; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.system_components.name IS 'Friendly component name e.g. ''Letters in Progress''';
-
-
---
--- Name: COLUMN system_components.dashboard; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.system_components.dashboard IS 'If true, can use on dashboards';
-
-
---
--- Name: COLUMN system_components.roles; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON COLUMN renalware.system_components.roles IS 'Who can use or be assigned this component';
-
-
---
--- Name: system_components_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
---
-
-CREATE SEQUENCE renalware.system_components_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: system_components_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
---
-
-ALTER SEQUENCE renalware.system_components_id_seq OWNED BY renalware.system_components.id;
-
-
---
 -- Name: system_countries; Type: TABLE; Schema: renalware; Owner: -
 --
 
@@ -15983,31 +15914,39 @@ ALTER SEQUENCE renalware.system_countries_id_seq OWNED BY renalware.system_count
 
 
 --
--- Name: system_dashboard_components; Type: TABLE; Schema: renalware; Owner: -
+-- Name: system_dashboard_placements; Type: TABLE; Schema: renalware; Owner: -
 --
 
-CREATE TABLE renalware.system_dashboard_components (
-    id bigint NOT NULL,
-    dashboard_id bigint,
-    component_id bigint,
-    "position" integer DEFAULT 1 NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+CREATE TABLE renalware.system_dashboard_placements (
+    id bigint CONSTRAINT system_dashboard_components_id_not_null NOT NULL,
+    dashboard_id bigint NOT NULL,
+    widget_id bigint NOT NULL,
+    "position" integer CONSTRAINT system_dashboard_components_position_not_null NOT NULL,
+    created_at timestamp without time zone CONSTRAINT system_dashboard_components_created_at_not_null NOT NULL,
+    updated_at timestamp without time zone CONSTRAINT system_dashboard_components_updated_at_not_null NOT NULL,
+    settings jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
 --
--- Name: TABLE system_dashboard_components; Type: COMMENT; Schema: renalware; Owner: -
+-- Name: TABLE system_dashboard_placements; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON TABLE renalware.system_dashboard_components IS 'Defines dashboard content';
+COMMENT ON TABLE renalware.system_dashboard_placements IS 'A widget placed on a dashboard';
 
 
 --
--- Name: system_dashboard_components_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+-- Name: COLUMN system_dashboard_placements.settings; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-CREATE SEQUENCE renalware.system_dashboard_components_id_seq
+COMMENT ON COLUMN renalware.system_dashboard_placements.settings IS 'e.g. wrapper_classes (Tailwind)';
+
+
+--
+-- Name: system_dashboard_placements_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.system_dashboard_placements_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -16016,10 +15955,111 @@ CREATE SEQUENCE renalware.system_dashboard_components_id_seq
 
 
 --
--- Name: system_dashboard_components_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+-- Name: system_dashboard_placements_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
 --
 
-ALTER SEQUENCE renalware.system_dashboard_components_id_seq OWNED BY renalware.system_dashboard_components.id;
+ALTER SEQUENCE renalware.system_dashboard_placements_id_seq OWNED BY renalware.system_dashboard_placements.id;
+
+
+--
+-- Name: system_dashboard_widget_roles; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.system_dashboard_widget_roles (
+    id bigint NOT NULL,
+    widget_id bigint NOT NULL,
+    role_id integer NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE system_dashboard_widget_roles; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON TABLE renalware.system_dashboard_widget_roles IS 'The roles whose users may see a dashboard widget. No rows means visible to no one';
+
+
+--
+-- Name: system_dashboard_widget_roles_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.system_dashboard_widget_roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: system_dashboard_widget_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.system_dashboard_widget_roles_id_seq OWNED BY renalware.system_dashboard_widget_roles.id;
+
+
+--
+-- Name: system_dashboard_widgets; Type: TABLE; Schema: renalware; Owner: -
+--
+
+CREATE TABLE renalware.system_dashboard_widgets (
+    id bigint CONSTRAINT system_components_id_not_null NOT NULL,
+    class_name character varying CONSTRAINT system_components_class_name_not_null NOT NULL,
+    name character varying CONSTRAINT system_components_name_not_null NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    key character varying NOT NULL,
+    description text
+);
+
+
+--
+-- Name: TABLE system_dashboard_widgets; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON TABLE renalware.system_dashboard_widgets IS 'Ruby view components registered for use on dashboards';
+
+
+--
+-- Name: COLUMN system_dashboard_widgets.class_name; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.system_dashboard_widgets.class_name IS 'Component class e.g. Renalware::..';
+
+
+--
+-- Name: COLUMN system_dashboard_widgets.name; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.system_dashboard_widgets.name IS 'Friendly component name e.g. ''Letters in Progress''';
+
+
+--
+-- Name: COLUMN system_dashboard_widgets.key; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.system_dashboard_widgets.key IS 'Stable immutable identifier e.g. user_activity';
+
+
+--
+-- Name: system_dashboard_widgets_id_seq; Type: SEQUENCE; Schema: renalware; Owner: -
+--
+
+CREATE SEQUENCE renalware.system_dashboard_widgets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: system_dashboard_widgets_id_seq; Type: SEQUENCE OWNED BY; Schema: renalware; Owner: -
+--
+
+ALTER SEQUENCE renalware.system_dashboard_widgets_id_seq OWNED BY renalware.system_dashboard_widgets.id;
 
 
 --
@@ -16028,12 +16068,13 @@ ALTER SEQUENCE renalware.system_dashboard_components_id_seq OWNED BY renalware.s
 
 CREATE TABLE renalware.system_dashboards (
     id bigint NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     description text,
     user_id bigint,
     cloned_from_dashboard_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    key character varying NOT NULL
 );
 
 
@@ -16055,7 +16096,14 @@ COMMENT ON COLUMN renalware.system_dashboards.user_id IS 'If present, this dashb
 -- Name: COLUMN system_dashboards.cloned_from_dashboard_id; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON COLUMN renalware.system_dashboards.cloned_from_dashboard_id IS 'Is the user customised their dashboard we store the original here';
+COMMENT ON COLUMN renalware.system_dashboards.cloned_from_dashboard_id IS 'If the user customised their dashboard we store the original here';
+
+
+--
+-- Name: COLUMN system_dashboards.key; Type: COMMENT; Schema: renalware; Owner: -
+--
+
+COMMENT ON COLUMN renalware.system_dashboards.key IS 'Stable immutable identifier e.g. admin';
 
 
 --
@@ -20885,13 +20933,6 @@ ALTER TABLE ONLY renalware.system_api_logs ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- Name: system_components id; Type: DEFAULT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.system_components ALTER COLUMN id SET DEFAULT nextval('renalware.system_components_id_seq'::regclass);
-
-
---
 -- Name: system_countries id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
@@ -20899,10 +20940,24 @@ ALTER TABLE ONLY renalware.system_countries ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- Name: system_dashboard_components id; Type: DEFAULT; Schema: renalware; Owner: -
+-- Name: system_dashboard_placements id; Type: DEFAULT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY renalware.system_dashboard_components ALTER COLUMN id SET DEFAULT nextval('renalware.system_dashboard_components_id_seq'::regclass);
+ALTER TABLE ONLY renalware.system_dashboard_placements ALTER COLUMN id SET DEFAULT nextval('renalware.system_dashboard_placements_id_seq'::regclass);
+
+
+--
+-- Name: system_dashboard_widget_roles id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_widget_roles ALTER COLUMN id SET DEFAULT nextval('renalware.system_dashboard_widget_roles_id_seq'::regclass);
+
+
+--
+-- Name: system_dashboard_widgets id; Type: DEFAULT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_widgets ALTER COLUMN id SET DEFAULT nextval('renalware.system_dashboard_widgets_id_seq'::regclass);
 
 
 --
@@ -23465,14 +23520,6 @@ ALTER TABLE ONLY renalware.system_api_logs
 
 
 --
--- Name: system_components system_components_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.system_components
-    ADD CONSTRAINT system_components_pkey PRIMARY KEY (id);
-
-
---
 -- Name: system_countries system_countries_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -23481,11 +23528,27 @@ ALTER TABLE ONLY renalware.system_countries
 
 
 --
--- Name: system_dashboard_components system_dashboard_components_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+-- Name: system_dashboard_placements system_dashboard_placements_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
 --
 
-ALTER TABLE ONLY renalware.system_dashboard_components
-    ADD CONSTRAINT system_dashboard_components_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY renalware.system_dashboard_placements
+    ADD CONSTRAINT system_dashboard_placements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: system_dashboard_widget_roles system_dashboard_widget_roles_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_widget_roles
+    ADD CONSTRAINT system_dashboard_widget_roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: system_dashboard_widgets system_dashboard_widgets_pkey; Type: CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_widgets
+    ADD CONSTRAINT system_dashboard_widgets_pkey PRIMARY KEY (id);
 
 
 --
@@ -24001,31 +24064,24 @@ CREATE INDEX hd_versions_type_id ON renalware.hd_versions USING btree (item_type
 
 
 --
--- Name: idx_dashboard_component_position; Type: INDEX; Schema: renalware; Owner: -
+-- Name: idx_dashboard_placement_position; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE UNIQUE INDEX idx_dashboard_component_position ON renalware.system_dashboard_components USING btree (dashboard_id, "position");
-
-
---
--- Name: INDEX idx_dashboard_component_position; Type: COMMENT; Schema: renalware; Owner: -
---
-
-COMMENT ON INDEX renalware.idx_dashboard_component_position IS 'Position must be unique within a dashboard';
+CREATE INDEX idx_dashboard_placement_position ON renalware.system_dashboard_placements USING btree (dashboard_id, "position");
 
 
 --
--- Name: idx_dashboard_component_useage_unique; Type: INDEX; Schema: renalware; Owner: -
+-- Name: idx_dashboard_placement_widget_unique; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE UNIQUE INDEX idx_dashboard_component_useage_unique ON renalware.system_dashboard_components USING btree (dashboard_id, component_id);
+CREATE UNIQUE INDEX idx_dashboard_placement_widget_unique ON renalware.system_dashboard_placements USING btree (dashboard_id, widget_id);
 
 
 --
--- Name: INDEX idx_dashboard_component_useage_unique; Type: COMMENT; Schema: renalware; Owner: -
+-- Name: INDEX idx_dashboard_placement_widget_unique; Type: COMMENT; Schema: renalware; Owner: -
 --
 
-COMMENT ON INDEX renalware.idx_dashboard_component_useage_unique IS 'Allow only one instance of a component on any dashboard';
+COMMENT ON INDEX renalware.idx_dashboard_placement_widget_unique IS 'Allow only one instance of a widget on any dashboard';
 
 
 --
@@ -24229,6 +24285,20 @@ CREATE UNIQUE INDEX idx_renal_safety_alerts_active_unique ON renalware.renal_saf
 --
 
 CREATE INDEX idx_renal_safety_alerts_on_rule_execution_id ON renalware.renal_safety_alerts USING btree (safety_alert_rule_execution_id);
+
+
+--
+-- Name: idx_system_dashboards_global_key; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_system_dashboards_global_key ON renalware.system_dashboards USING btree (key) WHERE (user_id IS NULL);
+
+
+--
+-- Name: idx_system_dashboards_user_clone; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_system_dashboards_user_clone ON renalware.system_dashboards USING btree (user_id, cloned_from_dashboard_id) WHERE (user_id IS NOT NULL);
 
 
 --
@@ -30119,27 +30189,6 @@ CREATE INDEX index_system_api_logs_on_status ON renalware.system_api_logs USING 
 
 
 --
--- Name: index_system_components_on_class_name; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_system_components_on_class_name ON renalware.system_components USING btree (class_name);
-
-
---
--- Name: index_system_components_on_name; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_system_components_on_name ON renalware.system_components USING btree (name);
-
-
---
--- Name: index_system_components_on_roles; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE INDEX index_system_components_on_roles ON renalware.system_components USING btree (roles);
-
-
---
 -- Name: index_system_countries_on_alpha2; Type: INDEX; Schema: renalware; Owner: -
 --
 
@@ -30168,10 +30217,45 @@ CREATE INDEX index_system_countries_on_position ON renalware.system_countries US
 
 
 --
--- Name: index_system_dashboard_components_on_component_id; Type: INDEX; Schema: renalware; Owner: -
+-- Name: index_system_dashboard_placements_on_widget_id; Type: INDEX; Schema: renalware; Owner: -
 --
 
-CREATE INDEX index_system_dashboard_components_on_component_id ON renalware.system_dashboard_components USING btree (component_id);
+CREATE INDEX index_system_dashboard_placements_on_widget_id ON renalware.system_dashboard_placements USING btree (widget_id);
+
+
+--
+-- Name: index_system_dashboard_widget_roles_on_role_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE INDEX index_system_dashboard_widget_roles_on_role_id ON renalware.system_dashboard_widget_roles USING btree (role_id);
+
+
+--
+-- Name: index_system_dashboard_widget_roles_on_widget_id_and_role_id; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_system_dashboard_widget_roles_on_widget_id_and_role_id ON renalware.system_dashboard_widget_roles USING btree (widget_id, role_id);
+
+
+--
+-- Name: index_system_dashboard_widgets_on_class_name; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_system_dashboard_widgets_on_class_name ON renalware.system_dashboard_widgets USING btree (class_name);
+
+
+--
+-- Name: index_system_dashboard_widgets_on_key; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_system_dashboard_widgets_on_key ON renalware.system_dashboard_widgets USING btree (key);
+
+
+--
+-- Name: index_system_dashboard_widgets_on_name; Type: INDEX; Schema: renalware; Owner: -
+--
+
+CREATE UNIQUE INDEX index_system_dashboard_widgets_on_name ON renalware.system_dashboard_widgets USING btree (name);
 
 
 --
@@ -30179,20 +30263,6 @@ CREATE INDEX index_system_dashboard_components_on_component_id ON renalware.syst
 --
 
 CREATE INDEX index_system_dashboards_on_cloned_from_dashboard_id ON renalware.system_dashboards USING btree (cloned_from_dashboard_id);
-
-
---
--- Name: index_system_dashboards_on_name; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_system_dashboards_on_name ON renalware.system_dashboards USING btree (name);
-
-
---
--- Name: index_system_dashboards_on_user_id; Type: INDEX; Schema: renalware; Owner: -
---
-
-CREATE UNIQUE INDEX index_system_dashboards_on_user_id ON renalware.system_dashboards USING btree (user_id);
 
 
 --
@@ -31652,6 +31722,14 @@ ALTER TABLE ONLY renalware.feed_logs
 
 
 --
+-- Name: system_dashboard_widget_roles fk_rails_048b8e445f; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_widget_roles
+    ADD CONSTRAINT fk_rails_048b8e445f FOREIGN KEY (widget_id) REFERENCES renalware.system_dashboard_widgets(id) ON DELETE CASCADE;
+
+
+--
 -- Name: pathology_observation_requests fk_rails_050f679712; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -31908,6 +31986,14 @@ ALTER TABLE ONLY renalware.letter_descriptions
 
 
 --
+-- Name: system_dashboard_placements fk_rails_1cf73f8de7; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_placements
+    ADD CONSTRAINT fk_rails_1cf73f8de7 FOREIGN KEY (dashboard_id) REFERENCES renalware.system_dashboards(id) ON DELETE CASCADE;
+
+
+--
 -- Name: patient_merge_operations fk_rails_1d644523c5; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -31969,14 +32055,6 @@ ALTER TABLE ONLY renalware.research_investigatorships
 
 ALTER TABLE ONLY renalware.modality_modalities
     ADD CONSTRAINT fk_rails_21e1b74109 FOREIGN KEY (description_id) REFERENCES renalware.modality_descriptions(id);
-
-
---
--- Name: system_dashboard_components fk_rails_222354af97; Type: FK CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.system_dashboard_components
-    ADD CONSTRAINT fk_rails_222354af97 FOREIGN KEY (component_id) REFERENCES renalware.system_components(id);
 
 
 --
@@ -33108,6 +33186,14 @@ ALTER TABLE ONLY renalware.letter_letters
 
 
 --
+-- Name: system_dashboard_placements fk_rails_6e45ede679; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_placements
+    ADD CONSTRAINT fk_rails_6e45ede679 FOREIGN KEY (widget_id) REFERENCES renalware.system_dashboard_widgets(id) ON DELETE RESTRICT;
+
+
+--
 -- Name: drug_trade_family_classifications fk_rails_6e6a5dc074; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -33616,7 +33702,7 @@ ALTER TABLE ONLY renalware.pd_regime_terminations
 --
 
 ALTER TABLE ONLY renalware.system_dashboards
-    ADD CONSTRAINT fk_rails_9531eb310e FOREIGN KEY (cloned_from_dashboard_id) REFERENCES renalware.system_dashboards(id);
+    ADD CONSTRAINT fk_rails_9531eb310e FOREIGN KEY (cloned_from_dashboard_id) REFERENCES renalware.system_dashboards(id) ON DELETE SET NULL;
 
 
 --
@@ -34228,6 +34314,14 @@ ALTER TABLE ONLY renalware.problem_problems
 
 
 --
+-- Name: system_dashboard_widget_roles fk_rails_bc201eb552; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboard_widget_roles
+    ADD CONSTRAINT fk_rails_bc201eb552 FOREIGN KEY (role_id) REFERENCES renalware.roles(id) ON DELETE CASCADE;
+
+
+--
 -- Name: hd_sessions fk_rails_bd995b497c; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -34425,6 +34519,14 @@ ALTER TABLE ONLY renalware.hd_sessions
 
 ALTER TABLE ONLY renalware.renal_profiles
     ADD CONSTRAINT fk_rails_cd10bc0ddf FOREIGN KEY (prd_description_id) REFERENCES renalware.renal_prd_descriptions(id);
+
+
+--
+-- Name: system_dashboards fk_rails_ce9a837a26; Type: FK CONSTRAINT; Schema: renalware; Owner: -
+--
+
+ALTER TABLE ONLY renalware.system_dashboards
+    ADD CONSTRAINT fk_rails_ce9a837a26 FOREIGN KEY (user_id) REFERENCES renalware.users(id) ON DELETE CASCADE;
 
 
 --
@@ -35204,14 +35306,6 @@ ALTER TABLE ONLY renalware.pathology_requests_patient_rules_requests
 
 
 --
--- Name: system_dashboard_components fk_rails_fc4e7f516a; Type: FK CONSTRAINT; Schema: renalware; Owner: -
---
-
-ALTER TABLE ONLY renalware.system_dashboard_components
-    ADD CONSTRAINT fk_rails_fc4e7f516a FOREIGN KEY (dashboard_id) REFERENCES renalware.system_dashboards(id);
-
-
---
 -- Name: modality_change_types fk_rails_fcb9925881; Type: FK CONSTRAINT; Schema: renalware; Owner: -
 --
 
@@ -35570,6 +35664,8 @@ ALTER TABLE ONLY renalware_heroic.biobank_usages
 SET search_path TO renalware,public,renalware_heroic,renalware_mse,renalware_blt,renalware_ich;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20261027120100'),
+('20261027120000'),
 ('20260930120000'),
 ('20260909120000'),
 ('20260908120000'),

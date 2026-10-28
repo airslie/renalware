@@ -1,0 +1,6 @@
+- placements.each do |placement|
+  - component_class = placement.widget.component_class
+  - if component_class.nil?
+    - Rails.logger.warn("Dashboard widget #{placement.widget.key} has unregistered component #{placement.widget.class_name}")
+  - else
+    = render component_class.new(current_user: current_user, wrapper_classes: placement.wrapper_classes)
