@@ -25,7 +25,7 @@
     "masonry-layout": "^4.2.2",
     "moment": "2.31.0",
     "print-js": "^1.6.0",
-    "rollup": "^4.64.10",
+    "rollup": "^4.64.12",
     "semver": "^7.6.3",
     "serialize-javascript": "^7.1",
     "slim-select": "^4.2.4",
