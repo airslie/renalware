@@ -55,13 +55,14 @@ module Renalware
 
       def deleted? = deleted_at.present?
 
-      # Opt-in: MSH|^~\&|Renalware|MSE|||20210920180000||MDM^T02^MDM_T02|RW0000000001|P|2.4
+      # Opt-in: MSH|^~\&|Renalware|MSE|||20210920180000||MDM^T02|RW0000000001|P|2.4
       def msh
         seg = HL7::Message::Segment::MSH.new
         seg.enc_chars = "^~\\&"
         seg.sending_app = "Renalware"
         seg.sending_facility = Renalware.config.feeds_outgoing_documents_sending_facility
         seg.message_control_id = external_id
+        # Keep two components for TIE compatibility in both header modes.
         seg.message_type = "MDM^T02"
         seg.time = Time.zone.now
         configure_msh_processing(seg)
@@ -70,7 +71,6 @@ module Renalware
 
       def configure_msh_processing(seg)
         if Renalware.config.feeds_outgoing_documents_correct_msh_header
-          seg.message_type = "MDM^T02^MDM_T02"
           seg.processing_id = Rails.env.production? ? "P" : "T"
           seg.version_id = "2.4"
         else
