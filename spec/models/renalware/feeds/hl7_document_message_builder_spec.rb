@@ -127,7 +127,7 @@ module Renalware
                       msg = described_class.call(renderable: letter, document:)
 
                       expect(msg[:MSH].to_s).to eq(
-                        "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02^MDM_T02|#{identifier}|#{processing_id}|2.4"
+                        "MSH|^~\\&|Renalware|MSE|||20211117152417||MDM^T02|#{identifier}|#{processing_id}|2.4"
                       )
 
                       allow(Renalware.config)
