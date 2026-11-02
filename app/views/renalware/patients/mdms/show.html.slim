@@ -9,7 +9,7 @@
 ruby:
   scope = options.current_view.scope&.humanize
   title = options.current_view.title
-  page_title = (title.present? && title != "All") ? title : scope
+  page_title = (title.present? && title != "All") ? title : scope # rubocop:disable Style/TernaryParentheses
 
 = within_admin_layout(title: "#{page_title} MDMS") do
   / See also _filters

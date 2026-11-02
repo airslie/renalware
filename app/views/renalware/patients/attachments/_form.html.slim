@@ -8,7 +8,7 @@ ruby:
   attachment_types = Renalware::Patients::AttachmentType.select(:id, :name, :store_file_externally)
   attachment_type_options = attachment_types.map do |at|
     [
-      "#{at.name}#{at.store_file_externally? ? ' (store externally)' : ''}",
+      "#{at.name}#{' (store externally)' if at.store_file_externally?}",
       at.id,
       { "data-store-file-externally" => at.store_file_externally? }
     ]
