@@ -5,13 +5,13 @@ ruby:
   columns = attribute_names.map do |attr|
     view.columns.detect { |col| col.code == attr } || Renalware::System::ColumnDefinition.new(code: attr, hidden: false)
   end
-  # TODO move to a helper or view object
-  # Sort column headers and remove hidden ones.
-  # attrs = options.rows.first.class.columns.map(&:name) - %w(id secure_id document)
-  # use the older of cols in view.columns to sort attrs - works even if only a few cols are in view.columns
-  # if options.current_view.columns.present?
-  #   attrs = options.current_view.columns & attrs
-  # end
+# TODO: move to a helper or view object
+# Sort column headers and remove hidden ones.
+# attrs = options.rows.first.class.columns.map(&:name) - %w(id secure_id document)
+# use the older of cols in view.columns to sort attrs - works even if only a few cols are in view.columns
+# if options.current_view.columns.present?
+#   attrs = options.current_view.columns & attrs
+# end
 
 table#mdm-patients-table
   thead

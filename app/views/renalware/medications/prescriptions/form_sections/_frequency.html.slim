@@ -1,6 +1,6 @@
 div data-controller="show-on-selected"
   ruby:
-    frequency_is_predefined = presenter.frequencies.find { _1.name == f.object.frequency }
+    frequency_is_predefined = presenter.frequencies.find { it.name == f.object.frequency }
     select_other = presenter.frequencies.size == 1 || (f.object.frequency.present? && !frequency_is_predefined)
 
   = f.input :frequency, wrapper: :horizontal_small,

@@ -17,7 +17,7 @@ table.mt-4.stripeless
                  when :pending then "bg-orange-300"
                  when :failure then "bg-red-600 text-white"
                  when :success then "bg-green-400"
-                 end
+                 end # rubocop:disable Style/HashLikeCase
           .rounded.py-0.px-1(class=bg)
             .flex.items-center.justify-center
               = trans.status.humanize
