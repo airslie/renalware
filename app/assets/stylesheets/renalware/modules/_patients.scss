@@ -1,13 +1,13 @@
 // Patient summary contains renal mini profile and allergy summary
 .patient-summary {
-  @media print {
-    display: none;
-  }
-
   display: flex;
   font-size: 0.9rem;
   margin: 3px 4px 0 4px;
   padding: 0;
+
+  @media print {
+    display: none;
+  }
 
   > div {
     margin: 0 3px 0 0;
