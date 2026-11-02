@@ -19,6 +19,14 @@ describe Sprockets::Railtie do
     expect(css).not_to include("image-url(")
   end
 
+  it "emits the patient summary print override after its default display rule" do
+    css = environment.find_asset("renalware/core.css").to_s
+    display_values = css.scan(/\.patient-summary\s*\{[^}]*?\bdisplay:\s*(\w+)/).flatten
+
+    expect(display_values).to eq(%w(flex none))
+    expect(css).to match(/@media\s+print\s*\{\s*\.patient-summary\s*\{\s*display:\s*none\b/)
+  end
+
   it "embeds the draft image in PDF styles" do
     css = environment.find_asset("renalware/pdf.css").to_s
 
