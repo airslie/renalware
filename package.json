@@ -29,6 +29,9 @@
     "sortablejs": "^1.13.0",
     "underscore": "1.13.8"
   },
+  "resolutions": {
+    "minimatch": "11.0.4"
+  },
   "scripts": {
     "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
     "build:css": "bundle exec tailwindcss -c ./config/tailwind.config.js -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css"

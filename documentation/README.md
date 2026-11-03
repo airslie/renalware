@@ -4,9 +4,43 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 
 ### Installation
 
+Use Node.js 22 or newer (CI uses Node.js 24) and Yarn Classic 1.22.22.
+
 ```
 $ yarn
 ```
+
+### Dependency security
+
+Run `yarn audit` here and at the repository root. The JavaScript Security workflow
+checks both dependency trees, including build tools, and blocks HIGH/CRITICAL
+findings. Lower severities remain visible in the retained reports. Audit errors,
+missing summaries and unexpected exit statuses also fail the checks.
+
+Temporary Yarn `resolutions` select patched transitive dependencies while their
+parents still request older major versions:
+
+- Application: `minimatch` 11.0.4 for ESLint and its config-array dependency.
+- Documentation: `serialize-javascript` 7.1.4 for the Webpack plugins, `tinypool`
+  2.1.2 for Docusaurus, and `uuid` 11.1.1 for SockJS.
+
+Remove each override when the parent dependency supports a patched release.
+Check both builds and ESLint when changing these overrides because they cross
+the parents' declared version ranges.
+
+Remaining advisories as of 3 November 2026:
+
+- `deepmerge` (both trees): [GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4).
+  The latest release, 4.3.1, has no published fix. It is used by Rollup's node
+  resolver and the documentation SVG tooling.
+- `minimatch` (documentation): [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249).
+  Docusaurus's `serve-handler` 6.1.7 requires 3.1.5 and calls its function export.
+  The fixed 11.x API is not a drop-in replacement for that caller.
+
+These findings are not suppressed. Raw `yarn audit` still exits unsuccessfully,
+but CI permits these low/moderate findings under its HIGH/CRITICAL policy.
+Do not downgrade `deepmerge` merely to fall
+outside the advisory range, or force minimatch 11 into `serve-handler`.
 
 ### Local Development
 
