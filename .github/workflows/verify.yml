@@ -24,7 +24,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BUNDLE_GITHUB__COM: ${{ secrets.CR_PAT }}
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   RENALWARE_EXTENSIONS: ${{ secrets.RENALWARE_EXTENSIONS }}
@@ -39,15 +38,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94 # v1
         with:
           bundler-cache: true
 
       - name: Setup node and yarn with caching
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
           cache: "yarn"
@@ -56,7 +55,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Asset cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: |
             public/assets
@@ -90,15 +89,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94 # v1
         with:
           bundler-cache: true
 
       - name: Setup node and yarn with caching
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
           cache: "yarn"
@@ -203,18 +202,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           submodules: "true"
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94 # v1
         with:
           bundler-cache: true
 
       - name: Setup node and yarn with caching
         if: matrix.javascript
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
           cache: "yarn"
@@ -226,7 +225,7 @@ jobs:
       - name: Cache Playwright Chromium browser
         if: matrix.browser
         id: playwright-cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ~/.cache/ms-playwright
           key: playwright-browsers-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -241,7 +240,7 @@ jobs:
 
       - name: Restore asset cache
         if: matrix.browser
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: |
             public/assets
@@ -293,7 +292,7 @@ jobs:
 
       - name: Store test failure screenshots
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: test-failure-screenshots
           path: tmp/capybara

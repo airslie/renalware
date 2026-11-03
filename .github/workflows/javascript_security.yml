@@ -1,0 +1,62 @@
+name: JavaScript Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: javascript-security-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Audit ${{ matrix.name }} dependencies
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: application
+            directory: .
+          - name: documentation
+            directory: documentation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+
+      - name: Verify Yarn Classic version
+        run: test "$(yarn --version)" = "1.22.22"
+
+      - name: Test audit policy
+        run: node --test bin/gh/audit-javascript.test.cjs
+
+      # Include build tools and retain every severity. Block HIGH/CRITICAL and audit errors.
+      - name: Audit dependencies
+        working-directory: ${{ matrix.directory }}
+        shell: bash
+        run: node "${GITHUB_WORKSPACE}/bin/gh/audit-javascript.cjs" "${RUNNER_TEMP}/yarn-audit.jsonl"
+
+      - name: Upload audit report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: yarn-audit-${{ matrix.name }}
+          path: ${{ runner.temp }}/yarn-audit.jsonl
+          if-no-files-found: warn
