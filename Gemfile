@@ -27,12 +27,10 @@ gem "azure-blob", "~> 0.8.0"
 gem "benchmark"
 gem "bootsnap", require: false # speeds up rspec and rails server boot time in development
 gem "faker"
-gem "i18n-tasks", require: false
 gem "jsbundling-rails", "~> 1.0"
 gem "json", "~> 2.21.2"
 gem "net-smtp", require: false # remove in Rails 7
 gem "rails", "~> 8.1.2"
-gem "ruby-prof", require: false
 gem "solid_cache"
 gem "terser"
 gem "thruster"
@@ -103,6 +101,7 @@ group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
   gem "debug", ">= 1.0.0", platforms: %i(mri windows)
   gem "factory_bot_rails", "~> 6.2"
+  gem "i18n-tasks", require: false
   gem "launchy", require: false
   # gem "overcommit" best not to include - just install manually and
   # run `overcommit --install` in the project root
@@ -110,6 +109,7 @@ group :development, :test do
   gem "pry-rails"
   gem "rspec-rails"
   gem "rubocop", require: false
+  gem "ruby-prof", require: false
   gem "wkhtmltopdf-binary", "0.12.6.8"
 end
 
