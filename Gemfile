@@ -44,7 +44,9 @@ gem "rake"
 
 gem "strong_migrations"
 
-gem "fhir_stu3_models", github: "airslie/fhir_stu3_models"
+gem "fhir_stu3_models",
+    github: "airslie/fhir_stu3_models",
+    ref: "2c7f65f39b3fbed0cdff62736d75a61f6507792f"
 gem "good_job", "~> 4.0"
 
 gem "matrix"

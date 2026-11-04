@@ -53,13 +53,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Install application gems
-COPY Gemfile Gemfile.lock yarn.lock package.json .gemrc .ruby-version .gitmodules ./
+COPY Gemfile Gemfile.lock yarn.lock package.json .yarnrc .gemrc .ruby-version .gitmodules ./
 
 ARG BUNDLE_GITHUB__COM
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
     bundle exec bootsnap precompile -j 1 --gemfile
+
+# Install only runtime JS packages (no devDependencies such as eslint, prettier, playwright) and
+# never run package lifecycle scripts. jsbundling-rails would otherwise run a plain `yarn install`
+# during assets:precompile; we skip that below with SKIP_YARN_INSTALL.
+RUN yarn install --frozen-lockfile --production --ignore-scripts && \
+    for dev_package in eslint playwright prettier; do \
+      test ! -d "node_modules/${dev_package}" || { echo "devDependency ${dev_package} was installed"; exit 1; }; \
+    done
 
 # Copy the UKRDC schema directories separately so schema updates can be cached
 # independently of broader application code changes.
@@ -118,9 +126,13 @@ RUN rm -rf public/assets tmp/cache/assets && \
     echo "ASSET_CACHE_BUSTER=${ASSET_CACHE_BUSTER}" && \
     SECRET_KEY_BASE_DUMMY=1 ./bin/rails tailwindcss:build --trace && \
     test -f app/assets/builds/tailwind.css && \
-    SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile --trace && \
+    SECRET_KEY_BASE_DUMMY=1 SKIP_YARN_INSTALL=1 ./bin/rails assets:precompile --trace && \
     ls -la public/assets && \
-    ruby -rjson -e 'manifest = Dir["public/assets/.sprockets-manifest-*.json"].max or abort("missing sprockets manifest"); assets = JSON.parse(File.read(manifest)).fetch("assets"); abort("tailwind.css missing from asset manifest") unless assets.key?("tailwind.css"); puts "tailwind asset => #{assets.fetch("tailwind.css")}"'
+    ruby -rjson -e 'manifest = Dir["public/assets/.sprockets-manifest-*.json"].max or abort("missing sprockets manifest"); assets = JSON.parse(File.read(manifest)).fetch("assets"); abort("tailwind.css missing from asset manifest") unless assets.key?("tailwind.css"); puts "tailwind asset => #{assets.fetch("tailwind.css")}"' && \
+    for dev_package in eslint playwright prettier; do \
+      test ! -d "node_modules/${dev_package}" || { echo "devDependency ${dev_package} was installed during precompile"; exit 1; }; \
+    done && \
+    rm -rf node_modules
 
 
 # Final stage for app image

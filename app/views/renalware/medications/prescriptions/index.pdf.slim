@@ -8,7 +8,7 @@ html
   heading
     .our-ref= "RW ref: #{presenter.patient.hospital_identifier}"
 
-    span.logo= wicked_pdf_image_tag "renalware/NHS-Black.jpg", width: 50
+    span.logo= image_tag(wicked_pdf_asset_base64("renalware/NHS-Black.jpg"), width: 50)
 
   main.medications-list
     h1= title
