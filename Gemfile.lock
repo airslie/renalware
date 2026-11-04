@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/airslie/fhir_stu3_models.git
   revision: 2c7f65f39b3fbed0cdff62736d75a61f6507792f
+  ref: 2c7f65f39b3fbed0cdff62736d75a61f6507792f
   specs:
     fhir_stu3_models (3.1.1)
       bcp47 (>= 0.3)
