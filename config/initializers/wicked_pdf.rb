@@ -25,6 +25,13 @@ WickedPdf.configure do |config|
   # Images must be inlined, e.g. image_tag(wicked_pdf_asset_base64("renalware/logo.png")).
   config.disable_local_file_access = true
 
+  # Our PDFs inline every asset and need no JavaScript or network access, so turn both off.
+  # Port 9 (discard) has no listener, so any http(s) fetch wkhtmltopdf attempts - for example an
+  # <img> pointing at an internal service - is refused. This is only passed to the wkhtmltopdf
+  # process and does not affect any other HTTP client in the app.
+  config.disable_javascript = true
+  config.proxy = "http://127.0.0.1:9"
+
   #   or
   # Layout file to be used for all PDFs
   # (but can be overridden in `render :pdf` calls)
