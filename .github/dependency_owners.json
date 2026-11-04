@@ -1,0 +1,962 @@
+{
+  "rubygems": {
+    "activerecord-import": [
+      "jkowens",
+      "zachdennis"
+    ],
+    "activerecord-postgres_enum": [
+      "bibendi"
+    ],
+    "acts_as_list": [
+      "spike21"
+    ],
+    "after_commit_everywhere": [
+      "Envek"
+    ],
+    "ahoy_matey": [
+      "ankane"
+    ],
+    "attr_extras": [
+      "auctionet",
+      "joakimk",
+      "malesca"
+    ],
+    "autoprefixer-rails": [
+      "albb0920",
+      "iskin",
+      "palkan"
+    ],
+    "awesome_print": [
+      "gerry",
+      "imajes",
+      "mid",
+      "waldyr"
+    ],
+    "aws-sdk-s3": [],
+    "azure-blob": [
+      "JoeDupuis"
+    ],
+    "bcrypt_pbkdf": [
+      "mfazekas"
+    ],
+    "benchmark": [
+      "hsbt"
+    ],
+    "binding_of_caller": [
+      "RobinDaugherty",
+      "badosu",
+      "banister",
+      "prpretten"
+    ],
+    "bootsnap": [
+      "burkelibbey",
+      "byroot",
+      "eileencodes",
+      "fxn",
+      "jhawthorn",
+      "rafaelfranca",
+      "tenderlove",
+      "webster132"
+    ],
+    "brakeman": [
+      "presidentbeef"
+    ],
+    "bundler-audit": [
+      "postmodern"
+    ],
+    "capybara": [
+      "jnicklas",
+      "twalpole"
+    ],
+    "capybara-playwright-driver": [
+      "YusukeIwaki"
+    ],
+    "capybara-screenshot": [
+      "mattheworiordan"
+    ],
+    "clipboard-rails": [
+      "sadiq"
+    ],
+    "cocoon": [
+      "nathanvda"
+    ],
+    "combine_pdf": [
+      "Myst"
+    ],
+    "concurrent-ruby": [
+      "chrisseaton",
+      "eregon",
+      "id:16",
+      "jdantonio",
+      "pitr-ch"
+    ],
+    "cronex": [
+      "Alpinweis"
+    ],
+    "cucumber": [
+      "cukebot"
+    ],
+    "cucumber-rails": [
+      "cukebot"
+    ],
+    "dartsass-sprockets": [
+      "johnnyshields"
+    ],
+    "database_cleaner": [
+      "bmabey",
+      "botandrose",
+      "etagwerker",
+      "vrinek"
+    ],
+    "debug": [
+      "hsbt",
+      "ko1",
+      "naruse"
+    ],
+    "devise": [
+      "cantoniodasilva",
+      "rafaelfranca"
+    ],
+    "devise-security": [
+      "natebird",
+      "olbrich",
+      "oniofchaos"
+    ],
+    "diffy": [
+      "samg"
+    ],
+    "dotenv-rails": [
+      "JessRudder",
+      "bkeepers",
+      "cadwallion",
+      "jonmagic"
+    ],
+    "dumb_delegator": [
+      "alindeman",
+      "stevenharman"
+    ],
+    "ed25519": [
+      "tarcieri"
+    ],
+    "email_validator": [
+      "balexand",
+      "karlwilbur"
+    ],
+    "enumerize": [
+      "lest",
+      "nashby"
+    ],
+    "execjs": [
+      "byroot",
+      "cantoniodasilva",
+      "eileencodes",
+      "fxn",
+      "guilleiguaran",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "schneems",
+      "tenderlove",
+      "webster132"
+    ],
+    "factory_bot_rails": [
+      "DoodlingDev",
+      "neilvcarvalho",
+      "thoughtbot"
+    ],
+    "faker": [
+      "stefannibrasil",
+      "stympy",
+      "thd",
+      "vbrazo"
+    ],
+    "faraday": [
+      "iMacTia",
+      "ollejonsson",
+      "technoweenie"
+    ],
+    "faraday-retry": [
+      "iMacTia"
+    ],
+    "fhir_models": [
+      "aquina",
+      "arscan",
+      "dgries360",
+      "jawalonoski",
+      "karlnaden",
+      "ltucker",
+      "scottbohon",
+      "smacvicar"
+    ],
+    "foreman": [
+      "ddollar"
+    ],
+    "friendly_id": [
+      "compay",
+      "parndt",
+      "xymbol"
+    ],
+    "fugit": [
+      "jmettraux_"
+    ],
+    "fuubar": [
+      "jkreeftmeijer",
+      "thekompanee"
+    ],
+    "good_job": [
+      "bensheldon"
+    ],
+    "groupdate": [
+      "ankane"
+    ],
+    "hashdiff": [
+      "liufengyun"
+    ],
+    "httparty": [
+      "jnunemaker"
+    ],
+    "i18n": [
+      "Tigrish",
+      "arkanis",
+      "cantoniodasilva",
+      "clemensk",
+      "matt_a",
+      "ryanbigg",
+      "saimon",
+      "sfuchs",
+      "svenfuchs"
+    ],
+    "i18n-tasks": [
+      "glebm"
+    ],
+    "inline_svg": [
+      "jamesmartin"
+    ],
+    "jbuilder": [
+      "byroot",
+      "cantoniodasilva",
+      "eileencodes",
+      "fxn",
+      "guilleiguaran",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "rwz",
+      "tenderlove",
+      "webster132"
+    ],
+    "jquery-rails": [
+      "byroot",
+      "cantoniodasilva",
+      "eileencodes",
+      "fxn",
+      "guilleiguaran",
+      "indirect",
+      "jangosteve",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "tenderlove",
+      "webster132"
+    ],
+    "jsbundling-rails": [
+      "byroot",
+      "cantoniodasilva",
+      "fxn",
+      "guilleiguaran",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "webster132"
+    ],
+    "json": [
+      "byroot",
+      "flori",
+      "headius",
+      "hsbt",
+      "naruse"
+    ],
+    "launchy": [
+      "jjh"
+    ],
+    "liquid": [
+      "Dennis",
+      "dylanahsmith",
+      "pushrax",
+      "shopify"
+    ],
+    "lograge": [
+      "benlovell",
+      "iloveitaly",
+      "johnnagro",
+      "pom"
+    ],
+    "matrix": [
+      "hsbt",
+      "marcandre",
+      "naruse"
+    ],
+    "naught": [
+      "avdi",
+      "sferik"
+    ],
+    "nested_form": [
+      "lest",
+      "ryanb"
+    ],
+    "net-ldap": [
+      "HarlemSquirrel",
+      "jch",
+      "mtodd",
+      "schaary"
+    ],
+    "net-sftp": [
+      "delano",
+      "mfazekas",
+      "minam"
+    ],
+    "net-smtp": [
+      "hsbt",
+      "knu",
+      "tommy"
+    ],
+    "nokogiri": [
+      "flavorjones",
+      "knu",
+      "tenderlove"
+    ],
+    "omniauth": [
+      "BobbyMcWho",
+      "mbleigh",
+      "sferik",
+      "tmilewski"
+    ],
+    "omniauth-entra-id": [
+      "RIPAGlobal",
+      "pond"
+    ],
+    "omniauth-ldap": [
+      "mbleigh",
+      "panpainter",
+      "pboling",
+      "pyu",
+      "tmilewski"
+    ],
+    "omniauth-rails_csrf_protection": [
+      "cookpad",
+      "sikachu"
+    ],
+    "opentelemetry-exporter-otlp": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-exporter-otlp-metrics": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-instrumentation-active_job": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-instrumentation-faraday": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-instrumentation-net_http": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-instrumentation-pg": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-instrumentation-rack": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-instrumentation-rails": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-metrics-sdk": [
+      "opentelemetry-ruby"
+    ],
+    "opentelemetry-sdk": [
+      "opentelemetry-ruby"
+    ],
+    "ox": [
+      "ohler"
+    ],
+    "packwerk": [
+      "shopify"
+    ],
+    "pagy": [
+      "ddnexus"
+    ],
+    "pandoc-ruby": [
+      "alphabetum"
+    ],
+    "paper_trail": [
+      "airblade",
+      "batter",
+      "fatkodima",
+      "jaredbeck"
+    ],
+    "paranoia": [
+      "BenMorganIO",
+      "jhawthorn",
+      "mathieu",
+      "ryanbigg",
+      "sevenseacat"
+    ],
+    "pdf-reader": [
+      "jhealy",
+      "pjones"
+    ],
+    "pg": [
+      "ged",
+      "jdavis",
+      "larskanis"
+    ],
+    "pghero": [
+      "ankane"
+    ],
+    "phlex-rails": [
+      "joeldrapper",
+      "willcosgrove"
+    ],
+    "prawn": [
+      "binarywaterfall",
+      "bluejade",
+      "bradediger",
+      "jhealy",
+      "jonsgreen",
+      "minam",
+      "packetmonkey",
+      "pointlessone"
+    ],
+    "prawn-table": [
+      "binarywaterfall",
+      "bradediger",
+      "hbrandl",
+      "packetmonkey",
+      "pointlessone"
+    ],
+    "pry-rails": [
+      "djpowers",
+      "rweng",
+      "ryanf"
+    ],
+    "psych": [
+      "headius",
+      "hsbt",
+      "tenderlove"
+    ],
+    "puma": [
+      "evan",
+      "nateberkopec",
+      "schneems"
+    ],
+    "pundit": [
+      "Burgestrand",
+      "jnicklas",
+      "varvet"
+    ],
+    "query_count": [
+      "rubysamurai"
+    ],
+    "rack": [
+      "chneukirchen",
+      "eileencodes",
+      "ioquatix",
+      "rafaelfranca",
+      "raggi",
+      "tenderlove"
+    ],
+    "rack-attack": [
+      "frewsxcv",
+      "grzuy",
+      "ioquatix",
+      "ktheory"
+    ],
+    "rails": [
+      "byroot",
+      "cantoniodasilva",
+      "eileencodes",
+      "fxn",
+      "guilleiguaran",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "tenderlove"
+    ],
+    "rails-controller-testing": [
+      "byroot",
+      "cantoniodasilva",
+      "eileencodes",
+      "fxn",
+      "guilleiguaran",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "tenderlove",
+      "webster132"
+    ],
+    "rake": [
+      "drbrain",
+      "hsbt",
+      "jimweirich"
+    ],
+    "ransack": [
+      "deivid",
+      "gregmolnar",
+      "sfcarroll"
+    ],
+    "roo": [
+      "chopraanmol1",
+      "empact",
+      "hmcgowan",
+      "simonoff",
+      "stevendaniels",
+      "thopre"
+    ],
+    "rqrcode": [
+      "whomwah"
+    ],
+    "rspec-html-matchers": [
+      "kucaahbe",
+      "randoum"
+    ],
+    "rspec-rails": [
+      "JonRowe"
+    ],
+    "rspec-retry": [
+      "MichaelGlass",
+      "ento",
+      "y_310"
+    ],
+    "rspec_junit_formatter": [
+      "sj26"
+    ],
+    "rubocop": [
+      "Drenmi",
+      "bbatsov",
+      "koic_ito",
+      "yujinakayama"
+    ],
+    "rubocop-capybara": [
+      "Darhazer",
+      "bquorning",
+      "pirj",
+      "ydah"
+    ],
+    "rubocop-factory_bot": [
+      "Darhazer",
+      "bquorning",
+      "pirj",
+      "ydah"
+    ],
+    "rubocop-i18n": [
+      "koic_ito",
+      "puppet-release"
+    ],
+    "rubocop-performance": [
+      "bbatsov",
+      "koic_ito"
+    ],
+    "rubocop-rails": [
+      "bbatsov",
+      "koic_ito"
+    ],
+    "rubocop-rake": [
+      "bbatsov",
+      "koic_ito",
+      "pocke"
+    ],
+    "rubocop-rspec": [
+      "Darhazer",
+      "bquorning",
+      "ydah"
+    ],
+    "rubocop-rspec_rails": [
+      "ydah"
+    ],
+    "rubocop-slim": [
+      "r7kamura"
+    ],
+    "ruby-hl7": [
+      "LucasM0N",
+      "Stratus3D",
+      "jdee",
+      "kofno",
+      "mitch-lindsay",
+      "mogox",
+      "patrickdlogan",
+      "segy"
+    ],
+    "ruby-lsp": [
+      "shopify"
+    ],
+    "ruby-prof": [
+      "bitsweat",
+      "cfis",
+      "harshaw",
+      "hboen",
+      "rogerdpack",
+      "shugo",
+      "skaes"
+    ],
+    "rubydex": [
+      "shopify"
+    ],
+    "scenic": [
+      "calebhearth",
+      "derekprior"
+    ],
+    "sendgrid-ruby": [
+      "twilio-dx"
+    ],
+    "shoulda-matchers": [
+      "guialbuk",
+      "matsales28",
+      "mcmire",
+      "thoughtbot",
+      "vsppedro"
+    ],
+    "simple_form": [
+      "cantoniodasilva",
+      "rafaelfranca"
+    ],
+    "simplecov": [
+      "PragTob",
+      "a_matsuda",
+      "bf4",
+      "colszowka",
+      "deivid",
+      "sferik",
+      "xaviershay"
+    ],
+    "simplecov-cobertura": [
+      "jessebs"
+    ],
+    "sinatra": [
+      "bmizerany",
+      "dentarg",
+      "jkowens",
+      "kytrinyx",
+      "namusyaka",
+      "rkh",
+      "zzak"
+    ],
+    "slim-rails": [
+      "januszm",
+      "leogalmeida",
+      "taketo1113"
+    ],
+    "solid_cache": [
+      "dmcbreen",
+      "eileencodes",
+      "fxn",
+      "guilleiguaran",
+      "jeremydaer",
+      "matthewd",
+      "rafaelfranca",
+      "tenderlove",
+      "webster132"
+    ],
+    "sprockets-rails": [
+      "byroot",
+      "cantoniodasilva",
+      "eileencodes",
+      "fxn",
+      "guilleiguaran",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "schneems",
+      "tenderlove",
+      "webster132"
+    ],
+    "stackprof": [
+      "aroben",
+      "id:44804",
+      "id:690",
+      "tenderlove"
+    ],
+    "store_model": [
+      "DmitryTsepelev"
+    ],
+    "strong_migrations": [
+      "ankane"
+    ],
+    "tailwindcss-rails": [
+      "byroot",
+      "cantoniodasilva",
+      "flavorjones",
+      "fxn",
+      "guilleiguaran",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "webster132"
+    ],
+    "tailwindcss-ruby": [
+      "flavorjones"
+    ],
+    "terser": [
+      "ahorek"
+    ],
+    "test-prof": [
+      "palkan"
+    ],
+    "thruster": [
+      "flavorjones",
+      "monorkin"
+    ],
+    "turbo-rails": [
+      "basecamp",
+      "jmanrubia",
+      "webster132"
+    ],
+    "validates_timeliness": [
+      "adzap"
+    ],
+    "vcr": [
+      "krainboltgreene",
+      "mcfiredrill",
+      "myronmarston",
+      "ollejonsson"
+    ],
+    "view_component": [
+      "BlakeWilliams",
+      "Spone",
+      "boardfish",
+      "camertron",
+      "joelhawksley"
+    ],
+    "virtus": [
+      "CraigBuchek",
+      "envygeeks",
+      "solnic"
+    ],
+    "web-console": [
+      "byroot",
+      "cantoniodasilva",
+      "eileencodes",
+      "fxn",
+      "gsamokovarov",
+      "guilleiguaran",
+      "jeremydaer",
+      "jhawthorn",
+      "kamipo",
+      "matthewd",
+      "rafaelfranca",
+      "tenderlove",
+      "webster132"
+    ],
+    "webmock": [
+      "bartoszblimke",
+      "koic_ito",
+      "myronmarston"
+    ],
+    "wicked_pdf": [
+      "mileszs",
+      "unixmonkey"
+    ],
+    "wisper": [
+      "krisleech"
+    ],
+    "wisper-activejob": [
+      "krisleech"
+    ],
+    "wisper-rspec": [
+      "krisleech"
+    ],
+    "wkhtmltopdf-binary": [
+      "Zakir",
+      "lambdabutz",
+      "unixmonkey"
+    ],
+    "yard": [
+      "lsegal"
+    ]
+  },
+  "npm": {
+    "@docusaurus/core": [
+      "docusaurus-bot",
+      "fb",
+      "lex111",
+      "slorber"
+    ],
+    "@docusaurus/module-type-aliases": [
+      "docusaurus-bot",
+      "fb",
+      "lex111",
+      "slorber"
+    ],
+    "@docusaurus/preset-classic": [
+      "docusaurus-bot",
+      "fb",
+      "lex111",
+      "slorber"
+    ],
+    "@docusaurus/types": [
+      "docusaurus-bot",
+      "fb",
+      "lex111",
+      "slorber"
+    ],
+    "@easyops-cn/docusaurus-search-local": [
+      "easyops-eve",
+      "weareoutman"
+    ],
+    "@hotwired/stimulus": [
+      "dhh"
+    ],
+    "@hotwired/turbo-rails": [
+      "dhh",
+      "jayohms",
+      "jorgemanrubia",
+      "kevinmcconnell",
+      "packagethief",
+      "rosapolis"
+    ],
+    "@mdx-js/react": [
+      "johno",
+      "remcohaszing",
+      "timneutkens",
+      "wooorm"
+    ],
+    "@rollup/plugin-commonjs": [
+      "guybedford",
+      "lukastaegert",
+      "rich_harris",
+      "shellscape"
+    ],
+    "@rollup/plugin-node-resolve": [
+      "guybedford",
+      "lukastaegert",
+      "rich_harris",
+      "shellscape"
+    ],
+    "@stimulus-components/dropdown": [
+      "guillaumebriday"
+    ],
+    "balloon-css": [
+      "kazzkiq"
+    ],
+    "clsx": [
+      "lukeed"
+    ],
+    "date-fns": [
+      "kossnocorp"
+    ],
+    "debounce": [
+      "sindresorhus"
+    ],
+    "eslint": [
+      "eslintbot",
+      "openjsfoundation"
+    ],
+    "flatpickr": [
+      "chmln",
+      "viorelsfetea"
+    ],
+    "highcharts": [
+      "askelj",
+      "bre1470",
+      "cvasseng",
+      "goransle",
+      "jszuminski",
+      "jtistel",
+      "khlieng",
+      "oysteinmoseng",
+      "skrulling",
+      "torsteinhonsi"
+    ],
+    "masonry-layout": [
+      "desandro"
+    ],
+    "moment": [
+      "gilmoreorless",
+      "ichernev",
+      "maggiepint",
+      "marwahaha",
+      "mattjohnsonpint",
+      "timrwood"
+    ],
+    "playwright": [
+      "dgozman-ms",
+      "microsoft-oss-releases",
+      "microsoft1es",
+      "pavelfeldman",
+      "yurys"
+    ],
+    "prettier": [
+      "azz",
+      "duailibe",
+      "fisker",
+      "ikatyang",
+      "jlongster",
+      "lydell",
+      "prettier-bot",
+      "sosukesuzuki",
+      "suchipi",
+      "thorn0",
+      "vjeux"
+    ],
+    "print-js": [
+      "crabbly"
+    ],
+    "prism-react-renderer": [
+      "carbonrobot",
+      "ceceppa",
+      "formidable-owner",
+      "formidablelabs",
+      "keithluchtel",
+      "mariano-formidable",
+      "masiddee",
+      "michaelmerrill",
+      "philpl",
+      "robwalkerco",
+      "ryan.roemer",
+      "sarahformidable",
+      "sarmeyer",
+      "scott-rippey",
+      "scottianstewart"
+    ],
+    "react": [
+      "fb",
+      "react-bot"
+    ],
+    "react-dom": [
+      "fb",
+      "react-bot"
+    ],
+    "rollup": [
+      "eventualbuddha",
+      "lukastaegert",
+      "rich_harris",
+      "trysound",
+      "victorystick"
+    ],
+    "slim-select": [
+      "brianvoe"
+    ],
+    "sortablejs": [
+      "owenm",
+      "rubaxa"
+    ],
+    "underscore": [
+      "jashkenas",
+      "jgonggrijp"
+    ]
+  }
+}

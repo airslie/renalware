@@ -1,0 +1,46 @@
+name: Dependency Owners
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - Gemfile
+      - Gemfile.lock
+      - package.json
+      - documentation/package.json
+      - .github/dependency_owners.json
+      - .github/workflows/dependency_owners.yml
+      - bin/gh/check-dependency-owners.cjs
+  schedule:
+    - cron: "47 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dependency-owners-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  owners:
+    name: Check gem and npm owners
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+
+      - name: Test owner check
+        run: node --test bin/gh/check-dependency-owners.test.cjs
+
+      - name: Compare owners with recorded snapshot
+        run: node bin/gh/check-dependency-owners.cjs
