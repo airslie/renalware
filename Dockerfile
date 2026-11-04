@@ -64,7 +64,10 @@ RUN bundle install && \
 # Install only runtime JS packages (no devDependencies such as eslint, prettier, playwright) and
 # never run package lifecycle scripts. jsbundling-rails would otherwise run a plain `yarn install`
 # during assets:precompile; we skip that below with SKIP_YARN_INSTALL.
-RUN yarn install --frozen-lockfile --production --ignore-scripts
+RUN yarn install --frozen-lockfile --production --ignore-scripts && \
+    for dev_package in eslint playwright prettier; do \
+      test ! -d "node_modules/${dev_package}" || { echo "devDependency ${dev_package} was installed"; exit 1; }; \
+    done
 
 # Copy the UKRDC schema directories separately so schema updates can be cached
 # independently of broader application code changes.
@@ -126,6 +129,9 @@ RUN rm -rf public/assets tmp/cache/assets && \
     SECRET_KEY_BASE_DUMMY=1 SKIP_YARN_INSTALL=1 ./bin/rails assets:precompile --trace && \
     ls -la public/assets && \
     ruby -rjson -e 'manifest = Dir["public/assets/.sprockets-manifest-*.json"].max or abort("missing sprockets manifest"); assets = JSON.parse(File.read(manifest)).fetch("assets"); abort("tailwind.css missing from asset manifest") unless assets.key?("tailwind.css"); puts "tailwind asset => #{assets.fetch("tailwind.css")}"' && \
+    for dev_package in eslint playwright prettier; do \
+      test ! -d "node_modules/${dev_package}" || { echo "devDependency ${dev_package} was installed during precompile"; exit 1; }; \
+    done && \
     rm -rf node_modules
 
 
