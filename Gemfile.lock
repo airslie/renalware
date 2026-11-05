@@ -115,26 +115,6 @@ GEM
     autoprefixer-rails (10.6.1.0)
       execjs (~> 2)
     awesome_print (1.9.2)
-    aws-eventstream (1.4.1)
-    aws-partitions (1.1300.0)
-    aws-sdk-core (3.263.0)
-      aws-eventstream (~> 1, >= 1.4.1)
-      aws-partitions (~> 1, >= 1.992.0)
-      aws-sigv4 (~> 1.9)
-      base64
-      bigdecimal
-      jmespath (~> 1, >= 1.6.1)
-      logger
-      rexml (~> 3.4, >= 3.4.2)
-    aws-sdk-kms (1.138.0)
-      aws-sdk-core (~> 3, >= 3.263.0)
-      aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.237.0)
-      aws-sdk-core (~> 3, >= 3.263.0)
-      aws-sdk-kms (~> 1)
-      aws-sigv4 (~> 1.5)
-    aws-sigv4 (1.12.1)
-      aws-eventstream (~> 1, >= 1.0.2)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -377,7 +357,6 @@ GEM
     jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    jmespath (1.6.2)
     jquery-rails (4.6.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -986,7 +965,7 @@ GEM
       activejob (>= 4.0.0)
       wisper
     wisper-rspec (1.1.0)
-    wkhtmltopdf-binary (0.12.6.8)
+    wkhtmltopdf-binary (0.12.6.10)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yaml (0.4.0)
@@ -1009,7 +988,6 @@ DEPENDENCIES
   attr_extras
   autoprefixer-rails
   awesome_print
-  aws-sdk-s3
   azure-blob (~> 0.8.0)
   bcrypt_pbkdf
   benchmark
@@ -1155,7 +1133,7 @@ DEPENDENCIES
   wisper (~> 3.0.0)
   wisper-activejob (~> 1.0.0)
   wisper-rspec (~> 1.1.0)
-  wkhtmltopdf-binary (= 0.12.6.8)
+  wkhtmltopdf-binary (= 0.12.6.10)
   yard (>= 0.9.35)
 
 RUBY VERSION
