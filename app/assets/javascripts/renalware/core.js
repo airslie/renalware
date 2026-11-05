@@ -27,7 +27,6 @@
 //= require clipboard
 //= require masonry-layout/dist/masonry.pkgd
 //= require print-js/dist/print
-//= require moment/moment
 //= require trix
 //= require_directory ./components
 
