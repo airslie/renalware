@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import debounce from "debounce"
+import { debounce } from "../helpers/timing"
 
 /*  Adds auto-submit to a form using @hotwired turbo
     Submits the form associated with the input

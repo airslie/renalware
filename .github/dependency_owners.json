@@ -858,9 +858,6 @@
     "date-fns": [
       "kossnocorp"
     ],
-    "debounce": [
-      "sindresorhus"
-    ],
     "eslint": [
       "eslintbot",
       "openjsfoundation"
@@ -945,10 +942,6 @@
     "sortablejs": [
       "owenm",
       "rubaxa"
-    ],
-    "underscore": [
-      "jashkenas",
-      "jgonggrijp"
     ]
   }
 }
