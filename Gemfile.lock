@@ -933,9 +933,6 @@ GEM
       logger
     thor (1.5.0)
     thread_safe (0.3.6)
-    thruster (0.1.27-aarch64-linux)
-    thruster (0.1.27-arm64-darwin)
-    thruster (0.1.27-x86_64-linux)
     tilt (2.9.0)
     timeliness (0.5.3)
     timeout (0.6.1)
@@ -1147,7 +1144,6 @@ DEPENDENCIES
   tailwindcss-ruby (~> 3.4)
   terser
   test-prof
-  thruster
   turbo-rails (= 2.0.23)
   validates_timeliness
   vcr

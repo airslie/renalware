@@ -33,7 +33,6 @@ gem "net-smtp", require: false # remove in Rails 7
 gem "rails", "~> 8.1.2"
 gem "solid_cache"
 gem "terser"
-gem "thruster"
 # Re wkhtmltopdf binary for letter generation
 # a host app could include the wkhtmltopdf-binary gem, or use the apt package.
 # Bear in mind the gem contains several platform-specific binaries so is pretty large,
