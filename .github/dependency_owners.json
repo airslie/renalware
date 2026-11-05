@@ -32,7 +32,6 @@
       "mid",
       "waldyr"
     ],
-    "aws-sdk-s3": [],
     "azure-blob": [
       "JoeDupuis"
     ],
@@ -715,10 +714,6 @@
     ],
     "test-prof": [
       "palkan"
-    ],
-    "thruster": [
-      "flavorjones",
-      "monorkin"
     ],
     "turbo-rails": [
       "basecamp",

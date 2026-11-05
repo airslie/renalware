@@ -11,6 +11,10 @@ module Renalware
         REGEX_TO_STRIP_SVG = %r{(?m)<svg\s*.*?"\s*\/>}
 
         def call
+          if Renalware.config.letters_render_rtf_with_ruby
+            return HtmlToRTF.new(letter.to_html).call
+          end
+
           using_temp_html_file do |temp_file|
             rtf_content_converted_from(temp_file)
           end

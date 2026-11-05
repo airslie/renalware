@@ -1,0 +1,35 @@
+{
+  "generator": "pandoc 3.10.1",
+  "cases": [
+    {
+      "name": "basic",
+      "html": "<table><tr><th>A</th><th>B</th></tr><tr><td>One</td><td>Two</td></tr></table>",
+      "body": "{\n\\trowd \\trgaph120\n\\clbrdrb\\brdrs\\cellx4320\\clbrdrb\\brdrs\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 A\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 B\\par}\n\\cell}\n}\n\\intbl\\row}\n{\n\\trowd \\trgaph120\n\\cellx4320\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 One\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 Two\\par}\n\\cell}\n}\n\\intbl\\row}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\par}"
+    },
+    {
+      "name": "multiline_and_empty",
+      "html": "<table><tr><td>A</td><td>B</td><td>C</td></tr><tr><td><p>One</p><p>Two<br>Three</p></td><td></td></tr></table>",
+      "body": "{\n\\trowd \\trgaph120\n\\cellx2880\\cellx5760\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 A\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 B\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 C\\par}\n\\cell}\n}\n\\intbl\\row}\n{\n\\trowd \\trgaph120\n\\cellx2880\\cellx5760\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 One\\par}\n{\\pard\\intbl \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Two\\line Three\\par}\n\\cell}\n{\\cell}\n{\\cell}\n}\n\\intbl\\row}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\par}"
+    },
+    {
+      "name": "spans",
+      "html": "<table><tr><th colspan=\"2\">Header</th></tr><tr><td rowspan=\"2\">A</td><td>B</td></tr><tr><td>C</td></tr></table>",
+      "body": "{\n\\trowd \\trgaph120\n\\clbrdrb\\brdrs\\cellx4320\\clbrdrb\\brdrs\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 Header\\par}\n\\cell}\n{\\cell}\n}\n\\intbl\\row}\n{\n\\trowd \\trgaph120\n\\cellx4320\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 A\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 B\\par}\n\\cell}\n}\n\\intbl\\row}\n{\n\\trowd \\trgaph120\n\\cellx4320\\cellx8640\n\\trkeep\\intbl\n{\n{\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 C\\par}\n\\cell}\n}\n\\intbl\\row}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\par}"
+    },
+    {
+      "name": "widths_and_alignment",
+      "html": "<table><colgroup><col style=\"width: 30%\"><col style=\"width: 70%\"></colgroup><tr><td align=\"right\">A</td><td style=\"text-align: center\">B</td></tr></table>",
+      "body": "{\n\\trowd \\trgaph120\n\\cellx2592\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\qr \\f0 \\fs24 \\sa0 \\li0 \\fi0 A\\par}\n\\cell}\n{{\\pard\\intbl \\qc \\f0 \\fs24 \\sa0 \\li0 \\fi0 B\\par}\n\\cell}\n}\n\\intbl\\row}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\par}"
+    },
+    {
+      "name": "caption_and_sections",
+      "html": "<table><caption>Results</caption><thead><tr><th>A</th><th>B</th></tr></thead><tbody><tr><td><b>One</b></td><td>Two</td></tr></tbody><tfoot><tr><td>Total</td><td>2</td></tr></tfoot></table>",
+      "body": "{\n\\trowd \\trgaph120\n\\clbrdrb\\brdrs\\cellx4320\\clbrdrb\\brdrs\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 A\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 B\\par}\n\\cell}\n}\n\\intbl\\row}\n{\n\\trowd \\trgaph120\n\\cellx4320\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 {\\b One}\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 Two\\par}\n\\cell}\n}\n\\intbl\\row}\n{\n\\trowd \\trgaph120\n\\cellx4320\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 Total\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 2\\par}\n\\cell}\n}\n\\intbl\\row}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Results\\par}"
+    },
+    {
+      "name": "surrounding_paragraphs",
+      "html": "<p>Before</p><div><table><tr><td>A</td><td>B</td></tr></table></div><p>After</p>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Before\\par}\n{\n\\trowd \\trgaph120\n\\cellx4320\\cellx8640\n\\trkeep\\intbl\n{\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 A\\par}\n\\cell}\n{{\\pard\\intbl \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 B\\par}\n\\cell}\n}\n\\intbl\\row}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 After\\par}"
+    }
+  ]
+}

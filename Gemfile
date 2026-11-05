@@ -22,7 +22,6 @@ group :opentelemetry do
 end
 
 gem "autoprefixer-rails"
-gem "aws-sdk-s3", require: false # for active storage when using Heroku for test environments
 gem "azure-blob", "~> 0.8.0"
 gem "benchmark"
 gem "bootsnap", require: false # speeds up rspec and rails server boot time in development
@@ -111,7 +110,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rubocop", require: false
   gem "ruby-prof", require: false
-  gem "wkhtmltopdf-binary", "0.12.6.8"
+  gem "wkhtmltopdf-binary", "0.12.6.10"
 end
 
 # From gemspec

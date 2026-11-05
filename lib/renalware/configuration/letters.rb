@@ -11,6 +11,11 @@ module Renalware
       end
 
       def self.register_letter_settings(base)
+        # Experimental: retain Pandoc as the default until receiving systems validate the output.
+        base.config_accessor(:letters_render_rtf_with_ruby) do
+          ActiveModel::Type::Boolean.new.cast(ENV.fetch("LETTERS_RENDER_RTF_WITH_RUBY", "false"))
+        end
+
         base.config_accessor(:letters_render_pdfs_with_prawn) do
           ActiveModel::Type::Boolean.new.cast(
             ENV.fetch("LETTERS_RENDER_PDFS_WITH_PRAWN", "false")

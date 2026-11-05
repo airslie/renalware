@@ -81,7 +81,6 @@ Uses native local tooling. Infrastructure services such as PostgreSQL are manage
 - Don't write controller tests. System tests are better
 - Don't write Cucumber features. These are deprecated
 - Use descriptive test names that document behavior
-- Avoid code comments, tests and well named methods are the documentation
 
 ### Coverage Reporting
 SimpleCov is configured to track code coverage for both RSpec and Cucumber tests:

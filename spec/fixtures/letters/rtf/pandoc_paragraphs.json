@@ -1,0 +1,50 @@
+{
+  "generator": "pandoc 3.10.1",
+  "cases": [
+    {
+      "name": "paragraphs",
+      "html": "<p>One</p><p>Two</p>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 One\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Two\\par}"
+    },
+    {
+      "name": "wrappers",
+      "html": "<div><section><p>One</p><p>Two</p></section></div>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 One\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Two\\par}"
+    },
+    {
+      "name": "mixed",
+      "html": "<div>Before<p>Middle</p>After</div>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 Before\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Middle\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 After\\par}"
+    },
+    {
+      "name": "headings",
+      "html": "<h1>Title</h1><h2>Summary</h2><h3>Details</h3><p>Body<br>Next</p>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\outlinelevel0 \\b \\fs34 Title\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\outlinelevel1 \\b \\fs32 Summary\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\outlinelevel2 \\b \\fs30 Details\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Body\\line Next\\par}"
+    },
+    {
+      "name": "empty",
+      "html": "<p></p><div></div><p><br></p><p>End</p>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 \\line \\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 End\\par}"
+    },
+    {
+      "name": "inline",
+      "html": "<p>One <strong>bold</strong> <em>italic</em> end</p>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 One {\\b bold} {\\i italic} end\\par}"
+    },
+    {
+      "name": "blockquote",
+      "html": "<blockquote><p>Quote</p></blockquote>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li720 \\fi0 Quote\\par}"
+    },
+    {
+      "name": "line_breaks",
+      "html": "<div>A<br><br>B</div>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa0 \\li0 \\fi0 A\\line \\line B\\par}"
+    },
+    {
+      "name": "formatted_wrappers",
+      "html": "<div>\n  <section>\n    <p>One</p>\n    <p>Two</p>\n  </section>\n</div>",
+      "body": "{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 One\\par}\n{\\pard \\ql \\f0 \\fs24 \\sa180 \\li0 \\fi0 Two\\par}"
+    }
+  ]
+}
