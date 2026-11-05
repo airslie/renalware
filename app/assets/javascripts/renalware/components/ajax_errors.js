@@ -1,4 +1,4 @@
-$(document).on("ajax:error", function(event) {
+document.addEventListener("ajax:error", function(event) {
   var xhr = event.detail[2];
   switch(xhr.status) {
     // For 401 Unathorised responses, for example trying to making a
