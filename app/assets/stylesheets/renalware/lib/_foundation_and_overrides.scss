@@ -1,3 +1,4 @@
+@use "sass:color";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -61,7 +62,7 @@ $font-family-sans-serif: "Helvetica Neue", -apple-system, BlinkMacSystemFont,
 // $secondary-color: #e7e7e7;
 // $alert-color: #f04124;
 $original-alert-color: #f04124;
-$alert-color: lighten($original-alert-color, 10%);
+$alert-color: color.adjust($original-alert-color, $lightness: 10%);
 // $success-color: #43AC6A;
 $warning-color: #fb923c;// #f08a24;
 $info-color: #e0f2fe; //#a0d3e8;

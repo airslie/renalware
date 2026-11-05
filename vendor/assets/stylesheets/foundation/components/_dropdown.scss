@@ -1,3 +1,4 @@
+@use "sass:color";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -32,7 +33,7 @@ $f-dropdown-bg: $white !default;
 // We use this to set the border styles for dropdowns.
 $f-dropdown-border-style: solid !default;
 $f-dropdown-border-width: 1px !default;
-$f-dropdown-border-color: scale-color($white, $lightness: -20%) !default;
+$f-dropdown-border-color: color.scale($white, $lightness: -20%) !default;
 
 // We use these to style the triangle pip.
 $f-dropdown-triangle-size: 6px !default;

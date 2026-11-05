@@ -61,7 +61,7 @@ $z-index-base: 1005;
   position: fixed;
   right: 0;
   top: 0;
-  z-index: if($include-z-index-value, $z-index-base - 1, auto);
+  z-index: if(sass($include-z-index-value): $z-index-base - 1; else: auto);
   #{$default-float}: 0;
 }
 

@@ -1,3 +1,4 @@
+@use "sass:color";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -13,7 +14,7 @@ $has-tip-border-bottom: dotted 1px $iron !default;
 $has-tip-font-weight: $font-weight-bold !default;
 $has-tip-font-color: $oil !default;
 $has-tip-border-bottom-hover: dotted 1px
-  scale-color($primary-color, $lightness: -55%) !default;
+  color.scale($primary-color, $lightness: -55%) !default;
 $has-tip-font-color-hover: $primary-color !default;
 $has-tip-cursor-type: help !default;
 

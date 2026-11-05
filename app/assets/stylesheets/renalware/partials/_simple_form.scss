@@ -1,3 +1,4 @@
+@use "sass:math";
 .simple_form {
   /*
   This class repositions the hint to the right of the input.
@@ -76,8 +77,8 @@
   }
 
   .wrapper.wrapper_style_horizontal {
-    margin-left: -($column-gutter/2);
-    margin-right: -($column-gutter/2);
+    margin-left: -(math.div($column-gutter, 2));
+    margin-right: -(math.div($column-gutter, 2));
 
     > .wrapper__label {
       @media #{$small-only} {

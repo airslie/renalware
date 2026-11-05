@@ -1,3 +1,5 @@
+@use "sass:color";
+@use "sass:math";
 // Add scss variables here that can be used in another scss files.
 //
 // For example, if you define a variable in this file
@@ -86,7 +88,10 @@ $patient-menu-icon-hover-color: var(--white);
 
 // HD Diaries
 $hd-weekly-diary-colour: #ffedd4;
-$hd-weekly-diary-hover-colour: lighten($hd-weekly-diary-colour, 25);
+$hd-weekly-diary-hover-colour: color.change(
+  $hd-weekly-diary-colour,
+  $lightness: math.min(100%, color.channel($hd-weekly-diary-colour, "lightness", $space: hsl) + 25%)
+);
 
 //
 // Lists

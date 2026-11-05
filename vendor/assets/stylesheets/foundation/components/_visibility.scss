@@ -1,3 +1,5 @@
+@use "sass:list";
+@use "sass:string";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -18,8 +20,8 @@ $include-legacy-visibility-classes: true !default;
 // Visibility Breakpoints
 $visibility-breakpoint-sizes: small, medium, large, xlarge, xxlarge;
 
-$visibility-breakpoint-queries: unquote($small-up), unquote($medium-up),
-  unquote($large-up), unquote($xlarge-up), unquote($xxlarge-up);
+$visibility-breakpoint-queries: string.unquote($small-up), string.unquote($medium-up),
+  string.unquote($large-up), string.unquote($xlarge-up), string.unquote($xxlarge-up);
 
 @mixin visibility-loop {
   @each $current-visibility-breakpoint in $visibility-breakpoint-sizes {
@@ -36,73 +38,73 @@ $visibility-breakpoint-queries: unquote($small-up), unquote($medium-up),
     $visibility-table-cell-list: ();
 
     @each $visibility-comparison-breakpoint in $visibility-breakpoint-sizes {
-      @if index(
+      @if list.index(
           $visibility-breakpoint-sizes,
           $visibility-comparison-breakpoint
         ) <
-        index($visibility-breakpoint-sizes, $current-visibility-breakpoint)
+        list.index($visibility-breakpoint-sizes, $current-visibility-breakpoint)
       {
         // Smaller than current breakpoint
 
-        $visibility-inherit-list: append(
+        $visibility-inherit-list: list.append(
           $visibility-inherit-list,
-          unquote(
+          string.unquote(
             ".hide-for-#{$visibility-comparison-breakpoint}-only, .show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-none-list: append(
+        $visibility-none-list: list.append(
           $visibility-none-list,
-          unquote(
+          string.unquote(
             ".show-for-#{$visibility-comparison-breakpoint}-only, .hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-visible-list: append(
+        $visibility-visible-list: list.append(
           $visibility-visible-list,
-          unquote(
+          string.unquote(
             ".hidden-for-#{$visibility-comparison-breakpoint}-only, .visible-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-hidden-list: append(
+        $visibility-hidden-list: list.append(
           $visibility-hidden-list,
-          unquote(
+          string.unquote(
             ".visible-for-#{$visibility-comparison-breakpoint}-only, .hidden-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-list: append(
+        $visibility-table-list: list.append(
           $visibility-table-list,
-          unquote(
+          string.unquote(
             "table.hide-for-#{$visibility-comparison-breakpoint}-only, table.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-header-group-list: append(
+        $visibility-table-header-group-list: list.append(
           $visibility-table-header-group-list,
-          unquote(
+          string.unquote(
             "thead.hide-for-#{$visibility-comparison-breakpoint}-only, thead.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-row-group-list: append(
+        $visibility-table-row-group-list: list.append(
           $visibility-table-row-group-list,
-          unquote(
+          string.unquote(
             "tbody.hide-for-#{$visibility-comparison-breakpoint}-only, tbody.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-row-list: append(
+        $visibility-table-row-list: list.append(
           $visibility-table-row-list,
-          unquote(
+          string.unquote(
             "tr.hide-for-#{$visibility-comparison-breakpoint}-only, tr.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-cell-list: append(
+        $visibility-table-cell-list: list.append(
           $visibility-table-cell-list,
-          unquote(
+          string.unquote(
             "th.hide-for-#{$visibility-comparison-breakpoint}-only, td.hide-for-#{$visibility-comparison-breakpoint}-only, th.show-for-#{$visibility-comparison-breakpoint}-up, td.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
@@ -112,138 +114,138 @@ $visibility-breakpoint-queries: unquote($small-up), unquote($medium-up),
         // Include .show/hide-for-[size] and .show/hide-for-[size]-down classes
         // for small, medium, and large breakpoints only
         @if $include-legacy-visibility-classes and
-          index((small, medium, large), $visibility-comparison-breakpoint) !=
+          list.index((small, medium, large), $visibility-comparison-breakpoint) !=
           false
         {
-          $visibility-inherit-list: append(
+          $visibility-inherit-list: list.append(
             $visibility-inherit-list,
-            unquote(
+            string.unquote(
               ".hide-for-#{$visibility-comparison-breakpoint}, .hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-none-list: append(
+          $visibility-none-list: list.append(
             $visibility-none-list,
-            unquote(
+            string.unquote(
               ".show-for-#{$visibility-comparison-breakpoint}, .show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-visible-list: append(
+          $visibility-visible-list: list.append(
             $visibility-visible-list,
-            unquote(
+            string.unquote(
               ".hidden-for-#{$visibility-comparison-breakpoint}, .hidden-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-hidden-list: append(
+          $visibility-hidden-list: list.append(
             $visibility-hidden-list,
-            unquote(
+            string.unquote(
               ".visible-for-#{$visibility-comparison-breakpoint}, .visible-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-list: append(
+          $visibility-table-list: list.append(
             $visibility-table-list,
-            unquote(
+            string.unquote(
               "table.hide-for-#{$visibility-comparison-breakpoint}, table.hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-header-group-list: append(
+          $visibility-table-header-group-list: list.append(
             $visibility-table-header-group-list,
-            unquote(
+            string.unquote(
               "thead.hide-for-#{$visibility-comparison-breakpoint}, thead.hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-row-group-list: append(
+          $visibility-table-row-group-list: list.append(
             $visibility-table-row-group-list,
-            unquote(
+            string.unquote(
               "tbody.hide-for-#{$visibility-comparison-breakpoint}, tbody.hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-row-list: append(
+          $visibility-table-row-list: list.append(
             $visibility-table-row-list,
-            unquote(
+            string.unquote(
               "tr.hide-for-#{$visibility-comparison-breakpoint}, tr.hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-cell-list: append(
+          $visibility-table-cell-list: list.append(
             $visibility-table-cell-list,
-            unquote(
+            string.unquote(
               "th.hide-for-#{$visibility-comparison-breakpoint}, td.hide-for-#{$visibility-comparison-breakpoint}, th.hide-for-#{$visibility-comparison-breakpoint}-down, td.hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
         }
       } @else if
-        index($visibility-breakpoint-sizes, $visibility-comparison-breakpoint) >
-        index($visibility-breakpoint-sizes, $current-visibility-breakpoint)
+        list.index($visibility-breakpoint-sizes, $visibility-comparison-breakpoint) >
+        list.index($visibility-breakpoint-sizes, $current-visibility-breakpoint)
       {
         // Larger than current breakpoint
 
-        $visibility-inherit-list: append(
+        $visibility-inherit-list: list.append(
           $visibility-inherit-list,
-          unquote(
+          string.unquote(
             ".hide-for-#{$visibility-comparison-breakpoint}-only, .hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-none-list: append(
+        $visibility-none-list: list.append(
           $visibility-none-list,
-          unquote(
+          string.unquote(
             ".show-for-#{$visibility-comparison-breakpoint}-only, .show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-visible-list: append(
+        $visibility-visible-list: list.append(
           $visibility-visible-list,
-          unquote(
+          string.unquote(
             ".hidden-for-#{$visibility-comparison-breakpoint}-only, .hidden-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-hidden-list: append(
+        $visibility-hidden-list: list.append(
           $visibility-hidden-list,
-          unquote(
+          string.unquote(
             ".visible-for-#{$visibility-comparison-breakpoint}-only, .visible-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-list: append(
+        $visibility-table-list: list.append(
           $visibility-table-list,
-          unquote(
+          string.unquote(
             "table.hide-for-#{$visibility-comparison-breakpoint}-only, table.hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-header-group-list: append(
+        $visibility-table-header-group-list: list.append(
           $visibility-table-header-group-list,
-          unquote(
+          string.unquote(
             "thead.hide-for-#{$visibility-comparison-breakpoint}-only, thead.hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-row-group-list: append(
+        $visibility-table-row-group-list: list.append(
           $visibility-table-row-group-list,
-          unquote(
+          string.unquote(
             "tbody.hide-for-#{$visibility-comparison-breakpoint}-only, tbody.hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-row-list: append(
+        $visibility-table-row-list: list.append(
           $visibility-table-row-list,
-          unquote(
+          string.unquote(
             "tr.hide-for-#{$visibility-comparison-breakpoint}-only, tr.hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-cell-list: append(
+        $visibility-table-cell-list: list.append(
           $visibility-table-cell-list,
-          unquote(
+          string.unquote(
             "th.hide-for-#{$visibility-comparison-breakpoint}-only, td.hide-for-#{$visibility-comparison-breakpoint}-only, th.hide-for-#{$visibility-comparison-breakpoint}-up, td.hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
@@ -253,68 +255,68 @@ $visibility-breakpoint-queries: unquote($small-up), unquote($medium-up),
         // Include .show/hide-for-[size] and .show/hide-for-[size]-down classes
         // for small, medium, and large breakpoints only
         @if $include-legacy-visibility-classes and
-          index((small, medium, large), $visibility-comparison-breakpoint) !=
+          list.index((small, medium, large), $visibility-comparison-breakpoint) !=
           false
         {
-          $visibility-inherit-list: append(
+          $visibility-inherit-list: list.append(
             $visibility-inherit-list,
-            unquote(
+            string.unquote(
               ".hide-for-#{$visibility-comparison-breakpoint}, .show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-none-list: append(
+          $visibility-none-list: list.append(
             $visibility-none-list,
-            unquote(
+            string.unquote(
               ".show-for-#{$visibility-comparison-breakpoint}, .hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-visible-list: append(
+          $visibility-visible-list: list.append(
             $visibility-visible-list,
-            unquote(
+            string.unquote(
               ".hidden-for-#{$visibility-comparison-breakpoint}, .visible-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-hidden-list: append(
+          $visibility-hidden-list: list.append(
             $visibility-hidden-list,
-            unquote(
+            string.unquote(
               ".visible-for-#{$visibility-comparison-breakpoint}, .hidden-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-list: append(
+          $visibility-table-list: list.append(
             $visibility-table-list,
-            unquote(
+            string.unquote(
               "table.hide-for-#{$visibility-comparison-breakpoint}, table.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-header-group-list: append(
+          $visibility-table-header-group-list: list.append(
             $visibility-table-header-group-list,
-            unquote(
+            string.unquote(
               "thead.hide-for-#{$visibility-comparison-breakpoint}, thead.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-row-group-list: append(
+          $visibility-table-row-group-list: list.append(
             $visibility-table-row-group-list,
-            unquote(
+            string.unquote(
               "tbody.hide-for-#{$visibility-comparison-breakpoint}, tbody.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-row-list: append(
+          $visibility-table-row-list: list.append(
             $visibility-table-row-list,
-            unquote(
+            string.unquote(
               "tr.hide-for-#{$visibility-comparison-breakpoint}, tr.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-cell-list: append(
+          $visibility-table-cell-list: list.append(
             $visibility-table-cell-list,
-            unquote(
+            string.unquote(
               "th.hide-for-#{$visibility-comparison-breakpoint}, td.hide-for-#{$visibility-comparison-breakpoint}, th.show-for-#{$visibility-comparison-breakpoint}-down, td.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
@@ -323,65 +325,65 @@ $visibility-breakpoint-queries: unquote($small-up), unquote($medium-up),
       } @else {
         // Current breakpoint
 
-        $visibility-inherit-list: append(
+        $visibility-inherit-list: list.append(
           $visibility-inherit-list,
-          unquote(
+          string.unquote(
             ".show-for-#{$visibility-comparison-breakpoint}-only, .show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-none-list: append(
+        $visibility-none-list: list.append(
           $visibility-none-list,
-          unquote(
+          string.unquote(
             ".hide-for-#{$visibility-comparison-breakpoint}-only, .hide-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-visible-list: append(
+        $visibility-visible-list: list.append(
           $visibility-visible-list,
-          unquote(
+          string.unquote(
             ".visible-for-#{$visibility-comparison-breakpoint}-only, .visible-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-hidden-list: append(
+        $visibility-hidden-list: list.append(
           $visibility-hidden-list,
-          unquote(
+          string.unquote(
             ".hidden-for-#{$visibility-comparison-breakpoint}-only, .hidden-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-list: append(
+        $visibility-table-list: list.append(
           $visibility-table-list,
-          unquote(
+          string.unquote(
             "table.show-for-#{$visibility-comparison-breakpoint}-only, table.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-header-group-list: append(
+        $visibility-table-header-group-list: list.append(
           $visibility-table-header-group-list,
-          unquote(
+          string.unquote(
             "thead.show-for-#{$visibility-comparison-breakpoint}-only, thead.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-row-group-list: append(
+        $visibility-table-row-group-list: list.append(
           $visibility-table-row-group-list,
-          unquote(
+          string.unquote(
             "tbody.show-for-#{$visibility-comparison-breakpoint}-only, tbody.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-row-list: append(
+        $visibility-table-row-list: list.append(
           $visibility-table-row-list,
-          unquote(
+          string.unquote(
             "tr.show-for-#{$visibility-comparison-breakpoint}-only, tr.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
         );
-        $visibility-table-cell-list: append(
+        $visibility-table-cell-list: list.append(
           $visibility-table-cell-list,
-          unquote(
+          string.unquote(
             "th.show-for-#{$visibility-comparison-breakpoint}-only, td.show-for-#{$visibility-comparison-breakpoint}-only, th.show-for-#{$visibility-comparison-breakpoint}-up, td.show-for-#{$visibility-comparison-breakpoint}-up"
           ),
           comma
@@ -391,68 +393,68 @@ $visibility-breakpoint-queries: unquote($small-up), unquote($medium-up),
         // Include .show/hide-for-[size] and .show/hide-for-[size]-down classes
         // for small, medium, and large breakpoints only
         @if $include-legacy-visibility-classes and
-          index((small, medium, large), $visibility-comparison-breakpoint) !=
+          list.index((small, medium, large), $visibility-comparison-breakpoint) !=
           false
         {
-          $visibility-inherit-list: append(
+          $visibility-inherit-list: list.append(
             $visibility-inherit-list,
-            unquote(
+            string.unquote(
               ".show-for-#{$visibility-comparison-breakpoint}, .show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-none-list: append(
+          $visibility-none-list: list.append(
             $visibility-none-list,
-            unquote(
+            string.unquote(
               ".hide-for-#{$visibility-comparison-breakpoint}, .hide-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-visible-list: append(
+          $visibility-visible-list: list.append(
             $visibility-visible-list,
-            unquote(
+            string.unquote(
               ".visible-for-#{$visibility-comparison-breakpoint}, .visible-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-hidden-list: append(
+          $visibility-hidden-list: list.append(
             $visibility-hidden-list,
-            unquote(
+            string.unquote(
               ".hidden-for-#{$visibility-comparison-breakpoint}, .hidden-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-list: append(
+          $visibility-table-list: list.append(
             $visibility-table-list,
-            unquote(
+            string.unquote(
               "table.show-for-#{$visibility-comparison-breakpoint}, table.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-header-group-list: append(
+          $visibility-table-header-group-list: list.append(
             $visibility-table-header-group-list,
-            unquote(
+            string.unquote(
               "thead.show-for-#{$visibility-comparison-breakpoint}, thead.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-row-group-list: append(
+          $visibility-table-row-group-list: list.append(
             $visibility-table-row-group-list,
-            unquote(
+            string.unquote(
               "tbody.show-for-#{$visibility-comparison-breakpoint}, tbody.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-row-list: append(
+          $visibility-table-row-list: list.append(
             $visibility-table-row-list,
-            unquote(
+            string.unquote(
               "tr.show-for-#{$visibility-comparison-breakpoint}, tr.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
           );
-          $visibility-table-cell-list: append(
+          $visibility-table-cell-list: list.append(
             $visibility-table-cell-list,
-            unquote(
+            string.unquote(
               "th.show-for-#{$visibility-comparison-breakpoint}, td.show-for-#{$visibility-comparison-breakpoint}, th.show-for-#{$visibility-comparison-breakpoint}-down, td.show-for-#{$visibility-comparison-breakpoint}-down"
             ),
             comma
@@ -462,7 +464,7 @@ $visibility-breakpoint-queries: unquote($small-up), unquote($medium-up),
     }
 
     /* #{$current-visibility-breakpoint} displays */
-    @media #{nth($visibility-breakpoint-queries, index($visibility-breakpoint-sizes, $current-visibility-breakpoint))} {
+    @media #{list.nth($visibility-breakpoint-queries, list.index($visibility-breakpoint-sizes, $current-visibility-breakpoint))} {
       #{$visibility-inherit-list} {
         display: inherit !important;
       }

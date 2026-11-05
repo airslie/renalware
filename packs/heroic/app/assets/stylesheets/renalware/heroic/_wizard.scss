@@ -1,3 +1,4 @@
+@use "sass:math";
 // From https://codepen.io/HugoGiraudel/pen/scluw
 //
 //
@@ -50,7 +51,7 @@ $step-breakpoint: 767px;
   @for $i from 1 through 10 {
     &:first-child:nth-last-child(#{$i}),
     &:first-child:nth-last-child(#{$i}) ~ & {
-      width: (100% / $i);
+      width: math.div(100%, $i);
     }
   }
 
@@ -58,13 +59,13 @@ $step-breakpoint: 767px;
    * Arrow shapes
    */
   &:after {
-    $sqrt-2: if(function-exists('sqrt') == true, sqrt(2), 1.4142135623730951);
-    $step-height: ($step-baseline * 3)  + ($step-baseline * 2) + (1/16 * 1em * 2);
-    $step-arrow-size: $step-height * $sqrt-2 / 2;
+    $sqrt-2: math.sqrt(2);
+    $step-height: ($step-baseline * 3)  + ($step-baseline * 2) + (math.div(1, 16) * 1em * 2);
+    $step-arrow-size: math.div($step-height * $sqrt-2, 2);
     width: $step-arrow-size;
     height: $step-arrow-size;
     position: absolute;
-    top: 1 / $sqrt-2 / 2 * 1em;
+    top: math.div(math.div(1, $sqrt-2), 2) * 1em;
     left: 100%;
     transform: rotate(45deg);
     content: '';
@@ -72,7 +73,7 @@ $step-breakpoint: 767px;
     background: inherit;
     border-right: $step-border;
     border-top: $step-border;
-    margin-left: -$step-arrow-size / 2;
+    margin-left: math.div(-$step-arrow-size, 2);
   }
 
   &[disabled] {

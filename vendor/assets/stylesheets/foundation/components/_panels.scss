@@ -1,3 +1,5 @@
+@use "sass:color";
+@use "sass:math";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -10,13 +12,13 @@
 $include-html-panel-classes: $include-html-classes !default;
 
 // We use these to control the background and border styles
-$panel-bg: scale-color($white, $lightness: -5%) !default;
+$panel-bg: color.scale($white, $lightness: -5%) !default;
 $panel-border-style: solid !default;
 $panel-border-size: 1px !default;
-$callout-panel-bg: scale-color($primary-color, $lightness: 94%) !default;
+$callout-panel-bg: color.scale($primary-color, $lightness: 94%) !default;
 
 // We use this % to control how much we darken things on hover
-$panel-border-color: scale-color($panel-bg, $lightness: -11%) !default;
+$panel-border-color: color.scale($panel-bg, $lightness: -11%) !default;
 
 // We use these to set default inner padding and bottom margin
 $panel-margin-bottom: rem-calc(20) !default;
@@ -28,7 +30,7 @@ $panel-font-color-alt: $white !default;
 
 $panel-header-adjust: true !default;
 $callout-panel-link-color: $primary-color !default;
-$callout-panel-link-color-hover: scale-color(
+$callout-panel-link-color-hover: color.scale(
   $callout-panel-link-color,
   $lightness: -14%
 ) !default;
@@ -36,7 +38,7 @@ $callout-panel-link-color-hover: scale-color(
 // @mixins
 //
 // We use this mixin to create panels.
-// $bg - Sets the panel background color. Default: $panel-pg || scale-color($white, $lightness: -5%) !default
+// $bg - Sets the panel background color. Default: $panel-pg || color.scale($white, $lightness: -5%) !default
 // $padding - Sets the panel padding amount. Default: $panel-padding || rem-calc(20)
 // $adjust - Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust || true
 @mixin panel(
@@ -46,7 +48,7 @@ $callout-panel-link-color-hover: scale-color(
   $border: true
 ) {
   @if $bg {
-    $bg-lightness: lightness($bg);
+    $bg-lightness: color.channel($bg, "lightness", $space: hsl);
 
     @if $border {
       border-style: $panel-border-style;
@@ -111,7 +113,7 @@ $callout-panel-link-color-hover: scale-color(
       h5,
       h6 {
         line-height: 1;
-        margin-bottom: rem-calc(20) / 2;
+        margin-bottom: math.div(rem-calc(20), 2);
         &.subheader {
           line-height: 1.4;
         }

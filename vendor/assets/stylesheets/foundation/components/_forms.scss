@@ -1,3 +1,5 @@
+@use "sass:color";
+@use "sass:math";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -18,7 +20,7 @@ $form-label-pointer: pointer !default;
 $form-label-font-size: rem-calc(14) !default;
 $form-label-font-weight: $font-weight-normal !default;
 $form-label-line-height: 1.5 !default;
-$form-label-font-color: scale-color($black, $lightness: 30%) !default;
+$form-label-font-color: color.scale($black, $lightness: 30%) !default;
 $form-label-small-transform: capitalize !default;
 $form-label-bottom-margin: 0 !default;
 $input-font-family: inherit !default;
@@ -26,9 +28,9 @@ $input-font-color: rgba(0, 0, 0, 0.75) !default;
 $input-placeholder-font-color: $steel !default;
 $input-font-size: rem-calc(14) !default;
 $input-bg-color: $white !default;
-$input-focus-bg-color: scale-color($white, $lightness: -2%) !default;
-$input-border-color: scale-color($white, $lightness: -20%) !default;
-$input-focus-border-color: scale-color($white, $lightness: -40%) !default;
+$input-focus-bg-color: color.scale($white, $lightness: -2%) !default;
+$input-border-color: color.scale($white, $lightness: -20%) !default;
+$input-focus-border-color: color.scale($white, $lightness: -40%) !default;
 $input-border-style: solid !default;
 $input-border-width: 1px !default;
 $input-border-radius: $global-radius !default;
@@ -49,8 +51,8 @@ $legend-font-weight: $font-weight-bold !default;
 $legend-padding: rem-calc(0 3) !default;
 
 // We use these to style the prefix and postfix input elements
-$input-prefix-bg: scale-color($white, $lightness: -5%) !default;
-$input-prefix-border-color: scale-color($white, $lightness: -20%) !default;
+$input-prefix-bg: color.scale($white, $lightness: -5%) !default;
+$input-prefix-border-color: color.scale($white, $lightness: -20%) !default;
 $input-prefix-border-size: 1px !default;
 $input-prefix-border-type: solid !default;
 $input-prefix-overflow: visible !default;
@@ -80,7 +82,7 @@ $input-transition-fade-timing-function: linear !default;
 
 // Select variables
 $select-bg-color: $ghost !default;
-$select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
+$select-hover-bg-color: color.scale($select-bg-color, $lightness: -3%) !default;
 
 //
 // @MIXINS
@@ -89,13 +91,13 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
 // We use this mixin to give us form styles for rows inside of forms
 @mixin form-row-base {
   .row {
-    margin-left: (-$form-spacing) / 2;
-    margin-right: (-$form-spacing) / 2;
+    margin-left: math.div(-$form-spacing, 2);
+    margin-right: math.div(-$form-spacing, 2);
 
     .column,
     .columns {
-      padding-left: $form-spacing / 2;
-      padding-right: $form-spacing / 2;
+      padding-left: math.div($form-spacing, 2);
+      padding-right: math.div($form-spacing, 2);
     }
 
     // Use this to collapse the margins of a form row
@@ -114,7 +116,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
   input.columns,
   textarea.column,
   textarea.columns {
-    padding-#{$default-float}: ($form-spacing / 2);
+    padding-#{$default-float}: (math.div($form-spacing, 2));
   }
 }
 
@@ -187,7 +189,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
     text-align: right;
   } @else if $alignment == inline {
     margin: 0 0 $form-spacing 0;
-    padding: $form-spacing / 2 + rem-calc($input-border-width) 0;
+    padding: math.div($form-spacing, 2) + rem-calc($input-border-width) 0;
   }
 }
 
@@ -211,7 +213,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
 // @MIXIN
 //
 // We use this mixin to create prefix label styles
-// $bg - Default:$input-prefix-bg || scale-color($white, $lightness: -5%) !default;
+// $bg - Default:$input-prefix-bg || color.scale($white, $lightness: -5%) !default;
 // $is-button - Toggle position settings if prefix is a button. Default:false
 //
 @mixin prefix(
@@ -220,7 +222,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
   $is-button: false
 ) {
   @if $bg {
-    $bg-lightness: lightness($bg);
+    $bg-lightness: color.channel($bg, "lightness", $space: hsl);
     background: $bg;
     border-#{$opposite-direction}: none;
 
@@ -249,7 +251,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
 // @MIXIN
 //
 // We use this mixin to create postfix label styles
-// $bg - Default:$input-prefix-bg || scale-color($white, $lightness: -5%) !default;
+// $bg - Default:$input-prefix-bg || color.scale($white, $lightness: -5%) !default;
 // $is-button - Toggle position settings if prefix is a button. Default: false
 @mixin postfix(
   $bg: $input-prefix-bg,
@@ -258,7 +260,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
   $is-button: false
 ) {
   @if $bg {
-    $bg-lightness: lightness($bg);
+    $bg-lightness: color.channel($bg, "lightness", $space: hsl);
     background: $bg;
     @if $border-left-hidden {
       border-#{$default-float}: none;
@@ -338,7 +340,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
   padding: $input-error-message-padding;
 
   // We can control the text color based on the brightness of the background.
-  $bg-lightness: lightness($bg);
+  $bg-lightness: color.channel($bg, "lightness", $space: hsl);
   background: $bg;
   @if $bg-lightness < 70% or $bg == yellow {
     color: $input-error-message-font-color;
@@ -359,7 +361,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+");
 
   // We can safely use leftmost and rightmost now
-  background-position: if($text-direction == "rtl", 0%, 100%) center;
+  background-position: if(sass($text-direction == "rtl"): 0%; else: 100%) center;
 
   background-repeat: no-repeat;
   border: {
@@ -418,7 +420,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
         /* Styles for required inputs */
         small {
           text-transform: $form-label-small-transform;
-          color: scale-color($form-label-font-color, $lightness: 15%);
+          color: color.scale($form-label-font-color, $lightness: 15%);
         }
       }
 
@@ -613,7 +615,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
         > label {
           > small {
             background: transparent;
-            color: scale-color($form-label-font-color, $lightness: 15%);
+            color: color.scale($form-label-font-color, $lightness: 15%);
             display: inline;
             font-size: 60%;
             font-style: normal;
