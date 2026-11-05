@@ -1,15 +1,19 @@
 // On forms with more than one submit button, apply the disable-with label to
 // only the clicked button, and just disable the other buttons.
 // See for instance the HD Session form.
-$(document).on(
-  "click",
-  ".form-with-multiple-submit-buttons :submit",
-  function () {
-    var buttons = $(".form-with-multiple-submit-buttons :submit").not($(this))
-    buttons.removeAttr("data-disable-with")
-    buttons.attr("disabled", true)
-  }
-)
+document.addEventListener("click", function (event) {
+  var clicked = event.target.closest(
+    ".form-with-multiple-submit-buttons [type=submit]"
+  )
+  if (!clicked) return
+
+  var form = clicked.closest(".form-with-multiple-submit-buttons")
+  form.querySelectorAll("[type=submit]").forEach(function (button) {
+    if (button === clicked) return
+    button.removeAttribute("data-disable-with")
+    button.disabled = true
+  })
+})
 
 function initClockpickersIn(container) {
   var elem = ".clockpicker"
