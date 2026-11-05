@@ -1,3 +1,4 @@
+@use "sass:color";
 article.clinical-allergies {
   padding-bottom: 0;
 
@@ -154,8 +155,8 @@ article.clinical-allergies {
         line-height: 1.6rem;
 
         &:hover {
-          // TODO: darken($nhs-orange, 5);
-          // background-color: darken($nhs-orange, 5);
+          // TODO: color.adjust($nhs-orange, $lightness: -5%);
+          // background-color: color.adjust($nhs-orange, $lightness: -5%);
         }
 
         &.urgent {
@@ -195,7 +196,7 @@ article.clinical-allergies {
           background-color: $nhs-pink;
 
           &:hover {
-            background-color: darken($nhs-pink, 7);
+            background-color: color.adjust($nhs-pink, $lightness: -7%);
           }
 
           .title a,
@@ -208,7 +209,7 @@ article.clinical-allergies {
           background-color: $nhs-aqua-green;
 
           &:hover {
-            background-color: darken($nhs-aqua-green, 4);
+            background-color: color.adjust($nhs-aqua-green, $lightness: -4%);
           }
 
           .title a,
@@ -232,11 +233,11 @@ article.clinical-allergies {
         }
 
         &.research-study-participant {
-          background-color: darken($nhs-green, 3);
+          background-color: color.adjust($nhs-green, $lightness: -3%);
           color: var(--white);
 
           &:hover {
-            background-color: darken($nhs-green, 5);
+            background-color: color.adjust($nhs-green, $lightness: -5%);
           }
 
           a {

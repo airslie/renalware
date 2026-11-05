@@ -1,3 +1,5 @@
+@use "sass:list";
+@use "sass:string";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -93,32 +95,32 @@ $base-line-height: 1.5 !default;
 ) {
   $transition: none;
 
-  @if length($property) > 1 {
+  @if list.length($property) > 1 {
     @each $transition_list in $property {
-      @for $i from 1 through length($transition_list) {
+      @for $i from 1 through list.length($transition_list) {
         @if $i == 1 {
-          $_property: nth($transition_list, $i);
+          $_property: list.nth($transition_list, $i);
         }
 
-        @if length($transition_list) > 1 {
+        @if list.length($transition_list) > 1 {
           @if $i == 2 {
-            $_speed: nth($transition_list, $i);
+            $_speed: list.nth($transition_list, $i);
           }
         } @else {
           $_speed: $speed;
         }
 
-        @if length($transition_list) > 2 {
+        @if list.length($transition_list) > 2 {
           @if $i == 3 {
-            $_ease: nth($transition_list, $i);
+            $_ease: list.nth($transition_list, $i);
           }
         } @else {
           $_ease: $ease;
         }
 
-        @if length($transition_list) > 3 {
+        @if list.length($transition_list) > 3 {
           @if $i == 4 {
-            $_delay: nth($transition_list, $i);
+            $_delay: list.nth($transition_list, $i);
           }
         } @else {
           $_delay: $delay;
@@ -388,47 +390,47 @@ $cursor-text-value: text !default;
     }
 
     meta.foundation-mq-small {
-      font-family: "/" + unquote($small-up) + "/";
+      font-family: "/" + string.unquote($small-up) + "/";
       width: lower-bound($small-range);
     }
 
     meta.foundation-mq-small-only {
-      font-family: "/" + unquote($small-only) + "/";
+      font-family: "/" + string.unquote($small-only) + "/";
       width: lower-bound($small-range);
     }
 
     meta.foundation-mq-medium {
-      font-family: "/" + unquote($medium-up) + "/";
+      font-family: "/" + string.unquote($medium-up) + "/";
       width: lower-bound($medium-range);
     }
 
     meta.foundation-mq-medium-only {
-      font-family: "/" + unquote($medium-only) + "/";
+      font-family: "/" + string.unquote($medium-only) + "/";
       width: lower-bound($medium-range);
     }
 
     meta.foundation-mq-large {
-      font-family: "/" + unquote($large-up) + "/";
+      font-family: "/" + string.unquote($large-up) + "/";
       width: lower-bound($large-range);
     }
 
     meta.foundation-mq-large-only {
-      font-family: "/" + unquote($large-only) + "/";
+      font-family: "/" + string.unquote($large-only) + "/";
       width: lower-bound($large-range);
     }
 
     meta.foundation-mq-xlarge {
-      font-family: "/" + unquote($xlarge-up) + "/";
+      font-family: "/" + string.unquote($xlarge-up) + "/";
       width: lower-bound($xlarge-range);
     }
 
     meta.foundation-mq-xlarge-only {
-      font-family: "/" + unquote($xlarge-only) + "/";
+      font-family: "/" + string.unquote($xlarge-only) + "/";
       width: lower-bound($xlarge-range);
     }
 
     meta.foundation-mq-xxlarge {
-      font-family: "/" + unquote($xxlarge-up) + "/";
+      font-family: "/" + string.unquote($xxlarge-up) + "/";
       width: lower-bound($xxlarge-range);
     }
 

@@ -1,3 +1,4 @@
+@use "sass:color";
 .form-actions {
   text-align: right;
   margin: 0;
@@ -170,7 +171,7 @@ article {
   width: 100%;
 
   &.secondary {
-    border-color: lighten($link-colour, 20%);
+    border-color: color.adjust($link-colour, $lightness: 20%);
     border-width: 1px;
   }
 

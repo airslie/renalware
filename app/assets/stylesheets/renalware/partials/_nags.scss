@@ -1,3 +1,4 @@
+@use "sass:color";
 .patient-nags ul {
   margin: 0;
   padding: 0 4px;
@@ -46,7 +47,7 @@
 
   span.date,
   span.value {
-    border-left: 1px solid lighten($nhs-light-blue, 10);
+    border-left: 1px solid color.adjust($nhs-light-blue, $lightness: 10%);
   }
 }
 

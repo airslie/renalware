@@ -1,3 +1,4 @@
+@use "sass:math";
 html {
   body.overflow {
     overflow: auto;
@@ -141,8 +142,8 @@ section.display {
 
 .half-collapse {
   .columns {
-    padding-left: $column-gutter / 2;
-    padding-right: $column-gutter / 2;
+    padding-left: math.div($column-gutter, 2);
+    padding-right: math.div($column-gutter, 2);
   }
 }
 

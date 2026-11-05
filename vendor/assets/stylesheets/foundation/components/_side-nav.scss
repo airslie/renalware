@@ -1,3 +1,4 @@
+@use "sass:color";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -20,15 +21,15 @@ $side-nav-list-margin: rem-calc(0 0 7 0) !default;
 
 // We use these to control link styles.
 $side-nav-link-color: $primary-color !default;
-$side-nav-link-color-active: scale-color(
+$side-nav-link-color-active: color.scale(
   $side-nav-link-color,
   $lightness: 30%
 ) !default;
-$side-nav-link-color-hover: scale-color(
+$side-nav-link-color-hover: color.scale(
   $side-nav-link-color,
   $lightness: 30%
 ) !default;
-$side-nav-link-bg-hover: hsla(0, 0, 0, 0.025) !default;
+$side-nav-link-bg-hover: hsla(0, 0%, 0%, 0.025) !default;
 $side-nav-link-margin: 0 !default;
 $side-nav-link-padding: rem-calc(7 14) !default;
 $side-nav-font-size: rem-calc(14) !default;
@@ -46,7 +47,7 @@ $side-nav-heading-text-transform: uppercase !default;
 // We use these to control border styles
 $side-nav-divider-size: 1px !default;
 $side-nav-divider-style: solid !default;
-$side-nav-divider-color: scale-color($white, $lightness: -10%) !default;
+$side-nav-divider-color: color.scale($white, $lightness: -10%) !default;
 
 //
 // @mixins

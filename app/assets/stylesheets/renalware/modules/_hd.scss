@@ -1,3 +1,4 @@
+@use "sass:color";
 #hd-session-form-batch-print-modal {
   .cancel-link {
     margin-bottom: 0.5em;
@@ -21,7 +22,7 @@
   tr {
     &.session_import_success {
       td.result {
-        background: lighten($nhs-light-green, 50);
+        background: color.adjust($nhs-light-green, $lightness: 50%);
       }
     }
     &.file {
@@ -32,7 +33,7 @@
     }
     &.session_import_error {
       td.result {
-        background-color: lighten($nhs-pink, 50);
+        background-color: color.adjust($nhs-pink, $lightness: 50%);
       }
     }
   }
@@ -594,10 +595,10 @@ table#hd-session-drugs {
   }
 
   .unauthorised tr {
-    background-color: lighten($nhs-pink, 55);
+    background-color: color.adjust($nhs-pink, $lightness: 55%);
 
     td {
-      border-color: lighten($nhs-pink, 55);
+      border-color: color.adjust($nhs-pink, $lightness: 55%);
     }
   }
 

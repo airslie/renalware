@@ -1,8 +1,9 @@
+@use "sass:color";
 .medication-review {
   float: left;
 
   .medication-review--content {
-    background-color: lighten($nhs-light-blue, 37);
+    background-color: color.adjust($nhs-light-blue, $lightness: 37%);
     border-radius: 0.8rem;
     padding: 0.1rem 0.7rem;
     box-shadow: 1px 1px 1px 0 #eee;

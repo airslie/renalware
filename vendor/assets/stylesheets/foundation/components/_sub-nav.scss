@@ -1,3 +1,4 @@
+@use "sass:color";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -27,7 +28,7 @@ $sub-nav-font-weight: $font-weight-normal !default;
 $sub-nav-text-decoration: none !default;
 $sub-nav-padding: rem-calc(3 16) !default;
 $sub-nav-border-radius: 3px !default;
-$sub-nav-font-color-hover: scale-color(
+$sub-nav-font-color-hover: color.scale(
   $sub-nav-font-color,
   $lightness: -25%
 ) !default;
@@ -36,7 +37,7 @@ $sub-nav-font-color-hover: scale-color(
 
 $sub-nav-active-font-weight: $font-weight-normal !default;
 $sub-nav-active-bg: $primary-color !default;
-$sub-nav-active-bg-hover: scale-color(
+$sub-nav-active-bg-hover: color.scale(
   $sub-nav-active-bg,
   $lightness: -14%
 ) !default;

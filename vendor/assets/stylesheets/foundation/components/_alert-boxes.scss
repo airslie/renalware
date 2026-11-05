@@ -1,3 +1,5 @@
+@use "sass:color";
+@use "sass:math";
 // Foundation by ZURB
 // foundation.zurb.com
 // Licensed under MIT Open Source
@@ -19,7 +21,7 @@ $alert-padding-bottom: $alert-padding-top !default;
 $alert-font-weight: $font-weight-normal !default;
 $alert-font-size: rem-calc(13) !default;
 $alert-font-color: $white !default;
-$alert-font-color-alt: scale-color($secondary-color, $lightness: -66%) !default;
+$alert-font-color-alt: color.scale($secondary-color, $lightness: -66%) !default;
 
 // We use this for close hover effect.
 $alert-function-factor: -14% !default;
@@ -27,7 +29,7 @@ $alert-function-factor: -14% !default;
 // We use these to control border styles.
 $alert-border-style: solid !default;
 $alert-border-width: 1px !default;
-$alert-border-color: scale-color(
+$alert-border-color: color.scale(
   $primary-color,
   $lightness: $alert-function-factor
 ) !default;
@@ -76,11 +78,11 @@ $alert-transition-ease: ease-out !default;
 // $bg - The background of the alert. Default: $primary-color.
 @mixin alert-style($bg: $primary-color) {
   // This finds the lightness percentage of the background color.
-  $bg-lightness: lightness($bg);
+  $bg-lightness: color.channel($bg, "lightness", $space: hsl);
 
   // We control which background color and border come through.
   background-color: $bg;
-  border-color: scale-color($bg, $lightness: $alert-function-factor);
+  border-color: color.scale($bg, $lightness: $alert-function-factor);
 
   // We control the text color for you based on the background color.
   @if $bg-lightness > 70% {
@@ -97,7 +99,7 @@ $alert-transition-ease: ease-out !default;
   color: $alert-close-color;
   font-size: $alert-close-font-size;
   line-height: 0.9;
-  margin-top: -($alert-close-font-size / 2);
+  margin-top: -(math.div($alert-close-font-size, 2));
   opacity: $alert-close-opacity;
   padding: $alert-close-padding;
   position: absolute;
