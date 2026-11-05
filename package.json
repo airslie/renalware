@@ -18,16 +18,13 @@
     "@stimulus-components/dropdown": "^3.0.0",
     "balloon-css": "^1.0.3",
     "date-fns": "^4.1.0",
-    "debounce": "^2.2.0",
     "flatpickr": "^4.6.13",
     "highcharts": "11.4.9",
     "masonry-layout": "^4.2.2",
-    "moment": "2.31.0",
     "print-js": "^1.6.0",
     "rollup": "^4.64.10",
     "slim-select": "^4.2.4",
-    "sortablejs": "^1.13.0",
-    "underscore": "1.13.8"
+    "sortablejs": "^1.13.0"
   },
   "resolutions": {
     "minimatch": "11.0.4"

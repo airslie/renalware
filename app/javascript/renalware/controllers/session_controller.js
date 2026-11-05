@@ -1,7 +1,7 @@
 
 const Rails = window.Rails
-const _ = window._
 import { Controller } from "@hotwired/stimulus"
+import { throttleTrailing } from "../helpers/timing"
 
 // This controller handles session keepalive, timeout detection and cross-tab
 // logout signalling.
@@ -55,12 +55,11 @@ export default class extends Controller {
     this.boundWindowFocus = this.windowFocus.bind(this)
     this.logSettings()
 
-    // We only need to register activity occasionally; trailing debounce keeps
+    // We only need to register activity occasionally; a trailing throttle keeps
     // requests low while still extending the session for active users.
-    this.throttledRegisterUserActivity = _.throttle(
+    this.throttledRegisterUserActivity = throttleTrailing(
       this.registerUserActivity.bind(this),
-      this.throttlePeriodSeconds * 1000,
-      { "leading": false, "trailing": true }
+      this.throttlePeriodSeconds * 1000
     )
   }
 

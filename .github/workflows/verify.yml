@@ -137,6 +137,9 @@ jobs:
       - name: ESLint
         run: bin/yarn eslint app/javascript --max-warnings=0
 
+      - name: JavaScript unit tests
+        run: node --test "spec/javascript/*.test.cjs"
+
       - name: Check translations
         run: |
           bundle exec i18n-tasks check-consistent-interpolations

@@ -20,14 +20,12 @@
 //= require foundation/foundation.reveal
 //= require foundation/foundation.tab
 //= require foundation/foundation.tooltip
-//= require underscore/underscore
 //= require jquery_nested_form
 //= require cocoon
 //= require renalware/iframeResizer
 //= require clipboard
 //= require masonry-layout/dist/masonry.pkgd
 //= require print-js/dist/print
-//= require moment/moment
 //= require trix
 //= require_directory ./components
 

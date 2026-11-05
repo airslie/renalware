@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import debounce from "debounce"
+import { debounce } from "../helpers/timing"
 
 export default class extends Controller {
   static targets = ["turboframe"]
