@@ -18,6 +18,43 @@ module Renalware::Letters::Transports::Mesh
       )
     end
 
+    # What we hand to Faraday: the mailbox url, the Mex-* headers and the TLS options.
+    describe "connection" do
+      it "is built from the mailbox url, request headers and client certificates" do
+        allow(Faraday).to receive(:new).and_call_original
+
+        VCR.use_cassette(cassette("handshake/success")) { described_class.new.handshake }
+
+        expect(Faraday).to have_received(:new).with(
+          hash_including(
+            url: "#{base_url}/#{mesh_mailbox_id}",
+            headers: hash_including(
+              "Mex-From" => mesh_mailbox_id,
+              "Mex-WorkflowID" => Renalware.config.mesh_workflow_id,
+              "Content-Type" => "application/xml"
+            ),
+            ssl: hash_including(
+              ca_file: Rails.root.join(Renalware.config.mesh_path_to_nhs_ca_file).to_s,
+              client_cert: an_instance_of(OpenSSL::X509::Certificate),
+              client_key: an_instance_of(OpenSSL::PKey::RSA)
+            )
+          )
+        )
+      end
+
+      # CURRENT BEHAVIOUR, pinned so that refactoring cannot change it unnoticed. The NHS MESH
+      # endpoints use a private CA, and verification is currently off. Turning it on is a
+      # deliberate, separately tested change; when you do it, update this example.
+      it "currently does not verify the server certificate (verify: false)" do
+        allow(Faraday).to receive(:new).and_call_original
+
+        VCR.use_cassette(cassette("handshake/success")) { described_class.new.handshake }
+
+        expect(Faraday)
+          .to have_received(:new).with(hash_including(ssl: hash_including(verify: false)))
+      end
+    end
+
     describe "#handshake" do
       context "when the mailbox does not exist" do
         it "returns 403 and a json response with an EPL error" do
