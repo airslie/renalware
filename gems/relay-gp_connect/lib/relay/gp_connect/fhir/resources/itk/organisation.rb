@@ -1,6 +1,6 @@
-module Renalware
-  module Letters
-    module Formats::FHIR
+module Relay
+  module GPConnect
+    module FHIR
       class Resources::ITK::Organisation
         include Support::Construction
         include Support::Helpers

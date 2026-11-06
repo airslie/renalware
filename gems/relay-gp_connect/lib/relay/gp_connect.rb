@@ -1,6 +1,12 @@
 require "date"
+require "securerandom"
+require "time"
 require "zeitwerk"
+require "nokogiri"
+require "fhir_stu3_models"
 require "active_support"
+require "active_support/concern"
+require "active_support/core_ext/enumerable"
 require "active_support/core_ext/object/blank"
 require "relay/gp_connect/version"
 
@@ -16,6 +22,7 @@ module Relay
         loader.inflector.inflect(
           "gp_connect" => "GPConnect",
           "fhir" => "FHIR",
+          "itk" => "ITK",
           "itk3_response" => "ITK3Response"
         )
       end

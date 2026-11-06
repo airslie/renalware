@@ -1,6 +1,6 @@
-module Renalware
-  module Letters
-    module Formats::FHIR
+module Relay
+  module GPConnect
+    module FHIR
       class Resources::Patient
         include Support::Construction
         include Support::Helpers
@@ -19,10 +19,10 @@ module Renalware
                 verified_nhs_number_identifier
                 # *hospital_number_identifiers
               ],
-              name: name,
-              gender: gender,
+              name:,
+              gender:,
               birthDate: patient.born_on.to_date.to_s,
-              address: address
+              address:
             )
           }
         end

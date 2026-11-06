@@ -1,7 +1,7 @@
-module Renalware
-  module Letters
-    module Formats::FHIR
-      # FHIR resource representing a Renalware site/hospital, profiled to CareConnect-Organization-1
+module Relay
+  module GPConnect
+    module FHIR
+      # FHIR resource representing the sending site/hospital, profiled to CareConnect-Organization-1
       class Resources::CareConnect::Organisation
         include Support::Construction
         include Support::Helpers
@@ -20,7 +20,7 @@ module Renalware
                 system: "https://fhir.nhs.uk/Id/ods-organization-code",
                 value: arguments.organisation_ods_code
               },
-              name: name,
+              name:,
               telecom: telecoms
             )
           }
@@ -37,7 +37,7 @@ module Renalware
         def telecoms      = [telecom_phone, telecom_email].compact
 
         def contact_point(system, value, use = "work")
-          ::FHIR::STU3::ContactPoint.new(system: system, value: value, use: use)
+          ::FHIR::STU3::ContactPoint.new(system:, value:, use:)
         end
       end
     end

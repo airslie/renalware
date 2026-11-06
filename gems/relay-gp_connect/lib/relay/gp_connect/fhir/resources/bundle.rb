@@ -1,6 +1,6 @@
-module Renalware
-  module Letters
-    module Formats::FHIR
+module Relay
+  module GPConnect
+    module FHIR
       module Resources
         # The top-level 'message' Bundle that will contain
         # - the message header

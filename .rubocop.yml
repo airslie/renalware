@@ -176,12 +176,14 @@ RSpec/MultipleExpectations:
 
 Metrics/MethodLength:
   Exclude:
-    - app/models/renalware/letters/formats/fhir/**/resources/**/*
+    - gems/relay-gp_connect/lib/relay/gp_connect/fhir/resources/**/*
 
 Layout/MultilineMethodCallIndentation:
   Enabled: true
 Metrics/ClassLength:
   Enabled: true
+  Exclude:
+    - gems/relay-gp_connect/lib/relay/gp_connect/fhir/resources/**/*
 Layout/LineLength:
   Exclude:
     - "features/step_definitions/**/*"
@@ -196,7 +198,7 @@ Metrics/AbcSize:
     - "features/**/*"
     - "db/**/*"
     - "db/**/*"
-    - app/models/renalware/letters/formats/fhir/**/resources/**/*
+    - gems/relay-gp_connect/lib/relay/gp_connect/fhir/resources/**/*
   Max: 25
 
 Lint/RedundantSafeNavigation:

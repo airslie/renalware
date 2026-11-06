@@ -1,6 +1,6 @@
-module Renalware
-  module Letters
-    module Formats::FHIR
+module Relay
+  module GPConnect
+    module FHIR
       #
       # FHIR MessageHeader resource
       # We need to include this in order to ask the receiver to send us
@@ -15,7 +15,7 @@ module Renalware
             fullUrl: arguments.transaction_urn, # the send_message operation
             resource: ::FHIR::STU3::MessageHeader.new(
               id: arguments.transaction_uuid,
-              timestamp: Time.zone.now.utc.iso8601,
+              timestamp: Time.now.utc.iso8601,
               meta: {
                 profile: "https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2"
               },

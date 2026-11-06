@@ -1,6 +1,6 @@
-module Renalware
-  module Letters
-    module Formats::FHIR
+module Relay
+  module GPConnect
+    module FHIR
       #
       # FHIR Practitioner resource, profiled to CareConnect,  representing the letter author.
       #
@@ -44,10 +44,6 @@ module Renalware
         private
 
         def author = arguments.request.author
-
-        # Until we can resolve individual user details via Active/Spine Directory lookup,
-        # Just use a globally configured telephone number
-        def telephone = Renalware.config.mesh_practitioner_phone
       end
     end
   end
