@@ -1,9 +1,0 @@
-- patient = event.patient
-
-h1= event.patient
-= "NHS: #{patient.nhs_number}"
-br
-= patient.hospital_identifiers.to_s_multiline
-p= l(event.date_time)
-p= event.description
-p= raw(event.notes)
