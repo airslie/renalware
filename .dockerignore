@@ -10,6 +10,7 @@ documentation/*
 docs/*
 doc/*
 spec/*
+gems/*/spec/*
 plans/*
 test/*
 coverage/*

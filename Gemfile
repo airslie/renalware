@@ -45,6 +45,10 @@ gem "strong_migrations"
 gem "fhir_stu3_models",
     github: "airslie/fhir_stu3_models",
     ref: "2c7f65f39b3fbed0cdff62736d75a61f6507792f"
+
+# GP Connect 'Send Document' payload building and MESH API client, shared with Relay.
+# Lives in this repo for now (see gems/relay-gp_connect/README.md); has no Rails dependency.
+gem "relay-gp_connect", path: "gems/relay-gp_connect", require: "relay/gp_connect"
 gem "good_job", "~> 4.0"
 
 gem "matrix"

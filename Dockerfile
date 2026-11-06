@@ -54,6 +54,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends nodejs npm \
 
 # Install application gems
 COPY Gemfile Gemfile.lock yarn.lock package.json .yarnrc .gemrc .ruby-version .gitmodules ./
+# Path gems must be present for bundle install
+COPY ./gems ./gems
 
 ARG BUNDLE_GITHUB__COM
 RUN bundle install && \

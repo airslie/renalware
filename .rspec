@@ -2,3 +2,4 @@
 --color
 --format progress
 --default-path .
+--exclude-pattern "gems/**/*_spec.rb"
