@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday"
   spec.add_dependency "fhir_stu3_models"
   spec.add_dependency "nokogiri"
+  spec.add_dependency "zeitwerk"
 end

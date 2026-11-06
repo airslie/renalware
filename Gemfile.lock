@@ -17,6 +17,7 @@ PATH
       faraday
       fhir_stu3_models
       nokogiri
+      zeitwerk
 
 GEM
   remote: https://rubygems.org/
