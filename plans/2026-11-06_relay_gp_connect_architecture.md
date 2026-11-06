@@ -359,6 +359,49 @@ Still open from section 2:
 6. **Renalware outbox + `RelayGateway`**, timeout/fail-safe, `GP_LETTER_DELIVERY=relay` goes
    live only here, then HOSPA cutover per 5.5 (own mailbox, drain the old poller).
 
+## 6d. Gem extraction: `gems/relay-gp_connect`
+
+The protocol code now lives in a path gem inside this repo (`Relay::GPConnect`), designed to be
+moved to its own repository when Relay needs it (`git subtree split` / `git filter-repo`
+preserves history). It has no Rails, ActiveRecord or `Renalware` dependency; its 90 specs run with
+`cd gems/relay-gp_connect && bundle exec rspec`, and a spec fails if Rails gets loaded.
+
+| In the gem | Stays in Renalware |
+|---|---|
+| `DeliveryRequest` (plain input value) | `BuildDeliveryRequest` (letter to request, with a lazy variant) |
+| `FHIR::*` (Arguments, BuildPayload, resources): the assured XML | `Formats::FHIR::Arguments` (builds the request from a Transmission); aliases for the rest |
+| `Mesh::Client`, `Config`, `AuthHeader`, `RequestHeaders`, `UrlHelpers`, `Certificates` | `API::Client` (uses Renalware settings by default, class-level shortcuts), `API::Config.from_renalware` |
+| `Mesh::OperationAttributes`, `ResponseHeaders`, `ITK3Response`, `Errors` | `API::LogOperation` (stores an `Operation`), the jobs, `Transmission`, reconcile, `gp_send_status` |
+
+The golden XML fixture moved into the gem and is produced from a hand-built `DeliveryRequest` there,
+and from a real Renalware letter by the integration spec here: same bytes both ways.
+
+Changes outside the gem to be aware of: `Gemfile`/`Gemfile.lock` (path gem), `Dockerfile` (`COPY
+./gems` before `bundle install`, required because path gems are not copied into the bundle),
+`.dockerignore`, `.rspec` (root run excludes `gems/`), `.github/workflows/verify.yml` (gem specs
+step), `.rubocop.yml` (the existing FHIR-builder exclusions now point at the gem path).
+
+Things found or decided on the way:
+- **Hidden Rails dependencies surface as `NameError` in the gem's specs**: `Date`, `Base64`,
+  Active Support extensions. The gem requires what it uses; `Base64` is replaced by the identical
+  `pack("m0")` rather than adding a dependency.
+- **Auth header timestamp.** Renalware has always timestamped the MESH auth header in
+  `Time.zone` (London), not UTC. The gem takes a `clock` in `Mesh::Config` (default UTC) and
+  Renalware passes `Time.zone.now`, so what is sent is unchanged. Pinned by a spec on the real
+  outgoing request. **Worth confirming what MESH expects (UTC vs local) in BST.**
+- **RSA-format key bug fixed** in `Certificates` (see commit): a good `BEGIN RSA PRIVATE KEY`
+  supplied as config contents was being corrupted.
+- **`verify: false`** is unchanged and pinned in the gem's client spec.
+- `MissingSnomedDocumentTypeError` message is now generic (the old text named a Renalware model).
+- The Renalware cassettes under `spec/fixtures/vcr_cassettes/letters/transports/mesh/api` are
+  duplicated in the gem (`spec/fixtures/vcr_cassettes/mesh`); `download_message_job_spec` still
+  uses the Renalware copies. Dedupe when convenient.
+
+Not done / next:
+1. Move the gem to its own repository (decide licence and where it is hosted first).
+2. `Letters::DeliveryGateway` port and the REST contract for Relay (section 5.4).
+3. Build Relay on the gem; Renalware outbox and `RelayGateway`.
+
 ## 7. Questions to resolve (many are non-technical)
 
 **Assurance and governance**

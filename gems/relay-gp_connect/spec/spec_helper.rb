@@ -26,4 +26,5 @@ RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
   config.include FaradayHelper
   config.include MeshConfigHelper
+  config.include DeliveryRequestHelper
 end
