@@ -295,6 +295,70 @@ Implications for Relay:
   safeguarding cases). Each sender's rule should be agreed with the hospital, and sender-side
   responsibility documented in the clinical safety case.
 
+## 6c. Groundwork status (branch `chore/gp_connect_relay_groundwork`)
+
+Constraint throughout: no change to production behaviour at HOSPA and no orphaned in-flight
+messages. No migrations, jobs, queues or table changes were made. All commits are local, not
+yet pushed or reviewed.
+
+| Step | Addresses problem | Commit | Result |
+|---|---|---|---|
+| 1 | 10 (wire-format regressions) | 6a17c9c10 | Golden-file spec pins the assured XML, `Mex-To` and `Mex-Subject` |
+| 2 | 2 (eligibility in 3 places) | 0d9d9adf4 | `Delivery::PrimaryCareDeliveryPolicy`, used by `ApproveLetter` and `QueueLetterDelivery` |
+| 3 | 1 (transport writes clinical state) | e2f8917ba | `RecordGPDeliveryOutcome` is the only writer of `gp_send_status` after approval; the reconcile job reports outcomes to it |
+| 4 | 3 (boolean doing three jobs) | ddfcc383d | `Renalware::GPLetterDelivery` (`none`, `builtin_mesh`, `relay`). `GP_LETTER_DELIVERY` wins; otherwise legacy `SEND_GP_LETTERS_OVER_MESH` maps to the same behaviour |
+| 5 | 5 (partly: inputs) | 8f4dcd0ca | `DeliveryRequest` plain value object + `BuildDeliveryRequest`; the GP Connect payload builds from it with no models or config |
+
+Notes and decisions made while doing it:
+- `GPLetterDelivery` lives in `lib/` because `ScheduledJobs.config` reads it in an initializer,
+  before `app/` classes autoload. Putting it in `app/` stopped the app booting.
+- `GP_LETTER_DELIVERY=relay` and unknown values abort boot on purpose. A silent no-send would
+  leave letters pending and hidden from the print list.
+- Nested `DeliveryRequest::*` types must be assigned outside the `Data.define` block, or the
+  constants leak into `Renalware::Letters` and clash with `Letters::Patient`.
+- `Arguments` builds a lazy request from a letter, resolving each field on first use. This
+  preserves the old reads-only-what-is-needed behaviour that existing specs rely on. A pure
+  `DeliveryRequest` (Relay, gem) needs none of it.
+- `SendMessageJob`'s send-time GP-recipient check was deliberately left as is (it protects
+  in-flight work).
+- The disabled `SEND_HOSPITAL_NUMBER_IDENTIFIERS` feature still works, from
+  `local_patient_ids`.
+- Two RTF specs in `spec/models/renalware/feeds/hl7_document_message_builder_spec.rb` fail
+  before and after this work (unrelated).
+
+Still open from section 2:
+- **6 (`verify: false` in `API::Client#ssl_options`)**: deliberately not changed. Enabling
+  verification could stop production sends if HOSPA's cert chain is not set up for it. Test
+  against the MESH environment first, then fix before the code is shared.
+- **4 (pending letters hidden for up to 20 days)**: needs the Relay-path timeout and outbox
+  (5.4); no change to the built-in path.
+- **5 (global single-tenant config, hard-coded "Consultation report", `document_version`)**:
+  `sender` now travels in the request, but the config source and the hard-coded title/version
+  in `Arguments` remain.
+- **7 (PHI retention in `letter_mesh_operations`)**, **8 (mailbox contention)** and **9 (operation
+  granularity)**: Relay-time concerns; nothing done yet.
+- Extra: `Transmission.letter_id` FK and `Arguments#letter` for the unused TransferOfCare code
+  keep the delivery code tied to `Letters::Letter` until the protocol layer is extracted.
+
+### Next phase (proposed order)
+
+1. **Investigate and fix item 6** against the MESH integration environment (own PR, behind
+   confirmation that HOSPA's chain verifies).
+2. **Make `Arguments` and the FHIR builders independent of `Transmission`/`Letter`** by moving
+   `document_title`, `composition_title`, `document_version`, `mex_to` and workflow selection
+   onto the request or a small config object. Keep TransferOfCare working or explicitly parked.
+3. **Pin the MESH client and ITK3 parsing** with specs, then **extract the protocol gem**
+   (payload builders, MESH client, ITK3 parsing, outcome evaluator) with history, behind a
+   `Config` object instead of `Renalware.config`. Renalware consumes it; golden spec must pass
+   unchanged.
+4. **Add `Letters::DeliveryGateway` port** with the built-in MESH implementation, and design the
+   REST contract for the Relay implementation (idempotency key = letter UUID, required
+   `confidentiality`, signed webhook, polling fallback).
+5. **Start Relay**: sender/mailbox/submission/delivery/attempt model, Entra auth (5.6), REST
+   ingress, then HL7 adapter once HOSPA's spec exists. Own NHS assurance.
+6. **Renalware outbox + `RelayGateway`**, timeout/fail-safe, `GP_LETTER_DELIVERY=relay` goes
+   live only here, then HOSPA cutover per 5.5 (own mailbox, drain the old poller).
+
 ## 7. Questions to resolve (many are non-technical)
 
 **Assurance and governance**
