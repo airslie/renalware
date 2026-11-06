@@ -1,12 +1,15 @@
-module Renalware
-  module Letters::Transports::Mesh
-    module API
+require "fileutils"
+require "openssl"
+
+module Relay
+  module GPConnect
+    module Mesh
       class Certificates
         # A well formed PEM starts with a header line such as -----BEGIN CERTIFICATE----- or
         # -----BEGIN RSA PRIVATE KEY-----, followed by a line feed.
         WELL_FORMED_PEM = /\A\s*-----BEGIN [A-Z0-9 ]+-----\s*\n/
 
-        def initialize(config: API::Config.from_renalware)
+        def initialize(config:)
           @config = config
         end
 
@@ -39,7 +42,7 @@ module Renalware
         # If the file is missing at runtime then create it using the cert content in the CA ENV var
         # and return the path to the file. The configured_ca_path will be relative eg
         # config/certificates/meh/nhs_ca.cert so we make sure to resolve that path relative to
-        # the configured base_dir (Rails.root in Renalware).
+        # the configured base_dir.
         #
         # - In Azure docker deployments, the file might be in the image, or the cert contents in ENV
         # - On Heroku the cert contents will be an ENV var.

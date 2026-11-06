@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8700/messageexchange/BADMAILBOX
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - NHSMESH BADMAILBOX:567f67db-e739-4cd6-a26b-b40dd6752cf6:0:202303011304:21eebf4a286f0d39a1ab4a3a0f7d226ae1738f8907cb597daa4a58e4034bbf4a
+      Mex-Clientversion:
+      - ApiDocs==0.0.1
+      Mex-Filename:
+      - None
+      Mex-Messagetype:
+      - DATA
+      Mex-Osarchitecture:
+      - x86_64
+      Mex-Osname:
+      - Linux
+      Mex-Osversion:
+      - ''
+      User-Agent:
+      - Faraday v1.10.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      Date:
+      - Wed, 01 Mar 2023 13:04:16 GMT
+      Server:
+      - uvicorn
+      Content-Length:
+      - '83'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"errorEvent":"SEND","errorCode":"EPL-151","errorDescription":"No mailbox
+        matched"}'
+  recorded_at: Wed, 01 Mar 2023 13:04:17 GMT
+recorded_with: VCR 6.1.0

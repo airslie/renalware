@@ -1,6 +1,6 @@
 module Renalware::Letters::Transports::Mesh
-  # Not too sure what we are testing here as we could end up testing the NHS MESH docker sandbox
-  # rather than our app! Validating various VCR cassettes is useful however
+  # The MESH client itself lives in the relay-gp_connect gem and is specified there. This covers
+  # what is Renalware's: it uses Renalware.config by default, with class-level shortcuts.
   describe API::Client do
     let(:mesh_mailbox_id) { "RAJ01OT001" }
     let(:base_url) { "http://localhost:8700/messageexchange" } # the MESH sandbox running in docker
@@ -8,8 +8,6 @@ module Renalware::Letters::Transports::Mesh
     def cassette(path) = File.join("letters/transports/mesh/api", path)
 
     before do
-      # Note you can run a meshapi sandbox on localhost:8700 using docker
-      # https://github.com/NHSDigital/mesh-sandbox
       allow(Renalware.config).to receive_messages(
         mesh_mailbox_id:,
         mesh_api_base_url: base_url,
@@ -18,164 +16,67 @@ module Renalware::Letters::Transports::Mesh
       )
     end
 
-    # What we hand to Faraday: the mailbox url, the Mex-* headers and the TLS options.
-    describe "connection" do
-      it "is built from the mailbox url, request headers and client certificates" do
-        allow(Faraday).to receive(:new).and_call_original
+    it "is the gem's client" do
+      expect(described_class.superclass).to eq(Relay::GPConnect::Mesh::Client)
+    end
 
-        VCR.use_cassette(cassette("handshake/success")) { described_class.new.handshake }
+    it "uses the settings in Renalware.config by default" do
+      response = VCR.use_cassette(cassette("handshake/success")) { described_class.new.handshake }
 
-        expect(Faraday).to have_received(:new).with(
-          hash_including(
-            url: "#{base_url}/#{mesh_mailbox_id}",
-            headers: hash_including(
-              "Mex-From" => mesh_mailbox_id,
-              "Mex-WorkflowID" => Renalware.config.mesh_workflow_id,
-              "Content-Type" => "application/xml"
-            ),
-            ssl: hash_including(
-              ca_file: Rails.root.join(Renalware.config.mesh_path_to_nhs_ca_file).to_s,
-              client_cert: an_instance_of(OpenSSL::X509::Certificate),
-              client_key: an_instance_of(OpenSSL::PKey::RSA)
-            )
-          )
+      expect(response.status).to eq(200)
+      expect(response.body).to eq("mailboxId" => mesh_mailbox_id)
+    end
+
+    it "has class-level shortcuts, e.g. handshake and send_message" do
+      handshake = VCR.use_cassette(cassette("handshake/success")) { described_class.handshake }
+      sent = VCR.use_cassette(cassette("send_message/naive")) do
+        described_class.send_message(
+          '<Bundle xmlns="http://hl7.org/fhir"></Bundle>',
+          operation_uuid: "localID",
+          to: "abc",
+          subject: "xyz"
         )
       end
 
-      # CURRENT BEHAVIOUR, pinned so that refactoring cannot change it unnoticed. The NHS MESH
-      # endpoints use a private CA, and verification is currently off. Turning it on is a
-      # deliberate, separately tested change; when you do it, update this example.
-      it "currently does not verify the server certificate (verify: false)" do
-        allow(Faraday).to receive(:new).and_call_original
-
-        VCR.use_cassette(cassette("handshake/success")) { described_class.new.handshake }
-
-        expect(Faraday)
-          .to have_received(:new).with(hash_including(ssl: hash_including(verify: false)))
-      end
+      expect(handshake.status).to eq(200)
+      expect(sent.status).to eq(202)
     end
 
-    # What a non-Renalware user of this code (e.g. Relay) does: supply its own settings.
-    describe "with an injected API::Config" do
-      let(:ca_path) { File.join(Dir.mktmpdir, "ca.pem") }
-      let(:config) do
-        API::Config.new(
-          mailbox_id: mesh_mailbox_id,
-          mailbox_password: "pass",
-          api_secret: "secret",
-          api_base_url: base_url,
-          workflow_id: "WF",
-          client_cert_path: Rails.root.join("spec/support/dummy_mesh_cert.txt"),
-          client_cert: nil,
-          client_key_path: Rails.root.join("spec/support/dummy_mesh_key.txt"),
-          client_key: nil,
-          ca_file_path: ca_path,
-          ca_cert: Rails.root.join("spec/support/dummy_mesh_cert.txt").read,
-          base_dir: Rails.root
-        )
-      end
-
-      it "uses it, and never reads Renalware.config" do
-        allow(Renalware.config).to receive(:mesh_mailbox_id).and_raise("Renalware.config was read")
-        allow(API::Config).to receive(:from_renalware).and_raise("Renalware.config was read")
-
-        response = VCR.use_cassette(cassette("handshake/success")) do
-          described_class.new(config:).handshake
-        end
-
-        expect(response.status).to eq(200)
-        expect(File.exist?(ca_path)).to be(true) # created from config.ca_cert
-      end
+    it "responds to a shortcut for every client call" do
+      %i(endpointlookup handshake check_inbox download_message acknowledge_message send_message)
+        .each { |call| expect(described_class).to respond_to(call) }
     end
 
-    describe "#handshake" do
-      context "when the mailbox does not exist" do
-        it "returns 403 and a json response with an EPL error" do
-          allow(Renalware.config).to receive(:mesh_mailbox_id).and_return("BADMAILBOX")
-          response = VCR.use_cassette(cassette("handshake/mailbox_not_found")) do
-            described_class.handshake
-          end
-
-          expect(response.status).to eq(403)
-          expect(response.body).to include("errorCode" => "EPL-151")
-        end
+    # The gem's default clock is UTC; Renalware has always timestamped the auth header in London
+    # time, so make sure the request that actually goes out still does.
+    it "timestamps the authorization header in London time" do
+      travel_to(Time.utc(2023, 7, 1, 12, 0)) do # BST: London is an hour ahead of UTC
+        VCR.use_cassette(cassette("handshake/success")) { described_class.handshake }
       end
 
-      context "when the mailbox exists" do
-        it "returns true" do
-          response = VCR.use_cassette(cassette("handshake/success")) do
-            described_class.new.handshake
-          end
-
-          expect(response.status).to eq(200)
-          expect(response.body).to eq("mailboxId" => mesh_mailbox_id)
-        end
-      end
+      expect(WebMock).to have_requested(:get, %r{/RAJ01OT001}).with { |request|
+        request.headers["Authorization"].split(":")[3] == "202307011300"
+      }
     end
 
-    describe "#check_inbox" do
-      it do
-        response = VCR.use_cassette(cassette("check_inbox/no_messages")) do
-          described_class.new.check_inbox
-        end
+    it "uses a config it is given, and never reads Renalware.config" do
+      config = Relay::GPConnect::Mesh::Config.new(
+        mailbox_id: mesh_mailbox_id, mailbox_password: "pass", api_secret: "secret",
+        api_base_url: base_url, workflow_id: "WF",
+        client_cert_path: Rails.root.join("spec/support/dummy_mesh_cert.txt"), client_cert: nil,
+        client_key_path: Rails.root.join("spec/support/dummy_mesh_key.txt"), client_key: nil,
+        ca_file_path: File.join(Dir.mktmpdir, "ca.pem"),
+        ca_cert: Rails.root.join("spec/support/dummy_mesh_cert.txt").read,
+        base_dir: Rails.root
+      )
+      allow(Renalware.config).to receive(:mesh_mailbox_id).and_raise("Renalware.config was read")
+      allow(API::Config).to receive(:from_renalware).and_raise("Renalware.config was read")
 
-        expect(response.status).to eq(200)
-        expect(response.body).to eq("messages" => [])
-      end
-    end
-
-    describe "#download_message" do
-      context "when the message does not exist" do
-        it do
-          response = VCR.use_cassette(cassette("download_message/not_found")) do
-            described_class.new.download_message("123")
-          end
-
-          expect(response.status).to eq(404)
-          expect(response.body).to include("errorDescription" => "Message does not exist")
-        end
+      response = VCR.use_cassette(cassette("handshake/success")) do
+        described_class.new(config:).handshake
       end
 
-      context "when REPORT message with no body" do
-        it do
-          response = VCR.use_cassette(cassette("download_message/report/undelivered")) do
-            described_class.new.download_message("123")
-          end
-
-          expect(response.status).to eq(200)
-          expect(response.body).to be_blank
-          expect(response.headers["Mex-MessageType"]).to eq("REPORT")
-          expect(response.headers["Mex-StatusCode"]).to eq("14")
-          expect(response.headers["Mex-StatusDescription"]).to eq("Undelivered message")
-        end
-      end
-
-      it "downloading a simple message created with curl!" do
-        response = VCR.use_cassette(
-          cassette("download_message/60A7BB96B4974B5D8CD50E28CB782795")
-        ) do
-          described_class.new.download_message("60A7BB96B4974B5D8CD50E28CB782795")
-        end
-
-        expect(response.status).to eq(200)
-        expect(response.body).to eq("This is a message")
-      end
-    end
-
-    describe "#send_message" do
-      it "send simple empty Bundle XML message" do
-        response = VCR.use_cassette(cassette("send_message/naive")) do
-          described_class.send_message(
-            '<Bundle xmlns="http://hl7.org/fhir"></Bundle>',
-            operation_uuid: "localID",
-            to: "abc",
-            subject: "xyz"
-          )
-        end
-
-        expect(response.status).to eq(202)
-        expect(response.body).to eq("messageID" => "DC15F15F29D5487EA444310EE5222322")
-      end
+      expect(response.status).to eq(200)
     end
   end
 end

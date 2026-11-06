@@ -1,12 +1,14 @@
-module Renalware
-  module Letters::Transports::Mesh
-    module API
+require "active_support/core_ext/object/blank"
+
+module Relay
+  module GPConnect
+    module Mesh
       # Turns the response to a MESH API call into a hash of attributes describing it: the HTTP
       # outcome, any MESH error (from a json body, or from the Mex-* headers of an error report),
       # and the ITK3 infrastructure/business response details if it is an xml response.
       #
-      # Pure: no database. LogOperation stores the result in a Renalware Operation; another user of
-      # the MESH client can store it however it likes.
+      # Pure: no database. The host application stores the result however it likes (Renalware
+      # keeps it in an Operation row).
       class OperationAttributes
         def initialize(response)
           @response = response
