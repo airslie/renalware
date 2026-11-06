@@ -2,6 +2,10 @@ module Renalware
   module Letters::Transports::Mesh
     module API
       class Certificates
+        # A well formed PEM starts with a header line such as -----BEGIN CERTIFICATE----- or
+        # -----BEGIN RSA PRIVATE KEY-----, followed by a line feed.
+        WELL_FORMED_PEM = /\A\s*-----BEGIN [A-Z0-9 ]+-----\s*\n/
+
         def initialize(config: API::Config.from_renalware)
           @config = config
         end
@@ -67,18 +71,19 @@ module Renalware
           cert_contents_with_line_feeds_reinstated(cert_contents)
         end
 
-        # If cert is present but contains no new lines, add them.
-        # This is because on Azure, pasting a cert into an ENV var in settings results
-        # in \n being replaces with " "
+        # If the contents are not well formed PEM (typically because the line feeds have been lost)
+        # reinstate them. This happens on Azure: pasting a cert into an ENV var in settings
+        # results in \n being replaced with " ".
+        #
+        # We used to guess this from the position of the first line feed, which wrongly "repaired"
+        # a good RSA key as its header (-----BEGIN RSA PRIVATE KEY-----) is longer than a
+        # certificate's. Now we look at the shape of the header.
         def cert_contents_with_line_feeds_reinstated(cert_contents)
-          first_line_feed = cert_contents.index("\n")
-          if first_line_feed.blank? || first_line_feed > 28 # Normally first \n should be pos 27
-            # Replace spaces in the cert string with \n unless they are the spaces between the
-            # words BEGIN CERTIFICATE or BEGIN PRIVATE KEY
-            cert_contents.gsub(/ (?!(CERTIFICATE|PRIVATE|KEY))/, "\n")
-          else
-            cert_contents
-          end
+          return cert_contents if cert_contents.match?(WELL_FORMED_PEM)
+
+          # Replace spaces in the PEM string with \n unless they are the spaces between the words
+          # of the header and footer, e.g. BEGIN RSA PRIVATE KEY
+          cert_contents.gsub(/ (?!(CERTIFICATE|PRIVATE|KEY|RSA|EC|ENCRYPTED))/, "\n")
         end
       end
     end

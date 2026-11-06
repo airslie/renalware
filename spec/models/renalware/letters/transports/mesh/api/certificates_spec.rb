@@ -61,17 +61,22 @@ module Renalware::Letters::Transports::Mesh
       expect(certificates.client_key).to be_a(OpenSSL::PKey::RSA)
     end
 
-    # KNOWN BUG, deliberately not fixed in the refactoring PRs (it would change behaviour).
-    # The line-feed "repair" assumes the first PEM line ends by position 28, but the header
-    # "-----BEGIN RSA PRIVATE KEY-----" is 31 characters, so a correctly formatted RSA key
-    # supplied as config contents (e.g. an env var) is corrupted. Keys read from a file path
-    # are not affected. When fixed, this example will fail as "expected pending to fail":
-    # delete the `pending` line.
     it "client_key falls back to RSA contents (BEGIN RSA PRIVATE KEY) in config" do
-      pending "cert_contents_with_line_feeds_reinstated corrupts RSA-format PEM headers"
       configure(mesh_client_key: key_pem)
 
-      expect(certificates.client_key).to be_a(OpenSSL::PKey::RSA)
+      expect(certificates.client_key.to_pem).to eq(OpenSSL::PKey::RSA.new(key_pem).to_pem)
+    end
+
+    it "client_key reinstates line feeds in an RSA key pasted into an env var with spaces" do
+      configure(mesh_client_key: key_pem.tr("\n", " ").strip)
+
+      expect(certificates.client_key.to_pem).to eq(OpenSSL::PKey::RSA.new(key_pem).to_pem)
+    end
+
+    it "leaves well formed contents alone even with leading blank lines or Windows line endings" do
+      configure(mesh_client_cert: "\n\n#{cert_pem.gsub("\n", "\r\n")}")
+
+      expect(certificates.client_cert.to_pem).to eq(expected_cert_pem)
     end
 
     it "client_key raises if there is neither a file nor config contents" do
