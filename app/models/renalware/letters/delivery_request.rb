@@ -10,7 +10,7 @@ module Renalware
     #
     # NB the nested types are assigned as DeliveryRequest::X (not inside a Data.define block,
     # where the constants would leak into Renalware::Letters and clash with e.g. Letters::Patient).
-    DeliveryRequest = Data.define(:patient, :author, :document, :sender) do
+    DeliveryRequest = Data.define(:patient, :author, :document, :sender, :routing) do
       def pdf_missing? = document.pdf_content.blank?
 
       def document_type_missing?
@@ -33,10 +33,17 @@ module Renalware
       :uuid, :given_name, :family_name, :professional_position
     )
 
-    # The letter itself: its identity, the PDF, and how it is classified.
+    # The letter itself: its identity, the PDF, and how it is classified and titled.
+    # composition_title is the human title of this kind of document (e.g. "Consultation report",
+    # "Discharge summary"); version is the document version being sent.
     DeliveryRequest::Document = Data.define(
-      :uuid, :binary_uuid, :approved_at, :pdf_content, :type_snomed_code, :type_snomed_title
+      :uuid, :binary_uuid, :approved_at, :pdf_content, :type_snomed_code, :type_snomed_title,
+      :composition_title, :version
     )
+
+    # Where to deliver. A blank recipient_mailbox_id means "let MESH auto-route to the patient's
+    # GP using their demographics"; a value means send directly to that mailbox.
+    DeliveryRequest::Routing = Data.define(:recipient_mailbox_id)
 
     # The sending organisation (hospital / department).
     DeliveryRequest::Sender = Data.define(

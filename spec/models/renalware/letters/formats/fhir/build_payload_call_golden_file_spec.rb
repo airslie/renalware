@@ -147,6 +147,10 @@ module Renalware::Letters
           type_snomed_code: "371531000",
           type_snomed_title: "Report of clinical encounter"
         )
+        expect(request.document).to have_attributes(
+          composition_title: "Consultation report", version: 1
+        )
+        expect(request.routing).to have_attributes(recipient_mailbox_id: nil)
         expect(request.sender).to have_attributes(
           uuid: "88888888-8888-8888-8888-888888888888",
           ods_code: "RAJ01",
@@ -184,8 +188,11 @@ module Renalware::Letters
             approved_at: Time.zone.parse("2022-01-01 01:01:01"),
             pdf_content: "%PDF-1.4 golden",
             type_snomed_code: "371531000",
-            type_snomed_title: "Report of clinical encounter"
+            type_snomed_title: "Report of clinical encounter",
+            composition_title: "Consultation report",
+            version: 1
           ),
+          routing: DeliveryRequest::Routing.new(recipient_mailbox_id: nil),
           sender: DeliveryRequest::Sender.new(
             uuid: "88888888-8888-8888-8888-888888888888",
             itk_uuid: "99999999-9999-9999-9999-999999999999",
@@ -212,6 +219,39 @@ module Renalware::Letters
         xml = travel_to(Time.utc(2022, 1, 2, 3, 4, 5)) { described_class.call(args) }
 
         expect(xml).to eq(File.read(fixture_path))
+      end
+
+      def args_for(request)
+        Arguments.new(
+          request:,
+          transmission_uuid: "66666666-6666-6666-6666-666666666666",
+          transaction_uuid: "77777777-7777-7777-7777-777777777777"
+        )
+      end
+
+      it "uses the request's composition title and version, so each document type can differ" do
+        document = plain_delivery_request.document.with(
+          composition_title: "Discharge summary", version: 2
+        )
+        args = args_for(plain_delivery_request.with(document:))
+
+        xml = described_class.call(args)
+
+        expect(xml).to include('<title value="Discharge summary"/>')
+        expect(args.mex_subject).to eq(
+          "Discharge summary for JONES, Patricia (Ms), NHS Number: 9999999999, " \
+          "seen at Test Hospital, RAJ01, Version: 2"
+        )
+      end
+
+      it "sends direct to the request's recipient mailbox when one is given, else auto-routes" do
+        direct = plain_delivery_request.with(
+          routing: DeliveryRequest::Routing.new(recipient_mailbox_id: "X26OT112")
+        )
+
+        expect(args_for(direct).mex_to).to eq("X26OT112")
+        expect(args_for(plain_delivery_request).mex_to)
+          .to eq("GPPROVIDER_9999999999_19700102_Jones")
       end
 
       it "produces the assured GP Connect XML, unchanged" do

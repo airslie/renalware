@@ -15,7 +15,8 @@ module Renalware
         patient: DeliveryRequest::Patient,
         author: DeliveryRequest::Author,
         document: DeliveryRequest::Document,
-        sender: DeliveryRequest::Sender
+        sender: DeliveryRequest::Sender,
+        routing: DeliveryRequest::Routing
       }.freeze
 
       attr_reader :letter
@@ -47,6 +48,7 @@ module Renalware
         def author   = @author   ||= Part.new(@builder, :author)
         def document = @document ||= Part.new(@builder, :document)
         def sender   = @sender   ||= Part.new(@builder, :sender)
+        def routing  = @routing  ||= Part.new(@builder, :routing)
 
         # Validation reads only the archive and topic, not the whole letter (as it always did).
         # The try is because we have a lot of tests that don't stub letter.archive.
@@ -133,6 +135,13 @@ module Renalware
       def document_type_snomed_code = snomed_document_type&.code
       def document_type_snomed_title = snomed_document_type&.title
       def snomed_document_type = letter.topic&.snomed_document_type
+      def document_composition_title = "Consultation report"
+      def document_version = 1
+
+      # Routing
+      def routing_recipient_mailbox_id
+        config.mesh_recipient_mailbox_id if config.mesh_use_endpoint_lookup
+      end
 
       # Sender
       def sender_uuid = organisation_uuid || config.mesh_organisation_uuid

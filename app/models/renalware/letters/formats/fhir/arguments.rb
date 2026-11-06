@@ -71,10 +71,10 @@ module Renalware
       def message_definition_url  = MESSAGE_DEFINITION_URL
       def event_code              = EVENT_CODE
       def event_display           = EVENT_DISPLAY
-      def document_version        = 1
+      def document_version        = request.document.version
       def confidentiality         = request.patient.restricted ? "R" : "N"
       def letter_datetime         = request.document.approved_at.utc.iso8601
-      def composition_title       = "Consultation report"
+      def composition_title       = request.document.composition_title
       def mex_subject             = document_title
 
       # # E.g. "371531000"
@@ -92,7 +92,8 @@ module Renalware
       #   and this will use MESH auto-routing to deliver the message to the correct mailbox
       #   (or return an EPL-* message if it can't resolve the practice mailbox fot the patient)
       def mex_to
-        return config.mesh_recipient_mailbox_id if config.mesh_use_endpoint_lookup
+        mailbox_id = request.routing.recipient_mailbox_id
+        return mailbox_id if mailbox_id
 
         # Use MESH auto routing
         [
@@ -114,8 +115,6 @@ module Renalware
       end
 
       private
-
-      def config = Renalware.config
 
       def validate_arguments
         raise Letters::MissingPdfContentError if request.pdf_missing?
