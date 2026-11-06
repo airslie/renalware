@@ -89,36 +89,6 @@ module Renalware
               end
             end
           end
-
-          context "when workflow is :transfer_of_care" do
-            before do
-              allow(Renalware.config)
-                .to receive(:letters_mesh_workflow)
-                .and_return(:transfer_of_care)
-            end
-
-            # it "resolves the correct workflow id to use in HTTP headers etc" do
-            #   expect(Renalware.config.mesh_workflow_id).to eq("d")
-            # end
-
-            describe "#resource" do
-              subject(:resource) { message_header[:resource] }
-
-              it "has an event describing the message" do
-                coding = resource.event.first
-                expect(coding.code).to eq("ITK006D")
-                expect(coding.display).to eq("ITK Outpatient Letter")
-              end
-
-              it "MessageDefinition url is correct" do
-                extension = resource.extension[0].extension[3]
-                expect(extension.url).to eq("MessageDefinition")
-                expect(extension.valueReference.reference).to eq(
-                  "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-OPL-MessageDefinition-4"
-                )
-              end
-            end
-          end
         end
       end
     end

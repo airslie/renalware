@@ -5,15 +5,11 @@ module Renalware
     class Arguments
       include Renalware::UniformResourceNaming
 
-      # The DeliveryRequest holds everything the GP Connect message needs as plain values. Only
-      # the (unused) TransferOfCare workflow still reaches back into the Renalware letter, via
-      # #letter, so that is nil-safe: a GP Connect message can be built from a request alone.
+      # The DeliveryRequest holds everything the GP Connect message needs as plain values, so a
+      # message can be built from a request alone (no transmission or letter).
       attr_reader :transmission,
                   :transaction_uuid,
                   :request
-
-      delegate :patient, :event, :archive, :topic, :approved_at, to: :letter, allow_nil: true
-      alias clinic_visit event
 
       class MissingSnomedDocumentTypeError < StandardError
         def message
@@ -21,26 +17,13 @@ module Renalware
         end
       end
 
-      WORKFLOWS = {
-        gp_connect: {
-          event: {
-            code: "ITK007C",
-            display: "ITK GP Connect Send Document"
-          },
-          message_definition: {
-            reference: "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-GPConnectSendDocument-MessageDefinition-1"
-          }
-        },
-        transfer_of_care: {
-          event: {
-            code: "ITK006D",
-            display: "ITK Outpatient Letter"
-          },
-          message_definition: {
-            reference: "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-OPL-MessageDefinition-4"
-          }
-        }
-      }.freeze
+      # The only workflow supported: ITK GP Connect Send Document.
+      # (The Transfer of Care workflow was removed; see git tag transfer-of-care-last-present.)
+      EVENT_CODE = "ITK007C".freeze
+      EVENT_DISPLAY = "ITK GP Connect Send Document".freeze
+      MESSAGE_DEFINITION_URL =
+        "https://fhir.nhs.uk/STU3/MessageDefinition/ITK-GPConnectSendDocument-MessageDefinition-1"
+          .freeze
 
       # Either pass a transmission (the request is built from its letter), or pass a ready-made
       # request and the transmission_uuid.
@@ -66,13 +49,10 @@ module Renalware
       def letter = transmission&.letter
       def transmission_uuid = @transmission_uuid || transmission.uuid
 
-      def workflow                = Renalware.config.letters_mesh_workflow
-      def gp_connect?             = workflow == :gp_connect
       def transmission_urn        = uuid_urn(transmission_uuid)
       def transaction_urn         = uuid_urn(transaction_uuid)
       def letter_urn              = uuid_urn(letter_uuid)
       def patient_urn             = uuid_urn(patient_uuid)
-      def encounter_urn           = uuid_urn(encounter_uuid)
       def author_urn              = uuid_urn(author_uuid)
       def organisation_urn        = uuid_urn(organisation_uuid)
       def organisation_uuid       = request.sender.uuid
@@ -88,9 +68,9 @@ module Renalware
       def author_uuid             = request.author.uuid
       def binary_uuid             = request.document.binary_uuid
       def binary_urn              = uuid_urn(binary_uuid)
-      def message_definition_url  = WORKFLOWS[workflow].dig(:message_definition, :reference)
-      def event_code              = WORKFLOWS[workflow].dig(:event, :code)
-      def event_display           = WORKFLOWS[workflow].dig(:event, :display)
+      def message_definition_url  = MESSAGE_DEFINITION_URL
+      def event_code              = EVENT_CODE
+      def event_display           = EVENT_DISPLAY
       def document_version        = 1
       def confidentiality         = request.patient.restricted ? "R" : "N"
       def letter_datetime         = request.document.approved_at.utc.iso8601
@@ -102,10 +82,6 @@ module Renalware
 
       # # E.g. 'Report of clinical encounter'
       # def document_type_snomed_title = snomed_document_type_description
-
-      def encounter_uuid
-        @encounter_uuid ||= clinic_visit&.uuid || SecureRandom.uuid
-      end
 
       # There are two modes for the Mex-To HTTP Header:
       # - we can use a known mesh mailbox id and send directly there (eg a mailbox id that was

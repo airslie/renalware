@@ -26,16 +26,6 @@ module Renalware
             value: uuid
           }
         end
-
-        def html_fragment_from(letter, html_id:)
-          fragment = Nokogiri.XML(letter.archive.content)
-            .xpath("//*[@id='#{html_id}']")
-            .first
-            &.to_s
-          raise(ArgumentError, html_id) if fragment.blank?
-
-          fragment
-        end
       end
     end
   end

@@ -36,7 +36,7 @@ module Renalware
           }
         end
 
-        # See TransferOfCare::DocumentBundle or GPConnect::DocumentBundle
+        # See GPConnect::DocumentBundle
         def entries
           raise NotImplementedError, "subclass must implement"
         end
