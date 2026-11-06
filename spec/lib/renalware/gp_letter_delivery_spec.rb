@@ -51,5 +51,27 @@ module Renalware
 
       expect { described_class.current }.to raise_error(NotImplementedError, /relay/i)
     end
+
+    it "is happy with the gp_connect workflow, the only one supported" do
+      configure(send_gp_letters_over_mesh: true)
+      allow(Renalware.config).to receive(:letters_mesh_workflow).and_return(:gp_connect)
+
+      expect(described_class.current).to eq(:builtin_mesh)
+    end
+
+    it "refuses to boot with built-in MESH on and the removed transfer_of_care workflow" do
+      configure(send_gp_letters_over_mesh: true)
+      allow(Renalware.config).to receive(:letters_mesh_workflow).and_return(:transfer_of_care)
+
+      expect { described_class.current }
+        .to raise_error(NotImplementedError, /transfer_of_care.*removed/i)
+    end
+
+    it "does not care about the workflow when letters are not being sent over MESH" do
+      configure(send_gp_letters_over_mesh: false)
+      allow(Renalware.config).to receive(:letters_mesh_workflow).and_return(:transfer_of_care)
+
+      expect(described_class.current).to eq(:none)
+    end
   end
 end

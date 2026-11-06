@@ -30,7 +30,9 @@ module Renalware
           ENV["LETTERS_EXTERNAL_DOCUMENT_TYPE_DESCRIPTION"].presence
         end
 
-        base.config_accessor(:letters_mesh_workflow) { :gp_connect } # or :transfer_of_care
+        # Only :gp_connect is supported (Transfer of Care was removed). Kept so a stale setting is
+        # detected at boot by Renalware::GPLetterDelivery rather than silently ignored.
+        base.config_accessor(:letters_mesh_workflow) { :gp_connect }
       end
 
       def self.register_mesh_timing_settings(base)
@@ -71,7 +73,6 @@ module Renalware
 
         base.config_accessor(:mesh_workflow_id) do
           ENV.fetch("MESH_WORKFLOW_ID", "GPCONNECT_SEND_DOCUMENT")
-          # transfer_of_care: "TOC_FHIR_OP_ATTEN"
         end
       end
 

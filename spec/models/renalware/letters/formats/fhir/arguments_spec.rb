@@ -73,24 +73,6 @@ module Renalware::Letters
         end
       end
 
-      describe "gp_connect?" do
-        it do
-          expect(arguments.gp_connect?).to be(true)
-        end
-      end
-
-      # describe "encounter_urn" do
-      #   it "is nil when there is no clinic visit for this letter" do
-      #     allow(letter).to receive(:event).and_return(nil)
-
-      #     expect(arguments.encounter_urn).to be_nil
-      #   end
-
-      #   it "returns the clinic_visit.uuid if this the letter is associated with a clinic" do
-      #     expect(arguments.encounter_urn).to eq("urn:uuid:#{clinic_visit_uuid}")
-      #   end
-      # end
-
       describe "organisation_uuid" do
         it "is read from config" do
           expect(arguments.organisation_uuid).to eq("ORG1")

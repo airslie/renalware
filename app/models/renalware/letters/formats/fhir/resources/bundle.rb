@@ -24,15 +24,9 @@ module Renalware
               entry: [
                 MessageHeader.call(arguments),
                 ITK::Organisation.call(arguments),
-                document_bundle_class.call(arguments)
+                GPConnect::DocumentBundle.call(arguments)
               ]
             )
-          end
-
-          private
-
-          def document_bundle_class
-            arguments.gp_connect? ? GPConnect::DocumentBundle : TransferOfCare::DocumentBundle
           end
         end
       end
