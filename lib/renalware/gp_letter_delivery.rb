@@ -21,6 +21,7 @@ module Renalware
       def current
         mode = explicit_mode || legacy_mode
         raise_if_unsupported(mode)
+        raise_if_workflow_removed if mode == :builtin_mesh
         mode
       end
 
@@ -47,6 +48,19 @@ module Renalware
 
       def legacy_mode
         Renalware.config.send_gp_letters_over_mesh ? :builtin_mesh : :none
+      end
+
+      # The Transfer of Care workflow (ITK006D outpatient letter) has been removed; GP Connect
+      # is the only supported workflow. Fail at boot rather than send the wrong message, or fail
+      # at send time and leave letters pending (hidden from the print list).
+      # The code is available at the git tag transfer-of-care-last-present.
+      def raise_if_workflow_removed
+        workflow = Renalware.config.letters_mesh_workflow.to_s
+        return if workflow.blank? || workflow == "gp_connect"
+
+        raise NotImplementedError,
+              "letters_mesh_workflow=#{workflow} has been removed; only gp_connect is " \
+              "supported. (Transfer of Care code: git tag transfer-of-care-last-present)"
       end
 
       def raise_if_unsupported(mode)
