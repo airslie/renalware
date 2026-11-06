@@ -9,7 +9,7 @@ module Renalware
         delegate :patient, to: :letter
 
         def send_electronically?
-          return false unless Renalware.config.send_gp_letters_over_mesh
+          return false unless GPLetterDelivery.electronic?
           return false if patient.confidentiality_restricted?
           return false unless letter.gp_is_a_recipient?
 

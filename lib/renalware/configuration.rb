@@ -193,9 +193,16 @@ module Renalware
     end
     config_accessor(:epr_mdt_document_type) { ENV.fetch("EPR_MDT_DOCUMENT_TYPE", "CL06.080") }
 
+    # Legacy on/off switch for built-in MESH delivery of GP letters. Prefer gp_letter_delivery
+    # (below). This is still honoured when gp_letter_delivery is not set, so existing
+    # deployments keep working unchanged. Read it via Letters::GPLetterDelivery.
     config_accessor(:send_gp_letters_over_mesh) do
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("SEND_GP_LETTERS_OVER_MESH", "false"))
     end
+
+    # How the GP's copy of an approved letter is delivered: none | builtin_mesh | relay
+    # (relay not yet implemented). When blank, derived from send_gp_letters_over_mesh.
+    config_accessor(:gp_letter_delivery) { ENV.fetch("GP_LETTER_DELIVERY", nil).presence }
     # On Azure we use a mapped path otherwise we will use Rails.root.join("tmp")
     # However Rails.root is not yet defined so we need we use a proc to load the config
     # setting JIT when accessed, and rely on the code calling #base_working_folder

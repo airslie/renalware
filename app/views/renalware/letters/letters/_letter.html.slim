@@ -19,7 +19,7 @@ tr(class=letter.state.dasherize data-controller="toggle")
       = inline_icon(:paperclip, size: :md, title: letter.enclosures, class: "text-green-500")
   td.state
     span= letter.state_description
-  - if Renalware.config.send_gp_letters_over_mesh
+  - if Renalware::GPLetterDelivery.electronic?
     td= t(letter.gp_send_status, scope: "letters.gp_send_status")
   td= l(letter.effective_date)
   - if columns.include?(:author)

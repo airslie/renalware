@@ -10,7 +10,7 @@
         th= sort_link([:renalware, q], :enclosures, "Enc.")
         th.col-width-small Type
         th.col-width-small= sort_link([:renalware, q], :type, "State")
-        - if Renalware.config.send_gp_letters_over_mesh
+        - if Renalware::GPLetterDelivery.electronic?
           th.col-width-small= sort_link([:renalware, q], :gp_sent_status, "GP Send")
         th.col-width-medium= sort_link([:renalware, q], :patient_family_name, "Patient")
         th.col-width-nhs-no= sort_link([:renalware, q], :patient_nhs_number, "NHS No")

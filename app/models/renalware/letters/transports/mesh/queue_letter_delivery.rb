@@ -11,6 +11,7 @@ module Renalware
           end
 
           def call
+            return unless GPLetterDelivery.builtin_mesh?
             return unless Delivery::PrimaryCareDeliveryPolicy.new(letter).send_electronically?
 
             transmission = Transmission.create!(letter: letter)
