@@ -33,15 +33,17 @@ module Renalware
               ],
               name: {
                 use: "official",
-                family: letter.author.family_name,
-                given: letter.author.given_name,
-                prefix: letter.author.professional_position
+                family: author.family_name,
+                given: author.given_name,
+                prefix: author.professional_position
               }
             )
           }
         end
 
         private
+
+        def author = arguments.request.author
 
         # Until we can resolve individual user details via Active/Spine Directory lookup,
         # Just use a globally configured telephone number

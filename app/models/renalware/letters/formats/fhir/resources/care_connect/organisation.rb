@@ -28,9 +28,10 @@ module Renalware
 
         private
 
-        def phone         = Renalware.config.mesh_organisation_phone
-        def email         = Renalware.config.mesh_organisation_email
-        def name          = Renalware.config.mesh_organisation_name
+        def sender        = arguments.request.sender
+        def phone         = sender.phone
+        def email         = sender.email
+        def name          = sender.name
         def telecom_phone = contact_point("phone", phone)
         def telecom_email = email.presence && contact_point("email", email)
         def telecoms      = [telecom_phone, telecom_email].compact

@@ -101,7 +101,7 @@ module Renalware
 
       # For Batch printing, hide letters where gp send_status is pending
       def self.printable_gp_send_statues
-        Renalware.config.send_gp_letters_over_mesh ? gp_send_statuses.keys - ["pending"] : []
+        GPLetterDelivery.electronic? ? gp_send_statuses.keys - ["pending"] : []
       end
 
       def self.policy_class     = LetterPolicy

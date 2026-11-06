@@ -5,20 +5,14 @@ module Renalware
     class Arguments
       include Renalware::UniformResourceNaming
 
+      # The DeliveryRequest holds everything the GP Connect message needs as plain values. Only
+      # the (unused) TransferOfCare workflow still reaches back into the Renalware letter, via
+      # #letter, so that is nil-safe: a GP Connect message can be built from a request alone.
       attr_reader :transmission,
                   :transaction_uuid,
-                  :organisation_uuid,
-                  :itk_organisation_uuid
+                  :request
 
-      delegate :letter, to: :transmission
-      delegate :uuid, to: :transmission, prefix: true
-      delegate :patient, :event, :archive, :topic, :approved_at, to: :letter
-      delegate :snomed_document_type, to: :topic, allow_nil: true
-      delegate :code, :title,
-               to: :snomed_document_type,
-               prefix: :document_type_snomed, allow_nil: true
-      delegate :pdf_content, to: :archive
-      delegate :uuid, to: :letter, prefix: true
+      delegate :patient, :event, :archive, :topic, :approved_at, to: :letter, allow_nil: true
       alias clinic_visit event
 
       class MissingSnomedDocumentTypeError < StandardError
@@ -48,18 +42,29 @@ module Renalware
         }
       }.freeze
 
-      def initialize(
-        transmission:,
+      # Either pass a transmission (the request is built from its letter), or pass a ready-made
+      # request and the transmission_uuid.
+      def initialize( # rubocop:disable Metrics/ParameterLists
         transaction_uuid:,
+        transmission: nil,
+        request: nil,
+        transmission_uuid: nil,
         organisation_uuid: nil,
         itk_organisation_uuid: nil
       )
         @transmission = transmission
         @transaction_uuid = transaction_uuid
-        @organisation_uuid = organisation_uuid || config.mesh_organisation_uuid
-        @itk_organisation_uuid = itk_organisation_uuid || config.mesh_itk_organisation_uuid
+        @transmission_uuid = transmission_uuid
+        @request = request || Letters::BuildDeliveryRequest.new(
+          letter: transmission.letter,
+          organisation_uuid:,
+          itk_organisation_uuid:
+        ).lazy
         validate_arguments
       end
+
+      def letter = transmission&.letter
+      def transmission_uuid = @transmission_uuid || transmission.uuid
 
       def workflow                = Renalware.config.letters_mesh_workflow
       def gp_connect?             = workflow == :gp_connect
@@ -70,19 +75,25 @@ module Renalware
       def encounter_urn           = uuid_urn(encounter_uuid)
       def author_urn              = uuid_urn(author_uuid)
       def organisation_urn        = uuid_urn(organisation_uuid)
-      def organisation_name       = config.mesh_organisation_name
-      def organisation_ods_code   = config.mesh_organisation_ods_code
+      def organisation_uuid       = request.sender.uuid
+      def itk_organisation_uuid   = request.sender.itk_uuid
+      def organisation_name       = request.sender.name
+      def organisation_ods_code   = request.sender.ods_code
+      def letter_uuid             = request.document.uuid
+      def document_type_snomed_code  = request.document.type_snomed_code
+      def document_type_snomed_title = request.document.type_snomed_title
+      def pdf_content             = request.document.pdf_content
       def itk_organisation_urn    = uuid_urn(itk_organisation_uuid)
-      def patient_uuid            = patient.secure_id_dashed
-      def author_uuid             = letter.author.uuid
-      def binary_uuid             = archive.uuid
+      def patient_uuid            = request.patient.uuid
+      def author_uuid             = request.author.uuid
+      def binary_uuid             = request.document.binary_uuid
       def binary_urn              = uuid_urn(binary_uuid)
       def message_definition_url  = WORKFLOWS[workflow].dig(:message_definition, :reference)
       def event_code              = WORKFLOWS[workflow].dig(:event, :code)
       def event_display           = WORKFLOWS[workflow].dig(:event, :display)
       def document_version        = 1
-      def confidentiality         = patient.confidentiality_normal? ? "N" : "R"
-      def letter_datetime         = approved_at.utc.iso8601
+      def confidentiality         = request.patient.restricted ? "R" : "N"
+      def letter_datetime         = request.document.approved_at.utc.iso8601
       def composition_title       = "Consultation report"
       def mex_subject             = document_title
 
@@ -110,16 +121,16 @@ module Renalware
         # Use MESH auto routing
         [
           "GPPROVIDER",
-          patient.nhs_number,
-          patient.born_on.strftime("%Y%m%d"),
-          patient.family_name
+          request.patient.nhs_number,
+          request.patient.born_on.strftime("%Y%m%d"),
+          request.patient.family_name
         ].join("_")
       end
 
       def document_title
         [
-          "#{composition_title} for #{patient}",
-          "NHS Number: #{patient.nhs_number}",
+          "#{composition_title} for #{request.patient.display_name}",
+          "NHS Number: #{request.patient.nhs_number}",
           "seen at #{organisation_name}",
           organisation_ods_code,
           "Version: #{document_version}"
@@ -131,14 +142,8 @@ module Renalware
       def config = Renalware.config
 
       def validate_arguments
-        # The try here is because we have a lot of tests that don't stub letter.archive
-        if letter.try(:archive).present? && pdf_content.blank?
-          raise Letters::MissingPdfContentError
-        end
-
-        if document_type_snomed_code.blank? || document_type_snomed_title.blank?
-          raise MissingSnomedDocumentTypeError
-        end
+        raise Letters::MissingPdfContentError if request.pdf_missing?
+        raise MissingSnomedDocumentTypeError if request.document_type_missing?
       end
     end
   end

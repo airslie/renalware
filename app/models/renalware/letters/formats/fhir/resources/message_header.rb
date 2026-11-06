@@ -65,7 +65,7 @@ module Renalware
                 }
               ],
               source: {
-                endpoint: Renalware.config.mesh_mailbox_id
+                endpoint: arguments.request.sender.mailbox_id
               },
               focus: {
                 reference: arguments.letter_urn

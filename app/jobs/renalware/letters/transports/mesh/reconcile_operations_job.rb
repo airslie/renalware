@@ -28,21 +28,10 @@ module Renalware
 
           transmissions.find_each do |transmission|
             transmission.update!(status: "success")
-            transmission
-              .letter
-              .update_columns(gp_send_status: :success, updated_at: Time.zone.now)
-
-            complete_letter_if_gp_is_the_only_recipient_so_no_printing_required(transmission.letter)
-          end
-        end
-
-        def complete_letter_if_gp_is_the_only_recipient_so_no_printing_required(letter)
-          recipients = letter.recipients
-          if recipients.size == 1 && recipients.first.person_role == :primary_care_physician
-            Letters::CompleteLetter
-              .build(letter)
-              .broadcasting_to_configured_subscribers
-              .call(by: letter.approved_by)
+            Letters::RecordGPDeliveryOutcome.call(
+              letter: transmission.letter,
+              outcome: :success
+            )
           end
         end
 
@@ -57,10 +46,10 @@ module Renalware
           transmissions.find_each do |transmission|
             Transmission.transaction do
               transmission.update!(status: "failure")
-              # Using update_all here to avoid loading the letter into memory
-              Letters::Letter
-                .where(id: transmission.letter_id)
-                .update_all(gp_send_status: "failure")
+              Letters::RecordGPDeliveryOutcome.call(
+                letter_id: transmission.letter_id,
+                outcome: :failure
+              )
             end
           end
         end
@@ -99,10 +88,10 @@ module Renalware
                 status: "failure",
                 comment: "Timeout out waiting for MESH inf or bus response"
               )
-              # Using update_all here to avoid loading the letter into memory
-              Letters::Letter
-                .where(id: transmission.letter_id)
-                .update_all(gp_send_status: "failure")
+              Letters::RecordGPDeliveryOutcome.call(
+                letter_id: transmission.letter_id,
+                outcome: :failure
+              )
             end
           end
         end

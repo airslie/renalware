@@ -1,3 +1,5 @@
+require "renalware/gp_letter_delivery"
+
 module Renalware
   # rubocop:disable-next Metrics/MethodLength
   module ScheduledJobs
@@ -107,7 +109,7 @@ module Renalware
     end
 
     def gp_connect_jobs
-      return {} unless Renalware.config.send_gp_letters_over_mesh == true
+      return {} unless GPLetterDelivery.builtin_mesh?
 
       {
         mesh_handshake: {

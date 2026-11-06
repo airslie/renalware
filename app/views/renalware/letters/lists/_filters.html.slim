@@ -68,7 +68,7 @@ ruby:
                   collection: form.page_count_options,
                   label: "Pages",
                   include_blank: form.allow_blank_inputs.include?(:page_count_in_array)
-      - if Renalware.config.send_gp_letters_over_mesh
+      - if Renalware::GPLetterDelivery.electronic?
         div
           / selected: form.pre_selected_gp_send_status_options,
 

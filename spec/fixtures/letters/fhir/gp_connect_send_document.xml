@@ -1,0 +1,250 @@
+<Bundle xmlns="http://hl7.org/fhir">
+  <id value="66666666-6666-6666-6666-666666666666"/>
+  <meta>
+    <lastUpdated value="2022-01-01T01:01:01Z"/>
+    <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Message-Bundle-1"/>
+  </meta>
+  <identifier>
+    <system value="https://tools.ietf.org/html/rfc4122"/>
+    <value value="66666666-6666-6666-6666-666666666666"/>
+  </identifier>
+  <type value="message"/>
+  <entry>
+    <fullUrl value="urn:uuid:77777777-7777-7777-7777-777777777777"/>
+    <resource>
+      <MessageHeader>
+        <id value="77777777-7777-7777-7777-777777777777"/>
+        <meta>
+          <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-MessageHeader-2"/>
+        </meta>
+        <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-ITK-MessageHandling-2">
+          <extension url="BusAckRequested">
+            <valueBoolean value="true"/>
+          </extension>
+          <extension url="InfAckRequested">
+            <valueBoolean value="true"/>
+          </extension>
+          <extension url="RecipientType">
+            <valueCoding>
+              <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-RecipientType-1"/>
+              <code value="FA"/>
+              <display value="For Action"/>
+            </valueCoding>
+          </extension>
+          <extension url="MessageDefinition">
+            <valueReference>
+              <reference value="https://fhir.nhs.uk/STU3/MessageDefinition/ITK-GPConnectSendDocument-MessageDefinition-1"/>
+            </valueReference>
+          </extension>
+          <extension url="SenderReference">
+            <valueString value="33333333-3333-3333-3333-333333333333"/>
+          </extension>
+          <extension url="LocalExtension">
+            <valueString value="None"/>
+          </extension>
+        </extension>
+        <event>
+          <system value="https://fhir.nhs.uk/STU3/CodeSystem/ITK-MessageEvent-2"/>
+          <code value="ITK007C"/>
+          <display value="ITK GP Connect Send Document"/>
+        </event>
+        <sender>
+          <reference value="urn:uuid:88888888-8888-8888-8888-888888888888"/>
+        </sender>
+        <timestamp value="2022-01-02T03:04:05Z"/>
+        <source>
+          <endpoint value="?"/>
+        </source>
+        <focus>
+          <reference value="urn:uuid:33333333-3333-3333-3333-333333333333"/>
+        </focus>
+      </MessageHeader>
+    </resource>
+  </entry>
+  <entry>
+    <fullUrl value="urn:uuid:99999999-9999-9999-9999-999999999999"/>
+    <resource>
+      <Organization>
+        <id value="99999999-9999-9999-9999-999999999999"/>
+        <meta>
+          <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-ITK-Header-Organization-1"/>
+        </meta>
+        <identifier>
+          <system value="https://fhir.nhs.uk/Id/ods-organization-code"/>
+          <value value="RAJ01"/>
+        </identifier>
+      </Organization>
+    </resource>
+  </entry>
+  <entry>
+    <fullUrl value="urn:uuid:33333333-3333-3333-3333-333333333333"/>
+    <resource>
+      <Bundle>
+        <id value="66666666-6666-6666-6666-666666666666"/>
+        <meta>
+          <lastUpdated value="2022-01-01T01:01:01Z"/>
+          <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Document-Bundle-1"/>
+        </meta>
+        <identifier>
+          <system value="https://tools.ietf.org/html/rfc4122"/>
+          <value value="66666666-6666-6666-6666-666666666666"/>
+        </identifier>
+        <type value="document"/>
+        <entry>
+          <fullUrl value="urn:uuid:33333333-3333-3333-3333-333333333333"/>
+          <resource>
+            <Composition>
+              <id value="33333333-3333-3333-3333-333333333333"/>
+              <meta>
+                <profile value="https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Composition-1"/>
+              </meta>
+              <text>
+                <status value="generated"/>
+                <div xmlns="http://www.w3.org/1999/xhtml">Consultation report for JONES, Patricia (Ms), NHS Number: 9999999999, seen at Test Hospital, RAJ01, Version: 1</div>
+              </text>
+              <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-CareSettingType-1">
+                <valueCodeableConcept>
+                  <coding>
+                    <system value="http://snomed.info/sct"/>
+                    <code value="788003006"/>
+                    <display value="Nephrology service"/>
+                  </coding>
+                </valueCodeableConcept>
+              </extension>
+              <identifier>
+                <system value="https://tools.ietf.org/html/rfc4122"/>
+                <value value="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"/>
+              </identifier>
+              <status value="final"/>
+              <type>
+                <coding>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="371531000"/>
+                  <display value="Report of clinical encounter"/>
+                </coding>
+              </type>
+              <subject>
+                <reference value="urn:uuid:11111111-1111-1111-1111-111111111111"/>
+              </subject>
+              <date value="2022-01-01T01:01:01Z"/>
+              <author>
+                <reference value="urn:uuid:22222222-2222-2222-2222-222222222222"/>
+              </author>
+              <title value="Consultation report"/>
+              <confidentiality value="N"/>
+              <custodian>
+                <reference value="urn:uuid:88888888-8888-8888-8888-888888888888"/>
+              </custodian>
+              <section>
+                <entry>
+                  <reference value="urn:uuid:88888888-8888-8888-8888-888888888888"/>
+                </entry>
+                <entry>
+                  <reference value="urn:uuid:22222222-2222-2222-2222-222222222222"/>
+                </entry>
+                <entry>
+                  <reference value="urn:uuid:11111111-1111-1111-1111-111111111111"/>
+                </entry>
+                <entry>
+                  <reference value="urn:uuid:55555555-5555-5555-5555-555555555555"/>
+                </entry>
+              </section>
+            </Composition>
+          </resource>
+        </entry>
+        <entry>
+          <fullUrl value="urn:uuid:88888888-8888-8888-8888-888888888888"/>
+          <resource>
+            <Organization>
+              <id value="88888888-8888-8888-8888-888888888888"/>
+              <meta>
+                <profile value="https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Organization-1"/>
+              </meta>
+              <identifier>
+                <system value="https://fhir.nhs.uk/Id/ods-organization-code"/>
+                <value value="RAJ01"/>
+              </identifier>
+              <name value="Test Hospital"/>
+              <telecom>
+                <system value="phone"/>
+                <value value="01111 111111"/>
+                <use value="work"/>
+              </telecom>
+              <telecom>
+                <system value="email"/>
+                <value value="org@example.com"/>
+                <use value="work"/>
+              </telecom>
+            </Organization>
+          </resource>
+        </entry>
+        <entry>
+          <fullUrl value="urn:uuid:22222222-2222-2222-2222-222222222222"/>
+          <resource>
+            <Practitioner>
+              <id value="22222222-2222-2222-2222-222222222222"/>
+              <meta>
+                <profile value="https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Practitioner-1"/>
+              </meta>
+              <identifier>
+                <system value="https://fhir.nhs.uk/Id/sds-user-id"/>
+                <value value="UNK"/>
+              </identifier>
+              <name>
+                <use value="official"/>
+                <family value="Doctor"/>
+                <given value="Jane"/>
+                <prefix value="Consultant Nephrologist"/>
+              </name>
+            </Practitioner>
+          </resource>
+        </entry>
+        <entry>
+          <fullUrl value="urn:uuid:11111111-1111-1111-1111-111111111111"/>
+          <resource>
+            <Patient>
+              <id value="11111111-1111-1111-1111-111111111111"/>
+              <meta>
+                <profile value="https://fhir.hl7.org.uk/STU3/StructureDefinition/CareConnect-Patient-1"/>
+              </meta>
+              <identifier>
+                <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-NHSNumberVerificationStatus-1">
+                  <valueCodeableConcept>
+                    <coding>
+                      <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-NHSNumberVerificationStatus-1"/>
+                      <code value="01"/>
+                      <display value="Number present and verified"/>
+                    </coding>
+                  </valueCodeableConcept>
+                </extension>
+                <system value="https://fhir.nhs.uk/Id/nhs-number"/>
+                <value value="9999999999"/>
+              </identifier>
+              <name>
+                <use value="official"/>
+                <family value="Jones"/>
+                <given value="Patricia"/>
+                <prefix value="Ms"/>
+              </name>
+              <gender value="male"/>
+              <birthDate value="1970-01-02"/>
+            </Patient>
+          </resource>
+        </entry>
+        <entry>
+          <fullUrl value="urn:uuid:55555555-5555-5555-5555-555555555555"/>
+          <resource>
+            <Binary>
+              <id value="55555555-5555-5555-5555-555555555555"/>
+              <meta>
+                <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/ITK-Attachment-Binary-1"/>
+              </meta>
+              <contentType value="application/pdf"/>
+              <content value="JVBERi0xLjQgZ29sZGVu"/>
+            </Binary>
+          </resource>
+        </entry>
+      </Bundle>
+    </resource>
+  </entry>
+</Bundle>

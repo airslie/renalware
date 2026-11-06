@@ -49,7 +49,7 @@ tbody
     td.col-width-medium-with-ellipsis= letter.type
     td.state
       span= letter.state_description
-    - if Renalware.config.send_gp_letters_over_mesh
+    - if Renalware::GPLetterDelivery.electronic?
       td
         span= t(letter.gp_send_status, scope: "letters.gp_send_status")
     td.full-name= default_patient_link(letter.patient)

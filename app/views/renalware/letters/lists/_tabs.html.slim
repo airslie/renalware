@@ -13,6 +13,6 @@ dl.sub-nav(data-controller="tabbed-navigation")
     dd(class=("active" if named_filter_param.to_s == filter.to_s))
       = link_to t(".tab.#{filter}"), letters_filtered_letters_list_path(named_filter: filter)
 
-  - if Renalware.config.send_gp_letters_over_mesh
+  - if Renalware::GPLetterDelivery.electronic?
     dd
       = link_to "GP Connect", letters_transports_mesh_letters_path

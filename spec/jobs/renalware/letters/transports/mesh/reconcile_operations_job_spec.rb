@@ -110,6 +110,33 @@ module Renalware::Letters::Transports::Mesh
       end
     end
 
+    context "when a pending transmission succeeded but the letter has other recipients" do
+      it "marks the GP copy successful but does not complete the letter" do
+        letter = create_mesh_letter_to_gp(create_mesh_patient(user:), user, to: :patient)
+        letter.recipients.create!(person_role: "primary_care_physician", role: "cc")
+        letter.update!(gp_send_status: :pending)
+        transmission = Transmission.create!(letter:, status: :pending)
+        transmission.operations.create!(
+          action: "download_message",
+          itk3_response_type: "bus",
+          itk3_operation_outcome_code: "30001"
+        )
+        transmission.operations.create!(
+          action: "download_message",
+          itk3_response_type: "inf",
+          itk3_operation_outcome_code: "20013"
+        )
+
+        expect {
+          described_class.perform_now
+        }.not_to broadcast(:letter_completed)
+
+        expect(transmission.reload.status).to eq("success")
+        expect(letter.reload.gp_send_status).to eq("success")
+        expect(letter.completed_at).to be_nil
+      end
+    end
+
     describe "no MESH response after configured period elapsed" do
       it "flags transmission as failed when x hours have elapsed and no response forthcoming" do
         # Create transmission with single send operation, no info or bus responses
