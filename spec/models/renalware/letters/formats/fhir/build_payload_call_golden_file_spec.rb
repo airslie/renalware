@@ -120,6 +120,100 @@ module Renalware::Letters
         )
       end
 
+      it "maps a letter to a plain DeliveryRequest" do
+        request = BuildDeliveryRequest.call(letter:)
+
+        expect(request.patient).to have_attributes(
+          uuid: "11111111-1111-1111-1111-111111111111",
+          nhs_number: "9999999999",
+          born_on: Date.new(1970, 1, 2),
+          given_name: "Patricia",
+          family_name: "Jones",
+          title: "Ms",
+          display_name: "JONES, Patricia (Ms)",
+          sex_code: "M",
+          restricted: false
+        )
+        expect(request.author).to have_attributes(
+          uuid: "22222222-2222-2222-2222-222222222222",
+          given_name: "Jane",
+          family_name: "Doctor",
+          professional_position: "Consultant Nephrologist"
+        )
+        expect(request.document).to have_attributes(
+          uuid: "33333333-3333-3333-3333-333333333333",
+          binary_uuid: "55555555-5555-5555-5555-555555555555",
+          pdf_content: "%PDF-1.4 golden",
+          type_snomed_code: "371531000",
+          type_snomed_title: "Report of clinical encounter"
+        )
+        expect(request.sender).to have_attributes(
+          uuid: "88888888-8888-8888-8888-888888888888",
+          ods_code: "RAJ01",
+          care_setting_snomed_code: "788003006"
+        )
+      end
+
+      # rubocop:disable-next Metrics/MethodLength
+      def plain_delivery_request
+        DeliveryRequest.new(
+          patient: DeliveryRequest::Patient.new(
+            uuid: "11111111-1111-1111-1111-111111111111",
+            nhs_number: "9999999999",
+            born_on: Date.new(1970, 1, 2),
+            given_name: "Patricia",
+            family_name: "Jones",
+            title: "Ms",
+            display_name: "JONES, Patricia (Ms)",
+            sex_code: "M",
+            telephone: "01234 567890",
+            email: "patricia@example.com",
+            restricted: false,
+            address: nil,
+            local_patient_ids: ["KCH12345"]
+          ),
+          author: DeliveryRequest::Author.new(
+            uuid: "22222222-2222-2222-2222-222222222222",
+            given_name: "Jane",
+            family_name: "Doctor",
+            professional_position: "Consultant Nephrologist"
+          ),
+          document: DeliveryRequest::Document.new(
+            uuid: "33333333-3333-3333-3333-333333333333",
+            binary_uuid: "55555555-5555-5555-5555-555555555555",
+            approved_at: Time.zone.parse("2022-01-01 01:01:01"),
+            pdf_content: "%PDF-1.4 golden",
+            type_snomed_code: "371531000",
+            type_snomed_title: "Report of clinical encounter"
+          ),
+          sender: DeliveryRequest::Sender.new(
+            uuid: "88888888-8888-8888-8888-888888888888",
+            itk_uuid: "99999999-9999-9999-9999-999999999999",
+            ods_code: "RAJ01",
+            name: "Test Hospital",
+            phone: "01111 111111",
+            email: "org@example.com",
+            mailbox_id: Renalware.config.mesh_mailbox_id,
+            care_setting_snomed_code: "788003006",
+            care_setting_description: "Nephrology service"
+          )
+        )
+      end
+
+      # This is what a shared (non-Renalware) library, e.g. Relay, would do: build the request from
+      # plain values with no models or database and get exactly the same assured message.
+      it "produces identical XML from a hand-built DeliveryRequest with no Renalware models" do
+        args = Arguments.new(
+          request: plain_delivery_request,
+          transmission_uuid: "66666666-6666-6666-6666-666666666666",
+          transaction_uuid: "77777777-7777-7777-7777-777777777777"
+        )
+
+        xml = travel_to(Time.utc(2022, 1, 2, 3, 4, 5)) { described_class.call(args) }
+
+        expect(xml).to eq(File.read(fixture_path))
+      end
+
       it "produces the assured GP Connect XML, unchanged" do
         xml = travel_to(Time.utc(2022, 1, 2, 3, 4, 5)) { described_class.call(arguments) }
 

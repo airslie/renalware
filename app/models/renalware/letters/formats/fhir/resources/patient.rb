@@ -5,9 +5,6 @@ module Renalware
         include Support::Construction
         include Support::Helpers
 
-        delegate :patient, to: :arguments
-        delegate :current_address, to: :patient, allow_nil: true
-
         SEND_HOSPITAL_NUMBER_IDENTIFIERS = false # not sent in GP Connect
 
         def call
@@ -31,6 +28,9 @@ module Renalware
         end
 
         private
+
+        def patient = arguments.request.patient
+        def current_address = patient.address
 
         def name
           {
@@ -82,12 +82,7 @@ module Renalware
           # if this changes, set SEND_HOSPITAL_NUMBER_IDENTIFIERS = true
           return {} unless SEND_HOSPITAL_NUMBER_IDENTIFIERS
 
-          [
-            patient.local_patient_id,
-            patient.local_patient_id_2,
-            patient.local_patient_id_3,
-            patient.local_patient_id_4
-          ].compact_blank.uniq.map do |hosp_num|
+          patient.local_patient_ids.map do |hosp_num|
             {
               system: "https://fhir.nhs.uk/Id/local-patient-identifier",
               value: hosp_num
@@ -101,7 +96,7 @@ module Renalware
             "M" => "male",
             "F" => "female",
             "O" => "other"
-          }.fetch(patient.sex&.code, "unknown")
+          }.fetch(patient.sex_code, "unknown")
         end
 
         def telecoms
@@ -109,11 +104,11 @@ module Renalware
         end
 
         def telephone
-          return if patient.telephone1.blank?
+          return if patient.telephone.blank?
 
           {
             system: "phone",
-            value: patient.telephone1,
+            value: patient.telephone,
             use: "home"
           }
         end

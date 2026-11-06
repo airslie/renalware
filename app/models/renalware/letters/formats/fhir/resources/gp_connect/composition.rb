@@ -37,7 +37,7 @@ module Renalware::Letters
                 subject: {
                   reference: arguments.patient_urn
                 },
-                date: letter.approved_at.to_datetime.utc.iso8601,
+                date: arguments.request.document.approved_at.to_datetime.utc.iso8601,
                 author: {
                   reference: arguments.author_urn
                 },
@@ -66,8 +66,8 @@ module Renalware::Letters
             {
               url: CARE_SETTING_TYPE_EXTENSION_URL,
               valueCodeableConcept: snomed_coding(
-                Renalware.config.mesh_care_setting_snomed_code,
-                Renalware.config.mesh_care_setting_description
+                arguments.request.sender.care_setting_snomed_code,
+                arguments.request.sender.care_setting_description
               )
             }
           end
