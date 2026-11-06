@@ -13,8 +13,13 @@ module Renalware
 
       OUTCOMES = %i(success failure).freeze
 
-      def initialize(letter_id:, outcome:)
-        @letter_id = letter_id
+      # Pass either the letter, or just its id. Passing a letter you already have loaded (e.g.
+      # via includes) saves a query per call when reconciling a batch.
+      def initialize(outcome:, letter: nil, letter_id: nil)
+        raise ArgumentError, "Pass a letter or a letter_id" if letter.nil? && letter_id.nil?
+
+        @letter = letter
+        @letter_id = letter_id || letter.id
         @outcome = outcome.to_sym
         raise ArgumentError, "Unknown outcome #{outcome.inspect}, expected one of #{OUTCOMES}" \
           unless OUTCOMES.include?(@outcome)
@@ -29,7 +34,7 @@ module Renalware
       attr_reader :letter_id, :outcome
 
       def record_success
-        letter = Letter.find(letter_id)
+        letter = @letter || Letter.find(letter_id)
         letter.update_columns(gp_send_status: :success, updated_at: Time.zone.now)
         complete_letter_if_gp_was_only_recipient(letter)
       end

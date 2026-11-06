@@ -39,6 +39,21 @@ module Renalware::Letters
       expect(reloaded(letter)).to have_attributes(gp_send_status: "success", completed_at: nil)
     end
 
+    it "on success, uses a letter it is given rather than loading it again" do
+      loaded_letter = Letter.find(letter.id)
+      queries = []
+      callback = lambda do |*, payload|
+        queries << payload[:sql] if payload[:sql].match?(/FROM.*letter_letters/)
+      end
+
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        described_class.call(letter: loaded_letter, outcome: :success)
+      end
+
+      expect(queries.grep(/\ASELECT/)).to be_empty
+      expect(reloaded(letter).gp_send_status).to eq("success")
+    end
+
     it "on failure, flags the GP copy as failed so it appears in the list to print" do
       described_class.call(letter_id: letter.id, outcome: :failure)
 

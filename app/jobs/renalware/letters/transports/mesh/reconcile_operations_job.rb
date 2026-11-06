@@ -23,13 +23,13 @@ module Renalware
         # private
 
         def flag_pending_transmissions_as_successful_if_inf_and_bus_operations_were_successful
-          transmissions = Transmission
+          transmissions = Transmission.includes(:letter)
             .where(id: pending_transmission_ids_with_two_successful_download_operations)
 
           transmissions.find_each do |transmission|
             transmission.update!(status: "success")
             Letters::RecordGPDeliveryOutcome.call(
-              letter_id: transmission.letter_id,
+              letter: transmission.letter,
               outcome: :success
             )
           end
