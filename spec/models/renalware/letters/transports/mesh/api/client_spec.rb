@@ -55,6 +55,39 @@ module Renalware::Letters::Transports::Mesh
       end
     end
 
+    # What a non-Renalware user of this code (e.g. Relay) does: supply its own settings.
+    describe "with an injected API::Config" do
+      let(:ca_path) { File.join(Dir.mktmpdir, "ca.pem") }
+      let(:config) do
+        API::Config.new(
+          mailbox_id: mesh_mailbox_id,
+          mailbox_password: "pass",
+          api_secret: "secret",
+          api_base_url: base_url,
+          workflow_id: "WF",
+          client_cert_path: Rails.root.join("spec/support/dummy_mesh_cert.txt"),
+          client_cert: nil,
+          client_key_path: Rails.root.join("spec/support/dummy_mesh_key.txt"),
+          client_key: nil,
+          ca_file_path: ca_path,
+          ca_cert: Rails.root.join("spec/support/dummy_mesh_cert.txt").read,
+          base_dir: Rails.root
+        )
+      end
+
+      it "uses it, and never reads Renalware.config" do
+        allow(Renalware.config).to receive(:mesh_mailbox_id).and_raise("Renalware.config was read")
+        allow(API::Config).to receive(:from_renalware).and_raise("Renalware.config was read")
+
+        response = VCR.use_cassette(cassette("handshake/success")) do
+          described_class.new(config:).handshake
+        end
+
+        expect(response.status).to eq(200)
+        expect(File.exist?(ca_path)).to be(true) # created from config.ca_cert
+      end
+    end
+
     describe "#handshake" do
       context "when the mailbox does not exist" do
         it "returns 403 and a json response with an EPL error" do

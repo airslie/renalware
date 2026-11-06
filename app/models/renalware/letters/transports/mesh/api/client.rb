@@ -15,6 +15,11 @@ module Renalware
         def self.acknowledge_message(...) = new.acknowledge_message(...)
         def self.send_message(...)        = new.send_message(...)
 
+        # config: an API::Config. Defaults to the settings in Renalware.config (see UrlHelpers).
+        def initialize(config: nil)
+          @config = config
+        end
+
         # GET /messageexchange/endpointlookup/{ods_code}/{workflow_id}
         # Find the MESH mailbox is for a particular ODS code (practice code).
         # Example response
@@ -99,7 +104,7 @@ module Renalware
           # request_header_options[:subject] ||= ""
           Faraday.new(
             url: base_url,
-            headers: API::RequestHeaders.new(**request_header_options).to_h,
+            headers: API::RequestHeaders.new(config:, **request_header_options).to_h,
             ssl: ssl_options
           ) do |f|
             f.response :json, preserve_raw: true
@@ -107,7 +112,7 @@ module Renalware
         end
 
         def ssl_options
-          certificates = Certificates.new
+          certificates = Certificates.new(config:)
           {
             verify: false,
             ca_file: certificates.ca_file_path,
