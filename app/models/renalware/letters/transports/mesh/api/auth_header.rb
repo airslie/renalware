@@ -10,10 +10,16 @@ module Renalware
 
       # Nonce can be passed but it is only used for testing so we can get back a consistent
       # header result. Otherwise we create a unique nonce on each request.
-      def initialize(mailbox_id: nil, mailbox_password: nil, mesh_api_secret: nil, nonce: nil)
-        @mailbox_id = mailbox_id || Renalware.config.mesh_mailbox_id
-        @mailbox_password = mailbox_password || Renalware.config.mesh_mailbox_password
-        @api_secret = mesh_api_secret || Renalware.config.mesh_api_secret
+      def initialize(
+        mailbox_id: nil,
+        mailbox_password: nil,
+        mesh_api_secret: nil,
+        nonce: nil,
+        config: API::Config.from_renalware
+      )
+        @mailbox_id = mailbox_id || config.mailbox_id
+        @mailbox_password = mailbox_password || config.mailbox_password
+        @api_secret = mesh_api_secret || config.api_secret
         @nonce = nonce || SecureRandom.uuid
         @nonce_count = 0
       end
