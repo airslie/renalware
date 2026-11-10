@@ -134,6 +134,26 @@ Relay adapter a small addition.
   indicator, since Relay cannot infer these. Renalware decides this today
   (`gp_is_a_recipient?`, `confidentiality_restricted?`).
 
+### 5.2a Mirth to Relay contract (decided)
+
+Mirth receives MLLP from HOSPA and calls the Relay **web API**. Not the database: the API is where
+validation, idempotency, sender-from-credential and audit live, it keeps Mirth independent of the
+schema, needs no network path to Postgres, and survives the planned move to a Mirth fork.
+
+`POST /api/v1/submissions` (JSON), authenticated with a per-sender credential held in the channel's
+configuration map (see `doc/api_credentials.md` for the pattern used by Renalware):
+- parsed fields: patient demographics (PID), document type and ids (TXA), the PDF (OBX, base64),
+  delivery instruction and confidentiality (required, see 6b), `source_message_id` (MSH-10);
+- `raw_hl7`: the original message **with the PDF removed**, for audit and replay (PHI: apply the
+  same retention as the document);
+- idempotent on (sender, `source_message_id`): a repeat returns the existing submission.
+
+Mirth does transport and field extraction only. Business rules live in Relay, so a rule change
+never means redeploying a channel. Responses: **2xx** then ACK the sender; **4xx** (validation)
+then NACK with the reason; **5xx or timeout** then no ACK, so the sender retries. Channels do not
+retain message content after delivery (large PDFs, PHI). One channel per sender, or a lookup from
+the sending application/facility (MSH-3/4) to its credential.
+
 ### 5.3 Feedback
 
 - Primary: REST `GET /deliveries/:id` plus a signed webhook (HMAC) to the sender.
