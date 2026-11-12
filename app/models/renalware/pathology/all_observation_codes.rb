@@ -4,6 +4,12 @@ module Renalware
     class AllObservationCodes
       include Singleton
 
+      CACHE_KEY = "renalware/pathology/all_observation_codes".freeze
+
+      def self.invalidate
+        Rails.cache.delete(CACHE_KEY)
+      end
+
       # Example usage:
       #   AllObservationCodes.include?(code)
       def self.include?(code)
@@ -11,7 +17,9 @@ module Renalware
       end
 
       def all
-        @all ||= ObservationDescription.order(:code).pluck(:code).map(&:upcase).map(&:to_sym)
+        Rails.cache.fetch(CACHE_KEY, expires_in: 1.hour) do
+          ObservationDescription.order(:code).pluck(:code).map(&:upcase).map(&:to_sym)
+        end
       end
     end
   end
