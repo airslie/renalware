@@ -126,6 +126,12 @@ RSpec.configure do |config|
     end
   end
 
+  # AllObservationCodes keeps an in-process copy of the codes, and the test cache store is
+  # shared across examples, so start each example from an empty cache.
+  config.before do
+    Renalware::Pathology::AllObservationCodes.invalidate
+  end
+
   config.around(:each, :caching) do |example|
     caching = ActionController::Base.perform_caching
     ActionController::Base.perform_caching = example.metadata[:caching]

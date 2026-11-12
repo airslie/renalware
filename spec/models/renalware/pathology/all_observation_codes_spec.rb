@@ -22,11 +22,23 @@ module Renalware::Pathology
       expect(ObservationDescription).to have_received(:order).with(:code).once
     end
 
-    it "reads the shared cache on every call" do
+    it "serves repeat lookups from memory without reading the shared cache" do
+      ObservationDescription.create!(code: "URE")
+      allow(cache).to receive(:fetch).and_call_original
+
+      3.times { expect(described_class.include?(:URE)).to be(true) }
+
+      expect(cache).to have_received(:fetch).once
+    end
+
+    it "picks up shared cache changes once the in-process copy expires" do
       expect(described_class.instance.all).to eq([])
       cache.write(described_class::CACHE_KEY, [:URE])
 
-      expect(described_class.instance.all).to eq([:URE])
+      expect(described_class.instance.all).to eq([])
+      travel described_class::LOCAL_TTL + 1.second do
+        expect(described_class.instance.all).to eq([:URE])
+      end
     end
 
     it "refreshes after one hour even if callbacks were bypassed" do
@@ -59,6 +71,15 @@ module Renalware::Pathology
 
         expect(cache.exist?(described_class::CACHE_KEY)).to be(false)
         expect(cache.read("unrelated")).to eq("value")
+      end
+
+      it "discards the in-process copy" do
+        expect(described_class.instance.all).to eq([])
+        ObservationDescription.insert_all([{ code: "URE" }])
+
+        described_class.invalidate
+
+        expect(described_class.instance.all).to eq([:URE])
       end
     end
   end

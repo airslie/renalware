@@ -5,13 +5,12 @@ module Renalware
 
       describe "dynamic OBX methods via method missing" do
         it "allows retrieval of the observation hash via a method with the name of the OBX code" do
-          allow(AllObservationCodes.instance).to receive(:all).twice.and_return([:HGB])
+          ObservationDescription.create!(code: "HGB")
 
           hash = described_class.load(HGB: hgb)
 
           expect(hash.hgb).to eq(hgb)
           expect(hash.HGB).to eq(hgb)
-          expect(AllObservationCodes.instance).to have_received(:all).twice
         end
 
         it "allows accessing OBX result via the code" do
@@ -41,12 +40,11 @@ module Renalware
 
         context "when the hash is a string" do
           it "works as expected" do
-            allow(AllObservationCodes.instance).to receive(:all).once.and_return([:HGB])
+            ObservationDescription.create!(code: "HGB")
 
             hash = described_class.load({ HGB: hgb }.to_json)
 
             expect(hash.hgb).to eq(hgb)
-            expect(AllObservationCodes.instance).to have_received(:all)
           end
         end
 
