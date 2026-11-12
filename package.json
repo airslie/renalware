@@ -22,7 +22,7 @@
     "highcharts": "11.4.9",
     "masonry-layout": "^4.2.2",
     "print-js": "^1.6.0",
-    "rollup": "^4.64.10",
+    "rollup": "^4.67.5",
     "slim-select": "^4.2.4",
     "sortablejs": "^1.13.0"
   },
