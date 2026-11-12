@@ -14,10 +14,9 @@ module Renalware
             let(:hgb) { { "result" => "123.4", "observed_at" => "2017-12-12" } }
 
             it "returns the whole observation using set.<obx_code>" do
-              allow(AllObservationCodes.instance).to receive(:all).once.times.and_return([:HGB])
+              ObservationDescription.create!(code: "HGB")
 
               expect(presenter.hgb).to eq(hgb)
-              expect(AllObservationCodes.instance).to have_received(:all)
             end
 
             it "returns the observation result using set.<obx_code>_result" do
