@@ -3,6 +3,53 @@ module Renalware
     describe ObservationsJsonbSerializer do
       let(:hgb) { { "result" => "23.1", "observed_at" => "2017-12-12 01:01:01" } }
 
+      it "splits only recognised trailing suffixes from observation codes" do
+        hash = described_class.load({})
+
+        {
+          P_URE: [:P_URE, ""],
+          p_ure: [:P_URE, ""],
+          P_URE_result: [:P_URE, "_result"],
+          p_ure_result: [:P_URE, "_result"],
+          P_URE_observed_at: [:P_URE, "_observed_at"],
+          p_ure_observed_at: [:P_URE, "_observed_at"],
+          URE: [:URE, ""],
+          ure: [:URE, ""],
+          URE_result: [:URE, "_result"],
+          ure_result: [:URE, "_result"],
+          URE_observed_at: [:URE, "_observed_at"],
+          ure_observed_at: [:URE, "_observed_at"],
+          P_URE_unknown: [:P_URE_UNKNOWN, ""],
+          P_URE_result_extra: [:P_URE_RESULT_EXTRA, ""]
+        }.each do |method_name, expected|
+          expect(hash.method_parts(method_name)).to eq(expected)
+        end
+      end
+
+      it "retrieves observations with underscores in their codes" do
+        ObservationDescription.create!(code: "P_URE")
+        hash = described_class.load(P_URE: hgb)
+
+        expect(hash.P_URE).to eq(hgb)
+        expect(hash.p_ure).to eq(hgb)
+        expect(hash.P_URE_result).to eq(hgb["result"])
+        expect(hash.p_ure_result).to eq(hgb["result"])
+        expect(hash.P_URE_observed_at).to eq(Date.new(2017, 12, 12))
+        expect(hash.p_ure_observed_at).to eq(Date.new(2017, 12, 12))
+      end
+
+      it "preserves retrieval of existing codes without underscores" do
+        ObservationDescription.create!(code: "URE")
+        hash = described_class.load(URE: hgb)
+
+        expect(hash.URE).to eq(hgb)
+        expect(hash.ure).to eq(hgb)
+        expect(hash.URE_result).to eq(hgb["result"])
+        expect(hash.ure_result).to eq(hgb["result"])
+        expect(hash.URE_observed_at).to eq(Date.new(2017, 12, 12))
+        expect(hash.ure_observed_at).to eq(Date.new(2017, 12, 12))
+      end
+
       describe "dynamic OBX methods via method missing" do
         it "allows retrieval of the observation hash via a method with the name of the OBX code" do
           ObservationDescription.create!(code: "HGB")

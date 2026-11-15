@@ -925,7 +925,6 @@
       "react-bot"
     ],
     "rollup": [
-      "eventualbuddha",
       "lukastaegert",
       "rich_harris",
       "trysound",
