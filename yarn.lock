@@ -28,9 +28,9 @@
     eslint-visitor-keys "^3.4.3"
 
 "@eslint-community/regexpp@^4.12.2":
-  version "4.12.2"
-  resolved "https://registry.yarnpkg.com/@eslint-community/regexpp/-/regexpp-4.12.2.tgz#bccdf615bcf7b6e8db830ec0b8d21c9a25de597b"
-  integrity sha512-EriSTlt5OC9/7SXkRSCAhfSxxoSUgBm33OH+IkwbdpgoqsSsUg7y3uh+IICI/Qg4BBWr3U2i39RpmycbxMq4ew==
+  version "4.12.3"
+  resolved "https://registry.yarnpkg.com/@eslint-community/regexpp/-/regexpp-4.12.3.tgz#332c2660e7dd03ce7017ea3354123fb19b21cdd6"
+  integrity sha512-R76UKbvsqI68DJJVTVyqFKqU98CN4+B+acxNfEA2IFarSzP0SjtKf/3+fFiXzTyv5Fj3PxLkGHe2wnVWWMxobQ==
 
 "@eslint/config-array@^0.23.5":
   version "0.23.5"
@@ -907,10 +907,10 @@ shebang-regex@^3.0.0:
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-slim-select@^4.2.4:
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/slim-select/-/slim-select-4.6.2.tgz#72acf4e5ce2e996fc9547d3cdbaf886eedf940f1"
-  integrity sha512-DAfmW1sufpcIh/gNb1lUJZHs8OaxyVpRAlltrB6TDOgDnmhzeXHK6w35dC44EthGf888JRzb1orbS76+H2VvAA==
+slim-select@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/slim-select/-/slim-select-4.6.4.tgz#347e2ef78b05e63fda2e968cdbb75c80f5f42731"
+  integrity sha512-sa06KapQWVUkyEoiawPL1tptUlaU0197Pjl1L77o5n4HzQe3y+I+OQpwY2V8GQ/lNImh/IxW8RErkf2Z0SLRFw==
 
 sortablejs@^1.13.0:
   version "1.15.7"
