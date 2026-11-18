@@ -42,6 +42,10 @@ but CI permits these low/moderate findings under its HIGH/CRITICAL policy.
 Do not downgrade `deepmerge` merely to fall
 outside the advisory range, or force minimatch 11 into `serve-handler`.
 
+### Update dependencies
+
+`npx npm-check-updates`
+
 ### Local Development
 
 ```
@@ -115,3 +119,4 @@ when this site is published. Cross-domain redirects must be configured on Airsli
 adding them to this Docusaurus site alone would not redirect visitors to the old host.
 Check old heading fragments during that cutover. No Airslie files were changed by
 this import. The existing `.app` to `.com` forwarding setup is unchanged.
+
