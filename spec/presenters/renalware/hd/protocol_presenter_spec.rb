@@ -95,9 +95,6 @@ describe Renalware::HD::ProtocolPresenter do
   describe "#recent_pathology" do
     context "when the patient has recent pathology" do
       it "returns the current_observation_set.values hash" do
-        # Because the AllObservationCodes singleton might already have been instantiated
-        # and hanging onto a previous collection of observation codes, reset it
-        Singleton.__init__(Renalware::Pathology::AllObservationCodes)
         descriptions = create_descriptions(%w(HGB PLT CRP))
         patient = create(:pathology_patient)
 
@@ -139,9 +136,6 @@ describe Renalware::HD::ProtocolPresenter do
 
   context "when the patient has no pathology" do
     it "returns an empty current_observation_set so eg a #hgb_result call will not fail" do
-      # Because the AllObservationCodes singleton might already have been instantiated
-      # and hanging onto a previous collection of observation codes, reset it
-      Singleton.__init__(Renalware::Pathology::AllObservationCodes)
       # Important - we need to create the relevant observation descriptions e.g. HGB before we can
       # try and access it on the current_observations_set.values hash (eg #hgb_result) which
       # uses .method_missing to dynamically find the relevant result.

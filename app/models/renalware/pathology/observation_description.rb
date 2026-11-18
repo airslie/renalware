@@ -23,6 +23,9 @@ module Renalware
       validates :upper_threshold, numericality: { allow_nil: true }
       validate :lower_threshold_lteq_upper_threshold
 
+      after_commit :invalidate_observation_codes, on: %i(create destroy)
+      after_update_commit :invalidate_observation_codes_if_code_changed
+
       def self.for(codes)
         ObservationDescriptionsByCodeQuery.new(codes: codes).call
       end
@@ -34,6 +37,14 @@ module Renalware
       end
 
       private
+
+      def invalidate_observation_codes
+        AllObservationCodes.invalidate
+      end
+
+      def invalidate_observation_codes_if_code_changed
+        invalidate_observation_codes if saved_change_to_code?
+      end
 
       def lower_threshold_lteq_upper_threshold
         return if lower_threshold.blank?

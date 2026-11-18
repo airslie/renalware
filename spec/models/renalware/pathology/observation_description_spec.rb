@@ -15,6 +15,80 @@ module Renalware
       is_expected.to respond_to(:title)
     end
 
+    describe "observation code cache invalidation" do
+      let(:cache) { ActiveSupport::Cache::MemoryStore.new }
+      let(:codes) { Pathology::AllObservationCodes.instance }
+
+      before do
+        allow(Rails).to receive(:cache).and_return(cache)
+      end
+
+      it "invalidates after a create commits" do
+        expect(codes.all).to eq([])
+
+        described_class.transaction(requires_new: true) do
+          described_class.create!(code: "P_URE")
+          expect(codes.all).to eq([])
+        end
+
+        expect(codes.all).to eq([:P_URE])
+      end
+
+      it "invalidates after a code change commits" do
+        description = described_class.create!(code: "URE")
+        expect(codes.all).to eq([:URE])
+
+        described_class.transaction(requires_new: true) do
+          description.update!(code: "P_URE")
+          expect(codes.all).to eq([:URE])
+        end
+
+        expect(codes.all).to eq([:P_URE])
+      end
+
+      it "invalidates after a destroy commits" do
+        description = described_class.create!(code: "URE")
+        expect(codes.all).to eq([:URE])
+
+        described_class.transaction(requires_new: true) do
+          description.destroy!
+          expect(codes.all).to eq([:URE])
+        end
+
+        expect(codes.all).to eq([])
+      end
+
+      it "keeps the cache when other attributes change" do
+        description = described_class.create!(code: "URE")
+        codes.all
+        allow(cache).to receive(:delete).and_call_original
+
+        description.update!(name: "Urea")
+
+        expect(cache).not_to have_received(:delete)
+      end
+
+      %i(create update destroy).each do |action|
+        it "keeps the cache when #{action} rolls back" do
+          description = described_class.create!(code: "URE")
+          codes.all
+          allow(cache).to receive(:delete).and_call_original
+
+          described_class.transaction(requires_new: true) do
+            case action
+            when :create then described_class.create!(code: "P_URE")
+            when :update then description.update!(code: "P_URE")
+            when :destroy then description.destroy!
+            end
+            raise ActiveRecord::Rollback
+          end
+
+          expect(cache).not_to have_received(:delete)
+          expect(codes.all).to eq([:URE])
+        end
+      end
+    end
+
     describe "#rr_type enum" do
       it "defaults to 0 (simple)" do
         expect(described_class.new.rr_type).to eq("rr_type_simple")

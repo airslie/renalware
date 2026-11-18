@@ -22,10 +22,11 @@ module Renalware
       end
 
       # From eg hgb_result, returns
-      # [:HGB, "result"]
+      # [:HGB, "_result"]
       def method_parts(method_name)
-        matches = method_name.to_s.match(/([^_]*)(\w*)/)
-        [matches[1]&.upcase&.to_sym, matches[2]]
+        name = method_name.to_s
+        suffix = VALID_SUFFIXES.find { |ending| name.end_with?(ending) } || ""
+        [name.delete_suffix(suffix).upcase.to_sym, suffix]
       end
 
       def observation_hash_or_hash_element_for(code, suffix)
