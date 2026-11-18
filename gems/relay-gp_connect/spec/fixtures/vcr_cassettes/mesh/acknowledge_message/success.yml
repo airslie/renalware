@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: http://localhost:8700/messageexchange/RAJ01OT001/inbox/<%= (defined?(mesh_message_id) && mesh_message_id.presence?) || "123" %>/status/acknowledged
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - NHSMESH RAJ01OT001:75155665-d300-4319-a7a4-3b6f3f38e739:0:202303061300:4af801abc20c6ef23a82951a5c01622c0ae5187985c6824f53bb623e0a219e7b
+      Mex-Clientversion:
+      - ApiDocs==0.0.1
+      Mex-Filename:
+      - None
+      Mex-Messagetype:
+      - DATA
+      Mex-Osarchitecture:
+      - x86_64
+      Mex-Osname:
+      - Linux
+      Mex-Osversion:
+      - ''
+      Mex-Workflowid:
+      - GPCONNECT_SEND_DOCUMENT
+      User-Agent:
+      - Faraday v1.10.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 06 Mar 2023 13:00:08 GMT
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Mon, 06 Mar 2023 13:00:08 GMT
+recorded_with: VCR 6.1.0

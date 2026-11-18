@@ -1,0 +1,27 @@
+module Relay
+  module GPConnect
+    module FHIR
+      module Support
+        module Construction
+          extend ActiveSupport::Concern
+          include Support::Helpers
+
+          included do
+            attr_reader :arguments, :options
+          end
+
+          def initialize(arguments, options = {})
+            @arguments = arguments
+            @options = options
+          end
+
+          class_methods do
+            def call(arguments, options = {})
+              new(arguments, **options).call
+            end
+          end
+        end
+      end
+    end
+  end
+end

@@ -134,6 +134,9 @@ jobs:
       - name: Rubocop
         run: bundle exec rubocop
 
+      - name: Gem specs (no Rails)
+        run: cd gems/relay-gp_connect && bundle exec rspec
+
       - name: ESLint
         run: bin/yarn eslint app/javascript --max-warnings=0
 

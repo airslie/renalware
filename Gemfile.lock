@@ -9,6 +9,16 @@ GIT
       mime-types (>= 3.0)
       nokogiri (>= 1.11.4)
 
+PATH
+  remote: gems/relay-gp_connect
+  specs:
+    relay-gp_connect (0.1.0)
+      activesupport
+      faraday
+      fhir_stu3_models
+      nokogiri
+      zeitwerk
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1085,6 +1095,7 @@ DEPENDENCIES
   rails-controller-testing (~> 1.0.4)
   rake
   ransack (~> 4.4)
+  relay-gp_connect!
   roo
   rqrcode (~> 2.0)
   rspec-html-matchers

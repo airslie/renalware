@@ -1,0 +1,47 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8700/messageexchange/RAJ01OT001
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - NHSMESH RAJ01OT001:5723c299-3661-4afc-9965-b558f21e164e:0:202303011305:bcc19c81c3c9cf62c5ef583583ea95a0fc28d9a6ff132517d06964229b0f0fe1
+      Mex-Clientversion:
+      - ApiDocs==0.0.1
+      Mex-Filename:
+      - None
+      Mex-Messagetype:
+      - DATA
+      Mex-Osarchitecture:
+      - x86_64
+      Mex-Osname:
+      - Linux
+      Mex-Osversion:
+      - ''
+      User-Agent:
+      - Faraday v1.10.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 01 Mar 2023 13:05:04 GMT
+      Server:
+      - uvicorn
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"mailboxId":"RAJ01OT001"}'
+  recorded_at: Wed, 01 Mar 2023 13:05:05 GMT
+recorded_with: VCR 6.1.0

@@ -1,0 +1,21 @@
+module Relay
+  module GPConnect
+    module FHIR
+      module Resources
+        module GPConnect
+          class DocumentBundle < Resources::DocumentBundle
+            def entries
+              [
+                GPConnect::Composition.call(arguments),
+                CareConnect::Organisation.call(arguments),
+                Practitioner.call(arguments),
+                Patient.call(arguments),
+                Binary.call(arguments)
+              ]
+            end
+          end
+        end
+      end
+    end
+  end
+end

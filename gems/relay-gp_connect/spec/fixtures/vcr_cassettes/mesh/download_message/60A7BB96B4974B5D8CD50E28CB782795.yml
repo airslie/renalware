@@ -1,0 +1,81 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8700/messageexchange/RAJ01OT001/inbox/60A7BB96B4974B5D8CD50E28CB782795
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - NHSMESH RAJ01OT001:363b4a0b-33d3-4a17-890d-346a0da939bf:0:202303011843:a9eab21a65978bccc7f79467bb0b3ea0ba90e620b30a17a16c142fcb55e8409a
+      Mex-Clientversion:
+      - ApiDocs==0.0.1
+      Mex-Filename:
+      - None
+      Mex-Messagetype:
+      - DATA
+      Mex-Osarchitecture:
+      - x86_64
+      Mex-Osname:
+      - Linux
+      Mex-Osversion:
+      - ''
+      Mex-Workflowid:
+      - API-DOCS-TEST
+      User-Agent:
+      - Faraday v1.10.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 01 Mar 2023 18:43:00 GMT
+      Server:
+      - uvicorn
+      Mex-From:
+      - RAJ01OT001
+      Mex-To:
+      - RAJ01OT001
+      Mex-Workflowid:
+      - API-DOCS-TEST
+      Mex-Chunk-Range:
+      - '1:1'
+      Mex-Addresstype:
+      - ALL
+      Mex-Localid:
+      - api-docs-bob-greets-alice
+      Mex-Filename:
+      - None
+      Mex-Version:
+      - '1.0'
+      Mex-Messagetype:
+      - DATA
+      Mex-Messageid:
+      - 60A7BB96B4974B5D8CD50E28CB782795
+      Mex-Statuscode:
+      - '00'
+      Mex-Statusevent:
+      - TRANSFER
+      Mex-Statusdescription:
+      - Transferred to recipient mailbox
+      Mex-Statussuccess:
+      - SUCCESS
+      Mex-Statustimestamp:
+      - '20230301183744'
+      Last-Modified:
+      - Wed, 01 Mar 2023 18:37:44 UTC
+      Content-Length:
+      - '17'
+      Content-Type:
+      - application/octet-stream
+    body:
+      encoding: UTF-8
+      string: This is a message
+  recorded_at: Wed, 01 Mar 2023 18:43:00 GMT
+recorded_with: VCR 6.1.0

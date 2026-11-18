@@ -13,7 +13,9 @@ module Renalware::Letters
   def self.cast_primary_care_physician(gp) = gp.becomes(Letters::PrimaryCarePhysician)
 
   # Errors
-  class MissingPdfContentError < StandardError; end
+  # Raised when a letter has no PDF content (yet). It is the gem's error, so the code that builds
+  # the message and the job that retries on it agree.
+  MissingPdfContentError = Relay::GPConnect::MissingPdfContentError
 
   module Delivery
   end
