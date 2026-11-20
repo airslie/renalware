@@ -10,19 +10,19 @@ gem "sprockets-rails"
 # opentelemetry is enabled with an ENV var.
 group :opentelemetry do
   gem "opentelemetry-exporter-otlp"
-  gem "opentelemetry-exporter-otlp-metrics", "~> 0.10.0"
+  gem "opentelemetry-exporter-otlp-metrics"
   gem "opentelemetry-instrumentation-active_job"
   gem "opentelemetry-instrumentation-faraday"
   gem "opentelemetry-instrumentation-net_http"
   gem "opentelemetry-instrumentation-pg"
   gem "opentelemetry-instrumentation-rack"
   gem "opentelemetry-instrumentation-rails"
-  gem "opentelemetry-metrics-sdk", "~> 0.16.0"
+  gem "opentelemetry-metrics-sdk"
   gem "opentelemetry-sdk"
 end
 
 gem "autoprefixer-rails"
-gem "azure-blob", "~> 0.8.0"
+gem "azure-blob", "~> 0.9.0"
 gem "benchmark"
 gem "bootsnap", require: false # speeds up rspec and rails server boot time in development
 gem "faker"
@@ -173,7 +173,7 @@ gem "phlex-rails"
 gem "prawn", "~> 2.5.0"
 gem "prawn-table", "~> 0.2"
 gem "psych", ">= 5.1.2" # required for ruby 3.x to avoid invalid database.yml error
-gem "puma", "~> 8.0.2" # Puma 7 may require testing due to call back changes
+gem "puma", "~> 8.1.2" # Puma 7 may require testing due to call back changes
 gem "pundit", "~> 2.5.0"
 gem "rack"
 gem "rack-attack"
